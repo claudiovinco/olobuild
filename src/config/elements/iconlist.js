@@ -59,7 +59,7 @@ export default {
   },
 
   fields: [
-    { key: 'items', label: t('Voci lista'), type: 'content-items', supportsDynamic: true,
+    { key: 'items', label: t('Voci'), type: 'content-items', supportsDynamic: true,
       itemFields: [
         { key: 'icon', label: t('Icona'), type: 'icon' },
         { key: 'text', label: t('Testo'), type: 'text' },
@@ -68,32 +68,26 @@ export default {
       newItemDefaults: { icon: 'check', text: t('Nuova voce'), color: '', link: '' },
     },
 
-    { type: 'separator', label: t('Layout') },
-    { key: 'divider', label: t('Separatore tra voci'), type: 'toggle' },
   ],
 
+  // Zone standard (16 nov 2026): Aspetto · Testo · Effetti testo · Icone · Forma · Disposizione · Voci. Prima «Preset
+  // stilistico», «Tipografia», «Stile icone», «Spaziatura & separatore» e il separatore fra le voci nel Contenuto.
   styleFields: [
-    { type: 'separator', label: t('Preset stilistico') },
+    { type: 'separator', label: t('Aspetto') },
     { key: 'preset', label: t('Stile'), type: 'select', options: [
-      { value: 'modern-clean',    label: t('Modern Clean') },
-      { value: 'minimal-mono',    label: t('Minimal Mono') },
-      { value: 'magazine-numbered', label: t('Magazine Numbered') },
-      { value: 'card-rows',       label: t('Card Rows') },
-      { value: 'compact-inline',  label: t('Compact Inline') },
-      { value: 'glass-rows',      label: t('Glass Rows') },
-      { value: 'neon-checks',     label: t('Neon Checks') },
-      { value: 'brutalist-block', label: t('Brutalist Block') },
-      { value: 'gradient-bullets', label: t('Gradient Bullets') },
-      { value: 'sticker-list',    label: t('Sticker List') },
-      { value: 'retro-checklist', label: t('Retro Checklist') },
-      { value: 'tilt-cards',      label: t('Tilt Cards') },
-      { value: 'custom',          label: t('Personalizzato') },
+      { value: 'clean', label: t('Pulita') },
+      { value: 'essential', label: t('Essenziale') },
+      { value: 'dots-full', label: t('Bollini pieni') },
+      { value: 'dots-soft', label: t('Bollini tenui') },
+      { value: 'squares', label: t('Quadratini') },
+      { value: 'row', label: t('In riga') },
+      { value: 'custom', label: t('Personalizzato') },
     ]},
-    ...textEffectsFields([ { value: 'text', label: t('Solo Testo') } ]),
+    ...shadowField,
 
-    { type: 'separator', label: t('Tipografia') },
+    { type: 'separator', label: t('Testo') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-    { type: 'typography', label: t('Testo items'),
+    { type: 'typography', label: t('Voci'),
       responsiveKeys: [],
       keys: {
         size:  'text_size',
@@ -101,42 +95,43 @@ export default {
       },
       sizeMin: 12, sizeMax: 28,
     },
+    ...textEffectsFields([ { value: 'text', label: t('Solo il testo') } ]),
 
-    { type: 'separator', label: t('Stile icone') },
+    { type: 'separator', label: t('Icone') },
     { key: 'icon_color', label: t('Colore icone'), type: 'color' },
-    { key: 'icon_size', label: t('Dimensione icone'), type: 'range', min: 12, max: 48, step: 2 },
-    { key: 'icon_shape', label: t('Sfondo icona'), type: 'select', options: [
+    { key: 'icon_size', label: t('Dimensione icone'), type: 'range', unit: 'px', min: 12, max: 48, step: 2 },
+    { key: 'icon_shape', label: t('Bollino'), type: 'select', options: [
       { value: 'none', label: t('Nessuno') },
       { value: 'circle', label: t('Cerchio') },
       { value: 'square', label: t('Quadrato') },
       { value: 'rounded', label: t('Arrotondato') },
     ]},
-    { key: 'icon_bg_color', label: t('Colore sfondo icona'), type: 'color',
+    { key: 'icon_bg_color', label: t('Colore bollino'), type: 'color',
       condition: { field: 'icon_shape', operator: '!=', value: 'none' } },
 
-    { type: 'separator', label: t('Allineamento') },
-    { key: 'text_align', label: t('Allineamento testo'), type: 'select', options: [
+    { type: 'separator', label: t('Forma') },
+    { key: 'list_padding', label: t('Padding'), type: 'spacing', min: 0, max: 80 },
+    ...borderFields(),
+
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'layout', label: t('Disposizione'), type: 'select', options: [
+      { value: 'vertical', label: t('Una sotto l’altra') },
+      { value: 'horizontal', label: t('In riga') },
+    ]},
+    { key: 'text_align', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
-      { value: 'center', label: t('Centrato') },
+      { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
       { value: 'justify', label: t('Giustificato') },
     ]},
-
-    { key: 'layout', label: t('Orientamento'), type: 'select', options: [
-      { value: 'vertical', label: t('Verticale') },
-      { value: 'horizontal', label: t('Orizzontale') },
-    ]},
-    { type: 'separator', label: t('Spaziatura & separatore') },
-    { key: 'gap', label: t('Gap voci'), type: 'range', min: 4, max: 32, step: 2 },
-    { key: 'list_padding', label: t('Padding lista'), type: 'spacing', min: 0, max: 80 },
-    { key: 'divider_color', label: t('Colore separatore'), type: 'color',
+    { key: 'gap', label: t('Gap voci'), type: 'range', unit: 'px', min: 4, max: 32, step: 2 },
+    { key: 'divider', label: t('Filo fra le voci'), type: 'toggle' },
+    { key: 'divider_color', label: t('Colore filo'), type: 'color',
       condition: { field: 'divider', operator: '==', value: true } },
 
-    ...shadowField,
-    ...borderFields(),
-    { type: 'separator', label: t('Voci lista') },
-    { key: 'items', type: 'content-items', label: t('Voci lista'), etichettaDa: 'text', itemFields: [
-        { key: 'color', label: t('Colore icona (override)'), type: 'color' },
+    { type: 'separator', label: t('Voci') },
+    { key: 'items', type: 'content-items', label: t('Voci'), etichettaDa: 'text', itemFields: [
+        { key: 'color', label: t('Colore icona'), type: 'color' },
     ] },
   ],
 };

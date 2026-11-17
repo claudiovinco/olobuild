@@ -174,10 +174,10 @@ const rowLayouts = [
 
 // All grid templates organized by category
 const gridCategories = [
-  { label: 'Colonne', items: gridColumns },
-  { label: 'Multi-riga', items: gridMultirow },
-  { label: 'Masonry', items: gridMasonry },
-  { label: 'Sidebar', items: gridSidebar },
+  { label: t('Colonne'), items: gridColumns },
+  { label: t('Più righe'), items: gridMultirow },
+  { label: t('A mosaico'), items: gridMasonry },
+  { label: t('Con barra laterale'), items: gridSidebar },
 ];
 
 // Accordion: solo una categoria aperta alla volta. -1 = tutte chiuse.

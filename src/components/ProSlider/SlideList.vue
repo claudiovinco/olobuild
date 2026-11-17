@@ -1,10 +1,10 @@
 <template>
   <div class="mb-w-48 mb-bg-gray-900 mb-border-r mb-border-gray-700 mb-flex mb-flex-col mb-overflow-hidden">
     <div class="mb-p-2 mb-border-b mb-border-gray-700 mb-text-xs mb-font-semibold mb-text-gray-300 mb-flex mb-items-center mb-justify-between">
-      <span>Slides ({{ slides.length }})</span>
+      <span>{{ t('Slide') }} ({{ slides.length }})</span>
       <div class="mb-flex mb-items-center mb-gap-1">
-        <button @click="doExport" class="mb-text-gray-400 hover:mb-text-primary-300" :title="t('Esporta slides')">&#8595;</button>
-        <button @click="triggerImport" class="mb-text-gray-400 hover:mb-text-primary-300" :title="t('Importa slides')">&#8593;</button>
+        <button @click="doExport" class="mb-text-gray-400 hover:mb-text-primary-300" :title="t('Esporta le slide')">&#8595;</button>
+        <button @click="triggerImport" class="mb-text-gray-400 hover:mb-text-primary-300" :title="t('Importa le slide')">&#8593;</button>
         <button @click="$emit('add')" class="mb-text-primary-400 hover:mb-text-primary-300" :title="t('Aggiungi slide')">+</button>
       </div>
       <input ref="importInput" type="file" accept=".json" class="mb-hidden" @change="handleImport" />

@@ -570,6 +570,25 @@ class Olobuild_Builder {
         if ( file_exists( OLOBUILD_PATH . 'assets/js/olo-utils.js' ) ) {
             wp_enqueue_script( 'olo-utils', OLOBUILD_URL . 'assets/js/olo-utils.js', [], OLOBUILD_VERSION, true );
         }
+        // Le tile coi file loro, che la pagina accoda solo se le contiene già all'apertura: una Ricerca Live
+        // aggiunta nel builder restava senza stile (una lente nuda e un campo grezzo) finché non si salvava e
+        // ricaricava (16 nov 2026, ep. 36). Stessi handle del sito, così non si caricano due volte.
+        if ( file_exists( OLOBUILD_PATH . 'assets/css/olo-livesearch.css' ) ) {
+            wp_enqueue_style( 'olo-livesearch-css', OLOBUILD_URL . 'assets/css/olo-livesearch.css', [], OLOBUILD_VERSION );
+        }
+        if ( file_exists( OLOBUILD_PATH . 'assets/js/olo-livesearch.js' ) ) {
+            wp_enqueue_script( 'olo-livesearch-js', OLOBUILD_URL . 'assets/js/olo-livesearch.js', [ 'olo-utils' ], OLOBUILD_VERSION, true );
+        }
+        // Il Viewer 360°: trascinato nel builder in una pagina che non lo aveva restava su «Caricamento 360°…» anche in
+        // anteprima, perché il suo script (che carica Pannellum e si riavvia a ogni render) non c'era (17 nov 2026, ep. 49).
+        if ( file_exists( OLOBUILD_PATH . 'assets/js/olo-viewer360.js' ) ) {
+            wp_enqueue_script( 'olo-viewer360-js', OLOBUILD_URL . 'assets/js/olo-viewer360.js', [], OLOBUILD_VERSION, true );
+        }
+        foreach ( [ 'olo-svganimator', 'olo-pdfviewer' ] as $foglio ) {
+            if ( file_exists( OLOBUILD_PATH . 'assets/css/' . $foglio . '.css' ) ) {
+                wp_enqueue_style( $foglio . '-css', OLOBUILD_URL . 'assets/css/' . $foglio . '.css', [], OLOBUILD_VERSION );
+            }
+        }
         // Bridge: deve essere DOPO ogni runtime (postMessage receiver)
         wp_enqueue_script( 'olo-iframe-bridge', OLOBUILD_URL . 'assets/js/iframe-bridge.js', [], OLOBUILD_VERSION, true );
         // Mode flag letto dal bridge.js → segnala al parent (Vue useIframeBridge) che

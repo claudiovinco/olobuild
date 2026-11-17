@@ -243,6 +243,7 @@ import { requestScrollToTile } from '@/utils/scrollToTileChannel';
 import { postToPreview } from '@/utils/previewOrigin';
 import StructureTree from './StructureTree.vue';
 import { t } from '@/i18n';
+import { getElementDef } from '@/config/elementRegistry';
 import { PALETTE_CATEGORIES, paletteCategory, paletteCategoryOf } from '@/config/paletteCategories';
 
 const tilesStore = useTilesStore();
@@ -440,7 +441,7 @@ function _findNodePath(nodes, targetId, chain = []) {
 }
 
 const _typeLabels = {
-  section: 'Sezione', row: 'Row', column: 'Column', 'inner-columns': 'Colonne', 'inner-column': 'Colonna',
+  section: 'Sezione', row: 'Riga', column: 'Colonna', 'inner-columns': 'Colonne', 'inner-column': 'Colonna',
 };
 
 const selectedBreadcrumb = computed(() => {
@@ -453,7 +454,8 @@ const selectedBreadcrumb = computed(() => {
   if (!path) return [];
   const out = [{ label: zone, icon: '' }];
   for (const node of path) {
-    const lbl = node.settings?._label || (_typeLabels[node.type] ? t(_typeLabels[node.type]) : node.type);
+    // il nome della tile come la chiama il builder («Schede prodotto»), non il tipo interno («product-cards»)
+    const lbl = node.settings?._label || (_typeLabels[node.type] ? t(_typeLabels[node.type]) : ((getElementDef(node.type) || {}).name || node.type));
     const ic = (node === path[path.length - 1]) ? (tileIcons[node.type] || '') : '';
     out.push({ label: lbl, icon: ic });
   }
@@ -892,8 +894,10 @@ function draggableTileOpts(tileType) {
         getOffset: () => ({ x: 16, y: 16 }),
         render: ({ container }) => {
           const srcEl = source.element;
-          const iconEl = srcEl.querySelector('.tp-btn-icon');
-          const labelEl = srcEl.querySelector('.tp-btn-label');
+          const iconEl = srcEl.querySelector('.ic, .tp-btn-icon');
+          // Le card si chiamano .ic/.lbl dal ridisegno della barra: coi vecchi nomi l'etichetta che segue il mouse
+          // mostrava il tipo interno, «button» invece di «Pulsante», e nessuna icona (17 nov 2026).
+          const labelEl = srcEl.querySelector('.lbl, .tp-btn-label');
           const catColor = getComputedStyle(srcEl).getPropertyValue('--cat-color').trim() || '#e8622a';
           const ghost = makeTileGhost(
             iconEl?.innerHTML || '',
@@ -929,7 +933,7 @@ function draggableGlobalWidgetOpts(globalId) {
         getOffset: () => ({ x: 16, y: 16 }),
         render: ({ container }) => {
           const srcEl = source.element;
-          const labelEl = srcEl.querySelector('.tp-btn-label');
+          const labelEl = srcEl.querySelector('.lbl, .tp-btn-label');
           const ghost = makeTileGhost(
             '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
             labelEl?.textContent || 'Widget',

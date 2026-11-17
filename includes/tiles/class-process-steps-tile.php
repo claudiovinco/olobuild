@@ -87,14 +87,16 @@ class Olobuild_Process_Steps_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-psteps <?php echo esc_attr( $uid ); ?>" style="display:grid;grid-template-columns:repeat(<?php echo (int) $cols; ?>,1fr);gap:<?php echo (int) $gap; ?>px">
+        <div class="olo-psteps <?php echo esc_attr( $uid ); ?>" style="display:grid;grid-template-columns:<?php echo esc_attr( $this->colonne_adattive( $cols, $gap, 160 ) ); ?>;gap:<?php echo (int) $gap; ?>px">
             <?php foreach ( $items as $i => $it ) :
                 $num = $auto ? sprintf( '%02d', $i + 1 ) : ( $it['number'] ?? sprintf( '%02d', $i + 1 ) );
                 $cardstyle  = 'display:flex;flex-direction:column;gap:' . $igap . 'px;text-align:' . $align . ';align-items:' . $align_items . ';';
                 if ( $cardbg )  $cardstyle .= 'background:' . $cardbg . ';';
                 if ( $cardbd )  $cardstyle .= Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $cardbd ] );
                 if ( $cardrad ) $cardstyle .= 'border-radius:' . $cardrad . ';';
-                $cardstyle .= 'padding:' . ( $cardpad !== '' ? $cardpad : '0 12px' ) . ';';
+                // Senza scheda (né sfondo né bordo) i passi stanno a filo col resto della sezione: il vecchio «0 12px»
+                // li faceva rientrare rispetto al titolo sopra. Con la scheda, di serie un po' d'aria tutto attorno.
+                $cardstyle .= 'padding:' . ( $cardpad !== '' ? $cardpad : ( ( $cardbg || $cardbd ) ? '20px' : '0' ) ) . ';';
             ?>
             <div class="olo-psteps__item" style="<?php echo esc_attr( $cardstyle ); ?>">
                 <?php if ( $circle ) : ?>

@@ -328,6 +328,15 @@ class Olobuild_Marquee_Tile extends Olobuild_Tile_Base {
                 white-space: nowrap;
                 flex-shrink: 0;
             }
+            <?php if ( $font_size > 28 ) : ?>
+            <?php // Titoli grandi sul telefono: il testo scala con lo schermo (al più l'8% della larghezza, mai oltre la
+                  // dimensione scelta) e il nastro con lui. A 44 px su 390 se ne leggeva una parola e mezza (16 nov 2026). ?>
+            @media (max-width: 640px) {
+                .<?php echo $uid; ?> { height: min(<?php echo (int) $height; ?>px, calc(8vw * <?php echo esc_attr( round( $height / $font_size, 3 ) ); ?>)); }
+                .<?php echo $uid; ?> .olo-mq-text { font-size: min(<?php echo (int) $font_size; ?>px, 8vw); }
+                .<?php echo $uid; ?> .olo-mq-sep { font-size: min(<?php echo (int) $sepsize; ?>px, calc(8vw * <?php echo esc_attr( round( $sepsize / $font_size, 3 ) ); ?>)); }
+            }
+            <?php endif; ?>
             <?php else : ?>
             .<?php echo $uid; ?> .olo-mq-img {
                 height: <?php echo (int) $img_height; ?>px;

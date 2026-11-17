@@ -13,8 +13,9 @@ class Olobuild_AnnouncementBar_Tile extends Olobuild_Tile_Base {
     protected $icon     = 'dashicons-megaphone';
     protected $category = 'marketing';
     protected $defaults = [
-        'text'           => 'Complimentary shipping & returns worldwide · ',
-        'accent_text'    => 'The Nocturne collection has arrived',
+        // In italiano come il config (erano i testi inglesi del blueprint Atelier Noir).
+        'text'           => 'Spedizione gratuita sopra i 50 € · ',
+        'accent_text'    => 'Scopri la nuova collezione',
         'link_url'       => '',
         'dismissible'    => false,
         'bg_color'       => '',
@@ -87,6 +88,8 @@ class Olobuild_AnnouncementBar_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .oab-close{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:0;color:inherit;cursor:pointer;font-size:16px;line-height:1;opacity:.6;}
             .<?php echo $uid; ?> .oab-close:hover{opacity:1;}
             .<?php echo $uid; ?> .oab-close:focus-visible{outline:2px solid <?php echo $acol; ?>;outline-offset:2px;}
+            <?php // Con la × il testo, centrato, lascia libero lo spazio del pulsante ai due lati: sul telefono andava a capo sotto la × (17 nov 2026). ?>
+            <?php if ( $dismiss ) : ?>.<?php echo $uid; ?>{padding-left:max(<?php echo intval( $cp['left'] ?? 20 ); ?>px,40px);padding-right:max(<?php echo intval( $cp['right'] ?? 20 ); ?>px,40px);}<?php endif; ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-annbar <?php echo esc_attr( $uid ); ?>">

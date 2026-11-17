@@ -172,7 +172,7 @@
             ui="dropdown"
             size="compact"
             :model-value="localItemMap[field.key] || ''"
-            :options="origin === 'images' ? IMAGE_PART_OPTS : (origin === 'righe' ? RIGA_PART_OPTS : WP_FIELD_OPTS)"
+            :options="origin === 'images' ? IMAGE_PART_OPTS : (origin === 'righe' ? RIGA_PART_OPTS : opzioniCampoVoce(field))"
             @update:model-value="updateItemMap(field.key, $event)"
           />
         </div>
@@ -280,6 +280,24 @@ const WP_FIELD_OPTS = [
   // 01, 02… nell'ordine dell'elenco: per i numeri delle liste e delle card
   { value: '_index', label: 'Numero progressivo' },
 ];
+
+// Un campo link della voce (17 nov 2026, link dinamici) può portare, oltre che al contenuto, alla pagina della sua
+// categoria o a un indirizzo dei suoi campi: il link dei biglietti di uno spettacolo, un campo link dei Tipi di
+// contenuto. Il PHP legge «sorgente:campo» (build_items_from_query).
+function opzioniCampoVoce(field) {
+  if (field?.type !== 'link') return WP_FIELD_OPTS;
+  const extra = [{ value: 'first_term_url', label: 'Link della categoria' }];
+  for (const sorgente of ['campi', 'spettacolo']) {
+    const campi = sources.value?.[sorgente]?.fields;
+    if (!Array.isArray(campi)) continue;
+    for (const c of campi) {
+      if (c?.type !== 'url') continue;
+      extra.push({ value: sorgente + ':' + c.key, label: c.label });
+    }
+  }
+  // Solo indirizzi, come nel pannello dei collegamenti: un titolo o una data in un link non portano da nessuna parte.
+  return [...WP_FIELD_OPTS.filter((o) => o.value === '' || o.value === 'permalink'), ...extra];
+}
 
 // ── Foto di un campo ──
 // Le parti di una foto che una voce può ricevere (le chiavi le legge

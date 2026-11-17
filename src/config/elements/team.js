@@ -81,102 +81,41 @@ export default {
   },
 
   fields: [
-    { type: 'separator', label: t('Media') },
+    { type: 'separator', label: t('Foto') },
     { key: 'photo', label: t('Foto / Video'), type: 'media' },
-    { key: 'hover_image', label: t('Immagine hover'), type: 'image' },
-    { key: 'hover_video', label: t('Video hover'), type: 'media' },
-    { type: 'separator', label: t('Contenuto') },
+    { key: 'hover_image', label: t('Immagine al passaggio'), type: 'image' },
+    { key: 'hover_video', label: t('Video al passaggio'), type: 'media' },
+    { type: 'separator', label: t('Testi') },
     { key: 'name', label: t('Nome'), type: 'text' },
     { key: 'role', label: t('Ruolo'), type: 'text' },
     { key: 'bio', label: t('Biografia'), type: 'textarea' },
     { type: 'separator', label: t('Link') },
-    { key: 'link_text', label: t('Testo link'), type: 'text' },
-    { key: 'link_url', label: t('URL link'), type: 'link' },
+    { key: 'link_text', label: t('Testo del link'), type: 'text' },
+    { key: 'link_url', label: t('Link'), type: 'link', condition: { field: 'link_text', op: 'notEmpty' } },
   ],
 
+  // Zone standard (16 nov 2026): Aspetto · Testo · Foto · Riquadro dei testi · Forma · Disposizione.
   styleFields: [
-    { type: 'separator', label: t('Preset stilistico') },
+    { type: 'separator', label: t('Aspetto') },
     { key: 'preset', label: t('Stile'), type: 'select', options: [
-      { value: 'corporate-card',   label: t('Corporate Card') },
-      { value: 'magazine-row',     label: t('Magazine Row') },
-      { value: 'minimal-clean',    label: t('Minimal Clean') },
-      { value: 'editorial-bold',   label: t('Editorial Bold') },
-      { value: 'photographer',     label: t('Photographer (B&N)') },
-      { value: 'glass-portrait',   label: t('Glass Portrait') },
-      { value: 'neon-frame',       label: t('Neon Frame') },
-      { value: 'brutalist-stamp',  label: t('Brutalist Stamp') },
+      { value: 'corporate-card',   label: t('Scheda') },
+      { value: 'magazine-row',     label: t('Rivista, in riga') },
+      { value: 'minimal-clean',    label: t('Essenziale') },
+      { value: 'editorial-bold',   label: t('Editoriale') },
+      { value: 'photographer',     label: t('Bianco e nero') },
+      { value: 'glass-portrait',   label: t('Vetro') },
+      { value: 'neon-frame',       label: t('Neon su scuro') },
+      { value: 'brutalist-stamp',  label: t('Timbro netto') },
       { value: 'polaroid-photo',   label: t('Polaroid') },
-      { value: 'sticker-portrait', label: t('Sticker Portrait') },
-      { value: 'retro-yearbook',   label: t('Retro Yearbook') },
-      { value: 'tilt-3d',          label: t('3D Tilt') },
+      { value: 'sticker-portrait', label: t('Adesivo') },
+      { value: 'retro-yearbook',   label: t('Annuario') },
+      { value: 'tilt-3d',          label: t('Inclinata') },
       { value: 'custom',           label: t('Personalizzato') },
     ]},
+    { key: 'bg_color', label: t('Sfondo'), type: 'color' },
+
+    { type: 'separator', label: t('Testo') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-
-    ...textEffectsFields([ { value: 'name', label: t('Solo Nome') } ]),
-
-    { type: 'separator', label: t('Foto') },
-    // Fino a 400: i temi usano anche 330. La foto non esce mai dalla scheda (il PHP la tiene
-    // entro la larghezza utile, alla stessa proporzione), quindi una misura grande è sicura.
-    { key: 'photo_size', label: t('Dimensione foto'), type: 'range', min: 60, max: 400, step: 5,
-      description: t('La larghezza della foto. Dove la scheda è più stretta, la foto si riduce alla sua larghezza e l\'altezza segue le proporzioni.') },
-    // Niente voce automatica: il riquadro della foto non ha altro da cui prendere
-    // l'altezza (e' un box di dimensione fissa), quindi senza proporzione collasserebbe.
-    { key: 'photo_ratio', label: t('Proporzioni'), type: 'select',
-      options: ratioOptions({ auto: false }),
-      description: t('La larghezza resta «Dimensione foto»: la proporzione decide quanto è alta.') },
-    { key: 'photo_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI },
-    // Il punto focale si nasconde SOLO con 'fill': con 'contain' lavora eccome (decide
-    // da che parte la foto si appoggia nelle bande vuote, e i due renderer lo
-    // emettono), e una scheda salvata prima che l'adattamento esistesse non ha affatto
-    // la chiave `photo_fit` — l'inspector valuta le condizioni sui settings GREZZI,
-    // senza fondere i default, quindi con un elenco `in` il valore assente non
-    // combacerebbe con niente e il controllo sparirebbe per sempre.
-    focalField('photo', { ratio: 'photo_ratio', fit: 'photo_fit',
-      condition: { field: 'photo_fit', op: 'neq', value: 'fill' } }),
-    { key: 'photo_shape', label: t('Maschera foto'), type: 'select', options: [
-      { value: 'circle', label: t('Tonda') },
-      { value: 'square', label: t('Quadrata') },
-      { value: 'rounded', label: t('Arrotondata') },
-      { value: 'hexagon', label: t('Esagonale') },
-    ]},
-    withHover({ key: 'photo_radius', label: t('Raggio foto'), type: 'border-radius',
-      condition: { field: 'photo_shape', value: 'rounded' } }),
-    { key: 'photo_border', label: t('Bordo foto'), type: 'border',
-      legacyKeys: { width: 'photo_border_width', color: 'photo_border_color' } },
-    { key: 'photo_shadow', label: t('Ombra foto'), type: 'select', options: [
-      { value: 'none', label: t('Nessuna') },
-      { value: 'sm', label: t('Leggera') },
-      { value: 'md', label: t('Media') },
-      { value: 'lg', label: t('Grande') },
-      { value: 'custom', label: t('Personalizzata') },
-    ]},
-    { key: 'photo_shadow_custom', label: t('Ombra personalizzata'), type: 'box-shadow',
-      legacyKeys: { h: 'photo_shadow_h', v: 'photo_shadow_v', blur: 'photo_shadow_blur', spread: 'photo_shadow_spread', color: 'photo_shadow_color', inset: 'photo_shadow_inset' },
-      condition: { field: 'photo_shadow', op: 'eq', value: 'custom' } },
-    { key: 'photo_gap', label: t('Gap foto-contenitore'), type: 'range', min: -40, max: 40, step: 4 },
-    // Filtri CSS della foto: stavano in fondo, in una sezione a sé, e nessun renderer li leggeva.
-    // Ora agiscono sulla foto (e sul suo media in hover), quindi stanno nella zona Foto e si
-    // vedono solo quando una foto c'è: sull'avatar disegnato dalla tile non farebbero niente.
-    ...filterFields
-      .filter((f) => f.type !== 'separator')
-      .map((f) => ({ ...f, condition: { field: 'photo', op: 'notEmpty' } })),
-
-    { type: 'separator', label: t('Contenitore info') },
-    { key: 'info_bg_color', label: t('Sfondo contenitore'), type: 'color' },
-    { key: 'info_width', label: t('Larghezza contenitore'), type: 'range', min: 50, max: 100, step: 5 },
-    { key: 'info_margin', label: t('Margine dal tile'), type: 'spacing', max: 40 },
-    { key: 'info_padding', label: t('Padding contenitore'), type: 'spacing', max: 48 },
-    withHover({ key: 'info_radius', label: t('Raggio'), type: 'border-radius' }),
-    { key: 'info_border', label: t('Bordo scheda'), type: 'border',
-      legacyKeys: { width: 'info_border_width', color: 'info_border_color' } },
-    { key: 'info_align', label: t('Allineamento testo'), type: 'select', options: [
-      { value: 'left', label: t('Sinistra') },
-      { value: 'center', label: t('Centro') },
-      { value: 'right', label: t('Destra') },
-    ]},
-
-    { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Nome'),
       responsiveKeys: [],
       keys: {
@@ -202,12 +141,75 @@ export default {
       },
       sizeMin: 10, sizeMax: 20, sizeStep: 1,
     },
+    ...textEffectsFields([ { value: 'name', label: t('Solo il nome') } ]),
 
-    { type: 'separator', label: t('Aspetto tile') },
-    { key: 'bg_color', label: t('Colore sfondo tile'), type: 'color' },
-    { key: 'tile_padding', label: t('Padding tile'), type: 'spacing', max: 40 },
-    withHover({ key: 'border_radius', label: t('Raggio tile'), type: 'border-radius' }),
+    { type: 'separator', label: t('Foto') },
+    // Fino a 400: i temi usano anche 330. La foto non esce mai dalla scheda (il PHP la tiene
+    // entro la larghezza utile, alla stessa proporzione), quindi una misura grande è sicura.
+    { key: 'photo_size', label: t('Dimensione foto'), type: 'range', unit: 'px', min: 60, max: 400, step: 5,
+      description: t('La larghezza della foto. Dove la scheda è più stretta, la foto si riduce alla sua larghezza e l\'altezza segue le proporzioni.') },
+    // Niente voce automatica: il riquadro della foto non ha altro da cui prendere
+    // l'altezza (e' un box di dimensione fissa), quindi senza proporzione collasserebbe.
+    { key: 'photo_ratio', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions({ auto: false }),
+      description: t('La larghezza resta «Dimensione foto»: la proporzione decide quanto è alta.') },
+    { key: 'photo_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI },
+    // Il punto focale si nasconde SOLO con 'fill': con 'contain' lavora eccome (decide
+    // da che parte la foto si appoggia nelle bande vuote, e i due renderer lo
+    // emettono), e una scheda salvata prima che l'adattamento esistesse non ha affatto
+    // la chiave `photo_fit` — l'inspector valuta le condizioni sui settings GREZZI,
+    // senza fondere i default, quindi con un elenco `in` il valore assente non
+    // combacerebbe con niente e il controllo sparirebbe per sempre.
+    focalField('photo', { ratio: 'photo_ratio', fit: 'photo_fit',
+      condition: { field: 'photo_fit', op: 'neq', value: 'fill' } }),
+    { key: 'photo_shape', label: t('Maschera'), type: 'select', options: [
+      { value: 'circle', label: t('Tonda') },
+      { value: 'square', label: t('Quadrata') },
+      { value: 'rounded', label: t('Arrotondata') },
+      { value: 'hexagon', label: t('Esagonale') },
+    ]},
+    withHover({ key: 'photo_radius', label: t('Raggio foto'), type: 'border-radius',
+      condition: { field: 'photo_shape', value: 'rounded' } }),
+    { key: 'photo_border', label: t('Bordo foto'), type: 'border',
+      legacyKeys: { width: 'photo_border_width', color: 'photo_border_color' } },
+    { key: 'photo_shadow', label: t('Ombra foto'), type: 'select', options: [
+      { value: 'none', label: t('Nessuna') },
+      { value: 'sm', label: t('Leggera') },
+      { value: 'md', label: t('Media') },
+      { value: 'lg', label: t('Grande') },
+      { value: 'custom', label: t('Personalizzata') },
+    ]},
+    { key: 'photo_shadow_custom', label: t('Ombra personalizzata'), type: 'box-shadow',
+      legacyKeys: { h: 'photo_shadow_h', v: 'photo_shadow_v', blur: 'photo_shadow_blur', spread: 'photo_shadow_spread', color: 'photo_shadow_color', inset: 'photo_shadow_inset' },
+      condition: { field: 'photo_shadow', op: 'eq', value: 'custom' } },
+    { key: 'photo_gap', label: t('Gap foto e testi'), type: 'range', unit: 'px', min: -40, max: 40, step: 4,
+      description: t('Sotto zero la foto entra nel riquadro dei testi e lo sovrappone.') },
+    // Filtri CSS della foto: stavano in fondo, in una sezione a sé, e nessun renderer li leggeva.
+    // Ora agiscono sulla foto (e sul suo media in hover), quindi stanno nella zona Foto e si
+    // vedono solo quando una foto c'è: sull'avatar disegnato dalla tile non farebbero niente.
+    ...filterFields
+      .filter((f) => f.type !== 'separator')
+      .map((f) => ({ ...f, condition: { field: 'photo', op: 'notEmpty' } })),
 
+    { type: 'separator', label: t('Riquadro dei testi') },
+    { key: 'info_bg_color', label: t('Sfondo riquadro'), type: 'color' },
+    { key: 'info_width', label: t('Larghezza riquadro'), type: 'range', unit: '%', min: 50, max: 100, step: 5 },
+    { key: 'info_margin', label: t('Margine riquadro'), type: 'spacing', max: 40 },
+    { key: 'info_padding', label: t('Padding riquadro'), type: 'spacing', max: 48 },
+    withHover({ key: 'info_radius', label: t('Raggio riquadro'), type: 'border-radius' }),
+    { key: 'info_border', label: t('Bordo riquadro'), type: 'border',
+      legacyKeys: { width: 'info_border_width', color: 'info_border_color' } },
+
+    { type: 'separator', label: t('Forma') },
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 40 },
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
     ...borderFields(),
+
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'info_align', label: t('Allineamento testo'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
+    ]},
   ],
 };

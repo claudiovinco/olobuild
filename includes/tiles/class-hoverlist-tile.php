@@ -84,7 +84,9 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'olo-hl-' . wp_rand( 10000, 99999 );
 
-        $heading = "var(--olo-font-family-heading, 'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
+        // Il ripiego dei titoli è quello di tutte le tile (resolve_font_family('heading')): senza un carattere dei titoli
+        // scelto nel sito questa tile ripiegava su DM Sans mentre i titoli accanto andavano su Georgia (16 nov 2026).
+        $heading = $this->resolve_font_family( 'heading' );
         $body    = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
         // Vuoto = il mono del tema (--olo-font-family-mono), come dice l'inspector; il monospazio di sistema solo se il tema non ne ha uno.
         $mono_fb = "var(--olo-font-family-mono, ui-monospace,'SF Mono',Menlo,Consolas,monospace)";
@@ -213,7 +215,7 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
         ob_start();
         ?>
         <?php $rowbg_rules = []; ?>
-        <div class="olo-hoverlist <?php echo esc_attr( $uid ); ?>" style="position:relative;border-top:1px solid <?php echo esc_attr( $line ); ?>;">
+        <div class="olo-hoverlist <?php echo esc_attr( $uid ); ?>" style="position:relative;container-type:inline-size;container-name:olo-hoverlist;border-top:1px solid <?php echo esc_attr( $line ); ?>;">
             <?php foreach ( $items as $idx => $it ) :
                 $color = $this->safe_color_css( $it['color'] ?? '' ) ?: 'var(--olo-color-border, #e5e7eb)';
                 $name  = $it['name'] ?? '';
@@ -288,10 +290,17 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
 
             .<?php echo $uid; ?> a.olo-hoverlist__row:focus-visible { outline: 2px solid <?php echo $name_c; ?>; outline-offset: -2px; }
             <?php if ( $lead === 'number' ) : ?>
-            @media (max-width: 680px) {
-                .<?php echo $uid; ?> .olo-hoverlist__row { grid-template-columns: 44px 1fr; }
-                .<?php echo $uid; ?> .olo-hoverlist__desc { display: none; }
+            <?php // Lista stretta (telefono, o una colonna a metà pagina): la descrizione scende sotto il nome invece di
+                  // restare a destra in una colonnina. Prima guardava la finestra (680 px) e sul telefono la descrizione
+                  // spariva; in una colonna stretta del computer restava schiacciata contro il bordo (16 nov 2026). ?>
+            @container olo-hoverlist (max-width: 600px) {
+                .<?php echo $uid; ?> .olo-hoverlist__row { grid-template-columns: 44px 1fr; row-gap: 6px; }
+                .<?php echo $uid; ?> .olo-hoverlist__desc { grid-column: 2; justify-self: start !important; text-align: left !important; max-width: none !important; }
             }
+            <?php // E il nome scende a gradini con la larghezza della lista, non della finestra. ?>
+            <?php foreach ( [ 600 => 40, 440 => 32, 340 => 26 ] as $hl_largo => $hl_px ) : if ( (int) $name_sz > $hl_px ) : ?>
+            @container olo-hoverlist (max-width: <?php echo (int) $hl_largo; ?>px) { .<?php echo $uid; ?> .olo-hoverlist__nm { font-size: <?php echo (int) $hl_px; ?>px !important; } }
+            <?php endif; endforeach; ?>
             <?php endif; ?>
             <?php foreach ( $rowbg_rules as $ri => $rdecl ) : ?>
             /* sfondo per-voce: vale a riposo E in hover (regola dopo la :hover generica) */

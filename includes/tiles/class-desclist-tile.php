@@ -199,6 +199,11 @@ class Olobuild_DescList_Tile extends Olobuild_Tile_Base {
                 align-items: center;
                 color: <?php echo $icon_clr; ?>;
             }
+            <?php if ( $layout === 'inline' ) : ?>
+            <?php // Termine e definizione affiancati stanno sulla linea di base, e un'icona senza testo ci appoggia il suo
+                  // bordo inferiore: restava più in alto della scritta. Al centro della riga (16 nov 2026). ?>
+            .<?php echo $uid; ?> .mdl-icon-wrap { align-self: center; }
+            <?php endif; ?>
             .<?php echo $uid; ?> .mdl-term {
                 font-size: <?php echo (int) $term_fs; ?>px;
                 font-weight: <?php echo (int) $term_fw; ?>;

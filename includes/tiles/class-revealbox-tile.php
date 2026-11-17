@@ -161,8 +161,8 @@ class Olobuild_Revealbox_Tile extends Olobuild_Tile_Base {
         // zona ha un fondo suo, un velo o lo sfondo comune: senza, il testo chiaro di serie sta
         // sulla pagina chiara, e nei riquadri salvati senza foto il titolo («<h3>Titolo</h3>» di
         // serie) si vedeva solo perché restava grigio scuro.
-        $top_cls = ( '' !== $top_bg || '' !== $top_overlay || '' !== $global_bg ) ? ' class="olo-rb-content"' : '';
-        $bot_cls = ( '' !== $bot_bg || '' !== $bot_overlay || '' !== $global_bg ) ? ' class="olo-rb-content"' : '';
+        $top_cls = ' class="olo-rb-testo' . ( ( '' !== $top_bg || '' !== $top_overlay || '' !== $global_bg ) ? ' olo-rb-content' : '' ) . '"';
+        $bot_cls = ' class="olo-rb-testo' . ( ( '' !== $bot_bg || '' !== $bot_overlay || '' !== $global_bg ) ? ' olo-rb-content' : '' ) . '"';
 
         $top_inner = $top_bg . $top_overlay . '<div' . $top_cls . ' style="' . $top_content_css . '">' . $top_icon_html . $top_content . '</div>';
         $bot_inner = $bot_bg . $bot_overlay . '<div' . $bot_cls . ' style="' . $bot_content_css . '">' . $bot_icon_html . $bot_content . '</div>';
@@ -269,6 +269,14 @@ class Olobuild_Revealbox_Tile extends Olobuild_Tile_Base {
         // $top_cls): prima li prendeva la regola dei titoli del tema (UIkit, grigio scuro) e su
         // una foto velata non si leggevano. Un colore scelto nell'editor (inline) resta sopra.
         $css .= "#{$uid} .olo-rb-content :is(h1,h2,h3,h4,h5,h6){color:inherit}";
+        // I titoli nella famiglia e nel peso dei titoli del sito (con ripiego Georgia): col ripiego del tema uscivano nel
+        // carattere del testo, in grassetto, accanto a titoli di sezione in tutt'altro carattere.
+        $fam_h = $this->resolve_font_family( 'heading' );
+        // Spazi del testo misurati sul testo stesso: i margini del tema (20 px sotto ogni paragrafo e titolo) staccavano
+        // di 50 px titolo e riga sotto, e l'ultimo paragrafo spingeva il testo lontano dal bordo della zona.
+        $css .= "#{$uid} .olo-rb-testo :is(p,h1,h2,h3,h4,h5,h6,ul,ol){margin:0 0 .5em}"
+            . "#{$uid} .olo-rb-testo :is(h1,h2,h3,h4,h5,h6){font-family:{$fam_h};font-weight:var(--olo-font-weight-heading,700);line-height:1.15;margin-bottom:.3em}"
+            . "#{$uid} .olo-rb-testo>:first-child{margin-top:0}#{$uid} .olo-rb-testo>:last-child{margin-bottom:0}";
 
         ob_start();
         echo '<style>' . $css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- reveal/transition CSS assembled above from the internally generated $uid, intval()'d heights/amounts, floatval()'d speed and a fixed easing map

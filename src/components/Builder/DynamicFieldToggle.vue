@@ -1,7 +1,10 @@
 <template>
   <div class="dft-wrap">
-    <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1 mb-flex mb-items-center mb-gap-1">
+    <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1 mb-flex mb-items-center mb-gap-1" :class="{ 'dft-label--voce': voce }">
       {{ field.label }}
+      <!-- La spiegazione del campo: la (i) come in tutti gli altri campi (16 nov 2026: nei testi collegabili ai
+           contenuti dinamici non compariva da nessuna parte, «Lascialo vuoto per non mostrare…» restava invisibile). -->
+      <InfoTip v-if="field.description" :testo="t(field.description)" :titolo="t(field.label || '')" />
       <button
         type="button"
         class="dft-btn"
@@ -39,11 +42,14 @@ import { ref, computed, onMounted } from 'vue';
 import { useDynamicContent, dinamiciNonDisponibili } from '@/composables/useDynamicContent';
 import DynamicBindingPanel from './DynamicBindingPanel.vue';
 import DynamicUnavailableNotice from './DynamicUnavailableNotice.vue';
+import InfoTip from './InfoTip.vue';
 
 const props = defineProps({
   field: { type: Object, required: true },
   tileId: { type: String, required: true },
   dynamic: { type: Object, default: () => ({}) },
+  // Dentro una voce di un ripetitore (17 nov 2026): l'etichetta come le altre della voce (maiuscoletto piccolo).
+  voce: { type: Boolean, default: false },
 });
 
 const emit = defineEmits(['update:dynamic']);
@@ -88,6 +94,14 @@ function removeDynamic() {
 <style scoped>
 .dft-wrap {
   position: relative;
+}
+
+.dft-label--voce {
+  font-size: 10px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .dft-btn {

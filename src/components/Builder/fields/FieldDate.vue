@@ -1,6 +1,8 @@
 <template>
   <input
     type="date"
+    min="1900-01-01"
+    max="9999-12-31"
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)"
     class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"

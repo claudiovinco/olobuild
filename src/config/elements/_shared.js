@@ -163,29 +163,29 @@ export const filterDefaults = {
 // nei preset non-audaci il blocco è invisibile/no-op.
 
 export const wowEffectsFields = () => [
-  { type: 'separator', label: t('Effetti avanzati (preset wow)') },
-  { key: 'wow_disable',         label: t('Disattiva effetti preset wow'), type: 'toggle' },
-  { key: 'wow_backdrop_blur',   label: t('Sfocatura sfondo (blur)'),      type: 'range',  min: 0,    max: 40,   step: 1 },
-  { key: 'wow_backdrop_saturate', label: t('Saturazione sfondo (%)'),     type: 'range',  min: 100,  max: 200,  step: 5 },
+  { type: 'separator', label: t('Effetti speciali') },
+  { key: 'wow_disable',         label: t('Spegni gli effetti speciali'), type: 'toggle' },
+  { key: 'wow_backdrop_blur',   label: t('Sfocatura dietro (px)'),        type: 'range',  min: 0,    max: 40,   step: 1 },
+  { key: 'wow_backdrop_saturate', label: t('Saturazione dietro (%)'),     type: 'range',  min: 100,  max: 200,  step: 5 },
   { key: 'wow_border_style',    label: t('Stile bordo'),                  type: 'select', options: [
     { value: 'solid',  label: t('Continuo') },
     { value: 'dashed', label: t('Tratteggiato') },
     { value: 'dotted', label: t('Puntinato') },
     { value: 'double', label: t('Doppio') },
   ]},
-  { key: 'wow_font_family',     label: t('Font speciale'),                type: 'select', options: [
-    { value: 'inherit',   label: t('Default (eredita)') },
+  { key: 'wow_font_family',     label: t('Carattere speciale'),           type: 'select', options: [
+    { value: 'inherit',   label: t('Quello del sito') },
     { value: 'monospace', label: t('Monospaziato') },
     { value: 'serif',     label: t('Serif') },
     { value: 'sans',      label: t('Sans-serif') },
   ]},
-  { key: 'wow_rotation',        label: t('Rotazione (gradi)'),            type: 'range',  min: -10,  max: 10,   step: 0.5 },
+  { key: 'wow_rotation',        label: t('Rotazione (deg)'),              type: 'range',  min: -10,  max: 10,   step: 0.5 },
   { key: 'wow_perspective',     label: t('Prospettiva 3D (px)'),          type: 'range',  min: 0,    max: 2000, step: 100 },
-  { key: 'wow_tilt_x',          label: t('Tilt asse X (gradi)'),          type: 'range',  min: -10,  max: 10,   step: 0.5 },
-  { key: 'wow_glow_pulse',      label: t('Glow pulsante (bordo animato)'),type: 'toggle' },
-  { key: 'wow_title_glow',      label: t('Glow su titolo/heading'),       type: 'toggle' },
-  { key: 'wow_scanlines',       label: t('Effetto scanlines (CRT)'),      type: 'toggle' },
-  { key: 'wow_terminal_prompt', label: t('Prompt terminale (> + cursore)'),type: 'toggle' },
+  { key: 'wow_tilt_x',          label: t('Inclinazione in avanti (deg)'), type: 'range',  min: -10,  max: 10,   step: 0.5 },
+  { key: 'wow_glow_pulse',      label: t('Bagliore che pulsa'),           type: 'toggle' },
+  { key: 'wow_title_glow',      label: t('Bagliore sui titoli'),          type: 'toggle' },
+  { key: 'wow_scanlines',       label: t('Righe da vecchio schermo'),     type: 'toggle' },
+  { key: 'wow_terminal_prompt', label: t('Cursore da terminale'),         type: 'toggle' },
 ];
 
 export const wowEffectsDefaults = {
@@ -449,19 +449,20 @@ export const textEffectsFields = (targetOptions = [
   { key: 'text_effect', label: t('Effetto'), type: 'select', options: [
     { value: 'none', label: t('Nessuno') },
     { value: 'typewriter', label: t('Macchina da scrivere') },
-    { value: 'typewriter-loop', label: t('Macchina da scrivere — loop frasi') },
-    { value: 'reveal-letter', label: t('Reveal lettera per lettera') },
-    { value: 'reveal-word', label: t('Reveal parola per parola') },
-    { value: 'gradient-anim', label: t('Gradient animato') },
-    { value: 'glitch', label: t('Glitch RGB') },
-    { value: 'wave', label: t('Wave (lettere ondulanti)') },
-    { value: 'underline-grow', label: t('Underline grow') },
-    { value: 'highlight-grow', label: t('Highlight grow') },
-    { value: 'scramble', label: t('Split scramble') },
+    { value: 'typewriter-loop', label: t('Macchina da scrivere, a giro di frasi') },
+    { value: 'reveal-letter', label: t('Lettera per lettera') },
+    { value: 'reveal-word', label: t('Parola per parola') },
+    { value: 'gradient-anim', label: t('Gradiente animato') },
+    { value: 'glitch', label: t('Glitch') },
+    { value: 'wave', label: t('Onda') },
+    { value: 'underline-grow', label: t('Sottolineatura che cresce') },
+    { value: 'highlight-grow', label: t('Evidenziatore che cresce') },
+    { value: 'scramble', label: t('Lettere mescolate') },
   ]},
   { key: 'text_effect_target', label: t('Applica a'), type: 'select', options: targetOptions,
     condition: { field: 'text_effect', op: 'neq', value: 'none' } },
-  { key: 'text_effect_speed', label: t('Velocità (ms per char/parola)'), type: 'range', min: 10, max: 300, step: 5,
+  { key: 'text_effect_speed', label: t('Velocità (ms)'), type: 'range', min: 10, max: 300, step: 5,
+    description: t('Il tempo di ogni lettera; negli effetti «parola per parola», di ogni parola.'),
     condition: { field: 'text_effect', op: 'neq', value: 'none' } },
   { key: 'text_effect_delay', label: t('Ritardo iniziale (ms)'), type: 'range', min: 0, max: 3000, step: 100,
     condition: { field: 'text_effect', op: 'neq', value: 'none' } },
@@ -479,12 +480,12 @@ export const textEffectsFields = (targetOptions = [
     condition: { field: 'text_effect', op: 'eq', value: 'typewriter-loop' } },
   { key: 'text_effect_pause', label: t('Pausa tra frasi (ms)'), type: 'range', min: 500, max: 5000, step: 100,
     condition: { field: 'text_effect', op: 'eq', value: 'typewriter-loop' } },
-  { key: 'text_effect_color', label: t('Colore primario'), type: 'color',
-    description: t('Per gradient/highlight/underline'),
+  { key: 'text_effect_color', label: t('Colore effetto'), type: 'color',
+    description: t('Il colore del gradiente, dell’evidenziatore o della sottolineatura.'),
     condition: { field: 'text_effect', value: ['gradient-anim', 'highlight-grow', 'underline-grow'] } },
-  { key: 'text_effect_color_to', label: t('Colore secondario (gradient)'), type: 'color',
+  { key: 'text_effect_color_to', label: t('Secondo colore del gradiente'), type: 'color',
     condition: { field: 'text_effect', op: 'eq', value: 'gradient-anim' } },
-  { key: 'text_effect_loop', label: t('Riproduci in loop'), type: 'toggle',
+  { key: 'text_effect_loop', label: t('Ripeti'), type: 'toggle',
     condition: { field: 'text_effect', value: ['typewriter', 'reveal-letter', 'reveal-word', 'wave', 'glitch', 'scramble'] } },
 ];
 
@@ -1072,7 +1073,9 @@ function bordoAttivo(b) {
  */
 export function borderEffectFields({ separatore = true, bordo = null } = {}) {
   const campi = [
-    { key: 'border_effect', label: t('Effetto'), type: 'select', options: [
+    // `default`: nel Contenitore (tile.style) la chiave non c'è finché non si sceglie un effetto e il selettore
+    // mostrava «—» in tutte le tile; il PHP tratta il vuoto come «Nessuno» (16 nov 2026).
+    { key: 'border_effect', label: t('Effetto'), type: 'select', default: 'none', options: [
       { value: 'none',          label: t('Nessuno') },
       { value: 'neon',          label: t('Neon glow') },
       { value: 'neon-pulse',    label: t('Neon pulsante') },

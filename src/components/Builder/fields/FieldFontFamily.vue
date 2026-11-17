@@ -278,6 +278,9 @@ const popularGoogleFonts = [
   'Bitter', 'Lora', 'EB Garamond', 'Cormorant Garamond', 'Spectral',
   // Scritte a mano e a gesso (la tile Lavagna a gesso nasce con Caveat e Fredericka the Great)
   'Caveat', 'Fredericka the Great', 'Kalam', 'Patrick Hand', 'Cabin Sketch', 'Gochi Hand', 'Permanent Marker', 'Amatic SC',
+  // Font variabili da specimen (17 nov 2026): la Variazione testo (ex Specimen Variabile) ne suggeriva due che il selettore non offriva.
+  // Recursive ha proprio gli assi di partenza della tile (peso e inclinazione), Anybody e Roboto Flex la larghezza.
+  'Recursive', 'Roboto Flex', 'Anybody', 'Fraunces',
 ];
 
 // Project fonts from store

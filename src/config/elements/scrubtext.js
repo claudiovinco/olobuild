@@ -12,7 +12,7 @@ import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEff
  */
 export default {
   type: 'scrubtext',
-  name: t('Manifesto — Scrub testo'),
+  name: t('Manifesto'),
   icon: 'dashicons-editor-textcolor',
   category: 'text',
 
@@ -52,54 +52,53 @@ export default {
     lead: t('Ogni progetto parte dall\'ascolto: capiamo cosa ti serve davvero, poi lo realizziamo con cura, un passo alla volta, con tempi e costi chiari fin dal primo giorno.'),
   },
 
+  // 16 nov 2026 (episodio 34): il nome «Manifesto» (era «Manifesto — Scrub testo»); il testo con l'editor, dove il
+  // corsivo fa le parole d'accento (prima si scriveva HTML a mano: <em>, <br/>); «Paragrafo» al posto di «Lead», «Allo
+  // scorrimento» al posto di «Scrub allo scroll»; lo Stile nelle zone Aspetto · Testo · Disposizione.
   fields: [
-    { key: 'text', label: t('Testo manifesto'), type: 'textarea',
-      description: t('HTML consentito: gli <em> diventano parole accento (colore primario), <br/> va a capo.') },
+    { key: 'text', label: t('Testo'), type: 'editor', mode: 'inline', strumenti: ['corsivo'], aCapo: true,
+      description: t('Le parole in corsivo prendono il colore d’accento e restano dritte. Per andare a capo: Maiusc + Invio.') },
 
-    { type: 'separator', label: t('Lead') },
-    { key: 'show_lead', label: t('Mostra paragrafo lead'), type: 'toggle' },
-    { key: 'lead', label: t('Paragrafo lead'), type: 'textarea',
+    { type: 'separator', label: t('Paragrafo') },
+    { key: 'show_lead', label: t('Mostra il paragrafo'), type: 'toggle' },
+    { key: 'lead', label: t('Paragrafo'), type: 'textarea',
       condition: { field: 'show_lead', op: 'eq', value: true } },
 
-    { type: 'separator', label: t('Scrub allo scroll') },
-    { key: 'scroll_reveal', label: t('Accendi le parole allo scroll'), type: 'toggle',
-      description: t('Le parole partono attenuate e si accendono con lo scorrimento. Disattivato automaticamente con prefers-reduced-motion.') },
+    { type: 'separator', label: t('Allo scorrimento') },
+    { key: 'scroll_reveal', label: t('Le parole si accendono'), type: 'toggle',
+      description: t('Le parole partono spente e si accendono una alla volta mentre la pagina scorre. Chi nel sistema ha chiesto meno movimento le vede tutte accese.') },
   ],
 
   styleFields: [
-    { type: 'separator', label: t('Colori') },
-    { key: 'accent', label: t('Accento (parole <em>)'), type: 'color',
-      description: t('Vuoto = primario del tema.') },
+    { type: 'separator', label: t('Aspetto') },
+    { key: 'accent', label: t('Colore accento'), type: 'color',
+      description: t('Le parole in corsivo del testo. Vuoto: il primario del sito.') },
+    { key: 'dim_opacity', label: t('Parole spente'), type: 'range', min: 0, max: 100, step: 1, unit: '%',
+      condition: { field: 'scroll_reveal', op: 'eq', value: true },
+      description: t('Quanto si vedono le parole non ancora accese.') },
+    { key: 'bg', label: t('Sfondo'), type: 'background', showParallax: false },
+    ...shadowField,
 
     // Tipografia nel controllo unico: la dimensione del manifesto è FLUIDA
     // (scala da sé fra i due estremi) e la riga si misura in caratteri.
-    // Chiavi invariate — i renderer Vue/PHP continuano a leggere le stesse.
-    { type: 'separator', label: t('Tipografia') },
+    // Chiavi invariate — il renderer continua a leggere le stesse.
+    { type: 'separator', label: t('Testo') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     // Lo stile tipografico collegato governa ENTRAMBI i testi (famiglia, peso,
     // interlinea…): a stile scelto i due controlli quelle righe non le mostrano.
-    { type: 'typography', label: t('Testo manifesto'), responsiveKeys: [],
+    { type: 'typography', label: t('Testo'), responsiveKeys: [],
       linkedPresetKey: 'typography_preset',
       keys: { family: 'text_font_family', fluidMin: 'size_min', fluidMax: 'size_max', weight: 'text_font_weight', maxWidth: 'max_width_ch', color: 'text_color' },
       sizeMin: 12, sizeMax: 200, maxWidthMin: 6, maxWidthMax: 60 },
-    { type: 'typography', label: t('Paragrafo lead'), responsiveKeys: [],
+    { type: 'typography', label: t('Paragrafo'), responsiveKeys: [],
       linkedPresetKey: 'typography_preset',
       keys: { family: 'lead_font_family', size: 'lead_size', weight: 'lead_font_weight', maxWidth: 'lead_max_width_ch', color: 'lead_color' },
       sizeMin: 10, sizeMax: 32, sizeStep: 0.5, maxWidthMin: 20, maxWidthMax: 100,
       condition: { field: 'show_lead', op: 'eq', value: true } },
 
-    { type: 'separator', label: t('Sfondo') },
-    { key: 'bg', label: t('Sfondo completo'), type: 'background', showParallax: false },
-
-    { type: 'separator', label: t('Ombra') },
-    ...shadowField,
-
     ...borderFields(),
-    { type: 'separator', label: t('Scrub allo scroll') },
-    { key: 'dim_opacity', label: t('Opacità parole spente'), type: 'number', min: 0, max: 100,
-      condition: { field: 'scroll_reveal', op: 'eq', value: true } },
 
-    // Manifesto e lead stavano sempre a sinistra. «Predefinito» = a sinistra, come prima;
+    // Manifesto e paragrafo stavano sempre a sinistra. «Predefinito» = a sinistra, come prima;
     // centrate o a destra le due righe (misurate in caratteri) si spostano col margine.
     { type: 'separator', label: t('Disposizione') },
     { key: 'text_align', label: t('Allineamento'), type: 'select', responsive: true, options: [

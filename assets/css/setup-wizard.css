@@ -1,0 +1,196 @@
+/* Olobuild — la configurazione iniziale (Olobuild_Setup_Wizard, pagina a tutto schermo dopo l'attivazione).
+   Colonna dei passi a sinistra, il passo a destra; i colori stanno tutti nelle variabili di .ws.
+   Stessa famiglia grafica dei video e della dashboard: fondo scuro caldo, bagliore rosso, Inter + Fraunces. */
+
+.ws {
+	--bg: #120e11; --rail: #171216; --card: #1d171b; --card-2: #241c21;
+	--line: rgba(255, 255, 255, .08); --line-2: rgba(255, 255, 255, .14);
+	--txt: #f5eff1; --txt-2: #c9bfc3; --mute: #a1959a; --faint: #6e6368;
+	--red: #e1474f; --red-h: #ec5a62; --red-soft: rgba(225, 71, 79, .14); --red-glow: rgba(225, 71, 79, .32);
+	--ok: #3ccf7a; --ok-soft: rgba(60, 207, 122, .14);
+	--sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+	--serif: "Fraunces", Georgia, "Times New Roman", serif;
+	position: fixed; inset: 0; display: grid; grid-template-columns: 300px minmax(0, 1fr);
+	background: var(--bg); color: var(--txt); font: 400 15px/1.55 var(--sans);
+	-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+.ws *, .ws *::before, .ws *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.ws [hidden] { display: none !important; }
+.ws a { color: inherit; }
+
+/* ── la colonna dei passi ── */
+.ws-rail { position: relative; display: flex; flex-direction: column; gap: 34px; padding: 40px 32px 30px;
+	background: var(--rail); border-right: 1px solid var(--line); overflow: auto; }
+.ws-logo { display: block; height: 30px; width: auto; align-self: flex-start; }
+.ws-rail-t .ws-kicker { display: block; font: 600 11.5px/1 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--red); }
+.ws-rail-t p { margin-top: 10px; font-size: 13.5px; color: var(--mute); line-height: 1.6; }
+.ws-steps { list-style: none; display: flex; flex-direction: column; }
+.ws-steps li { position: relative; display: flex; gap: 14px; align-items: flex-start; padding-bottom: 26px; }
+.ws-steps li:last-child { padding-bottom: 0; }
+.ws-steps li:not(:last-child)::after { content: ""; position: absolute; left: 15px; top: 36px; bottom: 6px; width: 2px;
+	border-radius: 2px; background: var(--line); transition: background .4s; }
+.ws-steps li.is-done:not(:last-child)::after { background: linear-gradient(var(--ok), rgba(60, 207, 122, .25)); }
+.ws-n { position: relative; flex: none; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%;
+	border: 1.5px solid var(--line-2); color: var(--mute); font: 600 13px/1 var(--sans); transition: all .35s; }
+.ws-n svg { display: none; width: 15px; height: 15px; }
+.ws-steps li.is-active .ws-n { background: var(--red); border-color: var(--red); color: #fff; box-shadow: 0 0 0 5px var(--red-soft), 0 8px 24px -6px var(--red-glow); }
+.ws-steps li.is-done .ws-n { background: var(--ok-soft); border-color: transparent; color: var(--ok); }
+.ws-steps li.is-done .ws-n i { display: none; }
+.ws-steps li.is-done .ws-n svg { display: block; }
+.ws-n i { font-style: normal; }
+.ws-steps b { display: block; padding-top: 2px; font: 600 14.5px/1.3 var(--sans); color: var(--txt-2); transition: color .3s; }
+.ws-steps small { display: block; margin-top: 3px; font-size: 12.5px; color: var(--faint); }
+.ws-steps li.is-active b { color: var(--txt); }
+.ws-steps li.is-active small { color: var(--mute); }
+.ws-rail-foot { margin-top: auto; display: flex; flex-direction: column; gap: 10px; }
+.skip-link { align-self: flex-start; font-size: 13px; color: var(--mute); text-decoration: none; border-bottom: 1px solid var(--line-2); padding-bottom: 1px; cursor: pointer; }
+.skip-link:hover { color: var(--txt-2); border-color: var(--mute); }
+.ws-ver { font-size: 11.5px; color: var(--faint); letter-spacing: .02em; }
+
+/* ── il passo ── */
+.ws-main { position: relative; overflow: auto; display: flex; flex-direction: column; justify-content: center;
+	padding: 48px clamp(28px, 5vw, 72px); isolation: isolate; }
+.ws-main::before { content: ""; position: fixed; z-index: -1; pointer-events: none; right: -220px; top: -260px; width: 820px; height: 820px;
+	border-radius: 50%; background: radial-gradient(circle, rgba(225, 71, 79, .20), transparent 64%); }
+.ws-main::after { content: ""; position: fixed; z-index: -1; pointer-events: none; left: 200px; bottom: -340px; width: 760px; height: 760px;
+	border-radius: 50%; background: radial-gradient(circle, rgba(225, 71, 79, .08), transparent 62%); }
+.ws-step { width: 100%; max-width: 860px; margin: 0 auto; animation: ws-in .45s cubic-bezier(.2, .7, .2, 1) both; }
+@keyframes ws-in { from { opacity: 0; transform: translateY(10px); } }
+.ws-eyebrow { display: inline-flex; align-items: center; gap: 8px; font: 600 11.5px/1 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--mute); }
+.ws-eyebrow::before { content: ""; width: 18px; height: 1.5px; background: var(--red); }
+.ws-title { margin-top: 14px; font: 600 clamp(30px, 3.1vw, 42px)/1.12 var(--serif); letter-spacing: -.01em; color: var(--txt); }
+.ws-lead { margin-top: 14px; max-width: 60ch; font-size: 16px; line-height: 1.65; color: var(--txt-2); }
+.ws-lead strong { color: var(--txt); font-weight: 600; }
+.ws-actions { margin-top: 30px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.status { margin-top: 16px; min-height: 22px; font-size: 13.5px; color: var(--mute); }
+.status .check { color: var(--ok); margin-right: 4px; }
+
+/* pulsanti: <button> e <a> uguali (i link dell'ultimo passo uscivano sottolineati) */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 0 24px;
+	border: 1px solid transparent; border-radius: 12px; font: 600 15px/1 var(--sans); text-decoration: none; cursor: pointer;
+	transition: background .2s, border-color .2s, color .2s, transform .2s, box-shadow .2s; white-space: nowrap; }
+.btn svg { width: 17px; height: 17px; flex: none; }
+.btn-primary { background: var(--red); color: #fff; box-shadow: 0 10px 28px -10px var(--red-glow); }
+.btn-primary:hover { background: var(--red-h); transform: translateY(-1px); box-shadow: 0 14px 32px -10px var(--red-glow); }
+.btn-primary:disabled { background: var(--card-2); color: var(--faint); border-color: var(--line); box-shadow: none; cursor: default; transform: none; }
+.btn-secondary { background: transparent; color: var(--txt-2); border-color: var(--line-2); }
+.btn-secondary:hover { color: var(--txt); border-color: var(--mute); background: rgba(255, 255, 255, .03); }
+.btn:focus-visible, .skip-link:focus-visible, .quick-card:focus-visible, .ws-net:has(input:focus-visible), .ws-net-link:focus-visible {
+	outline: 2px solid var(--red); outline-offset: 3px; }
+.spinner { display: inline-block; width: 17px; height: 17px; border: 2px solid rgba(255, 255, 255, .22); border-top-color: currentColor;
+	border-radius: 50%; animation: ws-spin .7s linear infinite; }
+@keyframes ws-spin { to { transform: rotate(360deg); } }
+
+/* ── passo 1: il tema WordPress, con lo schema della pagina ── */
+.ws-split { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 56px; align-items: center; }
+.ws-fig { position: relative; padding: 26px 18px 18px; border: 1.5px dashed var(--line-2); border-radius: 18px; }
+.ws-fig-tag { position: absolute; top: -11px; left: 16px; padding: 3px 10px; border-radius: 999px; background: var(--bg);
+	border: 1px solid var(--line-2); font: 600 11px/1.3 var(--sans); color: var(--mute); }
+.ws-fig-page { display: flex; flex-direction: column; gap: 8px; }
+.ws-fig-b { position: relative; border-radius: 9px; background: var(--red-soft); border: 1px solid rgba(225, 71, 79, .26); }
+.ws-fig-b span { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font: 600 11px/1 var(--sans); color: #f3a3a8; letter-spacing: .02em; }
+.ws-fig-b.is-bar { height: 30px; }
+.ws-fig-b.is-hero { height: 92px; background: linear-gradient(135deg, rgba(225, 71, 79, .34), rgba(225, 71, 79, .12)); }
+.ws-fig-b.is-hero span { top: auto; bottom: 10px; transform: none; }
+.ws-fig-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.ws-fig-row i { height: 46px; border-radius: 8px; background: rgba(225, 71, 79, .10); border: 1px solid rgba(225, 71, 79, .18); }
+.ws-fig-b.is-foot { height: 34px; background: rgba(225, 71, 79, .22); }
+.ws-fig-cap { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--mute); }
+.ws-fig-cap i { width: 10px; height: 10px; border-radius: 3px; background: rgba(225, 71, 79, .5); flex: none; }
+
+/* ── passo 2: il design, a tutta finestra ── */
+body.is-wide .ws-main { justify-content: flex-start; padding-top: 36px; padding-bottom: 24px; }
+body.is-wide .ws-step { max-width: none; }
+.step-head { display: flex; gap: 28px; align-items: flex-end; justify-content: space-between; }
+.step-head .ws-lead { margin-top: 10px; }
+.step-head .ws-title { margin-top: 12px; }
+.step-head .btn { flex: none; }
+.ws-pick { position: relative; margin-top: 22px; }
+.wizard-picker .otmp { height: calc(100vh - 236px); min-height: 380px; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); }
+/* il selettore condiviso, nella serie scura, sui colori della procedura (e l'accento rosso del marchio) */
+.ws .otmp--embed.otmp--scuro {
+	--modal: var(--card); --side: #19141a; --area: transparent; --panel: var(--card-2); --field: #19141a; --fill: var(--card-2);
+	--line: rgba(255, 255, 255, .08); --line-2: rgba(255, 255, 255, .14);
+	--txt: var(--txt); --txt-2: var(--txt-2); --mute: var(--mute); --faint: var(--faint);
+	--accent: var(--red); --accent-d: #c8323a; --accent-soft: var(--red-soft); --ring: rgba(225, 71, 79, .22);
+	--mark: linear-gradient(140deg, #2a2026, #1b1519); --img: #19141a; background: var(--card); }
+.ws-busy { position: absolute; inset: 0; z-index: 5; display: grid; place-items: center; border-radius: 16px;
+	background: rgba(18, 14, 17, .78); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); animation: ws-in .3s both; }
+.ws-busy-in { width: min(460px, 86%); text-align: center; }
+.ws-busy-in .spinner { width: 34px; height: 34px; border-width: 3px; color: var(--red); }
+.ws-busy-t { display: block; margin-top: 18px; font: 600 24px/1.25 var(--serif); color: var(--txt); }
+.ws-busy-s { display: block; margin-top: 10px; font-size: 14px; line-height: 1.6; color: var(--txt-2); }
+.ws-bar { position: relative; display: block; margin: 22px auto 0; width: 220px; height: 3px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.ws-bar::after { content: ""; position: absolute; top: 0; bottom: 0; width: 40%; border-radius: 3px; background: var(--red); animation: ws-bar 1.4s ease-in-out infinite; }
+@keyframes ws-bar { from { left: -40%; } to { left: 100%; } }
+
+/* ── passo 3: la rete OLOtheme ── */
+.ws-nets { margin-top: 28px; display: grid; gap: 10px; }
+.ws-net { position: relative; display: grid; grid-template-columns: 150px minmax(0, 1fr) auto 46px; align-items: center; gap: 22px;
+	padding: 16px 20px; border-radius: 14px; background: var(--card); border: 1px solid var(--line); cursor: pointer;
+	transition: border-color .2s, background .2s; }
+.ws-net:hover { border-color: var(--line-2); background: #211a1f; }
+.ws-net input { position: absolute; opacity: 0; pointer-events: none; }
+.ws-net-logo { height: 24px; width: auto; max-width: 140px; object-fit: contain; object-position: left center; }
+.ws-net-t b { display: block; font-weight: 600; font-size: 14.5px; color: var(--txt); }
+.ws-net-t span { display: block; margin-top: 2px; font-size: 13.5px; line-height: 1.5; color: var(--mute); }
+.ws-net-st { font-size: 12.5px; color: var(--faint); white-space: nowrap; }
+.ws-net-link { color: var(--txt-2); text-decoration: none; border-bottom: 1px solid var(--line-2); }
+.ws-net-link:hover { color: var(--txt); border-color: var(--mute); }
+.ws-net-on { color: var(--ok); font-weight: 600; }
+.ws-sw { position: relative; width: 46px; height: 26px; border-radius: 999px; background: var(--card-2); border: 1px solid var(--line-2); transition: all .25s; }
+.ws-sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: var(--mute);
+	transition: transform .25s cubic-bezier(.3, .7, .3, 1.2), background .25s; }
+.ws-net input:checked ~ .ws-sw { background: var(--red); border-color: var(--red); }
+.ws-net input:checked ~ .ws-sw::after { transform: translateX(20px); background: #fff; }
+.ws-net:has(input:checked) { border-color: rgba(225, 71, 79, .45); background: linear-gradient(90deg, rgba(225, 71, 79, .08), var(--card) 60%); }
+.ws-net.is-attivo { cursor: default; }
+.ws-net.is-attivo .ws-sw { opacity: .5; }
+.ws-net input:disabled:checked ~ .ws-sw { background: var(--ok); border-color: var(--ok); }
+.ws-note { margin-top: 18px; display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; line-height: 1.6; color: var(--mute); max-width: 72ch; }
+.ws-note svg { flex: none; width: 17px; height: 17px; margin-top: 2px; color: var(--mute); }
+
+/* ── passo 4: pronto ── */
+.ws-ok { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: var(--ok-soft); color: var(--ok);
+	box-shadow: 0 0 0 10px rgba(60, 207, 122, .06); animation: ws-pop .6s cubic-bezier(.2, .9, .3, 1.3) both .1s; }
+.ws-ok svg { width: 30px; height: 30px; }
+@keyframes ws-pop { from { transform: scale(.4); opacity: 0; } }
+#step-pronto .ws-title { margin-top: 24px; }
+.ws-done { list-style: none; margin-top: 26px; display: grid; gap: 10px; max-width: 640px; }
+.ws-done li { display: flex; gap: 12px; align-items: flex-start; padding: 13px 16px; border-radius: 12px; background: var(--card); border: 1px solid var(--line);
+	font-size: 14.5px; line-height: 1.5; color: var(--txt-2); }
+.ws-done li svg { flex: none; width: 18px; height: 18px; margin-top: 2px; color: var(--ok); }
+.quick-cards { display: grid; gap: 10px; margin-top: 24px; max-width: 640px; }
+.quick-card { display: flex; gap: 14px; align-items: center; padding: 14px 16px; background: var(--card); border: 1px solid var(--line);
+	border-radius: 12px; text-decoration: none; color: var(--txt); transition: border-color .2s, transform .2s; }
+.quick-card:hover { border-color: var(--red); transform: translateX(2px); }
+.quick-card-icon { width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; background: var(--card-2);
+	border-radius: 9px; color: #f2989e; flex-shrink: 0; }
+.quick-card strong { display: block; font-size: 14px; font-weight: 600; color: var(--txt); }
+.quick-card small { display: block; font-size: 12.5px; color: var(--mute); margin-top: 2px; }
+
+/* ── schermi stretti: i passi in alto, in riga ── */
+@media (max-width: 960px) {
+	.ws { position: static; display: block; min-height: 100vh; }
+	.ws-rail { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 16px 24px; padding: 18px 20px; border-right: 0; border-bottom: 1px solid var(--line); }
+	.ws-rail-t { display: none; }
+	.ws-steps { flex-direction: row; gap: 14px; flex: 1 1 100%; }
+	.ws-steps li { padding-bottom: 0; gap: 8px; align-items: center; }
+	.ws-steps li::after, .ws-steps small { display: none; }
+	.ws-steps li:not(.is-active) b { display: none; }
+	.ws-rail-foot { margin-top: 0; margin-left: auto; flex-direction: row; align-items: center; }
+	.ws-ver { display: none; }
+	.ws-main { overflow: visible; padding: 32px 20px; }
+	.ws-split { grid-template-columns: 1fr; gap: 32px; }
+	.ws-fig { max-width: 340px; }
+	.step-head { flex-direction: column; align-items: stretch; }
+	.wizard-picker .otmp { height: 70vh; }
+	.ws-net { grid-template-columns: 1fr auto; gap: 10px 14px; }
+	.ws-net-logo { grid-column: 1; }
+	.ws-net-t { grid-column: 1 / -1; grid-row: 2; }
+	.ws-net-st { grid-column: 1; grid-row: 3; }
+	.ws-sw { grid-column: 2; grid-row: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+	.ws *, .ws *::before, .ws *::after { animation: none !important; transition: none !important; }
+}

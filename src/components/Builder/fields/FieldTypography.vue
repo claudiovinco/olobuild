@@ -772,7 +772,8 @@ const FAMIGLIE_LEGACY = {
 // diceva niente. Il nome del ruolo resta solo se il tema non ha un font.
 function familyLabel(value) {
   const v = String(value || '').trim();
-  if (!v) return '';
+  // «inherit» = il carattere del sito: nella sintesi non dice niente (prima si leggeva «inherit · 0px»).
+  if (!v || v === 'inherit') return '';
   const vero = resolveFontToken(v, stylesStore);
   if (vero) return vero.split(',')[0].replace(/['"]/g, '').trim();
   // Il tema non ha un font per quel ruolo, o il set non esiste più.
@@ -820,13 +821,15 @@ const summaryParts = computed(() => {
     const lo = filled('fluidMin') ? fmt(raw('fluidMin')) : '·';
     const hi = filled('fluidMax') ? fmt(raw('fluidMax')) : '·';
     out.push(`${lo}–${hi}px`);
-  } else if (filled('size')) {
+  } else if (filled('size') && Number(raw('size')) !== 0) {
+    // 0 = la misura automatica della tile (sizeMin 0): come «predefinito», non «0px».
     out.push(fmt(raw('size'), 'px') + perDispositivo('size'));
   }
   if (filled('maxWidth')) out.push(fmt(raw('maxWidth'), props.maxWidthUnit));
 
   if (filled('weight') && !governata('weight')) out.push(String(raw('weight')));
-  if (filled('lineHeight') && !governata('lineHeight')) out.push(fmt(raw('lineHeight')) + perDispositivo('lineHeight'));
+  // 0 = l'interlinea della tile, come la dimensione: «predefinito», non «0» (16 nov 2026, Descrizione della Timeline).
+  if (filled('lineHeight') && Number(raw('lineHeight')) !== 0 && !governata('lineHeight')) out.push(fmt(raw('lineHeight')) + perDispositivo('lineHeight'));
   if (filled('letterSpacing') && !governata('letterSpacing')) out.push(fmt(raw('letterSpacing'), props.letterSpacingUnit));
   if (filled('wordSpacing')) out.push(fmt(raw('wordSpacing'), 'px') + ' ' + t('parole'));
 

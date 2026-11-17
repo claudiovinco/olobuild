@@ -154,6 +154,8 @@ class Olobuild_Progress_Tile extends Olobuild_Tile_Base {
     /**
      * Render circle layout
      */
+    // 17 nov 2026: niente più margine interno fisso di 16 px (barre e cerchi partivano più a destra del resto della
+    // colonna); lo spazio intorno si regola dal Contenitore, come nelle altre tile. L'etichetta sotto il cerchio a 13 px.
     private function render_circle( $s, $bars, $prog_fg, $prog_bar, $prog_bg, $uid ) {
         $circle_size  = max( 40, intval( $s['circle_size'] ) );
         $circle_width = max( 1, intval( $s['circle_width'] ) );
@@ -163,8 +165,13 @@ class Olobuild_Progress_Tile extends Olobuild_Tile_Base {
         $inner_text    = isset( $s['inner_text'] ) ? trim( $s['inner_text'] ) : '';
         $animate       = ! empty( $s['animate_counter'] );
         $animate_fill  = ! empty( $s['animated'] );
+        // Nel cerchio numero ed etichetta stanno sulla pagina, non sulla barra: lo stile «Spessa» scrive un colore del
+        // testo pensato per il primario (bianco su bianco nel cerchio, 17 nov 2026). Lì vale il colore del testo.
+        if ( 'spessa' === ( $s['preset'] ?? '' ) ) {
+            $prog_fg = '';
+        }
         ?>
-        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-progress olo-pr-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?> olo-progress-circle" style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;padding:16px;">
+        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-progress olo-pr-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?> olo-progress-circle" style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;">
             <?php foreach ( $bars as $bar ) :
                 $val    = min( max( intval( $bar['value'] ), 0 ), 100 );
                 $offset = $circumference - ( $circumference * $val / 100 );
@@ -185,7 +192,7 @@ class Olobuild_Progress_Tile extends Olobuild_Tile_Base {
                         echo $inner_text ? esc_html( $inner_text ) : (int) $val . '%';
                     ?></text>
                 </svg>
-                <div style="margin-top:4px;font-size:11px;<?php if ( $prog_fg ) echo 'color:' . $prog_fg . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>"><?php echo esc_html( $bar['label'] ); ?></div>
+                <div style="margin-top:6px;font-size:13px;line-height:1.3;<?php if ( $prog_fg ) echo 'color:' . $prog_fg . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>"><?php echo esc_html( $bar['label'] ); ?></div>
             </div>
             <?php endforeach; ?>
         </div>
@@ -219,7 +226,11 @@ class Olobuild_Progress_Tile extends Olobuild_Tile_Base {
         // vede): con quei preset e un testo chiaro va dentro la barra.
         $pct_dentro = false;
         if ( ! empty( $s['show_percentage'] ) && $inner_text === '' ) {
-            if ( in_array( $s['preset'] ?? '', [ 'thick-bold', 'gradient-bar', 'gradient-aurora' ], true ) ) {
+            if ( 'spessa' === ( $s['preset'] ?? '' ) ) {
+                // Lo stile «Spessa» (17 nov 2026) scrive il colore del testo sul primario: la percentuale sta sulla barra.
+                $pct_dentro = true;
+            } elseif ( in_array( $s['preset'] ?? '', [ 'thick-bold', 'gradient-bar', 'gradient-aurora' ], true ) ) {
+                // Gli stili di prima, ancora salvati in qualche pagina.
                 $pct_dentro = $this->testo_chiaro( $prog_fg );
             }
         }
@@ -227,7 +238,7 @@ class Olobuild_Progress_Tile extends Olobuild_Tile_Base {
         // testa, su pagina chiara, restavano bianche e invisibili. Prendono il colore del testo.
         $head_fg = $pct_dentro ? '' : $prog_fg;
         ?>
-        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-progress olo-pr-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="padding:16px;display:flex;flex-direction:column;gap:16px;">
+        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-progress olo-pr-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="display:flex;flex-direction:column;gap:16px;">
             <?php foreach ( $bars as $bar ) :
                 $val = min( max( intval( $bar['value'] ), 0 ), 100 );
             ?>
@@ -247,7 +258,9 @@ class Olobuild_Progress_Tile extends Olobuild_Tile_Base {
                             $radius_css = intval( $rad_raw ) . 'px';
                             $has_radius = intval( $rad_raw ) > 0;
                         }
-                        $bar_height = max( 10, intval( $s['height'] ) );
+                        $bar_height = max( 4, intval( $s['height'] ) );
+                        // Il testo dentro la barra cresce con lei (era 10 px fissi anche su una barra di 40).
+                        $fs_dentro = max( 10, min( 15, (int) round( $bar_height * 0.45 ) ) );
                     ?>
                     <div role="progressbar" aria-valuenow="<?php echo (int) $val; ?>" aria-valuemin="0" aria-valuemax="100" aria-label="<?php echo esc_attr( $bar['label'] ); ?>" style="position:relative;<?php if ( $track_bg !== '' ) echo 'background:' . esc_attr( $track_bg ) . ';'; ?><?php if ( $has_radius ) echo 'border-radius:' . $radius_css . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- absint/intval-built radius and (int) height only ?>height:<?php echo (int) $bar_height; ?>px;overflow:hidden;">
                         <div style="height:100%;width:<?php echo (int) $val; ?>%;background:<?php echo esc_attr( $fill_bg ); ?>;<?php if ( $has_radius ) echo 'border-radius:' . $radius_css . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- absint/intval-built radius only ?>transition:width 1s ease;"<?php if ( $animate_fill ) : ?> data-olo-fill="<?php echo (int) $val; ?>"<?php endif; ?>></div>
@@ -260,9 +273,9 @@ class Olobuild_Progress_Tile extends Olobuild_Tile_Base {
                             $pct_fuori = $val < 15;
                             $pct_pos   = $pct_fuori ? 'left:calc(' . (int) $val . '% + 6px);transform:translateY(-50%);' : 'left:calc(' . (int) $val . '% - 8px);transform:translate(-100%,-50%);';
                         ?>
-                            <span style="position:absolute;top:50%;<?php echo $pct_pos; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from (int) $val and fixed literals ?>white-space:nowrap;font-size:10px;font-weight:600;<?php if ( ! $pct_fuori ) { if ( $prog_fg ) echo 'color:' . $prog_fg . ';'; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>"<?php if ( $animate ) : ?> data-olo-counter="<?php echo (int) $val; ?>"<?php endif; ?>><?php echo (int) $val; ?>%</span>
+                            <span style="position:absolute;top:50%;<?php echo $pct_pos; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from (int) $val and fixed literals ?>white-space:nowrap;font-size:<?php echo (int) $fs_dentro; ?>px;font-weight:600;<?php if ( ! $pct_fuori ) { if ( $prog_fg ) echo 'color:' . $prog_fg . ';'; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>"<?php if ( $animate ) : ?> data-olo-counter="<?php echo (int) $val; ?>"<?php endif; ?>><?php echo (int) $val; ?>%</span>
                         <?php elseif ( $inner_text !== '' ) : ?>
-                            <span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:10px;font-weight:600;<?php if ( $prog_fg ) echo 'color:' . $prog_fg . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>"><?php echo esc_html( $inner_text ); ?></span>
+                            <span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:<?php echo (int) $fs_dentro; ?>px;font-weight:600;<?php if ( $prog_fg ) echo 'color:' . $prog_fg . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>"><?php echo esc_html( $inner_text ); ?></span>
                         <?php endif; ?>
                     </div>
                 </div>

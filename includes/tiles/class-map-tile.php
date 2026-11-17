@@ -575,6 +575,8 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
                 'cam'        => olobuild_t( 'cam.' ),
                 'bagni'      => olobuild_t( 'bagni' ),
                 'notte'      => olobuild_t( 'notte' ),
+                'risultato'  => olobuild_t( 'Risultato' ),
+                'risultati'  => olobuild_t( 'Risultati' ),
             ],
         ];
 
@@ -599,9 +601,9 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
                     <div class="plm-filters-grid">
                         <?php if ( $show_search ) : ?>
                             <div class="plm-filter-group plm-filter-group--full">
-                                <span class="plm-filter-label"><?php echo esc_html( olobuild_t( 'Localit&agrave;' ) ); ?></span>
+                                <span class="plm-filter-label"><?php echo esc_html( olobuild_t( 'Località' ) ); ?></span>
                                 <div class="plm-autocomplete-wrap">
-                                    <input type="text" class="plm-filter-input" data-filter="location" placeholder="<?php echo esc_attr( olobuild_t( 'Cerca citt&agrave;, zona, indirizzo...' ) ); ?>" autocomplete="off" />
+                                    <input type="text" class="plm-filter-input" data-filter="location" placeholder="<?php echo esc_attr( olobuild_t( 'Cerca città, zona, indirizzo...' ) ); ?>" autocomplete="off" />
                                     <ul class="plm-autocomplete-list" id="<?php echo esc_attr( $uid ); ?>-ac"></ul>
                                 </div>
                             </div>
@@ -645,7 +647,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
                             <option value="default" <?php selected( $sort_default, 'default' ); ?>><?php echo esc_html( olobuild_t( 'Ordine predefinito' ) ); ?></option>
                             <option value="title_asc" <?php selected( $sort_default, 'title_asc' ); ?>><?php echo esc_html( olobuild_t( 'Titolo A-Z' ) ); ?></option>
                             <option value="title_desc" <?php selected( $sort_default, 'title_desc' ); ?>><?php echo esc_html( olobuild_t( 'Titolo Z-A' ) ); ?></option>
-                            <option value="newest" <?php selected( $sort_default, 'newest' ); ?>><?php echo esc_html( olobuild_t( 'Pi&ugrave; recenti' ) ); ?></option>
+                            <option value="newest" <?php selected( $sort_default, 'newest' ); ?>><?php echo esc_html( olobuild_t( 'Più recenti' ) ); ?></option>
                             <option value="distance" <?php selected( $sort_default, 'distance' ); ?>><?php echo esc_html( olobuild_t( 'Distanza' ) ); ?></option>
                         </select>
                         <div class="plm-view-toggles" role="group" aria-label="<?php echo esc_attr( olobuild_t( 'Tipo di vista' ) ); ?>">
@@ -662,9 +664,9 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
                 <div class="plm-results-list<?php echo $view_mode === 'grid' ? ' plm-grid-view' : ''; ?>" id="<?php echo esc_attr( $uid ); ?>-list"></div>
 
                 <div class="plm-pagination" id="<?php echo esc_attr( $uid ); ?>-pagination">
-                    <button type="button" class="plm-page-btn" data-page="prev"><?php echo esc_html( olobuild_t( '&larr; Precedente' ) ); ?></button>
+                    <button type="button" class="plm-page-btn" data-page="prev"><?php echo esc_html( olobuild_t( '← Precedente' ) ); ?></button>
                     <span class="plm-page-info" id="<?php echo esc_attr( $uid ); ?>-pageinfo">1 / 1</span>
-                    <button type="button" class="plm-page-btn" data-page="next"><?php echo esc_html( olobuild_t( 'Successivo &rarr;' ) ); ?></button>
+                    <button type="button" class="plm-page-btn" data-page="next"><?php echo esc_html( olobuild_t( 'Successivo →' ) ); ?></button>
                 </div>
             </div>
         </div>
@@ -998,6 +1000,8 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
                 'cam'        => olobuild_t( 'cam.' ),
                 'bagni'      => olobuild_t( 'bagni' ),
                 'notte'      => olobuild_t( 'notte' ),
+                'risultato'  => olobuild_t( 'Risultato' ),
+                'risultati'  => olobuild_t( 'Risultati' ),
             ],
         ];
 
@@ -1022,9 +1026,9 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
                     <div class="plm-filters-grid">
                         <?php if ( $show_search ) : ?>
                             <div class="plm-filter-group plm-filter-group--full">
-                                <span class="plm-filter-label"><?php echo esc_html( olobuild_t( 'Localit&agrave;' ) ); ?></span>
+                                <span class="plm-filter-label"><?php echo esc_html( olobuild_t( 'Località' ) ); ?></span>
                                 <div class="plm-autocomplete-wrap">
-                                    <input type="text" class="plm-filter-input" data-filter="location" placeholder="<?php echo esc_attr( olobuild_t( 'Cerca citt&agrave;, zona, indirizzo...' ) ); ?>" autocomplete="off" />
+                                    <input type="text" class="plm-filter-input" data-filter="location" placeholder="<?php echo esc_attr( olobuild_t( 'Cerca città, zona, indirizzo...' ) ); ?>" autocomplete="off" />
                                     <ul class="plm-autocomplete-list" id="<?php echo esc_attr( $uid ); ?>-ac"></ul>
                                 </div>
                             </div>
@@ -1058,7 +1062,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
                             <option value="default" <?php selected( $sort_default, 'default' ); ?>><?php echo esc_html( olobuild_t( 'Ordine predefinito' ) ); ?></option>
                             <option value="title_asc" <?php selected( $sort_default, 'title_asc' ); ?>><?php echo esc_html( olobuild_t( 'Titolo A-Z' ) ); ?></option>
                             <option value="title_desc" <?php selected( $sort_default, 'title_desc' ); ?>><?php echo esc_html( olobuild_t( 'Titolo Z-A' ) ); ?></option>
-                            <option value="newest" <?php selected( $sort_default, 'newest' ); ?>><?php echo esc_html( olobuild_t( 'Pi&ugrave; recenti' ) ); ?></option>
+                            <option value="newest" <?php selected( $sort_default, 'newest' ); ?>><?php echo esc_html( olobuild_t( 'Più recenti' ) ); ?></option>
                             <option value="distance" <?php selected( $sort_default, 'distance' ); ?>><?php echo esc_html( olobuild_t( 'Distanza' ) ); ?></option>
                         </select>
                         <div class="plm-view-toggles" role="group" aria-label="<?php echo esc_attr( olobuild_t( 'Tipo di vista' ) ); ?>">
@@ -1075,9 +1079,9 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
                 <div class="plm-results-list<?php echo $view_mode === 'grid' ? ' plm-grid-view' : ''; ?>" id="<?php echo esc_attr( $uid ); ?>-list"></div>
 
                 <div class="plm-pagination" id="<?php echo esc_attr( $uid ); ?>-pagination">
-                    <button type="button" class="plm-page-btn" data-page="prev"><?php echo esc_html( olobuild_t( '&larr; Precedente' ) ); ?></button>
+                    <button type="button" class="plm-page-btn" data-page="prev"><?php echo esc_html( olobuild_t( '← Precedente' ) ); ?></button>
                     <span class="plm-page-info" id="<?php echo esc_attr( $uid ); ?>-pageinfo">1 / 1</span>
-                    <button type="button" class="plm-page-btn" data-page="next"><?php echo esc_html( olobuild_t( 'Successivo &rarr;' ) ); ?></button>
+                    <button type="button" class="plm-page-btn" data-page="next"><?php echo esc_html( olobuild_t( 'Successivo →' ) ); ?></button>
                 </div>
             </div>
         </div>
@@ -1353,7 +1357,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         <div class="olo-map-filters-bar olo-map-filters-bar--compact" data-map-target="<?php echo esc_attr( $map_id ); ?>">
             <?php $this->render_compact_filters( $s, $locations, $map_id ); ?>
             <div class="olo-map-svc-filter-counter" data-map-target="<?php echo esc_attr( $map_id ); ?>">
-                <span data-svc-count><?php echo (int) count( $locations ); ?></span> / <?php echo (int) count( $locations ); ?> risultati
+                <span data-svc-count><?php echo (int) count( $locations ); ?></span> / <?php echo (int) count( $locations ); ?> <?php echo esc_html( olobuild_t( 'risultati' ) ); ?>
             </div>
         </div>
         <?php else : ?>
@@ -1379,7 +1383,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
             }
             ?>
             <div class="olo-map-svc-filter-counter" data-map-target="<?php echo esc_attr( $map_id ); ?>">
-                <span data-svc-count><?php echo (int) count( $locations ); ?></span> / <?php echo (int) count( $locations ); ?> risultati
+                <span data-svc-count><?php echo (int) count( $locations ); ?></span> / <?php echo (int) count( $locations ); ?> <?php echo esc_html( olobuild_t( 'risultati' ) ); ?>
             </div>
         </div>
         <?php
@@ -1427,7 +1431,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
                 sort( $names );
                 ?>
                 <select class="olo-map-compact-select" data-filter-type="valley" data-map-target="<?php echo esc_attr( $map_id ); ?>">
-                    <option value=""><?php echo esc_html( olobuild_t( 'Localit&agrave;' ) ); ?></option>
+                    <option value=""><?php echo esc_html( olobuild_t( 'Località' ) ); ?></option>
                     <?php foreach ( $names as $n ) : ?>
                     <option value="<?php echo esc_attr( $n ); ?>"><?php echo esc_html( $n ); ?></option>
                     <?php endforeach; ?>
@@ -1560,7 +1564,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         sort( $locality_names );
         ?>
         <div class="olo-map-svc-filter-group" data-filter-type="valley" data-map-target="<?php echo esc_attr( $map_id ); ?>">
-            <span class="olo-map-svc-filter-label"><?php echo esc_html( olobuild_t( 'Localit&agrave;' ) ); ?></span>
+            <span class="olo-map-svc-filter-label"><?php echo esc_html( olobuild_t( 'Località' ) ); ?></span>
             <div class="olo-map-svc-filter-pills">
                 <button class="olo-map-filter-pill olo-map-filter-active" data-svc-filter=""><?php echo esc_html( olobuild_t( 'Tutte' ) ); ?></button>
                 <?php foreach ( $locality_names as $loc_name ) : ?>
@@ -1885,7 +1889,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
                 ];
             }
             if ( ! empty( $loc['price'] ) && $item_type !== 'Place' ) {
-                $schema_item['priceRange'] = '€' . $loc['price'];
+                $schema_item['priceRange'] = ( preg_match( '/^[\d.,\s]+$/', (string) $loc['price'] ) ? '€' : '' ) . $loc['price'];
             }
             $list_items[] = [
                 '@type'    => 'ListItem',
@@ -2205,7 +2209,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
                     }
                     if (sub.length) html += '<div class="plm-popup-sub">' + sub.join(' &middot; ') + '</div>';
                     if (IS_SVC && D.popupPrice && p.price) {
-                        html += '<div class="plm-popup-price" style="color:' + (D.popupBtnColor || COLOR) + '">&euro; ' + escHtml(p.price) + '</div>';
+                        html += '<div class="plm-popup-price" style="color:' + (D.popupBtnColor || COLOR) + '">' + (/^[\d.,\s]+$/.test(String(p.price)) ? '&euro; ' : '') + escHtml(p.price) + '</div>';
                     }
                     if ((IS_SVC ? D.popupLink : D.popupLink) && p.url) {
                         var btnText = IS_SVC ? (D.popupBtnText || 'Scopri') : 'Dettagli';
@@ -2352,7 +2356,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
                             if (specs.length) html += '<div class="plm-card-specs">' + specs.join('') + '</div>';
                         }
                         var priceVal = p.price || p.price_night;
-                        if (priceVal) html += '<div class="plm-card-price">&euro; ' + escHtml(priceVal) + (IS_SVC ? (' / ' + (D.i18n && D.i18n.notte || 'notte')) : '') + '</div>';
+                        if (priceVal) html += '<div class="plm-card-price">' + (/^[\d.,\s]+$/.test(String(priceVal)) ? '&euro; ' : '') + escHtml(priceVal) + (IS_SVC ? (' / ' + (D.i18n && D.i18n.notte || 'notte')) : '') + '</div>';
                         html += '</div></a>';
                     });
                     listEl.innerHTML = html;
@@ -2378,7 +2382,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
                 function updateCount() {
                     if (!countEl) return;
                     var n = filtered.length;
-                    countEl.innerHTML = '<strong>' + n + '</strong> Risultat' + (n === 1 ? 'o' : 'i');
+                    countEl.innerHTML = '<strong>' + n + '</strong> ' + (n === 1 ? ((D.i18n && D.i18n.risultato) || 'Risultato') : ((D.i18n && D.i18n.risultati) || 'Risultati'));
                 }
 
                 function updatePagination() {
@@ -3022,7 +3026,8 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
                         if (p.address)  sub.push(escHtml(p.address));
                         if (p.altitude !== undefined) sub.push((+p.altitude).toLocaleString('it-IT') + ' m');
                         if (sub.length) h += '<p class="olo-map-card-sub">' + sub.join(' &middot; ') + '</p>';
-                        if (p.price)    h += '<div class="olo-map-card-price">&euro; ' + escHtml(p.price) + '</div>';
+                        // «€» solo davanti a un numero: una fascia già scritta coi simboli («€€€») diventava «€ €€€» (17 nov 2026)
+                        if (p.price)    h += '<div class="olo-map-card-price">' + (/^[\d.,\s]+$/.test(String(p.price)) ? '&euro; ' : '') + escHtml(p.price) + '</div>';
                         else if (p.price_night) h += '<div class="olo-map-card-price">&euro; ' + escHtml(p.price_night) + '</div>';
                         h += '</div></a>';
                         return h;
@@ -3062,7 +3067,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
                 }
 
                 function updateCount() {
-                    if (countEl) countEl.innerHTML = '<strong>' + filtered.length + '</strong> risultat' + (filtered.length === 1 ? 'o' : 'i');
+                    if (countEl) countEl.innerHTML = '<strong>' + filtered.length + '</strong> ' + (filtered.length === 1 ? <?php echo wp_json_encode( olobuild_t( 'Risultato' ) ); ?> : <?php echo wp_json_encode( olobuild_t( 'Risultati' ) ); ?>);
                 }
 
                 function highlight(id) {

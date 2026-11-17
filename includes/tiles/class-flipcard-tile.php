@@ -330,6 +330,30 @@ class Olobuild_FlipCard_Tile extends Olobuild_Tile_Base {
                     transform: <?php echo $flip_transform; ?> !important;
                 }
             }
+            <?php
+            // Il disegno che uno stile ha e che non è un valore (16 nov 2026): prima «Vetro», «Neon», «Adesivo» e
+            // «Inclinato in 3D» erano solo colori, e «Aurora» due sfumature in esadecimale che il renderer scartava.
+            $fc_preset = sanitize_key( $s['preset'] ?? '' );
+            if ( 'gradient-aurora' === $fc_preset ) :
+                if ( '' === $this->safe_color_css( $s['front_bg'] ?? '' ) ) : ?>
+            .<?php echo $uid; ?> .olo-fc-front { background-image: linear-gradient(140deg, var(--olo-color-primary, #e1474f), color-mix(in srgb, var(--olo-color-primary, #e1474f) 45%, var(--olo-color-accent, #f59e0b))); }
+            <?php endif; if ( '' === $this->safe_color_css( $s['back_bg'] ?? '' ) ) : ?>
+            .<?php echo $uid; ?> .olo-fc-back { background-image: linear-gradient(140deg, var(--olo-color-dark, #16263d), color-mix(in srgb, var(--olo-color-primary, #e1474f) 55%, var(--olo-color-dark, #16263d))); }
+            <?php endif; ?>
+            <?php elseif ( 'glass-flip' === $fc_preset ) : ?>
+            .<?php echo $uid; ?> .olo-fc-front, .<?php echo $uid; ?> .olo-fc-back { -webkit-backdrop-filter: blur(14px) saturate(140%); backdrop-filter: blur(14px) saturate(140%); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--olo-color-light, #fff) 35%, transparent); }
+            <?php elseif ( 'neon-frame' === $fc_preset ) : ?>
+            .<?php echo $uid; ?> .olo-fc-front, .<?php echo $uid; ?> .olo-fc-back { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--olo-color-accent) 55%, transparent), 0 0 30px color-mix(in srgb, var(--olo-color-accent) 22%, transparent); }
+            .<?php echo $uid; ?> .olo-fc-title { text-shadow: 0 0 14px color-mix(in srgb, currentColor 60%, transparent); }
+            <?php elseif ( 'sticker-flip' === $fc_preset ) : ?>
+            .<?php echo $uid; ?> .olo-fc-front, .<?php echo $uid; ?> .olo-fc-back { border: 2px solid var(--olo-color-text, #1f2937); box-shadow: 6px 6px 0 var(--olo-color-text, #1f2937); }
+            <?php elseif ( 'tilt-3d' === $fc_preset ) : ?>
+            .<?php echo $uid; ?> { transform: perspective(1100px) rotateY(-9deg) rotateX(4deg); transition: transform .5s cubic-bezier(.2,.7,.3,1); }
+            .<?php echo $uid; ?>:hover, .<?php echo $uid; ?>:focus-within { transform: none; }
+            @media (prefers-reduced-motion: reduce) { .<?php echo $uid; ?> { transition: none; } }
+            <?php elseif ( 'retro-poster' === $fc_preset ) : ?>
+            .<?php echo $uid; ?> .olo-fc-title { text-transform: uppercase; letter-spacing: .06em; line-height: 1.05; }
+            <?php endif; ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-fc <?php echo esc_attr( $uid ); ?> olo-fc-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" data-trigger="<?php echo esc_attr( $trigger ); ?>">

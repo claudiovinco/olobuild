@@ -48,6 +48,7 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
         'avatar_border_color' => '',
         'avatar_filter'      => 'none',
         'border_radius'      => '12',
+        'card_shadow'        => 'none',
         'border_width'            => '0',
         'border_color'            => '',
         'border'                  => [],
@@ -86,7 +87,7 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
         $tile_radius = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $tile_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
-        $star_color = $this->safe_color_css( $s['star_color'] ?? '' ) ?: '#FBBF24';
+        $star_color = $this->safe_color_css( $s['star_color'] ?? '' ) ?: 'var(--olo-color-warning, #FBBF24)';
         $star_svg = '<svg width="18" height="18" viewBox="0 0 20 20" fill="' . esc_attr( $star_color ) . '" style="vertical-align:-2px;display:inline-block"><polygon points="10,1.5 12.5,7 18.5,7.6 14,11.5 15.3,17.5 10,14.5 4.7,17.5 6,11.5 1.5,7.6 7.5,7"/></svg>';
 
         $bottom_jc = 'flex-start';
@@ -135,7 +136,16 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
                 background: <?php echo $bg; ?>;
                 color: <?php echo $fg; ?>;
                 border-radius: <?php echo $tile_radius; ?>;
-                padding: 24px;
+                padding: 1.5rem;
+                <?php
+                // Ombra della scheda (Stile › Forma): «Netta, a timbro» è l'ombra piena spostata del Timbro netto.
+                $c_sh = (string) ( $s['card_shadow'] ?? 'none' );
+                if ( 'netta' === $c_sh ) {
+                    echo 'box-shadow:6px 6px 0 ' . $fg . ';';
+                } elseif ( in_array( $c_sh, [ 'sm', 'md', 'lg' ], true ) ) {
+                    echo 'box-shadow:' . Olobuild_Tile_Utils::shadow( $c_sh ) . ';';
+                }
+                ?>
                 <?php
                 // V3.21: nuovo card_border (4 lati hoverable) ha priorità sul legacy border_width/color.
                 $_card_border_css = $this->build_border_css( $s['card_border'] ?? [] );
@@ -157,10 +167,10 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
                 max-width: 160px;
                 object-fit: contain;
                 display: block;
-                margin-bottom: 16px;
+                margin-bottom: 1rem;
             }
             .<?php echo $uid; ?> .olo-test-stars {
-                margin-bottom: 12px;
+                margin-bottom: .75rem;
                 display: flex;
                 gap: 2px;
             }
@@ -175,6 +185,9 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
             // spento = dritto, scritto esplicito perché UIkit dà il corsivo a ogni blockquote.
             $q_it_v   = $s['quote_italic'] ?? true;
             $q_italic = ( '' === $q_it_v || null === $q_it_v ) ? true : filter_var( $q_it_v, FILTER_VALIDATE_BOOLEAN );
+            // Le parole in evidenza (il corsivo messo col pulsante I nella citazione): prima le leggeva solo
+            // l'Editoriale, e solo se si scriveva <em> a mano; nelle schede il tag spariva. Vuoto = il primario.
+            $q_accent = $this->safe_color_css( $s['quote_accent_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
             ?>
             .<?php echo $uid; ?> blockquote {
                 font-size: <?php echo $q_size > 0 ? $q_size . 'px' : '1.1em'; ?>;
@@ -186,12 +199,31 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
                 color: <?php echo $fg; ?>;
                 <?php if ( $show_line ) : ?>
                 border-left: 3px solid <?php echo $line_col; ?>;
-                padding-left: 16px;
+                padding-left: 1rem;
                 <?php else : ?>
                 border-left: none;
                 padding-left: 0;
                 <?php endif; ?>
             }
+            .<?php echo $uid; ?> blockquote em { font-style: italic; color: <?php echo $q_accent; ?>; }
+            .<?php echo $uid; ?> blockquote strong { font-weight: 700; }
+            <?php
+            // Il disegno che uno stile ha e che non è un valore: i foglietti storti col nastro adesivo, la
+            // sfocatura dietro il vetro, il bagliore delle parole al neon.
+            $preset = sanitize_key( $s['preset'] ?? '' );
+            if ( 'sticky-note' === $preset ) : ?>
+            .<?php echo $uid; ?> .olo-test-card { position: relative; transform: rotate(-1.4deg); transition: transform .35s cubic-bezier(.2,.7,.3,1); }
+            .<?php echo $uid; ?> .olo-test-grid > *:nth-child(3n+2) .olo-test-card, .<?php echo $uid; ?> .olo-test-grid > .olo-test-card:nth-child(3n+2) { transform: rotate(1.1deg); }
+            .<?php echo $uid; ?> .olo-test-grid > *:nth-child(3n) .olo-test-card, .<?php echo $uid; ?> .olo-test-grid > .olo-test-card:nth-child(3n) { transform: rotate(-.6deg); }
+            .<?php echo $uid; ?> .olo-test-card:hover { transform: rotate(0deg) translateY(-3px); }
+            .<?php echo $uid; ?> .olo-test-card::before { content: ""; position: absolute; top: -11px; left: 50%; width: 84px; height: 24px; transform: translateX(-50%) rotate(-3deg); background: color-mix(in srgb, var(--olo-color-light, #fff) 62%, transparent); box-shadow: 0 1px 2px rgba(16,24,40,.10); }
+            @media (prefers-reduced-motion: reduce) { .<?php echo $uid; ?> .olo-test-card { transition: none; } }
+            <?php elseif ( 'glass-frosted' === $preset ) : ?>
+            .<?php echo $uid; ?> .olo-test-card { -webkit-backdrop-filter: blur(14px) saturate(140%); backdrop-filter: blur(14px) saturate(140%); }
+            <?php elseif ( 'neon-quote' === $preset ) : ?>
+            .<?php echo $uid; ?> .olo-test-card { box-shadow: 0 0 0 1px color-mix(in srgb, var(--olo-color-accent) 30%, transparent), 0 0 26px color-mix(in srgb, var(--olo-color-accent) 28%, transparent); }
+            .<?php echo $uid; ?> blockquote em { text-shadow: 0 0 14px color-mix(in srgb, currentColor 60%, transparent); }
+            <?php endif; ?>
             .<?php echo $uid; ?> .olo-test-author img {
                 width: <?php echo $av_size; ?>px;
                 height: <?php echo $av_size; ?>px;
@@ -295,7 +327,7 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
         $qsize_css = $qsize > 0 ? ( $qsize . 'px' ) : 'clamp(24px,3.4vw,40px)';
         $upper   = ! empty( $s['author_uppercase'] );
         $qupper  = ! empty( $s['quote_uppercase'] );
-        $quote   = wp_kses( (string) ( $s['quote'] ?? '' ), [ 'em' => [], 'strong' => [], 'br' => [] ] );
+        $quote   = $this->citazione_html( $s['quote'] ?? '' );
         $name    = esc_html( wp_strip_all_tags( $s['author_name'] ?? '' ) );
         $role    = esc_html( wp_strip_all_tags( $s['author_role'] ?? '' ) );
         $stars   = str_repeat( '★', max( 0, $rating ) );
@@ -315,7 +347,7 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
 
     private function render_single( $uid, $s, $star_svg, $is_bottom, $position ) {
         $rating      = absint( $s['rating'] );
-        $quote       = nl2br( esc_html( wp_strip_all_tags( $s['quote'] ) ) );
+        $quote       = $this->citazione_html( $s['quote'] ?? '' );
         $author_name = esc_html( wp_strip_all_tags( $s['author_name'] ) );
         $author_role = esc_html( wp_strip_all_tags( $s['author_role'] ) );
         ?>
@@ -342,10 +374,13 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
         $show_arrows  = filter_var( $s['show_arrows'], FILTER_VALIDATE_BOOLEAN );
 
         $autoplay_attr = $autoplay ? 'true' : 'false';
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below only echoes the internally generated $uid.
+        // Il contenitore dello slider taglia ciò che esce dalla slide: con l'ombra della scheda o coi foglietti
+        // storti e il loro nastro serve un po' d'aria sopra e sotto, se no ombra e nastro escono mozzati.
+        $aria_li = ( 'none' !== ( $s['card_shadow'] ?? 'none' ) || 'sticky-note' === sanitize_key( $s['preset'] ?? '' ) ) ? '16px 12px 26px' : '0 8px';
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below only echoes the internally generated $uid and the fixed $aria_li literals.
         ?>
         <style>
-            .<?php echo $uid; ?> .uk-slider-items > li { padding: 0 8px; box-sizing: border-box; }
+            .<?php echo $uid; ?> .uk-slider-items > li { padding: <?php echo $aria_li; ?>; box-sizing: border-box; }
             .<?php echo $uid; ?> .olo-test-slider-nav { display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 16px; }
             .<?php echo $uid; ?> .olo-test-slider-nav a { color: inherit; }
             .<?php echo $uid; ?> .uk-dotnav > * > * { background: var(--olo-color-border, #E5E7EB); }
@@ -363,7 +398,7 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
                     <div class="olo-test-card">
                         <?php
                         $rating      = absint( $item['rating'] ?? 0 );
-                        $quote       = nl2br( esc_html( wp_strip_all_tags( $item['quote'] ?? '' ) ) );
+                        $quote       = $this->citazione_html( $item['quote'] ?? '' );
                         $author_name = esc_html( $item['author_name'] ?? '' );
                         $author_role = esc_html( $item['author_role'] ?? '' );
                         $item_s      = array_merge( $s, $item );
@@ -405,7 +440,9 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
         <style>
             .<?php echo $uid; ?> .olo-test-grid {
                 display: grid;
-                grid-template-columns: repeat(<?php echo (int) $columns; ?>, 1fr);
+                <?php // Al massimo le colonne scelte, ma mai più strette di 220 px: in una colonna di pagina stretta
+                      // tre schede facevano una parola per riga (16 nov 2026). ?>
+                grid-template-columns: <?php echo $this->colonne_adattive( $columns, 20, 220 ); ?>;
                 gap: 20px;
             }
             <?php // Le schede di una fila sono già alte uguali (la griglia le allunga): da colonne flex, l'autore
@@ -431,7 +468,7 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
                 <div class="olo-test-card">
                     <?php
                     $rating      = absint( $item['rating'] ?? 0 );
-                    $quote       = nl2br( esc_html( wp_strip_all_tags( $item['quote'] ?? '' ) ) );
+                    $quote       = $this->citazione_html( $item['quote'] ?? '' );
                     $author_name = esc_html( $item['author_name'] ?? '' );
                     $author_role = esc_html( $item['author_role'] ?? '' );
                     $item_s      = array_merge( $s, $item );
@@ -468,6 +505,26 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
             </div>
         <?php endif;
         return ob_get_clean();
+    }
+
+    /**
+     * La citazione pronta da stampare. Dal campo con la barra (corsivo, grassetto) arriva HTML con i paragrafi
+     * di TipTap: i paragrafi diventano a capo, restano solo corsivo e grassetto. Il testo semplice dei template
+     * di prima (textarea) resta com'era: escape e a capo veri.
+     */
+    private function citazione_html( $raw ) {
+        $raw = trim( (string) $raw );
+        if ( '' === $raw ) {
+            return '';
+        }
+        if ( false === strpos( $raw, '<' ) ) {
+            return nl2br( esc_html( $raw ) );
+        }
+        $raw = preg_replace( '#</p>\s*<p[^>]*>#i', '<br>', $raw );
+        $raw = preg_replace( '#</?p[^>]*>#i', '', $raw );
+        $raw = preg_replace( '#<(/?)b>#i', '<$1strong>', $raw );
+        $raw = preg_replace( '#<(/?)i>#i', '<$1em>', $raw );
+        return trim( wp_kses( $raw, [ 'em' => [], 'strong' => [], 'br' => [] ] ) );
     }
 
     private function render_quote( $rating, $star_svg, $quote, $s = [] ) {

@@ -392,7 +392,7 @@ export function useIframeBridge(iframeRef) {
         iframeMode = (d.mode === 'inline') ? 'inline' : 'standalone';
         iframeReady.value = true;
         renderFull();
-        // A ogni caricamento dell'iframe (anche dopo un salvataggio, che lo ricarica).
+        // A ogni caricamento dell'iframe (all'apertura e a ogni cambio di template; un salvataggio non lo ricarica più).
         sendZoneInfo();
         break;
 

@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'variablespecimen';
-    protected $name     = 'Specimen Variabile';
+    protected $name     = 'Variazione testo';
     protected $icon     = 'dashicons-editor-textcolor';
     protected $category = 'text';
     protected $defaults = [
@@ -167,12 +167,25 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
             }
         }
 
+        // Il valore che si legge sotto la lettera e accanto ai cursori (il gemello JS è mostra()).
+        $mostra = static function ( $a, $v ) {
+            if ( ( $a['max'] - $a['min'] ) >= 20 ) {
+                return (string) round( $v );
+            }
+            return rtrim( rtrim( number_format( $v, 1, '.', '' ), '0' ), '.' );
+        };
         $text_color  = $this->safe_color_css( $s['text_color'] )  ?: 'var(--olo-color-text, #111827)';
         $accent      = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $bg_color    = $this->safe_color_css( $s['bg_color'] );
         $bg_decl     = $bg_color ? "background:{$bg_color};" : '';
 
         $font_size   = max( 24, min( 800, intval( $s['font_size'] ) ) );
+        // La parola sta nella larghezza della TILE (container query): a 220 px «Calma» sul telefono si spezzava a metà
+        // («Cal/ma»). Il tetto in cqi viene dalla riga più lunga (una lettera ≈ 0,62 em); le misure scelte per tablet e
+        // telefono, più sotto, vincono comunque. 17 nov 2026.
+        $righe_c     = preg_split( '/\R/u', (string) ( '' !== $s['sample_text'] ? $s['sample_text'] : 'Ga' ) );
+        $lung_c      = max( 1, max( array_map( function ( $r ) { return function_exists( 'mb_strlen' ) ? mb_strlen( trim( $r ), 'UTF-8' ) : strlen( trim( $r ) ); }, $righe_c ) ) );
+        $cqi_c       = round( 92 / ( $lung_c * 0.62 ), 1 );
         $fw_fallback = in_array( $s['font_weight_fallback'], [ '300','400','500','600','700','900' ], true ) ? $s['font_weight_fallback'] : '700';
         $text_align  = in_array( $s['text_align'], [ 'left','center','right' ], true ) ? $s['text_align'] : 'left';
         $pad_css     = Olobuild_Tile_Utils::sides_css( Olobuild_Tile_Utils::spacing_sides(
@@ -206,6 +219,7 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
         <style>
             <?php echo $vf_face; // @font-face self-hosted generate da Olobuild_Font_Host (solo URL locali) ?>
             .<?php echo $uid; ?> {
+                container-type: inline-size;
                 <?php echo $bg_decl; ?>
                 padding: <?php echo esc_attr( $pad_css ); ?>;
                 text-align: <?php echo $text_align; ?>;
@@ -213,6 +227,7 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-vf-stage {
                 font-family: <?php echo $font_css; ?>;
                 font-size: <?php echo (int) $font_size; ?>px;
+                font-size: min(<?php echo (int) $font_size; ?>px, <?php echo esc_attr( $cqi_c ); ?>cqi);
                 line-height: .82;
                 letter-spacing: -.03em;
                 color: <?php echo $text_color; ?>;
@@ -340,7 +355,7 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
             <?php if ( $show_read ) : ?>
             <div class="olo-vf-readout" id="<?php echo esc_attr( $uid ); ?>-readout" aria-hidden="true">
                 <?php foreach ( $axes as $i => $a ) : ?>
-                    <span><?php echo esc_html( $a['tag'] ); ?> <b data-ro="<?php echo esc_attr( $i ); ?>"><?php echo esc_html( rtrim( rtrim( number_format( $a['def'], 2, '.', '' ), '0' ), '.' ) ); ?></b></span>
+                    <span><?php echo esc_html( '' !== $a['label'] ? $a['label'] : $a['tag'] ); ?> <b data-ro="<?php echo esc_attr( $i ); ?>"><?php echo esc_html( $mostra( $a, $a['def'] ) ); ?></b></span>
                 <?php endforeach; ?>
             </div>
             <?php endif; ?>
@@ -352,11 +367,11 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
             <?php if ( $has_slider ) : ?>
             <div class="olo-vf-controls">
                 <?php foreach ( $axes as $i => $a ) :
-                    $val_disp = rtrim( rtrim( number_format( $a['def'], 2, '.', '' ), '0' ), '.' );
+                    $val_disp = $mostra( $a, $a['def'] );
                     ?>
                     <div class="olo-vf-ctrl">
                         <label for="<?php echo esc_attr( $uid . '-ax-' . $i ); ?>">
-                            <span><?php echo esc_html( $a['label'] ); ?> · <?php echo esc_html( $a['tag'] ); ?></span>
+                            <span><?php echo esc_html( '' !== $a['label'] ? $a['label'] : $a['tag'] ); ?></span>
                             <b data-val="<?php echo esc_attr( $i ); ?>"><?php echo esc_html( $val_disp ); ?></b>
                         </label>
                         <input
@@ -486,6 +501,13 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
                 var r = Math.round(n * 100) / 100;
                 return ( Math.abs(r - Math.round(r)) < 0.001 ) ? String(Math.round(r)) : r.toFixed(2);
             }
+            // Il valore che si LEGGE: intero sugli assi ampi (peso 300–1000), un decimale sui piccoli (inclinazione -15–0).
+            // «904.65» diceva una precisione che nessuno vede.
+            function mostra(i, n){
+                var a = AXES[i];
+                if ( ( a.max - a.min ) >= 20 ) { return String( Math.round(n) ); }
+                return String( Math.round( n * 10 ) / 10 );
+            }
             function apply(){
                 var parts = [];
                 for ( var i = 0; i < AXES.length; i++ ) {
@@ -495,7 +517,7 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
                 // readout sotto la lettera
                 for ( var r = 0; r < ros.length; r++ ) {
                     var ri = parseInt(ros[r].getAttribute('data-ro'), 10);
-                    if ( !isNaN(ri) && AXES[ri] ) { ros[r].textContent = fmt(vals[ri]); }
+                    if ( !isNaN(ri) && AXES[ri] ) { ros[r].textContent = mostra(ri, vals[ri]); }
                 }
             }
             function syncSliders(){
@@ -507,7 +529,7 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
                 }
                 for ( var v = 0; v < rovals.length; v++ ) {
                     var vi = parseInt(rovals[v].getAttribute('data-val'), 10);
-                    if ( !isNaN(vi) && AXES[vi] ) { rovals[v].textContent = fmt(vals[vi]); }
+                    if ( !isNaN(vi) && AXES[vi] ) { rovals[v].textContent = mostra(vi, vals[vi]); }
                 }
             }
 
@@ -538,11 +560,17 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
                     fromEvent(e);
                 });
                 stage.addEventListener('pointerdown', function(e){
+                    // Mentre si scrive la parola nel canvas del builder il clic resta del testo.
+                    if ( stage.isContentEditable ) { return; }
+                    // Trascinando col mouse si selezionava il testo (un riquadro azzurro sulla parola): niente selezione.
+                    e.preventDefault();
+                    stage.style.userSelect = 'none';
+                    if ( window.getSelection ) { window.getSelection().removeAllRanges(); }
                     dragging = true; auto = false;
                     try { stage.setPointerCapture(e.pointerId); } catch(err){}
                     fromEvent(e);
                 });
-                stage.addEventListener('pointerup', function(e){ dragging = false; try { stage.releasePointerCapture(e.pointerId); } catch(err){} });
+                stage.addEventListener('pointerup', function(e){ dragging = false; stage.style.userSelect = ''; try { stage.releasePointerCapture(e.pointerId); } catch(err){} });
                 stage.addEventListener('pointerleave', function(){ if ( AUTO && !REDUCED ) { auto = true; } });
                 // tastiera: frecce muovono asse 0 (e Shift = asse 1 se presente)
                 stage.addEventListener('keydown', function(e){
@@ -567,7 +595,7 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
                             apply();
                             // aggiorna il valore mostrato accanto a QUESTO slider
                             for ( var v = 0; v < rovals.length; v++ ) {
-                                if ( parseInt(rovals[v].getAttribute('data-val'), 10) === ai ) { rovals[v].textContent = fmt(vals[ai]); }
+                                if ( parseInt(rovals[v].getAttribute('data-val'), 10) === ai ) { rovals[v].textContent = mostra(ai, vals[ai]); }
                             }
                         });
                     })(ranges[s]);

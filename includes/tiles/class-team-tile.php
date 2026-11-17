@@ -311,6 +311,39 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
                 box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
             }
             .<?php echo $uid; ?> .olo-team-photo-ph svg { width: 100%; height: 100%; fill: currentColor; stroke: currentColor; }
+            <?php
+            // Il disegno che uno stile ha e che non è un valore (16 nov 2026): prima gli stili erano tre colori e un
+            // raggio che nessuno leggeva.
+            $tm_preset = sanitize_key( $s['preset'] ?? '' );
+            if ( 'magazine-row' === $tm_preset ) : ?>
+            .<?php echo $uid; ?> { display: flex; align-items: center; gap: 1.5rem; }
+            .<?php echo $uid; ?> .olo-team-photo-wrap { flex: 0 0 auto; margin: 0; }
+            .<?php echo $uid; ?> .olo-team-info-wrap { flex: 1 1 auto; min-width: 0; }
+            @media (max-width: 480px) { .<?php echo $uid; ?> { flex-direction: column; align-items: flex-start; } }
+            <?php elseif ( 'photographer' === $tm_preset ) : ?>
+            .<?php echo $uid; ?> .olo-team-photo-inner img, .<?php echo $uid; ?> .olo-team-photo-inner video { filter: grayscale(1) contrast(1.05); transition: filter .6s ease; }
+            .<?php echo $uid; ?>:hover .olo-team-photo-inner img, .<?php echo $uid; ?>:hover .olo-team-photo-inner video { filter: none; }
+            <?php elseif ( 'glass-portrait' === $tm_preset ) : ?>
+            .<?php echo $uid; ?> .olo-team-info-wrap { position: relative; z-index: 2; margin: -6rem .9rem 0; }
+            .<?php echo $uid; ?> .olo-team-info { -webkit-backdrop-filter: blur(14px) saturate(140%); backdrop-filter: blur(14px) saturate(140%); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--olo-color-light, #fff) 30%, transparent); }
+            <?php elseif ( 'neon-frame' === $tm_preset ) : ?>
+            .<?php echo $uid; ?> .olo-team-photo-inner { box-shadow: 0 0 26px color-mix(in srgb, var(--olo-color-accent) 45%, transparent); }
+            .<?php echo $uid; ?> .olo-team-name { text-shadow: 0 0 14px color-mix(in srgb, var(--olo-color-accent) 45%, transparent); }
+            <?php elseif ( 'brutalist-stamp' === $tm_preset ) : ?>
+            .<?php echo $uid; ?> { border: 3px solid var(--olo-color-text, #1f2937); box-shadow: 6px 6px 0 var(--olo-color-text, #1f2937); }
+            <?php elseif ( 'polaroid-photo' === $tm_preset ) : ?>
+            .<?php echo $uid; ?> .olo-team-photo-outer { background: var(--olo-color-light, #fff); padding: .6rem .6rem 2.9rem; box-shadow: 0 10px 24px -10px rgba(16,24,40,.35); transform: rotate(-2deg); transition: transform .4s ease; }
+            .<?php echo $uid; ?>:hover .olo-team-photo-outer { transform: rotate(0deg); }
+            <?php elseif ( 'retro-yearbook' === $tm_preset ) : ?>
+            .<?php echo $uid; ?> .olo-team-photo-inner img { filter: sepia(.55) contrast(1.05) saturate(.8); }
+            .<?php echo $uid; ?> .olo-team-name { text-transform: uppercase; letter-spacing: .08em; }
+            <?php elseif ( 'tilt-3d' === $tm_preset ) : ?>
+            .<?php echo $uid; ?> { transform: perspective(1000px) rotateY(-8deg) rotateX(3deg); transition: transform .5s cubic-bezier(.2,.7,.3,1); }
+            .<?php echo $uid; ?>:hover { transform: none; }
+            <?php endif; ?>
+            <?php if ( in_array( $tm_preset, [ 'polaroid-photo', 'tilt-3d', 'photographer' ], true ) ) : ?>
+            @media (prefers-reduced-motion: reduce) { .<?php echo $uid; ?>, .<?php echo $uid; ?> * { transition: none !important; } }
+            <?php endif; ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-team <?php echo esc_attr( $uid ); ?> olo-team-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">

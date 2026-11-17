@@ -159,7 +159,8 @@ export default {
       ] },
 
     { type: 'separator', label: t('Lezioni') },
-    { key: 'lezioni', label: t('Lezioni'), type: 'content-items', itemLabel: t('Lezione'), etichettaDa: 'corso',
+    // Ogni voce si chiama «Lunedì · 07:00 · Indoor cycling» (prima solo il codice del corso: ventiquattro «cycling», «yoga»…).
+    { key: 'lezioni', label: t('Lezioni'), type: 'content-items', itemLabel: t('Lezione'), etichettaDa: 'giorno+inizio+corso',
       description: t('Una voce per ogni lezione della settimana: il giorno, l\'ora d\'inizio e di fine, il corso, chi la tiene e dove. Due lezioni alla stessa ora nello stesso giorno si affiancano.'),
       newItemDefaults: { giorno: 1, inizio: '18:00', fine: '', corso: '', istruttore: '', sala: '', livello: '', posti: '', nota: '' },
       itemFields: [
@@ -167,8 +168,10 @@ export default {
         { key: 'inizio', label: t('Inizio'), type: 'time' },
         { key: 'fine', label: t('Fine'), type: 'time',
           description: t('Vuota: l\'inizio più la durata del corso, o un\'ora.') },
-        { key: 'corso', label: t('Corso'), type: 'text',
-          description: t('Il nome del corso, come l\'hai scritto in Corsi (va bene anche il suo codice).') },
+        // Si sceglie fra i Corsi (prima si riscriveva a mano il nome o il codice: un errore di battitura e la lezione spariva).
+        // Un corso nuovo, con l'id automatico, vale per il suo nome, come nel renderer.
+        { key: 'corso', label: t('Corso'), type: 'select', optionsSource: 'vociDi',
+          voci: { lista: 'corsi', valore: 'id', etichetta: 'nome', automatico: true } },
         { key: 'istruttore', label: t('Istruttore'), type: 'text' },
         { key: 'sala', label: t('Sala'), type: 'text' },
         { key: 'livello', label: t('Livello'), type: 'select', options: LIVELLI },

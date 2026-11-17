@@ -27,6 +27,7 @@ class Olobuild_Setup_Wizard {
         add_action( 'wp_ajax_olobuild_setup_plugin_richiesto', [ $this, 'ajax_plugin_richiesto' ] );
         add_action( 'wp_ajax_olobuild_setup_skip', [ $this, 'ajax_skip' ] );
         add_action( 'wp_ajax_olobuild_setup_blank_starter', [ $this, 'ajax_blank_starter' ] );
+        add_action( 'wp_ajax_olobuild_setup_rete', [ $this, 'ajax_rete' ] );
 
         // First-run: redirect una-tantum al wizard dopo l'attivazione (pattern WooCommerce).
         // Niente rischio loop: il transient viene cancellato PRIMA del redirect, quindi
@@ -159,6 +160,44 @@ class Olobuild_Setup_Wizard {
     }
 
     /**
+     * I software della rete OLOtheme che la procedura propone (passo «Rete OLOtheme»), con lo stato sul sito.
+     * Per ora la scelta si ricorda soltanto (option olobuild_rete_richiesti): la zona comune da cui scaricarli
+     * arriverà dopo. OLOsocial e OLOlottie non ci sono: senza pagina pubblica, il secondo ancora nascosto.
+     */
+    public static function rete() {
+        $voci = [
+            'ololang'     => [ 'nome' => 'OLOlang', 'cosa' => __( 'Lingue', 'olobuild' ),
+                'testo' => __( 'Il sito in più lingue: pagine, menu e testi tradotti da un pannello solo.', 'olobuild' ) ],
+            'olosecurity' => [ 'nome' => 'OLOsecurity', 'cosa' => __( 'Sicurezza', 'olobuild' ),
+                'testo' => __( 'Accessi protetti, verifica in due passaggi, controllo dei file e un firewall leggero, con i dati sul tuo sito.', 'olobuild' ) ],
+            'olobooking'  => [ 'nome' => 'OLObooking', 'cosa' => __( 'Prenotazioni', 'olobuild' ),
+                'testo' => __( 'Camere, tavoli, appuntamenti, eventi, noleggi e visite agli immobili, con calendario e pagamenti.', 'olobuild' ) ],
+            'olotour'     => [ 'nome' => 'OLOtour', 'cosa' => __( 'Tour virtuali', 'olobuild' ),
+                'testo' => __( 'Tour a 360° e ambienti 3D da visitare, anche col visore e con le visite guidate dal vivo.', 'olobuild' ) ],
+            'olotutor'    => [ 'nome' => 'OLOtutor', 'cosa' => __( 'Corsi online', 'olobuild' ),
+                'testo' => __( 'Corsi e lezioni con giochi, quiz, badge e certificati, tutto dentro WordPress.', 'olobuild' ) ],
+        ];
+        if ( ! function_exists( 'get_plugins' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+        $piatto  = static function ( $s ) { return preg_replace( '/[^a-z]/', '', strtolower( (string) $s ) ); };
+        $plugins = get_plugins();
+        foreach ( $voci as $k => &$v ) {
+            $v['url']   = 'https://olotheme.com/' . $k . '/';
+            $v['logo']  = OLOBUILD_URL . 'assets/img/rete/' . $k . '-w.png';
+            $v['stato'] = '';
+            foreach ( $plugins as $file => $dati ) {
+                // la cartella (olo-lang, olo-booking…) o il nome (OLOlang…) del plugin, senza trattini né spazi
+                if ( 0 !== strpos( $piatto( dirname( $file ) ), $k ) && 0 !== strpos( $piatto( $dati['Name'] ?? '' ), $k ) ) continue;
+                $v['stato'] = is_plugin_active( $file ) ? 'attivo' : 'installato';
+                if ( 'attivo' === $v['stato'] ) break;
+            }
+        }
+        unset( $v );
+        return $voci;
+    }
+
+    /**
      * Render the setup wizard page.
      */
     public function render_wizard() {
@@ -169,119 +208,179 @@ class Olobuild_Setup_Wizard {
         require_once OLOBUILD_PATH . 'includes/class-theme-importer.php';
         $themes = Olobuild_Theme_Importer::get_themes();
 
+        $brand = apply_filters( 'olobuild_brand_name', 'Olobuild' );
+        // Con l'etichetta bianca (un altro nome al posto di Olobuild) la procedura non propone i software della rete.
+        $con_rete = (bool) apply_filters( 'olobuild_setup_rete', 'Olobuild' === $brand );
+        $rete     = $con_rete ? self::rete() : [];
+        $scelti   = (array) get_option( 'olobuild_rete_richiesti', [] );
+        $logo     = 'Olobuild' === $brand ? OLOBUILD_URL . 'assets/img/rete/olobuild-w.png'
+            : apply_filters( 'olobuild_brand_logo_url', OLOBUILD_URL . 'assets/img/olobuild-logo-200-white.png' );
+
+        $passi = [
+            'tema'   => [ __( 'Tema WordPress', 'olobuild' ), 'Hello Olobuild' ],
+            'design' => [ __( 'Design', 'olobuild' ), __( 'Un tema pronto', 'olobuild' ) ],
+        ];
+        if ( $con_rete ) $passi['rete'] = [ __( 'Rete OLOtheme', 'olobuild' ), __( 'Altri software', 'olobuild' ) ];
+        $passi['pronto'] = [ __( 'Pronto', 'olobuild' ), __( 'Il tuo sito', 'olobuild' ) ];
+        $n_passi = count( $passi );
+        $numero  = array_flip( array_keys( $passi ) );
+        $di      = static function ( $k ) use ( $numero, $n_passi ) {
+            /* translators: 1: numero del passo, 2: quanti passi in tutto */
+            return sprintf( __( 'Passo %1$d di %2$d', 'olobuild' ), $numero[ $k ] + 1, $n_passi );
+        };
+
+        // I caratteri della famiglia grafica (Inter, Fraunces per i titoli) ospitati sul sito; senza rete restano
+        // quelli di sistema.
+        $font_css = class_exists( 'Olobuild_Font_Host' ) ? Olobuild_Font_Host::get_font_face_css( [ 'Inter', 'Fraunces' ], '400;500;600;700' ) : '';
+        wp_register_style( 'olo-setup-wizard', OLOBUILD_URL . 'assets/css/setup-wizard.css', [], OLOBUILD_VERSION );
+
+        $spunta = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+        $freccia = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
         ?>
         <!DOCTYPE html>
         <html <?php language_attributes(); ?>>
         <head>
             <meta charset="<?php bloginfo( 'charset' ); ?>">
             <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title><?php echo esc_html( __( 'Olobuild — Configurazione iniziale', 'olobuild' ) ); ?></title>
-            <style>
-                * { box-sizing: border-box; margin: 0; padding: 0; }
-                body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1a1a1a; color: #E2E8F0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-                .wizard { max-width: 680px; width: 100%; padding: 48px; transition: max-width 0.25s ease; }
-                .wizard.wide { max-width: 1080px; }
-                .wizard-logo { text-align: center; margin-bottom: 40px; }
-                .wizard-logo img { height: 48px; }
-                .wizard-logo h1 { font-size: 28px; font-weight: 700; color: #F8FAFC; margin-top: 16px; }
-                .wizard-logo p { font-size: 15px; color: #94A3B8; margin-top: 8px; line-height: 1.5; }
-                .wizard-steps { display: flex; gap: 8px; margin-bottom: 32px; justify-content: center; }
-                .wizard-step { width: 40px; height: 4px; border-radius: 2px; background: #3a3a3a; transition: background 0.3s; }
-                .wizard-step.active { background: #e1474f; }
-                .wizard-step.done { background: #22C55E; }
-                .wizard-card { background: #262626; border: 1px solid #3a3a3a; border-radius: 16px; padding: 32px; margin-bottom: 16px; }
-                .wizard-card h2 { font-size: 18px; font-weight: 600; color: #F1F5F9; margin-bottom: 8px; }
-                .wizard-card p { font-size: 14px; color: #94A3B8; line-height: 1.6; margin-bottom: 20px; }
-                .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-                .btn-primary { background: #e1474f; color: #fff; }
-                .btn-primary:hover { background: #c8323a; transform: translateY(-1px); }
-                .btn-primary:disabled { background: #475569; cursor: not-allowed; transform: none; }
-                .btn-secondary { background: transparent; color: #94A3B8; border: 1px solid #475569; }
-                .btn-secondary:hover { border-color: #64748B; color: #CBD5E1; }
-                .btn-success { background: #22C55E; color: #fff; }
-                .btn-group { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-                .check { color: #22C55E; font-size: 20px; margin-right: 4px; }
-                .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.2); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; }
-                @keyframes spin { to { transform: rotate(360deg); } }
-                .status { font-size: 13px; color: #94A3B8; margin-top: 12px; min-height: 20px; }
-                /* Il selettore temi (card + filtri + ricerca) è il picker condiviso OloThemePicker. */
-                .wizard-picker { margin-bottom: 20px; }
-                .wizard-picker .otmp { height: 56vh; min-height: 320px; }
-                .skip-link { display: block; text-align: center; margin-top: 20px; color: #64748B; font-size: 13px; cursor: pointer; text-decoration: none; }
-                .skip-link:hover { color: #94A3B8; }
-                .btn:focus-visible, .skip-link:focus-visible, .quick-card:focus-visible { outline: 2px solid #e1474f; outline-offset: 2px; }
-                .quick-cards { display: grid; gap: 10px; }
-                .quick-card { display: flex; gap: 14px; align-items: center; padding: 14px 16px; background: #1a1a1a; border: 1px solid #3a3a3a; border-radius: 10px; text-decoration: none; color: #E2E8F0; transition: all 0.2s; }
-                .quick-card:hover { border-color: #e1474f; transform: translateX(2px); }
-                .quick-card-icon { font-size: 20px; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; background: #262626; border-radius: 8px; color: #f2989e; flex-shrink: 0; }
-                .quick-card strong { display: block; font-size: 14px; font-weight: 600; color: #F1F5F9; }
-                .quick-card small { display: block; font-size: 12px; color: #94A3B8; margin-top: 2px; }
-            </style>
+            <title><?php echo esc_html( sprintf( /* translators: %s = nome del brand */ __( '%s — Configurazione iniziale', 'olobuild' ), $brand ) ); ?></title>
+            <?php if ( $font_css ) : ?><style><?php echo $font_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole @font-face generate dal plugin (URL locali). ?></style><?php endif; ?>
+            <?php wp_print_styles( [ 'olo-setup-wizard' ] ); ?>
         </head>
         <body>
-            <div class="wizard">
-                <div class="wizard-logo">
-                    <?php if ( file_exists( OLOBUILD_PATH . 'assets/img/olobuild-logo-200-v2.png' ) ) : ?>
-                        <img src="<?php echo esc_url( OLOBUILD_URL . 'assets/img/olobuild-logo-200-v2.png' ); ?>" alt="Olobuild">
-                    <?php endif; ?>
-                    <h1><?php esc_html_e( 'Benvenuto in Olobuild', 'olobuild' ); ?></h1>
-                    <p><?php echo wp_kses( __( 'Configuriamo il tuo sito in pochi secondi.<br>Potrai personalizzare tutto in seguito.', 'olobuild' ), [ 'br' => [] ] ); ?></p>
+        <div class="ws">
+            <aside class="ws-rail">
+                <img class="ws-logo" src="<?php echo esc_url( $logo ); ?>" alt="<?php echo esc_attr( $brand ); ?>">
+                <div class="ws-rail-t">
+                    <span class="ws-kicker"><?php esc_html_e( 'Configurazione iniziale', 'olobuild' ); ?></span>
+                    <p><?php esc_html_e( 'Pochi passi, un paio di minuti. Tutto si cambia anche dopo.', 'olobuild' ); ?></p>
                 </div>
-
-                <div class="wizard-steps">
-                    <div class="wizard-step" id="step-dot-1"></div>
-                    <div class="wizard-step" id="step-dot-2"></div>
-                    <div class="wizard-step" id="step-dot-3"></div>
+                <ol class="ws-steps">
+                    <?php $i = 0; foreach ( $passi as $k => $p ) : $i++; ?>
+                        <li data-step="<?php echo esc_attr( $k ); ?>">
+                            <span class="ws-n"><i><?php echo (int) $i; ?></i><?php echo $spunta; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG fisso. ?></span>
+                            <span><b><?php echo esc_html( $p[0] ); ?></b><small><?php echo esc_html( $p[1] ); ?></small></span>
+                        </li>
+                    <?php endforeach; ?>
+                </ol>
+                <div class="ws-rail-foot">
+                    <a href="#" role="button" class="skip-link" onclick="skipSetup(); return false;"><?php esc_html_e( 'Salta configurazione', 'olobuild' ); ?></a>
+                    <span class="ws-ver"><?php echo esc_html( $brand . ' ' . OLOBUILD_VERSION ); ?></span>
                 </div>
+            </aside>
 
-                <!-- Step 1: Install Theme -->
-                <div class="wizard-card" id="step-1">
-                    <h2><?php esc_html_e( '1. Tema WordPress', 'olobuild' ); ?></h2>
-                    <?php if ( $theme_active ) : ?>
-                        <p><span class="check">✓</span> <?php esc_html_e( 'Hello Olobuild è già attivo. Perfetto!', 'olobuild' ); ?></p>
-                        <button class="btn btn-success" onclick="nextStep(2)"><?php esc_html_e( 'Continua →', 'olobuild' ); ?></button>
-                    <?php elseif ( $theme_installed ) : ?>
-                        <p><?php esc_html_e( 'Hello Olobuild è installato ma non attivo. È un tema leggero senza CSS invasivo — perfetto per Olobuild.', 'olobuild' ); ?></p>
-                        <div class="btn-group">
-                            <button class="btn btn-primary" onclick="installTheme('activate')"><?php esc_html_e( 'Attiva Hello Olobuild', 'olobuild' ); ?></button>
-                            <button class="btn btn-secondary" onclick="nextStep(2)"><?php esc_html_e( 'Mantieni tema attuale →', 'olobuild' ); ?></button>
+            <main class="ws-main">
+                <!-- Passo: il tema WordPress -->
+                <section class="ws-step" id="step-tema" hidden>
+                    <div class="ws-split">
+                        <div>
+                            <span class="ws-eyebrow"><?php echo esc_html( $di( 'tema' ) ); ?></span>
+                            <h1 class="ws-title"><?php esc_html_e( 'Il tema WordPress', 'olobuild' ); ?></h1>
+                            <?php if ( $theme_active ) : ?>
+                                <p class="ws-lead"><?php esc_html_e( 'Hello Olobuild è già attivo: WordPress lascia tutto lo spazio a Olobuild.', 'olobuild' ); ?></p>
+                                <div class="ws-actions">
+                                    <button class="btn btn-primary" onclick="setStep('design')"><?php esc_html_e( 'Continua', 'olobuild' ); ?><?php echo $freccia; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG fisso. ?></button>
+                                </div>
+                            <?php elseif ( $theme_installed ) : ?>
+                                <p class="ws-lead"><?php esc_html_e( 'Hello Olobuild è installato ma non attivo. È il tema leggero fatto apposta per Olobuild: non aggiunge stili suoi.', 'olobuild' ); ?></p>
+                                <div class="ws-actions">
+                                    <button class="btn btn-primary" id="btn-install" onclick="installTheme('activate')"><?php esc_html_e( 'Attiva Hello Olobuild', 'olobuild' ); ?></button>
+                                    <button class="btn btn-secondary" onclick="temaWp = false; setStep('design')"><?php esc_html_e( 'Tieni il tema attuale', 'olobuild' ); ?></button>
+                                </div>
+                            <?php else : ?>
+                                <p class="ws-lead"><?php echo wp_kses( __( 'Testata, pagine e piè di pagina li disegna Olobuild: al tema WordPress resta solo da lasciargli spazio. Installiamo <strong>Hello Olobuild</strong>, il tema leggero fatto apposta.', 'olobuild' ), [ 'strong' => [] ] ); ?></p>
+                                <div class="ws-actions">
+                                    <button class="btn btn-primary" id="btn-install" onclick="installTheme('install')"><?php esc_html_e( 'Installa e attiva', 'olobuild' ); ?></button>
+                                    <button class="btn btn-secondary" onclick="temaWp = false; setStep('design')"><?php esc_html_e( 'Tieni il tema attuale', 'olobuild' ); ?></button>
+                                </div>
+                            <?php endif; ?>
+                            <div class="status" id="status-tema" role="status"></div>
                         </div>
-                    <?php else : ?>
-                        <p><?php echo wp_kses( __( 'Installiamo <strong>Hello Olobuild</strong> — un tema WordPress leggero e minimale, progettato per non interferire col builder. Solo ~3KB di CSS.', 'olobuild' ), [ 'strong' => [] ] ); ?></p>
-                        <div class="btn-group">
-                            <button class="btn btn-primary" id="btn-install" onclick="installTheme('install')">
-                                <?php esc_html_e( 'Installa e attiva', 'olobuild' ); ?>
-                            </button>
-                            <button class="btn btn-secondary" onclick="nextStep(2)"><?php esc_html_e( 'Usa tema attuale →', 'olobuild' ); ?></button>
+                        <div class="ws-fig" aria-hidden="true">
+                            <span class="ws-fig-tag"><?php esc_html_e( 'Hello Olobuild: solo la cornice', 'olobuild' ); ?></span>
+                            <div class="ws-fig-page">
+                                <div class="ws-fig-b is-bar"><span><?php esc_html_e( 'Testata', 'olobuild' ); ?></span></div>
+                                <div class="ws-fig-b is-hero"><span><?php esc_html_e( 'Pagine', 'olobuild' ); ?></span></div>
+                                <div class="ws-fig-row"><i></i><i></i><i></i></div>
+                                <div class="ws-fig-b is-foot"><span><?php esc_html_e( 'Piè di pagina', 'olobuild' ); ?></span></div>
+                            </div>
+                            <p class="ws-fig-cap"><i></i><?php echo esc_html( sprintf( /* translators: %s = nome del brand */ __( 'Lo disegna %s', 'olobuild' ), $brand ) ); ?></p>
                         </div>
-                    <?php endif; ?>
-                    <div class="status" id="status-1"></div>
-                </div>
-
-                <!-- Step 2: Choose Site Theme -->
-                <div class="wizard-card" id="step-2" style="display:none">
-                    <h2><?php esc_html_e( '2. Scegli un design', 'olobuild' ); ?></h2>
-                    <p><?php esc_html_e( 'Seleziona un tema completo per iniziare. Include header, footer, homepage e menu — tutto personalizzabile.', 'olobuild' ); ?></p>
-                    <div class="wizard-picker" id="olo-wizard-picker"><!-- montato da OloThemePicker (embed) --></div>
-                    <div class="btn-group">
-                        <button class="btn btn-primary" id="btn-import" onclick="importTheme()" disabled><?php esc_html_e( 'Importa tema selezionato', 'olobuild' ); ?></button>
                     </div>
-                    <div class="status" id="status-2"></div>
-                </div>
+                </section>
 
-                <!-- Step 3: Done -->
-                <div class="wizard-card" id="step-3" style="display:none">
-                    <h2><?php esc_html_e( '✨ Tutto pronto!', 'olobuild' ); ?></h2>
-                    <p id="step-3-intro"><?php esc_html_e( 'Il tuo sito è configurato. Puoi iniziare a personalizzare tutto dal builder visuale.', 'olobuild' ); ?></p>
+                <!-- Passo: il design (selettore dei temi) -->
+                <section class="ws-step" id="step-design" hidden>
+                    <div class="step-head">
+                        <div>
+                            <span class="ws-eyebrow"><?php echo esc_html( $di( 'design' ) ); ?></span>
+                            <h1 class="ws-title"><?php esc_html_e( 'Scegli un design', 'olobuild' ); ?></h1>
+                            <p class="ws-lead"><?php esc_html_e( 'Ogni tema è un sito completo: testata, piè di pagina, pagine e menu. Dopo cambi tutto dal builder.', 'olobuild' ); ?></p>
+                        </div>
+                        <button class="btn btn-primary" id="btn-import" onclick="importTheme()" disabled><?php esc_html_e( 'Scegli un tema dall’elenco', 'olobuild' ); ?></button>
+                    </div>
+                    <div class="ws-pick">
+                        <div class="wizard-picker" id="olo-wizard-picker"><!-- montato da OloThemePicker (embed) --></div>
+                        <div class="ws-busy" id="ws-busy" hidden>
+                            <div class="ws-busy-in">
+                                <span class="spinner"></span>
+                                <b class="ws-busy-t" id="ws-busy-t"></b>
+                                <span class="ws-busy-s" id="ws-busy-s"></span>
+                                <i class="ws-bar"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="status" id="status-design" role="status"></div>
+                </section>
+
+                <?php if ( $con_rete ) : ?>
+                <!-- Passo: i software della rete OLOtheme -->
+                <section class="ws-step" id="step-rete" hidden>
+                    <span class="ws-eyebrow"><?php echo esc_html( $di( 'rete' ) ); ?></span>
+                    <h1 class="ws-title"><?php esc_html_e( 'Ti serve altro?', 'olobuild' ); ?></h1>
+                    <p class="ws-lead"><?php esc_html_e( 'Olobuild fa parte della rete OLOtheme: software che lavorano insieme sullo stesso sito, con lo stesso stile. Segna quelli che ti servono.', 'olobuild' ); ?></p>
+                    <div class="ws-nets">
+                        <?php foreach ( $rete as $k => $v ) : $attivo = 'attivo' === $v['stato']; ?>
+                            <label class="ws-net<?php echo $attivo ? ' is-attivo' : ''; ?>">
+                                <input type="checkbox" name="rete" value="<?php echo esc_attr( $k ); ?>" data-nome="<?php echo esc_attr( $v['nome'] ); ?>"<?php checked( $attivo || in_array( $k, $scelti, true ) ); ?><?php disabled( $attivo ); ?>>
+                                <img class="ws-net-logo" src="<?php echo esc_url( $v['logo'] ); ?>" alt="<?php echo esc_attr( $v['nome'] ); ?>">
+                                <span class="ws-net-t"><b><?php echo esc_html( $v['cosa'] ); ?></b><span><?php echo esc_html( $v['testo'] ); ?></span></span>
+                                <span class="ws-net-st">
+                                    <?php if ( $attivo ) : ?>
+                                        <span class="ws-net-on"><?php esc_html_e( 'Già attivo', 'olobuild' ); ?></span>
+                                    <?php else : ?>
+                                        <?php if ( 'installato' === $v['stato'] ) : ?><?php esc_html_e( 'Installato', 'olobuild' ); ?> · <?php endif; ?>
+                                        <a class="ws-net-link" href="<?php echo esc_url( $v['url'] ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Scopri', 'olobuild' ); ?></a>
+                                    <?php endif; ?>
+                                </span>
+                                <span class="ws-sw" aria-hidden="true"></span>
+                            </label>
+                        <?php endforeach; ?>
+                    </div>
+                    <p class="ws-note">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+                        <span><?php esc_html_e( 'Per ora la tua scelta resta segnata qui: quando i software della rete si potranno scaricare da Olobuild, li troverai pronti da installare.', 'olobuild' ); ?></span>
+                    </p>
+                    <div class="ws-actions">
+                        <button class="btn btn-primary" id="btn-rete" onclick="salvaRete()"><?php esc_html_e( 'Continua', 'olobuild' ); ?><?php echo $freccia; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG fisso. ?></button>
+                    </div>
+                </section>
+                <?php endif; ?>
+
+                <!-- Passo: pronto -->
+                <section class="ws-step" id="step-pronto" hidden>
+                    <span class="ws-ok"><?php echo $spunta; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG fisso. ?></span>
+                    <h1 class="ws-title"><?php esc_html_e( 'Tutto pronto!', 'olobuild' ); ?></h1>
+                    <p class="ws-lead" id="step-3-intro"><?php esc_html_e( 'Il tuo sito è configurato. Puoi iniziare a personalizzare tutto dal builder visuale.', 'olobuild' ); ?></p>
+                    <ul class="ws-done" id="ws-riepilogo"></ul>
 
                     <!-- Quick-start cards (popolate dinamicamente quando si crea uno starter blank) -->
-                    <div class="quick-cards" id="quick-cards" style="display:none; margin: 20px 0;">
+                    <div class="quick-cards" id="quick-cards" hidden>
                         <a href="#" id="card-header" class="quick-card">
                             <span class="quick-card-icon">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="6" rx="1"/><line x1="3" y1="13" x2="21" y2="13" opacity="0.4"/><line x1="3" y1="17" x2="21" y2="17" opacity="0.4"/></svg>
                             </span>
                             <span>
-                                <strong><?php esc_html_e( 'Personalizza header', 'olobuild' ); ?></strong>
+                                <strong><?php esc_html_e( 'Personalizza la testata', 'olobuild' ); ?></strong>
                                 <small><?php esc_html_e( 'Logo e menu già pronti — apri il builder', 'olobuild' ); ?></small>
                             </span>
                         </a>
@@ -290,7 +389,7 @@ class Olobuild_Setup_Wizard {
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="7" x2="21" y2="7" opacity="0.4"/><line x1="3" y1="11" x2="21" y2="11" opacity="0.4"/><rect x="3" y="15" width="18" height="6" rx="1"/></svg>
                             </span>
                             <span>
-                                <strong><?php esc_html_e( 'Personalizza footer', 'olobuild' ); ?></strong>
+                                <strong><?php esc_html_e( 'Personalizza il piè di pagina', 'olobuild' ); ?></strong>
                                 <small><?php esc_html_e( 'Logo, copyright e link rapidi', 'olobuild' ); ?></small>
                             </span>
                         </a>
@@ -305,14 +404,13 @@ class Olobuild_Setup_Wizard {
                         </a>
                     </div>
 
-                    <div class="btn-group">
-                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuild' ) ); ?>" class="btn btn-primary"><?php esc_html_e( 'Apri Olobuild →', 'olobuild' ); ?></a>
-                        <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="btn btn-secondary" target="_blank"><?php esc_html_e( 'Vedi il sito →', 'olobuild' ); ?></a>
+                    <div class="ws-actions">
+                        <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="btn btn-primary" id="btn-sito" target="_blank" rel="noopener"><?php esc_html_e( 'Vedi il sito', 'olobuild' ); ?><?php echo $freccia; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG fisso. ?></a>
+                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuild' ) ); ?>" class="btn btn-secondary"><?php echo esc_html( sprintf( /* translators: %s = nome del brand */ __( 'Apri %s', 'olobuild' ), $brand ) ); ?></a>
                     </div>
-                </div>
-
-                <a href="#" role="button" class="skip-link" onclick="skipSetup(); return false;"><?php esc_html_e( 'Salta configurazione', 'olobuild' ); ?></a>
-            </div>
+                </section>
+            </main>
+        </div>
 
             <?php
             // Pipeline thumbnail (render REST → html2canvas → upload): theme-picker e
@@ -328,12 +426,16 @@ class Olobuild_Setup_Wizard {
             ] ) . ';', 'before' );
             wp_print_scripts( [ 'olo-wizard-theme-picker', 'olo-wizard-thumb-capture' ] );
             ?>
-            <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JS below only outputs wp_json_encode()'d JSON strings, a wp_create_nonce() token, esc_url()'d admin URLs and a fixed integer literal from a ternary. ?>
+            <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JS below only outputs wp_json_encode()'d JSON strings, a wp_create_nonce() token, esc_url()'d admin URLs and fixed literals. ?>
             <script>
             var oloWizardThemes = <?php echo wp_json_encode( array_map( function ( $t ) { unset( $t['dir'] ); return $t; }, $themes ) ); ?>;
             var nonce = '<?php echo wp_create_nonce( 'olo_setup' ); ?>';
             var ajaxurl = '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>';
+            var PASSI = <?php echo wp_json_encode( array_keys( $passi ) ); ?>;
+            var SPUNTA = <?php echo wp_json_encode( $spunta ); ?>;
             var selectedThemeId = null;
+            // per il riepilogo dell'ultimo passo
+            var temaWp = <?php echo $theme_active ? 'true' : 'null'; ?>, temaImportato = null, partenzaVuota = false, reteScelta = [];
             var oloSetupI18n = {
                 installing: <?php echo wp_json_encode( __( 'Installazione...', 'olobuild' ) ); ?>,
                 installingProgress: <?php echo wp_json_encode( __( 'Installazione in corso...', 'olobuild' ) ); ?>,
@@ -344,28 +446,52 @@ class Olobuild_Setup_Wizard {
                 creatingStarter: <?php echo wp_json_encode( __( 'Creo header e footer base...', 'olobuild' ) ); ?>,
                 starterReady: <?php echo wp_json_encode( __( 'Header e footer base pronti!', 'olobuild' ) ); ?>,
                 starterIntro: <?php echo wp_json_encode( __( 'Ho creato un header con il logo del sito e un footer con copyright e link rapidi. Personalizzali con un click:', 'olobuild' ) ); ?>,
-                creatingTemplates: <?php echo wp_json_encode( __( 'Creazione template, menu, pagine...', 'olobuild' ) ); ?>,
+                creatingTemplates: <?php echo wp_json_encode( __( 'Creo le pagine, il menu, la testata e il piè di pagina, e copio le foto nella Libreria media…', 'olobuild' ) ); ?>,
+                /* translators: %s: nome del tema scelto */
+                importNamed: <?php echo wp_json_encode( __( 'Importa «%s»', 'olobuild' ) ); ?>,
+                /* translators: %s: nome del tema che si sta importando */
+                importingNamed: <?php echo wp_json_encode( __( 'Importo «%s»', 'olobuild' ) ); ?>,
+                startBlank: <?php echo wp_json_encode( __( 'Parti da zero', 'olobuild' ) ); ?>,
+                /* translators: %s: nome del tema importato */
+                themeReady: <?php echo wp_json_encode( __( 'Il tema «%s» è nel tuo sito: pagine, menu, testata e piè di pagina sono già al loro posto. Testi, foto e colori li cambi dal builder.', 'olobuild' ) ); ?>,
+                sumWp: <?php echo wp_json_encode( __( 'Hello Olobuild è il tema di WordPress', 'olobuild' ) ); ?>,
+                /* translators: %s: nome del tema importato */
+                sumTheme: <?php echo wp_json_encode( __( 'Il tema «%s»: pagine, menu, testata e piè di pagina', 'olobuild' ) ); ?>,
+                /* translators: %s: i software della rete scelti, separati da virgole */
+                sumNet: <?php echo wp_json_encode( __( 'Segnati per dopo: %s', 'olobuild' ) ); ?>,
                 /* translators: %s: nome del plugin che il tema richiede (WooCommerce) */
                 installingPlugin: <?php echo wp_json_encode( __( 'Installo e attivo %s…', 'olobuild' ) ); ?>,
                 templatesCreated: <?php echo wp_json_encode( /* translators: %d: number of templates created */ __( '%d template creati, homepage impostata!', 'olobuild' ) ); ?>
             };
             var oloBuilderBase = <?php echo wp_json_encode( admin_url( 'admin.php?page=olobuilder-templates&template_id=' ) ); ?>;
 
-            function setStep(n) {
-                for (var i = 1; i <= 3; i++) {
-                    document.getElementById('step-' + i).style.display = i === n ? 'block' : 'none';
-                    var dot = document.getElementById('step-dot-' + i);
-                    dot.className = 'wizard-step' + (i < n ? ' done' : (i === n ? ' active' : ''));
-                }
-                var wiz = document.querySelector('.wizard');
-                if (wiz) wiz.classList.toggle('wide', n === 2);
+            function setStep(nome) {
+                var i = PASSI.indexOf(nome);
+                if (i < 0) { nome = 'pronto'; i = PASSI.indexOf(nome); }
+                PASSI.forEach(function (p, k) {
+                    var sec = document.getElementById('step-' + p);
+                    if (sec) sec.hidden = p !== nome;
+                    var li = document.querySelector('.ws-steps [data-step="' + p + '"]');
+                    if (!li) return;
+                    li.classList.toggle('is-active', k === i);
+                    li.classList.toggle('is-done', k < i);
+                    if (k === i) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
+                });
+                document.body.classList.toggle('is-wide', nome === 'design');
+                // a configurazione finita «Salta configurazione» non ha più niente da saltare
+                var salta = document.querySelector('.skip-link');
+                if (salta) salta.hidden = nome === 'pronto';
+                var main = document.querySelector('.ws-main');
+                if (main) main.scrollTop = 0;
+                if (nome === 'pronto') riepilogo();
             }
-
+            // dopo il design: la rete, se c'è, poi pronto
+            function dopoDesign() { setStep(PASSI.indexOf('rete') >= 0 ? 'rete' : 'pronto'); }
             function nextStep(n) { setStep(n); }
 
             function installTheme(action) {
                 var btn = document.getElementById('btn-install');
-                var status = document.getElementById('status-1');
+                var status = document.getElementById('status-tema');
                 if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> ' + oloSetupI18n.installing; }
                 status.textContent = oloSetupI18n.installingProgress;
 
@@ -377,8 +503,9 @@ class Olobuild_Setup_Wizard {
                 .then(function(r) { return r.json(); })
                 .then(function(data) {
                     if (data.success) {
+                        temaWp = true;
                         status.innerHTML = '<span class="check">✓</span> ' + data.data.message;
-                        setTimeout(function() { nextStep(2); }, 800);
+                        setTimeout(function() { setStep('design'); }, 900);
                     } else {
                         status.textContent = '⚠ ' + (data.data || oloSetupI18n.error);
                         if (btn) { btn.disabled = false; btn.textContent = oloSetupI18n.retry; }
@@ -392,7 +519,7 @@ class Olobuild_Setup_Wizard {
                 var host = document.getElementById('olo-wizard-picker');
                 if (!host) return;
                 if (!window.OloThemePicker) {
-                    host.innerHTML = '<p style="color:#94A3B8;font-size:14px;padding:24px;text-align:center">'
+                    host.innerHTML = '<p style="color:#a1959a;font-size:14px;padding:24px;text-align:center">'
                         + <?php echo wp_json_encode( __( 'Impossibile caricare il selettore temi.', 'olobuild' ) ); ?> + '</p>';
                     return;
                 }
@@ -443,18 +570,36 @@ class Olobuild_Setup_Wizard {
                         /* translators: %s: nome del plugin */
                         'installsTitle'        => __( 'Si installa da sé: %s arriva da wordpress.org quando importi il tema', 'olobuild' ),
                     ] ); ?>,
-                    onSelect: function (id) {
+                    onSelect: function (id, tema) {
                         selectedThemeId = id;
                         var b = document.getElementById('btn-import');
-                        if (b) b.disabled = false;
+                        if (!b) return;
+                        b.disabled = false;
+                        // il pulsante dice cosa succede: «Importa «Mano Libera»», o «Parti da zero» per la tela bianca
+                        b.textContent = id === 'blank' ? oloSetupI18n.startBlank
+                            : oloSetupI18n.importNamed.replace('%s', (tema && tema.name) || id);
                     }
                 });
             })();
 
+            function attesa(si, titolo) {
+                var b = document.getElementById('ws-busy');
+                if (!b) return;
+                b.hidden = !si;
+                if (si) {
+                    document.getElementById('ws-busy-t').textContent = titolo || '';
+                    document.getElementById('ws-busy-s').textContent = oloSetupI18n.creatingTemplates;
+                }
+            }
+            function nomeScelto() {
+                var t = oloWizardThemes.filter(function (x) { return x.id === selectedThemeId; })[0];
+                return (t && t.name) || selectedThemeId;
+            }
+
             function importTheme() {
                 if (!selectedThemeId) return;
                 var btn = document.getElementById('btn-import');
-                var status = document.getElementById('status-2');
+                var status = document.getElementById('status-design');
                 btn.disabled = true;
                 btn.innerHTML = '<span class="spinner"></span> ' + oloSetupI18n.importing;
 
@@ -469,7 +614,8 @@ class Olobuild_Setup_Wizard {
                     .then(function(data) {
                         if (data.success) {
                             status.innerHTML = '<span class="check">✓</span> ' + oloSetupI18n.starterReady;
-                            // Popola le card dello step 3 con i link contestuali
+                            partenzaVuota = true;
+                            // Popola le card dell'ultimo passo con i link contestuali
                             var d = data.data || {};
                             if (d.header_id) {
                                 var ch = document.getElementById('card-header');
@@ -486,8 +632,8 @@ class Olobuild_Setup_Wizard {
                             var intro = document.getElementById('step-3-intro');
                             if (intro) intro.textContent = oloSetupI18n.starterIntro;
                             var cards = document.getElementById('quick-cards');
-                            if (cards) cards.style.display = 'grid';
-                            setTimeout(function() { nextStep(3); }, 800);
+                            if (cards) cards.hidden = false;
+                            setTimeout(dopoDesign, 800);
                         } else {
                             status.textContent = '⚠ ' + (data.data || oloSetupI18n.error);
                             btn.disabled = false;
@@ -505,7 +651,8 @@ class Olobuild_Setup_Wizard {
                 if (daInstallare) daInstallare = !!req.installabile;
                 if (daInstallare) daInstallare = tema.requires_plugin_status === 'missing';
                 if (daInstallare) {
-                    status.textContent = oloSetupI18n.installingPlugin.replace('%s', req.label || req.slug);
+                    attesa(true, oloSetupI18n.importingNamed.replace('%s', nomeScelto()));
+                    document.getElementById('ws-busy-s').textContent = oloSetupI18n.installingPlugin.replace('%s', req.label || req.slug);
                     fetch(ajaxurl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -514,6 +661,7 @@ class Olobuild_Setup_Wizard {
                     .then(function(r) { return r.json(); })
                     .then(function(data) {
                         if (!data.success) {
+                            attesa(false);
                             status.textContent = '⚠ ' + (data.data || oloSetupI18n.error);
                             btn.disabled = false;
                             btn.textContent = oloSetupI18n.retry;
@@ -523,6 +671,7 @@ class Olobuild_Setup_Wizard {
                         importaTema();
                     })
                     .catch(function(e) {
+                        attesa(false);
                         status.textContent = '⚠ ' + oloSetupI18n.connectionError;
                         btn.disabled = false;
                         btn.textContent = oloSetupI18n.retry;
@@ -534,32 +683,76 @@ class Olobuild_Setup_Wizard {
 
             function importaTema() {
                 var btn = document.getElementById('btn-import');
-                var status = document.getElementById('status-2');
-                status.textContent = oloSetupI18n.creatingTemplates;
+                var status = document.getElementById('status-design');
+                status.textContent = '';
+                attesa(true, oloSetupI18n.importingNamed.replace('%s', nomeScelto()));
 
                 fetch(ajaxurl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: 'action=olobuild_setup_import_theme&_nonce=' + nonce + '&theme_id=' + selectedThemeId
+                    body: 'action=olobuild_setup_import_theme&_nonce=' + nonce + '&theme_id=' + encodeURIComponent(selectedThemeId)
                 })
                 .then(function(r) { return r.json(); })
                 .then(function(data) {
                     if (data.success) {
                         var d = data.data;
-                        status.innerHTML = '<span class="check">✓</span> ' + oloSetupI18n.templatesCreated.replace('%d', d.templates);
-                        // Anteprime card in background (continua mentre l'utente è sullo step finale;
+                        document.getElementById('ws-busy-s').innerHTML = '<span class="check">✓</span> ' + oloSetupI18n.templatesCreated.replace('%d', d.templates);
+                        // Anteprime card in background (continua mentre l'utente è sui passi finali;
                         // le eventuali rimanenti le completa l'auto-heal della dashboard template).
                         if (window.oloGenerateMissingThumbs && d.template_ids && d.template_ids.length) {
                             window.oloGenerateMissingThumbs(d.template_ids);
                         }
-                        setTimeout(function() { nextStep(3); }, 1000);
+                        temaImportato = nomeScelto();
+                        var intro = document.getElementById('step-3-intro');
+                        if (intro) intro.textContent = oloSetupI18n.themeReady.replace('%s', temaImportato);
+                        setTimeout(function () { attesa(false); dopoDesign(); }, 1100);
                     } else {
+                        attesa(false);
                         status.textContent = '⚠ ' + (data.data || oloSetupI18n.error);
                         btn.disabled = false;
                         btn.textContent = oloSetupI18n.retry;
                     }
                 })
-                .catch(function(e) { status.textContent = '⚠ ' + oloSetupI18n.connectionError; });
+                .catch(function(e) {
+                    attesa(false);
+                    status.textContent = '⚠ ' + oloSetupI18n.connectionError;
+                    btn.disabled = false;
+                    btn.textContent = oloSetupI18n.retry;
+                });
+            }
+
+            // I software della rete: si ricorda la scelta (lo scaricamento arriverà con la zona comune di OLOtheme).
+            function salvaRete() {
+                var scelti = [].slice.call(document.querySelectorAll('.ws-net input:checked:not(:disabled)'));
+                reteScelta = scelti.map(function (c) { return c.getAttribute('data-nome'); });
+                var btn = document.getElementById('btn-rete');
+                if (btn) btn.disabled = true;
+                var vai = function () { if (btn) btn.disabled = false; setStep('pronto'); };
+                fetch(ajaxurl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'action=olobuild_setup_rete&_nonce=' + nonce + '&rete=' + encodeURIComponent(scelti.map(function (c) { return c.value; }).join(','))
+                }).then(vai, vai);
+            }
+
+            function riepilogo() {
+                var ul = document.getElementById('ws-riepilogo');
+                if (!ul) return;
+                var voci = [];
+                if (temaWp) voci.push(oloSetupI18n.sumWp);
+                if (temaImportato) voci.push(oloSetupI18n.sumTheme.replace('%s', temaImportato));
+                if (partenzaVuota) voci.push(oloSetupI18n.starterReady);
+                if (reteScelta.length) voci.push(oloSetupI18n.sumNet.replace('%s', reteScelta.join(', ')));
+                ul.innerHTML = '';
+                voci.forEach(function (t) {
+                    var li = document.createElement('li');
+                    li.innerHTML = SPUNTA;
+                    var s = document.createElement('span');
+                    s.textContent = t;
+                    li.appendChild(s);
+                    ul.appendChild(li);
+                });
+                ul.hidden = !voci.length;
             }
 
             function markComplete() {
@@ -575,8 +768,8 @@ class Olobuild_Setup_Wizard {
                 window.location.href = '<?php echo esc_url( admin_url( 'admin.php?page=olobuild' ) ); ?>';
             }
 
-            // Init first step
-            setStep(<?php echo $theme_active ? 2 : 1; ?>);
+            // Primo passo
+            setStep(<?php echo wp_json_encode( $theme_active ? 'design' : 'tema' ); ?>);
             </script>
             <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         </body>
@@ -679,6 +872,22 @@ class Olobuild_Setup_Wizard {
         check_ajax_referer( 'olo_setup', '_nonce' );
         update_option( 'olobuild_setup_complete', true );
         wp_send_json_success();
+    }
+
+    /**
+     * AJAX: i software della rete OLOtheme che servono (passo «Rete OLOtheme»). Per ora si ricordano soltanto:
+     * la zona comune da cui scaricarli arriverà dopo e leggerà questa scelta.
+     */
+    public function ajax_rete() {
+        check_ajax_referer( 'olo_setup', '_nonce' );
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( __( 'Permessi insufficienti.', 'olobuild' ) );
+        }
+        $grezzo = isset( $_POST['rete'] ) ? sanitize_text_field( wp_unslash( $_POST['rete'] ) ) : '';
+        $voci   = array_values( array_intersect( array_map( 'sanitize_key', explode( ',', $grezzo ) ), array_keys( self::rete() ) ) );
+        update_option( 'olobuild_rete_richiesti', $voci, false );
+        update_option( 'olobuild_rete_richiesti_il', time(), false );
+        wp_send_json_success( [ 'rete' => $voci ] );
     }
 
     /**

@@ -42,7 +42,8 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
         'ribbon_color'        => '',
         'shadow'              => 'sm',
 
-        'preset'              => 'editorial-grid',
+        // 'custom' come il config: 'editorial-grid' non era fra gli stili e l'inspector mostrava «—».
+        'preset'              => 'custom',
         'item_radius'         => 12,
         'overlay_color'       => 'rgba(0,0,0,0.45)',
         'overlay_gradient'    => true,
@@ -154,7 +155,7 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
         $position  = esc_attr( $s['overlay_position'] ?: 'bottom' );
         $style     = in_array( $s['overlay_style'], [ 'overlay-primary', 'overlay-default' ], true ) ? $s['overlay_style'] : 'overlay-primary';
 
-        $preset_id = $s['preset'] ?? 'editorial-grid';
+        $preset_id = $s['preset'] ?? 'custom';
 
         // New granular controls
         // item_radius dual-format: numero legacy O oggetto {tl,tr,br,bl} (type border-radius).
@@ -252,6 +253,10 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
                 <?php if ( $item_radius_css ) : ?>border-radius: <?php echo $item_radius_css; ?>;<?php endif; ?>
                 <?php echo $shadow_css; ?>
             }
+            <?php // Sul telefono non si passa sopra: il testo che «compare al passaggio» restava invisibile (16 nov 2026). ?>
+            @media (hover: none) {
+                .<?php echo $uid; ?> [class*="uk-transition-fade"], .<?php echo $uid; ?> [class*="uk-transition-slide"] { opacity: 1 !important; transform: none !important; }
+            }
             .<?php echo $uid; ?> .mos-og-hover-zoom:hover,
             .<?php echo $uid; ?> .uk-transition-toggle:hover .mos-og-hover-zoom { transform: scale(1.08); }
             .<?php echo $uid; ?> .mos-og-hover-zoom-rotate:hover,
@@ -276,6 +281,24 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
                 <?php endif; ?>
                 color: <?php echo $title_clr; ?>;
             }
+            <?php if ( $overlay_grad ) :
+                // Velo sfumato in basso o in alto: pieno dietro al testo, la sfumatura sta FUORI dalla didascalia, verso
+                // il centro della foto. Prima cominciava dal bordo della didascalia, cioè dal titolo, che restava sulla
+                // foto quasi nuda: su una foto chiara (roccia, un piatto bianco) non si leggeva (16 nov 2026, ep. 31).
+                // Solo le didascalie larghe quanto la card (in basso, in alto) sfumano: un riquadro in un angolo o al
+                // centro (uk-position-bottom-left, -center…) è un'etichetta, e si riempie e basta; «Su tutta la card»
+                // tiene la sfumatura dall'alto. La sfumatura è lunga al massimo
+                // metà della didascalia: nelle card basse del mosaico non copre tutta la foto.
+                foreach ( [ 'bottom' => [ '::before', 'bottom', '180deg' ], 'top' => [ '::after', 'top', '0deg' ] ] as $lato => $v ) :
+                    $sel = '.' . $uid . ' .uk-overlay-primary.uk-position-' . $lato . ', .' . $uid . ' .uk-overlay-default.uk-position-' . $lato;
+                    ?>
+            <?php echo $sel; ?> { background: <?php echo $overlay_clr; ?>; }
+            <?php echo str_replace( ', ', $v[0] . ', ', $sel ) . $v[0]; ?> { content: ''; position: absolute; left: 0; right: 0; <?php echo $v[1]; ?>: 100%; height: min(72px, 50%); background: linear-gradient(<?php echo $v[2]; ?>, rgba(0,0,0,0) 0%, <?php echo $overlay_clr; ?> 100%); pointer-events: none; }
+                <?php endforeach; ?>
+            .<?php echo $uid; ?> .uk-overlay-primary[class*="uk-position-bottom-"], .<?php echo $uid; ?> .uk-overlay-default[class*="uk-position-bottom-"],
+            .<?php echo $uid; ?> .uk-overlay-primary[class*="uk-position-top-"], .<?php echo $uid; ?> .uk-overlay-default[class*="uk-position-top-"],
+            .<?php echo $uid; ?> .uk-overlay-primary[class*="uk-position-center"], .<?php echo $uid; ?> .uk-overlay-default[class*="uk-position-center"] { background: <?php echo $overlay_clr; ?>; }
+            <?php endif; ?>
             <?php // La didascalia delle card con foto ha la classe uk-overlay-primary/-default, MAI
                   // «uk-overlay»: con `.uk-overlay h3` colore, peso, spaziatura e maiuscolo del
                   // titolo (e colore e corpo del sottotitolo) non arrivavano, e restavano il bianco
@@ -308,6 +331,10 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .uk-panel:hover .olo-og-cta--arrow .olo-og-cta__arrow,
             .<?php echo $uid; ?> a:hover .olo-og-cta--arrow .olo-og-cta__arrow { transform: translateX(4px); }
             .<?php echo $uid; ?> .olo-og-cta--pill { background: var(--olo-color-primary, #e1474f); color: var(--olo-color-primary-contrast, #fff); border-radius: 999px; padding: 8px 18px; }
+            <?php // Sul velo del colore primario la pillola primaria sparirebbe: si inverte (16 nov 2026). ?>
+            <?php if ( false !== strpos( (string) $overlay_clr, 'primary' ) && false === strpos( (string) $overlay_clr, 'primary-contrast' ) ) : ?>
+            .<?php echo $uid; ?> .uk-overlay-primary .olo-og-cta--pill, .<?php echo $uid; ?> .uk-overlay-default .olo-og-cta--pill { background: var(--olo-color-primary-contrast, #fff); color: var(--olo-color-primary, #e1474f); }
+            <?php endif; ?>
             /* Card con link: il fuoco da tastiera si vede */
             .<?php echo $uid; ?> a.uk-display-block:focus-visible { outline: 2px solid var(--olo-color-primary, #e1474f); outline-offset: 2px; }
 
@@ -367,6 +394,37 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
             <?php if ( $cols_tab ) : ?>@media(min-width:640px) and (max-width:959px){ .<?php echo $uid; ?>.olo-og--masonry > div { grid-template-columns:repeat(<?php echo (int) $cols_tab; ?>,1fr) !important; } }<?php endif; ?>
             @media(max-width:640px){ .<?php echo $uid; ?>.olo-og--masonry > div { grid-template-columns:repeat(<?php echo (int) $cols_mob; ?>,1fr) !important; grid-auto-rows:<?php echo (int) $mrow_m; ?>px; } .<?php echo $uid; ?>.olo-og--masonry > div > div.olo-og-tall, .<?php echo $uid; ?>.olo-og--masonry > div > div.olo-og-wide { grid-row:auto; grid-column:auto; } }
             <?php endif; ?>
+            <?php
+            // Le colonne seguono la LARGHEZZA DELLA TILE, non solo quella dello schermo: in mezza pagina tre card
+            // restavano larghe 130 px e il testo usciva dalla foto (16 nov 2026, episodio 31). Sopra il telefono,
+            // per ogni fascia di schermo, la tile toglie colonne finché ogni card ha almeno 220 px. Il telefono
+            // tiene le sue colonne. Soglie in px: le unità cq valgono solo dentro un contenitore (audit).
+            $fasce = [
+                [ 640, 959, $cols_tab ?: $cols_mob ],
+                [ 960, $cols_lap ? 1199 : 0, $cols_lap ?: $columns ],
+            ];
+            if ( $cols_lap ) {
+                $fasce[] = [ 1200, 0, $columns ];
+            }
+            foreach ( $fasce as $fascia ) {
+                $n = (int) $fascia[2];
+                if ( $n < 2 ) {
+                    continue;
+                }
+                echo '@media (min-width:' . (int) $fascia[0] . 'px)' . ( $fascia[1] ? ' and (max-width:' . (int) $fascia[1] . 'px)' : '' ) . '{';
+                for ( $k = $n - 1; $k >= 1; $k-- ) {
+                    $soglia = ( $k + 1 ) * 220 - 1;
+                    if ( $masonry ) {
+                        echo '@container olo-og (max-width:' . $soglia . 'px){.' . $uid . '.olo-og--masonry > div{grid-template-columns:repeat(' . $k . ',1fr) !important}'
+                            . ( 1 === $k ? '.' . $uid . '.olo-og--masonry > div > div.olo-og-wide{grid-column:auto}' : '' ) . '}';
+                    } else {
+                        echo '@container olo-og (max-width:' . $soglia . 'px){.' . $uid . ' > div > div{width:' . round( 100 / $k, 4 ) . '% !important}}';
+                    }
+                }
+                echo '}';
+            }
+            ?>
+            .<?php echo $uid; ?> { container-type: inline-size; container-name: olo-og; }
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="<?php echo $wrap_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- class list built above from esc_attr()'d preset id, fixed literals and internal wp_rand() uid. ?>">

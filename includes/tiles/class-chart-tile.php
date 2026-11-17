@@ -155,16 +155,26 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
         $animate     = ! empty( $s['animate'] );
         $tension     = max( 0, min( 1, floatval( $s['tension'] ) ) );
         $index_axis  = $s['index_axis'] === 'y' ? 'y' : 'x';
+        // L'asse dei valori (y, o x nelle barre orizzontali): col «Separatore migliaia» le sue tacche scrivono i
+        // numeri come il fumetto. Prima il fumetto diceva «1.240» e l'asse «1240» (16 nov 2026).
+        $asse_valori = ( 'bar' === $chart_type && 'y' === $index_axis ) ? 'x' : 'y';
 
         // Legend
-        $show_legend     = ! empty( $s['show_legend'] );
+        // Barre, linee e radar hanno una serie sola: la legenda dice il suo nome. Senza nome era un quadratino
+        // colorato senza scritta sotto il grafico (16 nov 2026); torte, ciambelle e aree polari elencano i dati.
+        $show_legend     = ! empty( $s['show_legend'] )
+            && ( ! in_array( $chart_type, [ 'bar', 'line', 'radar' ], true ) || '' !== $dataset_label );
         $legend_position = in_array( $s['legend_position'], [ 'top', 'bottom', 'left', 'right' ], true ) ? $s['legend_position'] : 'bottom';
         $legend_align    = in_array( $s['legend_align'], [ 'start', 'center', 'end' ], true ) ? $s['legend_align'] : 'center';
         $legend_color    = $this->safe_color_css( $s['legend_color'] ) ?: $text_color;
         $legend_fs       = max( 8, intval( $s['legend_font_size'] ) );
         $legend_fw       = esc_js( $s['legend_font_weight'] ?: '400' );
         $legend_bw       = max( 10, intval( $s['legend_box_width'] ) );
-        $legend_pad      = max( 0, intval( $s['legend_padding'] ) );
+        // Spazio fra le voci della legenda: un numero (Chart.js non ha lati). Un grafico modificato quando il
+        // controllo era a quattro lati ha salvato un oggetto: si prende il lato alto (prima intval() dava 1).
+        $legend_pad      = max( 0, is_array( $s['legend_padding'] )
+            ? Olobuild_Tile_Utils::spacing_sides( $s['legend_padding'], [], [ 10, 10, 10, 10 ] )['top']
+            : intval( $s['legend_padding'] ) );
         $legend_ps       = ! empty( $s['legend_point_style'] );
         // Pallino della legenda: Chart.js lo disegna con raggio = boxHeight × √2 / 2 e, con
         // pointStyleWidth, largo pointStyleWidth → un ellisse (12 px di larghezza, alto quanto il
@@ -178,7 +188,15 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
         $title_color  = $this->safe_color_css( $s['title_color'] ) ?: $text_color;
         $title_fs     = max( 10, intval( $s['title_font_size'] ) );
         $title_fw     = esc_js( $s['title_font_weight'] ?: '700' );
-        $title_pad    = max( 0, intval( $s['title_padding'] ) );
+        // Padding del titolo: il controllo `spacing` salva i quattro lati (alto e basso valgono, Chart.js non ha
+        // i lati del titolo); i temi e i grafici di prima un numero solo, che era lo spazio sotto. Prima intval()
+        // di un oggetto dava 1: toccare il controllo schiacciava il titolo sul grafico (16 nov 2026).
+        if ( is_array( $s['title_padding'] ) ) {
+            $tp_lati   = Olobuild_Tile_Utils::spacing_sides( $s['title_padding'], [], [ 0, 0, 10, 0 ] );
+            $title_pad = '{ top: ' . max( 0, $tp_lati['top'] ) . ', bottom: ' . max( 0, $tp_lati['bottom'] ) . ' }';
+        } else {
+            $title_pad = '{ bottom: ' . max( 0, intval( $s['title_padding'] ) ) . ' }';
+        }
 
         // Subtitle
         $show_sub     = ! empty( $s['show_subtitle'] );
@@ -194,7 +212,14 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
         $tt_bw        = max( 0, intval( $s['tooltip_border_width'] ) );
         $tt_cr        = max( 0, Olobuild_Tile_Utils::radius_int( $s['tooltip_corner_radius'] ) );
         $tt_fs        = max( 8, intval( $s['tooltip_font_size'] ) );
-        $tt_pad       = max( 4, intval( $s['tooltip_padding'] ) );
+        // Padding del fumetto: quattro lati dal controllo `spacing`, un numero dai grafici di prima.
+        if ( is_array( $s['tooltip_padding'] ) ) {
+            $tt_lati = Olobuild_Tile_Utils::spacing_sides( $s['tooltip_padding'], [], [ 8, 8, 8, 8 ] );
+            $tt_pad  = '{ top: ' . max( 0, $tt_lati['top'] ) . ', right: ' . max( 0, $tt_lati['right'] ) . ', bottom: '
+                . max( 0, $tt_lati['bottom'] ) . ', left: ' . max( 0, $tt_lati['left'] ) . ' }';
+        } else {
+            $tt_pad = (string) max( 4, intval( $s['tooltip_padding'] ) );
+        }
 
         // Bar
         $bar_radius   = max( 0, Olobuild_Tile_Utils::radius_int( $s['bar_radius'] ) );
@@ -371,6 +396,10 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
                     dataset.label = '<?php echo $dataset_label; ?>';
                     <?php endif; ?>
 
+                    function formatta(v){
+                        return Number(v).toLocaleString(document.documentElement.lang || undefined, { useGrouping: 'always' });
+                    }
+
                     var config = {
                         type: chartType,
                         data: {
@@ -410,7 +439,7 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
                                     text: '<?php echo $chart_title; ?>',
                                     color: '<?php echo esc_js( $title_color ); ?>',
                                     font: { size: <?php echo $title_fs; ?>, weight: '<?php echo $title_fw; ?>' },
-                                    padding: { bottom: <?php echo $title_pad; ?> }
+                                    padding: <?php echo $title_pad; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- oggetto JS di soli interi, costruito qui sopra ?>
                                 },
                                 subtitle: {
                                     display: <?php echo $show_sub ? 'true' : 'false'; ?>,
@@ -420,6 +449,9 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
                                 },
                                 tooltip: {
                                     enabled: <?php echo $tt_enabled ? 'true' : 'false'; ?>,
+                                    <?php /* Una serie sola (barre, linee, radar): il quadratino col colore del dato non
+                                             distingue niente, e sul fumetto dello stesso colore era un riquadro vuoto. */ ?>
+                                    displayColors: <?php echo in_array( $chart_type, [ 'bar', 'line', 'radar' ], true ) ? 'false' : 'true'; ?>,
                                     backgroundColor: '<?php echo esc_js( $tt_bg ); ?>',
                                     titleColor: '<?php echo esc_js( $tt_text ); ?>',
                                     bodyColor: '<?php echo esc_js( $tt_text ); ?>',
@@ -439,7 +471,7 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
                                             <?php if ( $num_format ) : ?>
                                             /* 'always': in italiano anche 1234 diventa 1.234 (di norma il
                                                separatore parte da 10.000). */
-                                            v = Number(v).toLocaleString(document.documentElement.lang || undefined, { useGrouping: 'always' });
+                                            v = formatta(v);
                                             <?php endif; ?>
                                             var lbl = ctx.dataset.label ? ctx.dataset.label + ': ' : '';
                                             return lbl + '<?php echo $tt_prefix; ?>' + v + '<?php echo $tt_suffix; ?>';
@@ -452,14 +484,14 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
                             ,scales: {
                                 x: {
                                     <?php if ( $stacked ) : ?>stacked: true,<?php endif; ?>
-                                    ticks: { color: '<?php echo esc_js( $text_color ); ?>', font: { size: <?php echo $tick_fs; ?> } },
+                                    ticks: { color: '<?php echo esc_js( $text_color ); ?>', font: { size: <?php echo $tick_fs; ?> }<?php if ( $num_format && 'x' === $asse_valori ) echo ', callback: function(v){ return formatta(v); }'; ?> },
                                     grid: { display: <?php echo $show_x_grid ? 'true' : 'false'; ?>, color: '<?php echo esc_js( $grid_color ); ?>', lineWidth: <?php echo $grid_lw; ?> },
                                     border: { display: <?php echo $show_x_bdr ? 'true' : 'false'; ?>, color: '<?php echo esc_js( $axis_color ); ?>' }
                                     <?php if ( $x_label ) : ?>,title: { display: true, text: '<?php echo $x_label; ?>', color: '<?php echo esc_js( $text_color ); ?>', font: {} }<?php endif; ?>
                                 },
                                 y: {
                                     <?php if ( $stacked ) : ?>stacked: true,<?php endif; ?>
-                                    ticks: { color: '<?php echo esc_js( $text_color ); ?>', font: { size: <?php echo $tick_fs; ?> }<?php if ( $y_step !== '' ) echo ', stepSize: ' . floatval( $y_step ); ?> },
+                                    ticks: { color: '<?php echo esc_js( $text_color ); ?>', font: { size: <?php echo $tick_fs; ?> }<?php if ( $y_step !== '' ) echo ', stepSize: ' . floatval( $y_step ); ?><?php if ( $num_format && 'y' === $asse_valori ) echo ', callback: function(v){ return formatta(v); }'; ?> },
                                     grid: { display: <?php echo $show_y_grid ? 'true' : 'false'; ?>, color: '<?php echo esc_js( $grid_color ); ?>', lineWidth: <?php echo $grid_lw; ?> },
                                     border: { display: <?php echo $show_y_bdr ? 'true' : 'false'; ?>, color: '<?php echo esc_js( $axis_color ); ?>' },
                                     beginAtZero: <?php echo $begin_zero ? 'true' : 'false'; ?>
@@ -499,6 +531,26 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
                     };
 
                     risolviColori(config, canvas.parentNode);
+                    /* Al passaggio il dato si fa «più pieno»: un colore velato diventa più coprente, uno pieno un po' più
+                       scuro. Chart.js di suo lo satura, e le barre in tinta del primario diventavano un rosso acceso
+                       fuori palette; scurirle verso il colore scuro le faceva grigiastre (16 nov 2026). */
+                    function piuPieno(c){
+                        if (typeof c !== 'string') return c;
+                        var r, g, b, a = 1, m = /^rgba?\(([^)]+)\)$/.exec(c);
+                        if (m) {
+                            var p = m[1].split(/[\s,\/]+/).filter(Boolean);
+                            r = +p[0]; g = +p[1]; b = +p[2]; if (p[3] !== undefined) a = +p[3];
+                        } else {
+                            m = /^color\(srgb\s+([\d.e-]+)\s+([\d.e-]+)\s+([\d.e-]+)(?:\s*\/\s*([\d.]+))?\)$/.exec(c);
+                            if (!m) return c;
+                            r = m[1] * 255; g = m[2] * 255; b = m[3] * 255; if (m[4] !== undefined) a = +m[4];
+                        }
+                        if (a < 0.95) return 'rgba(' + Math.round(r) + ',' + Math.round(g) + ',' + Math.round(b) + ',' + Math.min(1, a + 0.35).toFixed(2) + ')';
+                        return 'rgb(' + Math.round(r * 0.86) + ',' + Math.round(g * 0.86) + ',' + Math.round(b * 0.86) + ')';
+                    }
+                    config.data.datasets.forEach(function(d){
+                        if (Array.isArray(d.backgroundColor)) d.hoverBackgroundColor = d.backgroundColor.map(piuPieno);
+                    });
                     var famiglia = getComputedStyle(canvas.parentNode).fontFamily;
                     if (famiglia) conFont(config.options, famiglia);
                     <?php if ( $chart_type === 'polarArea' ) : ?>

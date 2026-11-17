@@ -8,6 +8,7 @@
         'fmp-pill',
         selected.includes(opt.value) ? 'fmp-pill--active' : ''
       ]"
+      :aria-pressed="selected.includes(opt.value) ? 'true' : 'false'"
       @click="toggle(opt.value)"
     >
       <svg v-if="opt.icon && iconPaths[opt.icon]" class="fmp-pill-icon" width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path :d="iconPaths[opt.icon]" /></svg>
@@ -71,7 +72,11 @@ const iconPaths = {
 </script>
 
 <style scoped>
+/* Tema chiaro del chrome (16 nov 2026): lo stile era rimasto quello del builder scuro e una pillola accesa aveva la
+   scritta lilla chiara su un fondo rosa chiaro, quasi illeggibile (i giorni della Lavagna e dell'Hours Strip).
+   Spenta: bianca col bordo grigio; accesa: piena nell'arancio dell'interfaccia, scritta bianca. */
 .fmp-wrap {
+  --olo-ui-accent: #e8622a;
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
@@ -81,31 +86,39 @@ const iconPaths = {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 3px 9px;
+  padding: 3px 10px;
   font-size: 11px;
   font-weight: 500;
-  border: 1px solid #4b5563;
+  border: 1px solid #d1d5db;
   border-radius: 999px;
-  background: transparent;
-  color: #9ca3af;
+  background: #fff;
+  color: #4b5563;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
   line-height: 1.4;
 }
 
 .fmp-pill:hover {
-  border-color: #6b7280;
-  color: #d1d5db;
+  border-color: #9ca3af;
+  color: #111827;
+}
+
+.fmp-pill:focus-visible {
+  outline: 2px solid var(--olo-ui-accent);
+  outline-offset: 2px;
 }
 
 .fmp-pill--active {
-  background: rgb(var(--olo-primary-rgb, 232 98 42) / 0.2);
-  border-color: var(--olo-ui-accent, #e8622a);
-  color: #c7d2fe;
+  background: var(--olo-ui-accent);
+  border-color: var(--olo-ui-accent);
+  color: #fff;
+  font-weight: 600;
 }
 
 .fmp-pill--active:hover {
-  background: rgb(var(--olo-primary-rgb, 232 98 42) / 0.3);
+  background: #d4561f;
+  border-color: #d4561f;
+  color: #fff;
 }
 
 .fmp-pill-icon {

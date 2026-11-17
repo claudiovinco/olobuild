@@ -251,6 +251,8 @@
   /* dentro la tela scalata le misure restano quelle di progetto; fuori (livelli con fusione)
      --mps-k è la scala dello slider, scritta dal JS sul contenitore */
   --mps-k: 1;
+  /* il carattere minimo leggibile (PHP carattere_leggibile): dentro la tela 14 px sullo schermo sono 14 / scala */
+  --mps-den: var(--mps-scala, 1);
 }
 .mps-layers-wrap .olo-proslider-layer {
   pointer-events: auto;

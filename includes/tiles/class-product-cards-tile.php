@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'product-cards';
-    protected $name     = 'Product Cards';
+    protected $name     = 'Schede prodotto';
     protected $icon     = 'dashicons-portfolio';
     protected $category = 'layout';
     protected $defaults = [
@@ -153,7 +153,10 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
 
         $hover_effect = in_array( $s['card_hover_effect'] ?? 'lift', [ 'none', 'lift', 'scale', 'tilt' ], true ) ? ( $s['card_hover_effect'] ?? 'lift' ) : 'lift';
 
-        $grid_style = sprintf( 'display:grid;grid-template-columns:repeat(%d,1fr);gap:%dpx;', $cols, $gap );
+        // Le colonne scelte sono il massimo: se una scheda resterebbe più stretta di 220 px (mezza pagina, colonna
+        // stretta) la griglia ne mette meno da sola. Prima contava solo lo schermo: in mezza pagina le schede erano
+        // larghe 130 px, una parola per riga (16 nov 2026).
+        $grid_style = sprintf( 'display:grid;grid-template-columns:repeat(auto-fill,minmax(max(220px,calc((100%% - %dpx) / %d)),1fr));gap:%dpx;', $gap * ( $cols - 1 ), $cols, $gap );
 
         $items = is_array( $s['items'] ) ? $s['items'] : [];
         $con_seconda = false;
@@ -286,7 +289,6 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
             @media (prefers-reduced-motion: reduce) { .<?php echo $uid; ?> .olo-pcards__alt { transition: opacity .2s linear; transform: none; } }
             <?php endif; ?>
             .<?php echo $uid; ?> .olo-pcards__cta:focus-visible { outline: none; border-radius: 3px; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
-            @media (max-width: 1100px) { .<?php echo $uid; ?> { grid-template-columns: repeat(<?php echo min( $cols, 3 ); ?>, 1fr) !important; } }
             @media (max-width: 700px)  { .<?php echo $uid; ?> { grid-template-columns: repeat(<?php echo (int) $cols_m; ?>, 1fr) !important; } }
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>

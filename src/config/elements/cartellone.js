@@ -24,6 +24,19 @@ const STATI = [
 
 const nonProssimo = { field: 'vista', op: 'neq', value: 'prossimo' };
 
+// Le date degli appuntamenti di partenza contano da oggi (17 nov 2026): erano fisse (novembre e dicembre 2026) e una tile
+// inserita dopo il 5 dicembre avrebbe mostrato solo appuntamenti passati, sul sito nessuno.
+// La tile disegna le foto solo se «Immagini» è acceso e la vista ne ha: non il Calendario del mese, non il Biglietto
+// (una striscia bassa senza locandina). Altrimenti i loro controlli non agirebbero.
+const conFoto = (s) => s.immagini !== false && (s.vista || 'lista') !== 'mese'
+  && !((s.vista || 'lista') === 'prossimo' && (s.forma_prossimo || 'scheda') === 'biglietto');
+
+const fra = (giorni) => {
+  const d = new Date();
+  d.setDate(d.getDate() + giorni);
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+};
+
 export default {
   type: 'cartellone',
   name: t('Cartellone'),
@@ -63,9 +76,9 @@ export default {
       { id: 'gen-3', nome: t('Incontri'), colore: '' },
     ],
     voci: [
-      { id: 'voce-1', titolo: 'La locandiera', sottotitolo: 'di Carlo Goldoni · Compagnia dell\'Arco', genere: t('Prosa'), data: '2026-11-14', ora: '20:30', data_fine: '', orari: '', luogo: t('Sala grande'), durata: '2 h 10 min con intervallo', prezzo: 'da 14 €', stato: '', etichette: '', descrizione: '', incontro: '', immagine: '', link_biglietti: '#', link_info: '' },
-      { id: 'voce-2', titolo: 'Le quattro stagioni', sottotitolo: 'Orchestra da camera della città', genere: t('Musica'), data: '2026-11-28', ora: '21:00', data_fine: '', orari: '', luogo: t('Sala grande'), durata: '1 h 20 min', prezzo: 'da 12 €', stato: 'ultimi', etichette: '', descrizione: '', incontro: '', immagine: '', link_biglietti: '#', link_info: '' },
-      { id: 'voce-3', titolo: t('Prima del sipario'), sottotitolo: t('Conversazione con il regista'), genere: t('Incontri'), data: '2026-12-05', ora: '18:00', data_fine: '', orari: '', luogo: t('Foyer'), durata: '1 h', prezzo: '', stato: 'gratuito', etichette: '', descrizione: '', incontro: '', immagine: '', link_biglietti: '', link_info: '' },
+      { id: 'voce-1', titolo: 'La locandiera', sottotitolo: 'di Carlo Goldoni · Compagnia dell\'Arco', genere: t('Prosa'), data: fra(12), ora: '20:30', data_fine: '', orari: '', luogo: t('Sala grande'), durata: '2 h 10 min con intervallo', prezzo: 'da 14 €', stato: '', etichette: '', descrizione: '', incontro: '', immagine: '', link_biglietti: '#', link_info: '' },
+      { id: 'voce-2', titolo: 'Le quattro stagioni', sottotitolo: 'Orchestra da camera della città', genere: t('Musica'), data: fra(26), ora: '21:00', data_fine: '', orari: '', luogo: t('Sala grande'), durata: '1 h 20 min', prezzo: 'da 12 €', stato: 'ultimi', etichette: '', descrizione: '', incontro: '', immagine: '', link_biglietti: '#', link_info: '' },
+      { id: 'voce-3', titolo: t('Prima del sipario'), sottotitolo: t('Conversazione con il regista'), genere: t('Incontri'), data: fra(33), ora: '18:00', data_fine: '', orari: '', luogo: t('Foyer'), durata: '1 h', prezzo: '', stato: 'gratuito', etichette: '', descrizione: '', incontro: '', immagine: '', link_biglietti: '', link_info: '' },
     ],
 
     accento: '',
@@ -139,8 +152,11 @@ export default {
       itemFields: [
         { key: 'titolo', label: t('Titolo'), type: 'text' },
         { key: 'sottotitolo', label: t('Autore, compagnia, interpreti'), type: 'text' },
-        { key: 'genere', label: t('Genere'), type: 'text',
-          description: t('Scrivi il genere com\'è nell\'elenco dei generi (Prosa, Lirica…): diventa il filtro e prende il suo colore.') },
+        // Si sceglie fra i Generi (17 nov 2026): scritto a mano, un errore di battitura creava un filtro in più. Un genere
+        // salvato che non è nell'elenco resta fra le scelte.
+        { key: 'genere', label: t('Genere'), type: 'select', optionsSource: 'vociDi',
+          voci: { lista: 'generi', valore: 'nome', etichetta: 'nome' },
+          description: t('Diventa il filtro e prende il suo colore. I generi si aggiungono nella sezione Generi.') },
         { key: 'data', label: t('Data'), type: 'date' },
         { key: 'ora', label: t('Ora'), type: 'time' },
         { key: 'data_fine', label: t('Fino al'), type: 'date' },
@@ -192,7 +208,7 @@ export default {
       { value: 'solo', label: t('Solo i passati (lo storico)') },
     ], condition: nonProssimo,
       description: t('Con «Solo i passati» la tile mostra solo gli appuntamenti già andati in scena, non attenuati: è lo storico, e si aggiorna da solo coi giorni.') },
-    { key: 'immagini', label: t('Immagini'), type: 'toggle' },
+    { key: 'immagini', label: t('Immagini'), type: 'toggle', show: (s) => conFoto({ ...s, immagini: true }) },
 
     { type: 'separator', label: t('Filtri'), condition: nonProssimo },
     { key: 'filtri_generi', label: t('Filtro per genere'), type: 'toggle' },
@@ -280,14 +296,14 @@ export default {
     { key: 'padding_voce', label: t('Padding voce'), type: 'spacing', max: 96 },
     { key: 'larghezza_data', label: t('Larghezza della data'), type: 'range', min: 64, max: 220, step: 2, unit: 'px',
       condition: { field: 'vista', op: 'eq', value: 'lista' } },
-    { key: 'img_intera', label: t('Immagine intera'), type: 'toggle', condition: { field: 'immagini', op: 'eq', value: true },
+    { key: 'img_intera', label: t('Immagine intera'), type: 'toggle', show: conFoto,
       description: t('La foto o la locandina si vede tutta, con le sue proporzioni, senza ritaglio: per le locandine verticali. Spento, la foto riempie una cornice della proporzione scelta.') },
     ...imageFrameFields('img', {
       separator: false,
       fit: false,
       ratioOpts: { autoValue: '', autoLabel: 'Predefinito (4:3)', custom: true },
-      condition: [{ field: 'immagini', op: 'eq', value: true }, { field: 'img_intera', op: 'ne', value: true }],
-    }),
+      condition: { field: 'img_intera', op: 'ne', value: true },
+    }).map((f) => ({ ...f, show: conFoto })),
 
     { type: 'separator', label: t('Disposizione') },
     { key: 'colonne', label: t('Colonne'), type: 'range', min: 1, max: 4, step: 1, responsive: true,

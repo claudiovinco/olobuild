@@ -45,11 +45,42 @@ class Olobuild_StatStrip_Tile extends Olobuild_Tile_Base {
 
     public function get_controls() { return []; }
 
+    /**
+     * Il valore resta su UNA riga e scende a gradini con la larghezza della sua cella (contenitore olo-ss-cella), mai
+     * oltre la dimensione scelta. I gradini si calcolano sul valore più lungo della tile: un carattere vale circa
+     * 0,62 em, quindi in una cella larga W il valore di L caratteri ci sta fino a W / (L × 0,62) px. Prima i gradini
+     * erano tarati su tre cifre e a 64 px «1.400 m» andava a capo («1.400» / «m», 16 nov 2026).
+     *
+     * @param string $sel    Selettore della tile.
+     * @param int    $v_size Dimensione scelta del valore, px.
+     * @param array  $items  Voci (per il valore più lungo).
+     * @return string CSS.
+     */
+    private static function gradini_valore( $sel, $v_size, $items ) {
+        $lungo = 1;
+        foreach ( (array) $items as $it ) {
+            $lungo = max( $lungo, function_exists( 'mb_strlen' ) ? mb_strlen( (string) ( $it['value'] ?? '' ) ) : strlen( (string) ( $it['value'] ?? '' ) ) );
+        }
+        $css  = $sel . ' .olo-statstrip__cell .olo-statstrip__value{white-space:nowrap;}';
+        $fatti = [];
+        foreach ( [ 900, 760, 640, 540, 460, 400, 340, 290, 250, 210, 180, 150, 125, 100, 80, 65 ] as $largo ) {
+            $px = max( 14, (int) floor( $largo / ( $lungo * 0.62 ) ) );
+            if ( $px >= (int) $v_size || isset( $fatti[ $px ] ) ) {
+                continue;
+            }
+            $fatti[ $px ] = true;
+            $css .= '@container olo-ss-cella (max-width:' . (int) $largo . 'px){' . $sel . ' .olo-statstrip__value{font-size:' . (int) $px . 'px !important;}}';
+        }
+        return $css;
+    }
+
     public function render( $settings, $style = [] ) {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'olo-statstrip-' . wp_rand( 10000, 99999 );
 
-        $heading = "var(--olo-font-family-heading, 'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
+        // Il ripiego dei titoli è quello di tutte le tile (resolve_font_family('heading')): senza un carattere dei titoli
+        // scelto nel sito questa tile ripiegava su DM Sans mentre i titoli accanto andavano su Georgia (16 nov 2026).
+        $heading = $this->resolve_font_family( 'heading' );
         $body    = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
         // Vuoto = il mono del tema (--olo-font-family-mono), come dice l'inspector; il monospazio di sistema solo se il tema non ne ha uno.
         $mono_fb = "var(--olo-font-family-mono, ui-monospace,'SF Mono',Menlo,Consolas,monospace)";
@@ -108,7 +139,10 @@ class Olobuild_StatStrip_Tile extends Olobuild_Tile_Base {
         // non in linea: in linea batterebbe lo spazio fra le righe del telefono (media query qui sotto).
         $row_gap    = max( 16, (int) round( $v_size * 0.6 ) );
         $grid_style = 'display:grid;grid-template-columns:repeat(' . $cols . ',minmax(0,1fr));';
-        $cell_style = 'display:flex;flex-direction:column;gap:8px;text-align:' . $align . ';padding:4px 24px;'
+        // Cella come contenitore (olo-ss-cella) e valore che scende a gradini con la sua larghezza, mai oltre la
+        // dimensione scelta (gradini_valore()): in una colonna stretta quattro numeri a 48 px non ci stavano e «24 h»
+        // andava a capo (16 nov 2026). Il padding laterale cresce con la colonna invece di mangiarsene 48 px fissi.
+        $cell_style = 'display:flex;flex-direction:column;gap:.5rem;text-align:' . $align . ';padding:4px clamp(8px, 8%, 24px);container-type:inline-size;container-name:olo-ss-cella;'
             . ( $align === 'center' ? 'align-items:center;' : '' );
 
         ob_start();
@@ -129,6 +163,7 @@ class Olobuild_StatStrip_Tile extends Olobuild_Tile_Base {
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for $line, the (int) cast $row_gap and the internally generated 'olo-statstrip-' . wp_rand() $uid. ?>
         <style>
             .<?php echo $uid; ?> .olo-statstrip__grid { row-gap: <?php echo (int) $row_gap; ?>px; }
+            <?php echo self::gradini_valore( '.' . $uid, $v_size, $items ); ?>
             <?php
             // Divisore a sinistra di OGNI cella, spostato di 1 px fuori dalla sua colonna, e la
             // griglia che taglia ciò che esce dai suoi lati: il divisore della prima colonna di
@@ -202,8 +237,9 @@ class Olobuild_StatStrip_Tile extends Olobuild_Tile_Base {
                 $html .= $cella( $idx, $it, $v['v_size'] );
             }
             $css = $sel . ' .olo-statstrip__grid{display:grid;grid-template-columns:repeat(' . (int) $v['cols'] . ',minmax(0,1fr));gap:1rem;}'
-                . $sel . ' .olo-statstrip__cell{display:flex;flex-direction:column;gap:.6em;padding:1.4em 1.3em;border-radius:1rem;'
+                . $sel . ' .olo-statstrip__cell{display:flex;flex-direction:column;gap:.6em;padding:1.4em 1.3em;border-radius:1rem;container-type:inline-size;container-name:olo-ss-cella;'
                 . 'background:color-mix(in srgb, ' . $v['v_color'] . ' 6%, transparent);' . ( $center ? 'align-items:center;text-align:center;' : '' ) . '}'
+                . self::gradini_valore( $sel, $v['v_size'], $items )
                 . '@media (max-width: 959px){' . $sel . ' .olo-statstrip__grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}}'
                 . $this->css_per_dispositivo( $s, 'columns', $sel . ' .olo-statstrip__grid', $this->decl_colonne( 6 ) );
         } else { // evidenza

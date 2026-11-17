@@ -1075,6 +1075,22 @@ class Olobuild_Frontend_Renderer {
                         $ref    = &$settings;
                         $c_e    = true;
                         foreach ( $pezzi as $pezzo ) {
+                            // «items.@il-2.link»: la voce del ripetitore con quell'id, non quella in quella posizione,
+                            // così il collegamento resta alla sua voce anche se le voci si spostano (17 nov 2026).
+                            if ( '' !== $pezzo && '@' === $pezzo[0] && is_array( $ref ) ) {
+                                $cercato = substr( $pezzo, 1 );
+                                $pezzo   = null;
+                                foreach ( $ref as $indice => $voce ) {
+                                    if ( is_array( $voce ) && (string) ( $voce['id'] ?? '' ) === $cercato ) {
+                                        $pezzo = $indice;
+                                        break;
+                                    }
+                                }
+                                if ( null === $pezzo ) {
+                                    $c_e = false;
+                                    break;
+                                }
+                            }
                             if ( ! isset( $ref[ $pezzo ] ) || ! is_array( $ref[ $pezzo ] ) ) {
                                 $c_e = false;
                                 break;
@@ -1123,9 +1139,16 @@ class Olobuild_Frontend_Renderer {
         $SFONDO_PROPRIO = [ 'announcementbar', 'audiohero', 'beforeafter', 'categoryrail', 'chathero', 'cta-banner', 'featuredstory', 'filmreel', 'glowgallery', 'glowhero', 'imagehero', 'introsplit', 'marquee', 'masthead', 'matchfixtures', 'mediacta', 'northquoteslider', 'northvideohero', 'particlefx', 'photocover', 'productgrid', 'producthero', 'scrubtext', 'searchhero', 'showcasegrid', 'smearhero', 'studiohero', 'terminalhero', 'themedemos' ];
         if ( empty( $bg_source['bg'] ) && ! empty( $settings['bg'] ) && ! in_array( $type, $SFONDO_PROPRIO, true ) ) $bg_source['bg'] = $settings['bg'];
         // Tile in cui bg_color è il colore di un loro elemento, non del contenitore: «Aggiungi al carrello» lo usa per
-        // il pulsante, e il riquadro della tile (quantità compresa) si tingeva tutto di quel colore.
-        $BG_COLOR_DELL_ELEMENTO = [ 'woo_addtocart' ];
-        if ( empty( $bg_source['bg_color'] ) && ! empty( $settings['bg_color'] ) && ! in_array( $type, $BG_COLOR_DELL_ELEMENTO, true ) ) $bg_source['bg_color'] = $settings['bg_color'];
+        // il pulsante, e il riquadro della tile (quantità compresa) si tingeva tutto di quel colore. Lo stesso per le
+        // schede (16 nov 2026): con la Testimonianza in griglia e le card del Query Loop il colore riempiva lo spazio
+        // fra le schede (sembravano un blocco unico), dietro la scheda arrotondata della Tabella prezzi e dietro la
+        // casella della Ricerca si vedevano gli angoli vivi del contenitore.
+        // L'Editoriale della Testimonianza non ha schede: lì il colore resta quello del riquadro (un modello della
+        // libreria ci conta per il fondo scuro sotto la citazione chiara).
+        $BG_COLOR_DELL_ELEMENTO = [ 'woo_addtocart', 'testimonial', 'pricing', 'queryloop', 'search' ];
+        $bg_dell_elemento       = in_array( $type, $BG_COLOR_DELL_ELEMENTO, true )
+            && ! ( 'testimonial' === $type && 'editorial' === ( $settings['layout'] ?? '' ) );
+        if ( empty( $bg_source['bg_color'] ) && ! empty( $settings['bg_color'] ) && ! $bg_dell_elemento ) $bg_source['bg_color'] = $settings['bg_color'];
 
         // v1.0.55 — Tile ATOMICHE (button/icon/divider/spacer/togglebtn): wrapper SEMPRE
         // trasparente, ignora qualsiasi bg in style/settings (il bg appartiene all'elemento

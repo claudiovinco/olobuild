@@ -9,8 +9,8 @@ import { t } from '@/i18n';
  *                   touch_drag, scroll_zoom, gyroscope), toggle controlli (show_controls,
  *                   show_fullscreen, show_zoom, show_compass), vista iniziale (yaw, pitch,
  *                   zoom, min_zoom, max_zoom), didascalia (testo)
- *   styleFields[] → preset, typography_preset, textEffectsFields, autorotate_speed (°/s),
- *                   height (px), border_radius, shadow + borderFields
+ *   styleFields[] → Aspetto (stile, sfondo del riquadro, ombra) · Testo (stile tipografico, effetti della
+ *                   didascalia) · Forma (altezza, raggio) · Bordo. Velocità e inerzia stanno nella Navigazione.
  */
 // I campi del video valgono solo nel panorama con «Video 360°» (array = tutte vere).
 const conVideo = [{ field: 'mode', value: 'hdri' }, { field: 'source_type', value: 'video' }];
@@ -87,72 +87,87 @@ export default {
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────
+  // 17 nov 2026 (episodio 49): nomi in italiano senza sigle («HDRI / equirect», «pseudo-3D», «fullscreen», «touch»);
+  // le velocità e l'inerzia (comportamento) dallo Stile alla Navigazione; i pulsanti solo nel panorama, l'unico che li
+  // disegna; lo «zoom» chiamato per quello che è, il campo visivo in gradi. Chiavi invariate.
   fields: [
     // ── SORGENTE ──
     { type: 'separator', label: t('Sorgente') },
     { key: 'mode', label: t('Modalità'), type: 'select', options: [
-      { value: 'hdri',          label: t('Panorama 360° (HDRI / equirect)') },
-      { value: 'object-rotate', label: t('Oggetto girevole — 1 immagine (pseudo-3D)') },
-      { value: 'object-frames', label: t('Oggetto girevole — sequenza di frame') },
-    ], description: t('“Oggetto girevole”: trascina per ruotare un prodotto su sé stesso, con inerzia al rilascio. Pseudo-3D (una immagine ruotata) oppure sequenza di frame reale.') },
+      { value: 'hdri',          label: t('Panorama a 360°') },
+      { value: 'object-rotate', label: t('Oggetto girevole, da una foto') },
+      { value: 'object-frames', label: t('Oggetto girevole, da una sequenza di foto') },
+    ], description: t('Panorama: una foto o un video equirettangolare (largo il doppio dell’altezza), dentro cui ci si guarda attorno. Oggetto girevole: un prodotto che ruota su sé stesso trascinandolo, con l’inerzia al rilascio; da una foto sola (la foto ruota) o dalla sequenza delle foto scattate girandogli intorno.') },
 
     { key: 'source_type', label: t('Tipo'), type: 'select',
       condition: { field: 'mode', value: 'hdri' }, options: [
-      { value: 'image', label: t('Foto 360° (equirectangular)') },
-      { value: 'video', label: t('Video 360°') },
+      { value: 'image', label: t('Foto a 360°') },
+      { value: 'video', label: t('Video a 360°') },
     ]},
-    { key: 'image_url', label: t('Immagine panoramica 360°'), type: 'image',
+    // Niente immagine segnaposto (17 nov 2026): una foto qualunque non è un panorama, e col segnaposto il campo diceva
+    // «Cambia immagine» e il riquadro restava su «Caricamento 360°…» per sempre.
+    { key: 'image_url', label: t('Foto a 360°'), type: 'image', segnaposto: false,
+      description: t('Una foto equirettangolare, larga il doppio dell’altezza: quella che fanno le fotocamere a 360° e molti telefoni in modalità panorama sferico.'),
       condition: [{ field: 'mode', value: 'hdri' }, { field: 'source_type', op: 'neq', value: 'video' }] },
     // Dalla 1.4.975 il video si sceglie dalla Libreria media (la chiave salva sempre l'indirizzo, come prima).
     { key: 'video_url', label: t('Video 360°'), type: 'media', accept: 'video', condition: conVideo,
       description: t('Un video equirettangolare (2:1) in mp4 H.264. Per il computer bastano 3840×1920 a circa 10 Mbit/s: più grande non si vede meglio e molti schermi non lo reggono.') },
     { key: 'video_url_mobile', label: t('Video leggero per il telefono'), type: 'media', accept: 'video', condition: conVideo,
       description: t('Facoltativo: lo stesso video a 2560×1280, circa 5 Mbit/s. Su telefoni e tablet si usa questo: molti non riescono a disegnare un video più largo di 4096 px e resterebbe nero.') },
-    { key: 'video_poster', label: t('Copertina (foto 360°)'), type: 'image', condition: conVideo,
+    { key: 'video_poster', label: t('Copertina (foto 360°)'), type: 'image', segnaposto: false, condition: conVideo,
       description: t('Un fotogramma del video, in 2:1: si vede e si gira già prima del play. Senza copertina il riquadro resta scuro finché il video non parte.') },
     { key: 'video_autoplay', label: t('Parte da solo, senza audio'), type: 'toggle', condition: conVideo,
       description: t('Parte quando arriva sullo schermo e si ferma quando esce. Chi guarda può attivare l’audio dalla barra. Spento: parte col pulsante, già con l’audio.') },
     { key: 'video_loop', label: t('Ricomincia alla fine'), type: 'toggle', condition: conVideo },
     { key: 'video_audio', label: t('Pulsante dell’audio'), type: 'toggle', condition: conVideo,
       description: t('Spento: il video resta sempre muto.') },
-    { key: 'object_image', label: t('Immagine oggetto'), type: 'image',
+    { key: 'object_image', label: t('Foto dell’oggetto'), type: 'image',
       condition: { field: 'mode', value: 'object-rotate' } },
-    { key: 'object_frames', label: t('Frame della rotazione (in ordine)'), type: 'gallery',
+    { key: 'object_frames', label: t('Foto della rotazione'), type: 'gallery',
+      description: t('In ordine, scattate girando intorno all’oggetto alla stessa distanza: più sono, più il giro è fluido (24–36 vanno bene).'),
       condition: { field: 'mode', value: 'object-frames' } },
 
     // ── NAVIGAZIONE ──
     { type: 'separator', label: t('Navigazione') },
     { key: 'autorotate', label: t('Rotazione automatica'), type: 'toggle' },
-    { key: 'mouse_drag', label: t('Trascinamento mouse'), type: 'toggle' },
-    { key: 'touch_drag', label: t('Trascinamento touch'), type: 'toggle' },
-    { key: 'scroll_zoom', label: t('Zoom con scroll'), type: 'toggle',
+    { key: 'autorotate_speed', label: t('Velocità della rotazione'), type: 'range', unit: '°/s', min: 0.1, max: 5, step: 0.1,
+      condition: { field: 'autorotate', value: true } },
+    { key: 'mouse_drag', label: t('Si trascina col mouse'), type: 'toggle' },
+    { key: 'touch_drag', label: t('Si trascina col dito'), type: 'toggle' },
+    { key: 'drag_sensitivity', label: t('Sensibilità del trascinamento'), type: 'range', min: 0.1, max: 1.5, step: 0.05,
+      condition: { field: 'mode', op: 'in', value: ['object-rotate', 'object-frames'] } },
+    { key: 'spin_inertia', label: t('Inerzia al rilascio'), type: 'range', min: 0.8, max: 0.99, step: 0.01,
+      description: t('Quanto continua a girare dopo averlo lasciato: vicino a 1 gira a lungo, più in basso si ferma subito.'),
+      condition: { field: 'mode', op: 'in', value: ['object-rotate', 'object-frames'] } },
+    { key: 'scroll_zoom', label: t('Zoom con la rotella'), type: 'toggle',
       condition: { field: 'mode', value: 'hdri' } },
-    { key: 'gyroscope', label: t('Giroscopio (mobile)'), type: 'toggle',
+    { key: 'gyroscope', label: t('Si orienta muovendo il telefono'), type: 'toggle',
       condition: { field: 'mode', value: 'hdri' } },
-    { key: 'show_angle', label: t('Mostra angolo di rotazione'), type: 'toggle',
+    { key: 'show_angle', label: t('Mostra l’angolo'), type: 'toggle',
       condition: { field: 'mode', op: 'in', value: ['object-rotate', 'object-frames'] } },
 
-    // ── CONTROLLI ──
-    { type: 'separator', label: t('Controlli UI') },
-    { key: 'show_controls', label: t('Mostra barra controlli'), type: 'toggle' },
-    { key: 'show_fullscreen', label: t('Pulsante fullscreen'), type: 'toggle',
-      condition: { field: 'show_controls', value: true } },
-    { key: 'show_zoom', label: t('Pulsanti zoom'), type: 'toggle',
-      condition: { field: 'show_controls', value: true } },
+    // ── PULSANTI (li disegna solo il panorama) ──
+    { type: 'separator', label: t('Pulsanti'), condition: { field: 'mode', value: 'hdri' } },
+    { key: 'show_controls', label: t('Barra dei pulsanti'), type: 'toggle', condition: { field: 'mode', value: 'hdri' } },
+    { key: 'show_fullscreen', label: t('Schermo intero'), type: 'toggle',
+      condition: [{ field: 'mode', value: 'hdri' }, { field: 'show_controls', value: true }] },
+    { key: 'show_zoom', label: t('Zoom'), type: 'toggle',
+      condition: [{ field: 'mode', value: 'hdri' }, { field: 'show_controls', value: true }] },
     { key: 'show_compass', label: t('Bussola'), type: 'toggle',
-      condition: { field: 'show_controls', value: true } },
+      condition: [{ field: 'mode', value: 'hdri' }, { field: 'show_controls', value: true }] },
 
     // ── VISTA INIZIALE (solo panorama) ──
     { type: 'separator', label: t('Vista iniziale'), condition: { field: 'mode', value: 'hdri' } },
-    { key: 'default_yaw', label: t('Rotazione orizzontale (°)'), type: 'range', min: -180, max: 180, step: 5,
+    { key: 'default_yaw', label: t('Rotazione orizzontale'), type: 'range', unit: '°', min: -180, max: 180, step: 5,
       condition: { field: 'mode', value: 'hdri' } },
-    { key: 'default_pitch', label: t('Inclinazione verticale (°)'), type: 'range', min: -90, max: 90, step: 5,
+    { key: 'default_pitch', label: t('Inclinazione verticale'), type: 'range', unit: '°', min: -90, max: 90, step: 5,
       condition: { field: 'mode', value: 'hdri' } },
-    { key: 'default_zoom', label: t('Zoom iniziale'), type: 'range', min: 10, max: 100, step: 5,
+    { key: 'default_zoom', label: t('Campo visivo'), type: 'range', unit: '°', min: 10, max: 100, step: 5,
+      description: t('Quanto si vede del panorama: più è piccolo, più la vista è ravvicinata. Il minimo e il massimo limitano lo zoom di chi guarda.'),
       condition: { field: 'mode', value: 'hdri' } },
-    { key: 'min_zoom', label: t('Zoom minimo'), type: 'range', min: 10, max: 50, step: 5,
+    { key: 'min_zoom', label: t('Campo visivo minimo'), type: 'range', unit: '°', min: 10, max: 50, step: 5,
       condition: { field: 'mode', value: 'hdri' } },
-    { key: 'max_zoom', label: t('Zoom massimo'), type: 'range', min: 50, max: 120, step: 5,
+    { key: 'max_zoom', label: t('Campo visivo massimo'), type: 'range', unit: '°', min: 50, max: 120, step: 5,
       condition: { field: 'mode', value: 'hdri' } },
 
     // ── Didascalia (testo) ──
@@ -161,47 +176,33 @@ export default {
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
+  // Zone standard: Aspetto · Testo · Forma. Gli stili erano dodici nomi da cornice (Neon Frame, Cinema Wide…) che
+  // cambiavano solo la rotazione automatica e lo zoom; ora quattro stili veri, che scrivono raggio, ombra e fondo.
   styleFields: [
-    { type: 'separator', label: t('Preset stilistico') },
+    { type: 'separator', label: t('Aspetto') },
     { key: 'preset', label: t('Stile'), type: 'select', options: [
-      { value: 'modern-clean',    label: t('Modern Clean') },
-      { value: 'minimal-frame',   label: t('Minimal Frame') },
-      { value: 'cinema-wide',     label: t('Cinema Wide') },
-      { value: 'showcase-bold',   label: t('Showcase Bold') },
-      { value: 'product-display', label: t('Product Display') },
-      { value: 'glass-frame',     label: t('Glass Frame') },
-      { value: 'neon-frame',      label: t('Neon Frame') },
-      { value: 'brutalist-block', label: t('Brutalist Block') },
-      { value: 'gradient-glow',   label: t('Gradient Glow') },
-      { value: 'sticker-frame',   label: t('Sticker Frame') },
-      { value: 'retro-monitor',   label: t('Retro Monitor') },
-      { value: 'tilt-3d',         label: t('3D Tilt') },
-      { value: 'custom',          label: t('Personalizzato') },
+      { value: 'pulito',      label: t('Pulito') },
+      { value: 'arrotondato', label: t('Arrotondato') },
+      { value: 'scheda',      label: t('Scheda') },
+      { value: 'vetrina',     label: t('Vetrina su fondo chiaro') },
+      { value: 'custom',      label: t('Personalizzato') },
     ]},
     { key: 'stage_bg', label: t('Sfondo del riquadro'), type: 'color',
       description: t('Vuoto = il colore scuro della palette. Per le foto prodotto su fondo bianco scegli il bianco, o il colore del fondo delle foto: il prodotto si fonde col riquadro.'),
       condition: { field: 'mode', op: 'in', value: ['object-rotate', 'object-frames'] } },
+    ...shadowField,
+
+    { type: 'separator', label: t('Testo') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    ...textEffectsFields([ { value: 'caption', label: t('Didascalia') } ]),
 
-    ...textEffectsFields([ { value: 'caption', label: t('Solo Didascalia') } ]),
-
-    // ── Navigazione (velocità rotazione) ──
-    { type: 'separator', label: t('Animazione') },
-    { key: 'autorotate_speed', label: t('Velocità rotazione (°/s)'), type: 'range', min: 0.1, max: 5, step: 0.1,
-      condition: { field: 'autorotate', value: true } },
-    { key: 'drag_sensitivity', label: t('Sensibilità trascinamento'), type: 'range', min: 0.1, max: 1.5, step: 0.05,
-      condition: { field: 'mode', op: 'in', value: ['object-rotate', 'object-frames'] } },
-    { key: 'spin_inertia', label: t('Inerzia al rilascio'), type: 'range', min: 0.8, max: 0.99, step: 0.01,
-      condition: { field: 'mode', op: 'in', value: ['object-rotate', 'object-frames'] } },
-
-    // ── LAYOUT ──
-    { type: 'separator', label: t('Layout') },
-    { key: 'height', label: t('Altezza'), type: 'range', min: 200, max: 800, step: 10 },
+    // ── FORMA ──
+    { type: 'separator', label: t('Forma') },
+    { key: 'height', label: t('Altezza'), type: 'range', unit: 'px', min: 200, max: 800, step: 10 },
     { key: 'height_mobile', label: t('Altezza sul telefono'), type: 'number', min: 160, max: 1200, step: 10, unit: 'px',
       placeholder: t('Come sul computer') },
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
 
-    ...shadowField,
     ...borderFields(),
   ],
 };

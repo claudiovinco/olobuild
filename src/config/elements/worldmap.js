@@ -6,7 +6,7 @@ import { t } from '@/i18n';
  * il secondo, tre di nuovo trasparente. Nata per mostrare gli stati coperti da OLOfounder (13 ott 2026).
  * Renderer: includes/tiles/class-worldmap-tile.php · dati: assets/data/mappa-mondo.json (scripts/mappa-mondo.mjs).
  *   fields[]      → stati (cartina cliccabile), legenda (mostra, nomi dei due colori, numeri)
- *   styleFields[] → i due colori, stati vuoti, confini · testo della legenda · spessore · posizione della legenda
+ *   styleFields[] → i due colori, stati vuoti, mare, confini · testo della legenda · spessore · posizione della legenda
  */
 export default {
   type: 'worldmap',
@@ -23,6 +23,7 @@ export default {
     colore_1: 'var(--olo-color-warning, #F59E0B)',
     colore_2: 'var(--olo-color-success, #10B981)',
     colore_vuoto: '',
+    colore_mare: '',
     colore_confini: '',
     spessore_confini: 0.6,
     legenda_posizione: 'sotto',
@@ -34,14 +35,22 @@ export default {
     legenda_color: '',
   },
 
+  // Appena trascinata (17 nov 2026): qualche stato già colorato, così la cartina mostra subito cosa fa e la legenda
+  // compare coi numeri; prima nasceva vuota, senza legenda. I default restano vuoti: le mappe salvate non cambiano.
+  partenza: {
+    stati: { IT: 2, FR: 2, ES: 2, DE: 2, PT: 1, GB: 1 },
+  },
+
   fields: [
     { key: 'stati', label: t('Stati'), type: 'mappa-stati',
       description: t('Clicca uno stato: un clic gli dà il primo colore, due il secondo, tre lo riportano trasparente. «Apri in grande» mostra la cartina più grande, con la ricerca per nome e gli elenchi: serve per gli stati piccoli, che sulla cartina sono puntini.') },
 
     { type: 'separator', label: t('Legenda') },
     { key: 'mostra_legenda', label: t('Mostra la legenda'), type: 'toggle' },
-    { key: 'etichetta_1', label: t('Primo colore (un clic)'), type: 'text', condition: { field: 'mostra_legenda', value: true } },
-    { key: 'etichetta_2', label: t('Secondo colore (due clic)'), type: 'text', condition: { field: 'mostra_legenda', value: true } },
+    { key: 'etichetta_1', label: t('Nome del primo colore'), type: 'text', description: t('Il colore degli stati cliccati una volta.'),
+      condition: { field: 'mostra_legenda', value: true } },
+    { key: 'etichetta_2', label: t('Nome del secondo colore'), type: 'text', description: t('Il colore degli stati cliccati due volte.'),
+      condition: { field: 'mostra_legenda', value: true } },
     { key: 'mostra_numeri', label: t('Mostra quanti sono'), type: 'toggle', condition: { field: 'mostra_legenda', value: true } },
   ],
 
@@ -50,7 +59,9 @@ export default {
     { key: 'colore_1', label: t('Primo colore'), type: 'color' },
     { key: 'colore_2', label: t('Secondo colore'), type: 'color' },
     { key: 'colore_vuoto', label: t('Stati senza colore'), type: 'color',
-      description: t('Vuoto: trasparenti, si vede lo sfondo.') },
+      description: t('Vuoto: trasparenti, si vede lo sfondo; col mare colorato diventano chiari.') },
+    { key: 'colore_mare', label: t('Colore del mare'), type: 'color',
+      description: t('Il fondo della cartina, per esempio un azzurro. Vuoto: niente mare, la cartina sta sullo sfondo della pagina.') },
     { key: 'colore_confini', label: t('Confini'), type: 'color',
       description: t('Vuoto: il colore del testo, velato. Chiari su uno sfondo scuro, scuri su uno chiaro.') },
 
@@ -71,7 +82,14 @@ export default {
     { key: 'inquadratura', label: t('Inquadratura'), type: 'select', options: [
       { value: 'mondo', label: t('Tutto il mondo') },
       { value: 'colorati', label: t('Solo i paesi colorati') },
-    ], description: t('Con «Solo i paesi colorati» la cartina si stringe attorno agli stati colorati, con un po’ di margine: per chi ha cantato o lavorato in pochi paesi vicini.') },
+      { value: 'europa', label: t('Europa') },
+      { value: 'nordamerica', label: t('Nord America') },
+      { value: 'sudamerica', label: t('Sud America') },
+      { value: 'africa', label: t('Africa') },
+      { value: 'mediooriente', label: t('Medio Oriente') },
+      { value: 'asia', label: t('Asia') },
+      { value: 'oceania', label: t('Oceania') },
+    ], description: t('Con «Solo i paesi colorati» la cartina si stringe attorno agli stati colorati, con un po’ di margine: per chi ha cantato o lavorato in pochi paesi vicini. Con una regione si stringe su quella parte di mondo: gli stati colorati fuori restano fuori vista, ma la legenda li conta.') },
 
     { type: 'separator', label: t('Disposizione'), condition: { field: 'mostra_legenda', value: true } },
     { key: 'legenda_posizione', label: t('Posizione della legenda'), type: 'select', options: [

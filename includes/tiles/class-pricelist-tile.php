@@ -106,6 +106,9 @@ class Olobuild_Pricelist_Tile extends Olobuild_Tile_Base {
         $hover_border = 'color-mix(in srgb, ' . $card_border . ', ' . $title_clr . ' 18%)';
 
         // Dimensioni dei testi: i valori di sempre se il popover Tipografia non ne ha una.
+        // Carattere di nomi e prezzi (Tipografia «Nome» e «Prezzo»): vuoto = quello del sito.
+        $ff_title = $this->resolve_font_family( $s['title_font'] ?? '' );
+        $ff_price = $this->resolve_font_family( $s['price_font'] ?? '' );
         $fs_title = absint( $s['title_size'] ?? 0 );
         $fs_desc  = absint( $s['description_size'] ?? 0 );
         $fs_price = absint( $s['price_size'] ?? 0 );
@@ -189,6 +192,7 @@ class Olobuild_Pricelist_Tile extends Olobuild_Tile_Base {
                 gap: 12px;
             }
             .<?php echo $uid; ?> .olo-pl-title {
+                <?php if ( $ff_title !== '' && $ff_title !== 'inherit' ) : ?>font-family: <?php echo $ff_title; ?>;<?php endif; ?>
                 font-weight: 600;
                 font-size: <?php echo $fs_title ?: 15; ?>px;
                 color: <?php echo $title_clr; ?>;
@@ -222,6 +226,7 @@ class Olobuild_Pricelist_Tile extends Olobuild_Tile_Base {
             <?php // Raggio badge in hover: il badge sta dentro la card e cambia quando si passa sulla card. ?>
             <?php echo Olobuild_Tile_Utils::radius_hover_rules( ".{$uid} .olo-pl-badge", $s, 'badge_border_radius_hover', '', ".{$uid} .olo-pl-card:hover .olo-pl-badge" ); ?>
             .<?php echo $uid; ?> .olo-pl-price {
+                <?php if ( $ff_price !== '' && $ff_price !== 'inherit' ) : ?>font-family: <?php echo $ff_price; ?>;<?php endif; ?>
                 color: <?php echo $price_clr; ?>;
                 font-weight: 700;
                 font-size: <?php echo $fs_price ?: 17; ?>px;
@@ -255,6 +260,27 @@ class Olobuild_Pricelist_Tile extends Olobuild_Tile_Base {
                     flex-wrap: wrap;
                 }
             }
+            <?php
+            // Il disegno che uno stile ha e che non è un valore (16 nov 2026): prima «Vetro», «Neon», «Adesivo» e
+            // «Inclinato in 3D» erano solo colori, e «Aurora» una sfumatura in esadecimale che il renderer scartava.
+            $pl_preset = sanitize_key( $s['preset'] ?? '' );
+            if ( 'gradient-aurora' === $pl_preset && '' === $this->safe_color_css( $s['bg_color'] ?? '' ) ) : ?>
+            .<?php echo $uid; ?> { background: linear-gradient(140deg, var(--olo-color-primary, #e1474f), color-mix(in srgb, var(--olo-color-primary, #e1474f) 45%, var(--olo-color-accent, #f59e0b))); border-radius: 1rem; padding: 1.1rem; }
+            <?php elseif ( 'glass-frosted' === $pl_preset ) : ?>
+            .<?php echo $uid; ?> .olo-pl-card { -webkit-backdrop-filter: blur(12px) saturate(140%); backdrop-filter: blur(12px) saturate(140%); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--olo-color-light, #fff) 30%, transparent); }
+            <?php elseif ( 'neon-glow' === $pl_preset ) : ?>
+            .<?php echo $uid; ?> .olo-pl-card { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--olo-color-accent) 45%, transparent), 0 0 22px color-mix(in srgb, var(--olo-color-accent) 18%, transparent); }
+            .<?php echo $uid; ?> .olo-pl-price { text-shadow: 0 0 12px color-mix(in srgb, currentColor 60%, transparent); }
+            <?php elseif ( 'sticker-fun' === $pl_preset ) : ?>
+            .<?php echo $uid; ?> .olo-pl-card { border: 2px solid var(--olo-color-text, #1f2937) !important; box-shadow: 4px 4px 0 var(--olo-color-text, #1f2937); }
+            <?php elseif ( 'retro-terminal' === $pl_preset ) : ?>
+            .<?php echo $uid; ?> .olo-pl-desc { font-family: var(--olo-font-family-mono, ui-monospace, Menlo, Consolas, monospace); }
+            <?php elseif ( 'tilt-3d' === $pl_preset ) : ?>
+            .<?php echo $uid; ?> .olo-pl-card { transform: rotate(-0.7deg); transition: transform .35s cubic-bezier(.2,.7,.3,1); }
+            .<?php echo $uid; ?> .olo-pl-card:nth-child(even) { transform: rotate(0.6deg); }
+            .<?php echo $uid; ?> .olo-pl-card:hover { transform: rotate(0deg) translateY(-2px); }
+            @media (prefers-reduced-motion: reduce) { .<?php echo $uid; ?> .olo-pl-card { transition: none; } }
+            <?php endif; ?>
         </style>
 <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-pricelist <?php echo esc_attr( $uid ); ?>">

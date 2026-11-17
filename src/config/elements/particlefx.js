@@ -31,7 +31,7 @@ import { t } from '@/i18n';
  */
 export default {
   type: 'particlefx',
-  name: t('Particelle (ParticleFX)'),
+  name: t('Particelle'),
   icon: 'dashicons-art',
   category: 'atmosphere',
   defaults: {
@@ -102,28 +102,30 @@ export default {
   fields: [
     { type: 'separator', label: t('Ambito') },
     { key: 'scope', label: t('Riempi'), type: 'select', options: [
-      { value: 'section', label: t('Sezione (sfondo della sezione ospite)') },
-      { value: 'page',    label: t('Tutta la pagina (overlay fisso del sito)') },
-      { value: 'over',    label: t('Sezione, sopra il contenuto') },
-    ], description: t('Tutta la pagina: le particelle vivono su tutto il documento e scorrono con esso, dietro al contenuto, senza mai bloccare i click. Sopra il contenuto: le particelle passano davanti a ciò che la sezione mostra (anche a uno sfondo disegnato da una tile, come quello di un\'apertura), senza bloccare i click.') },
+      { value: 'section', label: t('Sfondo della sezione') },
+      { value: 'page',    label: t('Tutta la pagina') },
+      { value: 'over',    label: t('Sopra il contenuto') },
+    ], description: t('Sfondo della sezione: le particelle stanno dietro a ciò che la sezione mostra. Tutta la pagina: le particelle vivono su tutto il documento e scorrono con esso, dietro al contenuto, senza mai bloccare i click. Sopra il contenuto: le particelle passano davanti a ciò che la sezione mostra (anche a uno sfondo disegnato da una tile, come quello di un\'apertura), senza bloccare i click.') },
 
-    { type: 'separator', label: t('Sistema particelle') },
-    { key: 'preset', label: t('Preset'), type: 'select', options: [
-      { value: 'petals',   label: t('Petali (cadono)') },
+    { type: 'separator', label: t('Particelle') },
+    // 16 nov 2026 (episodio 32): etichette senza parentesi né «Preset»; come si muove ogni tipo sta nella (i).
+    { key: 'preset', label: t('Tipo'), type: 'select', options: [
+      { value: 'petals',   label: t('Petali') },
       { value: 'snow',     label: t('Neve') },
-      { value: 'bubbles',  label: t('Bolle (salgono)') },
-      { value: 'stars',    label: t('Stelle / Costellazioni') },
-      { value: 'confetti', label: t('Coriandoli (scoppio una tantum)') },
+      { value: 'bubbles',  label: t('Bolle') },
+      { value: 'stars',    label: t('Stelle') },
+      { value: 'confetti', label: t('Coriandoli') },
       { value: 'soccer',   label: t('Palloni da calcio') },
-      { value: 'embers',   label: t('Braci (scintille che salgono)') },
-      { value: 'sparks',   label: t('Scintille (schizzano e ricadono)') },
+      { value: 'embers',   label: t('Braci') },
+      { value: 'sparks',   label: t('Scintille') },
       { value: 'rain',     label: t('Pioggia') },
-    ]},
+    ], description: t('Petali, neve, pioggia e palloni cadono; bolle e braci salgono; le stelle restano sospese; i coriandoli scoppiano una volta; le scintille schizzano da un punto e ricadono.') },
     { key: 'count', label: t('Numero particelle'), type: 'range', min: 5, max: 300, step: 5,
       description: t('Su mobile il numero viene ridotto automaticamente per le prestazioni.') },
     { key: 'speed', label: t('Velocità'), type: 'range', min: 0.1, max: 4, step: 0.1 },
-    { key: 'wind', label: t('Vento (deriva orizzontale)'), type: 'range', min: 0, max: 3, step: 0.1 },
-    { key: 'gravity', label: t('Gravità / spinta verticale'), type: 'range', min: 0, max: 3, step: 0.1,
+    { key: 'wind', label: t('Vento'), type: 'range', min: 0, max: 3, step: 0.1,
+      description: t('Quanto le particelle derivano di lato mentre si muovono.') },
+    { key: 'gravity', label: t('Gravità'), type: 'range', min: 0, max: 3, step: 0.1,
       description: t('Petali, neve, coriandoli e scintille cadono; le bolle e le braci salgono; le stelle restano sospese.') },
     { key: 'confetti_start', label: t('Quando parte'), type: 'select', options: [
       { value: 'load', label: t("All'apertura della pagina") },
@@ -141,10 +143,11 @@ export default {
       description: t('0° verso l’alto, 90° verso destra, -90° verso sinistra, 180° verso il basso. La gravità poi le fa ricadere.') },
     { key: 'sparks_spread', label: t('Ampiezza del getto'), type: 'range', min: 10, max: 180, step: 5, unit: '°' },
 
-    { type: 'separator', label: t('Costellazioni') },
+    // Solo con le Stelle: il renderer disegna le linee solo lì (con neve o petali restavano linee fra i fiocchi).
+    { type: 'separator', label: t('Costellazioni'), condition: { field: 'preset', value: 'stars' } },
     { key: 'connect_lines', label: t('Collega con linee'), type: 'toggle',
-      description: t('Disegna linee tra particelle vicine (effetto costellazione). Ideale col preset Stelle.') },
-    { key: 'connect_distance', label: t('Distanza max linee'), type: 'range', min: 40, max: 200, step: 5,
+      description: t('Disegna linee sottili fra le stelle vicine, come una costellazione.') },
+    { key: 'connect_distance', label: t('Distanza delle linee'), type: 'range', min: 40, max: 200, step: 5,
       condition: { field: 'connect_lines', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Interazione') },
@@ -167,7 +170,7 @@ export default {
     { key: 'particle_opacity', label: t('Opacità particelle'), type: 'range', min: 10, max: 100, step: 5 },
 
     { type: 'separator', label: t('Forma') },
-    { key: 'size', label: t('Dimensione'), type: 'range', min: 1, max: 24, step: 1 },
+    { key: 'size', label: t('Dimensione particelle'), type: 'range', min: 1, max: 24, step: 1 },
     { key: 'umbrella_size', label: t('Ampiezza dell’ombrello'), type: 'range', min: 20, max: 160, step: 2, unit: 'px',
       condition: [ { field: 'preset', value: 'rain' }, { field: 'interact_on_hover', value: true } ] },
     // Agisce solo nel ramo «Sezione» del runtime: con «Tutta la pagina» non c'è una sezione da

@@ -114,21 +114,25 @@ export default {
       itemLabel: t('Voce'),
       newItemDefaults: { color: '#e79aa6', name: 'Nuova voce', sub: 'Etichetta', desc: '', number: '', image: '', link_url: '', row_bg: { type: 'none' } },
       itemFields: [
+        // 16 nov 2026: descrizione e numero solo col numero a sinistra, l'immagine solo con l'anteprima accesa.
         { key: 'name',     label: t('Nome'),             type: 'text' },
-        { key: 'sub',      label: t('Sotto-etichetta'),  type: 'text' },
-        { key: 'desc',     label: t('Descrizione (colonna destra, layout numerato)'), type: 'text' },
-        { key: 'number',   label: t('Numero (vuoto = automatico 01, 02…)'), type: 'text' },
-        { key: 'image',    label: t('Immagine anteprima (peek)'), type: 'image' },
+        { key: 'sub',      label: t('Etichetta'),        type: 'text' },
+        { key: 'desc',     label: t('Descrizione'),      type: 'text',
+          condizioneTile: { field: 'lead_mode', operator: '==', value: 'number' } },
+        { key: 'number',   label: t('Numero'),           type: 'text', placeholder: t('Automatico: 01, 02…'),
+          condizioneTile: { field: 'lead_mode', operator: '==', value: 'number' } },
+        { key: 'image',    label: t('Immagine dell\'anteprima'), type: 'image',
+          condizioneTile: { field: 'peek', operator: '!=', value: false } },
         { key: 'link_url', label: t('Link'),             type: 'link' },
       ],
     },
 
-    { type: 'separator', label: t('Anteprima al hover') },
-    { key: 'peek', label: t('Pannello "peek" che segue il cursore'), type: 'toggle' },
-    { key: 'peek_mode', label: t('Contenuto anteprima'), type: 'select',
-      condition: { field: 'peek', value: true }, options: [
+    { type: 'separator', label: t('Anteprima al passaggio') },
+    { key: 'peek', label: t('Mostra l\'anteprima che segue il puntatore'), type: 'toggle' },
+    { key: 'peek_mode', label: t('Contenuto'), type: 'select',
+      condition: { field: 'peek', operator: '!=', value: false }, options: [
         { value: 'image', label: t('Immagine') },
-        { value: 'monitor', label: t('Monitor regia') },
+        { value: 'monitor', label: t('Schermo di regia') },
       ]},
     // Il focale e' UNO per tutta la lista (src:'' → pad neutro): le anteprime devono
     // essere inquadrate allo stesso modo, altrimenti la lista "balla" al passaggio.
@@ -141,12 +145,12 @@ export default {
   // + durata della transizione, stesso schema del Button. Il render (Vue + PHP) tratta un
   // valore hover vuoto come "invariato".
   styleFields: [
-    { type: 'separator', label: t('Pastiglia / Numero') },
+    { type: 'separator', label: t('Segno a sinistra') },
     { key: 'lead_mode', label: t('Elemento a sinistra'), type: 'select', options: [
       { value: 'swatch', label: t('Pastiglia') },
       { value: 'number', label: t('Numero') },
     ]},
-    withHover({ key: 'swatch_size', label: t('Dimensione'), type: 'range', min: 14, max: 44, step: 1,
+    withHover({ key: 'swatch_size', label: t('Dimensione'), type: 'range', unit: 'px', min: 14, max: 44, step: 1,
       condition: { field: 'lead_mode', value: 'swatch' } },
       { hoverKey: 'swatch_hover_size', hoverDurationKey: 'swatch_size_hover_duration', defaultDuration: 200 }),
     { key: 'swatch_shape', label: t('Forma'), type: 'select', options: [
@@ -163,13 +167,14 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Nome'), responsiveKeys: [], keys: { size: 'name_size', weight: 'name_weight', uppercase: 'name_uppercase', family: 'name_font_family' }, sizeMin: 14, sizeMax: 56 },
 
-    { type: 'separator', label: t('Sotto-etichetta') },
-    { key: 'mono_font_family', label: t('Font (vuoto = mono del tema)'), type: 'font-family' },
+    { type: 'separator', label: t('Etichetta') },
     withHover({ key: 'sub_color', label: t('Colore'), type: 'color' },
       { hoverKey: 'sub_hover_color', hoverDurationKey: 'sub_color_hover_duration', defaultDuration: 200 }),
-    { type: 'typography', label: t('Sottotitolo'), responsiveKeys: [], keys: { size: 'sub_size', uppercase: 'sub_uppercase' }, sizeMin: 10, sizeMax: 18 },
+    // Il font dell'etichetta stava in un campo a parte: ora è nel controllo tipografia (chiave INVARIATA).
+    { type: 'typography', label: t('Etichetta'), responsiveKeys: [], keys: { family: 'mono_font_family', size: 'sub_size', uppercase: 'sub_uppercase' }, sizeMin: 10, sizeMax: 18,
+      description: t('Font vuoto: il monospazio del tema.') },
 
-    { type: 'separator', label: t('Descrizione (colonna destra)') },
+    { type: 'separator', label: t('Descrizione'), condition: { field: 'lead_mode', value: 'number' } },
     withHover({ key: 'desc_color', label: t('Colore'), type: 'color',
       condition: { field: 'lead_mode', value: 'number' } },
       { hoverKey: 'desc_hover_color', hoverDurationKey: 'desc_color_hover_duration', defaultDuration: 200 }),
@@ -181,7 +186,7 @@ export default {
     { key: 'row_padding', label: t('Padding riga'), type: 'spacing', min: 0, max: 80,
       legacyKeys: { y: 'row_padding_y' },
       condition: { field: 'lead_mode', value: 'swatch' } },
-    withHover({ key: 'row_indent', label: t('Rientro riga'), type: 'range', min: 0, max: 60, step: 2,
+    withHover({ key: 'row_indent', label: t('Rientro riga'), type: 'range', unit: 'px', min: 0, max: 60, step: 2,
       placeholder: t('auto') },
       { hoverKey: 'hover_indent', hoverDurationKey: 'hover_indent_duration', defaultDuration: 250 }),
     withHover({ key: 'row_bg_color', label: t('Sfondo riga'), type: 'color' },
@@ -190,21 +195,23 @@ export default {
       { hoverKey: 'line_hover_color', hoverDurationKey: 'line_color_hover_duration', defaultDuration: 200 }),
     { type: 'description', description: t('Ogni controllo con il toggle Normale | Hover imposta anche la resa al passaggio del mouse, con la sua durata; lasciare vuoto lo stato Hover significa «invariato». Rientro vuoto = automatico (8 px con pastiglia, 4 px nel layout numerato, dove la riga segue una scala fluida di altezza). Una voce con sfondo proprio lo mantiene anche in hover.') },
     { key: 'items', type: 'content-items', label: t('Voci'), itemLabel: t('Voce'), etichettaDa: 'name', miniaturaDa: 'image', itemFields: [
-        { key: 'color',    label: t('Colore pastiglia'), type: 'color' },
+        { key: 'color',    label: t('Colore pastiglia'), type: 'color',
+          condizioneTile: { field: 'lead_mode', operator: '!=', value: 'number' } },
         { key: 'row_bg',   label: t('Sfondo voce'),      type: 'background',
           description: t('Sfondo della riga: colore, gradiente o immagine. Vuoto = trasparente con evidenziazione standard al passaggio del mouse; una voce con sfondo proprio lo mantiene anche in hover.') },
     ] },
-    { type: 'separator', label: t('Anteprima al hover') },
-    { key: 'peek_width', label: t('Larghezza anteprima'), type: 'range', min: 100, max: 320, step: 10,
-      condition: { field: 'peek', value: true } },
+    // «!= false»: peek vale di serie vero, e una tile salvata prima della chiave non ce l'ha (le condizioni leggono i
+    // valori salvati, senza i predefiniti): con «== true» la zona spariva.
+    { type: 'separator', label: t('Anteprima'), condition: { field: 'peek', operator: '!=', value: false } },
+    { key: 'peek_width', label: t('Larghezza'), type: 'range', unit: 'px', min: 100, max: 320, step: 10 },
     // Elenco canonico. Niente voce automatica: il peek è uno <span> vuoto con la foto
     // messa come background-image, quindi senza `aspect-ratio` il riquadro avrebbe
     // altezza zero e l'anteprima sparirebbe. Il 16:11 non sta nel set canonico ma era
     // una delle quattro voci offerte finora: resta selezionabile via `extra` per chi
     // l'ha già salvato.
     // Il monitor di regia ha le sue proporzioni (quelle di uno schermo): qui agisce solo sull'immagine.
-    { key: 'peek_ratio', label: t('Proporzioni anteprima'), type: 'select',
-      condition: [{ field: 'peek', value: true }, { field: 'peek_mode', op: 'neq', value: 'monitor' }],
+    { key: 'peek_ratio', label: t('Proporzioni'), type: 'select',
+      condition: { field: 'peek_mode', op: 'neq', value: 'monitor' },
       options: ratioOptions({ auto: false, extra: ['16/11'] }) },
   ],
 };

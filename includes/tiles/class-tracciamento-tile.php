@@ -267,7 +267,8 @@ class Olobuild_Tracciamento_Tile extends Olobuild_Tile_Base {
         ob_start();
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS da colori passati da safe_color_css() e dagli helper di Olobuild_Tile_Utils, numeri forzati, valori da elenchi chiusi e selettori generati qui
         echo '<style>';
-        echo "{$sel}{--otr-h:{$alto}px;--otr-max:{$largo}px;--otr-rc:{$rc};--otr-rp:{$rp};--otr-acc:{$pbg};--otr-pbg:{$pbg};--otr-pfg:{$pfg};--otr-cbg:{$cbg};--otr-cfg:{$cfg_c};--otr-err:{$err};--otr-nota:{$c_nota}}";
+        // La tile misura sé stessa (container query «otr»): in pila quando è stretta lei, non lo schermo.
+        echo "{$sel}{container-type:inline-size;container-name:otr;--otr-h:{$alto}px;--otr-max:{$largo}px;--otr-rc:{$rc};--otr-rp:{$rp};--otr-acc:{$pbg};--otr-pbg:{$pbg};--otr-pfg:{$pfg};--otr-cbg:{$cbg};--otr-cfg:{$cfg_c};--otr-err:{$err};--otr-nota:{$c_nota}}";
         echo "{$sel} .otr-form{margin:0;max-width:var(--otr-max)}";
         if ( $centro ) {
             echo "{$sel} .otr-form{margin-left:auto;margin-right:auto;text-align:center}";
@@ -277,6 +278,15 @@ class Olobuild_Tracciamento_Tile extends Olobuild_Tile_Base {
         // In riga: il campo prende lo spazio, il pulsante quanto gli serve; se non ci stanno, il pulsante va sotto, largo.
         echo "{$sel} .otr-riga{display:flex;flex-wrap:wrap;align-items:stretch;gap:.5rem;text-align:left}";
         echo "{$sel} .otr-scelta{position:relative;display:flex;flex:1 1 10rem;max-width:16rem;min-width:0}";
+        // La scelta parte larga quanto il nome più lungo (più il margine della freccia): con 10rem fissi «Poste Italiane»
+        // diventava «Poste Itali…» anche dove c'era posto (17 nov 2026). Resta il massimo di 16rem.
+        $lungo = 0;
+        foreach ( $operatori as $op ) {
+            $lungo = max( $lungo, mb_strlen( (string) $op['nome'] ) );
+        }
+        if ( $lungo > 0 ) {
+            echo "{$sel} .otr-scelta{flex-basis:max(10rem, calc({$lungo}ch + 4.2em))}";
+        }
         echo "{$sel} .otr-campo{position:relative;display:flex;flex:999 1 14rem;min-width:0}";
         echo "{$sel} .otr-input,{$sel} .otr-select{box-sizing:border-box;width:100%;height:var(--otr-h);margin:0;padding:0 1.1em;{$bordo}border-radius:var(--otr-rc);background:var(--otr-cbg);color:var(--otr-cfg);font:inherit;line-height:1.2;outline:none;-webkit-appearance:none;appearance:none;box-shadow:" . ( '' !== $om ? $om : 'none' ) . ';transition:border-color .2s ease,box-shadow .2s ease}';
         echo "{$sel} .otr-input::placeholder{color:currentColor;opacity:.5;text-transform:none;letter-spacing:normal;font-weight:400}";
@@ -304,9 +314,11 @@ class Olobuild_Tracciamento_Tile extends Olobuild_Tile_Base {
         if ( $builder ) {
             echo "{$sel} .otr-avviso{margin:.75rem 0 0;padding:.75rem 1rem;font-size:14px;line-height:1.45;opacity:.75;border:1px dashed color-mix(in srgb, currentColor 30%, transparent);border-radius:.5rem}";
         }
-        // In colonna, e sempre sul telefono: campo e pulsante uno sotto l'altro, larghi uguali.
+        // In colonna, e sempre quando la tile è stretta (sotto i 480 px: il telefono, una colonna stretta): campo e pulsante
+        // uno sotto l'altro, larghi uguali. Era una regola sullo schermo (639 px): in una colonna di 500 px il campo e il
+        // pulsante, che ci stanno, restavano in riga solo sul computer.
         $pila = "{$sel} .otr-riga{display:grid;grid-template-columns:minmax(0,1fr)}{$sel} .otr-scelta{max-width:none}{$sel} .otr-pulsante{width:100%}";
-        echo $colonna ? $pila : '@media (max-width:639px){' . $pila . '}';
+        echo $colonna ? $pila : '@container otr (max-width:479px){' . $pila . '}';
         echo '@media (prefers-reduced-motion:reduce){' . "{$sel} .otr-input,{$sel} .otr-select,{$sel} .otr-pulsante{transition:none}" . '}';
         echo $this->css_testo( $s, 'etichetta', "{$sel} .otr-etichetta", $c_et );
         echo $this->css_testo( $s, 'campo', "{$sel} .otr-input,{$sel} .otr-select", '', 16 ); // mai sotto 16 px: il telefono ingrandirebbe la pagina al tocco

@@ -137,12 +137,12 @@ export default {
   fields: [
     { type: 'separator', label: t('Gruppi') },
     { key: 'gruppi', label: t('Gruppi'), type: 'content-items', itemLabel: t('Gruppo'), etichettaDa: 'titolo',
-      description: t('Un gruppo per ogni scelta da fare: il processore, la memoria, i servizi. Le opzioni entrano in un gruppo scrivendo il suo ID (o il suo titolo) nel loro campo Gruppo.'),
+      description: t('Un gruppo per ogni scelta da fare: il processore, la memoria, i servizi. Ogni opzione sceglie il suo gruppo dal menu Gruppo.'),
       newItemDefaults: { titolo: '', tipo: 'uno', obbligatorio: true, aiuto: '' },
       itemFields: [
         { key: 'titolo', label: t('Titolo'), type: 'text' },
         { key: 'id', label: t('ID'), type: 'text', placeholder: 'cpu',
-          description: t('Una parola senza spazi, per esempio cpu, da scrivere nel campo Gruppo delle sue opzioni. Vuoto o automatico (ci-…): vale il titolo.') },
+          description: t('Il nome tecnico del gruppo, una parola senza spazi (per esempio cpu): serve ai collegamenti e ai moduli. Vuoto o automatico (ci-…): vale il titolo.') },
         { key: 'tipo', label: t('Tipo di scelta'), type: 'select', options: [
           { value: 'uno', label: t('Una scelta') },
           { value: 'piu', label: t('Più scelte') },
@@ -163,8 +163,10 @@ export default {
       description: t('Tutte le opzioni, nell\'ordine in cui compaiono, ognuna col suo gruppo. Il prezzo è la differenza sul prezzo base: 0 = inclusa, un numero negativo = uno sconto.'),
       newItemDefaults: { gruppo: '', nome: '', descrizione: '', prezzo: 0, immagine: '', badge: '', predefinita: false, punti: '', min: 0, max: 10 },
       itemFields: [
-        { key: 'gruppo', label: t('Gruppo'), type: 'text', placeholder: 'cpu',
-          description: t('L\'ID del gruppo in cui compare l\'opzione (va bene anche il titolo del gruppo).') },
+        // Un menu coi gruppi della tile, non più un campo dove scrivere a mano l'ID (16 nov 2026): il valore resta lo
+        // stesso (l'ID, o il titolo per i gruppi con l'id automatico), quindi le opzioni già salvate non cambiano.
+        { key: 'gruppo', label: t('Gruppo'), type: 'select', optionsSource: 'vociDi',
+          voci: { lista: 'gruppi', valore: 'id', etichetta: 'titolo', automatico: true }, nessuna: t('— Scegli il gruppo —') },
         { key: 'nome', label: t('Nome'), type: 'text' },
         { key: 'descrizione', label: t('Descrizione'), type: 'textarea' },
         { key: 'prezzo', label: t('Prezzo'), type: 'number', step: 0.01,
@@ -202,7 +204,7 @@ export default {
     { type: 'separator', label: t('Indicatori') },
     { key: 'indicatori', label: t('Indicatori'), type: 'content-items', itemLabel: t('Indicatore'), etichettaDa: 'nome',
       description: t('Facoltativi: barre nel riepilogo che sommano i punti delle opzioni scelte, fino al massimo; per esempio quanto la configurazione va bene per giocare o per lavorare.'),
-      newItemDefaults: { nome: '', massimo: 100 },
+      newItemDefaults: { nome: '', massimo: 100 }, minimo: 0,   // facoltativi: si tolgono tutti
       itemFields: [
         { key: 'nome', label: t('Nome'), type: 'text' },
         { key: 'id', label: t('ID'), type: 'text', placeholder: 'giochi',
@@ -289,9 +291,10 @@ export default {
       { value: 'schede', label: t('Schede in griglia') },
       { value: 'righe', label: t('Righe compatte') },
     ], description: t('Schede: in griglia, con l\'immagine in alto. Righe: una sotto l\'altra, col prezzo a destra; occupano meno spazio, anche sul telefono.') },
-    { key: 'disposizione', label: t('Posizione del riepilogo'), type: 'select', options: [
-      { value: 'lato', label: t('Accanto alle opzioni') },
-      { value: 'sotto', label: t('Sotto le opzioni') },
+    // «Riepilogo» con «Di fianco» / «Sotto»: «Posizione del riepilogo» e «Accanto alle opzioni» uscivano tagliati.
+    { key: 'disposizione', label: t('Riepilogo'), type: 'select', options: [
+      { value: 'lato', label: t('Di fianco') },
+      { value: 'sotto', label: t('Sotto') },
     ], description: t('Accanto: resta in vista mentre si scorrono le opzioni. Sotto i 960 px, o in una colonna stretta, va sotto, e la sua barra col totale resta in fondo allo schermo finché si sceglie.') },
     { key: 'colonne', label: t('Colonne'), type: 'range', min: 1, max: 4, step: 1, responsive: true, condition: conSchede,
       description: t('Delle schede. Se lo spazio non basta la griglia ne mette meno da sola; sul tablet al massimo due e sul telefono una, se non ne scegli altre per quei dispositivi. Un gruppo che lascerebbe una scheda da sola nell\'ultima riga cambia colonne da sé: 4 opzioni su 3 colonne vanno 2 + 2.') },

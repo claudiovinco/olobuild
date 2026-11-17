@@ -5,10 +5,23 @@
 (function () {
   'use strict';
 
-  document.addEventListener('DOMContentLoaded', function () {
+  // Una volta per tile: nel canvas del builder il bridge la richiama dopo ogni ridisegno (una Ricerca Live aggiunta
+  // dopo l'apertura della pagina non partiva). 16 nov 2026.
+  function initAll() {
     var widgets = document.querySelectorAll('.olo-livesearch[data-livesearch]');
-    widgets.forEach(initWidget);
-  });
+    widgets.forEach(function (el) {
+      if (el.getAttribute('data-olo-ls-pronta')) return;
+      el.setAttribute('data-olo-ls-pronta', '1');
+      initWidget(el);
+    });
+  }
+  window.OloLiveSearch = { initAll: initAll };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+  } else {
+    initAll();
+  }
 
   function initWidget(el) {
     var raw = el.getAttribute('data-livesearch');
@@ -270,6 +283,9 @@
 
       if (emptyEl) { emptyEl.hidden = true; }
 
+      // Il segnaposto grigio serve ad allineare i titoli quando ALCUNI risultati hanno la foto: se non ce l'ha
+      // nessuno (pagine senza immagine in evidenza) erano solo quadrati vuoti in colonna (16 nov 2026).
+      var qualcunaFoto = results.some(function (r) { return !!r.thumbnail; });
       results.forEach(function (item, idx) {
         var div = document.createElement('div');
         div.className = 'olo-ls-item';
@@ -282,7 +298,7 @@
         if (cfg.showThumb) {
           if (item.thumbnail) {
             html += '<img class="olo-ls-thumb" src="' + oloUtils.escHtml(item.thumbnail) + '" alt="" loading="lazy">';
-          } else {
+          } else if (qualcunaFoto) {
             html += '<span class="olo-ls-thumb olo-ls-thumb--empty"></span>';
           }
         }

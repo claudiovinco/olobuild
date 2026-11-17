@@ -3,8 +3,8 @@ import { t } from '@/i18n';
 
 /**
  * Tile TextPath — split CONTENUTO/STILE.
- *   fields[]      → text, path_preset, custom_path, animation, animation_speed
- *   styleFields[] → preset, bg, typo, text-effects, tipografia (size/color/spacing), border
+ *   fields[]      → text, animazione, rotazione
+ *   styleFields[] → Testo (tipografia, effetti), Forma (tracciato, percorso SVG), bordo
  */
 export default {
   type: 'textpath',
@@ -18,7 +18,11 @@ export default {
     text: 'Testo che segue un tracciato curvo',
     path_preset: 'arc',
     custom_path: '',
+    font_family: '',
     font_size: '24',
+    font_weight: '',
+    text_transform: '',
+    font_italic: false,
     text_color: '',
     letter_spacing: '2',
     animation: 'none',
@@ -44,26 +48,25 @@ export default {
     text_color: 'var(--olo-color-primary)',
   },
 
+  // 16 nov 2026 (episodio 33): tolto il menu «Stile» (dodici nomi inglesi dei preset base che scrivevano sfondo, ombra e
+  // raggio: il renderer non li legge, agiva solo il colore); etichette senza parentesi, la spiegazione nelle (i); il
+  // percorso SVG nella Forma accanto al tracciato; al «Testo» carattere, peso, maiuscolo e corsivo, letti dal renderer.
   fields: [
     { key: 'text', label: t('Testo'), type: 'text' },
 
-    { type: 'separator', label: t('Tracciato') },
-    { key: 'custom_path', label: t('Percorso SVG (d)'), type: 'text', placeholder: t('M 0 50 Q 150 0 300 50'),
-      condition: { field: 'path_preset', value: 'custom' } },
-
     { type: 'separator', label: t('Animazione') },
-    { key: 'animation', label: t('Animazione'), type: 'select', options: [
+    { key: 'animation', label: t('Movimento'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
       { value: 'scroll', label: t('Scorrimento una volta') },
       { value: 'continuous', label: t('Scorrimento continuo') },
-    ]},
-    { key: 'animation_speed', label: t('Velocità animazione (sec)'), type: 'range', min: 1, max: 20,
+    ], description: t('Una volta: il testo entra dalla fine del tracciato quando la tile si vede, e si ferma. Continuo: la frase si ripete e scorre senza fine. Chi nel sistema ha chiesto meno movimento lo vede fermo.') },
+    { key: 'animation_speed', label: t('Durata'), type: 'range', min: 1, max: 20, unit: 's',
       condition: { field: 'animation', value: ['scroll', 'continuous'] } },
 
-    { type: 'separator', label: t('Rotazione continua (spin)') },
-    { key: 'spin', label: t('Ruota tutto il gruppo'), type: 'toggle',
-      description: t('Ruota in continuazione l\'intero testo-su-tracciato (ideale per badge ad anello). Rispetta prefers-reduced-motion: resta fermo.') },
-    { key: 'spin_speed', label: t('Velocità rotazione (sec/giro)'), type: 'range', min: 3, max: 40, step: 1,
+    { type: 'separator', label: t('Rotazione') },
+    { key: 'spin', label: t('Ruota tutto'), type: 'toggle',
+      description: t('Il testo gira in continuazione col suo tracciato, come un timbro ad anello: col Cerchio è perfetto. Chi nel sistema ha chiesto meno movimento lo vede fermo.') },
+    { key: 'spin_speed', label: t('Durata di un giro'), type: 'range', min: 3, max: 40, step: 1, unit: 's',
       condition: { field: 'spin', op: 'eq', value: true } },
     { key: 'spin_direction', label: t('Direzione'), type: 'select', options: [
       { value: 'cw',  label: t('Oraria') },
@@ -72,45 +75,35 @@ export default {
   ],
 
   styleFields: [
-    { type: 'separator', label: t('Preset stilistico') },
-    { key: 'preset', label: t('Stile'), type: 'select', options: [
-      { value: 'modern-clean',    label: t('Modern Clean') },
-      { value: 'minimal-mono',    label: t('Minimal Mono') },
-      { value: 'magazine-bold',   label: t('Magazine Bold') },
-      { value: 'editorial-serif', label: t('Editorial Serif') },
-      { value: 'compact-inline',  label: t('Compact Inline') },
-      { value: 'glass-frosted',   label: t('Glass Frosted') },
-      { value: 'neon-glow',       label: t('Neon Glow') },
-      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
-      { value: 'gradient-aurora', label: t('Gradient Aurora') },
-      { value: 'sticker-fun',     label: t('Sticker Fun') },
-      { value: 'retro-terminal',  label: t('Retro Terminal') },
-      { value: 'tilt-3d',         label: t('3D Tilt') },
-      { value: 'custom',          label: t('Personalizzato') },
-    ] },
+    { type: 'separator', label: t('Testo') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-
-    ...textEffectsFields([ { value: 'text', label: t('Solo Testo') } ]),
-
-    { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Testo'),
       responsiveKeys: [],
       keys: {
+        family:        'font_family',
         size:          'font_size',
+        weight:        'font_weight',
         letterSpacing: 'letter_spacing',
+        transform:     'text_transform',
+        italic:        'font_italic',
         color:         'text_color',
       },
       sizeMin: 12, sizeMax: 72,
     },
+    ...textEffectsFields([ { value: 'text', label: t('Solo Testo') } ]),
 
-    ...borderFields(),
-    { type: 'separator', label: t('Tracciato') },
-    { key: 'path_preset', label: t('Forma tracciato'), type: 'select', options: [
+    { type: 'separator', label: t('Forma') },
+    { key: 'path_preset', label: t('Tracciato'), type: 'select', options: [
       { value: 'arc', label: t('Arco') },
       { value: 'wave', label: t('Onda') },
       { value: 'circle', label: t('Cerchio') },
       { value: 'spiral', label: t('Spirale') },
       { value: 'custom', label: t('Personalizzato') },
     ]},
+    { key: 'custom_path', label: t('Percorso SVG'), type: 'text', placeholder: t('M 0 50 Q 150 0 300 50'),
+      condition: { field: 'path_preset', value: 'custom' },
+      description: t('Il tracciato in formato SVG, cioè l’attributo «d» di un path, in un riquadro largo 300 e alto 100: per esempio M 0 50 Q 150 0 300 50.') },
+
+    ...borderFields(),
   ],
 };

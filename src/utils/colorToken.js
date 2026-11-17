@@ -11,13 +11,26 @@
  */
 
 // Ruoli del tema selezionabili come token, oltre ai globali custom.
+import { t } from '@/i18n';
+
+// I nomi in italiano (16 nov 2026): nel campo colore comparivano «Primary», «Warning» accanto a «Testo» e «Sfondo».
+// Si traducono quando servono (t() al momento della lettura, non al caricamento del modulo).
 export const ROLE_SWATCHES = [
-  { id: 'primary', label: 'Primary' }, { id: 'secondary', label: 'Secondary' },
-  { id: 'success', label: 'Success' }, { id: 'warning', label: 'Warning' },
-  { id: 'danger', label: 'Danger' }, { id: 'link', label: 'Link' },
+  { id: 'primary', label: 'Primario' }, { id: 'secondary', label: 'Secondario' },
+  { id: 'success', label: 'Successo' }, { id: 'warning', label: 'Avviso' },
+  { id: 'danger', label: 'Pericolo' }, { id: 'link', label: 'Link' },
   { id: 'text', label: 'Testo' }, { id: 'background', label: 'Sfondo' },
   { id: 'muted', label: 'Superficie' }, { id: 'border', label: 'Bordo' },
 ];
+
+// Gli altri token della Palette, che non sono fra le swatch ma le tile usano: il loro nome leggibile.
+const NOMI_TOKEN = {
+  accent: 'Accento', dark: 'Scuro', light: 'Chiaro', surface: 'Superficie', 'surface-alt': 'Superficie alternativa',
+  'text-muted': 'Testo tenue', 'primary-contrast': 'Sul primario', 'on-primary': 'Sul primario',
+  'secondary-contrast': 'Sul secondario', info: 'Informazione',
+  // Alias che lo stile emette sempre (Olobuild_Style_System::ALIAS_COLORI): prima comparivano in inglese («Text soft»).
+  'text-soft': 'Testo tenue', 'text-faint': 'Testo tenue', error: 'Pericolo',
+};
 
 /**
  * Scompone un token colore nelle sue due parti: l'id e l'eventuale RISERVA.
@@ -47,7 +60,7 @@ export function buildSwatchColors(stylesStore) {
   const roleIds = new Set(ROLE_SWATCHES.map(r => r.id));
   const roles = ROLE_SWATCHES
     .filter(r => c[r.id])
-    .map(r => ({ id: r.id, label: r.label, value: c[r.id], quick: false, hidden: false }));
+    .map(r => ({ id: r.id, label: t(r.label), value: c[r.id], quick: false, hidden: false }));
   const globals = (stylesStore?.globalColors || [])
     .filter(g => g && g.id && !roleIds.has(g.id))
     .map(g => ({ id: g.id, label: g.label || g.id, value: g.value, quick: !!g.quick, hidden: !!g.hidden }));
@@ -81,14 +94,28 @@ export function tokenDaSalvare(id, stylesStore) {
  * legge, mentre `var(--olo-color-text-fai…` troncato non vuol dire niente.
  */
 export function tokenLabel(val, stylesStore) {
+  const v = String(val || '').trim();
+  // «transparent» (il nessuno sfondo di molti predefiniti: Sfondo grafico, Sfondo sezione…) si legge in italiano,
+  // non come la parola grezza in monospazio (16 nov 2026).
+  if (/^transparent$/i.test(v)) return t('Trasparente');
   // Un token con la trasparenza (`color-mix(in srgb, var(--olo-color-x) 35%, transparent)`, come lo salvano i temi e
   // le partenze delle tile) ha lo stesso nome: l'alfa la mostra già la sua barra. Prima il campo mostrava «color-mix(».
   const mix = /^color-mix\(\s*in\s+srgb\s*,\s*(var\(\s*--olo-color-[a-z0-9_-]+\s*(?:,[^()]*)?\))\s*\d+(?:\.\d+)?%\s*,\s*transparent\s*\)$/i
-    .exec(String(val || '').trim());
-  const tk = tokenParts(mix ? mix[1] : val);
+    .exec(v);
+  // Un token mescolato a un altro (`color-mix(in srgb, var(--olo-color-warning) 30%, var(--olo-color-background))`,
+  // le tinte degli stili delle tile): «Avviso 30%», col secondo colore solo se non è lo Sfondo.
+  const due = /^color-mix\(\s*in\s+srgb\s*,\s*(var\(\s*--olo-color-[a-z0-9_-]+\s*(?:,[^()]*)?\))\s*(\d+(?:\.\d+)?)%\s*,\s*(var\(\s*--olo-color-[a-z0-9_-]+\s*(?:,[^()]*)?\))\s*\)$/i
+    .exec(v);
+  if (due) {
+    const a = tokenLabel(due[1], stylesStore);
+    const b = tokenParts(due[3]);
+    if (a && b) return a + ' ' + due[2] + '%' + (b.id === 'background' ? '' : ' · ' + tokenLabel(due[3], stylesStore));
+  }
+  const tk = tokenParts(mix ? mix[1] : v);
   if (!tk) return '';
   const hit = buildSwatchColors(stylesStore).find(s => s.id === tk.id);
   if (hit) return hit.label;
+  if (NOMI_TOKEN[tk.id]) return t(NOMI_TOKEN[tk.id]);
   const pulito = tk.id.replace(/[-_]+/g, ' ').trim();
   return pulito.charAt(0).toUpperCase() + pulito.slice(1);
 }
@@ -126,6 +153,26 @@ export function templateColorTokens(stylesStore) {
  * se non ne ha torna '' — meglio nessun pallino che un pallino nero (il nero era
  * il vecchio ripiego di FieldColor, e mostrava centinaia di pastiglie sbagliate).
  */
+// Gli alias che il tema definisce fuori dalla Palette (`dark`, `light`, `surface`… nel CSS del tema o di OLObuild)
+// non stanno in `cssVariables`: la pagina li conosce, il pannello no, e il campo mostrava il quadratino a righe
+// («Scuro», «Chiaro» nel Listino prezzi, 16 nov 2026). Si leggono dal canvas, che È la pagina: il valore calcolato
+// di una proprietà personalizzata ha già i var() sostituiti. Mentre il canvas si ricarica non si trovano: vale
+// l'ultimo letto (si rilegge ogni pochi secondi, così un cambio di Palette arriva).
+const vivoCache = new Map();
+function tokenDalCanvas(id) {
+  const ora = Date.now();
+  const c = vivoCache.get(id);
+  if (c && ora - c.t < 3000) return c.v;
+  let v = '';
+  try {
+    const doc = document.querySelector('iframe.olo-live-iframe')?.contentDocument;
+    const el = doc && (doc.querySelector('.olo-template') || doc.documentElement);
+    if (el) v = (doc.defaultView.getComputedStyle(el).getPropertyValue('--olo-color-' + id) || '').trim();
+  } catch (_) { v = ''; }
+  if (v) vivoCache.set(id, { t: ora, v });
+  return v || (c ? c.v : '');
+}
+
 export function resolveColorToken(val, stylesStore, depth = 0) {
   const v = String(val || '').trim();
   if (!v) return '';
@@ -133,7 +180,8 @@ export function resolveColorToken(val, stylesStore, depth = 0) {
   if (!t) return v;
   if (depth > 8) return ''; // token che rimandano l'uno all'altro in cerchio
   const def = templateColorTokens(stylesStore)[t.id]
-    || buildSwatchColors(stylesStore).find(s => s.id === t.id)?.value;
+    || buildSwatchColors(stylesStore).find(s => s.id === t.id)?.value
+    || tokenDalCanvas(t.id);
   if (def) {
     const r = resolveColorToken(def, stylesStore, depth + 1);
     if (r) return r;
@@ -205,7 +253,8 @@ function scomponi(s) {
  * colore del template. null se una variabile non si risolve: dipinta così
  * com'è prenderebbe il valore del CHROME del builder, non quello della pagina.
  */
-function sostituisciToken(str, stylesStore) {
+function sostituisciToken(str, stylesStore, giro = 0) {
+  if (giro > 6) return null;
   let out = '';
   let i = 0;
   while (i < str.length) {
@@ -218,7 +267,10 @@ function sostituisciToken(str, stylesStore) {
       else if (str[k] === ')' && --prof === 0) break;
     }
     if (k >= str.length) return null;
-    const risolto = resolveColorToken(str.slice(j, k + 1), stylesStore);
+    let risolto = resolveColorToken(str.slice(j, k + 1), stylesStore);
+    // Un token definito come mescola di un altro (`--olo-color-dark: color-mix(…, var(--olo-color-primary) 12%, …)`):
+    // si risolvono anche i var() annidati. Prima il campo si arrendeva e mostrava il quadratino a righe.
+    if (risolto && /var\(/i.test(risolto)) risolto = sostituisciToken(risolto, stylesStore, giro + 1);
     if (!risolto || /var\(/i.test(risolto)) return null;
     out += str.slice(i, j) + risolto;
     i = k + 1;

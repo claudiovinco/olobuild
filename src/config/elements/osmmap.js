@@ -14,8 +14,6 @@ export default {
   icon: 'dashicons-location-alt',
   category: 'media',
   defaults: {
-    preset: 'custom',
-    typography_preset: '',
     latitude: '45.4642',
     longitude: '9.1900',
     zoom: '13',
@@ -57,77 +55,64 @@ export default {
     { key: 'address', label: t('Cerca indirizzo'), type: 'geocode', targetLat: 'latitude', targetLng: 'longitude', targetZoom: 'zoom' },
     { key: 'latitude', label: t('Latitudine'), type: 'text' },
     { key: 'longitude', label: t('Longitudine'), type: 'text' },
-    { key: 'zoom', label: t('Zoom'), type: 'range', min: 1, max: 19, step: 1 },
+    { key: 'zoom', label: t('Zoom'), type: 'range', min: 1, max: 19, step: 1,
+      description: t('1 = il mondo intero, 19 = il singolo edificio. 15 mostra il quartiere.') },
 
-    // ── Marker ──
-    { type: 'separator', label: t('Marker') },
-    { key: 'marker', label: t('Mostra marker'), type: 'toggle' },
-    { key: 'marker_popup', label: t('Testo popup marker'), type: 'text',
+    // ── Segnaposto ──
+    { type: 'separator', label: t('Segnaposto') },
+    { key: 'marker', label: t('Mostra segnaposto'), type: 'toggle' },
+    { key: 'marker_popup', label: t('Testo del fumetto'), type: 'text',
+      description: t('Compare cliccando il segnaposto. Vuoto = nessun fumetto.'),
       condition: { field: 'marker', value: true } },
-    { key: 'marker_type', label: t('Tipo marker'), type: 'select', options: [
-      { value: 'pin', label: t('Pin classico') },
+    { key: 'marker_type', label: t('Forma'), type: 'select', options: [
+      { value: 'pin', label: t('Spillo') },
       { value: 'drop', label: t('Goccia') },
       { value: 'circle', label: t('Cerchio') },
       { value: 'square', label: t('Quadrato') },
-      { value: 'diamond', label: t('Diamante') },
+      { value: 'diamond', label: t('Rombo') },
       { value: 'star', label: t('Stella') },
       { value: 'flag', label: t('Bandiera') },
-      { value: 'flag-wave', label: t('Bandiera animata') },
+      { value: 'flag-wave', label: t('Bandiera al vento') },
       { value: 'heart', label: t('Cuore') },
-      { value: 'image', label: t('Immagine personalizzata') },
+      { value: 'image', label: t('Immagine') },
     ], condition: { field: 'marker', value: true } },
-    { key: 'marker_image', label: t('Immagine marker'), type: 'image',
-      condition: { field: 'marker_type', value: 'image' } },
+    { key: 'marker_image', label: t('Immagine segnaposto'), type: 'image',
+      condition: [ { field: 'marker', value: true }, { field: 'marker_type', value: 'image' } ] },
 
     // ── Interazione ──
     { type: 'separator', label: t('Interazione') },
-    { key: 'scroll_wheel_zoom', label: t('Zoom con rotella mouse'), type: 'toggle' },
-    { key: 'dragging', label: t('Trascinamento mappa'), type: 'toggle' },
+    { key: 'scroll_wheel_zoom', label: t('Zoom con la rotella'), type: 'toggle',
+      description: t('Spento, la rotella fa scorrere la pagina invece di ingrandire la mappa: di solito è meglio.') },
+    { key: 'dragging', label: t('Si sposta trascinando'), type: 'toggle' },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
+  // Zone standard (16 nov 2026): Aspetto · Segnaposto · Forma. Tolti «Stile» e «Stile tipografico»: nessuno stile
+  // registrato e nessun testo da impaginare, il menu mostrava «—» e non cambiava niente.
   styleFields: [
-    { type: 'separator', label: t('Preset stilistico') },
-    { key: 'preset', label: t('Stile'), type: 'select', options: [
-      { value: 'modern-clean',    label: t('Modern Clean') },
-      { value: 'minimal-mono',    label: t('Minimal Mono') },
-      { value: 'magazine-bold',   label: t('Magazine Bold') },
-      { value: 'editorial-serif', label: t('Editorial Serif') },
-      { value: 'compact-inline',  label: t('Compact Inline') },
-      { value: 'glass-frosted',   label: t('Glass Frosted') },
-      { value: 'neon-glow',       label: t('Neon Glow') },
-      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
-      { value: 'gradient-aurora', label: t('Gradient Aurora') },
-      { value: 'sticker-fun',     label: t('Sticker Fun') },
-      { value: 'retro-terminal',  label: t('Retro Terminal') },
-      { value: 'tilt-3d',         label: t('3D Tilt') },
-      { value: 'custom',          label: t('Personalizzato') },
-    ] },
-    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-
-    // ── Marker (stile) ──
-    { type: 'separator', label: t('Stile marker') },
-    { key: 'marker_color', label: t('Colore marker'), type: 'color',
-      condition: { field: 'marker', value: true } },
-    { key: 'marker_size', label: t('Dimensione marker'), type: 'range', min: 20, max: 64, step: 2,
-      condition: { field: 'marker', value: true } },
-
-    // ── Aspetto ──
     { type: 'separator', label: t('Aspetto') },
-    { key: 'height', label: t('Altezza'), type: 'range', min: 150, max: 800, step: 10 },
-    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'tile_layer', label: t('Stile mappa'), type: 'select', options: [
       { value: 'standard', label: t('Standard') },
-      { value: 'hot', label: t('Humanitarian') },
-      { value: 'positron', label: t('Positron (chiaro)') },
-      { value: 'voyager', label: t('Voyager (colorato)') },
-      { value: 'dark', label: t('Dark Matter') },
+      { value: 'positron', label: t('Chiara') },
+      { value: 'gray', label: t('Grigia') },
+      { value: 'voyager', label: t('Tenue') },
+      { value: 'dark', label: t('Scura') },
       { value: 'satellite', label: t('Satellite') },
       { value: 'topo', label: t('Topografica') },
-      { value: 'esri_street', label: t('Esri Street') },
-      { value: 'gray', label: t('Grigio minimal') },
-      { value: 'opentopomap', label: t('OpenTopoMap') },
+      { value: 'opentopomap', label: t('Rilievi') },
+      { value: 'esri_street', label: t('Stradale') },
+      { value: 'hot', label: t('Umanitaria') },
     ]},
+
+    { type: 'separator', label: t('Segnaposto'), condition: { field: 'marker', value: true } },
+    { key: 'marker_color', label: t('Colore segnaposto'), type: 'color',
+      condition: [ { field: 'marker', value: true }, { field: 'marker_type', op: 'neq', value: 'image' } ] },
+    { key: 'marker_size', label: t('Dimensione segnaposto'), type: 'range', unit: 'px', min: 20, max: 64, step: 2,
+      condition: { field: 'marker', value: true } },
+
+    { type: 'separator', label: t('Forma') },
+    { key: 'height', label: t('Altezza'), type: 'range', unit: 'px', min: 150, max: 800, step: 10 },
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
     ...borderFields(),
   ],
 };

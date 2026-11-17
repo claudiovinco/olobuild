@@ -3,16 +3,14 @@ import { shadowField } from './_shared.js';
 import { t, tPartenza } from '@/i18n';
 
 /**
- * Tile Chart — split CONTENUTO/STILE (regola universale Olobuild).
- *   fields[]      → tipo grafico, dati (items), orientamento, stacked, dataset_label,
- *                   toggle show_* (legend/title/subtitle/tooltip), testi titolo/sottotitolo,
- *                   posizione/allineamento legenda, comportamento dati (animate, stacked,
- *                   stepped_line, fill_area, point_style, asse Y min/max/step, etichette assi,
- *                   formato valori), toggle griglia/bordi assi/begin_at_zero
- *   styleFields[] → preset, bg, altezza grafico,
- *                   colori/dimensioni/spaziature di legenda/titolo/sottotitolo/tooltip,
- *                   border_radius tooltip, bordi e raggi barre/punti, doughnut_cutout,
- *                   colori griglia/assi/testi, tension, shadow + borderFields
+ * Tile Grafico — Chart.js su un canvas, una serie di dati (etichetta, valore, colore).
+ *   fields[]      → tipo, dati, nome della serie · Titolo · Legenda e fumetto (mostrare, animazione) · Scala e assi
+ *                   (da zero, minimo, massimo, passo, nomi degli assi) · Formato valori
+ *   styleFields[] → Aspetto (stile, sfondo, colore dei bordi, ombra) · Testo (titolo, sottotitolo, assi, legenda,
+ *                   fumetto) · Forma (altezza, barre, linea, punti, ciambella) · Griglia e assi · Legenda · Fumetto ·
+ *                   Disposizione (orientamento) · Ogni dato (colore e bordo di ciascuno)
+ * Ordinato il 16 nov 2026 (episodio 26 di «Una tile in un minuto»): griglia, larghezze, area, gradini e orientamento
+ * stavano nel Contenuto; gli stili erano i dodici generici in inglese che il grafico quasi non leggeva.
  */
 export default {
   type: 'chart',
@@ -160,6 +158,9 @@ export default {
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────
+  // 16 nov 2026 (episodio 26): ogni proprietà nella sua casa. Nel Contenuto ciò che il grafico dice (tipo, dati, nome
+  // della serie, titoli, scala, nomi degli assi, formato dei numeri) e il comportamento (fumetto, animazione); la
+  // griglia, le larghezze delle barre, l'area piena, i gradini, l'orientamento e l'impilato sono aspetto → Stile.
   fields: [
     { key: 'chart_type', label: t('Tipo grafico'), type: 'select', options: [
       { value: 'bar', label: t('Barre') },
@@ -169,49 +170,103 @@ export default {
       { value: 'radar', label: t('Radar') },
       { value: 'polarArea', label: t('Area polare') },
     ]},
-    { key: 'index_axis', label: t('Orientamento'), type: 'select', options: [
-      { value: 'x', label: t('Verticale') },
-      { value: 'y', label: t('Orizzontale') },
-    ], condition: { field: 'chart_type', op: 'in', value: ['bar'] } },
-    { key: 'stacked', label: t('Impilato (stacked)'), type: 'toggle',
-      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line'] } },
-    { key: 'items', label: t('Dati'), type: 'content-items',
+    { key: 'items', label: t('Dati'), type: 'content-items', itemLabel: t('Dato'), etichettaDa: 'label',
       itemFields: [
         { key: 'label', label: t('Etichetta'), type: 'text' },
         { key: 'value', label: t('Valore'), type: 'number', step: 0.01 },
-
       ],
-      newItemDefaults: { label: t('Nuovo'), value: '50', color: '#e1474f', border_color: '' },
-      itemLabel: 'Dato',
+      newItemDefaults: { label: t('Nuovo'), value: '50', color: 'var(--olo-color-primary)', border_color: '' },
     },
-    { key: 'dataset_label', label: t('Etichetta dataset'), type: 'text', placeholder: t('Mostrata nella legenda'),
+    { key: 'dataset_label', label: t('Nome della serie'), type: 'text', placeholder: t('Mostrato nella legenda'),
+      description: t('Il nome dei valori, che la legenda e il fumetto mostrano accanto al colore: per esempio «kWh prodotti».'),
       condition: { field: 'chart_type', op: 'in', value: ['bar', 'line', 'radar'] } },
 
-    // ── Legenda (contenuto) ──
-    { type: 'separator', label: t('Legenda') },
-    { key: 'show_legend', label: t('Mostra legenda'), type: 'toggle' },
-
-    // ── Titolo (contenuto) ──
     { type: 'separator', label: t('Titolo') },
     { key: 'show_title', label: t('Mostra titolo'), type: 'toggle' },
     { key: 'chart_title', label: t('Testo titolo'), type: 'text',
       condition: { field: 'show_title', value: true } },
-
-    // ── Sottotitolo (contenuto) ──
     { key: 'show_subtitle', label: t('Mostra sottotitolo'), type: 'toggle' },
     { key: 'chart_subtitle', label: t('Testo sottotitolo'), type: 'text',
       condition: { field: 'show_subtitle', value: true } },
 
-    // ── Tooltip (contenuto) ──
-    { type: 'separator', label: t('Tooltip') },
-    { key: 'tooltip_enabled', label: t('Mostra tooltip'), type: 'toggle' },
+    { type: 'separator', label: t('Legenda e fumetto') },
+    { key: 'show_legend', label: t('Mostra legenda'), type: 'toggle',
+      description: t('Torte, ciambelle e aree polari elencano i dati coi loro colori. Barre, linee e radar mostrano il nome della serie: senza nome la legenda non compare.') },
+    { key: 'tooltip_enabled', label: t('Fumetto al passaggio'), type: 'toggle',
+      description: t('Passando sopra un dato (o toccandolo, sul telefono) un fumetto ne mostra il valore.') },
+    { key: 'animate', label: t('Animazione'), type: 'toggle',
+      description: t('Le barre crescono, le linee si disegnano quando il grafico entra nello schermo.') },
 
-    // ── Stile dati (comportamento) ──
-    { type: 'separator', label: t('Stile dati') },
-    { key: 'animate', label: t('Animazione'), type: 'toggle' },
-    { key: 'bar_percentage', label: t('Larghezza barre'), type: 'range', min: 0.1, max: 1, step: 0.05,
+    { type: 'separator', label: t('Scala e assi') },
+    { key: 'begin_at_zero', label: t('Inizia da zero'), type: 'toggle',
+      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line'] } },
+    // Minimo, massimo e incremento valgono anche per la scala dei valori di radar e area
+    // polare (prima il radar li ignorava).
+    { key: 'y_min', label: t('Valore minimo'), type: 'number', placeholder: t('Auto'),
+      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line', 'radar', 'polarArea'] } },
+    { key: 'y_max', label: t('Valore massimo'), type: 'number', placeholder: t('Auto'),
+      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line', 'radar', 'polarArea'] } },
+    { key: 'y_step_size', label: t('Passo della scala'), type: 'number', placeholder: t('Auto'),
+      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line', 'radar', 'polarArea'] } },
+    { key: 'x_label', label: t('Nome asse delle etichette'), type: 'text',
+      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line'] } },
+    { key: 'y_label', label: t('Nome asse dei valori'), type: 'text',
+      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line'] } },
+
+    { type: 'separator', label: t('Formato valori') },
+    { key: 'tooltip_prefix', label: t('Prefisso valore'), type: 'text', placeholder: t('es. €') },
+    { key: 'tooltip_suffix', label: t('Suffisso valore'), type: 'text', placeholder: t('es. %') },
+    { key: 'number_format', label: t('Separatore migliaia'), type: 'toggle' },
+  ],
+
+  // ─── STILE ─────────────────────────────────────────────────
+  // Zone dello standard: Aspetto · Testo · Forma · Griglia e assi · Legenda · Fumetto · Disposizione · Ogni dato.
+  styleFields: [
+    { type: 'separator', label: t('Aspetto') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'pulito',     label: t('Pulito') },
+      { value: 'scheda',     label: t('Scheda') },
+      { value: 'scuro',      label: t('Scuro') },
+      { value: 'tinta',      label: t('Tinta') },
+      { value: 'essenziale', label: t('Essenziale') },
+      { value: 'pillole',    label: t('Pillole') },
+      { value: 'custom',     label: t('Personalizzato') },
+    ], description: t('Cambia insieme sfondo, griglia, testi, fumetto e forma delle barre, coi colori del sito. I colori dei dati restano i tuoi (in fondo, «Ogni dato»).') },
+    { key: 'bg_color', label: t('Sfondo grafico'), type: 'color' },
+    { key: 'border_color_override', label: t('Colore dei bordi'), type: 'color',
+      description: t('Un colore solo per il bordo di tutti i dati. Vuoto: ogni dato ha il suo.') },
+    ...shadowField,
+
+    // Niente «Stile tipografico» né «Effetti testo»: il grafico è disegnato su un canvas,
+    // dove né l'uno né gli altri possono agire (erano due controlli che non facevano niente).
+    { type: 'separator', label: t('Testo') },
+    { type: 'typography', label: t('Titolo'), responsiveKeys: [],
+      keys: { size: 'title_font_size', weight: 'title_font_weight', color: 'title_color' },
+      sizeMin: 10, sizeMax: 32, sizeStep: 1 },
+    { type: 'typography', label: t('Sottotitolo'), responsiveKeys: [],
+      keys: { size: 'subtitle_font_size', color: 'subtitle_color' },
+      sizeMin: 8, sizeMax: 20, sizeStep: 1 },
+    { type: 'typography', label: t('Assi'), responsiveKeys: [],
+      keys: { size: 'tick_font_size', color: 'text_color' },
+      sizeMin: 8, sizeMax: 16, sizeStep: 1 },
+    { type: 'typography', label: t('Legenda'), responsiveKeys: [],
+      keys: { size: 'legend_font_size', weight: 'legend_font_weight', color: 'legend_color' },
+      sizeMin: 8, sizeMax: 20, sizeStep: 1 },
+    { type: 'typography', label: t('Fumetto'), responsiveKeys: [],
+      keys: { size: 'tooltip_font_size', color: 'tooltip_text_color' },
+      sizeMin: 8, sizeMax: 18, sizeStep: 1 },
+
+    { type: 'separator', label: t('Forma') },
+    { key: 'chart_height', label: t('Altezza'), type: 'range', min: 200, max: 800, step: 10, unit: 'px' },
+    { key: 'title_padding', label: t('Padding titolo'), type: 'spacing', max: 40,
+      condition: { field: 'show_title', value: true } },
+    { key: 'bar_radius', label: t('Raggio barre'), type: 'border-radius',
       condition: { field: 'chart_type', value: 'bar' } },
-    { key: 'category_percentage', label: t('Larghezza categoria'), type: 'range', min: 0.1, max: 1, step: 0.05,
+    { key: 'bar_percentage', label: t('Larghezza barre'), type: 'range', min: 0.1, max: 1, step: 0.05,
+      description: t('Quanto della sua colonna occupa ogni barra: 1 = tutta.'),
+      condition: { field: 'chart_type', value: 'bar' } },
+    { key: 'category_percentage', label: t('Larghezza colonne'), type: 'range', min: 0.1, max: 1, step: 0.05,
+      description: t('Quanto dello spazio di ogni etichetta occupa la sua colonna: più basso, più aria fra le barre.'),
       condition: { field: 'chart_type', value: 'bar' } },
     { key: 'fill_area', label: t('Riempi area'), type: 'toggle',
       condition: { field: 'chart_type', op: 'in', value: ['line', 'radar'] } },
@@ -221,164 +276,8 @@ export default {
       { value: 'after', label: t('Dopo') },
       { value: 'middle', label: t('Centro') },
     ], condition: { field: 'chart_type', value: 'line' } },
-
-    // ── Griglia e assi (comportamento/labels) ──
-    { type: 'separator', label: t('Griglia e assi') },
-    { key: 'show_x_grid', label: t('Griglia asse X'), type: 'toggle',
-      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line'] } },
-    { key: 'show_y_grid', label: t('Griglia asse Y'), type: 'toggle',
-      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line'] } },
-    { key: 'show_x_border', label: t('Bordo asse X'), type: 'toggle',
-      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line'] } },
-    { key: 'show_y_border', label: t('Bordo asse Y'), type: 'toggle',
-      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line'] } },
-    { key: 'begin_at_zero', label: t('Inizia da zero'), type: 'toggle',
-      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line'] } },
-    // Minimo, massimo e incremento valgono anche per la scala dei valori di radar e area
-    // polare (prima il radar li ignorava).
-    { key: 'y_min', label: t('Y minimo'), type: 'number', placeholder: t('Auto'),
-      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line', 'radar', 'polarArea'] } },
-    { key: 'y_max', label: t('Y massimo'), type: 'number', placeholder: t('Auto'),
-      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line', 'radar', 'polarArea'] } },
-    { key: 'y_step_size', label: t('Incremento Y'), type: 'number', placeholder: t('Auto'),
-      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line', 'radar', 'polarArea'] } },
-    { key: 'x_label', label: t('Etichetta asse X'), type: 'text',
-      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line'] } },
-    { key: 'y_label', label: t('Etichetta asse Y'), type: 'text',
-      condition: { field: 'chart_type', op: 'in', value: ['bar', 'line'] } },
-
-    // ── Formato valori ──
-    { type: 'separator', label: t('Formato valori') },
-    { key: 'tooltip_prefix', label: t('Prefisso valore'), type: 'text', placeholder: t('es. €') },
-    { key: 'tooltip_suffix', label: t('Suffisso valore'), type: 'text', placeholder: t('es. %') },
-    { key: 'number_format', label: t('Separatore migliaia'), type: 'toggle' },
-  ],
-
-  // ─── STILE ─────────────────────────────────────────────────
-  styleFields: [
-    { type: 'separator', label: t('Preset stilistico') },
-    { key: 'preset', label: t('Stile'), type: 'select', options: [
-      { value: 'modern-clean',    label: t('Modern Clean') },
-      { value: 'minimal-mono',    label: t('Minimal Mono') },
-      { value: 'magazine-bold',   label: t('Magazine Bold') },
-      { value: 'editorial-serif', label: t('Editorial Serif') },
-      { value: 'compact-inline',  label: t('Compact Inline') },
-      { value: 'glass-frosted',   label: t('Glass Frosted') },
-      { value: 'neon-glow',       label: t('Neon Glow') },
-      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
-      { value: 'gradient-aurora', label: t('Gradient Aurora') },
-      { value: 'sticker-fun',     label: t('Sticker Fun') },
-      { value: 'retro-terminal',  label: t('Retro Terminal') },
-      { value: 'tilt-3d',         label: t('3D Tilt') },
-      { value: 'custom',          label: t('Personalizzato') },
-    ] },
-    // Niente «Stile tipografico» né «Effetti testo»: il grafico è disegnato su un canvas,
-    // dove né l'uno né gli altri possono agire (erano due controlli che non facevano niente).
-    { key: 'chart_height', label: t('Altezza'), type: 'range', min: 200, max: 800, step: 10 },
-
-    // ── Tipografia ──
-    { type: 'separator', label: t('Tipografia') },
-    { type: 'typography', label: t('Legenda'),
-      responsiveKeys: [],
-      keys: {
-        size:   'legend_font_size',
-        weight: 'legend_font_weight',
-        color:  'legend_color',
-      },
-      sizeMin: 8, sizeMax: 20, sizeStep: 1,
-    },
-    { type: 'typography', label: t('Titolo'),
-      responsiveKeys: [],
-      keys: {
-        size:   'title_font_size',
-        weight: 'title_font_weight',
-        color:  'title_color',
-      },
-      sizeMin: 10, sizeMax: 32, sizeStep: 1,
-    },
-    { type: 'typography', label: t('Sottotitolo'),
-      responsiveKeys: [],
-      keys: {
-        size:  'subtitle_font_size',
-        color: 'subtitle_color',
-      },
-      sizeMin: 8, sizeMax: 20, sizeStep: 1,
-    },
-    { type: 'typography', label: t('Tooltip'),
-      responsiveKeys: [],
-      keys: {
-        size:  'tooltip_font_size',
-        color: 'tooltip_text_color',
-      },
-      sizeMin: 8, sizeMax: 18, sizeStep: 1,
-    },
-    { type: 'typography', label: t('Assi'),
-      responsiveKeys: [],
-      keys: {
-        size:  'tick_font_size',
-        color: 'text_color',
-      },
-      sizeMin: 8, sizeMax: 16, sizeStep: 1,
-    },
-
-    // ── Legenda (stile) ──
-    { type: 'separator', label: t('Legenda — stile') },
-    { key: 'legend_box_width', label: t('Larghezza indicatore'), type: 'range', min: 10, max: 60, step: 2,
-      condition: { field: 'show_legend', value: true } },
-    { key: 'legend_padding', label: t('Padding'), type: 'spacing', max: 30,
-      condition: { field: 'show_legend', value: true } },
-
-    { key: 'legend_position', label: t('Posizione'), type: 'select', options: [
-      { value: 'top', label: t('Alto') },
-      { value: 'bottom', label: t('Basso') },
-      { value: 'left', label: t('Sinistra') },
-      { value: 'right', label: t('Destra') },
-    ], condition: { field: 'show_legend', value: true } },
-    { key: 'legend_align', label: t('Allineamento'), type: 'select', options: [
-      { value: 'start', label: t('Inizio') },
-      { value: 'center', label: t('Centro') },
-      { value: 'end', label: t('Fine') },
-    ], condition: { field: 'show_legend', value: true } },
-    { key: 'legend_point_style', label: t('Indicatore circolare'), type: 'toggle',
-      condition: { field: 'show_legend', value: true } },
-    // ── Titolo (stile) ──
-    { type: 'separator', label: t('Titolo — stile') },
-    { key: 'title_padding', label: t('Padding titolo'), type: 'spacing', max: 40,
-      condition: { field: 'show_title', value: true } },
-
-    // ── Tooltip (stile) ──
-    { type: 'separator', label: t('Tooltip — stile') },
-    { key: 'tooltip_bg', label: t('Sfondo tooltip'), type: 'color',
-      condition: { field: 'tooltip_enabled', value: true } },
-    { key: 'tooltip_border', label: t('Bordo tooltip'), type: 'border',
-      legacyKeys: { width: 'tooltip_border_width', color: 'tooltip_border_color' } },
-
-
-    { key: 'tooltip_corner_radius', label: t('Raggio tooltip'), type: 'border-radius',
-      condition: { field: 'tooltip_enabled', value: true } },
-    { key: 'tooltip_padding', label: t('Padding tooltip'), type: 'spacing', max: 20,
-      condition: { field: 'tooltip_enabled', value: true } },
-
-    // ── Stile dati (aspetto) ──
-    { type: 'separator', label: t('Stile dati — aspetto') },
-
-    { key: 'border_color_override', label: t('Colore bordo globale'), type: 'color' },
-    { key: 'bar_radius', label: t('Raggio barre'), type: 'border-radius',
-      condition: { field: 'chart_type', value: 'bar' } },
     { key: 'tension', label: t('Curvatura linea'), type: 'range', min: 0, max: 1, step: 0.05,
       condition: { field: 'chart_type', op: 'in', value: ['line', 'radar'] } },
-    { key: 'point_radius', label: t('Raggio punti'), type: 'range', min: 0, max: 12, step: 1,
-      condition: { field: 'chart_type', op: 'in', value: ['line', 'radar'] } },
-    { key: 'point_hover_radius', label: t('Raggio punti (hover)'), type: 'range', min: 0, max: 16, step: 1,
-      condition: { field: 'chart_type', op: 'in', value: ['line', 'radar'] } },
-    { key: 'doughnut_cutout', label: t('Taglio ciambella'), type: 'range', min: 10, max: 90, step: 5,
-      condition: { field: 'chart_type', value: 'doughnut' } },
-
-    { key: 'items', type: 'content-items', label: t('Dati'), itemLabel: 'Dato', etichettaDa: 'label', itemFields: [
-        { key: 'color', label: t('Colore sfondo'), type: 'color' },
-        { key: 'border', label: t('Bordo'), type: 'border',
-          legacyKeys: { width: 'border_width', color: 'border_color' } },
-    ] },
     { key: 'point_style', label: t('Stile punti'), type: 'select', options: [
       { value: 'circle', label: t('Cerchio') },
       { value: 'rect', label: t('Quadrato') },
@@ -389,14 +288,64 @@ export default {
       { value: 'crossRot', label: t('Croce ruotata') },
       { value: 'dash', label: t('Trattino') },
     ], condition: { field: 'chart_type', op: 'in', value: ['line', 'radar'] } },
-    // ── Griglia e assi (colori/dimensioni) ──
-    { type: 'separator', label: t('Griglia e assi — colori') },
-    { key: 'bg_color', label: t('Sfondo grafico'), type: 'color' },
-    { key: 'grid_color', label: t('Colore griglia'), type: 'color' },
-    { key: 'grid_line_width', label: t('Spessore griglia'), type: 'range', min: 0, max: 4, step: 0.5 },
-    { key: 'axis_color', label: t('Colore bordo assi'), type: 'color' },
+    { key: 'point_radius', label: t('Raggio punti'), type: 'range', min: 0, max: 12, step: 1, unit: 'px',
+      condition: { field: 'chart_type', op: 'in', value: ['line', 'radar'] } },
+    { key: 'point_hover_radius', label: t('Raggio punti al passaggio'), type: 'range', min: 0, max: 16, step: 1, unit: 'px',
+      condition: { field: 'chart_type', op: 'in', value: ['line', 'radar'] } },
+    { key: 'doughnut_cutout', label: t('Foro della ciambella'), type: 'range', min: 10, max: 90, step: 5, unit: '%',
+      condition: { field: 'chart_type', value: 'doughnut' } },
 
-    ...shadowField,
+    { type: 'separator', label: t('Griglia e assi'), condition: { field: 'chart_type', op: 'in', value: ['bar', 'line'] } },
+    { key: 'show_x_grid', label: t('Griglia verticale'), type: 'toggle' },
+    { key: 'show_y_grid', label: t('Griglia orizzontale'), type: 'toggle' },
+    { key: 'grid_color', label: t('Colore griglia'), type: 'color' },
+    { key: 'grid_line_width', label: t('Spessore griglia'), type: 'range', min: 0, max: 4, step: 0.5, unit: 'px' },
+    { key: 'show_x_border', label: t('Linea dell’asse orizzontale'), type: 'toggle' },
+    { key: 'show_y_border', label: t('Linea dell’asse verticale'), type: 'toggle' },
+    { key: 'axis_color', label: t('Colore linee degli assi'), type: 'color' },
+
+    { type: 'separator', label: t('Legenda'), condition: { field: 'show_legend', value: true } },
+    { key: 'legend_position', label: t('Posizione'), type: 'select', options: [
+      { value: 'top', label: t('Alto') },
+      { value: 'bottom', label: t('Basso') },
+      { value: 'left', label: t('Sinistra') },
+      { value: 'right', label: t('Destra') },
+    ] },
+    { key: 'legend_align', label: t('Allineamento'), type: 'select', options: [
+      { value: 'start', label: t('Inizio') },
+      { value: 'center', label: t('Centro') },
+      { value: 'end', label: t('Fine') },
+    ] },
+    { key: 'legend_point_style', label: t('Indicatore circolare'), type: 'toggle' },
+    { key: 'legend_box_width', label: t('Larghezza indicatore'), type: 'range', min: 10, max: 60, step: 2, unit: 'px',
+      condition: { field: 'legend_point_style', op: 'neq', value: true } },
+    // Chart.js ha un solo numero (lo spazio attorno a ogni voce): il renderer legge il lato alto; coi lati
+    // collegati, com'è di partenza, se ne cambia uno e cambiano tutti.
+    { key: 'legend_padding', label: t('Padding'), type: 'spacing', max: 30,
+      description: t('Lo spazio attorno a ogni voce della legenda.') },
+
+    { type: 'separator', label: t('Fumetto'), condition: { field: 'tooltip_enabled', op: 'neq', value: false } },
+    { key: 'tooltip_bg', label: t('Sfondo fumetto'), type: 'color' },
+    { key: 'tooltip_border', label: t('Bordo fumetto'), type: 'border',
+      legacyKeys: { width: 'tooltip_border_width', color: 'tooltip_border_color' } },
+    { key: 'tooltip_corner_radius', label: t('Raggio fumetto'), type: 'border-radius' },
+    { key: 'tooltip_padding', label: t('Padding fumetto'), type: 'spacing', max: 20 },
+
+    // «Impilato (stacked)» tolto dall'inspector: il grafico ha una serie sola (i Dati), e una serie sola impilata è
+    // identica a quella affiancata. La chiave resta letta dal renderer.
+    { type: 'separator', label: t('Disposizione'), condition: { field: 'chart_type', value: 'bar' } },
+    { key: 'index_axis', label: t('Orientamento'), type: 'select', options: [
+      { value: 'x', label: t('Barre verticali') },
+      { value: 'y', label: t('Barre orizzontali') },
+    ] },
+
+    { type: 'separator', label: t('Ogni dato') },
+    { key: 'items', type: 'content-items', label: t('Dati'), itemLabel: t('Dato'), etichettaDa: 'label', itemFields: [
+        { key: 'color', label: t('Colore'), type: 'color' },
+        { key: 'border', label: t('Bordo'), type: 'border',
+          legacyKeys: { width: 'border_width', color: 'border_color' } },
+    ] },
+
     // bordo, raggio ed effetti sul riquadro del grafico: dalla 1.4.506 il selettore .{uid} c'è
     ...borderFields({ raggio: withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }) }),
   ],

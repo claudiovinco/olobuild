@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 class Olobuild_Projector_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'projector';
-    protected $name     = 'Projector';
+    protected $name     = 'Calcolatore a slider';
     protected $icon     = 'dashicons-chart-line';
     protected $category = 'interactive';
     protected $defaults = [
@@ -124,6 +124,9 @@ class Olobuild_Projector_Tile extends Olobuild_Tile_Base {
         // box-model
         $tp = is_array( $s['tile_padding'] ?? null ) ? $s['tile_padding'] : [];
         $pad = intval( $tp['top'] ?? 48 ) . 'px ' . intval( $tp['right'] ?? 48 ) . 'px ' . intval( $tp['bottom'] ?? 48 ) . 'px ' . intval( $tp['left'] ?? 48 ) . 'px';
+        // Sul telefono il padding di serie (48 per lato) lasciava al contenuto 260 px: sotto i 640 px ha un tetto
+        // (32 sopra e sotto, 24 ai lati). Un padding già più piccolo resta com'è (16 nov 2026, ep. 35).
+        $pad_tel = 'min(' . intval( $tp['top'] ?? 48 ) . 'px,32px) min(' . intval( $tp['right'] ?? 48 ) . 'px,24px) min(' . intval( $tp['bottom'] ?? 48 ) . 'px,32px) min(' . intval( $tp['left'] ?? 48 ) . 'px,24px)';
         $br_val = $this->build_border_radius_css( $s['border_radius'] ?? null );
         $radius_css = $br_val ? 'border-radius:' . $br_val . ';' : '';
         $shadow_val = Olobuild_Tile_Utils::shadow_value( $s, 'shadow' );
@@ -184,6 +187,7 @@ class Olobuild_Projector_Tile extends Olobuild_Tile_Base {
                 padding:<?php echo $pad; ?>; <?php echo $radius_css . $shadow_css; ?>
                 <?php if ( $border_css ) echo $border_css; ?>
             }
+            @media (max-width: 640px) { .<?php echo $uid; ?> { padding: <?php echo $pad_tel; ?>; } }
             .<?php echo $uid; ?> .opj-grid{display:grid; grid-template-columns:1.15fr .85fr; gap:clamp(28px,4vw,64px); align-items:center;}
             <?php if ( $center ) : ?>.<?php echo $uid; ?>{text-align:center;}<?php endif; ?>
             @container <?php echo $uid; ?> (max-width:<?php echo (int) $soglia_colonna; ?>px){.<?php echo $uid; ?> .opj-grid{grid-template-columns:1fr;}}
@@ -213,7 +217,7 @@ class Olobuild_Projector_Tile extends Olobuild_Tile_Base {
             <div class="opj-grid">
             <div class="opj-l">
                 <?php if ( $s['eyebrow'] !== '' ) : ?><span class="opj-eyebrow"><?php echo esc_html( $s['eyebrow'] ); ?></span><?php endif; ?>
-                <?php if ( $s['heading'] !== '' ) : ?><h2 class="opj-h"><?php echo wp_kses_post( $s['heading'] ); ?></h2><?php endif; ?>
+                <?php if ( $s['heading'] !== '' ) : ?><h2 class="opj-h"><?php echo $this->sanitize_richtext( (string) $s['heading'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitize_richtext() toglie i <p> dell'editor e passa da wp_kses_post() ?></h2><?php endif; ?>
                 <?php if ( $s['intro'] !== '' ) : ?><p class="opj-intro"><?php echo esc_html( $s['intro'] ); ?></p><?php endif; ?>
                 <?php if ( $s['input_label'] !== '' ) : ?><div class="opj-inlabel"><?php echo esc_html( $s['input_label'] ); ?></div><?php endif; ?>
                 <input class="opj-range" type="range" data-project-input min="<?php echo esc_attr( $min ); ?>" max="<?php echo esc_attr( $max ); ?>" step="<?php echo esc_attr( $step ); ?>" value="<?php echo esc_attr( $val ); ?>" aria-label="<?php echo esc_attr( $s['input_label'] ?: 'slider' ); ?>"/>

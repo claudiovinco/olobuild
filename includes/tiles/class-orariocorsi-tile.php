@@ -15,7 +15,8 @@
  * larghezza minima della colonna; se le colonne non ci stanno, l'orario scorre in orizzontale DENTRO la tile), e nelle
  * lezioni brevi o affiancate il nome viene prima dell'ora, che resta solo se c'è posto (ai lettori di schermo resta
  * sempre). Vista «elenco»: le lezioni una sotto l'altra per giorno.
- * Sul telefono (sotto i 640 px) sempre un giorno alla volta: le schede dei giorni (role="tablist", frecce, Home ed
+ * Quando la tile è stretta (sotto i 640 px: il telefono, o una colonna stretta del computer; container query «ooc») sempre
+ * un giorno alla volta: le schede dei giorni (role="tablist", frecce, Home ed
  * End; aperta oggi, o il primo giorno con lezioni dopo oggi) e sotto le lezioni del giorno; i filtri restano sopra.
  * Filtri: un pulsante per corso (aria-pressed) e «Tutti», i menu facoltativi del livello (un livello mostra anche le
  * lezioni «per tutti i livelli») e dell'istruttore. Le lezioni escluse spariscono in dissolvenza (subito con «riduci
@@ -584,7 +585,9 @@ class Olobuild_Orariocorsi_Tile extends Olobuild_Tile_Base {
         ob_start();
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS da colori passati da safe_color_css() e dagli helper di Olobuild_Tile_Utils, numeri forzati, valori da elenchi chiusi e selettori generati qui
         echo '<style>';
-        echo "{$sel}{--ooc-h:{$h}px;--ooc-ore:{$ore};--ooc-n:{$n_g};--ooc-gap:{$gap}px;--ooc-th:3rem;--ooc-r:{$raggio};--ooc-rmax:{$r_max}px;--ooc-rf:{$rf}px;--ooc-rd:{$rd}px;--ooc-rc:{$rc};--ooc-acc:var(--olo-color-primary);--ooc-su-acc:var(--olo-color-primary-contrast, #ffffff);--ooc-oggi:{$oggi};--ooc-su-oggi:{$su_oggi};--ooc-adesso:{$ades};--ooc-su-adesso:{$su_ades};--ooc-tenue:{$tenue};--ooc-sfondo:{$sfondo};--ooc-linee:{$linee};--ooc-ombra:{$om};--ooc-lc:" . self::num( $lc ) . 'px' . ( '' !== $testo_c ? ";color:{$testo_c}" : '' ) . '}';
+        // La tile misura sé stessa (container query «ooc»): griglia o un giorno alla volta secondo la colonna in cui sta, non
+        // lo schermo (17 nov 2026: in una colonna stretta del computer i sei giorni scorrevano di lato, coi corsi troncati).
+        echo "{$sel}{container-type:inline-size;container-name:ooc;--ooc-h:{$h}px;--ooc-ore:{$ore};--ooc-n:{$n_g};--ooc-gap:{$gap}px;--ooc-th:3rem;--ooc-r:{$raggio};--ooc-rmax:{$r_max}px;--ooc-rf:{$rf}px;--ooc-rd:{$rd}px;--ooc-rc:{$rc};--ooc-acc:var(--olo-color-primary);--ooc-su-acc:var(--olo-color-primary-contrast, #ffffff);--ooc-oggi:{$oggi};--ooc-su-oggi:{$su_oggi};--ooc-adesso:{$ades};--ooc-su-adesso:{$su_ades};--ooc-tenue:{$tenue};--ooc-sfondo:{$sfondo};--ooc-linee:{$linee};--ooc-ombra:{$om};--ooc-lc:" . self::num( $lc ) . 'px' . ( '' !== $testo_c ? ";color:{$testo_c}" : '' ) . '}';
         if ( $griglia && abs( $lct - $lc ) > 0.001 ) {
             echo '@media (max-width:960px){' . "{$sel}{--ooc-lc:" . self::num( $lct ) . 'px}}';
         }
@@ -695,7 +698,7 @@ class Olobuild_Orariocorsi_Tile extends Olobuild_Tile_Base {
             // Colonne attaccate: una linea fra un giorno e l'altro.
             $largo .= "{$sel} .ooc-giorno+.ooc-giorno{box-shadow:inset 1px 0 0 var(--ooc-linee)}";
         }
-        echo '@media (min-width:640px){' . $largo . '}';
+        echo '@container ooc (min-width:640px){' . $largo . '}';
         if ( $griglia ) {
             if ( $con_rnt ) {
                 // Sul tablet la tipografia «Corso» ha la sua misura: le righe che entrano sono altre.
@@ -715,8 +718,9 @@ class Olobuild_Orariocorsi_Tile extends Olobuild_Tile_Base {
         echo "{$sel} .ooc-giorno.is-oggi{background:color-mix(in srgb, var(--ooc-oggi) 8%, var(--ooc-sfondo))}";
         echo "{$sel} .ooc-giorno.is-oggi .ooc-giorno-nome{background:var(--ooc-oggi);color:var(--ooc-su-oggi)}";
 
-        // Telefono (sotto i 640 px): un giorno alla volta con le schede; filtri e schede scorrono in orizzontale.
-        echo '@media (max-width:639px){'
+        // Tile stretta (sotto i 640 px: il telefono, o una colonna stretta): un giorno alla volta con le schede; filtri e schede
+        // scorrono in orizzontale.
+        echo '@container ooc (max-width:639px){'
             . "{$sel} .ooc-testa{display:grid;grid-template-columns:minmax(0,1fr);gap:.625rem;margin-bottom:1rem}"
             . "{$sel} .ooc-chips{flex-wrap:nowrap;overflow-x:auto;padding:.25rem;scrollbar-width:none}"
             . "{$sel} .ooc-chips::-webkit-scrollbar{display:none}"
@@ -1066,10 +1070,11 @@ schede.forEach(function(t,i){
 t.addEventListener("click",function(){scegli(+dato(t,"g"),false);});
 t.addEventListener("keydown",function(e){var k=e.key,j=-1,N=schede.length;if(k==="ArrowRight"){j=(i+1)%N;}else if(k==="ArrowLeft"){j=(i-1+N)%N;}else if(k==="Home"){j=0;}else if(k==="End"){j=N-1;}if(j<0){return;}e.preventDefault();scegli(+dato(schede[j],"g"),true);});
 });
-var mq=null;try{mq=window.matchMedia("(max-width: 639px)");}catch(e){}
+var ro=null,giaModo=false;
 function modo(){
-if(!vivo()){if(mq){if(mq.removeEventListener){mq.removeEventListener("change",modo);}else if(mq.removeListener){mq.removeListener(modo);}}return;}
-mobile=mq?mq.matches:false;
+if(!vivo()){if(ro){ro.disconnect();}window.removeEventListener("resize",modo);return;}
+var m=el.clientWidth>0?el.clientWidth<640:false;if(giaModo?m===mobile:false){return;}giaModo=true;
+mobile=m;
 colonne.forEach(function(col){
 var tab=document.getElementById(el.id+"-t"+col._g);
 if(mobile){if(tab){col.setAttribute("role","tabpanel");col.setAttribute("aria-labelledby",tab.id);if(!col.querySelector("button")){col.tabIndex=0;}}}
@@ -1077,7 +1082,7 @@ else{col.removeAttribute("role");col.removeAttribute("aria-labelledby");col.remo
 });
 applica();
 }
-if(mq){if(mq.addEventListener){mq.addEventListener("change",modo);}else if(mq.addListener){mq.addListener(modo);}}
+if(window.ResizeObserver){ro=new ResizeObserver(function(){modo();});ro.observe(el);}else{window.addEventListener("resize",modo);}
 function adesso(){var d=new Date();return {g:(d.getDay()+6)%7+1,m:d.getHours()*60+d.getMinutes()};}
 function segna(v,on){
 var b=v.querySelector(".ooc-lez-stato");

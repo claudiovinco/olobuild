@@ -231,22 +231,26 @@
                 <template v-for="(field, fIdx) in section.fields" :key="field.key || ('f-' + sIdx + '-' + fIdx)">
                   <template v-if="isFieldVisible(field)">
                     <div v-if="field.type === 'content-items'">
-                      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t(field.label) }}</label>
+                      <!-- La spiegazione del ripetitore nella (i) accanto all'etichetta: prima non si vedeva da nessuna parte. -->
+                      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t(field.label) }}<InfoTip v-if="field.description" class="olo-field-info" :testo="t(field.description)" :titolo="t(field.label)" /></label>
                       <ContentItemsEditor
                         :modelValue="ensureContentItems(selectedTile, field)"
                         :itemFields="field.itemFields"
                         :newItemDefaults="field.newItemDefaults || {}"
-                        :itemLabel="field.itemLabel || 'Item'"
+                        :itemLabel="field.itemLabel || 'Voce'"
                         :etichettaDa="field.etichettaDa || ''"
                         :miniaturaDa="field.miniaturaDa || ''"
+                        :minimo="field.minimo ?? 1"
                         :tileId="selectedTile.id"
                         :tileSettings="selectedTile.settings || {}"
                         :supportsDynamic="field.supportsDynamic || false"
                         :dynamicOrigins="field.dynamicOrigins || null"
                         :dynamic="selectedTile.dynamic || {}"
+                        :chiave="field.key"
                         @update:modelValue="updateSetting(field.key, $event)"
                         @update:dynamic-query="updateDynamicQuery($event, field.key)"
                         @update:dynamic-item-map="updateDynamicItemMap"
+                        @update:dynamic="onDynamicFieldUpdate"
                       />
                     </div>
                     <div v-else-if="field.key === 'custom_widths' && selectedTile.type === 'row'">
@@ -291,22 +295,26 @@
                 <template v-for="(field, fIdx) in section.fields" :key="field.key || ('f-' + sIdx + '-' + fIdx)">
                   <template v-if="isFieldVisible(field, section.label)">
                     <div v-if="field.type === 'content-items'">
-                      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t(field.label) }}</label>
+                      <!-- La spiegazione del ripetitore nella (i) accanto all'etichetta: prima non si vedeva da nessuna parte. -->
+                      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t(field.label) }}<InfoTip v-if="field.description" class="olo-field-info" :testo="t(field.description)" :titolo="t(field.label)" /></label>
                       <ContentItemsEditor
                         :modelValue="ensureContentItems(selectedTile, field)"
                         :itemFields="field.itemFields"
                         :newItemDefaults="field.newItemDefaults || {}"
-                        :itemLabel="field.itemLabel || 'Item'"
+                        :itemLabel="field.itemLabel || 'Voce'"
                         :etichettaDa="field.etichettaDa || ''"
                         :miniaturaDa="field.miniaturaDa || ''"
+                        :minimo="field.minimo ?? 1"
                         :tileId="selectedTile.id"
                         :tileSettings="selectedTile.settings || {}"
                         :supportsDynamic="field.supportsDynamic || false"
                         :dynamicOrigins="field.dynamicOrigins || null"
                         :dynamic="selectedTile.dynamic || {}"
+                        :chiave="field.key"
                         @update:modelValue="updateSetting(field.key, $event)"
                         @update:dynamic-query="updateDynamicQuery($event, field.key)"
                         @update:dynamic-item-map="updateDynamicItemMap"
+                        @update:dynamic="onDynamicFieldUpdate"
                       />
                     </div>
                     <div v-else-if="field.key === 'custom_widths' && selectedTile.type === 'row'">
@@ -426,24 +434,19 @@
           <!-- Visibility -->
           <div>
             <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">{{ t('Visibilità') }}</label>
-            <div class="mb-flex mb-items-center mb-gap-2">
-            <label v-for="vp in viewports" :key="vp.key" class="mb-flex mb-items-center mb-gap-1 mb-cursor-pointer" :title="(tileAdvanced['visible_' + vp.key] !== false ? t('Visibile su ') : t('Nascosto su ')) + vp.label">
-              <input
-                type="checkbox"
-                :checked="tileAdvanced['visible_' + vp.key] !== false"
-                @change="updateAdvanced('visible_' + vp.key, $event.target.checked)"
-                class="mb-hidden"
-              />
-              <span
-                :class="[
-                  'mb-flex mb-items-center mb-justify-center mb-w-8 mb-h-8 mb-rounded-md mb-border mb-transition-all',
-                  tileAdvanced['visible_' + vp.key] !== false
-                    ? 'mb-border-primary-500 mb-bg-primary-600/20 mb-text-primary-300'
-                    : 'mb-border-gray-600 mb-bg-gray-700/50 mb-text-gray-500'
-                ]"
-                v-html="vp.svg"
-              ></span>
-            </label>
+            <!-- Un pulsante per schermo (17 nov 2026): prima caselle native in vista accanto a quadrati scuri senza icona,
+                 e l'ultimo usciva dal pannello. Acceso = la tile si vede su quello schermo; spento = barrato. -->
+            <div class="v2i-vis-row" role="group" :aria-label="t('Visibilità')">
+              <button
+                v-for="vp in viewports"
+                :key="vp.key"
+                type="button"
+                class="v2i-vis-btn"
+                :class="{ 'is-off': tileAdvanced['visible_' + vp.key] === false }"
+                :aria-pressed="tileAdvanced['visible_' + vp.key] !== false ? 'true' : 'false'"
+                :title="(tileAdvanced['visible_' + vp.key] !== false ? t('Visibile su ') : t('Nascosto su ')) + vp.label"
+                @click="updateAdvanced('visible_' + vp.key, tileAdvanced['visible_' + vp.key] === false)"
+              ><span class="v2i-vis-ic" v-html="vp.svg"></span></button>
             </div>
           </div>
 
@@ -2334,12 +2337,18 @@ const tileBadges = computed(() => {
   // Hover: chiavi con suffisso _hover non vuote, oppure style.hover non vuoto, oppure border_hover
   const respRe = /_(widescreen|tablet_landscape|tablet|mobile_landscape|mobile)$/;
   const isFilled = (v) => v !== undefined && v !== null && v !== '' && v !== false && !(typeof v === 'object' && v !== null && Object.keys(v).length === 0);
-  const hasHoverKey = Object.keys(set).some(k => /_hover(_duration)?$/.test(k) && isFilled(set[k]));
+  // Solo un hover impostato davvero: una chiave _hover diversa dal predefinito della tile. La sola durata (300 ms di
+  // partenza) o il bordo hover a zero dei predefiniti accendevano «Hover» su ogni tile coi bordi (16 nov 2026).
+  const defs = elementDef.value?.defaults || {};
+  const uguale = (a, b) => { try { return JSON.stringify(a) === JSON.stringify(b); } catch (e) { return false; } };
+  const hasHoverKey = Object.keys(set).some(k => /_hover$/.test(k) && isFilled(set[k]) && !uguale(set[k], defs[k]));
   const hasStyleHover = sty.hover && Object.values(sty.hover).some(isFilled);
   if (hasHoverKey || hasStyleHover) badges.push({ id: 'hover', label: 'Hover', color: 'orange', target: 'Contenuto' });
 
   // Responsive: chiavi con suffisso breakpoint
-  const hasResp = Object.keys(set).some(k => respRe.test(k) && isFilled(set[k]))
+  // Come «Hover»: solo valori per i dispositivi diversi dal predefinito della tile. Chiavi come columns_mobile, che sono
+  // un campo a sé con un valore di partenza, accendevano «Responsive» su ogni tile appena inserita (16 nov 2026).
+  const hasResp = Object.keys(set).some(k => respRe.test(k) && isFilled(set[k]) && !uguale(set[k], defs[k]))
     || Object.keys(sty).some(k => respRe.test(k) && isFilled(sty[k]));
   if (hasResp) badges.push({ id: 'resp', label: 'Responsive', color: 'blue', target: 'Stile' });
 
@@ -2380,10 +2389,10 @@ function navigateTab(dir) {
 const showProSliderEditor = ref(false);
 const viewports = [
   { key: 'desktop', label: 'Desktop', svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>' },
-  { key: 'tablet_landscape', label: 'Tablet L', svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><line x1="12" x2="12.01" y1="12" y2="12"/></svg>' },
-  { key: 'tablet', label: 'Tablet P', svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="12" x2="12.01" y1="18" y2="18"/></svg>' },
-  { key: 'mobile_landscape', label: 'Mobile L', svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="12" x2="12.01" y1="12" y2="12"/></svg>' },
-  { key: 'mobile', label: 'Mobile', svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2"/><line x1="12" x2="12.01" y1="18" y2="18"/></svg>' },
+  { key: 'tablet_landscape', label: t('Tablet orizzontale'), svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><line x1="12" x2="12.01" y1="12" y2="12"/></svg>' },
+  { key: 'tablet', label: t('Tablet verticale'), svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="12" x2="12.01" y1="18" y2="18"/></svg>' },
+  { key: 'mobile_landscape', label: t('Telefono orizzontale'), svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="12" x2="12.01" y1="12" y2="12"/></svg>' },
+  { key: 'mobile', label: t('Telefono'), svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2"/><line x1="12" x2="12.01" y1="18" y2="18"/></svg>' },
 ];
 
 const selectedTile = computed(() => {
@@ -3086,6 +3095,20 @@ function applyTilePresetTheme(tile, presetId) {
   // Quindi il preset DEVE atterrare in settings — altrimenti chiavi come font_weight,
   // heading_color, decoration, text_shadow, gradient_text, text_stroke restano in style
   // dove nessuno le legge e il preset "non si applica".
+  // Una faccia con una foto o un video non prende i colori dello stile (16 nov 2026): gli stili pensati per un fondo
+  // chiaro mettevano il testo scuro sopra la foto della FlipCard e il titolo spariva. La foto e il suo testo chiaro
+  // restano; lo stile vale per il resto (raggio, ombra, retro senza media, pulsante…).
+  const FACCE_CON_MEDIA = {
+    flipcard: [['front_media', ['front_bg', 'front_text_color']], ['back_media', ['back_bg', 'back_text_color']]],
+    pricing: [['media_bg', ['bg_color', 'text_color']]],
+  };
+  for (const [chiaveMedia, chiaviColore] of (FACCE_CON_MEDIA[tile.type] || [])) {
+    const m = tile.settings?.[chiaveMedia];
+    const haMedia = m && typeof m === 'object' && (
+      (m.type === 'image' && m.image_url) || (m.type === 'video' && m.video_url)
+      || (m.type === 'gallery' && Array.isArray(m.gallery_images) && m.gallery_images.length));
+    if (haMedia) chiaviColore.forEach((k) => { delete mapped[k]; });
+  }
   tilesStore.updateTile(tile.id, { ...mapped });
   // v1.0.52 — Tile ATOMICHE (button/icon/divider/spacer/togglebtn): NON replicare bg/radius/shadow
   // al wrapper esterno. Sono elementi inline/atomici dentro una colonna molto più grande, e
@@ -3284,6 +3307,39 @@ function updateDynamicItemMap(itemMap) {
 </script>
 
 <style scoped>
+/* Visibilità per schermo: cinque pulsanti in una griglia che sta sempre nel pannello. */
+.v2i-vis-row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.v2i-vis-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--olo-ui-accent, #e8622a) 55%, transparent);
+  background: color-mix(in srgb, var(--olo-ui-accent, #e8622a) 10%, transparent);
+  color: var(--olo-ui-accent, #e8622a);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.v2i-vis-btn:hover { background: color-mix(in srgb, var(--olo-ui-accent, #e8622a) 18%, transparent); }
+.v2i-vis-btn.is-off { border-color: #d1d5db; background: #f3f4f6; color: #9ca3af; }
+.v2i-vis-btn.is-off:hover { background: #e5e7eb; }
+.v2i-vis-btn.is-off::after {
+  content: '';
+  position: absolute;
+  left: 24%;
+  right: 24%;
+  top: 50%;
+  height: 1.5px;
+  background: currentColor;
+  transform: rotate(-35deg);
+}
+.v2i-vis-btn:focus-visible { outline: 2px solid var(--olo-ui-accent, #e8622a); outline-offset: 2px; }
+.v2i-vis-ic { display: inline-flex; pointer-events: none; }
+/* La (i) accanto all'etichetta di un ripetitore, come in InspectorField. */
+.olo-field-info { margin-left: 3px; color: #94a3b8; }
 .slide-enter-active,
 .slide-leave-active {
   transition: transform 0.2s ease, opacity 0.2s ease;

@@ -146,12 +146,21 @@ export function useDynamicContent() {
   /**
    * Get available source keys (for binding, not post_types/taxonomies).
    */
-  function getBindingSources() {
+  function getBindingSources(fieldType = '') {
     if (!sourcesData.value) return [];
     const keys = ['current_post', 'site', 'custom_field', 'author'];
     if (sourcesData.value.acf?.available) keys.push('acf');
     // I campi dei tipi di contenuto delle Impostazioni (Notizie › Sottotitolo…), quando ce n'è almeno uno.
     if (sourcesData.value.campi?.fields?.length) keys.push('campi');
+    // Per un link anche le sorgenti che danno indirizzi (17 nov 2026): la pagina dei biglietti di uno spettacolo,
+    // il contenuto precedente e successivo, la pagina aperta, il file del media, il prodotto. Il pannello poi
+    // mostra solo i loro campi indirizzo.
+    if (fieldType === 'link') {
+      for (const k of ['spettacolo', 'post_navigation', 'request', 'media', 'woocommerce']) {
+        const s = sourcesData.value[k];
+        if (s && s.available !== false && Array.isArray(s.fields) && s.fields.length) keys.push(k);
+      }
+    }
     return keys.map(key => ({
       value: key,
       label: sourcesData.value[key]?.label || key,

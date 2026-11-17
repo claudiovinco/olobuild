@@ -107,7 +107,7 @@
 
 <script setup>
 import { t } from '@/i18n';
-import { computed, ref } from 'vue';
+import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import { useStylesStore } from '@/stores/styles';
 import { useToast } from '@/composables/useToast.js';
 import { tokenParts, buildSwatchColors, tokenLabel, describeColor, tokenDaSalvare } from '@/utils/colorToken';
@@ -173,7 +173,19 @@ function toOutput(hex, alpha) {
 // sfumatura, parola di contesto, vuoto, irrisolvibile. La lettura sta in
 // colorToken.js: il vecchio parser ripiegava su #000000 per tutto ciò che non
 // era hex/rgba/token, e `transparent` diventava un quadrato nero con alfa 100%.
-const colore = computed(() => describeColor(props.modelValue, stylesStore));
+// I colori che il tema definisce fuori dalla Palette si leggono dalla pagina nel canvas (colorToken.js): se il campo
+// nasce o cambia mentre il canvas si ricarica (scelto uno stile) non li trova ancora. Si ricalcola un paio di volte
+// dopo, finché la pagina è pronta.
+const ritocco = ref(0);
+let timerRitocco = [];
+function ricalcolaDopo() {
+  timerRitocco.forEach(clearTimeout);
+  timerRitocco = [900, 2200, 4000].map(ms => setTimeout(() => { ritocco.value++; }, ms));
+}
+onMounted(ricalcolaDopo);
+watch(() => props.modelValue, ricalcolaDopo);
+onBeforeUnmount(() => timerRitocco.forEach(clearTimeout));
+const colore = computed(() => { void ritocco.value; return describeColor(props.modelValue, stylesStore); });
 const haColore = computed(() => colore.value.kind === 'color');
 
 // L'input nativo accetta solo #rrggbb: dove un colore non c'è apre il selettore
@@ -505,7 +517,10 @@ async function hideQuickColor(colorId) {
 .fc-hex-input::placeholder {
   color: #9ca3af;
 }
-.fc-hex-input--nome {
+/* Il nome (Predefinito, Primario…) nel carattere dell'interfaccia, non monospaziato. Doppia classe: la regola
+   .fc-hex-input qui sotto, a parità di peso, vinceva e «Predefinito» in monospazio usciva tagliato nei campi in
+   linea («Predefinit», 16 nov 2026). */
+.fc-hex-input.fc-hex-input--nome {
   font-family: inherit;
   letter-spacing: 0;
 }

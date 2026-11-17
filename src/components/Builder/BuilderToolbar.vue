@@ -586,7 +586,7 @@
         {{ builderStore.isSaving ? t('Salvataggio…') : t('Salva') }}
       </button>
       <button
-        @click="builderStore.togglePublish()"
+        @click="pubblicaOBozza"
         :disabled="builderStore.isSaving"
         :class="[
           'mb-px-4 mb-py-1.5 mb-text-xs mb-font-medium mb-rounded-md mb-border mb-transition-colors',
@@ -718,6 +718,13 @@ watch(() => builderStore.isSaving, (now, prev) => {
 // Pulsante Salva e Ctrl+S: vale anche se è cambiato solo l'header o il footer.
 // Prima si chiude la fotografia in sospeso (debounce), che aggiorna i flag: un
 // flag rimasto acceso su una zona uguale al salvato si spegne senza scrivere.
+// «Pubblicato» toglieva la pagina dal sito con un clic solo, senza dirlo (17 nov 2026): chi esplorava la barra poteva
+// rimettere in bozza la home senza volerlo. Ora lo chiede; pubblicare resta un clic.
+function pubblicaOBozza() {
+  if (isPublished.value && !window.confirm(t('Rimettere la pagina in bozza? Il sito non la mostrerà più finché non la pubblichi di nuovo.'))) return;
+  builderStore.togglePublish();
+}
+
 function salvaOra() {
   history.pushStateNow();
   if (builderStore.isAnyDirty) builderStore.saveTemplate();

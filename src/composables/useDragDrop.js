@@ -55,6 +55,13 @@ export function useDragDrop() {
     // v3.55.36 — applica placeholder universali (Lorem ipsum, immagine segnaposto)
     // ai field testo lunghi/immagine vuoti, leggendo i fields[] dall'elementRegistry.
     const def = getElementDef(tileType);
+    // Le chiavi che i default PHP non hanno prendono quelle del config: sono i valori che normalizeNodes dà alla tile
+    // quando la pagina si riapre, quindi la tile nasce già come sarà dopo il salvataggio. Senza, i controlli di una
+    // tile appena trascinata mostravano «—» (Effetti testo della Fisarmonica) e le loro condizioni «diverso da
+    // Nessuno» mostravano i campi che dipendono da un effetto mai scelto (16 nov 2026).
+    for (const [k, v] of Object.entries(def?.defaults || {})) {
+      if (!(k in defaults)) defaults[k] = (v && typeof v === 'object') ? JSON.parse(JSON.stringify(v)) : v;
+    }
     // Una lista vuota nei default PHP non copre le voci d'esempio del config: senza, nav,
     // social, carousel, portfolio, iconlist… nascevano vuote e non mostravano nulla.
     for (const [k, v] of Object.entries(def?.defaults || {})) {

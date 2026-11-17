@@ -3,6 +3,579 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.1189 - 2026-11-17 (Link dinamici: nella Sorgente dinamica solo indirizzi)
+- «Sorgente dinamica», Mappatura campi: per il link delle voci la scelta propone solo indirizzi (Permalink, Link della categoria, i link degli spettacoli e dei Tipi di contenuto), come il pannello dei collegamenti.
+
+## v1.4.1188 - 2026-11-17 (Link dinamici: l'etichetta nelle voci)
+- Nelle voci dei ripetitori l'etichetta del link collegabile ha lo stesso aspetto delle altre della voce.
+
+## v1.4.1187 - 2026-11-17 (Link dinamici in tutte le tile)
+- Ogni campo link si collega a un contenuto, col fulmine accanto all'etichetta come i testi e le immagini: il pulsante, le aperture, il logo, i reindirizzamenti dopo l'accesso, la ricerca… (112 campi in 59 tile). Il pannello propone solo i campi che danno un indirizzo: l'indirizzo del contenuto e della sua categoria, del sito, dell'autore, della pagina aperta, del contenuto precedente e successivo, del file del media, del prodotto, i link degli spettacoli, i campi link dei Tipi di contenuto e di ACF, o un campo personalizzato.
+- Anche i link delle voci scritte a mano nei ripetitori (card, slide, menu, social, lingue… 55 campi in 48 tile): il collegamento resta alla sua voce anche se le voci si spostano, e se ne va con lei.
+- Nei ripetitori riempiti dalla «Sorgente dinamica», il link delle voci può portare anche alla pagina della categoria o a un campo link del contenuto (i biglietti di uno spettacolo), non solo al contenuto.
+- Nuovo campo «Link della categoria» (la pagina del primo termine del contenuto); «URL file» del media e i campi link, pagina e file di ACF valgono come indirizzi.
+
+## v1.4.1186 - 2026-11-17 (Mappa Pro: il conteggio e il prezzo delle schede)
+- Mappa Pro: il conteggio «11 Risultati» e «Ordine predefinito» si traducono come il resto del pannello (lo script li scriveva in italiano), anche nel contatore delle baite; il prezzo delle schede prende «€» solo davanti a un numero, come già nel fumetto.
+
+## v1.4.1185 - 2026-11-17 (Mappa Pro: il pannello tradotto in tutte le lingue)
+- Mappa Pro: «Località», «Raggio di ricerca», l'ordinamento «Più recenti», il segnaposto della ricerca e le frecce della paginazione restavano in italiano anche sui siti in altre lingue (erano scritti con le entità HTML o mancavano nei cataloghi delle traduzioni).
+
+## v1.4.1184 - 2026-11-17 (Mappa Pro: la fascia di prezzo senza «€» in più)
+- Mappa Pro: il prezzo nelle schede, nel fumetto e nei dati per Google prende il simbolo «€» solo quando è un numero. Una fascia già scritta coi simboli («€€€») appariva come «€ €€€».
+
+## v1.4.1183 - 2026-11-17 (Mappa del mondo: il mare colorato)
+- Mappa del mondo, Stile → Aspetto: «Colore del mare» colora il fondo della sola cartina, per esempio d'azzurro. Con il mare, gli stati senza colore diventano chiari, se non ne scegli uno tu in «Stati senza colore». Vuoto: niente mare, come prima.
+
+## v1.4.1182 - 2026-11-17 (Concia: la didascalia della bottega resta nella sua scheda)
+- Tema Concia: sul tablet largo la didascalia della bottega si ferma alla sua scheda e va a capo invece di arrivare sotto quella della borsa; sul notebook la barra delle schede scende di poco per non toccarla.
+
+## v1.4.1181 - 2026-11-17 (Concia sul tablet: la barra delle schede sotto la didascalia)
+- Tema Concia, sul tablet: la barra di avanzamento delle schede scende sotto la didascalia della bottega, che col carattere minimo va su due righe e ci finiva sopra.
+
+## v1.4.1180 - 2026-11-17 (Aperture sul tablet: occhielli e pulsanti al loro posto)
+- Temi, sul tablet: in Concia i pulsanti non toccano più le schede dei prodotti e l'occhiello non tocca il titolo anche sui tablet stretti; in Rastrello e Soglia l'occhiello si stacca dal titolo.
+
+## v1.4.1179 - 2026-11-17 (Mappa del mondo: Europa e Nord America più vicine)
+- Mappa del mondo, Inquadratura: l'Europa si stringe di circa un quarto (Islanda, Norvegia con le Svalbard e Groenlandia non allargano più il riquadro di mare e ghiaccio; l'Islanda resta in vista) e il Nord America si centra sul continente, senza la Groenlandia che lo spingeva fino all'Europa.
+
+## v1.4.1178 - 2026-11-17 (Mappa del mondo: l'inquadratura su una regione)
+- Mappa del mondo, Inquadratura: oltre a «Tutto il mondo» e «Solo i paesi colorati» ci sono sette regioni (Europa, Nord America, Sud America, Africa, Medio Oriente, Asia, Oceania). La cartina si stringe su quella parte di mondo; gli stati colorati fuori restano fuori vista, ma la legenda li conta.
+
+## v1.4.1177 - 2026-11-17 (Aperture sul tablet: niente testo sotto la pillola dello sconto)
+- Temi negozio (Madia, Orlo, Calice, Pennino, Spiedo, Trottola e altri 10): sul tablet il paragrafo dell'apertura si ferma prima della pillola dello sconto; prima ci finiva sotto.
+- Temi: sul tablet l'occhiello di Falcata, Combinazione e Foglia Lenta, che col carattere minimo va su due righe, sale e non tocca più il titolo; in Cric le scritte del cruscotto stanno su una riga; al telefono la didascalia della bottega di Concia non copre più il paragrafo e l'etichetta «Ingresso» di Pianta Libera torna intera.
+
+## v1.4.1176 - 2026-11-17 (Tracciamento spedizione: il nome del corriere intero)
+- Tracciamento spedizione: con più corrieri, il menu della scelta parte largo quanto il nome più lungo (fino a 16rem). Prima partiva sempre da 10rem e «Poste Italiane» diventava «Poste Itali…» anche dove c'era spazio.
+
+## v1.4.1175 - 2026-11-17 (Scheda tecnica: su uno sfondo scuro si legge tutto)
+- Scheda tecnica: con uno «Sfondo scheda» scelto, il testo della scheda diventa chiaro o scuro secondo il fondo. Prima le certificazioni (CE, ISO 9001…) e i testi senza un colore proprio restavano nel colore della pagina: su una scheda scura non si vedevano.
+
+## v1.4.1174 - 2026-11-17 (Slider Pro: i testi non scendono più sotto la misura leggibile)
+- Slider Pro: quando lo schermo è più stretto della tela (tablet, notebook, telefono) i testi dei livelli si riducono con lei solo fino a una misura che si legge: 14 px sullo schermo per i paragrafi, 11 px per le scritte brevi e i pulsanti. Prima a 820 px un paragrafo da 14 finiva a 11 e un'etichetta a 9.
+
+## v1.4.1173 - 2026-11-17 (Respiro: la frase in basso si legge sul mare)
+- Tema Respiro, al telefono: sotto «Seguite il cerchio» una sfumatura scura solo dove c'è il testo, come quella in alto; prima sul mare chiaro il contrasto era 3,75.
+
+## v1.4.1172 - 2026-11-17 (Aperture al telefono, ultimi ritocchi)
+- Temi: al telefono i pulsanti dell'apertura non toccano più il paragrafo sopra (in 18 temi); in Ciak il ciak disegnato scende con i testi; in Respiro «Seguite il cerchio» ha il colore chiaro pieno e si legge sul mare.
+
+## v1.4.1171 - 2026-11-17 (Aperture sul tablet: niente sotto la testata)
+- Temi: sul tablet, in Cric, Fermento, Fornace, Morsetto, Respiro e Sincope gli occhielli e i titoli dell'apertura finivano sotto la testata: ora scendono quanto basta. Cambiano solo i valori per il tablet (il telefono tiene i suoi).
+
+## v1.4.1170 - 2026-11-17 (Aperture al telefono, seconda passata; Scroscio sul tablet)
+- Temi: al telefono gli occhielli lunghi, ora più leggibili, vanno su due righe: quello che sta sotto scende quanto basta per non toccarli (in 22 temi). Scroscio anche sul tablet: occhiello e titolo sotto la testata, paragrafo e pulsanti leggibili.
+
+## v1.4.1169 - 2026-11-17 (Aperture dei temi al telefono)
+- Temi: le aperture al telefono rivedute su tutto il catalogo, a 390 px. Gli occhielli e i titoli che finivano sotto la testata scendono quanto basta (in 14 temi, fra cui Scroscio, Ciak, Capitonné, Concia, Cric, Respiro); i paragrafi si leggono (almeno 14 px) e le scritte piccole stanno almeno a 11 px (in 66 temi). A Scroscio il pulsante «Ombrello: il mouse» al telefono non c'è più: il mouse lì non c'è, e toccava il bordo dello schermo. Cambiano solo i valori per il telefono.
+
+## v1.4.1168 - 2026-11-17 (Aperture al telefono: i testi alla loro misura)
+- Slider Pro al telefono: i testi delle aperture finivano rimpiccioliti di quasi metà (a Scroscio il paragrafo era di 7 px). Il controllo che evita le parole spezzate a metà li misurava prima che lo slider avesse preparato la sua tela, quando i titoli grandi non ci stavano ancora; ora aspetta la tela pronta e rimpicciolisce solo le parole spezzate davvero.
+
+## v1.4.1167 - 2026-11-17 (La barra della tile non sparisce tornando sulla tile)
+- Builder: passando dalla barra della tile alla tile stessa (capita scendendo col mouse su una tile appena spostata) la barra spariva dopo un attimo e non tornava col mouse fermo. Ora resta.
+
+## v1.4.1166 - 2026-11-17 (La barra della tile resta dopo Sposta su e giù)
+- Builder: dopo «Sposta su» o «Sposta giù» (o un'altra modifica che ridisegna la tile) la barra della tile spariva e, col mouse fermo sopra, non tornava finché non si usciva e si rientrava. Ora segue la tile ridisegnata, o quella che sta sotto il mouse.
+
+## v1.4.1165 - 2026-11-17 (Struttura: Riga e Colonna, e la tile scelta in vista)
+- Builder, scheda Struttura: righe e colonne si chiamano «Riga» e «Colonna» (prima «Row» e «Column», mentre l'inspector diceva già Sezione › Riga › Colonna); il percorso «Selezionato» in fondo mostra il nome della tile («Schede prodotto»), non il tipo interno; aprendo la scheda con una tile già scelta, l'albero la porta in vista invece di partire dall'alto.
+
+## v1.4.1164 - 2026-11-17 (Menu del tasto destro: le griglie in italiano)
+- Builder, menu del tasto destro su una tile: le categorie delle griglie sotto «Layout colonne» ora si chiamano «Colonne», «Più righe», «A mosaico» e «Con barra laterale» (prima «Multi-riga», «Masonry», «Sidebar»), e si traducono con la lingua dell'editor.
+
+## v1.4.1163 - 2026-11-17 («Pubblicato» chiede prima di togliere la pagina dal sito)
+- Builder: il pulsante «Pubblicato» in alto rimetteva la pagina in bozza con un clic solo, senza avvisare: bastava esplorare la barra per togliere dal sito la home. Ora chiede conferma prima di rimettere in bozza una pagina pubblicata; pubblicare resta un clic.
+
+## v1.4.1162 - 2026-11-17 (Visibilità per schermo, pulsanti chiari)
+- Builder, Avanzate → Visibilità: i cinque schermi (desktop, tablet orizzontale e verticale, telefono orizzontale e verticale) ora sono cinque pulsanti chiari in fila, accesi dove la tile si vede e barrati dove è nascosta. Prima si vedevano caselle accanto a quadrati scuri senza icona, e l'ultimo usciva dal pannello. I nomi degli schermi, al passaggio del mouse, sono in italiano.
+
+## v1.4.1161 - 2026-11-17 (L'editor dello Slider Pro in italiano)
+- Slider Pro: nell'editor le scritte rimaste in inglese ora sono in italiano: «Slide», «Livelli globali», «Schermo:», il nome del livello («Livello Pulsante», non «Livello Button»), «Profondità parallasse», «Visibile su Mobile» e la nota dei valori per schermo, l'azione «Mostra o nasconde un livello».
+
+## v1.4.1160 - 2026-11-17 (Nel builder la freccia del mouse resta)
+- Builder: con un cursore del tema attivo (l'ombrello di Scroscio, la scia, il mirino…) nel canvas la freccia del mouse spariva, anche sopra le barre e i pulsanti delle tile: si lavorava senza vedere la punta. Ora nel builder la freccia resta e l'effetto si vede attorno; sul sito non cambia niente.
+
+## v1.4.1159 - 2026-11-17 (Trascinando un elemento, il suo nome e la sua icona)
+- Builder: trascinando un elemento dalla barra di sinistra, l'etichetta che segue il mouse mostrava il nome interno in inglese («button» invece di «Pulsante») e nessuna icona. Ora mostra il nome e l'icona della card che si sta trascinando.
+
+## v1.4.1158 - 2026-11-17 (La barra della sezione resta sua)
+- Builder: selezionata la sezione (o la riga, la colonna) dal percorso in cima all'inspector, la sua barra nel canvas restava al suo posto solo finché il puntatore non passava sulla tile che sta dentro: lì diventava la barra della tile, nello stesso punto, e il cestino toglieva la tile invece della sezione. Ora resta la barra della sezione; per agire sulla tile dentro basta cliccarla.
+
+## v1.4.1157 - 2026-11-17 (Mappa del mondo: nasce con qualche stato colorato)
+- Mappa del mondo: appena inserita ha già qualche stato colorato e la legenda coi numeri, così si vede subito cosa fa (prima era una cartina vuota). I nomi dei due colori senza parentesi, con la spiegazione nella (i).
+
+## v1.4.1156 - 2026-11-17 (Viewer 360°: il panorama si vede subito nel builder)
+- Viewer 360°: trascinato nel builder in una pagina che non lo aveva, il panorama restava su «Caricamento 360°…» anche in anteprima (mancava il suo script finché non si salvava e ricaricava); ora si vede e si gira subito, come l'oggetto girevole.
+
+## v1.4.1155 - 2026-11-17 (Specimen Variabile si chiama Variazione testo)
+- La tile Specimen Variabile ora si chiama «Variazione testo» nella barra degli elementi e nell'inspector («specimen» era una parola da fonderia di caratteri). Le pagine già fatte non cambiano.
+
+## v1.4.1154 - 2026-11-17 (ricarica della 1.4.1153)
+- La 1.4.1153 era partita col bundle del builder della versione prima (build interrotta): ora c'è quello giusto.
+
+## v1.4.1153 - 2026-11-17 (Viewer 360°: la foto del panorama parte vuota)
+- Viewer 360°: passando a «Panorama a 360°» la foto parte vuota col pulsante «Seleziona immagine» (prima c'era un'immagine segnaposto qualunque, il pulsante diceva «Cambia immagine» e il riquadro restava su «Caricamento 360°…»); lo stesso per la copertina del video. Il riquadro vuoto lo dice in italiano.
+
+## v1.4.1152 - 2026-11-17 (Viewer 360°: l'icona dello schermo intero)
+- Viewer 360°: nel panorama da foto il pulsante dello schermo intero mostra la sua icona (nella 1.4.1151 era un tondo vuoto).
+
+## v1.4.1151 - 2026-11-17 (Viewer 360°: i pulsanti del panorama come quelli del video)
+- Viewer 360°: nel panorama da foto lo zoom e lo schermo intero sono tondi, a vetro scuro con i segni chiari, come nel video a 360° (restavano i quadratini bianchi della libreria).
+
+## v1.4.1150 - 2026-11-17 (Viewer 360°: stili veri, nomi in italiano, pulsanti solo dove ci sono)
+- Viewer 360°: quattro stili veri (Pulito, Arrotondato, Scheda, Vetrina su fondo chiaro) che cambiano raggio, ombra e fondo; i dodici di prima avevano nomi da cornice (Neon Frame, Cinema Wide, Retro Monitor) ma cambiavano solo la rotazione automatica e lo zoom.
+- Viewer 360°: nomi in italiano senza sigle («Panorama a 360°», «Oggetto girevole, da una foto», «Schermo intero», «Si trascina col dito»…); il «zoom» della vista iniziale si chiama per quello che è, il campo visivo in gradi, con la spiegazione nella (i); velocità della rotazione, sensibilità e inerzia dallo Stile alla Navigazione.
+- Viewer 360°: la barra dei pulsanti (schermo intero, zoom, bussola) compare solo nel panorama, l'unico che la disegna; nell'oggetto girevole non faceva niente.
+
+## v1.4.1149 - 2026-11-17 (Specimen Variabile: trascinare senza selezionare)
+- Specimen Variabile: trascinando la parola col mouse non si seleziona più il testo (compariva un riquadro azzurro sulle lettere); spostando un cursore il valore accanto è arrotondato come gli altri.
+
+## v1.4.1148 - 2026-11-17 (Specimen Variabile: la parola sta nella tile, nasce con un font variabile vero)
+- Specimen Variabile: la parola si riduce per stare nella larghezza della tile (sul telefono «Calma» a 220 px si spezzava a metà); le misure scelte per tablet e telefono vincono comunque.
+- Specimen Variabile: appena inserito usa Recursive, il font variabile che ha proprio i due assi di partenza (peso e inclinazione): col carattere del tema l'inclinazione di solito non faceva niente.
+- Selettore dei caratteri: fra i Google Fonts anche Recursive, Roboto Flex, Anybody e Fraunces, font variabili da specimen.
+
+## v1.4.1147 - 2026-11-17 (Specimen Variabile: stili veri, inspector in ordine, valori leggibili)
+- Specimen Variabile: quattro stili coi colori del sito (Pulito, Riquadro tenue, Scuro, Pieno); il menu «Stile» aveva dodici nomi inglesi e nessuno stile registrato, e sceglierne uno non cambiava niente.
+- Specimen Variabile: lo Stile nelle zone Aspetto, Testo (anche il font variabile, che stava nel Contenuto), Disposizione e Forma; nel Contenuto il Comportamento. Nomi in italiano al posto di «slider», «readout», «loop», «fallback no-varfont»; negli assi «Nome» e «Sigla» con la spiegazione delle sigle nella (i).
+- Specimen Variabile: sotto la lettera e accanto ai cursori il nome dell'asse e il valore arrotondato («Peso 905» al posto di «wght 904.65»).
+
+## v1.4.1146 - 2026-11-17 (Titolo animato: la digitazione parte dall'inizio)
+- Titolo animato: con la Digitazione e la Tendina nel titolo centrato la parola si scrive dall'inizio del suo spazio, accanto al testo prima (veniva scritta dal centro: ogni lettera spostava le altre e il cursore, a parola cancellata, restava staccato).
+
+## v1.4.1145 - 2026-11-17 (Titolo animato: la parola evidenziata leggibile)
+- Titolo animato: con l'evidenziazione a sfondo la parola, se non ha un colore suo, prende quello del titolo (il colore primario sulla pillola dello stesso colore non si leggeva bene); appena inserito usa lo stile Evidenziatore.
+
+## v1.4.1144 - 2026-11-17 (Titolo animato: stili onesti, inspector in ordine)
+- Titolo animato: cinque stili coi colori del sito (Pulito, Evidenziatore, Cerchiato, Sobrio, Su fondo scuro) al posto dei dodici nomi inglesi, che scrivevano sfondo e raggio, impostazioni che il titolo non usa, e cambiavano solo il colore del testo.
+- Titolo animato: lo Stile nelle zone Aspetto (stile, evidenziazione, ombra), Testo (il carattere, la misura, il peso e il colore del titolo, il colore della parola animata) e Disposizione; nel Contenuto il Comportamento con animazione, ritmo della digitazione (solo con la Digitazione, in ms) e pausa fra le parole (in ms). Nomi in italiano («Scorre dal basso», «Tendina», «Parola animata»).
+- Titolo animato: il titolo usa il carattere dei titoli del sito (o quello scelto nel controllo Titolo) e non ha più un padding suo di 24 × 16 px: allineato a sinistra non rientra più rispetto alle altre tile; lo spazio attorno si dà dal Contenitore.
+
+## v1.4.1143 - 2026-11-17 (Reveal Box: i titoli nel carattere dei titoli del sito)
+- Reveal Box: i titoli scritti nelle zone usano il carattere e il peso dei titoli del sito (uscivano nel carattere del testo, in grassetto).
+
+## v1.4.1142 - 2026-11-17 (Reveal Box: niente velo sulla foto appena inserita)
+- Reveal Box: appena inserita la foto della zona visibile si vede piena, con la sfumatura scura solo in basso dove c'è il testo (prima un velo copriva tutta la foto), e la zona rivelata mostra il menu sul colore scuro del sito invece che su una seconda foto velata.
+
+## v1.4.1141 - 2026-11-17 (Sfondo: le voci in italiano)
+- Sfondo di tutte le tile e livelli dello Slider Pro: le voci in italiano («Copri (taglia)», «Contieni (intera)», «Riempi (deforma)», «Dimensione originale»; nella galleria «Dissolvenza», «Scorrimento», «Sfocatura», «Giro») al posto di «Cover», «Contain», «Fade», «Slide», «Blur», «Flip».
+
+## v1.4.1140 - 2026-11-17 (Reveal Box: inspector in ordine, testo più curato)
+- Reveal Box: nel Contenuto le due zone hanno ognuna testo, icona e il proprio «Sfondo / media» (prima gli sfondi stavano in fondo allo Stile), e il Comportamento raccoglie effetto, scorrimento, durata e andamento. Lo Stile ha le zone Aspetto, Testo, Zona visibile, Zona rivelata e Forma, come la Flip card.
+- Reveal Box: nomi in italiano e unità nel controllo («Durata» in secondi, «Opacità del velo» in %, «Altezza» in px, l'andamento «Morbido», «Fluido», «Costante» al posto di «Ease», «Smooth»…); «velo» al posto di «overlay»; le spiegazioni nelle (i).
+- Reveal Box: titolo e righe del testo con spazi misurati (i margini del tema staccavano di 50 px titolo e riga sotto); appena inserita mostra un titolo vero sopra la riga, non due righe uguali.
+
+## v1.4.1139 - 2026-11-17 (Proporzioni personalizzate solo con «Personalizzato»)
+- Cartellone, Scheda tecnica, Griglia articoli e Hero a striscia: il campo «Proporzioni personalizzate» si vede solo quando nelle Proporzioni scegli «Personalizzato» (compariva con qualsiasi proporzione, e scriverci non cambiava niente).
+- Cartellone: i controlli della foto (Immagini, Immagine intera, Proporzioni, Punto focale) si nascondono nelle viste che non hanno foto, il Biglietto e il Calendario del mese.
+
+## v1.4.1138 - 2026-11-17 (Cartellone: il prossimo senza riquadro vuoto)
+- Cartellone: nella vista «Solo il prossimo» un appuntamento senza foto non lascia più mezza tile grigia e vuota: il testo prende tutta la larghezza.
+
+## v1.4.1137 - 2026-11-17 (Cartellone: date di partenza davvero da oggi, pulsanti allineati)
+- Cartellone: le date di partenza contano da oggi anche quando la tile si trascina nella pagina (la 1.4.1136 lo faceva solo in una parte del builder, e una tile nuova nasceva ancora col primo spettacolo del 14 novembre, già passato).
+- Cartellone: nell'elenco i pulsanti stanno a destra, così il tondo «Aggiungi al calendario» cade nello stesso punto con e senza «Biglietti».
+
+## v1.4.1136 - 2026-11-17 (Cartellone: gli appuntamenti di partenza contano da oggi)
+- Cartellone: appena inserita mostra tre appuntamenti a partire da oggi (fra 12, 26 e 33 giorni); prima le date erano fisse a novembre e dicembre 2026 e da dicembre una tile nuova avrebbe mostrato solo appuntamenti passati.
+
+## v1.4.1135 - 2026-11-17 (Cartellone in una colonna stretta)
+- Cartellone: elenco, schede e prossimo appuntamento si dispongono secondo la larghezza della tile, non dello schermo: in una colonna stretta del computer l'elenco teneva affiancati data, testo e pulsanti, col testo a una parola per riga e «Biglietti» sopra il genere.
+- Cartellone: nelle voci degli appuntamenti il genere si sceglie da un menu coi Generi (scritto a mano, un errore creava un filtro in più).
+
+## v1.4.1134 - 2026-11-17 (Contatore: la tipografia nella zona Testo)
+- Contatore: la tipografia del numero e dell'etichetta torna nella zona Testo, prima degli Effetti testo (nella 1.4.1133 era finita dentro la loro sezione).
+
+## v1.4.1133 - 2026-11-17 (Contatore: stili coi colori del sito)
+- Contatore: cinque stili coi colori del sito (Semplice, Riquadro tenue, Scheda, Pieno, Scuro) al posto di dodici nomi inglesi a colori fissi, che scrivevano una vecchia chiave dello sfondo invece dello Sfondo.
+- Contatore: lo Stile nelle zone Aspetto, Testo e Forma; il velo scuro sul media passa dal Contenuto allo Stile, accanto allo Sfondo; «Icona» senza «/ Emoji»; dimensione dell'icona e opacità del velo con l'unità nel controllo.
+
+## v1.4.1132 - 2026-11-17 (Barra progresso: i cerchi con lo stile Spessa)
+- Barra progresso: coi cerchi e lo stile Spessa il numero e l'etichetta prendono il colore del testo (quello dello stile è pensato per stare sulla barra: nel cerchio era bianco su bianco).
+
+## v1.4.1131 - 2026-11-17 (Barra progresso allineata alla colonna)
+- Barra progresso: niente più margine interno fisso di 16 px, che spostava etichette e barre più a destra del resto della colonna; lo spazio intorno si regola dal Contenitore. L'etichetta sotto i cerchi passa da 11 a 13 px.
+
+## v1.4.1130 - 2026-11-17 (Barra progresso: stili coi colori del sito, il raggio)
+- Barra progresso: cinque stili coi colori del sito (Sottile, Classica, Spessa, Sfumata, Su fondo scuro) al posto di dodici nomi inglesi a colori fissi, alcuni dei quali promettevano effetti mai disegnati (segmenti, vetro, inclinazione 3D).
+- Barra progresso: il Raggio delle barre si regola (il renderer lo leggeva senza un controllo, sempre 10 px); altezza, cerchio e durata con l'unità nel controllo; con lo stile Spessa la percentuale sta sulla barra, e il testo dentro la barra cresce con lei.
+- Barra progresso: lo Stile nelle zone Aspetto, Testo, Forma e Disposizione; la durata dell'animazione accanto alle due animazioni; «Barre» senza parentesi, con la spiegazione nella (i).
+
+## v1.4.1129 - 2026-11-17 (Quiz a punteggio: il titolo coi caratteri dei titoli)
+- Quiz a punteggio: il titolo e il titolo dell'esito prendono il carattere dei titoli del sito anche dove la tipografia globale non ne sceglie uno (ripiegavano sul testo: un sans in grassetto accanto ai titoli con le grazie), e vanno a capo bilanciati.
+- Quiz a punteggio: nello Stile la zona Testo, con la tipografia del titolo e della domanda (carattere, misura anche per tablet e telefono, peso).
+- Quiz a punteggio: «Risposte» senza parentesi; come scriverle è nella (i).
+
+## v1.4.1128 - 2026-11-17 (Tracciamento spedizione in una colonna stretta)
+- Tracciamento spedizione: campo e pulsante vanno uno sotto l'altro quando la tile è stretta (sotto i 480 px: il telefono o una colonna stretta), non più secondo lo schermo; in una colonna di 500 px del computer restano in riga, dove ci stanno.
+
+## v1.4.1127 - 2026-11-17 (Orario corsi in una colonna stretta, il corso da un menu)
+- Orario corsi: griglia dei giorni o un giorno alla volta lo decide la larghezza della tile, non lo schermo: in una colonna stretta del computer ora si vedono le schede dei giorni (prima i sei giorni scorrevano di lato e i nomi dei corsi si troncavano).
+- Orario corsi: nelle Lezioni il corso si sceglie da un menu coi Corsi scritti sopra (prima si riscriveva a mano nome o codice, e con un errore la lezione spariva); ogni voce si chiama col giorno, l'ora e il corso («Lunedì · 07:00 · Indoor cycling»), non più col solo codice.
+- Builder: i ripetitori possono comporre il titolo delle voci da più campi.
+
+## v1.4.1126 - 2026-11-17 (La barra della tile selezionata)
+- Builder: passando col mouse da un'altra sezione alla tile selezionata, la barra degli strumenti torna quella della tile (restava quella della sezione attraversata).
+
+## v1.4.1125 - 2026-11-17 (I file nelle voci dei ripetitori)
+- Builder: nelle voci dei ripetitori un file che non è un'immagine (il PDF di un documento, uno ZIP) si vede col suo nome e l'icona del file; prima compariva come un'immagine rotta. Il pulsante dice «Seleziona file» / «Cambia file» (era «Seleziona media»).
+
+## v1.4.1124 - 2026-11-17 (Scheda tecnica in una colonna stretta, la (i) dei ripetitori)
+- Scheda tecnica: la foto va sopra quando la tile è stretta (sotto i 720 px), anche in una colonna del computer: prima restava affiancata in pochi pixel e la tabella usciva dal bordo.
+- Scheda tecnica: quando nome e valore di una specifica non stanno sulla stessa riga, il valore va sotto, sempre a destra (prima il nome si spezzava a una parola per riga e il valore con l'unità usciva dalla scheda).
+- Scheda tecnica: appena inserita mostra il suo segnaposto «La foto del prodotto» invece di un rettangolo grigio, e Proporzioni, Adattamento e posizione della foto compaiono quando c'è la foto; «Colonne delle specifiche» si sceglie fra 1 e 2.
+- Builder: nel Contenuto, la spiegazione dei ripetitori (Specifiche, Documenti, voci di ogni tile) si apre dalla (i) accanto al titolo; prima non si vedeva da nessuna parte.
+- Il colore della parte in evidenza si chiama «Colore accento» in tutte le tile (in quattro era «Colore d'accento»).
+
+## v1.4.1123 - 2026-11-17 (Builder: la barra torna sulla tile selezionata)
+- Builder: dopo il passaggio del mouse su un'altra tile la barra degli strumenti torna sulla tile selezionata (prima spariva e per riaverla bisognava cliccare di nuovo la tile).
+
+## v1.4.1122 - 2026-11-17 (Builder: la barra della tile resta sulla tile giusta)
+- Builder: la barra degli strumenti di una tile si rimette al suo posto dopo ogni aggiornamento del canvas e quando si passa alla vista telefono o tablet (restava dov'era e poteva coprire il testo di una fascia sottile, come la Barra Annuncio, col nome di un'altra sezione).
+- Builder: la barra degli strumenti mostra il nome di ogni tile («Barra Annuncio» invece di «announcementbar»).
+
+## v1.4.1121 - 2026-11-17 (Barra Annuncio: il testo non finisce sotto la ×)
+- Barra Annuncio: quando si può chiudere, il testo lascia libero lo spazio della × ai due lati (sul telefono andava a capo fin sotto il pulsante).
+
+## v1.4.1120 - 2026-11-17 (Barra Annuncio: etichette senza parentesi, testi in italiano)
+- Barra Annuncio: «Parte evidenziata», «Link» e «Si può chiudere» con la spiegazione nella (i) (prima «Testo evidenziato (accento)», «Link (opzionale, rende cliccabile la barra)», «Chiudibile (X + memoria)»); lo Stile nelle zone Aspetto, Testo, Forma e Disposizione, col «Filo sotto» in px; i testi di riserva in italiano (erano quelli inglesi del blueprint).
+
+## v1.4.1119 - 2026-11-16 (Newsletter: gli stili Tinta e Scuro si leggono)
+- Newsletter: gli stili scrivono anche il colore delle parole in corsivo del titolo e della privacy: su Tinta il corsivo spariva (rosso su rosso) e su Scuro la privacy non si leggeva. Il modulo «Minimal», identico a «In colonna», non si propone più.
+
+## v1.4.1118 - 2026-11-16 (Newsletter: etichette intere)
+- Newsletter: etichette che non si tagliano («Pagina», «Suggerimento», «Sfondo conferma», «Testo errore»…), «Sopra il titolo» al posto del secondo «Icona», l'animazione del messaggio nella zona Messaggi e privacy (era finita sotto gli Effetti testo).
+
+## v1.4.1117 - 2026-11-16 (Newsletter: titolo e privacy con l'editor, stili onesti)
+- Newsletter: il titolo si scrive con l'editor e il corsivo fa la parola d'accento; il testo della privacy anche, col suo collegamento (prima HTML a mano, «<em>» e «<a href>»).
+- Newsletter: cinque stili coi colori del sito (Chiaro, Scheda, Scuro, Tinta, Linea) al posto di dodici nomi inglesi a colori fissi che cambiavano anche l'icona.
+- Newsletter: etichette in italiano («Testo nel campo email», «Pagina dopo l'iscrizione», «Contenuto riservato», «Campo trappola» con la spiegazione), il modulo In riga, In colonna o Essenziale; lo Stile nelle zone Aspetto, Forma, Testo, Icona, Campi, Pulsante, Messaggi e privacy, Disposizione.
+
+## v1.4.1116 - 2026-11-16 (Ricerca Live: niente quadrati vuoti fra i risultati)
+- Ricerca Live: se nessun risultato ha un'immagine (pagine senza immagine in evidenza) non compaiono più i quadrati grigi vuoti al posto delle miniature; restano solo per allineare i titoli quando qualche risultato la foto ce l'ha.
+
+## v1.4.1115 - 2026-11-16 (Ricerca Live: il suggerimento nel campo si legge)
+- Ricerca Live: il suggerimento grigio nel campo vuoto prende il colore del testo del campo, attenuato (prima quello della lente, rosso di partenza e poco leggibile).
+
+## v1.4.1114 - 2026-11-16 (Ricerca Live: nel builder ha subito il suo aspetto e funziona)
+- Ricerca Live: aggiunta nel builder ha subito il suo aspetto e risponde mentre si scrive (prima, finché non si salvava e ricaricava, era una lente nuda con un campo grezzo: il suo stile si caricava solo se la pagina la conteneva già all'apertura). Lo stesso per i fogli di SVG Animator e Visualizzatore PDF.
+
+## v1.4.1113 - 2026-11-16 (Ricerca Live: in italiano, via lo «Stile» che non agiva)
+- Ricerca Live: etichette in italiano («Testo nel campo», «Attesa», «Pagina di tutti i risultati», «Finestra») al posto di Placeholder, Debounce, Modale, Popup; le modalità senza parentesi, con la spiegazione nella (i); lo Stile nelle zone Testo, Campo, Pulsante, Finestra, Risultati e Disposizione.
+- Ricerca Live: tolto il menu «Stile» (dodici nomi inglesi che cambiavano solo la modalità, cioè il comportamento).
+
+## v1.4.1112 - 2026-11-16 (Calcolatore a slider: più spazio sul telefono)
+- Calcolatore a slider: sul telefono il padding del pannello ha un tetto (32 sopra e sotto, 24 ai lati): con quello di serie il contenuto restava largo 260 px.
+
+## v1.4.1111 - 2026-11-16 (Calcolatore a slider: titolo con l'editor, lista che si svuota)
+- Calcolatore a slider: il titolo si scrive con l'editor e il corsivo fa le parole d'accento (prima HTML a mano, <em>); la lista che scala si può svuotare per tornare al risultato e una voce nuova nasce coi suoi valori (prima vuota); «Fattore» e «Lista che scala» senza parentesi; lo Stile nelle zone Aspetto, Forma e Disposizione, con l'Ombra standard.
+
+## v1.4.1110 - 2026-11-16 (Manifesto: l'a capo funziona davvero)
+- Manifesto: Maiusc + Invio va a capo davvero (l'editor in linea fermava anche Maiusc + Invio); l'inspector passa all'editor gli strumenti e l'a capo dichiarati dal campo.
+
+## v1.4.1109 - 2026-11-16 (Manifesto: si va a capo con Maiusc + Invio)
+- Manifesto: nell'editor del testo Maiusc + Invio va a capo (l'editor in linea scartava gli «a capo», e aprendolo una volta il manifesto perdeva la riga spezzata).
+
+## v1.4.1108 - 2026-11-16 (Manifesto: il testo con l'editor, niente HTML a mano)
+- Manifesto (era «Manifesto — Scrub testo»): il testo si scrive con l'editor e le parole in corsivo diventano quelle colorate (prima si scriveva HTML a mano, <em> e <br/>); «Paragrafo» al posto di «Lead», «Allo scorrimento» e «Le parole si accendono» al posto di «Scrub allo scroll»; «Parole spente» col cursore in percentuale; lo Stile nelle zone Aspetto, Testo e Disposizione.
+
+## v1.4.1107 - 2026-11-16 (Testo su tracciato: il cerchio si chiude e resta nel suo riquadro)
+- Testo su tracciato: sul Cerchio una frase che copre quasi tutto il giro si distribuisce sull'intero giro e l'anello si chiude, come un timbro (prima restava un buco); le lettere non escono più dal riquadro (sul telefono arrivavano al bordo dello schermo).
+
+## v1.4.1106 - 2026-11-16 (Testo su tracciato: carattere, peso e maiuscolo; via lo «Stile» che non agiva)
+- Testo su tracciato: al controllo «Testo» carattere, peso, maiuscolo e corsivo (prima solo grandezza, spaziatura e colore); il testo che non ci sta si rimpicciolisce tenendone conto.
+- Testo su tracciato: tolto il menu «Stile» (dodici nomi inglesi che scrivevano sfondo, ombra e raggio, che la tile non disegna); il percorso SVG sta nella Forma accanto al tracciato; etichette senza parentesi («Durata», «Durata di un giro», «Ruota tutto») e le spiegazioni nelle (i).
+
+## v1.4.1105 - 2026-11-16 (Particelle: la neve c'è già quando la pagina si apre)
+- Particelle: neve, petali, palloni e bolle partono già sparsi su tutta l'altezza invece di nascere fuori dal campo: prima per qualche secondo non si vedeva niente (nel builder dopo ogni ritocco, e su tutta la pagina molto di più).
+
+## v1.4.1104 - 2026-11-16 (Particelle: nel builder la sezione non cresce più a ogni ritocco)
+- Particelle: nel builder ogni modifica lasciava il canvas vecchio nella sezione senza il suo stile, la sezione raddoppiava d'altezza e le particelle diventavano una macchia grigia; ora il canvas della tile ridisegnata si smonta da solo.
+
+## v1.4.1103 - 2026-11-16 (Particelle: le linee solo con le Stelle)
+- Particelle: le linee della costellazione si disegnano solo col tipo Stelle, e la sezione «Costellazioni» compare solo lì; passando dalla costellazione di partenza alla neve o ai petali restavano linee fra i fiocchi.
+
+## v1.4.1102 - 2026-11-16 (Particelle: nome ed etichette in italiano)
+- Particelle (era «Particelle (ParticleFX)»): «Tipo» al posto di «Preset», voci senza parentesi (Petali, Bolle, Stelle, Coriandoli, Braci, Scintille) e come si muove ognuna nella (i); «Sfondo della sezione», «Tutta la pagina», «Sopra il contenuto»; «Vento», «Gravità», «Distanza delle linee», «Dimensione particelle».
+
+## v1.4.1101 - 2026-11-16 (Overlay Grid: riquadri pieni negli angoli, sfumatura più corta)
+- Overlay Grid: col «Velo sfumato» il testo in un angolo o al centro sta in un riquadro pieno (una sfumatura dentro un riquadro lasciava il titolo sulla foto); la sfumatura sopra la didascalia è lunga al massimo metà della didascalia, così nelle card basse del mosaico la foto resta libera.
+
+## v1.4.1100 - 2026-11-16 (Overlay Grid: il testo si legge anche sulle foto chiare)
+- Overlay Grid: col «Velo sfumato» il velo è pieno dietro al testo e sfuma verso il centro della foto; prima la sfumatura cominciava dal titolo, che su una foto chiara (roccia, un piatto bianco) non si leggeva.
+- Overlay Grid: lo stile Vetro ha un vetro scuro (con quello chiaro il testo bianco spariva sulle foto chiare), Minimo un velo un po' più pieno, Tinta il pulsante a freccia; la pillola sul velo del colore primario si inverte invece di sparire.
+- Overlay Grid: gli stili non cambiano più «Il testo» al passaggio, che sta nel Contenuto.
+
+## v1.4.1099 - 2026-11-16 (Effetti bordo: «Nessuno» invece di «—»)
+- Tutte le tile: nel Contenitore, l'Effetto degli Effetti bordo mostra «Nessuno» finché non se ne sceglie uno (prima «—»).
+- Overlay Grid: «Colonne portatile», «Colonne tablet», «Colonne telefono», per intero.
+
+## v1.4.1098 - 2026-11-16 (Overlay Grid: le colonne seguono la larghezza della tile)
+- Overlay Grid: in mezza pagina o in una colonna stretta la tile toglie da sola le colonne finché ogni card ha almeno 220 px (prima tre card da 130 px col testo che usciva dalla foto). Il telefono tiene le colonne scelte.
+- Overlay Grid: lo Stile parte da «Personalizzato» invece di «—»; «Effetto foto» e «Colonne sul portatile» non si tagliano più.
+- Inspector: la (i) del Punto focale sta accanto al suo pulsante, non più da sola sulla riga sopra.
+
+## v1.4.1097 - 2026-11-16 (Overlay Grid: in italiano, stili onesti, il testo visibile sul telefono)
+- Overlay Grid: sei stili coi colori del sito (Editoriale, Minimo, Rivista, Schede, Vetro, Tinta) al posto di dodici nomi inglesi a colori fissi, che scrivevano anche il testo del pulsante («Read more», «ACCESS») e le colonne.
+- Overlay Grid: etichette in italiano senza spiegazioni tra parentesi (nelle (i)), lo Stile diviso in Aspetto, Testo, Forma, Disposizione, Pulsante, Nastro e Ogni elemento; «Cella alta» e «Cella larga» compaiono solo col mosaico.
+- Overlay Grid: tolti quattro controlli che non agivano («Tweak effetto preset»: colore, intensità e velocità; «Stile overlay»).
+- Overlay Grid: sul telefono il testo che «compare al passaggio» è sempre visibile (prima restava nascosto: sul telefono non si passa sopra).
+
+## v1.4.1096 - 2026-11-16 (Striscia garanzie: niente separatori spaiati quando va a capo)
+- Striscia garanzie: quando le voci vanno a capo, il separatore che cadrebbe a inizio o a fine riga non si vede più («· Pagamenti sicuri ·»).
+
+## v1.4.1095 - 2026-11-16 (Striscia garanzie: nomi in italiano e una riga che scorre; Schede prodotto: una spiegazione corretta)
+- Striscia garanzie (prima «Trust Strip»): i controlli in italiano (Voci, Pillole, Punto, Pallino, Barra, Lineetta, Distribuito al posto di Items, Pill, bullet, pipe, em-dash, space-between) e le spiegazioni nelle (i) invece che tra parentesi; logo e badge compaiono solo con le pillole, dove agiscono; lo Stile diviso in zone.
+- Striscia garanzie: con «Forza una riga», se le voci non ci stanno la striscia scorre di lato; prima uscivano dalla pagina e sul telefono tutta la pagina scorreva in orizzontale.
+- Striscia garanzie: le pillole di vetro nuove si vedono anche su una sezione chiara (prima erano bianche al 5%).
+- Schede prodotto: la spiegazione della seconda parte del titolo dice cosa fa davvero (il corsivo, non il colore).
+
+## v1.4.1094 - 2026-11-16 (Schede prodotto: colonne che si adattano; inspector: «Responsive» solo quando c'è)
+- Schede prodotto: le colonne scelte sono il massimo; in una colonna stretta della pagina, se una scheda resterebbe più stretta di 220 px, la griglia ne mette meno da sola (prima in mezza pagina le schede erano larghe 130 px, una parola per riga).
+- Schede prodotto: la spaziatura della marca si legge in em, com'è davvero (il controllo la mostrava in px).
+- Inspector: il cartellino «Responsive» in cima compare solo quando un valore per tablet o telefono è impostato davvero; prima lo accendevano campi come «Colonne sul telefono» col loro valore di partenza.
+
+## v1.4.1093 - 2026-11-16 (Schede prodotto: nomi in italiano, la foto nel Contenuto, controlli in ordine)
+- Schede prodotto (prima «Product Cards»): i controlli in italiano (Scheda, Marca o categoria, Testo del badge, Testo del pulsante, Collegamento, Scritta in alto al posto di Card, Brand label, Badge testo, CTA testo, CTA URL, Label outline) e le spiegazioni nelle (i).
+- Schede prodotto: la foto in alto («Sfondo / media in alto») si sceglie nel Contenuto, con gli altri dati della scheda: stava nello Stile.
+- Schede prodotto: una scheda aggiunta nasce coi suoi valori (prima vuota); lo Stile diviso in Aspetto, Testo, Forma, Disposizione e Ogni scheda; unità accanto ai cursori.
+
+## v1.4.1092 - 2026-11-16 (Work List: si adatta alla sua colonna, la categoria non sparisce sul telefono)
+- Work List: l'indice si adatta alla larghezza della sua colonna, non solo dello schermo: in mezza pagina il titolo si rimpicciolisce e la categoria va sotto, invece di andare a capo e schiacciarsi.
+- Work List: sul telefono la categoria resta, sotto il titolo; prima spariva.
+- Work List: «Sfondo al passaggio» e «Carattere dei dettagli» non escono più tagliati nell'inspector.
+
+## v1.4.1090 - 2026-11-16 (Tabella: le schede del telefono col titolo; Work List: controlli in ordine)
+- Tabella: con «Una scheda per riga», il titolo di ogni scheda ha lo sfondo e il colore dell'intestazione; prima aveva lo stesso peso delle etichette e non si capiva dove cominciasse una scheda.
+- Work List: una riga aggiunta nasce coi suoi valori (prima nasceva vuota); le spiegazioni di Numero e Link nelle (i); lo Stile diviso in Aspetto, Testo e Forma; categoria e anno con un controllo tipografico come il numero; «Rientro al passaggio» e «Sfondo riga al passaggio» al posto di «Indentazione hover» e «Sfondo riga (hover)».
+- Work List: i progetti d'esempio in italiano anche quando la tile non ha ancora le sue righe.
+
+## v1.4.1089 - 2026-11-16 (Grafico: al passaggio il colore si fa più pieno)
+- Grafico: al passaggio un dato velato diventa più coprente e uno pieno un po' più scuro, sempre nel suo colore: scurirlo verso il colore scuro del sito rendeva grigiastre le barre in tinta.
+
+## v1.4.1088 - 2026-11-16 (Tabella: i dati in una finestra a griglia; Grafico: fumetto e passaggio coi colori del sito)
+- Tabella: i dati si scrivono in una finestra a griglia («Modifica la tabella»): celle, righe e colonne da aggiungere o togliere, l'allineamento di ogni colonna, Tab e Invio per spostarsi. Prima si modificavano solo nel vecchio canvas, e nel builder la tabella non si poteva cambiare.
+- Tabella: sei stili coi colori del sito (Chiara, Scura, Primario, A righe, Essenziale, Compatta) al posto di dodici nomi inglesi con colori fissi, che accendevano anche la riga d'intestazione.
+- Tabella: lo Stile diviso in Aspetto, Testo, Forma e Disposizione; il carattere dell'intestazione e delle celle (famiglia, dimensione, peso, maiuscole), non più il solo colore; «Sul telefono: Scorre di lato / Una scheda per riga».
+- Grafico: al passaggio il dato si scurisce verso il colore scuro del sito (prima diventava un rosso acceso); nel fumetto di barre, linee e radar niente più quadratino del colore.
+
+## v1.4.1087 - 2026-11-16 (Grafico: niente legenda vuota; inspector: «Hover» solo quando c'è)
+- Grafico: con barre, linee e radar la legenda mostra il nome della serie; senza nome non compare più (era un quadratino colorato senza scritta).
+- Inspector: il cartellino «Hover» in cima compare solo quando un effetto al passaggio è impostato davvero; prima lo accendeva la durata predefinita di 300 ms su ogni tile coi bordi.
+- Inspector: un colore «transparent» si legge «Trasparente», come gli altri nomi dei colori.
+
+## v1.4.1086 - 2026-11-16 (Grafico: i padding che si leggono, l'asse coi migliaia come il fumetto)
+- Grafico: il padding del titolo, del fumetto e delle voci della legenda, una volta toccato nell'inspector, si legge davvero (prima diventava 1 px e il titolo si schiacciava sul grafico).
+- Grafico: col «Separatore migliaia» anche i numeri dell'asse dei valori si scrivono 1.000, come nel fumetto.
+
+## v1.4.1085 - 2026-11-16 (Configuratore: il prezzo base sulla sua riga; colori «Predefinito» interi)
+- Configuratore: nel riepilogo il prezzo base sta sulla riga della sua etichetta, come le altre voci; prima scendeva sotto, da solo a destra.
+- Configuratore: nella Disposizione «Riepilogo: Di fianco / Sotto» al posto di «Posizione del riepilogo: Accanto alle opzioni», che usciva tagliato.
+- Inspector: nei campi colore stretti «Predefinito» si legge intero, nel carattere dell'interfaccia (usciva tagliato in «Predefinit»).
+
+## v1.4.1084 - 2026-11-16 (Grafico: i controlli in ordine e sei stili che cambiano davvero)
+- Grafico: sei stili coi colori del sito (Pulito, Scheda, Scuro, Tinta, Essenziale, Pillole) al posto di dodici nomi inglesi che cambiavano solo il colore delle etichette. Ognuno sistema insieme sfondo, griglia, testi, fumetto e forma delle barre; i colori dei dati restano i tuoi.
+- Grafico: nel Contenuto restano ciò che il grafico dice (tipo, dati, nome della serie, titoli, scala, nomi degli assi, formato dei numeri) e il suo comportamento; griglia, larghezze delle barre, area piena, gradini e orientamento passano nello Stile, diviso in Aspetto, Testo, Forma, Griglia e assi, Legenda, Fumetto, Disposizione e Ogni dato.
+- Grafico: nomi più chiari («Nome della serie», «Fumetto al passaggio», «Griglia orizzontale», «Foro della ciambella») e le unità accanto ai cursori. Tolto «Impilato», che con una serie sola non cambiava niente.
+
+## v1.4.1083 - 2026-11-16 (Configuratore: gli indicatori si tolgono tutti)
+- Configuratore: gli indicatori sono facoltativi, e ora si elimina anche l'ultimo. Prima la sua × era spenta e la barra restava nel riepilogo anche quando i punti non servivano.
+
+## v1.4.1082 - 2026-11-16 (Configuratore: il gruppo di un'opzione si sceglie da un menu)
+- Configuratore: nelle opzioni il «Gruppo» è un menu coi gruppi della tile, invece di un campo dove scrivere a mano l'ID («cpu»). Le opzioni già salvate restano nel loro gruppo.
+- Nei ripetitori un menu può prendere le sue voci da un altro elenco della stessa tile.
+
+## v1.4.1081 - 2026-11-16 (Hotspot: il fumetto si chiude toccandolo)
+- Hotspot: toccare il fumetto aperto lo chiude (il link al suo interno funziona come prima). Sul telefono il fumetto copre spesso gli altri punti, e per aprirne un altro bisognava toccare un posto libero fuori dall'immagine.
+
+## v1.4.1080 - 2026-11-16 (Hotspot: stili veri coi colori del sito, e i testi del fumetto)
+- Hotspot, «Stile»: sei stili in italiano coi colori della palette (Numeri, Punti, Icone, Scuro, Vetro, Editoriale) al posto di dodici nomi inglesi con colori fissi (Neon Cyan, Pink Pulse…) che cambiavano solo il colore dei marker. Ogni stile sceglie forma, colori e misura dei marker, la pulsazione, il fumetto e il raggio dell'immagine.
+- Nuovi controlli per il carattere, la misura e il colore del titolo e della descrizione nel fumetto. Coi campi vuoti restano com'erano.
+- Inspector nello standard: zone Aspetto, Immagine, Marker e Fumetto; «fumetto» al posto di «tooltip»; posizione del marker «Da sinistra» e «Dall'alto» in percentuale; la descrizione su più righe; l'icona si sceglie solo quando la forma del marker è «Icona»; unità nei cursori.
+
+## v1.4.1079 - 2026-11-16 (Card impilate: i colori di ogni card in una zona sua)
+- Card impilate, Stile: i colori e l'adattamento dell'immagine card per card stanno nella zona «Ogni card», non più in fondo a Disposizione.
+
+## v1.4.1078 - 2026-11-16 (Card impilate: a una colonna anche in mezza pagina, e i testi da scegliere)
+- Card impilate: in una colonna stretta (mezza pagina) testo e foto passano uno sotto l'altra e il titolo si rimpicciolisce, come sul telefono. Prima la card restava a due colonne schiacciate finché non era stretta la finestra.
+- Nuova zona Testo nello Stile: stile tipografico, Titolo grande, e carattere, misura e colore di titolo, seconda parte del titolo, occhiello, testo e numero. Coi campi vuoti le card restano com'erano.
+- Inspector nello standard: Aspetto, Testo, Forma, Immagine e Disposizione; «Mostra il numero» passa nel Contenuto; nomi chiari («Occhiello», «Seconda parte del titolo», «Scritta senza immagine», che compare solo finché manca l'immagine), unità nei cursori e spiegazioni nelle (i). Il nome nella barra è «Card impilate».
+- «Titolo grande» usa davvero il carattere dei titoli del sito anche dove la tipografia globale non ne sceglie uno.
+
+## v1.4.1077 - 2026-11-16 (l'icona del calendario sui moduli scuri)
+- Modulo: nei campi Data, Data e ora e Ora l'icona del calendario (o dell'orologio) prende il colore del testo del campo. Prima Chrome la disegnava sempre nera e sui moduli scuri non si vedeva.
+- Tema Mano Libera: tolta la fascia a gradini fra i numeri e il listino, che usciva marrone fra due sezioni scure e sembrava un errore.
+- Configurazione iniziale: le righe dei software della rete mostrano il contorno di messa a fuoco solo quando si usa la tastiera, non al clic.
+
+## v1.4.1076 - 2026-11-16 (la configurazione iniziale più chiara)
+- Configurazione iniziale (la procedura che si apre dopo aver attivato Olobuild): nella scelta del design il pulsante d'importazione sta in alto, accanto al titolo, e porta il nome del tema scelto («Importa «Rastrello»»); il benvenuto si riduce al logo, così l'elenco dei temi e il pulsante stanno nella finestra anche su uno schermo basso. Prima il pulsante finiva sotto il bordo.
+- Testi più chiari: perché serve il tema Hello Olobuild, cosa contiene ogni tema, cosa succede mentre si importa; alla fine il nome del tema importato. Niente più parole inglesi (header, footer) né emoji.
+- I pulsanti dell'ultimo passo («Apri Olobuild», «Vedi il sito») non sono più sottolineati, e «Salta configurazione» sparisce quando la configurazione è finita.
+
+## v1.4.1075 - 2026-11-16 (il numero nel nodo, senza l'icona sopra)
+- Timeline: con «Nel nodo» su Numero, Anno o Punto, le tappe con un'icona della libreria Lucide (per esempio la bandierina) mostravano l'icona sopra il numero. Ora il nodo mostra solo il numero, l'anno o il punto, con qualsiasi icona.
+
+## v1.4.1074 - 2026-11-16 (Timeline a una colonna, card piene)
+- Timeline, disposizione «Una colonna»: le card riempiono la colonna (fino a 560 px) invece di restare strisce da 380 px con mezzo spazio vuoto accanto. «Larghezza massima card» le restringe ancora, se serve.
+
+## v1.4.1073 - 2026-11-16 (le etichette della Timeline piccole e una volta sola)
+- Timeline: le etichette delle tappe sono di nuovo piccole pillole maiuscole, come nel disegno; prima ereditavano il testo grande della pagina (lo stesso per il link delle card e le scritte della barra orizzontale). E l'etichetta non si ripete più accanto alla data: resta la pillola nella card, che «Mostra le etichette» accende e spegne.
+
+## v1.4.1072 - 2026-11-16 (piccoli nomi dell'inspector)
+- Inspector: il riassunto della tipografia non scrive più «0» quando l'interlinea è quella della tile (dice «predefinito», come per la dimensione), e il pulsante del punto focale dice «Punto focale» una volta sola. Timeline: nell'Animazione «Filo» al posto di «Riempimento del filo», che non ci stava.
+
+## v1.4.1071 - 2026-11-16 (la Timeline in ordine)
+- Timeline, inspector: nel Contenuto gli eventi, cosa mostrano le card (immagini, etichette) e l'animazione; nello Stile una zona per parte, Aspetto, Filo, Nodo, Card, Immagine, Testo, Etichetta e Disposizione, con la disposizione e il nodo passati qui. Niente più unità e «0 = auto» nei nomi (le spiegazioni sono nelle (i)), «Cometa», «Biglietto» e «Cianografia» al posto dei nomi inglesi, le categorie come tondi colorati, «Colore della tappa» al posto di «Colore override». Le timeline già nel sito restano com'erano.
+
+## v1.4.1070 - 2026-11-16 (le pillole dell'inspector si leggono)
+- Inspector, scelte a pillole (per esempio i giorni della settimana della Lavagna a gesso e dell'Hours Strip): una pillola accesa è piena nell'arancio dell'interfaccia con la scritta bianca, una spenta è bianca col bordo grigio. Prima la scritta di una pillola accesa era lilla chiaro su rosa chiaro, quasi invisibile.
+
+## v1.4.1069 - 2026-11-16 (la scritta «Oggi» sul bordo della fascia)
+- Hours Strip: la scritta «Oggi» sta sul bordo superiore della fascia evidenziata, allineata al testo. Accanto al giorno, in una fascia stretta andava a capo e abbassava l'orario rispetto alle altre.
+
+## v1.4.1068 - 2026-11-16 (l'Hours Strip mostra la fascia di oggi)
+- Hours Strip: con «Evidenzia oggi» (nel Contenuto, sezione «Oggi») la fascia che vale oggi ha un fondo tenue, il giorno nel colore scelto e la scritta «Oggi». Per ogni fascia si scelgono i giorni della settimana; «oggi» è quello del fuso orario del sito e cambia da solo, anche con la pagina in cache. Acceso nelle tile nuove; quelle già nel sito restano com'erano.
+
+## v1.4.1067 - 2026-11-16 (il consenso ai cookie dentro il riquadro del video)
+- Video da YouTube o Vimeo, quando il visitatore non ha ancora accettato i cookie: «Questo contenuto richiede il consenso» e «Accetta e carica» riempiono tutto il riquadro del video, nelle sue proporzioni. Prima il riquadro restava alto 200 px in cima, con sotto uno spazio vuoto.
+
+## v1.4.1066 - 2026-11-16 (il Nastro coi titoli grandi sul telefono)
+- Nastro scorrevole: con un testo grande (oltre 28 px) sul telefono le frasi si rimpiccioliscono con lo schermo, e il nastro con loro. Prima, coi «Titoli grandi», se ne leggeva una parola e mezza.
+
+## v1.4.1065 - 2026-11-16 (le frasi del Nastro una per riga, davvero)
+- Nastro scorrevole: le frasi salvate con «|» si vedono una per riga anche nel campo collegabile ai contenuti dinamici (quello col fulmine), che è proprio quello del Nastro. Nella 1.4.1053 valeva solo per i campi senza fulmine.
+
+## v1.4.1064 - 2026-11-16 (nomi dei colori in italiano, anteprima della Hover List sempre a portata)
+- Selettore dei colori: «Testo tenue» e «Pericolo» anche per i colori che alcune tile usano col nome tecnico (prima si leggeva «Text soft»).
+- Hover List: il campo dell'immagine di ogni voce e la zona «Anteprima» dello Stile compaiono anche nelle liste salvate prima che l'anteprima avesse un interruttore.
+
+## v1.4.1063 - 2026-11-16 (la Info Cards si adatta alla sua colonna)
+- Info Cards: in una fascia stretta (una colonna a metà pagina, una barra laterale) le schede vanno a due per riga sotto i 760 px e una sotto i 500, e il titolo grande si riduce. Prima restavano tre schede da 140 px col titolo tagliato e la descrizione una parola per riga.
+
+## v1.4.1062 - 2026-11-16 (gli stili della Lista descrittiva non tolgono le icone)
+- Lista descrittiva: scegliere uno stile non spegne più «Mostra le icone», che è un'impostazione del Contenuto. Prima «Scheda tecnica» ed «Essenziale» toglievano le icone dalla lista.
+
+## v1.4.1061 - 2026-11-16 (le icone della Lista descrittiva in riga col testo)
+- Lista descrittiva, con termine e definizione affiancati (per esempio lo stile «Scheda tecnica»): l'icona sta al centro della riga, alla stessa altezza della scritta. Prima restava più in alto.
+
+## v1.4.1060 - 2026-11-16 («Aggiungi voce», non «Aggiungi Item»)
+- Inspector, elenchi di voci: il pulsante per aggiungerne una dice «Aggiungi voce» anche nelle tile che non danno un nome alle loro voci (per esempio la Lista icone). Prima diceva «Aggiungi Item», in inglese.
+
+## v1.4.1059 - 2026-11-16 (scrivere una dimensione non fa saltare il testo)
+- Inspector, campi numerici: mentre si scrive un numero, un valore a metà sotto il minimo (il «4» di «46») non si applica subito ma all'uscita dal campo o con Invio. Prima, scrivendo la dimensione di un titolo, il titolo diventava minuscolo per un attimo prima di arrivare al valore giusto.
+
+## v1.4.1058 - 2026-11-16 (salvare non ricarica l'anteprima)
+- Builder: salvare non ricarica più l'anteprima. Prima, dopo ogni «Salva», il canvas mostrava per un secondo «Pagina vuota» e tornava in cima alla pagina.
+
+## v1.4.1057 - 2026-11-16 (le spiegazioni anche nei testi collegabili)
+- Inspector: i campi di testo che si possono collegare a un contenuto dinamico (quelli col fulmine) mostrano la loro (i) con la spiegazione, come tutti gli altri. Prima la spiegazione non compariva da nessuna parte (per esempio «Lascialo vuoto per non mostrare il secondo pulsante» nel CTA Banner).
+
+## v1.4.1056 - 2026-11-16 (il CTA Banner alto quanto la colonna resta compatto)
+- CTA Banner: con «Alta quanto la colonna» e le parti una sotto l'altra, titolo, testo e pulsanti restano insieme dove li mette l'Allineamento verticale. Prima si spartivano l'altezza: il titolo in cima, i pulsanti in fondo e un vuoto in mezzo.
+
+## v1.4.1055 - 2026-11-16 (i numeri della Stat Strip su una riga sola)
+- Stat Strip: il valore resta sempre su una riga e si rimpicciolisce quanto serve guardando il numero più lungo della striscia. Prima, grande, «1.400 m» andava a capo e la «m» finiva da sola sotto.
+
+## v1.4.1054 - 2026-11-16 (lo stesso carattere dei titoli in tutte le tile)
+- Stat Strip, Hours Strip, Hover List, Work List, Work Grid e Lookbook: «Titoli» come carattere usa lo stesso ripiego di tutte le altre tile quando il sito non ha scelto un carattere per i titoli. Prima i numeri uscivano in un carattere senza grazie mentre il titolo accanto le aveva.
+- Stat Strip: il campo del valore si chiama solo «Valore» (l'esempio è dentro il campo).
+
+## v1.4.1053 - 2026-11-16 (le tile che si adattano alla loro colonna)
+- Stat Strip e Hours Strip: in una colonna stretta (mezza pagina, una barra laterale) i numeri e gli orari si rimpiccioliscono per stare su una riga. Prima «24 h» andava a capo e «10 — 13» finiva su tre righe; ora il trattino resta attaccato a ciò che lo precede.
+- CTA Banner: titolo, testo e pulsanti si mettono uno sotto l'altro quando è stretto il banner, non solo la finestra. In una colonna a metà pagina i pulsanti uscivano dal riquadro.
+- Hover List: in una lista stretta la descrizione scende sotto il nome; sul telefono prima spariva.
+- Timeline: in una colonna stretta va in una colonna sola anche sul computer, invece di tenere le schede ai due lati del filo.
+- Nastro scorrevole: le frasi si scrivono una per riga (prima tutte in una riga, separate da «|»); i nastri già fatti si vedono già una frase per riga. Gli stili sono nuovi e veri (Striscia piena, Tra due fili, Titoli grandi, Corsivo, Notte, Avviso): prima cambiavano solo il colore del testo.
+- Lista icone e Lista descrittiva: stili nuovi coi colori del sito (Pulita, Essenziale, Bollini, Quadratini, In riga; Scheda tecnica, A righe alterne, In griglia, Termini forti) al posto di dodici nomi in inglese con colori fissi; il filo fra le voci e le righe alterne passano nello Stile.
+- Info Cards: le schede hanno il loro titolo nell'elenco (prima tutte «Senza titolo») e ogni campo compare solo se la sua parte è accesa in «Cosa mostrare». Pannello tutto in italiano.
+- Citazione, CTA Banner, Stat Strip, Hours Strip, Hover List: lo Stile è ordinato nelle zone di sempre (Aspetto, Testo, Forma, Disposizione) e in italiano.
+
+## v1.4.1052 - 2026-11-16 (il numero del passo solo quando serve)
+- Process Steps: senza scheda i passi stanno a filo col titolo della sezione (prima rientravano di 12 px); con la scheda hanno di serie un po' d'aria tutto attorno.
+- Process Steps: con «Numeri automatici» acceso, il campo «Numero o scritta» di ogni passo non si mostra più, perché non conterebbe. Spento, torna.
+
+## v1.4.1050 - 2026-11-16 (gli stili del Membro del team sono veri)
+- Membro del team, Stile: ogni stile ha il suo aspetto. «Bianco e nero» ha la foto senza colori che si colora al passaggio, «Polaroid» la cornice bianca un po' storta, «Vetro» il riquadro sfocato sopra la foto, «Rivista, in riga» la foto accanto al nome, «Annuario» la foto color seppia e il nome maiuscolo, «Neon su scuro» il bagliore attorno alla foto, «Timbro netto» il bordo pieno e l'ombra netta, «Inclinata» (era «Inclinato in 3D») si raddrizza al passaggio. Prima gli stili cambiavano tre colori e un raggio che nessuno leggeva.
+
+## v1.4.1048 - 2026-11-16 (gli stili della Lista prezzi disegnano quello che dicono)
+- Lista prezzi: nomi e prezzi hanno il loro carattere (Tipografia «Nome» e «Prezzo»); «Menù con grazie» e «Rivista» usano quello dei titoli, «Terminale» quello monospaziato. Prima «Menù con grazie» non aveva grazie.
+- Lista prezzi, Stile: «Vetro» sfoca dietro le voci, «Neon su scuro» fa brillare i prezzi, «Adesivo» ha il bordo pieno e l'ombra netta, «Biglietti» (era «Inclinato in 3D») ha le voci un po' storte che si raddrizzano al passaggio, «Sfumato» (era «Aurora») ha la sfumatura nei colori del sito. «Rivista» è chiaro coi prezzi nel colore del sito (era uguale a «Menù con grazie»); sugli stili scuri le descrizioni si leggono meglio.
+
+## v1.4.1046 - 2026-11-16 (lo stile non copre la foto)
+- FlipCard e Listino prezzi: scegliendo uno stile, una faccia che ha già una foto o un video tiene il suo testo chiaro e il suo fondo. Prima gli stili pensati per un fondo chiaro mettevano il testo scuro sopra la foto e il titolo spariva.
+
+## v1.4.1045 - 2026-11-16 (gli stili della FlipCard disegnano quello che dicono)
+- FlipCard, Stile: «Vetro» sfoca ciò che sta dietro le due facce, «Neon su scuro» ha il bordo che brilla, «Adesivo» il bordo pieno e l'ombra netta, «Inclinata» (era «Inclinato in 3D») sta un po' girata e si raddrizza al passaggio, «Manifesto» ha il titolo in maiuscolo, «Sfumato» (era «Aurora») ha le sfumature nei colori del sito: prima erano due colori che il sito scartava.
+
+## v1.4.1044 - 2026-11-16 (ogni colore col suo campione)
+- Campo colore: i colori della palette fatti mescolando altri colori (Scuro, Chiaro…) e quelli che il tema definisce fuori dalla palette mostrano il loro campione e la trasparenza. Prima comparivano come un quadratino a righe, come se il colore non ci fosse.
+
+## v1.4.1040 - 2026-11-16 (il Listino prezzi non sborda sotto un titolo)
+- Listino prezzi: con un'altra tile sopra nella stessa colonna (un titolo, un'etichetta) la scheda sbordava sulla riga sotto, perché prendeva tutta l'altezza della colonna. Ora prende lo spazio che resta, e le schede affiancate restano alte uguali.
+
+## v1.4.1039 - 2026-11-16 (gli stili del Listino prezzi disegnano quello che dicono)
+- Listino prezzi, Stile: «Vetro» sfoca ciò che sta dietro la scheda, «Neon su scuro» fa brillare il prezzo, «Adesivo» ha il bordo pieno e l'ombra netta, «Scontrino» il bordo dentellato in fondo, il carattere a macchina e le righe tratteggiate, «Fluttuante» (era «Inclinato in 3D») sta un po' storta e si raddrizza al passaggio, «Sfumato» (era «Aurora») ha la sfumatura nei colori del sito: prima era un colore che il sito scartava.
+
+## v1.4.1038 - 2026-11-16 (il conto alla rovescia sta in fila anche col padding)
+- Conto alla rovescia: sul telefono si stringono con lo schermo anche il padding laterale della tile e delle caselle. Coi 32 px di serie e le scritte come «SECONDI» l'ultima casella andava ancora a capo.
+
+## v1.4.1037 - 2026-11-16 (la data si scrive senza sorprese)
+- Campi «Data» e «Data e ora»: l'anno ha quattro cifre e, scritto l'anno, si passa da soli all'ora. Prima il campo accettava anni a sei cifre: scrivendo la data e poi l'ora, l'ora finiva nell'anno.
+- Conto alla rovescia: con una data che non si legge mostra «00» invece di «NaN» in ogni casella.
+
+## v1.4.1036 - 2026-11-16 (il conto alla rovescia in fila sul telefono)
+- Conto alla rovescia: sul telefono, se non si sceglie una misura apposta, i numeri si stringono con lo schermo e le quattro caselle restano in fila. Prima, con i giorni a tre cifre, i «Secondi» andavano a capo da soli.
+
+## v1.4.1034 - 2026-11-16 (gli stili del Conto alla rovescia sono veri)
+- Conto alla rovescia, Stile: ogni stile disegna davvero quello che dice. «Cartellini a metà» col taglio orizzontale come i vecchi orologi a palette, «Anelli» coi numeri dentro un cerchio, «Vetro» che sfoca ciò che sta dietro le caselle, «Neon su scuro» coi numeri che si illuminano, «Numeri sfumati» nei colori del sito, «Adesivo» con le caselle bordate e un po' storte, poi «Digitale», «Essenziale», «Rivista» e «Numeri giganti». Prima cambiavano misure e colori di un riquadro che nessun controllo mostrava, e «Aurora» aveva una sfumatura che il sito scartava. Tolti «Orologio a palette», che erano i Cartellini, e «Inclinato in 3D».
+- Conto alla rovescia: le cifre sono tutte larghe uguali, così il numero non balla più a ogni secondo; i Numeri hanno anche il loro carattere (Titoli, Monospazio…).
+
+## v1.4.1033 - 2026-11-16 (i colori col loro nome, in italiano)
+- Campo colore: i colori della palette si chiamano in italiano (Primario, Secondario, Accento, Avviso…); prima comparivano «Primary», «Warning» accanto a «Testo» e «Sfondo». Una tinta fatta mescolando due colori della palette si legge col suo nome, per esempio «Avviso 30%», invece del codice «color-mix(…».
+- Tipografia: la sintesi sotto «Citazione», «Titolo»… non scrive più «inherit · 0px» quando il carattere e la misura sono quelli predefiniti.
+- Testimonianza: «Colore parole in evidenza» si chiama «Colore evidenza», così non si taglia.
+
+## v1.4.1032 - 2026-11-16 (la Testimonianza col carattere del sito)
+- Testimonianza: gli stili «Linea sottile», «Neon su scuro» e «Foglietti adesivi» scrivono la citazione col carattere del testo del sito, non con un carattere di ripiego.
+
+## v1.4.1031 - 2026-11-16 (le schede non si incollano più fra loro)
+- Testimonianza, Tabella prezzi, Query Loop e Ricerca: il colore della scheda (o della casella) non dipinge più anche il riquadro della tile. In griglia le testimonianze e le card sembravano un blocco unico, senza spazio fra l'una e l'altra; dietro la scheda arrotondata della Tabella prezzi e dietro la casella della Ricerca si vedevano gli angoli vivi. La Testimonianza «Editoriale», che non ha schede, resta com'era.
+- Carattere «Titoli» o «Monospazio» scelto in una tile: sui siti che non hanno scelto un carattere globale usciva col carattere del testo. Ora prende il ripiego del suo ruolo, come i titoli delle sezioni.
+
+## v1.4.1030 - 2026-11-16 (gli stili della Testimonianza sono veri)
+- Testimonianza, Stile: ogni stile ha davvero il suo aspetto. «Scheda» sollevata, «Editoriale con grazie» col carattere dei titoli e il filo sopra, «Linea sottile», «Deciso, su scuro», «Vetro» che sfoca ciò che sta dietro, «Neon su scuro» con le parole in evidenza che si illuminano, «Foglietti adesivi» un po' storti col nastro, «Macchina da scrivere» e «Timbro netto». Prima cambiavano solo due colori e quattro erano identici.
+- Testimonianza: scegliere uno stile non rimette più il layout su «Singola». Prima, in una Griglia o in un Carosello, l'elenco delle testimonianze spariva.
+- Testimonianza, Stile › Forma: nuova «Ombra scheda», da Nessuna a Grande, più «Netta, a timbro». Le stelle senza un colore scelto prendono l'ambra della palette.
+
+## v1.4.1029 - 2026-11-16 (le parole in evidenza nelle testimonianze)
+- Testimonianza: nella citazione si seleziona una parola e si preme I, il corsivo, e la parola prende il «Colore parole in evidenza» dello Stile, in tutti i layout. Prima bisognava scrivere a mano il codice <em> e funzionava solo nel layout Editoriale.
+- Testimonianza: nell'elenco delle testimonianze ogni voce si chiama col nome del cliente, non più con la citazione.
+- Editor di testo: dove serve solo il corsivo la barra mostra solo quello, senza colori, link e dimensioni che poi non si vedrebbero.
+
+## v1.4.1028 - 2026-11-16 (lo stile della mappa dice quello che fa)
+- Mappa, Stile mappa: «Colorata» si chiama «Tenue». È la mappa standard un po' sbiadita, non una mappa più colorata.
+
+## v1.4.1027 - 2026-11-16 (i campi a condizione funzionano da soli)
+- Form Contatti: un campo con la sua «Visibilità condizionale» (per esempio «Modello della batteria» solo se la bici è una E-bike) compare e scompare da solo. Prima serviva anche l'interruttore «Abilita condizioni» in un'altra sezione, e senza quello la condizione scelta non faceva niente: l'interruttore non c'è più.
+
+## v1.4.1026 - 2026-11-16 (i titoli della Fisarmonica senza sottolineatura)
+- Fisarmonica: il titolo di una voce non si sottolinea più al passaggio del mouse e al tocco (prendeva lo stile dei link del tema).
+
+## v1.4.1025 - 2026-11-16 (i menu dicono il loro valore)
+- Tutti i menu senza un valore salvato mostrano quello che vale davvero (per esempio «Normale» in Fusione, nel Contenitore) invece di «—».
+- Form Contatti: l'elenco dei campi mostra il nome di ogni campo («Nome e cognome», «Messaggio») e non più il suo tipo; il colore del testo del pulsante segue la palette.
+- FlipCard: lo sfondo di ogni faccia sta dopo titolo e descrizione, e nella tile appena aggiunta la foto resta piena con il velo scuro solo dove c'è il testo. Process Steps: l'elenco dei passi mostra i titoli.
+
+## v1.4.1024 - 2026-11-16 (dieci tile in ordine, prima dei loro video)
+- Fisarmonica, Form Contatti, Mappa, Testimonianza, Conto alla rovescia, Listino prezzi, FlipCard, Lista prezzi, Membro del team e Process Steps: lo Stile ha le zone di tutte le tile (Aspetto, Testo, le parti della tile, Forma, Disposizione), i nomi in italiano chiaro, le misure con l'unità accanto al numero e le spiegazioni nella (i). Gli stili hanno nomi onesti e i colori della palette al posto di quelli scritti a mano: su un tema scuro o con un primario diverso seguono il sito.
+- Mappa: aggiunta nel builder si vede subito (prima restava bianca finché non si ricaricava la pagina). Tolti «Stile» e «Stile tipografico», che non facevano niente.
+- Testimonianza e Process Steps: le colonne sono un massimo; in una colonna stretta le schede vanno a capo invece di fare una parola per riga o uscire dalla tile. Conto alla rovescia: le caselle restano su una riga e si stringono quanto serve.
+- Conto alla rovescia: «Nessuna (mostra zero)» in realtà mostrava il messaggio di fine; ora la scelta si chiama «Compare un messaggio» e il messaggio si scrive lì sotto. Le scritte delle unità stanno accanto all'interruttore di ogni unità.
+- Form Contatti: la condizione di un campo («mostra solo se il campo…») e il campo email delle integrazioni si scelgono da un menu con i campi del modulo, non scrivendo a mano il nome tecnico.
+- In tutte le tile: i pulsanti affiancati diventano un menu quando i nomi non ci stanno (prima si tagliavano: «Chev… Più/M…»); una tile appena trascinata mostra già i valori che avrà dopo il salvataggio (prima alcuni menu mostravano «—»); gli effetti speciali e gli effetti testo hanno nomi in italiano e i bagliori prendono il colore del sito.
+
 ## v1.4.1023 - 2026-11-16 (la barra uguale dappertutto)
 - Sistema → Configurazione: la barra in alto è quella di tutte le altre pagine di Olobuild. A destra stringi menu, notifiche, guida e profilo (prima «Guida» e «Anteprima sito» scritti), la versione nel suo badge, «Ctrl K» su Windows («⌘ K» solo sul Mac). La ricerca resta quella delle impostazioni, che porta al campo.
 - Dashboard: il saluto non usa più l'indirizzo email come nome. Chi non ha compilato il nome legge «Buon lavoro»; le iniziali dell'avatar vengono dal nome o dal nome di accesso.

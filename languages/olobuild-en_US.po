@@ -49395,3 +49395,3639 @@ msgstr "Image «After»"
 #: OLObuild 1.4.1023
 msgid "Buon lavoro"
 msgstr "Have a great day"
+
+#: OLObuild 1.4.1024
+msgid "Effetti speciali"
+msgstr "Special effects"
+
+#: OLObuild 1.4.1024
+msgid "Spegni gli effetti speciali"
+msgstr "Turn off special effects"
+
+#: OLObuild 1.4.1024
+msgid "Sfocatura dietro (px)"
+msgstr "Background blur (px)"
+
+#: OLObuild 1.4.1024
+msgid "Saturazione dietro (%)"
+msgstr "Background saturation (%)"
+
+#: OLObuild 1.4.1024
+msgid "Carattere speciale"
+msgstr "Special typeface"
+
+#: OLObuild 1.4.1024
+msgid "Quello del sito"
+msgstr "The site’s own"
+
+#: OLObuild 1.4.1024
+msgid "Inclinazione in avanti (deg)"
+msgstr "Forward tilt (deg)"
+
+#: OLObuild 1.4.1024
+msgid "Bagliore che pulsa"
+msgstr "Pulsing glow"
+
+#: OLObuild 1.4.1024
+msgid "Bagliore sui titoli"
+msgstr "Glow on titles"
+
+#: OLObuild 1.4.1024
+msgid "Righe da vecchio schermo"
+msgstr "Old-screen lines"
+
+#: OLObuild 1.4.1024
+msgid "Cursore da terminale"
+msgstr "Terminal cursor"
+
+#: OLObuild 1.4.1024
+msgid "Macchina da scrivere, a giro di frasi"
+msgstr "Typewriter, rotating sentences"
+
+#: OLObuild 1.4.1024
+msgid "Lettera per lettera"
+msgstr "Letter by letter"
+
+#: OLObuild 1.4.1024
+msgid "Parola per parola"
+msgstr "Word by word"
+
+#: OLObuild 1.4.1024
+msgid "Gradiente animato"
+msgstr "Animated gradient"
+
+#: OLObuild 1.4.1024
+msgid "Glitch"
+msgstr "Glitch"
+
+#: OLObuild 1.4.1024
+msgid "Sottolineatura che cresce"
+msgstr "Growing underline"
+
+#: OLObuild 1.4.1024
+msgid "Evidenziatore che cresce"
+msgstr "Growing highlighter"
+
+#: OLObuild 1.4.1024
+msgid "Lettere mescolate"
+msgstr "Scrambled letters"
+
+#: OLObuild 1.4.1024
+msgid "Il tempo di ogni lettera; negli effetti «parola per parola», di ogni parola."
+msgstr "The time for each letter; in the word-by-word effects, for each word."
+
+#: OLObuild 1.4.1024
+msgid "Il colore del gradiente, dell’evidenziatore o della sottolineatura."
+msgstr "The colour of the gradient, highlighter or underline."
+
+#: OLObuild 1.4.1024
+msgid "Secondo colore del gradiente"
+msgstr "Second gradient colour"
+
+#: OLObuild 1.4.1024
+msgid "Immagine al passaggio"
+msgstr "Image on hover"
+
+#: OLObuild 1.4.1024
+msgid "Aperti all’inizio"
+msgstr "Open at start"
+
+#: OLObuild 1.4.1024
+msgid "Schede morbide"
+msgstr "Soft cards"
+
+#: OLObuild 1.4.1024
+msgid "Righe sottili"
+msgstr "Thin lines"
+
+#: OLObuild 1.4.1024
+msgid "Voce aperta nel primario"
+msgstr "Open item in primary"
+
+#: OLObuild 1.4.1024
+msgid "Contorno primario"
+msgstr "Primary outline"
+
+#: OLObuild 1.4.1024
+msgid "Vetro liquido"
+msgstr "Liquid glass"
+
+#: OLObuild 1.4.1024
+msgid "Neon su scuro"
+msgstr "Neon on dark"
+
+#: OLObuild 1.4.1024
+msgid "Blocchi netti"
+msgstr "Sharp blocks"
+
+#: OLObuild 1.4.1024
+msgid "Voce aperta scura"
+msgstr "Dark open item"
+
+#: OLObuild 1.4.1024
+msgid "Adesivo"
+msgstr "Sticker"
+
+#: OLObuild 1.4.1024
+msgid "Terminale"
+msgstr "Terminal"
+
+#: OLObuild 1.4.1024
+msgid "Inclinato in 3D"
+msgstr "Tilted in 3D"
+
+#: OLObuild 1.4.1024
+msgid "Sollevamento al passaggio"
+msgstr "Lift on hover"
+
+#: OLObuild 1.4.1024
+msgid "Ombra al passaggio"
+msgstr "Shadow on hover"
+
+#: OLObuild 1.4.1024
+msgid "Sfocatura dietro"
+msgstr "Background blur"
+
+#: OLObuild 1.4.1024
+msgid "Sfoca quello che sta dietro le voci (effetto vetro): si vede con gli sfondi trasparenti."
+msgstr "Blurs what is behind the items (glass effect): visible with transparent backgrounds."
+
+#: OLObuild 1.4.1024
+msgid "Saturazione dietro"
+msgstr "Background saturation"
+
+#: OLObuild 1.4.1024
+msgid "Testo del pannello"
+msgstr "Panel text"
+
+#: OLObuild 1.4.1024
+msgid "Solo le intestazioni"
+msgstr "Headers only"
+
+#: OLObuild 1.4.1024
+msgid "Solo i pannelli"
+msgstr "Panels only"
+
+#: OLObuild 1.4.1024
+msgid "Tutto il testo"
+msgstr "All text"
+
+#: OLObuild 1.4.1024
+msgid "Sfondo voce aperta"
+msgstr "Open item background"
+
+#: OLObuild 1.4.1024
+msgid "Freccia a punta ›"
+msgstr "Chevron ›"
+
+#: OLObuild 1.4.1024
+msgid "Più e meno ＋"
+msgstr "Plus and minus ＋"
+
+#: OLObuild 1.4.1024
+msgid "Gira all’apertura"
+msgstr "Turns when opening"
+
+#: OLObuild 1.4.1024
+msgid "Dimensione forma"
+msgstr "Shape size"
+
+#: OLObuild 1.4.1024
+msgid "Sfondo forma"
+msgstr "Shape background"
+
+#: OLObuild 1.4.1024
+msgid "Pannello aperto"
+msgstr "Open panel"
+
+#: OLObuild 1.4.1024
+msgid "Immediata"
+msgstr "Instant"
+
+#: OLObuild 1.4.1024
+msgid "Durata apertura"
+msgstr "Opening duration"
+
+#: OLObuild 1.4.1024
+msgid "Lo spazio fra una voce e l’altra: a 0 le voci formano un solo blocco."
+msgstr "The space between items: at 0 they form a single block."
+
+#: OLObuild 1.4.1024
+msgid "senza chiave"
+msgstr "no key"
+
+#: OLObuild 1.4.1024
+msgid "Manca la chiave del servizio: si inserisce in Sistema › Configurazione › Servizi. Senza, l’interruttore non ha effetto."
+msgstr "The service key is missing: add it in System › Configuration › Services. Without it, the switch has no effect."
+
+#: OLObuild 1.4.1024
+msgid "Nome tecnico"
+msgstr "Technical name"
+
+#: OLObuild 1.4.1024
+msgid "Il nome con cui il campo arriva nell’email e negli invii, senza spazi (es. telefono). Lo usano le condizioni e le integrazioni."
+msgstr "The name the field arrives with in the email and submissions, without spaces (e.g. phone). Conditions and integrations use it."
+
+#: OLObuild 1.4.1024
+msgid "Mostra solo se il campo"
+msgstr "Show only if the field"
+
+#: OLObuild 1.4.1024
+msgid "— Sempre visibile —"
+msgstr "— Always visible —"
+
+#: OLObuild 1.4.1024
+msgid "Dopo l’invio vai a"
+msgstr "After sending go to"
+
+#: OLObuild 1.4.1024
+msgid "Vuoto: resta e mostra il messaggio"
+msgstr "Empty: stays and shows the message"
+
+#: OLObuild 1.4.1024
+msgid "Modulo a passi"
+msgstr "Step form"
+
+#: OLObuild 1.4.1024
+msgid "Dividi in passi"
+msgstr "Split into steps"
+
+#: OLObuild 1.4.1024
+msgid "Nomi dei passi (uno per riga)"
+msgstr "Step names (one per line)"
+
+#: OLObuild 1.4.1024
+msgid "Campi che compaiono a condizione"
+msgstr "Conditional fields"
+
+#: OLObuild 1.4.1024
+msgid "Accesa, ogni campo può comparire solo quando un altro ha un certo valore: si sceglie nella voce del campo, in «Visibilità condizionale»."
+msgstr "When on, each field can appear only when another has a given value: choose it in the field’s item, under “Conditional visibility”."
+
+#: OLObuild 1.4.1024
+msgid "Caricamento file"
+msgstr "File upload"
+
+#: OLObuild 1.4.1024
+msgid "Dimensione massima (MB)"
+msgstr "Maximum size (MB)"
+
+#: OLObuild 1.4.1024
+msgid "Trappola per i robot"
+msgstr "Bot trap"
+
+#: OLObuild 1.4.1024
+msgid "Un campo invisibile che le persone non compilano e i robot sì: gli invii che lo riempiono si scartano. Consigliata."
+msgstr "An invisible field that people leave empty and bots fill in: submissions that fill it are discarded. Recommended."
+
+#: OLObuild 1.4.1024
+msgid "Limite di invii"
+msgstr "Submission limit"
+
+#: OLObuild 1.4.1024
+msgid "Invii massimi"
+msgstr "Maximum submissions"
+
+#: OLObuild 1.4.1024
+msgid "Nell’arco di (minuti)"
+msgstr "Within (minutes)"
+
+#: OLObuild 1.4.1024
+msgid "Campo email"
+msgstr "Email field"
+
+#: OLObuild 1.4.1024
+msgid "Casella del consenso"
+msgstr "Consent checkbox"
+
+#: OLObuild 1.4.1024
+msgid "Pulito"
+msgstr "Clean"
+
+#: OLObuild 1.4.1024
+msgid "Linea sottile"
+msgstr "Thin line"
+
+#: OLObuild 1.4.1024
+msgid "Rivista"
+msgstr "Magazine"
+
+#: OLObuild 1.4.1024
+msgid "Scheda sollevata"
+msgstr "Raised card"
+
+#: OLObuild 1.4.1024
+msgid "Timbro netto"
+msgstr "Bold stamp"
+
+#: OLObuild 1.4.1024
+msgid "Linea su scuro"
+msgstr "Line on dark"
+
+#: OLObuild 1.4.1024
+msgid "Comparsa del messaggio inviato"
+msgstr "Sent message entrance"
+
+#: OLObuild 1.4.1024
+msgid "Comparsa del messaggio d’errore"
+msgstr "Error message entrance"
+
+#: OLObuild 1.4.1024
+msgid "Testo dei campi"
+msgstr "Field text"
+
+#: OLObuild 1.4.1024
+msgid "Solo le etichette"
+msgstr "Labels only"
+
+#: OLObuild 1.4.1024
+msgid "Solo i nomi"
+msgstr "Names only"
+
+#: OLObuild 1.4.1024
+msgid "Opacità del suggerimento"
+msgstr "Placeholder opacity"
+
+#: OLObuild 1.4.1024
+msgid "Il testo d’esempio dentro i campi vuoti («Mario Rossi»)."
+msgstr "The sample text inside empty fields (“John Smith”)."
+
+#: OLObuild 1.4.1024
+msgid "Colore bordo al focus"
+msgstr "Border colour on focus"
+
+#: OLObuild 1.4.1024
+msgid "Alone al focus"
+msgstr "Glow on focus"
+
+#: OLObuild 1.4.1024
+msgid "Caselle"
+msgstr "Checkboxes"
+
+#: OLObuild 1.4.1024
+msgid "Colore spunta"
+msgstr "Check colour"
+
+#: OLObuild 1.4.1024
+msgid "Indicatore dei passi"
+msgstr "Step indicator"
+
+#: OLObuild 1.4.1024
+msgid "0 = tutta la colonna."
+msgstr "0 = the whole column."
+
+#: OLObuild 1.4.1024
+msgid "Sopra il campo"
+msgstr "Above the field"
+
+#: OLObuild 1.4.1024
+msgid "Dentro il campo, poi sopra"
+msgstr "Inside the field, then above"
+
+#: OLObuild 1.4.1024
+msgid "Allineamento modulo"
+msgstr "Form alignment"
+
+#: OLObuild 1.4.1024
+msgid "Pulsante largo quanto il modulo"
+msgstr "Button as wide as the form"
+
+#: OLObuild 1.4.1024
+msgid "Larghezza dei campi"
+msgstr "Field widths"
+
+#: OLObuild 1.4.1024
+msgid "1 = il mondo intero, 19 = il singolo edificio. 15 mostra il quartiere."
+msgstr "1 = the whole world, 19 = a single building. 15 shows the neighbourhood."
+
+#: OLObuild 1.4.1024
+msgid "Mostra segnaposto"
+msgstr "Show marker"
+
+#: OLObuild 1.4.1024
+msgid "Testo del fumetto"
+msgstr "Popup text"
+
+#: OLObuild 1.4.1024
+msgid "Compare cliccando il segnaposto. Vuoto = nessun fumetto."
+msgstr "Appears when the marker is clicked. Empty = no popup."
+
+#: OLObuild 1.4.1024
+msgid "Spillo"
+msgstr "Pin"
+
+#: OLObuild 1.4.1024
+msgid "Bandiera al vento"
+msgstr "Waving flag"
+
+#: OLObuild 1.4.1024
+msgid "Immagine segnaposto"
+msgstr "Marker image"
+
+#: OLObuild 1.4.1024
+msgid "Zoom con la rotella"
+msgstr "Scroll-wheel zoom"
+
+#: OLObuild 1.4.1024
+msgid "Spento, la rotella fa scorrere la pagina invece di ingrandire la mappa: di solito è meglio."
+msgstr "When off, the wheel scrolls the page instead of zooming the map: usually better."
+
+#: OLObuild 1.4.1024
+msgid "Si sposta trascinando"
+msgstr "Drag to move"
+
+#: OLObuild 1.4.1024
+msgid "Chiara"
+msgstr "Light"
+
+#: OLObuild 1.4.1024
+msgid "Grigia"
+msgstr "Grey"
+
+#: OLObuild 1.4.1024
+msgid "Colorata"
+msgstr "Colourful"
+
+#: OLObuild 1.4.1024
+msgid "Scura"
+msgstr "Dark"
+
+#: OLObuild 1.4.1024
+msgid "Rilievi"
+msgstr "Relief"
+
+#: OLObuild 1.4.1024
+msgid "Stradale"
+msgstr "Street"
+
+#: OLObuild 1.4.1024
+msgid "Umanitaria"
+msgstr "Humanitarian"
+
+#: OLObuild 1.4.1024
+msgid "Colore segnaposto"
+msgstr "Marker colour"
+
+#: OLObuild 1.4.1024
+msgid "Dimensione segnaposto"
+msgstr "Marker size"
+
+#: OLObuild 1.4.1024
+msgid "Logo del cliente"
+msgstr "Client logo"
+
+#: OLObuild 1.4.1024
+msgid "Compare in alto nella scheda."
+msgstr "Appears at the top of the card."
+
+#: OLObuild 1.4.1024
+msgid "Ruolo o città"
+msgstr "Role or city"
+
+#: OLObuild 1.4.1024
+msgid "Scorre da solo"
+msgstr "Plays on its own"
+
+#: OLObuild 1.4.1024
+msgid "Ogni"
+msgstr "Every"
+
+#: OLObuild 1.4.1024
+msgid "Citazione da rivista"
+msgstr "Magazine quote"
+
+#: OLObuild 1.4.1024
+msgid "Editoriale con grazie"
+msgstr "Editorial serif"
+
+#: OLObuild 1.4.1024
+msgid "Deciso"
+msgstr "Bold"
+
+#: OLObuild 1.4.1024
+msgid "Sfumato morbido"
+msgstr "Soft gradient"
+
+#: OLObuild 1.4.1024
+msgid "Foglietto adesivo"
+msgstr "Sticky note"
+
+#: OLObuild 1.4.1024
+msgid "Scheda inclinata"
+msgstr "Tilted card"
+
+#: OLObuild 1.4.1024
+msgid "Colore stelle"
+msgstr "Star colour"
+
+#: OLObuild 1.4.1024
+msgid "Vuoto: ambra."
+msgstr "Empty: amber."
+
+#: OLObuild 1.4.1024
+msgid "Colore parole in evidenza"
+msgstr "Highlighted words colour"
+
+#: OLObuild 1.4.1024
+msgid "Le parole in corsivo (<em>) dentro la citazione."
+msgstr "The italic words (<em>) inside the quote."
+
+#: OLObuild 1.4.1024
+msgid "Linea accanto alla citazione"
+msgstr "Line beside the quote"
+
+#: OLObuild 1.4.1024
+msgid "Solo la citazione"
+msgstr "Quote only"
+
+#: OLObuild 1.4.1024
+msgid "Raggio ritratto"
+msgstr "Portrait radius"
+
+#: OLObuild 1.4.1024
+msgid "Ombra ritratto"
+msgstr "Portrait shadow"
+
+#: OLObuild 1.4.1024
+msgid "Bordo ritratto"
+msgstr "Portrait border"
+
+#: OLObuild 1.4.1024
+msgid "Editoriale: centrata, con le stelle in alto, la citazione con le grazie e il nome sotto."
+msgstr "Editorial: centred, with the stars on top, the quote in serif and the name below."
+
+#: OLObuild 1.4.1024
+msgid "Il massimo: in una colonna stretta le schede vanno a capo da sole."
+msgstr "The maximum: in a narrow column the cards wrap on their own."
+
+#: OLObuild 1.4.1024
+msgid "Schede visibili"
+msgstr "Visible cards"
+
+#: OLObuild 1.4.1024
+msgid "Posizione del nome"
+msgstr "Name position"
+
+#: OLObuild 1.4.1024
+msgid "Conta fino a"
+msgstr "Counts down to"
+
+#: OLObuild 1.4.1024
+msgid "Un tempo, per ogni visitatore"
+msgstr "A time, for each visitor"
+
+#: OLObuild 1.4.1024
+msgid "Un giorno della settimana"
+msgstr "A day of the week"
+
+#: OLObuild 1.4.1024
+msgid "«Per ogni visitatore»: il tempo parte dalla sua prima visita (un’offerta che dura tre giorni per chiunque arrivi)."
+msgstr "“For each visitor”: the time starts from their first visit (an offer that lasts three days for anyone who arrives)."
+
+#: OLObuild 1.4.1024
+msgid "Ricomincia da capo"
+msgstr "Starts over"
+
+#: OLObuild 1.4.1024
+msgid "Cosa succede"
+msgstr "What happens"
+
+#: OLObuild 1.4.1024
+msgid "Compare un messaggio"
+msgstr "A message appears"
+
+#: OLObuild 1.4.1024
+msgid "Il conto sparisce"
+msgstr "The countdown disappears"
+
+#: OLObuild 1.4.1024
+msgid "Si va a un’altra pagina"
+msgstr "Go to another page"
+
+#: OLObuild 1.4.1024
+msgid "Compare un messaggio (scelta storica)"
+msgstr "A message appears (legacy choice)"
+
+#: OLObuild 1.4.1024
+msgid "Il segno fra un’unità e l’altra (per esempio «:»). Vuoto = nessuno."
+msgstr "The sign between one unit and the next (for example “:”). Empty = none."
+
+#: OLObuild 1.4.1024
+msgid "Digitale"
+msgstr "Digital"
+
+#: OLObuild 1.4.1024
+msgid "Cartellini"
+msgstr "Tags"
+
+#: OLObuild 1.4.1024
+msgid "Numeri giganti"
+msgstr "Giant numbers"
+
+#: OLObuild 1.4.1024
+msgid "Orologio a palette"
+msgstr "Flip clock"
+
+#: OLObuild 1.4.1024
+msgid "Caselle di OLObuild"
+msgstr "OLObuild boxes"
+
+#: OLObuild 1.4.1024
+msgid "UIkit"
+msgstr "UIkit"
+
+#: OLObuild 1.4.1024
+msgid "UIkit: i numeri semplici di UIkit, senza caselle né separatori disegnati."
+msgstr "UIkit: UIkit’s plain numbers, with no drawn boxes or separators."
+
+#: OLObuild 1.4.1024
+msgid "Scritte"
+msgstr "Labels"
+
+#: OLObuild 1.4.1024
+msgid "Sfondo casella"
+msgstr "Box background"
+
+#: OLObuild 1.4.1024
+msgid "Raggio casella"
+msgstr "Box radius"
+
+#: OLObuild 1.4.1024
+msgid "Padding casella"
+msgstr "Box padding"
+
+#: OLObuild 1.4.1024
+msgid "Larghezza casella"
+msgstr "Box width"
+
+#: OLObuild 1.4.1024
+msgid "La larghezza minima di ogni casella: in una colonna stretta scende quanto serve perché stiano tutte su una riga."
+msgstr "The minimum width of each box: in a narrow column it shrinks as needed so they all fit on one row."
+
+#: OLObuild 1.4.1024
+msgid "Una riga di testo"
+msgstr "A line of text"
+
+#: OLObuild 1.4.1024
+msgid "Nome del piano"
+msgstr "Plan name"
+
+#: OLObuild 1.4.1024
+msgid "Mensile o annuale"
+msgstr "Monthly or yearly"
+
+#: OLObuild 1.4.1024
+msgid "Interruttore fra due prezzi"
+msgstr "Switch between two prices"
+
+#: OLObuild 1.4.1024
+msgid "Sopra il prezzo compare un interruttore (per esempio Mensile · Annuale) che mostra il prezzo alternativo."
+msgstr "A switch appears above the price (for example Monthly · Yearly) that shows the alternative price."
+
+#: OLObuild 1.4.1024
+msgid "Prima scritta"
+msgstr "First label"
+
+#: OLObuild 1.4.1024
+msgid "Seconda scritta"
+msgstr "Second label"
+
+#: OLObuild 1.4.1024
+msgid "Scritta dello sconto"
+msgstr "Discount label"
+
+#: OLObuild 1.4.1024
+msgid "Cosa comprende"
+msgstr "What’s included"
+
+#: OLObuild 1.4.1024
+msgid "Voci (una per riga)"
+msgstr "Items (one per line)"
+
+#: OLObuild 1.4.1024
+msgid "Nota sotto il pulsante"
+msgstr "Note below the button"
+
+#: OLObuild 1.4.1024
+msgid "Etichetta in evidenza"
+msgstr "Featured label"
+
+#: OLObuild 1.4.1024
+msgid "Mostra l’etichetta"
+msgstr "Show the label"
+
+#: OLObuild 1.4.1024
+msgid "Offerta a tempo"
+msgstr "Limited-time offer"
+
+#: OLObuild 1.4.1024
+msgid "Scritta a offerta scaduta"
+msgstr "Expired offer text"
+
+#: OLObuild 1.4.1024
+msgid "Nascondi la scheda a offerta scaduta"
+msgstr "Hide the card when the offer expires"
+
+#: OLObuild 1.4.1024
+msgid "Scuro elegante"
+msgstr "Elegant dark"
+
+#: OLObuild 1.4.1024
+msgid "Scontrino"
+msgstr "Receipt"
+
+#: OLObuild 1.4.1024
+msgid "Le spunte, il filo e il bagliore della scheda."
+msgstr "The checks, the outline and the glow of the card."
+
+#: OLObuild 1.4.1024
+msgid "Sfondo con immagine o video"
+msgstr "Background with image or video"
+
+#: OLObuild 1.4.1024
+msgid "Velo scuro sul fondo"
+msgstr "Dark veil over the background"
+
+#: OLObuild 1.4.1024
+msgid "Opacità velo"
+msgstr "Veil opacity"
+
+#: OLObuild 1.4.1024
+msgid "Forma dietro il prezzo"
+msgstr "Shape behind the price"
+
+#: OLObuild 1.4.1024
+msgid "Bordo forma"
+msgstr "Shape border"
+
+#: OLObuild 1.4.1024
+msgid "Segno"
+msgstr "Mark"
+
+#: OLObuild 1.4.1024
+msgid "Dimensione segno"
+msgstr "Mark size"
+
+#: OLObuild 1.4.1024
+msgid "Righe fra le voci"
+msgstr "Lines between items"
+
+#: OLObuild 1.4.1024
+msgid "Colore testo al passaggio"
+msgstr "Text colour on hover"
+
+#: OLObuild 1.4.1024
+msgid "Larghezza pulsante"
+msgstr "Button width"
+
+#: OLObuild 1.4.1024
+msgid "Effetto al passaggio"
+msgstr "Hover effect"
+
+#: OLObuild 1.4.1024
+msgid "Si solleva"
+msgstr "Lifts"
+
+#: OLObuild 1.4.1024
+msgid "Pulsa"
+msgstr "Pulses"
+
+#: OLObuild 1.4.1024
+msgid "Luccica"
+msgstr "Shines"
+
+#: OLObuild 1.4.1024
+msgid "Colore scritta etichetta"
+msgstr "Label text colour"
+
+#: OLObuild 1.4.1024
+msgid "Raggio etichetta"
+msgstr "Label radius"
+
+#: OLObuild 1.4.1024
+msgid "Colore scritta dello sconto"
+msgstr "Discount text colour"
+
+#: OLObuild 1.4.1024
+msgid "Colore interruttore"
+msgstr "Switch colour"
+
+#: OLObuild 1.4.1024
+msgid "Un percorso pensato attorno a te, dal primo incontro al risultato."
+msgstr "A path designed around you, from the first meeting to the result."
+
+#: OLObuild 1.4.1024
+msgid "Fronte"
+msgstr "Front"
+
+#: OLObuild 1.4.1024
+msgid "Retro"
+msgstr "Back"
+
+#: OLObuild 1.4.1024
+msgid "Link pulsante"
+msgstr "Button link"
+
+#: OLObuild 1.4.1024
+msgid "Si gira"
+msgstr "Flips"
+
+#: OLObuild 1.4.1024
+msgid "Al passaggio del mouse"
+msgstr "On mouse hover"
+
+#: OLObuild 1.4.1024
+msgid "Al clic"
+msgstr "On click"
+
+#: OLObuild 1.4.1024
+msgid "Sul telefono si gira sempre col tocco."
+msgstr "On phones it always flips on tap."
+
+#: OLObuild 1.4.1024
+msgid "Si gira di lato"
+msgstr "Flips sideways"
+
+#: OLObuild 1.4.1024
+msgid "Si gira dall’alto"
+msgstr "Flips from the top"
+
+#: OLObuild 1.4.1024
+msgid "In diagonale"
+msgstr "Diagonal"
+
+#: OLObuild 1.4.1024
+msgid "Cubo"
+msgstr "Cube"
+
+#: OLObuild 1.4.1024
+msgid "Scivola e si gira"
+msgstr "Slides and flips"
+
+#: OLObuild 1.4.1024
+msgid "Si avvicina e si gira"
+msgstr "Zooms and flips"
+
+#: OLObuild 1.4.1024
+msgid "Morbido"
+msgstr "Smooth"
+
+#: OLObuild 1.4.1024
+msgid "Morbido ai due capi"
+msgstr "Smooth at both ends"
+
+#: OLObuild 1.4.1024
+msgid "Con rimbalzo"
+msgstr "With bounce"
+
+#: OLObuild 1.4.1024
+msgid "Foto con velo"
+msgstr "Photo with veil"
+
+#: OLObuild 1.4.1024
+msgid "Icona grande"
+msgstr "Large icon"
+
+#: OLObuild 1.4.1024
+msgid "Blocco netto"
+msgstr "Sharp block"
+
+#: OLObuild 1.4.1024
+msgid "Manifesto"
+msgstr "Poster"
+
+#: OLObuild 1.4.1024
+msgid "Descrizioni"
+msgstr "Descriptions"
+
+#: OLObuild 1.4.1024
+msgid "Titolo del fronte"
+msgstr "Front title"
+
+#: OLObuild 1.4.1024
+msgid "Descrizione del fronte"
+msgstr "Front description"
+
+#: OLObuild 1.4.1024
+msgid "Titolo del retro"
+msgstr "Back title"
+
+#: OLObuild 1.4.1024
+msgid "Descrizione del retro"
+msgstr "Back description"
+
+#: OLObuild 1.4.1024
+msgid "Velo sull’immagine"
+msgstr "Veil over the image"
+
+#: OLObuild 1.4.1024
+msgid "Una parola accanto al nome, per esempio «Novità» o «Il più scelto». Vuoto = nessuna."
+msgstr "A word beside the name, for example “New” or “Most popular”. Empty = none."
+
+#: OLObuild 1.4.1024
+msgid "Una riga che la racconta"
+msgstr "A line that describes it"
+
+#: OLObuild 1.4.1024
+msgid "Mostra le immagini"
+msgstr "Show images"
+
+#: OLObuild 1.4.1024
+msgid "Menù con grazie"
+msgstr "Serif menu"
+
+#: OLObuild 1.4.1024
+msgid "Sfondo voce in evidenza"
+msgstr "Featured item background"
+
+#: OLObuild 1.4.1024
+msgid "Si solleva al passaggio"
+msgstr "Lifts on hover"
+
+#: OLObuild 1.4.1024
+msgid "Solo le descrizioni"
+msgstr "Descriptions only"
+
+#: OLObuild 1.4.1024
+msgid "Puntini"
+msgstr "Dots"
+
+#: OLObuild 1.4.1024
+msgid "Fra nome e prezzo"
+msgstr "Between name and price"
+
+#: OLObuild 1.4.1024
+msgid "Bordo etichetta"
+msgstr "Label border"
+
+#: OLObuild 1.4.1024
+msgid "Gap fra le voci"
+msgstr "Gap between items"
+
+#: OLObuild 1.4.1024
+msgid "Video al passaggio"
+msgstr "Video on hover"
+
+#: OLObuild 1.4.1024
+msgid "Rivista, in riga"
+msgstr "Magazine, in a row"
+
+#: OLObuild 1.4.1024
+msgid "Annuario"
+msgstr "Yearbook"
+
+#: OLObuild 1.4.1024
+msgid "Solo il nome"
+msgstr "Name only"
+
+#: OLObuild 1.4.1024
+msgid "Gap foto e testi"
+msgstr "Photo and text gap"
+
+#: OLObuild 1.4.1024
+msgid "Sotto zero la foto entra nel riquadro dei testi e lo sovrappone."
+msgstr "Below zero the photo moves into the text box and overlaps it."
+
+#: OLObuild 1.4.1024
+msgid "Riquadro dei testi"
+msgstr "Text box"
+
+#: OLObuild 1.4.1024
+msgid "Larghezza riquadro"
+msgstr "Box width"
+
+#: OLObuild 1.4.1024
+msgid "Margine riquadro"
+msgstr "Box margin"
+
+#: OLObuild 1.4.1024
+msgid "Padding riquadro"
+msgstr "Box padding"
+
+#: OLObuild 1.4.1024
+msgid "Bordo riquadro"
+msgstr "Box border"
+
+#: OLObuild 1.4.1024
+msgid "Numero o scritta"
+msgstr "Number or label"
+
+#: OLObuild 1.4.1024
+msgid "Numeri automatici (01, 02, …)"
+msgstr "Automatic numbers (01, 02, …)"
+
+#: OLObuild 1.4.1024
+msgid "Accesa, i passi si numerano da soli nell’ordine in cui stanno e il campo «Numero» di ogni voce non conta."
+msgstr "When on, the steps number themselves in their order and each item’s “Number” field is ignored."
+
+#: OLObuild 1.4.1024
+msgid "Solo il numero, grande"
+msgstr "Just the number, large"
+
+#: OLObuild 1.4.1024
+msgid "Cerchio col bordo"
+msgstr "Outlined circle"
+
+#: OLObuild 1.4.1024
+msgid "Colore cerchio"
+msgstr "Circle colour"
+
+#: OLObuild 1.4.1024
+msgid "Il fondo del cerchio pieno o il bordo del cerchio vuoto."
+msgstr "The fill of the solid circle or the border of the empty one."
+
+#: OLObuild 1.4.1024
+msgid "Vuoto: i passi stanno sul fondo della sezione, senza scheda."
+msgstr "Empty: the steps sit on the section background, with no card."
+
+#: OLObuild 1.4.1024
+msgid "Il massimo: dove la colonna è stretta i passi vanno a capo da soli."
+msgstr "The maximum: where the column is narrow the steps wrap on their own."
+
+#: OLObuild 1.4.1024
+msgid "Gap interno"
+msgstr "Inner gap"
+
+#: OLObuild 1.4.1024
+msgid "Lo spazio fra numero, titolo e descrizione."
+msgstr "The space between number, title and description."
+
+#: OLObuild 1.4.1024
+msgid "— Nessuna —"
+msgstr "— None —"
+
+#: OLObuild 1.4.1024
+msgid "— Scegli un campo —"
+msgstr "— Choose a field —"
+
+#: OLObuild 1.4.1024
+msgid "Come compare il messaggio dopo un invio riuscito."
+msgstr "How the message appears after a successful submission."
+
+#: OLObuild 1.4.1024
+msgid "Come compare il messaggio quando l’invio non riesce."
+msgstr "How the message appears when the submission fails."
+
+#: OLObuild 1.4.1024
+msgid "Una durata"
+msgstr "A duration"
+
+#: OLObuild 1.4.1024
+msgid "Un giorno a settimana"
+msgstr "One day a week"
+
+#: OLObuild 1.4.1024
+msgid "«Una durata» parte dalla prima visita di ognuno: un’offerta che dura tre giorni per chiunque arrivi, quando arriva."
+msgstr "“A duration” starts from each person’s first visit: an offer that lasts three days for anyone, from when they arrive."
+
+#: OLObuild 1.4.1024
+msgid "Tenue"
+msgstr "Muted"
+
+#: OLObuild 1.4.1024
+msgid "Seleziona una parola e premi I: prende il colore delle parole in evidenza."
+msgstr "Select a word and press I: it takes the highlighted-words colour."
+
+#: OLObuild 1.4.1024
+msgid "Le parole che nella citazione hai messo in corsivo col pulsante I. Vuoto: il colore primario."
+msgstr "The words you set in italics in the quote with the I button. Empty: the primary colour."
+
+#: OLObuild 1.4.1024
+msgid "Deciso, su scuro"
+msgstr "Bold, on dark"
+
+#: OLObuild 1.4.1024
+msgid "Foglietti adesivi"
+msgstr "Sticky notes"
+
+#: OLObuild 1.4.1024
+msgid "Ombra scheda"
+msgstr "Card shadow"
+
+#: OLObuild 1.4.1024
+msgid "Netta, a timbro"
+msgstr "Hard, stamp-like"
+
+#: OLObuild 1.4.1024
+msgid "Vuoto: l’ambra della palette."
+msgstr "Empty: the palette amber."
+
+#: OLObuild 1.4.1024
+msgid "Colore evidenza"
+msgstr "Highlight colour"
+
+#: OLObuild 1.4.1024
+msgid "Superficie alternativa"
+msgstr "Alternative surface"
+
+#: OLObuild 1.4.1024
+msgid "Testo tenue"
+msgstr "Muted text"
+
+#: OLObuild 1.4.1024
+msgid "Sul primario"
+msgstr "On primary"
+
+#: OLObuild 1.4.1024
+msgid "Sul secondario"
+msgstr "On secondary"
+
+#: OLObuild 1.4.1024
+msgid "Informazione"
+msgstr "Information"
+
+#: OLObuild 1.4.1024
+msgid "Cartellini a metà"
+msgstr "Split-flap cards"
+
+#: OLObuild 1.4.1024
+msgid "Numeri sfumati"
+msgstr "Gradient numbers"
+
+#: OLObuild 1.4.1024
+msgid "Inclinata"
+msgstr "Tilted"
+
+#: OLObuild 1.4.1024
+msgid "Banda: i numeri in colonne a tutta larghezza. Riga: in fila e piccoli, sotto un paragrafo. Elenco: uno sotto l’altro col nome accanto, accanto a una foto o a un testo. Schede: ogni numero in un riquadro. In evidenza: il primo grande, gli altri in una riga sotto."
+msgstr "Band: the numbers in full-width columns. Row: small and in line, under a paragraph. List: one below the other with the name beside it, next to a photo or text. Cards: each number in a box. Highlight: the first one large, the others in a row below."
+
+#: OLObuild 1.4.1024
+msgid "Parole in evidenza"
+msgstr "Highlighted words"
+
+#: OLObuild 1.4.1024
+msgid "Secondo pulsante"
+msgstr "Second button"
+
+#: OLObuild 1.4.1024
+msgid "Lascialo vuoto per non mostrare il secondo pulsante."
+msgstr "Leave it empty to hide the second button."
+
+#: OLObuild 1.4.1024
+msgid "Parole in evidenza in corsivo"
+msgstr "Highlighted words in italics"
+
+#: OLObuild 1.4.1024
+msgid "Tre colonne: titolo, testo, pulsanti"
+msgstr "Three columns: title, text, buttons"
+
+#: OLObuild 1.4.1024
+msgid "Due colonne: titolo col testo, pulsanti"
+msgstr "Two columns: title with text, buttons"
+
+#: OLObuild 1.4.1024
+msgid "Una sotto l’altra, centrate"
+msgstr "One below the other, centred"
+
+#: OLObuild 1.4.1024
+msgid "Quando il banner è stretto (una colonna a metà pagina, il telefono) le parti vanno comunque una sotto l'altra."
+msgstr "When the banner is narrow (a half-page column, a phone) the parts stack one below the other anyway."
+
+#: OLObuild 1.4.1024
+msgid "Titolo più largo"
+msgstr "Wider title"
+
+#: OLObuild 1.4.1024
+msgid "Titolo e testo uguali"
+msgstr "Title and text equal"
+
+#: OLObuild 1.4.1024
+msgid "Titolo molto più largo"
+msgstr "Much wider title"
+
+#: OLObuild 1.4.1024
+msgid "Pulita"
+msgstr "Clean"
+
+#: OLObuild 1.4.1024
+msgid "Bollini pieni"
+msgstr "Solid dots"
+
+#: OLObuild 1.4.1024
+msgid "Bollini tenui"
+msgstr "Soft dots"
+
+#: OLObuild 1.4.1024
+msgid "Quadratini"
+msgstr "Small squares"
+
+#: OLObuild 1.4.1024
+msgid "Solo il testo"
+msgstr "Text only"
+
+#: OLObuild 1.4.1024
+msgid "Bollino"
+msgstr "Dot"
+
+#: OLObuild 1.4.1024
+msgid "Colore bollino"
+msgstr "Dot colour"
+
+#: OLObuild 1.4.1024
+msgid "Una sotto l’altra"
+msgstr "One below the other"
+
+#: OLObuild 1.4.1024
+msgid "Filo fra le voci"
+msgstr "Line between items"
+
+#: OLObuild 1.4.1024
+msgid "Colore filo"
+msgstr "Line colour"
+
+#: OLObuild 1.4.1024
+msgid "Mostra le icone"
+msgstr "Show icons"
+
+#: OLObuild 1.4.1024
+msgid "A righe alterne"
+msgstr "Striped rows"
+
+#: OLObuild 1.4.1024
+msgid "In griglia"
+msgstr "In a grid"
+
+#: OLObuild 1.4.1024
+msgid "Termini forti"
+msgstr "Bold terms"
+
+#: OLObuild 1.4.1024
+msgid "Termine sopra, definizione sotto"
+msgstr "Term above, definition below"
+
+#: OLObuild 1.4.1024
+msgid "Termine e definizione affiancati"
+msgstr "Term and definition side by side"
+
+#: OLObuild 1.4.1024
+msgid "Righe alterne"
+msgstr "Alternating rows"
+
+#: OLObuild 1.4.1024
+msgid "Colore righe alterne"
+msgstr "Alternating rows colour"
+
+#: OLObuild 1.4.1024
+msgid "Etichetta del numero"
+msgstr "Number label"
+
+#: OLObuild 1.4.1024
+msgid "Seguito del titolo"
+msgstr "Title continuation"
+
+#: OLObuild 1.4.1024
+msgid "Immagine e icona"
+msgstr "Image and icon"
+
+#: OLObuild 1.4.1024
+msgid "Scritta senza immagine"
+msgstr "Text without image"
+
+#: OLObuild 1.4.1024
+msgid "Piè di scheda e link"
+msgstr "Card footer and link"
+
+#: OLObuild 1.4.1024
+msgid "Piè di scheda"
+msgstr "Card footer"
+
+#: OLObuild 1.4.1024
+msgid "Mostra l'etichetta del numero"
+msgstr "Show the number label"
+
+#: OLObuild 1.4.1024
+msgid "Mostra l'immagine"
+msgstr "Show the image"
+
+#: OLObuild 1.4.1024
+msgid "Mostra l'icona"
+msgstr "Show the icon"
+
+#: OLObuild 1.4.1024
+msgid "Mostra la freccia in alto"
+msgstr "Show the top arrow"
+
+#: OLObuild 1.4.1024
+msgid "Mostra il filo sotto la descrizione"
+msgstr "Show the line under the description"
+
+#: OLObuild 1.4.1024
+msgid "Mostra il piè di scheda"
+msgstr "Show the card footer"
+
+#: OLObuild 1.4.1024
+msgid "Mostra l'invito «Scopri di più»"
+msgstr "Show the “Find out more” prompt"
+
+#: OLObuild 1.4.1024
+msgid "Bordo che si accende"
+msgstr "Glowing border"
+
+#: OLObuild 1.4.1024
+msgid "Si inclina in 3D"
+msgstr "Tilts in 3D"
+
+#: OLObuild 1.4.1024
+msgid "Il font vale anche per il piè di scheda e per la scritta senza immagine. Vuoto: il monospazio di sistema."
+msgstr "The font also applies to the card footer and the text without image. Empty: the system monospace."
+
+#: OLObuild 1.4.1024
+msgid "Il font vale anche per il numero con l'etichetta e per la scritta senza immagine. Vuoto: il monospazio di sistema."
+msgstr "The font also applies to the labelled number and the text without image. Empty: the system monospace."
+
+#: OLObuild 1.4.1024
+msgid "Seguito del titolo in corsivo"
+msgstr "Title continuation in italics"
+
+#: OLObuild 1.4.1024
+msgid "Sfondo fascia"
+msgstr "Band background"
+
+#: OLObuild 1.4.1024
+msgid "Padding fascia"
+msgstr "Band padding"
+
+#: OLObuild 1.4.1024
+msgid "Raggio fascia"
+msgstr "Band radius"
+
+#: OLObuild 1.4.1024
+msgid "Gap schede"
+msgstr "Card gap"
+
+#: OLObuild 1.4.1024
+msgid "Gap attorno alle schede"
+msgstr "Gap around the cards"
+
+#: OLObuild 1.4.1024
+msgid "Spazio attorno a ogni scheda, anche verso il bordo della fascia."
+msgstr "Space around each card, including towards the band edge."
+
+#: OLObuild 1.4.1024
+msgid "Da rivista"
+msgstr "Magazine"
+
+#: OLObuild 1.4.1024
+msgid "Virgolette grandi"
+msgstr "Large quote marks"
+
+#: OLObuild 1.4.1024
+msgid "Corsivo centrato"
+msgstr "Centred italics"
+
+#: OLObuild 1.4.1024
+msgid "Timbro"
+msgstr "Stamp"
+
+#: OLObuild 1.4.1024
+msgid "Foglietto"
+msgstr "Note"
+
+#: OLObuild 1.4.1024
+msgid "In rilievo"
+msgstr "Raised"
+
+#: OLObuild 1.4.1024
+msgid "Solo l'autore"
+msgstr "Author only"
+
+#: OLObuild 1.4.1024
+msgid "Citazione e autore"
+msgstr "Quote and author"
+
+#: OLObuild 1.4.1024
+msgid "Trattino e nome"
+msgstr "Dash and name"
+
+#: OLObuild 1.4.1024
+msgid "In calce, in corsivo"
+msgstr "Below, in italics"
+
+#: OLObuild 1.4.1024
+msgid "Automatico: 01, 02…"
+msgstr "Automatic: 01, 02…"
+
+#: OLObuild 1.4.1024
+msgid "Immagine dell'anteprima"
+msgstr "Preview image"
+
+#: OLObuild 1.4.1024
+msgid "Anteprima al passaggio"
+msgstr "Preview on hover"
+
+#: OLObuild 1.4.1024
+msgid "Mostra l'anteprima che segue il puntatore"
+msgstr "Show the preview that follows the pointer"
+
+#: OLObuild 1.4.1024
+msgid "Schermo di regia"
+msgstr "Control-room screen"
+
+#: OLObuild 1.4.1024
+msgid "Segno a sinistra"
+msgstr "Left marker"
+
+#: OLObuild 1.4.1024
+msgid "Font vuoto: il monospazio del tema."
+msgstr "Empty font: the theme monospace."
+
+#: OLObuild 1.4.1024
+msgid "Durata di un giro"
+msgstr "Loop duration"
+
+#: OLObuild 1.4.1024
+msgid "Si trascina col dito o col mouse"
+msgstr "Drag with finger or mouse"
+
+#: OLObuild 1.4.1024
+msgid "Reazione allo scorrimento"
+msgstr "Scroll reaction"
+
+#: OLObuild 1.4.1024
+msgid "Accelera e si inclina scorrendo"
+msgstr "Speeds up and tilts while scrolling"
+
+#: OLObuild 1.4.1024
+msgid "Lo scorrimento della pagina aggiunge spinta e inclinazione al nastro, che si smorza quando ti fermi. Con «riduci movimento» del sistema resta solo lo scorrimento di base."
+msgstr "Scrolling the page adds push and tilt to the strip, easing off when you stop. With the system’s “reduce motion” only the base movement remains."
+
+#: OLObuild 1.4.1024
+msgid "Velocità di base"
+msgstr "Base speed"
+
+#: OLObuild 1.4.1024
+msgid "Spinta dello scorrimento"
+msgstr "Scroll boost"
+
+#: OLObuild 1.4.1024
+msgid "Inclinazione massima"
+msgstr "Maximum tilt"
+
+#: OLObuild 1.4.1024
+msgid "Striscia piena"
+msgstr "Solid strip"
+
+#: OLObuild 1.4.1024
+msgid "Tra due fili"
+msgstr "Between two lines"
+
+#: OLObuild 1.4.1024
+msgid "Titoli grandi"
+msgstr "Large titles"
+
+#: OLObuild 1.4.1024
+msgid "Sfondo nastro"
+msgstr "Strip background"
+
+#: OLObuild 1.4.1024
+msgid "Frasi"
+msgstr "Phrases"
+
+#: OLObuild 1.4.1024
+msgid "Vuoto: il colore delle frasi."
+msgstr "Empty: the phrases colour."
+
+#: OLObuild 1.4.1024
+msgid "Dimensione separatore"
+msgstr "Separator size"
+
+#: OLObuild 1.4.1024
+msgid "0: la dimensione delle frasi."
+msgstr "0: the phrases size."
+
+#: OLObuild 1.4.1024
+msgid "Filo sopra"
+msgstr "Top line"
+
+#: OLObuild 1.4.1024
+msgid "Filo sotto"
+msgstr "Bottom line"
+
+#: OLObuild 1.4.1024
+msgid "Colore fili"
+msgstr "Lines colour"
+
+#: OLObuild 1.4.1024
+msgid "A tutta larghezza della finestra"
+msgstr "Full window width"
+
+#: OLObuild 1.4.1024
+msgid "Hours Strip"
+msgstr "Hours Strip"
+
+#: OLObuild 1.4.1024
+msgid "Fasce"
+msgstr "Slots"
+
+#: OLObuild 1.4.1024
+msgid "Facoltativa"
+msgstr "Optional"
+
+#: OLObuild 1.4.1024
+msgid "Servono a evidenziare la fascia di oggi. Nessun giorno: la fascia non si evidenzia mai, come i festivi."
+msgstr "They are used to highlight today’s slot. No days: the slot is never highlighted, like public holidays."
+
+#: OLObuild 1.4.1024
+msgid "La fascia che vale oggi, nel fuso orario del sito, con un fondo tenue e la scritta qui sotto. Cambia da sola ogni giorno, anche con la pagina in cache."
+msgstr "The slot that applies today, in the site’s time zone, with a soft background and the label below. It changes by itself every day, even with a cached page."
+
+#: OLObuild 1.4.1024
+msgid "Il fondo tenue, il giorno e la scritta della fascia di oggi. Vuoto: il primario del tema."
+msgstr "The soft background, the day and the label of today’s slot. Empty: the theme’s primary colour."
+
+#: OLObuild 1.4.1024
+msgid "0: la dimensione dello stile scelto."
+msgstr "0: the size of the chosen style."
+
+#: OLObuild 1.4.1024
+msgid "0: la larghezza della disposizione scelta."
+msgstr "0: the width of the chosen arrangement."
+
+#: OLObuild 1.4.1024
+msgid "0: lo spessore del tratto scelto."
+msgstr "0: the thickness of the chosen stroke."
+
+#: OLObuild 1.4.1024
+msgid "0: lo spessore dello stile scelto."
+msgstr "0: the thickness of the chosen style."
+
+#: OLObuild 1.4.1024
+msgid "0: l’altezza dello stile scelto."
+msgstr "0: the height of the chosen style."
+
+#: OLObuild 1.4.1024
+msgid "Barra colorata sopra"
+msgstr "Coloured bar on top"
+
+#: OLObuild 1.4.1024
+msgid "Biglietto"
+msgstr "Ticket"
+
+#: OLObuild 1.4.1024
+msgid "Cianografia"
+msgstr "Blueprint"
+
+#: OLObuild 1.4.1024
+msgid "Colore della tappa"
+msgstr "Milestone colour"
+
+#: OLObuild 1.4.1024
+msgid "Dimensione nodo"
+msgstr "Node size"
+
+#: OLObuild 1.4.1024
+msgid "Forma card"
+msgstr "Card shape"
+
+#: OLObuild 1.4.1024
+msgid "Il colore della tappa: nodo, etichetta e barra sopra l’immagine."
+msgstr "The milestone colour: node, label and bar above the image."
+
+#: OLObuild 1.4.1024
+msgid "Ingresso delle card"
+msgstr "Card entrance"
+
+#: OLObuild 1.4.1024
+msgid "La timeline sta sullo sfondo della sezione invece che sul fondo del tema scelto."
+msgstr "The timeline sits on the section background instead of the chosen theme’s background."
+
+#: OLObuild 1.4.1024
+msgid "Larghezza massima card"
+msgstr "Maximum card width"
+
+#: OLObuild 1.4.1024
+msgid "Mostra le etichette"
+msgstr "Show labels"
+
+#: OLObuild 1.4.1024
+msgid "Navigatore"
+msgstr "Navigator"
+
+#: OLObuild 1.4.1024
+msgid "Nel nodo"
+msgstr "In the node"
+
+#: OLObuild 1.4.1024
+msgid "Nel nodo, quando lo Stile mostra le icone."
+msgstr "In the node, when the Style shows icons."
+
+#: OLObuild 1.4.1024
+msgid "Nelle card"
+msgstr "In the cards"
+
+#: OLObuild 1.4.1024
+msgid "Ribalta"
+msgstr "Flip"
+
+#: OLObuild 1.4.1024
+msgid "Riempimento, primo colore"
+msgstr "Fill, first colour"
+
+#: OLObuild 1.4.1024
+msgid "Riempimento, secondo colore"
+msgstr "Fill, second colour"
+
+#: OLObuild 1.4.1024
+msgid "Scaletta"
+msgstr "Schedule"
+
+#: OLObuild 1.4.1024
+msgid "Scaletta: la data a sinistra e il testo accanto, senza card. Navigatore: un asse di date e una tappa alla volta."
+msgstr "Schedule: the date on the left and the text beside it, without cards. Navigator: a date axis and one milestone at a time."
+
+#: OLObuild 1.4.1024
+msgid "Senza lo sfondo del tema"
+msgstr "Without the theme background"
+
+#: OLObuild 1.4.1024
+msgid "Solo il primario"
+msgstr "Primary only"
+
+#: OLObuild 1.4.1024
+msgid "Spessore bordo nodo"
+msgstr "Node border thickness"
+
+#: OLObuild 1.4.1024
+msgid "Spessore filo"
+msgstr "Line thickness"
+
+#: OLObuild 1.4.1024
+msgid "Tratto"
+msgstr "Stroke"
+
+#: OLObuild 1.4.1024
+msgid "Tutti a 0: il padding della forma scelta."
+msgstr "All at 0: the padding of the chosen shape."
+
+#: OLObuild 1.4.1024
+msgid "Tutti a 0: il raggio della forma scelta."
+msgstr "All at 0: the radius of the chosen shape."
+
+#: OLObuild 1.4.1024
+msgid "Tutti a 0: il raggio dello stile scelto."
+msgstr "All at 0: the radius of the chosen style."
+
+#: OLObuild 1.4.1024
+msgid "Una barra nel colore della tappa sopra l’immagine."
+msgstr "A bar in the milestone colour above the image."
+
+#: OLObuild 1.4.1024
+msgid "Vuoto: il colore della categoria di ogni tappa."
+msgstr "Empty: the category colour of each milestone."
+
+#: OLObuild 1.4.1024
+msgid "Vuoto: il colore della categoria."
+msgstr "Empty: the category colour."
+
+#: OLObuild 1.4.1076
+msgid "Hello Olobuild è installato ma non attivo. È il tema leggero fatto apposta per Olobuild: non aggiunge stili suoi."
+msgstr "Hello Olobuild is installed but not active. It is the lightweight theme made for Olobuild: it adds no styles of its own."
+
+#: OLObuild 1.4.1076
+msgid "Testata, pagine e piè di pagina li disegna Olobuild: al tema WordPress resta solo da lasciargli spazio. Installiamo <strong>Hello Olobuild</strong>, il tema leggero fatto apposta."
+msgstr "Olobuild designs the header, the pages and the footer: the WordPress theme only has to make room for it. Let’s install <strong>Hello Olobuild</strong>, the lightweight theme made for the job."
+
+#: OLObuild 1.4.1076
+msgid "Ogni tema è un sito completo: testata, piè di pagina, pagine e menu. Dopo cambi tutto dal builder."
+msgstr "Each theme is a complete site: header, footer, pages and menu. Afterwards you change everything in the builder."
+
+#: OLObuild 1.4.1076
+msgid "Scegli un tema dall’elenco"
+msgstr "Choose a theme from the list"
+
+#: OLObuild 1.4.1076
+msgid "Tutto pronto!"
+msgstr "All set!"
+
+#: OLObuild 1.4.1076
+msgid "Creo le pagine, il menu, la testata e il piè di pagina, e copio le foto nella Libreria media…"
+msgstr "Creating the pages, the menu, the header and the footer, and copying the photos to the Media Library…"
+
+#: OLObuild 1.4.1076
+msgid "Importa «%s»"
+msgstr "Import “%s”"
+
+#: OLObuild 1.4.1076
+msgid "Il tema «%s» è nel tuo sito: pagine, menu, testata e piè di pagina sono già al loro posto. Testi, foto e colori li cambi dal builder."
+msgstr "The “%s” theme is on your site: pages, menu, header and footer are already in place. You change texts, photos and colours in the builder."
+
+#: OLObuild 1.4.1076
+msgid "%s — Configurazione iniziale"
+msgstr "%s — Initial setup"
+
+#: OLObuild 1.4.1076
+msgid "Configurazione iniziale"
+msgstr "Initial setup"
+
+#: OLObuild 1.4.1076
+msgid "Pochi passi, un paio di minuti. Tutto si cambia anche dopo."
+msgstr "A few steps, a couple of minutes. You can change everything later."
+
+#: OLObuild 1.4.1076
+msgid "Tema WordPress"
+msgstr "WordPress theme"
+
+#: OLObuild 1.4.1076
+msgid "Design"
+msgstr "Design"
+
+#: OLObuild 1.4.1076
+msgid "Un tema pronto"
+msgstr "A ready-made theme"
+
+#: OLObuild 1.4.1076
+msgid "Rete OLOtheme"
+msgstr "OLOtheme network"
+
+#: OLObuild 1.4.1076
+msgid "Altri software"
+msgstr "More software"
+
+#: OLObuild 1.4.1076
+msgid "Il tuo sito"
+msgstr "Your site"
+
+#: OLObuild 1.4.1076
+msgid "Il tema WordPress"
+msgstr "The WordPress theme"
+
+#: OLObuild 1.4.1076
+msgid "Hello Olobuild è già attivo: WordPress lascia tutto lo spazio a Olobuild."
+msgstr "Hello Olobuild is already active: WordPress leaves all the room to Olobuild."
+
+#: OLObuild 1.4.1076
+msgid "Tieni il tema attuale"
+msgstr "Keep the current theme"
+
+#: OLObuild 1.4.1076
+msgid "Hello Olobuild: solo la cornice"
+msgstr "Hello Olobuild: just the frame"
+
+#: OLObuild 1.4.1076
+msgid "Lo disegna %s"
+msgstr "Designed by %s"
+
+#: OLObuild 1.4.1076
+msgid "Scegli un design"
+msgstr "Choose a design"
+
+#: OLObuild 1.4.1076
+msgid "Importo «%s»"
+msgstr "Importing “%s”"
+
+#: OLObuild 1.4.1076
+msgid "Ti serve altro?"
+msgstr "Need anything else?"
+
+#: OLObuild 1.4.1076
+msgid "Olobuild fa parte della rete OLOtheme: software che lavorano insieme sullo stesso sito, con lo stesso stile. Segna quelli che ti servono."
+msgstr "Olobuild is part of the OLOtheme network: software that works together on the same site, in the same style. Tick the ones you need."
+
+#: OLObuild 1.4.1076
+msgid "Il sito in più lingue: pagine, menu e testi tradotti da un pannello solo."
+msgstr "Your site in several languages: pages, menus and texts translated from a single panel."
+
+#: OLObuild 1.4.1076
+msgid "Sicurezza"
+msgstr "Security"
+
+#: OLObuild 1.4.1076
+msgid "Accessi protetti, verifica in due passaggi, controllo dei file e un firewall leggero, con i dati sul tuo sito."
+msgstr "Protected logins, two-step verification, file checks and a lightweight firewall, with the data on your own site."
+
+#: OLObuild 1.4.1076
+msgid "Prenotazioni"
+msgstr "Bookings"
+
+#: OLObuild 1.4.1076
+msgid "Camere, tavoli, appuntamenti, eventi, noleggi e visite agli immobili, con calendario e pagamenti."
+msgstr "Rooms, tables, appointments, events, rentals and property viewings, with calendar and payments."
+
+#: OLObuild 1.4.1076
+msgid "Tour virtuali"
+msgstr "Virtual tours"
+
+#: OLObuild 1.4.1076
+msgid "Tour a 360° e ambienti 3D da visitare, anche col visore e con le visite guidate dal vivo."
+msgstr "360° tours and 3D spaces to explore, also with a headset and with live guided visits."
+
+#: OLObuild 1.4.1076
+msgid "Corsi online"
+msgstr "Online courses"
+
+#: OLObuild 1.4.1076
+msgid "Corsi e lezioni con giochi, quiz, badge e certificati, tutto dentro WordPress."
+msgstr "Courses and lessons with games, quizzes, badges and certificates, all inside WordPress."
+
+#: OLObuild 1.4.1076
+msgid "Già attivo"
+msgstr "Already active"
+
+#: OLObuild 1.4.1076
+msgid "Installato"
+msgstr "Installed"
+
+#: OLObuild 1.4.1076
+msgid "Per ora la tua scelta resta segnata qui: quando i software della rete si potranno scaricare da Olobuild, li troverai pronti da installare."
+msgstr "For now your choice is noted here: when the network’s software can be downloaded from Olobuild, you’ll find it ready to install."
+
+#: OLObuild 1.4.1076
+msgid "Personalizza la testata"
+msgstr "Customise the header"
+
+#: OLObuild 1.4.1076
+msgid "Personalizza il piè di pagina"
+msgstr "Customise the footer"
+
+#: OLObuild 1.4.1076
+msgid "Vedi il sito"
+msgstr "View the site"
+
+#: OLObuild 1.4.1076
+msgid "Hello Olobuild è il tema di WordPress"
+msgstr "Hello Olobuild is the WordPress theme"
+
+#: OLObuild 1.4.1076
+msgid "Il tema «%s»: pagine, menu, testata e piè di pagina"
+msgstr "The “%s” theme: pages, menu, header and footer"
+
+#: OLObuild 1.4.1076
+msgid "Segnati per dopo: %s"
+msgstr "Noted for later: %s"
+
+#: OLObuild 1.4.1078
+msgid "Card impilate"
+msgstr "Stacked cards"
+
+#: OLObuild 1.4.1078
+msgid "Una parola sopra il titolo, in maiuscolo: «Qualità», «Ascolto»."
+msgstr "A word above the title, in capitals: “Quality”, “Listening”."
+
+#: OLObuild 1.4.1078
+msgid "Seconda parte del titolo"
+msgstr "Second part of the title"
+
+#: OLObuild 1.4.1078
+msgid "Continua il titolo in un tono più tenue: «Curiamo» + «ogni dettaglio»."
+msgstr "Continues the title in a softer tone: “We care for” + “every detail”."
+
+#: OLObuild 1.4.1078
+msgid "Compare nel riquadro dell’immagine finché non ne scegli una."
+msgstr "Shown in the image box until you choose an image."
+
+#: OLObuild 1.4.1078
+msgid "Il numero progressivo sopra ogni card: 01, 02, 03…"
+msgstr "The running number above each card: 01, 02, 03…"
+
+#: OLObuild 1.4.1078
+msgid "Distanza dall’alto"
+msgstr "Distance from the top"
+
+#: OLObuild 1.4.1078
+msgid "A che altezza della finestra si ferma la prima card mentre scorri."
+msgstr "How far down the window the first card stops while you scroll."
+
+#: OLObuild 1.4.1078
+msgid "Scalino fra le card"
+msgstr "Step between cards"
+
+#: OLObuild 1.4.1078
+msgid "Ogni card si ferma un po’ più in basso della precedente, così della pila resta visibile il bordo."
+msgstr "Each card stops a little lower than the previous one, so the edge of the stack stays visible."
+
+#: OLObuild 1.4.1078
+msgid "Rimpicciolisci le card coperte"
+msgstr "Shrink the covered cards"
+
+#: OLObuild 1.4.1078
+msgid "Le card già coperte si riducono un poco, per dare profondità. Chi ha chiesto al sistema meno animazioni vede le card una sotto l’altra."
+msgstr "Cards already covered shrink a little, to add depth. Anyone who asked their system for less motion sees the cards one below the other."
+
+#: OLObuild 1.4.1078
+msgid "Quanto rimpicciolire"
+msgstr "How much to shrink"
+
+#: OLObuild 1.4.1078
+msgid "Per ogni card che sale sopra."
+msgstr "For each card that slides over it."
+
+#: OLObuild 1.4.1078
+msgid "Per le card senza un colore proprio (lo scegli card per card qui sotto, in «Card»). Vuoto: la superficie del tema."
+msgstr "For cards without their own colour (you choose it card by card below, under “Card”). Empty: the theme surface."
+
+#: OLObuild 1.4.1078
+msgid "Per le card senza un colore del testo proprio. Vuoto: il testo del tema."
+msgstr "For cards without their own text colour. Empty: the theme text."
+
+#: OLObuild 1.4.1078
+msgid "Vuoto: il colore principale del tema."
+msgstr "Empty: the theme’s main colour."
+
+#: OLObuild 1.4.1078
+msgid "Titolo grande"
+msgstr "Large title"
+
+#: OLObuild 1.4.1078
+msgid "Il carattere dei titoli del sito e una misura più grande."
+msgstr "The site’s heading typeface and a larger size."
+
+#: OLObuild 1.4.1078
+msgid "Lo stesso per tutte le immagini delle card."
+msgstr "The same for all card images."
+
+#: OLObuild 1.4.1078
+msgid "In una colonna stretta e sul telefono l’immagine va sotto il testo."
+msgstr "In a narrow column and on phones the image goes below the text."
+
+#: OLObuild 1.4.1078
+msgid "Ogni card"
+msgstr "Each card"
+
+#: OLObuild 1.4.1080
+msgid "Dove sta il marker sull’immagine: 0 è il bordo sinistro, 100 il destro."
+msgstr "Where the marker sits on the image: 0 is the left edge, 100 the right."
+
+#: OLObuild 1.4.1080
+msgid "0 è il bordo in alto, 100 quello in basso."
+msgstr "0 is the top edge, 100 the bottom one."
+
+#: OLObuild 1.4.1080
+msgid "Foto nel fumetto"
+msgstr "Photo in the bubble"
+
+#: OLObuild 1.4.1080
+msgid "Cambia insieme marker, fumetto e raggio dell’immagine, coi colori del sito. Poi ogni controllo qui sotto si regola da solo."
+msgstr "Changes the markers, the bubble and the image radius together, with the site colours. Then each control below can be adjusted on its own."
+
+#: OLObuild 1.4.1080
+msgid "Forma del marker"
+msgstr "Marker shape"
+
+#: OLObuild 1.4.1080
+msgid "Vuoto: il colore principale del sito."
+msgstr "Empty: the site’s main colour."
+
+#: OLObuild 1.4.1080
+msgid "Marker che pulsano"
+msgstr "Pulsing markers"
+
+#: OLObuild 1.4.1080
+msgid "Un anello si allarga attorno a ogni marker, per dire che si può toccare."
+msgstr "A ring spreads around each marker, to show it can be tapped."
+
+#: OLObuild 1.4.1080
+msgid "Sfondo fumetto"
+msgstr "Bubble background"
+
+#: OLObuild 1.4.1080
+msgid "Vuoto: la superficie del sito. Con un colore semitrasparente il fumetto diventa vetro smerigliato."
+msgstr "Empty: the site surface. With a semi-transparent colour the bubble becomes frosted glass."
+
+#: OLObuild 1.4.1080
+msgid "Colore testo fumetto"
+msgstr "Bubble text colour"
+
+#: OLObuild 1.4.1080
+msgid "Larghezza fumetto"
+msgstr "Bubble width"
+
+#: OLObuild 1.4.1080
+msgid "Dove si apre il fumetto"
+msgstr "Where the bubble opens"
+
+#: OLObuild 1.4.1080
+msgid "Posizione del fumetto"
+msgstr "Bubble position"
+
+#: OLObuild 1.4.1080
+msgid "Se non ci sta, il fumetto si sposta o si gira da solo per restare nello schermo."
+msgstr "If it doesn’t fit, the bubble moves or flips by itself to stay on screen."
+
+#: OLObuild 1.4.1082
+msgid "Un gruppo per ogni scelta da fare: il processore, la memoria, i servizi. Ogni opzione sceglie il suo gruppo dal menu Gruppo."
+msgstr "One group for each choice to make: processor, memory, services. Each option picks its group from the Group menu."
+
+#: OLObuild 1.4.1082
+msgid "Il nome tecnico del gruppo, una parola senza spazi (per esempio cpu): serve ai collegamenti e ai moduli. Vuoto o automatico (ci-…): vale il titolo."
+msgstr "The group’s technical name, one word without spaces (for example cpu): used by links and forms. Empty or automatic (ci-…): the title is used."
+
+#: OLObuild 1.4.1082
+msgid "— Scegli il gruppo —"
+msgstr "— Choose the group —"
+
+#: OLObuild 1.4.1082
+msgid "— Scegli —"
+msgstr "— Choose —"
+
+#: OLObuild 1.4.1084
+msgid "Nome della serie"
+msgstr "Series name"
+
+#: OLObuild 1.4.1084
+msgid "Mostrato nella legenda"
+msgstr "Shown in the legend"
+
+#: OLObuild 1.4.1084
+msgid "Il nome dei valori, che la legenda e il fumetto mostrano accanto al colore: per esempio «kWh prodotti»."
+msgstr "The name of the values, shown by the legend and the tooltip next to the colour: for example “kWh produced”."
+
+#: OLObuild 1.4.1084
+msgid "Legenda e fumetto"
+msgstr "Legend and tooltip"
+
+#: OLObuild 1.4.1084
+msgid "Fumetto al passaggio"
+msgstr "Tooltip on hover"
+
+#: OLObuild 1.4.1084
+msgid "Passando sopra un dato (o toccandolo, sul telefono) un fumetto ne mostra il valore."
+msgstr "Hovering over a data point (or tapping it on a phone) shows its value in a tooltip."
+
+#: OLObuild 1.4.1084
+msgid "Le barre crescono, le linee si disegnano quando il grafico entra nello schermo."
+msgstr "Bars grow and lines draw themselves when the chart comes into view."
+
+#: OLObuild 1.4.1084
+msgid "Scala e assi"
+msgstr "Scale and axes"
+
+#: OLObuild 1.4.1084
+msgid "Passo della scala"
+msgstr "Scale step"
+
+#: OLObuild 1.4.1084
+msgid "Nome asse delle etichette"
+msgstr "Label axis name"
+
+#: OLObuild 1.4.1084
+msgid "Nome asse dei valori"
+msgstr "Value axis name"
+
+#: OLObuild 1.4.1084
+msgid "Cambia insieme sfondo, griglia, testi, fumetto e forma delle barre, coi colori del sito. I colori dei dati restano i tuoi (in fondo, «Ogni dato»)."
+msgstr "Changes background, grid, text, tooltip and bar shape together, with the site colours. The data colours stay yours (at the bottom, “Each data point”)."
+
+#: OLObuild 1.4.1084
+msgid "Colore dei bordi"
+msgstr "Border colour"
+
+#: OLObuild 1.4.1084
+msgid "Un colore solo per il bordo di tutti i dati. Vuoto: ogni dato ha il suo."
+msgstr "One colour for the border of every data point. Empty: each keeps its own."
+
+#: OLObuild 1.4.1084
+msgid "Quanto della sua colonna occupa ogni barra: 1 = tutta."
+msgstr "How much of its column each bar fills: 1 = all of it."
+
+#: OLObuild 1.4.1084
+msgid "Larghezza colonne"
+msgstr "Column width"
+
+#: OLObuild 1.4.1084
+msgid "Quanto dello spazio di ogni etichetta occupa la sua colonna: più basso, più aria fra le barre."
+msgstr "How much of each label’s space its column fills: lower means more room between bars."
+
+#: OLObuild 1.4.1084
+msgid "Raggio punti al passaggio"
+msgstr "Point radius on hover"
+
+#: OLObuild 1.4.1084
+msgid "Foro della ciambella"
+msgstr "Doughnut hole"
+
+#: OLObuild 1.4.1084
+msgid "Griglia verticale"
+msgstr "Vertical grid"
+
+#: OLObuild 1.4.1084
+msgid "Griglia orizzontale"
+msgstr "Horizontal grid"
+
+#: OLObuild 1.4.1084
+msgid "Linea dell’asse orizzontale"
+msgstr "Horizontal axis line"
+
+#: OLObuild 1.4.1084
+msgid "Linea dell’asse verticale"
+msgstr "Vertical axis line"
+
+#: OLObuild 1.4.1084
+msgid "Colore linee degli assi"
+msgstr "Axis line colour"
+
+#: OLObuild 1.4.1084
+msgid "Bordo fumetto"
+msgstr "Tooltip border"
+
+#: OLObuild 1.4.1084
+msgid "Raggio fumetto"
+msgstr "Tooltip radius"
+
+#: OLObuild 1.4.1084
+msgid "Padding fumetto"
+msgstr "Tooltip padding"
+
+#: OLObuild 1.4.1084
+msgid "Barre verticali"
+msgstr "Vertical bars"
+
+#: OLObuild 1.4.1084
+msgid "Barre orizzontali"
+msgstr "Horizontal bars"
+
+#: OLObuild 1.4.1084
+msgid "Ogni dato"
+msgstr "Each data point"
+
+#: OLObuild 1.4.1085
+msgid "Di fianco"
+msgstr "Alongside"
+
+#: OLObuild 1.4.1087
+msgid "Lo spazio attorno a ogni voce della legenda."
+msgstr "The space around each legend item."
+
+#: OLObuild 1.4.1087
+msgid "Torte, ciambelle e aree polari elencano i dati coi loro colori. Barre, linee e radar mostrano il nome della serie: senza nome la legenda non compare."
+msgstr "Pie, doughnut and polar area charts list the data with their colours. Bars, lines and radar show the series name: without a name there is no legend."
+
+#: OLObuild 1.4.1088
+msgid "La prima riga dei Dati fa da intestazione: ha il suo sfondo e il suo carattere, e sul telefono dà il nome alle celle."
+msgstr "The first row of the data is the header: it has its own background and font, and on phones it names the cells."
+
+#: OLObuild 1.4.1088
+msgid "Prima colonna come titolo di riga"
+msgstr "First column as row title"
+
+#: OLObuild 1.4.1088
+msgid "La prima cella di ogni riga diventa il titolo della riga, in grassetto; nelle schede del telefono è il titolo della scheda."
+msgstr "The first cell of each row becomes the row title, in bold; in the phone cards it is the card title."
+
+#: OLObuild 1.4.1088
+msgid "A righe"
+msgstr "Striped"
+
+#: OLObuild 1.4.1088
+msgid "Cambia insieme intestazione, righe, linee e caratteri, coi colori del sito. Poi ogni controllo qui sotto si regola da solo."
+msgstr "Changes header, rows, lines and fonts together, with the site colours. Then each control below can be adjusted on its own."
+
+#: OLObuild 1.4.1088
+msgid "Sfondo righe alternate"
+msgstr "Alternate row background"
+
+#: OLObuild 1.4.1088
+msgid "Linee fra le righe"
+msgstr "Lines between rows"
+
+#: OLObuild 1.4.1088
+msgid "Le linee fra le righe e, sul telefono, il bordo delle schede."
+msgstr "The lines between rows and, on phones, the border of the cards."
+
+#: OLObuild 1.4.1088
+msgid "Evidenzia la riga al passaggio"
+msgstr "Highlight the row on hover"
+
+#: OLObuild 1.4.1088
+msgid "Meno spazio attorno al testo delle celle e un carattere un po’ più piccolo: per tabelle lunghe."
+msgstr "Less space around the cell text and a slightly smaller font: for long tables."
+
+#: OLObuild 1.4.1088
+msgid "Sul telefono"
+msgstr "On phones"
+
+#: OLObuild 1.4.1088
+msgid "Scorre di lato"
+msgstr "Scrolls sideways"
+
+#: OLObuild 1.4.1088
+msgid "Una scheda per riga"
+msgstr "One card per row"
+
+#: OLObuild 1.4.1088
+msgid "Scorre di lato: la tabella resta com’è e si scorre col dito. Una scheda per riga: ogni riga diventa una scheda, coi nomi dell’intestazione accanto ai valori."
+msgstr "Scrolls sideways: the table stays as it is and is moved with a finger. One card per row: each row becomes a card, with the header names next to the values."
+
+#: OLObuild 1.4.1088
+msgid "Modifica la tabella"
+msgstr "Edit the table"
+
+#: OLObuild 1.4.1088
+msgid "Dati della tabella"
+msgstr "Table data"
+
+#: OLObuild 1.4.1088
+msgid "Scrivi nelle celle: la pagina si aggiorna mentre scrivi."
+msgstr "Type in the cells: the page updates as you type."
+
+#: OLObuild 1.4.1088
+msgid "Tab passa alla cella dopo, Invio a quella sotto (alla fine aggiunge una riga)."
+msgstr "Tab moves to the next cell, Enter to the one below (at the end it adds a row)."
+
+#: OLObuild 1.4.1088
+msgid "Sopra ogni colonna scegli l’allineamento; la × toglie la colonna o la riga."
+msgstr "Above each column choose the alignment; the × removes the column or the row."
+
+#: OLObuild 1.4.1088
+msgid "Allineamento colonna"
+msgstr "Column alignment"
+
+#: OLObuild 1.4.1088
+msgid "Togli la colonna"
+msgstr "Remove the column"
+
+#: OLObuild 1.4.1088
+msgid "Testa"
+msgstr "Header"
+
+#: OLObuild 1.4.1088
+msgid "Togli la riga"
+msgstr "Remove the row"
+
+#: OLObuild 1.4.1088
+msgid "colonna"
+msgstr "column"
+
+#: OLObuild 1.4.1088
+msgid "+ Riga"
+msgstr "+ Row"
+
+#: OLObuild 1.4.1088
+msgid "+ Colonna"
+msgstr "+ Column"
+
+#: OLObuild 1.4.1088
+msgid "1 riga"
+msgstr "1 row"
+
+#: OLObuild 1.4.1088
+msgid "%d righe"
+msgstr "%d rows"
+
+#: OLObuild 1.4.1088
+msgid "%d colonne"
+msgstr "%d columns"
+
+#: OLObuild 1.4.1090
+msgid "Il numero o la sigla davanti al titolo: 01, A1, ★. Vuoto: niente."
+msgstr "The number or code before the title: 01, A1, ★. Empty: nothing."
+
+#: OLObuild 1.4.1090
+msgid "Con un link la riga intera porta lì, e al passaggio compare la freccia."
+msgstr "With a link the whole row goes there, and the arrow appears on hover."
+
+#: OLObuild 1.4.1090
+msgid "Sfondo riga al passaggio"
+msgstr "Row background on hover"
+
+#: OLObuild 1.4.1090
+msgid "Carattere dei dettagli"
+msgstr "Details font"
+
+#: OLObuild 1.4.1090
+msgid "Il carattere di numero, categoria e anno. Vuoto: quello monospaziato del sito."
+msgstr "The font of number, category and year. Empty: the site’s monospaced font."
+
+#: OLObuild 1.4.1090
+msgid "Rientro al passaggio"
+msgstr "Indent on hover"
+
+#: OLObuild 1.4.1090
+msgid "Di quanto la riga rientra quando ci si passa sopra."
+msgstr "How far the row indents when hovered."
+
+#: OLObuild 1.4.1090
+msgid "Con un link la riga intera porta lì."
+msgstr "With a link the whole row goes there."
+
+#: OLObuild 1.4.1090
+msgid "Sfondo al passaggio"
+msgstr "Background on hover"
+
+#: OLObuild 1.4.1093
+msgid "Schede prodotto"
+msgstr "Product cards"
+
+#: OLObuild 1.4.1093
+msgid "Sfondo / media in alto"
+msgstr "Top background / media"
+
+#: OLObuild 1.4.1093
+msgid "La metà alta della scheda: la foto del prodotto, o una tinta o una sfumatura con la lettera o il logo sopra."
+msgstr "The top half of the card: the product photo, or a colour or gradient with the letter or the logo on top."
+
+#: OLObuild 1.4.1093
+msgid "Una lettera grande sopra lo sfondo in alto, come un monogramma. Vuota: niente."
+msgstr "A large letter over the top background, like a monogram. Empty: nothing."
+
+#: OLObuild 1.4.1093
+msgid "Al posto della lettera."
+msgstr "Instead of the letter."
+
+#: OLObuild 1.4.1093
+msgid "Scritta in alto"
+msgstr "Top caption"
+
+#: OLObuild 1.4.1093
+msgid "Una piccola scritta a filo, sopra la foto o la lettera."
+msgstr "A small outlined caption over the photo or the letter."
+
+#: OLObuild 1.4.1093
+msgid "Marca o categoria"
+msgstr "Brand or category"
+
+#: OLObuild 1.4.1093
+msgid "Mostra il badge"
+msgstr "Show the badge"
+
+#: OLObuild 1.4.1093
+msgid "Attaccata al titolo, nel colore della marca e, se vuoi, in corsivo."
+msgstr "Attached to the title, in the brand colour and, if you like, in italics."
+
+#: OLObuild 1.4.1093
+msgid "Mostra la scritta in alto"
+msgstr "Show the top caption"
+
+#: OLObuild 1.4.1093
+msgid "Freccia accanto al pulsante"
+msgstr "Arrow next to the button"
+
+#: OLObuild 1.4.1093
+msgid "Al passaggio"
+msgstr "On hover"
+
+#: OLObuild 1.4.1093
+msgid "Colore scritta in alto"
+msgstr "Top caption colour"
+
+#: OLObuild 1.4.1093
+msgid "Marca"
+msgstr "Brand"
+
+#: OLObuild 1.4.1093
+msgid "Proporzioni in alto"
+msgstr "Top aspect ratio"
+
+#: OLObuild 1.4.1093
+msgid "Padding in alto"
+msgstr "Top padding"
+
+#: OLObuild 1.4.1093
+msgid "Ogni scheda"
+msgstr "Each card"
+
+#: OLObuild 1.4.1093
+msgid "Colore marca"
+msgstr "Brand colour"
+
+#: OLObuild 1.4.1093
+msgid "Seconda parte in corsivo"
+msgstr "Second part in italics"
+
+#: OLObuild 1.4.1093
+msgid "Al massimo: se le schede resterebbero più strette di 220 px, in una colonna stretta della pagina, la griglia ne mette meno da sola."
+msgstr "At most: if the cards would be narrower than 220 px, in a narrow column of the page, the grid uses fewer by itself."
+
+#: OLObuild 1.4.1095
+msgid "Striscia garanzie"
+msgstr "Trust strip"
+
+#: OLObuild 1.4.1095
+msgid "Con le pillole, al posto dell’icona: il marchio di un pagamento, di un corriere, di una certificazione."
+msgstr "With pills, instead of the icon: the logo of a payment method, a courier, a certification."
+
+#: OLObuild 1.4.1095
+msgid "Con le pillole, una piccola etichetta a destra del testo: «Nuovo», «Gratis»."
+msgstr "With pills, a small label to the right of the text: “New”, “Free”."
+
+#: OLObuild 1.4.1095
+msgid "In riga: icona e testo, con un separatore fra le voci. Pillole: ogni voce in una capsula di vetro, col logo al posto dell’icona e un badge."
+msgstr "In a row: icon and text, with a separator between items. Pills: each item in a glass capsule, with the logo instead of the icon and a badge."
+
+#: OLObuild 1.4.1095
+msgid "Sfondo pillola"
+msgstr "Pill background"
+
+#: OLObuild 1.4.1095
+msgid "· Punto"
+msgstr "· Dot"
+
+#: OLObuild 1.4.1095
+msgid "• Pallino"
+msgstr "• Bullet"
+
+#: OLObuild 1.4.1095
+msgid "| Barra"
+msgstr "| Bar"
+
+#: OLObuild 1.4.1095
+msgid "— Lineetta"
+msgstr "— Dash"
+
+#: OLObuild 1.4.1095
+msgid "Su più righe"
+msgstr "On several lines"
+
+#: OLObuild 1.4.1095
+msgid "Forza una riga: le voci non vanno mai a capo, e se non ci stanno la striscia scorre di lato."
+msgstr "Force one line: items never wrap, and if they don’t fit the strip scrolls sideways."
+
+#: OLObuild 1.4.1095
+msgid "Ogni voce"
+msgstr "Each item"
+
+#: OLObuild 1.4.1095
+msgid "Attaccata al titolo e, se vuoi, in corsivo (Stile → Ogni scheda)."
+msgstr "Attached to the title and, if you like, in italics (Style → Each card)."
+
+#: OLObuild 1.4.1097
+msgid "Immagine: la foto col testo sopra. Testo, Icona e Grafica: una card piena col suo colore, senza foto."
+msgstr "Image: the photo with the text over it. Text, Icon and Graphic: a solid card in its colour, without a photo."
+
+#: OLObuild 1.4.1097
+msgid "Seconda immagine al passaggio"
+msgstr "Second image on hover"
+
+#: OLObuild 1.4.1097
+msgid "Il paragrafo sotto il titolo, nelle card senza foto."
+msgstr "The paragraph under the title, in cards without a photo."
+
+#: OLObuild 1.4.1097
+msgid "Una scritta nell’angolo della card: «Nuovo», «Esaurito», «Ultimi posti»."
+msgstr "A label in the corner of the card: “New”, “Sold out”, “Last places”."
+
+#: OLObuild 1.4.1097
+msgid "Cella alta"
+msgstr "Tall cell"
+
+#: OLObuild 1.4.1097
+msgid "Nel mosaico occupa due righe."
+msgstr "In the mosaic it takes two rows."
+
+#: OLObuild 1.4.1097
+msgid "Cella larga"
+msgstr "Wide cell"
+
+#: OLObuild 1.4.1097
+msgid "Nel mosaico occupa due colonne."
+msgstr "In the mosaic it takes two columns."
+
+#: OLObuild 1.4.1097
+msgid "Il testo"
+msgstr "The text"
+
+#: OLObuild 1.4.1097
+msgid "Compare"
+msgstr "Fades in"
+
+#: OLObuild 1.4.1097
+msgid "Entra da sinistra"
+msgstr "Enters from the left"
+
+#: OLObuild 1.4.1097
+msgid "Entra da destra"
+msgstr "Enters from the right"
+
+#: OLObuild 1.4.1097
+msgid "Sempre visibile, o solo quando il puntatore passa sulla card. Sul telefono, dove non si passa sopra, il testo è sempre visibile."
+msgstr "Always visible, or only when the pointer is over the card. On phones, where there is no hover, the text is always visible."
+
+#: OLObuild 1.4.1097
+msgid "Mostra il pulsante"
+msgstr "Show the button"
+
+#: OLObuild 1.4.1097
+msgid "Lo stesso pulsante su ogni card, che porta al suo link."
+msgstr "The same button on every card, leading to its link."
+
+#: OLObuild 1.4.1097
+msgid "Cambia insieme velo, testo, raggio, ombra ed effetto al passaggio, coi colori del sito. Poi ogni controllo qui sotto si regola da solo."
+msgstr "Changes veil, text, radius, shadow and hover effect together, with the site colours. Then each control below can be adjusted on its own."
+
+#: OLObuild 1.4.1097
+msgid "Colore del velo"
+msgstr "Veil colour"
+
+#: OLObuild 1.4.1097
+msgid "Il fondo sotto il testo delle card con la foto."
+msgstr "The background under the text of cards with a photo."
+
+#: OLObuild 1.4.1097
+msgid "Velo sfumato"
+msgstr "Gradient veil"
+
+#: OLObuild 1.4.1097
+msgid "Trasparente in alto e pieno in basso, dove sta il testo: la foto resta libera."
+msgstr "Transparent at the top and solid at the bottom, where the text is: the photo stays clear."
+
+#: OLObuild 1.4.1097
+msgid "Effetto sull’immagine"
+msgstr "Image effect"
+
+#: OLObuild 1.4.1097
+msgid "Zoom e rotazione"
+msgstr "Zoom and rotation"
+
+#: OLObuild 1.4.1097
+msgid "Più luminosa"
+msgstr "Brighter"
+
+#: OLObuild 1.4.1097
+msgid "Dal grigio al colore"
+msgstr "From grey to colour"
+
+#: OLObuild 1.4.1097
+msgid "Da sfocata a nitida"
+msgstr "From blurred to sharp"
+
+#: OLObuild 1.4.1097
+msgid "Al passaggio del puntatore sulla card."
+msgstr "When the pointer is over the card."
+
+#: OLObuild 1.4.1097
+msgid "Grandezza del titolo"
+msgstr "Title size"
+
+#: OLObuild 1.4.1097
+msgid "Grandissimo (H1)"
+msgstr "Very large (H1)"
+
+#: OLObuild 1.4.1097
+msgid "Grande (H2)"
+msgstr "Large (H2)"
+
+#: OLObuild 1.4.1097
+msgid "Medio (H3)"
+msgstr "Medium (H3)"
+
+#: OLObuild 1.4.1097
+msgid "Piccolo (H4)"
+msgstr "Small (H4)"
+
+#: OLObuild 1.4.1097
+msgid "Punto focale delle immagini (uguale per tutte). Predefinito: il centro."
+msgstr "Focal point of the images (the same for all). Default: the centre."
+
+#: OLObuild 1.4.1097
+msgid "Padding del testo"
+msgstr "Text padding"
+
+#: OLObuild 1.4.1097
+msgid "Nel mosaico le card con «Cella alta» o «Cella larga» occupano due righe o due colonne; l’altezza diventa quella di una riga."
+msgstr "In the mosaic, cards with “Tall cell” or “Wide cell” take two rows or two columns; the height becomes that of one row."
+
+#: OLObuild 1.4.1097
+msgid "Colonne sul tablet orizzontale"
+msgstr "Columns on landscape tablet"
+
+#: OLObuild 1.4.1097
+msgid "Colonne sul tablet"
+msgstr "Columns on tablet"
+
+#: OLObuild 1.4.1097
+msgid "Come il telefono"
+msgstr "Like the phone"
+
+#: OLObuild 1.4.1097
+msgid "Su tutta la card"
+msgstr "Over the whole card"
+
+#: OLObuild 1.4.1097
+msgid "Stile del pulsante"
+msgstr "Button style"
+
+#: OLObuild 1.4.1097
+msgid "Con freccia"
+msgstr "With arrow"
+
+#: OLObuild 1.4.1097
+msgid "Vuoto: il colore primario del sito."
+msgstr "Empty: the site’s primary colour."
+
+#: OLObuild 1.4.1097
+msgid "Testo nastro"
+msgstr "Ribbon text"
+
+#: OLObuild 1.4.1097
+msgid "Vuoto: il colore che contrasta col primario."
+msgstr "Empty: the colour that contrasts with the primary."
+
+#: OLObuild 1.4.1097
+msgid "Posizione nastro"
+msgstr "Ribbon position"
+
+#: OLObuild 1.4.1097
+msgid "Ogni elemento"
+msgstr "Each item"
+
+#: OLObuild 1.4.1097
+msgid "Lo sfondo della card senza foto. Vuoto: il colore scuro del sito."
+msgstr "The background of the card without a photo. Empty: the site’s dark colour."
+
+#: OLObuild 1.4.1097
+msgid "Solo per questa card. Vuoto: quello scelto in Testo."
+msgstr "For this card only. Empty: the one chosen in Text."
+
+#: OLObuild 1.4.1098
+msgid "Effetto foto"
+msgstr "Photo effect"
+
+#: OLObuild 1.4.1098
+msgid "Colonne sul portatile"
+msgstr "Columns on laptop"
+
+#: OLObuild 1.4.1098
+msgid "Da 960 a 1199 px di larghezza della finestra: portatili piccoli e tablet in orizzontale. In mezza pagina la tile toglie da sola le colonne finché ogni card ha almeno 220 px."
+msgstr "From 960 to 1199 px of window width: small laptops and tablets in landscape. In half a page the tile removes columns by itself until each card is at least 220 px wide."
+
+#: OLObuild 1.4.1099
+msgid "Colonne portatile"
+msgstr "Columns laptop"
+
+#: OLObuild 1.4.1099
+msgid "Colonne telefono"
+msgstr "Columns phone"
+
+#: OLObuild 1.4.1102
+msgid "Particelle"
+msgstr "Particles"
+
+#: OLObuild 1.4.1102
+msgid "Sopra il contenuto"
+msgstr "Over the content"
+
+#: OLObuild 1.4.1102
+msgid "Sfondo della sezione: le particelle stanno dietro a ciò che la sezione mostra. Tutta la pagina: le particelle vivono su tutto il documento e scorrono con esso, dietro al contenuto, senza mai bloccare i click. Sopra il contenuto: le particelle passano davanti a ciò che la sezione mostra (anche a uno sfondo disegnato da una tile, come quello di un'apertura), senza bloccare i click."
+msgstr "Section background: the particles sit behind what the section shows. Whole page: the particles live on the whole document and scroll with it, behind the content, never blocking clicks. Over the content: the particles pass in front of what the section shows (even a background drawn by a tile, like a hero’s), without blocking clicks."
+
+#: OLObuild 1.4.1102
+msgid "Petali"
+msgstr "Petals"
+
+#: OLObuild 1.4.1102
+msgid "Coriandoli"
+msgstr "Confetti"
+
+#: OLObuild 1.4.1102
+msgid "Braci"
+msgstr "Embers"
+
+#: OLObuild 1.4.1102
+msgid "Petali, neve, pioggia e palloni cadono; bolle e braci salgono; le stelle restano sospese; i coriandoli scoppiano una volta; le scintille schizzano da un punto e ricadono."
+msgstr "Petals, snow, rain and balls fall; bubbles and embers rise; stars stay suspended; confetti bursts once; sparks shoot from a point and fall back."
+
+#: OLObuild 1.4.1102
+msgid "Vento"
+msgstr "Wind"
+
+#: OLObuild 1.4.1102
+msgid "Quanto le particelle derivano di lato mentre si muovono."
+msgstr "How much the particles drift sideways as they move."
+
+#: OLObuild 1.4.1102
+msgid "Distanza delle linee"
+msgstr "Line distance"
+
+#: OLObuild 1.4.1102
+msgid "Dimensione particelle"
+msgstr "Particle size"
+
+#: OLObuild 1.4.1103
+msgid "Disegna linee sottili fra le stelle vicine, come una costellazione."
+msgstr "Draws thin lines between nearby stars, like a constellation."
+
+#: OLObuild 1.4.1106
+msgid "Una volta: il testo entra dalla fine del tracciato quando la tile si vede, e si ferma. Continuo: la frase si ripete e scorre senza fine. Chi nel sistema ha chiesto meno movimento lo vede fermo."
+msgstr "Once: the text comes in from the end of the path when the tile is in view, and stops. Continuous: the sentence repeats and scrolls forever. Anyone who asked the system for less motion sees it still."
+
+#: OLObuild 1.4.1106
+msgid "Ruota tutto"
+msgstr "Rotate everything"
+
+#: OLObuild 1.4.1106
+msgid "Il testo gira in continuazione col suo tracciato, come un timbro ad anello: col Cerchio è perfetto. Chi nel sistema ha chiesto meno movimento lo vede fermo."
+msgstr "The text keeps turning with its path, like a ring stamp: perfect with the Circle. Anyone who asked the system for less motion sees it still."
+
+#: OLObuild 1.4.1106
+msgid "Percorso SVG"
+msgstr "SVG path"
+
+#: OLObuild 1.4.1106
+msgid "Il tracciato in formato SVG, cioè l’attributo «d» di un path, in un riquadro largo 300 e alto 100: per esempio M 0 50 Q 150 0 300 50."
+msgstr "The path in SVG format, i.e. the “d” attribute of a path, in a box 300 wide and 100 high: for example M 0 50 Q 150 0 300 50."
+
+#: OLObuild 1.4.1108
+msgid "Le parole in corsivo prendono il colore d’accento e restano dritte. Per andare a capo: Maiusc + Invio."
+msgstr "Words in italics take the accent colour and stay upright. To start a new line: Shift + Enter."
+
+#: OLObuild 1.4.1108
+msgid "Mostra il paragrafo"
+msgstr "Show the paragraph"
+
+#: OLObuild 1.4.1108
+msgid "Allo scorrimento"
+msgstr "On scroll"
+
+#: OLObuild 1.4.1108
+msgid "Le parole si accendono"
+msgstr "Words light up"
+
+#: OLObuild 1.4.1108
+msgid "Le parole partono spente e si accendono una alla volta mentre la pagina scorre. Chi nel sistema ha chiesto meno movimento le vede tutte accese."
+msgstr "The words start dimmed and light up one at a time as the page scrolls. Anyone who asked the system for less motion sees them all lit."
+
+#: OLObuild 1.4.1108
+msgid "Colore d’accento"
+msgstr "Accent colour"
+
+#: OLObuild 1.4.1108
+msgid "Le parole in corsivo del testo. Vuoto: il primario del sito."
+msgstr "The words in italics in the text. Empty: the site’s primary colour."
+
+#: OLObuild 1.4.1108
+msgid "Parole spente"
+msgstr "Dimmed words"
+
+#: OLObuild 1.4.1108
+msgid "Quanto si vedono le parole non ancora accese."
+msgstr "How visible the words not yet lit are."
+
+#: OLObuild 1.4.1111
+msgid "Le parole in corsivo prendono il colore d’accento."
+msgstr "Words in italics take the accent colour."
+
+#: OLObuild 1.4.1111
+msgid "Fattore"
+msgstr "Factor"
+
+#: OLObuild 1.4.1111
+msgid "Lista che scala"
+msgstr "Scaling list"
+
+#: OLObuild 1.4.1111
+msgid "Il colore di cursore, occhiello, parole in corsivo del titolo e risultato."
+msgstr "The colour of the slider, eyebrow, italic words in the title and result."
+
+#: OLObuild 1.4.1113
+msgid "Testo nel campo"
+msgstr "Text in the field"
+
+#: OLObuild 1.4.1113
+msgid "Il suggerimento grigio che si vede nel campo vuoto."
+msgstr "The grey hint shown in the empty field."
+
+#: OLObuild 1.4.1113
+msgid "Suggerimenti che si alternano"
+msgstr "Rotating hints"
+
+#: OLObuild 1.4.1113
+msgid "Suggerimenti"
+msgstr "Hints"
+
+#: OLObuild 1.4.1113
+msgid "Uno per riga: si scrivono e si cancellano a turno nel campo vuoto."
+msgstr "One per line: they are typed and erased in turn in the empty field."
+
+#: OLObuild 1.4.1113
+msgid "Estesa"
+msgstr "Expanded"
+
+#: OLObuild 1.4.1113
+msgid "Finestra"
+msgstr "Window"
+
+#: OLObuild 1.4.1113
+msgid "Estesa: il campo sempre visibile. Compatta: solo la lente, il campo si apre al clic. Finestra: la lente apre una finestra al centro dello schermo. In linea: il campo senza riquadro, per un mega menu o una colonna laterale."
+msgstr "Expanded: the field is always visible. Compact: only the magnifier, the field opens on click. Window: the magnifier opens a window in the centre of the screen. Inline: the field without a box, for a mega menu or a sidebar."
+
+#: OLObuild 1.4.1113
+msgid "Quante lettere servono prima che parta la ricerca."
+msgstr "How many letters are needed before the search starts."
+
+#: OLObuild 1.4.1113
+msgid "Attesa"
+msgstr "Wait"
+
+#: OLObuild 1.4.1113
+msgid "Quanto aspetta dopo l’ultima lettera prima di cercare: evita una ricerca a ogni tasto."
+msgstr "How long it waits after the last letter before searching: avoids a search at every key."
+
+#: OLObuild 1.4.1113
+msgid "Risultati al massimo"
+msgstr "Results at most"
+
+#: OLObuild 1.4.1113
+msgid "Pagina di tutti i risultati"
+msgstr "All results page"
+
+#: OLObuild 1.4.1113
+msgid "In fondo ai risultati, un collegamento a questa pagina con la ricerca fatta."
+msgstr "Below the results, a link to this page with the search made."
+
+#: OLObuild 1.4.1113
+msgid "Testo se non trova niente"
+msgstr "Text when nothing is found"
+
+#: OLObuild 1.4.1113
+msgid "Gli slug dei termini, separati da virgola."
+msgstr "The term slugs, separated by commas."
+
+#: OLObuild 1.4.1113
+msgid "Parole da escludere"
+msgstr "Words to exclude"
+
+#: OLObuild 1.4.1113
+msgid "I contenuti che le contengono non escono fra i risultati. Separate da virgola."
+msgstr "Content containing them does not appear in the results. Separated by commas."
+
+#: OLObuild 1.4.1113
+msgid "Titolo del risultato"
+msgstr "Result title"
+
+#: OLObuild 1.4.1113
+msgid "Bordo mentre si scrive"
+msgstr "Border while typing"
+
+#: OLObuild 1.4.1113
+msgid "Il bordo del campo quando ci si clicca dentro. Vuoto: il primario del sito."
+msgstr "The field border when you click into it. Empty: the site’s primary colour."
+
+#: OLObuild 1.4.1113
+msgid "Altezza campo"
+msgstr "Field height"
+
+#: OLObuild 1.4.1113
+msgid "Il pulsante con la sola lente (Compatta e Finestra). Vuoto = lo sfondo del campo."
+msgstr "The button with only the magnifier (Compact and Window). Empty = the field background."
+
+#: OLObuild 1.4.1113
+msgid "Colore lente"
+msgstr "Magnifier colour"
+
+#: OLObuild 1.4.1113
+msgid "Larghezza finestra"
+msgstr "Window width"
+
+#: OLObuild 1.4.1113
+msgid "Colore dietro la finestra"
+msgstr "Colour behind the window"
+
+#: OLObuild 1.4.1113
+msgid "Sfondo risultati"
+msgstr "Results background"
+
+#: OLObuild 1.4.1113
+msgid "Bordo risultati"
+msgstr "Results border"
+
+#: OLObuild 1.4.1113
+msgid "Raggio risultati"
+msgstr "Results radius"
+
+#: OLObuild 1.4.1113
+msgid "Sfondo voce al passaggio"
+msgstr "Item background on hover"
+
+#: OLObuild 1.4.1113
+msgid "Altezza massima risultati"
+msgstr "Maximum results height"
+
+#: OLObuild 1.4.1117
+msgid "Testo nel campo nome"
+msgstr "Text in the name field"
+
+#: OLObuild 1.4.1117
+msgid "Testo nel campo email"
+msgstr "Text in the email field"
+
+#: OLObuild 1.4.1117
+msgid "Testo privacy"
+msgstr "Privacy text"
+
+#: OLObuild 1.4.1117
+msgid "La riga sotto il modulo, col collegamento alla pagina della privacy: seleziona le parole e premi il pulsante del collegamento."
+msgstr "The line under the form, with the link to the privacy page: select the words and press the link button."
+
+#: OLObuild 1.4.1117
+msgid "Dopo l’iscrizione"
+msgstr "After signing up"
+
+#: OLObuild 1.4.1117
+msgid "Pagina dopo l’iscrizione"
+msgstr "Page after signing up"
+
+#: OLObuild 1.4.1117
+msgid "Vuota: resta sulla pagina e mostra il messaggio."
+msgstr "Empty: stays on the page and shows the message."
+
+#: OLObuild 1.4.1117
+msgid "Contenuto riservato"
+msgstr "Locked content"
+
+#: OLObuild 1.4.1117
+msgid "Blocca il contenuto che segue"
+msgstr "Lock the content that follows"
+
+#: OLObuild 1.4.1117
+msgid "Messaggio sul contenuto bloccato"
+msgstr "Message on the locked content"
+
+#: OLObuild 1.4.1117
+msgid "Contro lo spam"
+msgstr "Against spam"
+
+#: OLObuild 1.4.1117
+msgid "Campo trappola"
+msgstr "Trap field"
+
+#: OLObuild 1.4.1117
+msgid "Un campo invisibile che le persone non vedono e i programmi automatici riempiono: chi lo riempie non viene iscritto. Consigliato."
+msgstr "An invisible field people don’t see and bots fill in: whoever fills it is not subscribed. Recommended."
+
+#: OLObuild 1.4.1117
+msgid "Cambia insieme fondo, testi, campi e pulsante, coi colori del sito. Poi ogni controllo qui sotto si regola da solo."
+msgstr "Changes background, texts, fields and button together, with the site’s colours. Then each control below can be adjusted on its own."
+
+#: OLObuild 1.4.1117
+msgid "Come compare il messaggio"
+msgstr "How the message appears"
+
+#: OLObuild 1.4.1117
+msgid "Spunta animata"
+msgstr "Animated tick"
+
+#: OLObuild 1.4.1117
+msgid "Colore d’accento del titolo"
+msgstr "Title accent colour"
+
+#: OLObuild 1.4.1117
+msgid "Le parole in corsivo del titolo. Vuoto: il primario del sito."
+msgstr "The italic words in the title. Empty: the site’s primary colour."
+
+#: OLObuild 1.4.1117
+msgid "Sfondo campi"
+msgstr "Fields background"
+
+#: OLObuild 1.4.1117
+msgid "Colore testo campi"
+msgstr "Fields text colour"
+
+#: OLObuild 1.4.1117
+msgid "Colore del suggerimento"
+msgstr "Hint colour"
+
+#: OLObuild 1.4.1117
+msgid "Raggio campi"
+msgstr "Fields radius"
+
+#: OLObuild 1.4.1117
+msgid "Altezza campi"
+msgstr "Fields height"
+
+#: OLObuild 1.4.1117
+msgid "Messaggi e privacy"
+msgstr "Messages and privacy"
+
+#: OLObuild 1.4.1117
+msgid "Sfondo messaggio di conferma"
+msgstr "Confirmation message background"
+
+#: OLObuild 1.4.1117
+msgid "Colore messaggio di conferma"
+msgstr "Confirmation message colour"
+
+#: OLObuild 1.4.1117
+msgid "Sfondo messaggio d’errore"
+msgstr "Error message background"
+
+#: OLObuild 1.4.1117
+msgid "Colore messaggio d’errore"
+msgstr "Error message colour"
+
+#: OLObuild 1.4.1117
+msgid "In riga: campi e pulsante uno accanto all’altro. In colonna: uno sotto l’altro. Essenziale: solo l’email e il pulsante, senza titolo né icona."
+msgstr "In a row: fields and button side by side. In a column: one under the other. Essential: only the email and the button, no title or icon."
+
+#: OLObuild 1.4.1118
+msgid "Sopra il titolo"
+msgstr "Above the title"
+
+#: OLObuild 1.4.1118
+msgid "La pagina dove va chi si è appena iscritto. Vuota: resta qui e vede il messaggio."
+msgstr "The page new subscribers go to. Empty: they stay here and see the message."
+
+#: OLObuild 1.4.1118
+msgid "Il testo grigio nei campi vuoti."
+msgstr "The grey text in empty fields."
+
+#: OLObuild 1.4.1118
+msgid "Sfondo conferma"
+msgstr "Confirmation background"
+
+#: OLObuild 1.4.1118
+msgid "Testo conferma"
+msgstr "Confirmation text"
+
+#: OLObuild 1.4.1118
+msgid "Sfondo errore"
+msgstr "Error background"
+
+#: OLObuild 1.4.1118
+msgid "Testo errore"
+msgstr "Error text"
+
+#: OLObuild 1.4.1118
+msgid "Come compare il messaggio di conferma dopo l’iscrizione."
+msgstr "How the confirmation message appears after signing up."
+
+#: OLObuild 1.4.1120
+msgid "Parte evidenziata"
+msgstr "Highlighted part"
+
+#: OLObuild 1.4.1120
+msgid "Le parole dopo il testo, nel colore d’accento: la novità, l’offerta, la data."
+msgstr "The words after the text, in the accent colour: the news, the offer, the date."
+
+#: OLObuild 1.4.1120
+msgid "Facoltativo: con un link tutta la barra si può cliccare."
+msgstr "Optional: with a link the whole bar is clickable."
+
+#: OLObuild 1.4.1120
+msgid "Si può chiudere"
+msgstr "Can be closed"
+
+#: OLObuild 1.4.1120
+msgid "Una × a destra: chi la chiude non la rivede su quel dispositivo, finché il testo non cambia."
+msgstr "An × on the right: whoever closes it won’t see it again on that device until the text changes."
+
+#: OLObuild 1.4.1120
+msgid "Colore di fondo"
+msgstr "Background colour"
+
+#: OLObuild 1.4.1120
+msgid "Il colore della parte evidenziata. Vuoto: il primario del sito."
+msgstr "The colour of the highlighted part. Empty: the site’s primary colour."
+
+#: OLObuild 1.4.1120
+msgid "Una riga sottile lungo il bordo inferiore, per staccare la barra dal menu. 0: nessuna."
+msgstr "A thin line along the bottom edge, to set the bar apart from the menu. 0: none."
+
+#: OLObuild 1.4.1120
+msgid "Colore del filo"
+msgstr "Line colour"
+
+#: OLObuild 1.4.1125
+msgid "Seleziona file"
+msgstr "Select file"
+
+#: OLObuild 1.4.1125
+msgid "Cambia file"
+msgstr "Change file"
+
+#: OLObuild 1.4.1128
+msgid "In riga: quando la tile è stretta (il telefono, una colonna stretta) il pulsante va comunque sotto, largo quanto il campo."
+msgstr "In a row: when the tile is narrow (a phone, a narrow column) the button still moves below, as wide as the field."
+
+#: OLObuild 1.4.1129
+msgid "Una per riga, scritta «Risposta|punti»: per esempio «Spesso|3». Senza punti la risposta vale 0."
+msgstr "One per line, written «Answer|points»: for example «Often|3». Without points the answer is worth 0."
+
+#: OLObuild 1.4.1130
+msgid "Una per riga, scritta «Etichetta|valore», col valore da 0 a 100: «Clienti soddisfatti|98»."
+msgstr "One per line, written «Label|value», with the value from 0 to 100: «Happy customers|98»."
+
+#: OLObuild 1.4.1130
+msgid "Il testo al centro della barra o del cerchio. Se è vuoto, nel cerchio compare la percentuale; nella barra la percentuale sta in testa con «Mostra percentuale», e dentro la barra con lo stile «Spessa»."
+msgstr "The text in the middle of the bar or circle. If empty, the circle shows the percentage; on the bar the percentage sits above with «Show percentage», and inside the bar with the «Thick» style."
+
+#: OLObuild 1.4.1130
+msgid "Le barre e i cerchi si riempiono quando entrano nello schermo."
+msgstr "Bars and circles fill up when they come into view."
+
+#: OLObuild 1.4.1130
+msgid "Le percentuali salgono da zero insieme alle barre."
+msgstr "The percentages rise from zero along with the bars."
+
+#: OLObuild 1.4.1130
+msgid "Spessa"
+msgstr "Thick"
+
+#: OLObuild 1.4.1130
+msgid "Su fondo scuro"
+msgstr "On a dark background"
+
+#: OLObuild 1.4.1130
+msgid "Cambia insieme altezza, raggio e colori, coi colori del sito. Poi ogni controllo qui sotto si regola da solo."
+msgstr "Changes height, radius and colours together, with the site’s colours. Then each control below can be adjusted on its own."
+
+#: OLObuild 1.4.1130
+msgid "Colore della traccia"
+msgstr "Track colour"
+
+#: OLObuild 1.4.1130
+msgid "La parte vuota dietro la barra, o l'anello dietro il cerchio."
+msgstr "The empty part behind the bar, or the ring behind the circle."
+
+#: OLObuild 1.4.1130
+msgid "Barre o cerchi"
+msgstr "Bars or circles"
+
+#: OLObuild 1.4.1133
+msgid "Riquadro tenue"
+msgstr "Soft box"
+
+#: OLObuild 1.4.1133
+msgid "Cambia insieme sfondo, testi, raggio e spazi, coi colori del sito. Poi ogni controllo qui sotto si regola da solo."
+msgstr "Changes background, texts, radius and spacing together, with the site’s colours. Then each control below can be adjusted on its own."
+
+#: OLObuild 1.4.1133
+msgid "Immagine, video, gradiente o colore dietro il numero."
+msgstr "Image, video, gradient or colour behind the number."
+
+#: OLObuild 1.4.1133
+msgid "Velo scuro sul media"
+msgstr "Dark veil over the media"
+
+#: OLObuild 1.4.1133
+msgid "Opacità del velo"
+msgstr "Veil opacity"
+
+#: OLObuild 1.4.1135
+msgid "Diventa il filtro e prende il suo colore. I generi si aggiungono nella sezione Generi."
+msgstr "It becomes the filter and takes its colour. Genres are added in the Genres section."
+
+#: OLObuild 1.4.1140
+msgid "Zona visibile"
+msgstr "Visible area"
+
+#: OLObuild 1.4.1140
+msgid "Zona rivelata"
+msgstr "Revealed area"
+
+#: OLObuild 1.4.1140
+msgid "Si ingrandisce e svanisce"
+msgstr "Grows and fades"
+
+#: OLObuild 1.4.1140
+msgid "Si rimpicciolisce e svanisce"
+msgstr "Shrinks and fades"
+
+#: OLObuild 1.4.1140
+msgid "Ruota e svanisce"
+msgstr "Turns and fades"
+
+#: OLObuild 1.4.1140
+msgid "La zona rivelata compare al passaggio del mouse, col tocco sul telefono (un altro tocco la richiude) e col tasto Tab da tastiera."
+msgstr "The revealed area appears on mouse hover, on tap on phones (another tap closes it) and with the Tab key."
+
+#: OLObuild 1.4.1140
+msgid "Di quanto scorre la zona visibile. Vuoto o 0: tutta l’altezza del riquadro (a sinistra e a destra, tutta la larghezza)."
+msgstr "How far the visible area slides. Empty or 0: the full height of the box (left and right, the full width)."
+
+#: OLObuild 1.4.1140
+msgid "Rallenta alla fine"
+msgstr "Slows down at the end"
+
+#: OLObuild 1.4.1140
+msgid "Fluido"
+msgstr "Smooth"
+
+#: OLObuild 1.4.1140
+msgid "Costante"
+msgstr "Steady"
+
+#: OLObuild 1.4.1140
+msgid "Sfondo comune"
+msgstr "Shared background"
+
+#: OLObuild 1.4.1140
+msgid "Dietro tutte e due le zone: si vede dove una zona non ha uno sfondo suo."
+msgstr "Behind both areas: it shows where an area has no background of its own."
+
+#: OLObuild 1.4.1140
+msgid "Testo della zona visibile"
+msgstr "Visible area text"
+
+#: OLObuild 1.4.1140
+msgid "Testo della zona rivelata"
+msgstr "Revealed area text"
+
+#: OLObuild 1.4.1140
+msgid "In proporzione: 1 = 20 px."
+msgstr "As a ratio: 1 = 20 px."
+
+#: OLObuild 1.4.1140
+msgid "Più è bassa, più il giro è profondo e vicino."
+msgstr "The lower it is, the deeper and closer the turn."
+
+#: OLObuild 1.4.1140
+msgid "<h3>La cena in terrazza</h3><p>Il venerdì e il sabato sera</p>"
+msgstr "<h3>Dinner on the terrace</h3><p>Friday and Saturday evenings</p>"
+
+#: OLObuild 1.4.1140
+msgid "<h3>Menu degustazione · 45 €</h3><p>Cinque portate con i vini abbinati, dalle 20. Prenota entro il giovedì.</p>"
+msgstr "<h3>Tasting menu · €45</h3><p>Five courses with matching wines, from 8 pm. Book by Thursday.</p>"
+
+#: OLObuild 1.4.1140
+msgid "Dissolvenza incrociata"
+msgstr "Crossfade"
+
+#: OLObuild 1.4.1140
+msgid "Giro"
+msgstr "Flip"
+
+#: OLObuild 1.4.1144
+msgid "Una per riga: si alternano nello stesso punto, che resta largo quanto la più lunga, così il titolo non cambia forma."
+msgstr "One per line: they take turns in the same spot, which stays as wide as the longest, so the heading keeps its shape."
+
+#: OLObuild 1.4.1144
+msgid "Ritmo della digitazione"
+msgstr "Typing pace"
+
+#: OLObuild 1.4.1144
+msgid "Il tempo di ogni lettera: più è basso, più scrive in fretta. Cancella al doppio della velocità."
+msgstr "The time for each letter: the lower it is, the faster it types. It deletes at twice the speed."
+
+#: OLObuild 1.4.1144
+msgid "Pausa fra le parole"
+msgstr "Pause between words"
+
+#: OLObuild 1.4.1144
+msgid "Evidenziatore"
+msgstr "Highlighter"
+
+#: OLObuild 1.4.1144
+msgid "Cerchiato"
+msgstr "Circled"
+
+#: OLObuild 1.4.1144
+msgid "Sobrio"
+msgstr "Understated"
+
+#: OLObuild 1.4.1144
+msgid "Parola animata"
+msgstr "Animated word"
+
+#: OLObuild 1.4.1147
+msgid "Lettera, parola o breve frase mostrata in grande. Si scrive anche direttamente nel canvas."
+msgstr "A letter, word or short phrase shown large. You can also type it straight on the canvas."
+
+#: OLObuild 1.4.1147
+msgid "Sigla"
+msgstr "Tag"
+
+#: OLObuild 1.4.1147
+msgid "Le quattro lettere dell’asse nel font: wght peso, wdth larghezza, slnt inclinazione, ital corsivo, opsz misura ottica; gli assi propri del font sono in maiuscolo (CASL, MONO, GRAD)."
+msgstr "The four letters of the axis in the font: wght weight, wdth width, slnt slant, ital italic, opsz optical size; the font’s own axes are in capitals (CASL, MONO, GRAD)."
+
+#: OLObuild 1.4.1147
+msgid "Trascina la lettera"
+msgstr "Drag the letter"
+
+#: OLObuild 1.4.1147
+msgid "Solo cursori"
+msgstr "Sliders only"
+
+#: OLObuild 1.4.1147
+msgid "Trascina e cursori"
+msgstr "Drag and sliders"
+
+#: OLObuild 1.4.1147
+msgid "Pressione"
+msgstr "Pressure"
+
+#: OLObuild 1.4.1147
+msgid "«Trascina»: in orizzontale si muove il primo asse, in verticale il secondo. «Pressione»: ogni lettera va verso il massimo dei suoi assi quando il puntatore (o il dito, scorrendo di lato) le passa vicino, e torna al valore iniziale con una molla; per un effetto elastico tieni basso il valore iniziale (per esempio larghezza 60 su 50–150)."
+msgstr "«Drag»: horizontally you move the first axis, vertically the second. «Pressure»: each letter goes towards the maximum of its axes when the pointer (or a finger swiping sideways) passes close, and springs back to its starting value; for an elastic effect keep the starting value low (for example width 60 on 50–150)."
+
+#: OLObuild 1.4.1147
+msgid "Si muove da solo a riposo"
+msgstr "Moves by itself when idle"
+
+#: OLObuild 1.4.1147
+msgid "Quando nessuno la tocca, gli assi oscillano piano (con «Pressione» un’onda attraversa la parola). Chi ha chiesto meno movimento al sistema la vede ferma."
+msgstr "When nobody touches it, the axes sway gently (with «Pressure» a wave runs through the word). People who asked their system for less motion see it still."
+
+#: OLObuild 1.4.1147
+msgid "Durata di un’onda"
+msgstr "Length of one wave"
+
+#: OLObuild 1.4.1147
+msgid "Mostra i valori"
+msgstr "Show the values"
+
+#: OLObuild 1.4.1147
+msgid "I cursori e i valori."
+msgstr "The sliders and the values."
+
+#: OLObuild 1.4.1147
+msgid "Un font variabile, per esempio Recursive o Roboto Flex: solo i font variabili cambiano davvero coi cursori. Vuoto: il carattere del tema."
+msgstr "A variable font, for example Recursive or Roboto Flex: only variable fonts really change with the sliders. Empty: the theme’s font."
+
+#: OLObuild 1.4.1147
+msgid "Peso di riserva"
+msgstr "Fallback weight"
+
+#: OLObuild 1.4.1147
+msgid "Il peso fisso che si vede se il browser non sa variare il font."
+msgstr "The fixed weight shown if the browser cannot vary the font."
+
+#: OLObuild 1.4.1150
+msgid "Panorama a 360°"
+msgstr "360° panorama"
+
+#: OLObuild 1.4.1150
+msgid "Oggetto girevole, da una foto"
+msgstr "Spinning object, from one photo"
+
+#: OLObuild 1.4.1150
+msgid "Oggetto girevole, da una sequenza di foto"
+msgstr "Spinning object, from a photo sequence"
+
+#: OLObuild 1.4.1150
+msgid "Panorama: una foto o un video equirettangolare (largo il doppio dell’altezza), dentro cui ci si guarda attorno. Oggetto girevole: un prodotto che ruota su sé stesso trascinandolo, con l’inerzia al rilascio; da una foto sola (la foto ruota) o dalla sequenza delle foto scattate girandogli intorno."
+msgstr "Panorama: an equirectangular photo or video (twice as wide as it is tall) that you look around in. Spinning object: a product that turns on itself as you drag it, with inertia when released; from a single photo (the photo rotates) or from the sequence of photos taken walking around it."
+
+#: OLObuild 1.4.1150
+msgid "Foto a 360°"
+msgstr "360° photo"
+
+#: OLObuild 1.4.1150
+msgid "Video a 360°"
+msgstr "360° video"
+
+#: OLObuild 1.4.1150
+msgid "Una foto equirettangolare, larga il doppio dell’altezza: quella che fanno le fotocamere a 360° e molti telefoni in modalità panorama sferico."
+msgstr "An equirectangular photo, twice as wide as it is tall: the kind 360° cameras and many phones in spherical panorama mode take."
+
+#: OLObuild 1.4.1150
+msgid "Foto dell’oggetto"
+msgstr "Photo of the object"
+
+#: OLObuild 1.4.1150
+msgid "Foto della rotazione"
+msgstr "Rotation photos"
+
+#: OLObuild 1.4.1150
+msgid "In ordine, scattate girando intorno all’oggetto alla stessa distanza: più sono, più il giro è fluido (24–36 vanno bene)."
+msgstr "In order, taken walking around the object at the same distance: the more there are, the smoother the spin (24–36 work well)."
+
+#: OLObuild 1.4.1150
+msgid "Velocità della rotazione"
+msgstr "Rotation speed"
+
+#: OLObuild 1.4.1150
+msgid "Si trascina col mouse"
+msgstr "Drag with the mouse"
+
+#: OLObuild 1.4.1150
+msgid "Si trascina col dito"
+msgstr "Drag with a finger"
+
+#: OLObuild 1.4.1150
+msgid "Sensibilità del trascinamento"
+msgstr "Drag sensitivity"
+
+#: OLObuild 1.4.1150
+msgid "Quanto continua a girare dopo averlo lasciato: vicino a 1 gira a lungo, più in basso si ferma subito."
+msgstr "How long it keeps spinning after you let go: close to 1 it spins for a long time, lower it stops at once."
+
+#: OLObuild 1.4.1150
+msgid "Si orienta muovendo il telefono"
+msgstr "Turns as you move the phone"
+
+#: OLObuild 1.4.1150
+msgid "Mostra l’angolo"
+msgstr "Show the angle"
+
+#: OLObuild 1.4.1150
+msgid "Barra dei pulsanti"
+msgstr "Button bar"
+
+#: OLObuild 1.4.1150
+msgid "Rotazione orizzontale"
+msgstr "Horizontal rotation"
+
+#: OLObuild 1.4.1150
+msgid "Inclinazione verticale"
+msgstr "Vertical tilt"
+
+#: OLObuild 1.4.1150
+msgid "Quanto si vede del panorama: più è piccolo, più la vista è ravvicinata. Il minimo e il massimo limitano lo zoom di chi guarda."
+msgstr "How much of the panorama you see: the smaller it is, the closer the view. The minimum and maximum limit the viewer’s zoom."
+
+#: OLObuild 1.4.1150
+msgid "Campo visivo minimo"
+msgstr "Minimum field of view"
+
+#: OLObuild 1.4.1150
+msgid "Campo visivo massimo"
+msgstr "Maximum field of view"
+
+#: OLObuild 1.4.1150
+msgid "Vetrina su fondo chiaro"
+msgstr "Showcase on a light background"
+
+#: OLObuild 1.4.1153
+msgid "Scegli nel Contenuto una foto o un video a 360°: equirettangolare, largo il doppio dell’altezza."
+msgstr "Choose a 360° photo or video in the Content tab: equirectangular, twice as wide as it is tall."
+
+#: OLObuild 1.4.1155
+msgid "Variazione testo"
+msgstr "Text variation"
+
+#: OLObuild 1.4.1157
+msgid "Nome del primo colore"
+msgstr "Name of the first colour"
+
+#: OLObuild 1.4.1157
+msgid "Nome del secondo colore"
+msgstr "Name of the second colour"
+
+#: OLObuild 1.4.1157
+msgid "Il colore degli stati cliccati una volta."
+msgstr "The colour of countries clicked once."
+
+#: OLObuild 1.4.1157
+msgid "Il colore degli stati cliccati due volte."
+msgstr "The colour of countries clicked twice."
+
+#: OLObuild 1.4.1161
+msgid "Esporta le slide"
+msgstr "Export slides"
+
+#: OLObuild 1.4.1161
+msgid "Importa le slide"
+msgstr "Import slides"
+
+#: OLObuild 1.4.1161
+msgid "Editor dello Slider Pro"
+msgstr "Slider Pro editor"
+
+#: OLObuild 1.4.1161
+msgid "Livelli globali"
+msgstr "Global layers"
+
+#: OLObuild 1.4.1161
+msgid "Nessun livello globale"
+msgstr "No global layers"
+
+#: OLObuild 1.4.1161
+msgid "Schermo:"
+msgstr "Screen:"
+
+#: OLObuild 1.4.1161
+msgid "Profondità parallasse"
+msgstr "Parallax depth"
+
+#: OLObuild 1.4.1161
+msgid "Valori per"
+msgstr "Values for"
+
+#: OLObuild 1.4.1161
+msgid "— quelli non impostati ereditano dallo schermo più grande"
+msgstr "— unset values inherit from the larger screen"
+
+#: OLObuild 1.4.1161
+msgid "Nascosto all'avvio (lo mostra un altro livello)"
+msgstr "Hidden at start (another layer shows it)"
+
+#: OLObuild 1.4.1161
+msgid "Mostra o nasconde un livello"
+msgstr "Shows or hides a layer"
+
+#: OLObuild 1.4.1162
+msgid "Tablet orizzontale"
+msgstr "Tablet landscape"
+
+#: OLObuild 1.4.1162
+msgid "Tablet verticale"
+msgstr "Tablet portrait"
+
+#: OLObuild 1.4.1162
+msgid "Telefono orizzontale"
+msgstr "Phone landscape"
+
+#: OLObuild 1.4.1163
+msgid "Rimettere la pagina in bozza? Il sito non la mostrerà più finché non la pubblichi di nuovo."
+msgstr "Turn the page back into a draft? The site will stop showing it until you publish it again."
+
+#: OLObuild 1.4.1164
+msgid "Più righe"
+msgstr "Multiple rows"
+
+#: OLObuild 1.4.1164
+msgid "A mosaico"
+msgstr "Masonry"
+
+#: OLObuild 1.4.1164
+msgid "Con barra laterale"
+msgstr "With sidebar"
+
+#: OLObuild 1.4.1178
+msgid "Europa"
+msgstr "Europe"
+
+#: OLObuild 1.4.1178
+msgid "Nord America"
+msgstr "North America"
+
+#: OLObuild 1.4.1178
+msgid "Sud America"
+msgstr "South America"
+
+#: OLObuild 1.4.1178
+msgid "Africa"
+msgstr "Africa"
+
+#: OLObuild 1.4.1178
+msgid "Medio Oriente"
+msgstr "Middle East"
+
+#: OLObuild 1.4.1178
+msgid "Asia"
+msgstr "Asia"
+
+#: OLObuild 1.4.1178
+msgid "Oceania"
+msgstr "Oceania"
+
+#: OLObuild 1.4.1178
+msgid "Con «Solo i paesi colorati» la cartina si stringe attorno agli stati colorati, con un po’ di margine: per chi ha cantato o lavorato in pochi paesi vicini. Con una regione si stringe su quella parte di mondo: gli stati colorati fuori restano fuori vista, ma la legenda li conta."
+msgstr "With “Only the coloured countries” the map closes in on the coloured countries, with a little margin: for anyone who has sung or worked in a few neighbouring countries. With a region it closes in on that part of the world: coloured countries outside it stay out of view, but the legend still counts them."
+
+#: OLObuild 1.4.1183
+msgid "Colore del mare"
+msgstr "Sea colour"
+
+#: OLObuild 1.4.1183
+msgid "Il fondo della cartina, per esempio un azzurro. Vuoto: niente mare, la cartina sta sullo sfondo della pagina."
+msgstr "The background of the map, for example a light blue. Empty: no sea, the map sits on the page background."
+
+#: OLObuild 1.4.1183
+msgid "Vuoto: trasparenti, si vede lo sfondo; col mare colorato diventano chiari."
+msgstr "Empty: transparent, the background shows through; with a coloured sea they turn light."
+
+#: OLObuild 1.4.1185
+msgid "Raggio di ricerca"
+msgstr "Search radius"
+
+#: OLObuild 1.4.1185
+msgid "Cerca città, zona, indirizzo..."
+msgstr "Search city, area, address..."
+
+#: OLObuild 1.4.1185
+msgid "← Precedente"
+msgstr "← Previous"
+
+#: OLObuild 1.4.1185
+msgid "Successivo →"
+msgstr "Next →"
+
+#: OLObuild 1.4.1186
+msgid "Ordine predefinito"
+msgstr "Default order"
+
+#: OLObuild 1.4.1187
+msgid "Link della categoria"
+msgstr "Category link"
+
+#: OLObuild 1.4.1187
+msgid "URL file"
+msgstr "File URL"
+
+#: OLObuild 1.4.1187
+msgid "URL corrente"
+msgstr "Current URL"
+
+#: OLObuild 1.4.1187
+msgid "Pagina di provenienza"
+msgstr "Referring page"
+
+#: OLObuild 1.4.1187
+msgid "URL post precedente"
+msgstr "Previous post URL"
+
+#: OLObuild 1.4.1187
+msgid "URL post successivo"
+msgstr "Next post URL"
+
+#: OLObuild 1.4.1187
+msgid "Titolo post precedente"
+msgstr "Previous post title"
+
+#: OLObuild 1.4.1187
+msgid "Titolo post successivo"
+msgstr "Next post title"
+
+#: OLObuild 1.4.1187
+msgid "URL prodotto"
+msgstr "Product URL"
+
+#: OLObuild 1.4.1187
+msgid "Navigazione post"
+msgstr "Post navigation"
+
+#: OLObuild 1.4.1187
+msgid "Media (immagine in evidenza)"
+msgstr "Media (featured image)"

@@ -11,7 +11,13 @@ import { t } from '@/i18n';
 function etichettaServizio(nome, servizio) {
   const stato = typeof window !== 'undefined' ? window.oloData?.formIntegrations : null;
   if (!stato || stato[servizio] !== false) return nome;
-  return nome + ' — ' + t('chiave mancante in Configurazione');
+  // In coda all'etichetta «— chiave mancante in Configurazione» si tagliava nella colonna stretta: basta un segno,
+  // la spiegazione sta nella (i) dell'interruttore (avvisoServizio).
+  return nome + ' · ' + t('senza chiave');
+}
+function avvisoServizio(servizio) {
+  const stato = typeof window !== 'undefined' ? window.oloData?.formIntegrations : null;
+  return stato && stato[servizio] === false ? t('Manca la chiave del servizio: si inserisce in Sistema › Configurazione › Servizi. Senza, l’interruttore non ha effetto.') : undefined;
 }
 
 /**
@@ -177,7 +183,7 @@ export default {
   },
 
   fields: [
-    { key: 'fields', label: t('Campi del form'), type: 'content-items',
+    { key: 'fields', label: t('Campi del modulo'), type: 'content-items', etichettaDa: 'label|field_type',
       itemFields: [
         { key: 'field_type', label: t('Tipo campo'), type: 'select', options: [
           { value: 'text', label: t('Testo') },
@@ -203,7 +209,8 @@ export default {
           { value: 'step', label: t('── Separatore step ──') },
         ]},
         { key: 'label', label: t('Etichetta'), type: 'text' },
-        { key: 'name', label: t('Nome campo (email)'), type: 'text', partenzaFissa: true },
+        { key: 'name', label: t('Nome tecnico'), type: 'text', partenzaFissa: true,
+          description: t('Il nome con cui il campo arriva nell’email e negli invii, senza spazi (es. telefono). Lo usano le condizioni e le integrazioni.') },
         { key: 'placeholder', label: t('Placeholder'), type: 'text' },
         { key: 'icon', label: t('Icona campo'), type: 'icon',
           condition: { field: 'field_type', op: 'in', value: ['text', 'email', 'tel', 'url', 'number', 'date', 'time'] } },
@@ -244,16 +251,18 @@ export default {
         { key: 'calc_decimals', label: t('Decimali'), type: 'number',
           condition: { field: 'field_type', op: 'in', value: ['calculation'] } },
         { type: 'separator', label: t('Visibilità condizionale') },
-        { key: 'condition_field', label: t('Condizione: campo'), type: 'text', placeholder: t('Nome campo (es. nome)') },
-        { key: 'condition_operator', label: t('Condizione: operatore'), type: 'select', options: [
+        // Il campo da guardare si sceglie fra gli altri del modulo (prima si scriveva a mano il suo nome tecnico).
+        { key: 'condition_field', label: t('Mostra solo se il campo'), type: 'select', optionsSource: 'altreVoci',
+          voci: { valore: 'name', etichetta: 'label' }, nessuna: t('— Sempre visibile —') },
+        { key: 'condition_operator', label: t('Confronto'), type: 'select', options: [
           { value: 'equals', label: t('Uguale a') },
           { value: 'not_equals', label: t('Diverso da') },
           { value: 'contains', label: t('Contiene') },
           { value: 'not_empty', label: t('Non vuoto') },
           { value: 'empty', label: t('Vuoto') },
         ], condition: { field: 'condition_field', op: 'notEmpty' } },
-        { key: 'condition_value', label: t('Condizione: valore'), type: 'text',
-          condition: { field: 'condition_field', op: 'notEmpty' } },
+        { key: 'condition_value', label: t('Valore'), type: 'text',
+          condition: [ { field: 'condition_field', op: 'notEmpty' }, { field: 'condition_operator', op: 'in', value: ['equals', 'not_equals', 'contains'] } ] },
       ],
       newItemDefaults: { field_type: 'text', label: t('Nuovo campo'), placeholder: '', name: '', required: false, width: '1-1', options: '', icon: '', file_allowed_types: '.pdf,.doc,.docx,.jpg,.png', file_max_size: 5, file_max_files: 1, file_button_text: 'Scegli file', range_min: 0, range_max: 100, range_step: 1, range_default: 50, star_count: 5, default_value: '', calc_formula: '', calc_prefix: '', calc_suffix: '', calc_decimals: 2, param: '', condition_field: '', condition_operator: 'equals', condition_value: '' },
       itemLabel: 'Campo',
@@ -266,7 +275,7 @@ export default {
     { key: 'email_subject', label: t('Oggetto email'), type: 'text' },
     { key: 'success_message', label: t('Messaggio di successo'), type: 'text' },
     { key: 'error_message', label: t('Messaggio di errore'), type: 'text' },
-    { key: 'redirect_url', label: t('Redirect dopo invio (URL)'), type: 'link', placeholder: t('Lascia vuoto per mostrare messaggio') },
+    { key: 'redirect_url', label: t('Dopo l’invio vai a'), type: 'link', placeholder: t('Vuoto: resta e mostra il messaggio') },
 
     { type: 'separator', label: t('Risposta automatica') },
     { key: 'auto_reply', label: t('Invia conferma al compilatore'), type: 'toggle' },
@@ -283,16 +292,16 @@ export default {
       { value: 'right', label: t('Destra') },
     ], condition: { field: 'submit_icon', op: 'notEmpty' } },
 
-    { type: 'separator', label: t('Multi-step') },
-    { key: 'enable_multistep', label: t('Form multi-step'), type: 'toggle' },
-    { key: 'step_labels', label: t('Etichette step (una per riga)'), type: 'textarea',
+    { type: 'separator', label: t('Modulo a passi') },
+    { key: 'enable_multistep', label: t('Dividi in passi'), type: 'toggle' },
+    { key: 'step_labels', label: t('Nomi dei passi (uno per riga)'), type: 'textarea',
       condition: { field: 'enable_multistep', operator: '==', value: true } },
 
-    { type: 'separator', label: t('Logica condizionale') },
-    { key: 'enable_conditions', label: t('Abilita condizioni'), type: 'toggle' },
+    // «Logica condizionale» con l'interruttore generale: tolta. Le condizioni si scelgono in ogni campo («Visibilità
+    // condizionale») e valgono da sole (class-form-tile.php).
 
-    { type: 'separator', label: t('File upload') },
-    { key: 'file_max_size', label: t('Dimensione max file (MB)'), type: 'range', min: 1, max: 25, step: 1 },
+    { type: 'separator', label: t('Caricamento file') },
+    { key: 'file_max_size', label: t('Dimensione massima (MB)'), type: 'range', min: 1, max: 25, step: 1 },
     { key: 'file_types', label: t('Tipi file ammessi'), type: 'text' },
 
     { type: 'separator', label: t('Archiviazione') },
@@ -336,21 +345,22 @@ export default {
       condition: { field: 'page_check', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Anti-spam') },
-    { key: 'honeypot', label: t('Honeypot (consigliato)'), type: 'toggle' },
-    { key: 'rate_limit', label: t('Rate limiting'), type: 'toggle' },
-    { key: 'rate_limit_max', label: t('Max invii per finestra'), type: 'range', min: 1, max: 20,
+    { key: 'honeypot', label: t('Trappola per i robot'), type: 'toggle',
+      description: t('Un campo invisibile che le persone non compilano e i robot sì: gli invii che lo riempiono si scartano. Consigliata.') },
+    { key: 'rate_limit', label: t('Limite di invii'), type: 'toggle' },
+    { key: 'rate_limit_max', label: t('Invii massimi'), type: 'range', min: 1, max: 20,
       condition: { field: 'rate_limit', op: 'eq', value: true } },
-    { key: 'rate_limit_window', label: t('Finestra (minuti)'), type: 'range', min: 5, max: 120, step: 5,
+    { key: 'rate_limit_window', label: t('Nell’arco di (minuti)'), type: 'range', min: 5, max: 120, step: 5,
       condition: { field: 'rate_limit', op: 'eq', value: true } },
-    { key: 'recaptcha_enabled', label: etichettaServizio(t('reCAPTCHA v3'), 'recaptcha'), type: 'toggle' },
+    { key: 'recaptcha_enabled', label: etichettaServizio(t('reCAPTCHA v3'), 'recaptcha'), type: 'toggle', description: avvisoServizio('recaptcha') },
 
     // Una sola sezione per tutti i servizi (prima erano sei), chiusa di default. L'interruttore
     // di ogni servizio fa da titolo: i suoi campi compaiono sotto solo quando è acceso.
     { type: 'separator', label: t('Integrazioni') },
-    { key: 'mailchimp_enabled', label: etichettaServizio(t('Mailchimp'), 'mailchimp'), type: 'toggle' },
+    { key: 'mailchimp_enabled', label: etichettaServizio(t('Mailchimp'), 'mailchimp'), type: 'toggle', description: avvisoServizio('mailchimp') },
     { key: 'mailchimp_list_id', label: t('List/Audience ID'), type: 'text', placeholder: t('abc1234def'),
       condition: { field: 'mailchimp_enabled', op: 'eq', value: true } },
-    { key: 'mailchimp_email_field', label: t('Nome campo email'), type: 'text', placeholder: t('email'),
+    { key: 'mailchimp_email_field', label: t('Campo email'), type: 'select', optionsSource: 'vociDi', voci: { lista: 'fields', valore: 'name', etichetta: 'label', filtro: { chiave: 'field_type', valori: ['email', 'text'] } },
       condition: { field: 'mailchimp_enabled', op: 'eq', value: true } },
     { key: 'mailchimp_merge_fields', label: t('Merge fields (campo=MERGE)'), type: 'textarea', placeholder: t('nome=FNAME\ncognome=LNAME'),
       condition: { field: 'mailchimp_enabled', op: 'eq', value: true } },
@@ -368,7 +378,7 @@ export default {
       condition: { field: 'hubspot_enabled', op: 'eq', value: true } },
     { key: 'hubspot_form_guid', label: t('HubSpot Form GUID'), type: 'text', placeholder: t('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'),
       condition: { field: 'hubspot_enabled', op: 'eq', value: true } },
-    { key: 'hubspot_email_field', label: t('Nome campo email'), type: 'text', placeholder: t('email'),
+    { key: 'hubspot_email_field', label: t('Campo email'), type: 'select', optionsSource: 'vociDi', voci: { lista: 'fields', valore: 'name', etichetta: 'label', filtro: { chiave: 'field_type', valori: ['email', 'text'] } },
       condition: { field: 'hubspot_enabled', op: 'eq', value: true } },
     // HubSpot scarta l'INTERO invio se riceve un campo che il suo modulo non ha: si mandano solo
     // l'email e i campi mappati qui, col nome interno della proprietà HubSpot.
@@ -377,81 +387,66 @@ export default {
     { type: 'description', description: t('A HubSpot arrivano solo l\'email e i campi elencati qui sopra. Usa il nome interno delle proprietà e metti solo quelle che il modulo HubSpot ha, comprese tutte quelle obbligatorie: altrimenti HubSpot scarta l\'intero invio.'),
       condition: { field: 'hubspot_enabled', op: 'eq', value: true } },
 
-    { key: 'activecampaign_enabled', label: etichettaServizio(t('ActiveCampaign'), 'activecampaign'), type: 'toggle' },
+    { key: 'activecampaign_enabled', label: etichettaServizio(t('ActiveCampaign'), 'activecampaign'), type: 'toggle', description: avvisoServizio('activecampaign') },
     { key: 'activecampaign_list_id', label: t('List ID'), type: 'text', placeholder: '1',
       condition: { field: 'activecampaign_enabled', op: 'eq', value: true } },
-    { key: 'activecampaign_email_field', label: t('Nome campo email'), type: 'text', placeholder: t('email'),
+    { key: 'activecampaign_email_field', label: t('Campo email'), type: 'select', optionsSource: 'vociDi', voci: { lista: 'fields', valore: 'name', etichetta: 'label', filtro: { chiave: 'field_type', valori: ['email', 'text'] } },
       condition: { field: 'activecampaign_enabled', op: 'eq', value: true } },
 
-    { key: 'convertkit_enabled', label: etichettaServizio(t('ConvertKit'), 'convertkit'), type: 'toggle' },
+    { key: 'convertkit_enabled', label: etichettaServizio(t('ConvertKit'), 'convertkit'), type: 'toggle', description: avvisoServizio('convertkit') },
     { key: 'convertkit_form_id', label: t('Form ID'), type: 'text', placeholder: '1234567',
       condition: { field: 'convertkit_enabled', op: 'eq', value: true } },
-    { key: 'convertkit_email_field', label: t('Nome campo email'), type: 'text', placeholder: t('email'),
+    { key: 'convertkit_email_field', label: t('Campo email'), type: 'select', optionsSource: 'vociDi', voci: { lista: 'fields', valore: 'name', etichetta: 'label', filtro: { chiave: 'field_type', valori: ['email', 'text'] } },
       condition: { field: 'convertkit_enabled', op: 'eq', value: true } },
 
-    { key: 'brevo_enabled', label: etichettaServizio(t('Brevo (Sendinblue)'), 'brevo'), type: 'toggle' },
+    { key: 'brevo_enabled', label: etichettaServizio(t('Brevo (Sendinblue)'), 'brevo'), type: 'toggle', description: avvisoServizio('brevo') },
     { key: 'brevo_list_id', label: t('List ID'), type: 'text', placeholder: '3',
       condition: { field: 'brevo_enabled', op: 'eq', value: true } },
-    { key: 'brevo_email_field', label: t('Nome campo email'), type: 'text', placeholder: t('email'),
+    { key: 'brevo_email_field', label: t('Campo email'), type: 'select', optionsSource: 'vociDi', voci: { lista: 'fields', valore: 'name', etichetta: 'label', filtro: { chiave: 'field_type', valori: ['email', 'text'] } },
       condition: { field: 'brevo_enabled', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Privacy') },
-    { key: 'privacy_checkbox', label: t('Checkbox consenso privacy'), type: 'toggle' },
+    { key: 'privacy_checkbox', label: t('Casella del consenso'), type: 'toggle' },
     { key: 'privacy_text', label: t('Testo consenso'), type: 'text',
       condition: { field: 'privacy_checkbox', op: 'eq', value: true } },
   ],
 
+  // Stile nelle zone standard (16 nov 2026, prima di «Una tile in un minuto»): Aspetto · Testo · Campi · Pulsante ·
+  // Caselle · Passi · Forma · Disposizione. Prima: «Preset stilistico», «Contenitore» (che si confondeva col blocco
+  // comune), «Stile campi» con le larghezze dei campi in mezzo, allineamenti sparsi fra pulsante e modulo.
   styleFields: [
-    { type: 'separator', label: t('Preset stilistico') },
+    { type: 'separator', label: t('Aspetto') },
     { key: 'preset', label: t('Stile'), type: 'select', options: [
-      { value: 'modern-clean',    label: t('Modern Clean') },
-      { value: 'minimal-line',    label: t('Minimal Line') },
-      { value: 'magazine-bold',   label: t('Magazine Bold') },
-      { value: 'card-floating',   label: t('Card Floating') },
-      { value: 'compact-inline',  label: t('Compact Inline') },
-      { value: 'glass-form',      label: t('Glass Form') },
-      { value: 'neon-cyber',      label: t('Neon Cyber') },
-      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
-      { value: 'gradient-aurora', label: t('Gradient Aurora') },
-      { value: 'sticker-fun',     label: t('Sticker Fun') },
-      { value: 'retro-terminal',  label: t('Retro Terminal') },
-      { value: 'tilt-3d',         label: t('3D Tilt') },
-      { value: 'underline-dark',  label: t('Underline Dark') },
+      { value: 'modern-clean',    label: t('Pulito') },
+      { value: 'minimal-line',    label: t('Linea sottile') },
+      { value: 'magazine-bold',   label: t('Rivista') },
+      { value: 'card-floating',   label: t('Scheda sollevata') },
+      { value: 'compact-inline',  label: t('Compatto') },
+      { value: 'glass-form',      label: t('Vetro') },
+      { value: 'neon-cyber',      label: t('Neon su scuro') },
+      { value: 'brutalist-stamp', label: t('Timbro netto') },
+      { value: 'gradient-aurora', label: t('Aurora') },
+      { value: 'sticker-fun',     label: t('Adesivo') },
+      { value: 'retro-terminal',  label: t('Terminale') },
+      { value: 'tilt-3d',         label: t('Inclinato in 3D') },
+      { value: 'underline-dark',  label: t('Linea su scuro') },
       { value: 'custom',          label: t('Personalizzato') },
     ]},
-    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-
-    ...textEffectsFields([
-      { value: 'label', label: t('Solo Etichetta') },
-      { value: 'name', label: t('Solo Nome') },
-      { value: 'all', label: t('Tutti gli elementi testuali') },
-    ]),
-
-    { type: 'separator', label: t('Animazioni messaggi') },
-    { key: 'success_animation', label: t('Animazione successo'), type: 'select', options: [
+    { key: 'success_animation', label: t('Conferma'), type: 'select', description: t('Come compare il messaggio dopo un invio riuscito.'), options: [
       { value: 'fade', label: t('Dissolvenza') },
       { value: 'slide-top-small', label: t('Scorrimento dall\'alto') },
       { value: 'slide-bottom-small', label: t('Scorrimento dal basso') },
       { value: 'scale-up', label: t('Scala') },
     ]},
-    { key: 'error_animation', label: t('Animazione errore'), type: 'select', options: [
+    { key: 'error_animation', label: t('Errore'), type: 'select', description: t('Come compare il messaggio quando l’invio non riesce.'), options: [
       { value: 'shake', label: t('Vibrazione') },
       { value: 'fade', label: t('Dissolvenza') },
       { value: 'slide-top-small', label: t('Scorrimento dall\'alto') },
     ]},
 
-    { type: 'separator', label: t('Contenitore') },
-    { key: 'form_max_width', label: t('Larghezza massima'), type: 'range', min: 0, max: 900, step: 10 },
-    { key: 'form_align', label: t('Allineamento form'), type: 'select', options: [
-      { value: 'left', label: t('Sinistra') },
-      { value: 'center', label: t('Centro') },
-      { value: 'right', label: t('Destra') },
-    ], condition: { field: 'form_max_width', operator: '>', value: 0 } },
-    // Imbottisce tutto il modulo: stava sotto «Stile pulsante» e sembrava il padding del pulsante.
-    { key: 'tile_padding', label: t('Padding modulo'), type: 'spacing', max: 48 },
-
-    { type: 'separator', label: t('Tipografia') },
-    { type: 'typography', label: t('Etichetta'),
+    { type: 'separator', label: t('Testo') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { type: 'typography', label: t('Etichette'),
       responsiveKeys: [],
       keys: {
         family:        'label_font_family',
@@ -463,12 +458,17 @@ export default {
       },
       sizeMin: 11, sizeMax: 18, sizeStep: 1,
     },
+    { type: 'typography', label: t('Testo dei campi'),
+      keys: { family: 'input_font_family' },
+    },
 
-    { type: 'separator', label: t('Stile campi') },
-    { key: 'form_layout', label: t('Layout form'), type: 'select', options: [
-      { value: 'stacked', label: t('Label sopra (stacked)') },
-      { value: 'floating', label: t('Label fluttuante') },
-    ]},
+    ...textEffectsFields([
+      { value: 'label', label: t('Solo le etichette') },
+      { value: 'name', label: t('Solo i nomi') },
+      { value: 'all', label: t('Tutto il testo') },
+    ]),
+
+    { type: 'separator', label: t('Campi') },
     // La variante dei campi (riquadro, sola linea sotto, senza bordo) torna un menu suo: dal
     // 1.4.436 il Bordo completo ne aveva preso il posto e la «linea sotto», che i preset usano,
     // non si poteva più scegliere, e il tratto scelto nel Bordo finiva in questa chiave («dashed»
@@ -476,46 +476,30 @@ export default {
     // Bordo campi e Raggio input restano visibili in ogni variante: oltre ai campi disegnano il
     // pulsante file, il selettore colore e il riquadro del calcolo, il colore del bordo fa il
     // binario e i pallini del multi-step, il raggio i messaggi d'esito.
-    { key: 'input_border_style', label: t('Variante campi'), type: 'select', options: [
+    { key: 'input_border_style', label: t('Variante'), type: 'select', options: [
       { value: 'box', label: t('Riquadro') },
       { value: 'underline', label: t('Solo linea sotto') },
       { value: 'none', label: t('Senza bordo') },
     ], valoriStorici: { solid: 'box', dashed: 'box', dotted: 'box', double: 'box', groove: 'box', ridge: 'box' },
       description: t('Solo linea sotto: i campi perdono riquadro e raggio, il testo si allinea all\'etichetta e lo sfondo è trasparente se non ne scegli uno; spessore, tratto e colore della linea vengono dal Bordo campi. In ogni variante Bordo campi e Raggio input disegnano anche pulsante file, selettore colore e riquadro del calcolo; il colore del bordo fa i passi del modulo a più pagine, il raggio i messaggi di invio.') },
-    { key: 'input_border', label: t('Bordo campi'), type: 'border',
-      legacyKeys: { width: 'input_border_width', color: 'input_border_color' } },
-    { key: 'input_bg', label: t('Sfondo input'), type: 'color' },
-    { key: 'input_color', label: t('Colore testo input'), type: 'color' },
-    withHover({ key: 'input_radius', label: t('Raggio input'), type: 'border-radius' }),
-    { key: 'input_size', label: t('Dimensione input'), type: 'select', options: [
-      { value: 'small', label: t('Piccolo') },
+    { key: 'input_size', label: t('Dimensione'), type: 'select', options: [
+      { value: 'small', label: t('Piccola') },
       { value: 'default', label: t('Normale') },
       { value: 'large', label: t('Grande') },
     ]},
-    { type: 'typography', label: t('Font campi'),
-      keys: { family: 'input_font_family' },
-    },
-    { key: 'input_focus_border', label: t('Colore bordo focus'), type: 'color' },
-    { key: 'input_focus_shadow', label: t('Ombra focus'), type: 'toggle' },
-    { key: 'input_placeholder_opacity', label: t('Opacità placeholder'), type: 'range', min: 0.2, max: 0.8, step: 0.05 },
-    { key: 'gap', label: t('Gap campi'), type: 'range', min: 8, max: 32, step: 4 },
+    { key: 'input_bg', label: t('Sfondo'), type: 'color' },
+    { key: 'input_color', label: t('Colore testo'), type: 'color' },
+    { key: 'input_placeholder_opacity', label: t('Opacità del suggerimento'), type: 'range', min: 0.2, max: 0.8, step: 0.05,
+      description: t('Il testo d’esempio dentro i campi vuoti («Mario Rossi»).') },
+    { key: 'input_border', label: t('Bordo campi'), type: 'border',
+      legacyKeys: { width: 'input_border_width', color: 'input_border_color' } },
+    withHover({ key: 'input_radius', label: t('Raggio input'), type: 'border-radius' }),
+    { key: 'input_focus_border', label: t('Colore bordo al focus'), type: 'color' },
+    { key: 'input_focus_shadow', label: t('Alone al focus'), type: 'toggle' },
 
-    { key: 'fields', type: 'content-items', label: t('Campi del form'), itemLabel: 'Campo', etichettaDa: 'label', itemFields: [
-        { key: 'width', label: t('Larghezza'), type: 'select', options: [
-          { value: '1-1', label: t('Intera (100%)') },
-          { value: '1-2', label: t('Metà (50%)') },
-          { value: '1-3', label: t('Un terzo (33%)') },
-          { value: '2-3', label: t('Due terzi (66%)') },
-          { value: '1-4', label: t('Un quarto (25%)') },
-          { value: '3-4', label: t('Tre quarti (75%)') },
-        ]},
-    ] },
-    { type: 'separator', label: t('Stile pulsante') },
+    { type: 'separator', label: t('Pulsante') },
     withHover({ key: 'submit_bg', label: t('Sfondo pulsante'), type: 'color' }, { hoverKey: 'submit_hover_bg', defaultDuration: 200 }),
     { key: 'submit_color', label: t('Colore testo pulsante'), type: 'color' },
-    withHover({ key: 'submit_radius', label: t('Raggio'), type: 'border-radius' }),
-    { key: 'submit_padding', label: t('Padding pulsante'), type: 'spacing', max: 48,
-      legacyKeys: { y: 'submit_padding_y', x: 'submit_padding_x' } },
     { type: 'typography', label: t('Pulsante'),
       responsiveKeys: [],
       keys: {
@@ -527,6 +511,9 @@ export default {
       },
       sizeMin: 12, sizeMax: 22, sizeStep: 1,
     },
+    withHover({ key: 'submit_radius', label: t('Raggio pulsante'), type: 'border-radius' }),
+    { key: 'submit_padding', label: t('Padding pulsante'), type: 'spacing', max: 48,
+      legacyKeys: { y: 'submit_padding_y', x: 'submit_padding_x' } },
     // Lo stato Hover del bordo salva un bordo intero nella chiave storica, che nei
     // template esistenti è la sola stringa colore: il PHP accetta entrambi.
     withHover(
@@ -535,25 +522,53 @@ export default {
       { hoverKey: 'submit_hover_border_color', defaultDuration: 200 }
     ),
 
+    { type: 'separator', label: t('Caselle') },
+    { key: 'check_accent_color', label: t('Colore spunta'), type: 'color' },
+    { key: 'check_bg', label: t('Sfondo'), type: 'color' },
+    { key: 'check_border_color', label: t('Colore bordo'), type: 'color' },
+    { key: 'check_size', label: t('Dimensione'), type: 'range', unit: 'px', min: 14, max: 24 },
+    { key: 'check_label_gap', label: t('Gap etichetta'), type: 'range', unit: 'px', min: 4, max: 16 },
+
+    { type: 'separator', label: t('Passi'), condition: { field: 'enable_multistep', operator: '==', value: true } },
+    { key: 'step_style', label: t('Indicatore dei passi'), type: 'select', options: [
+      { value: 'progress', label: t('Barra') },
+      { value: 'numbers', label: t('Numeri') },
+      { value: 'dots', label: t('Pallini') },
+    ], condition: { field: 'enable_multistep', operator: '==', value: true } },
+
+    { type: 'separator', label: t('Forma') },
+    { key: 'form_max_width', label: t('Larghezza massima'), type: 'range', unit: 'px', min: 0, max: 900, step: 10,
+      description: t('0 = tutta la colonna.') },
+    // Imbottisce tutto il modulo: stava sotto «Stile pulsante» e sembrava il padding del pulsante.
+    { key: 'tile_padding', label: t('Padding modulo'), type: 'spacing', max: 48 },
+    { key: 'gap', label: t('Gap campi'), type: 'range', unit: 'px', min: 8, max: 32, step: 4 },
+    ...borderFields(),
+
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'form_layout', label: t('Etichette'), type: 'select', options: [
+      { value: 'stacked', label: t('Sopra il campo') },
+      { value: 'floating', label: t('Dentro il campo, poi sopra') },
+    ]},
+    { key: 'form_align', label: t('Allineamento modulo'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
+    ], condition: { field: 'form_max_width', operator: '>', value: 0 } },
     { key: 'submit_alignment', label: t('Allineamento pulsante'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
-    ], show: (s) => !aPassi(s) },
-    { key: 'submit_full_width', label: t('Pulsante larghezza piena'), type: 'toggle', show: (s) => !aPassi(s) },
-    { type: 'separator', label: t('Checkbox e Radio') },
-    { key: 'check_accent_color', label: t('Colore accento (checked)'), type: 'color' },
-    { key: 'check_bg', label: t('Sfondo'), type: 'color' },
-    { key: 'check_border_color', label: t('Colore bordo'), type: 'color' },
-    { key: 'check_size', label: t('Dimensione'), type: 'range', min: 14, max: 24 },
-    { key: 'check_label_gap', label: t('Gap etichetta'), type: 'range', min: 4, max: 16 },
-
-    ...borderFields(),
-    { type: 'separator', label: t('Multi-step') },
-    { key: 'step_style', label: t('Stile step'), type: 'select', options: [
-      { value: 'progress', label: t('Barra progresso') },
-      { value: 'numbers', label: t('Numeri') },
-      { value: 'dots', label: t('Pallini') },
-    ], condition: { field: 'enable_multistep', operator: '==', value: true } },
+    ], show: (s) => !aPassi(s) && !s.submit_full_width },
+    { key: 'submit_full_width', label: t('Pulsante largo quanto il modulo'), type: 'toggle', show: (s) => !aPassi(s) },
+    { key: 'fields', type: 'content-items', label: t('Larghezza dei campi'), itemLabel: 'Campo', etichettaDa: 'label', itemFields: [
+        { key: 'width', label: t('Larghezza'), type: 'select', options: [
+          { value: '1-1', label: t('Intera (100%)') },
+          { value: '1-2', label: t('Metà (50%)') },
+          { value: '1-3', label: t('Un terzo (33%)') },
+          { value: '2-3', label: t('Due terzi (66%)') },
+          { value: '1-4', label: t('Un quarto (25%)') },
+          { value: '3-4', label: t('Tre quarti (75%)') },
+        ]},
+    ] },
   ],
 };

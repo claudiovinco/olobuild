@@ -128,11 +128,27 @@ class Olobuild_Osmmap_Tile extends Olobuild_Tile_Base {
             var mapEl = document.getElementById('<?php echo esc_js( $map_id ); ?>');
             if (!mapEl) return;
 
+            // Leaflet arriva in coda alla pagina (wp_enqueue). Una mappa messa DOPO il caricamento — nel builder la tile
+            // appena trascinata, o un contenuto caricato dopo — non lo trova, e restava vuota per sempre: allora lo si
+            // carica da qui, una volta sola (16 nov 2026).
+            function caricaLeaflet() {
+                if (document.querySelector('script[src*="vendor/leaflet/leaflet.js"]')) return;
+                var css = document.createElement('link');
+                css.rel = 'stylesheet';
+                css.href = '<?php echo esc_js( OLOBUILD_URL . 'assets/vendor/leaflet/leaflet.css?ver=' . OLOBUILD_VERSION ); ?>';
+                document.head.appendChild(css);
+                var js = document.createElement('script');
+                js.src = '<?php echo esc_js( OLOBUILD_URL . 'assets/vendor/leaflet/leaflet.js?ver=' . OLOBUILD_VERSION ); ?>';
+                document.head.appendChild(js);
+            }
+            var attese = 0;
             function initOloMap() {
                 if (typeof L === 'undefined') {
+                    if (++attese === 15) caricaLeaflet();
                     setTimeout(initOloMap, 100);
                     return;
                 }
+                if (mapEl._leaflet_id) return;
 
                 var map = L.map('<?php echo esc_js( $map_id ); ?>', {
                     scrollWheelZoom: <?php echo $scroll_zoom_js; ?>,

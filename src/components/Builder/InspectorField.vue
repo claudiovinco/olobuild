@@ -200,7 +200,7 @@
         <InfoTip v-if="field.description" class="olo-field-info" :testo="t(field.description)" :titolo="etichetta.testo" />
       </label>
       <!-- Campi che l'etichetta la disegnano da sé: la (i) sta sopra, allineata a destra. -->
-      <div v-else-if="field.description" class="olo-field-info-row">
+      <div v-else-if="field.description && !field.reveal" class="olo-field-info-row">
         <InfoTip class="olo-field-info" :testo="t(field.description)" :titolo="t(field.label || '')" />
       </div>
 
@@ -303,8 +303,9 @@
            Con field.reveal il pad (alto ~270px) resta nascosto dietro un pulsante e si apre
            on-demand: utile dove la tile è già densa o ha immagini multiple (punto focale globale). -->
       <template v-else-if="field.type === 'object-position'">
+        <!-- La (i) accanto al pulsante, sulla stessa riga: sopra, da sola, sembrava un controllo perso (16 nov 2026). -->
+        <div v-if="field.reveal" class="olo-reveal-riga">
         <button
-          v-if="field.reveal"
           type="button"
           class="olo-reveal-btn"
           :class="{ 'is-open': revealOpen }"
@@ -312,9 +313,11 @@
           @click="revealOpen = !revealOpen"
         >
           <svg class="olo-reveal-chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          <span>{{ revealOpen ? t('Nascondi punto focale') : (t(field.label) + ' — ' + t('punto focale')) }}</span>
+          <span>{{ revealOpen ? t('Nascondi punto focale') : (t(field.label).toLowerCase() === t('punto focale').toLowerCase() ? t(field.label) : (t(field.label) + ' — ' + t('punto focale'))) }}</span>
           <span v-if="!revealOpen && hasNonDefaultValue" class="olo-reveal-dot" :title="t('Posizione personalizzata')"></span>
         </button>
+        <InfoTip v-if="field.description" class="olo-field-info" :testo="t(field.description)" :titolo="t(field.label || '')" />
+        </div>
         <FieldObjectPosition
           v-if="!field.reveal || revealOpen"
           :class="{ 'olo-reveal-body': field.reveal }"
@@ -330,6 +333,8 @@
         v-else-if="field.type === 'editor'"
         :modelValue="effectiveValue"
         :mode="field.mode || 'inline'"
+        :strumenti="field.strumenti || null"
+        :a-capo="!!field.aCapo"
         @update:modelValue="onFieldUpdate($event)"
       />
 
@@ -408,6 +413,7 @@
       <FieldTextarea
         v-else-if="field.type === 'textarea'"
         :modelValue="effectiveValue"
+        :righeDa="field.righeDa || ''"
         @update:modelValue="onFieldUpdate($event)"
       />
 
@@ -423,6 +429,15 @@
         :modelValue="effectiveValue"
         :tileSettings="tileSettings"
         @update:modelValue="onFieldUpdate($event)"
+      />
+
+      <!-- I dati della Tabella in una finestra a griglia; gli allineamenti delle colonne sono un'altra chiave. -->
+      <FieldTabella
+        v-else-if="field.type === 'tabella'"
+        :modelValue="effectiveValue"
+        :tileSettings="tileSettings"
+        @update:modelValue="onFieldUpdate($event)"
+        @chiave="$emit('update:settingKey', $event)"
       />
 
       <FieldSpettacoli
@@ -669,6 +684,7 @@ import DynamicQueryPanel from './DynamicQueryPanel.vue';
 import FieldIcon from './fields/FieldIcon.vue';
 import FieldMegaPanelMap from './fields/FieldMegaPanelMap.vue';
 import FieldMappaStati from './fields/FieldMappaStati.vue';
+import FieldTabella from './fields/FieldTabella.vue';
 import FieldSpettacoli from './fields/FieldSpettacoli.vue';
 import FieldMultiPills from './fields/FieldMultiPills.vue';
 import FieldBoxShadow from './fields/FieldBoxShadow.vue';
@@ -696,7 +712,9 @@ import { useGlobalPanels } from '@/composables/useGlobalPanels';
 
 const { openTypography } = useGlobalPanels();
 
-const DYNAMIC_TYPES = ['text', 'textarea', 'editor', 'image', 'media'];
+// Anche i link (17 nov 2026, richiesta dell'utente): un pulsante col testo dinamico deve poter avere il link
+// dinamico. Il renderer collegava già qualunque campo; mancava il comando ⚡ accanto all'URL.
+const DYNAMIC_TYPES = ['text', 'textarea', 'editor', 'image', 'media', 'link'];
 
 const props = defineProps({
   field: { type: Object, required: true },
@@ -925,6 +943,23 @@ const resolvedOptions = computed(() => {
       // I campi Allegati dei tipi di contenuto (Impostazioni › Tipi di contenuto); il primo è «Elenco qui sotto».
       return md.campiAllegati?.length ? md.campiAllegati : [{ value: '', label: t('Elenco qui sotto') }];
     }
+    if (props.field.optionsSource === 'vociDi') {
+      // Le voci di un ripetitore della stessa tile (`voci: { lista, valore, etichetta }`): per scegliere un campo del
+      // modulo («Campo email» delle integrazioni del Form) invece di scriverne a mano il nome tecnico.
+      const tilesStore = useTilesStore();
+      const tile = props.tileId ? tilesStore.getTileById(props.tileId) : null;
+      const v = props.field.voci || {};
+      const lista = (tile?.settings || props.tileSettings || {})[v.lista || 'fields'];
+      const valore = v.valore || 'name';
+      const etichetta = v.etichetta || 'label';
+      const filtro = v.filtro || null;   // { chiave, valori: [...] }: solo le voci di quei tipi
+      const voci = (Array.isArray(lista) ? lista : []).filter((it) => it && String(it[valore] || '').trim()
+        && (!filtro || (filtro.valori || []).includes(it[filtro.chiave])));
+      const opzioni = voci.map((it) => ({ value: String(it[valore]), label: String(it[etichetta] || it[valore]) + ' (' + it[valore] + ')' }));
+      const attuale = props.modelValue;
+      if (attuale && !opzioni.some((o) => o.value === String(attuale))) opzioni.unshift({ value: String(attuale), label: String(attuale) });
+      return [{ value: '', label: props.field.nessuna || t('— Scegli un campo —') }, ...opzioni];
+    }
     if (props.field.optionsSource === 'termini') {
       // I termini della tassonomia scelta in un altro campo della tile (optionsDependOn), sottocategorie rientrate.
       const tilesStore = useTilesStore();
@@ -1061,6 +1096,7 @@ const fieldComponent = computed(() => {
     case 'textarea': return FieldTextarea;
     case 'megapanel-map': return FieldMegaPanelMap;
     case 'mappa-stati': return FieldMappaStati;
+    case 'tabella': return FieldTabella;
     case 'spettacoli': return FieldSpettacoli;
     case 'icon-select': return FieldIconSelect;
     case 'multi_pills': return FieldMultiPills;
@@ -1092,7 +1128,14 @@ const effectiveValue = computed(() => {
     }
     return h;
   }
-  return normalValue();
+  const v = normalValue();
+  // Un menu senza valore salvato mostra il suo `default` (quello che il renderer usa davvero) invece di «—»:
+  // «Fusione» del Contenitore, per esempio, era vuoto su ogni tile pur essendo «Normale» (16 nov 2026).
+  if (props.field.type === 'select' && (v === undefined || v === null || v === '') && props.field.default !== undefined
+      && (props.field.options || []).some((o) => o && String(o.value) === String(props.field.default))) {
+    return props.field.default;
+  }
+  return v;
 });
 
 // Valore dello stato Normale, con i ponti verso i formati storici.
@@ -1257,13 +1300,17 @@ const fieldProps = computed(() => {
     case 'border-radius': return { ...base, mode: 'corners', units: unitaCampo.value ? [unitaCampo.value] : ['px'], defaultUnit: unitaCampo.value || 'px' };
     case 'object-position': return { ...base, imageSrc: objectPositionContext.value.imageSrc, frameRatio: objectPositionContext.value.frameRatio, objectFit: objectPositionContext.value.objectFit };
     case 'media': return { ...base, accept: mediaAccept.value };
-    case 'editor': return { ...base, mode: props.field.mode || 'inline' };
+    case 'editor': return { ...base, mode: props.field.mode || 'inline', strumenti: props.field.strumenti || null, aCapo: !!props.field.aCapo };
     case 'icon-select': return { ...base, options: props.field.options || [] };
     case 'multi_pills': return { ...base, options: props.field.options || [] };
     case 'megapanel-map': return { ...base, vuoto: props.field.vuoto || '' };
     case 'mappa-stati': return { ...base, tileSettings: props.tileSettings };
+    case 'tabella': return { ...base, tileSettings: props.tileSettings };
     case 'spettacoli': return { ...base, tileSettings: props.tileSettings };
     case 'code': return { ...base, class: 'olo-field-code' };
+    // Anche nei campi collegabili ai contenuti dinamici (DynamicFieldToggle passa da qui): l'elenco salvato con «|» si
+    // mostra una voce per riga (prima, col fulmine, le frasi del Nastro restavano tutte in una riga).
+    case 'textarea': return { ...base, righeDa: props.field.righeDa || '' };
     default: return base;
   }
 });
@@ -1467,6 +1514,8 @@ function onDynamicUpdate(dynamicUpdate, isRemove) {
 .olo-field-info { margin-left: 3px; color: #94a3b8; }
 .olo-fi-label .olo-field-info { flex: none; }
 .olo-field-info-row { display: flex; justify-content: flex-end; margin-bottom: -4px; }
+.olo-reveal-riga { display: flex; align-items: center; gap: 6px; }
+.olo-reveal-riga > .olo-reveal-btn { flex: 1 1 auto; min-width: 0; }
 .olo-desc-row {
   display: flex;
   align-items: center;

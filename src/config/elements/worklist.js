@@ -14,10 +14,10 @@ export default {
   defaults: {
     typography_preset: '',
     items: [
-      { number: '01', title: 'Marisol',      category: 'Brand identity', year: '2026', link_url: '' },
-      { number: '02', title: 'Atlas Press',   category: 'Editorial · web', year: '2025', link_url: '' },
-      { number: '03', title: 'Field Museum',  category: 'Wayfinding',     year: '2025', link_url: '' },
-      { number: '04', title: 'Cobalt',        category: 'Identity · product', year: '2024', link_url: '' },
+      { number: '01', title: t('Residenza Aurora'), category: t('Architettura'), year: '2026', link_url: '' },
+      { number: '02', title: t('Bottega Marini'), category: t('Identità visiva'), year: '2025', link_url: '' },
+      { number: '03', title: t('Studio Ferri'), category: t('Interni · arredo'), year: '2025', link_url: '' },
+      { number: '04', title: t('Caffè Centrale'), category: t('Sito web'), year: '2024', link_url: '' },
     ],
 
     divider_color: 'var(--olo-color-border, #e5e7eb)',
@@ -68,17 +68,22 @@ export default {
   },
 
   // ═══ CONTENUTO ════════════════════════════════════════════════
+  // 16 nov 2026 (episodio 28): «Voce» nuova coi suoi valori (la chiave era `defaults`, che il ripetitore non legge: una
+  // riga aggiunta nasceva vuota), spiegazioni nelle (i), lo Stile nelle zone dello standard e categoria e anno con un
+  // controllo tipografico come il numero (prima due cursori senza unità e un colore a parte).
   fields: [
     { type: 'separator', label: t('Voci') },
     { key: 'items', label: t('Righe'), type: 'content-items', supportsDynamic: true,
-      itemLabel: t('Voce'),
-      defaults: { number: '00', title: t('Nuovo progetto'), category: t('Categoria'), year: '2026', link_url: '' },
+      itemLabel: t('Voce'), etichettaDa: 'title',
+      newItemDefaults: { number: '05', title: t('Nuovo progetto'), category: t('Categoria'), year: '2026', link_url: '' },
       itemFields: [
-        { key: 'number',   label: t('Numero (es. 01)'), type: 'text' },
+        { key: 'number',   label: t('Numero'), type: 'text', placeholder: '01',
+          description: t('Il numero o la sigla davanti al titolo: 01, A1, ★. Vuoto: niente.') },
         { key: 'title',    label: t('Titolo'),          type: 'text' },
         { key: 'category', label: t('Categoria'),       type: 'text' },
         { key: 'year',     label: t('Anno'),            type: 'text' },
-        { key: 'link_url', label: t('Link'),            type: 'link' },
+        { key: 'link_url', label: t('Link'),            type: 'link',
+          description: t('Con un link la riga intera porta lì.') },
       ],
     },
 
@@ -89,25 +94,28 @@ export default {
   ],
 
   // ═══ STILE ════════════════════════════════════════════════════
+  // Zone: Aspetto · Testo · Forma.
   styleFields: [
-    { type: 'separator', label: t('Righe') },
-    { key: 'divider_color', label: t('Colore linee'),         type: 'color' },
-    { key: 'row_padding', label: t('Padding riga'), type: 'spacing', min: 0, max: 80,
-      legacyKeys: { y: 'row_padding_y' } },
-    { key: 'row_hover_bg',  label: t('Sfondo riga (hover)'),  type: 'color' },
-    { key: 'hover_indent',  label: t('Indentazione hover'), type: 'range', min: 0, max: 48, step: 2 },
+    { type: 'separator', label: t('Aspetto') },
+    { key: 'divider_color', label: t('Colore linee'), type: 'color' },
+    { key: 'row_hover_bg',  label: t('Sfondo al passaggio'), type: 'color' },
+    { key: 'arrow_color',   label: t('Colore freccia'), type: 'color', condition: { field: 'show_arrow', op: 'neq', value: false } },
 
-    { type: 'separator', label: t('Titolo') },
+    { type: 'separator', label: t('Testo') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'), responsiveKeys: ['size'], keys: { size: 'title_size', weight: 'title_weight', color: 'title_color', family: 'title_font_family' }, sizeMin: 20, sizeMax: 72 },
-
-    { type: 'separator', label: t('Meta (numero · categoria · anno)') },
-    { key: 'mono_font_family', label: t('Font meta (vuoto = mono del tema)'), type: 'font-family' },
+    { key: 'mono_font_family', label: t('Carattere dei dettagli'), type: 'font-family', layout: 'block',
+      description: t('Il carattere di numero, categoria e anno. Vuoto: quello monospaziato del sito.') },
     { type: 'typography', label: t('Numero'), responsiveKeys: [], keys: { size: 'number_size', color: 'number_color' }, sizeMin: 10, sizeMax: 20 },
-    { key: 'category_color', label: t('Colore categoria'), type: 'color' },
-    { key: 'category_size',  label: t('Categoria'),   type: 'range', min: 10, max: 18, step: 1 },
-    { key: 'year_color',     label: t('Colore anno'),      type: 'color' },
-    { key: 'year_size',      label: t('Anno'),        type: 'range', min: 10, max: 20, step: 1 },
-    { key: 'arrow_color',    label: t('Colore freccia'),   type: 'color' },
+    { type: 'typography', label: t('Categoria'), responsiveKeys: [], keys: { size: 'category_size', color: 'category_color' }, sizeMin: 10, sizeMax: 18,
+      condition: { field: 'show_category', op: 'neq', value: false } },
+    { type: 'typography', label: t('Anno'), responsiveKeys: [], keys: { size: 'year_size', color: 'year_color' }, sizeMin: 10, sizeMax: 20,
+      condition: { field: 'show_year', op: 'neq', value: false } },
+
+    { type: 'separator', label: t('Forma') },
+    { key: 'row_padding', label: t('Padding riga'), type: 'spacing', min: 0, max: 80,
+      legacyKeys: { y: 'row_padding_y' } },
+    { key: 'hover_indent',  label: t('Rientro al passaggio'), type: 'range', min: 0, max: 48, step: 2, unit: 'px',
+      description: t('Di quanto la riga rientra quando ci si passa sopra.') },
   ],
 };

@@ -47,7 +47,7 @@
                 type="button"
                 class="cie-btn cie-btn--delete"
                 :title="t('Elimina')"
-                :disabled="localItems.length <= 1"
+                :disabled="localItems.length <= minimo"
                 @click.stop="removeItem(index)"
               >{{ t('&times;') }}</button>
               <span class="cie-chevron" :class="{ 'cie-chevron--open': expandedId === element.id }">&#9660;</span>
@@ -57,7 +57,7 @@
           <!-- Expanded editor -->
           <div v-if="expandedId === element.id" class="cie-body">
             <div v-for="(field, fi) in itemFields" :key="(field.key || '') + ':' + (field.type || '') + ':' + (field.label || '')" v-show="campoVisibileNellaVoce(field, fi, element)" class="cie-field" :class="{ 'cie-field--inline': field.type === 'number' || field.type === 'range' }">
-              <label v-if="field.type !== 'separator' && !isDelegated(field)" class="cie-label">{{ etichettaDi(field).testo }}<InfoTip v-if="field.description" class="cie-info" :testo="t(field.description)" :titolo="etichettaDi(field).testo" /></label>
+              <label v-if="field.type !== 'separator' && !isDelegated(field) && !linkCollegabile(field)" class="cie-label">{{ etichettaDi(field).testo }}<InfoTip v-if="field.description" class="cie-info" :testo="t(field.description)" :titolo="etichettaDi(field).testo" /></label>
 
               <!-- separator (intestazione di sezione, nessun input) -->
               <div v-if="field.type === 'separator'" class="cie-separator">{{ field.label }}</div>
@@ -67,6 +67,7 @@
                 v-else-if="field.type === 'editor'"
                 :modelValue="element[field.key] || ''"
                 :mode="field.mode || 'inline'"
+                :strumenti="field.strumenti || null"
                 @update:modelValue="updateField(index, field.key, $event)"
               />
 
@@ -84,10 +85,13 @@
               <!-- media picker (image + video, auto-filtered by field key) -->
               <div v-else-if="field.type === 'media'" class="cie-image-picker">
                 <div v-if="element[field.key]" class="cie-image-preview">
-                  <img v-if="!/\.(mp4|webm|ogg)(\?.*)?$/i.test(element[field.key])" :src="element[field.key]" alt="" />
+                  <!-- Solo le immagini in anteprima: un PDF o uno ZIP (i Documenti della Scheda tecnica) si vedevano come
+                       immagine rotta. Video e altri file: l'icona e il nome del file. -->
+                  <img v-if="eImmagine(element[field.key])" :src="element[field.key]" alt="" />
                   <div v-else class="cie-media-video-badge">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
-                    <span class="cie-media-filename">{{ element[field.key].split('/').pop() }}</span>
+                    <svg v-if="/\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(element[field.key])" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
+                    <svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span class="cie-media-filename">{{ String(element[field.key]).split('/').pop() }}</span>
                   </div>
                   <button @click="updateField(index, field.key, ''); updateField(index, field.key + '_id', 0)" class="cie-image-remove">{{ t('&times;') }}</button>
                 </div>
@@ -175,7 +179,7 @@
                 v-else-if="field.type === 'select'"
                 ui="dropdown"
                 :modelValue="element[field.key] || ''"
-                :options="resolveSelectOptions(field)"
+                :options="resolveSelectOptions(field, element)"
                 @update:modelValue="updateField(index, field.key, $event)"
               />
 
@@ -215,6 +219,24 @@
                 :modelValue="!!element[field.key]"
                 @update:modelValue="updateField(index, field.key, $event)"
               />
+
+              <!-- link collegabile a un campo del contenuto (17 nov 2026): la chiave porta l'id della voce
+                   («items.@il-2.link»), così il collegamento resta alla sua voce se le voci si spostano -->
+              <DynamicFieldToggle
+                v-else-if="linkCollegabile(field)"
+                :field="{ ...field, key: chiaveCollegamento(element, field), label: etichettaDi(field).testo }"
+                :tileId="tileId"
+                :dynamic="dynamic"
+                voce
+                @update:dynamic="(aggiornato, togli) => emit('update:dynamic', aggiornato, togli)"
+              >
+                <FieldLink
+                  :modelValue="element[field.key] || ''"
+                  :placeholder="field.placeholder || ''"
+                  :types="field.linkTypes || ''"
+                  @update:modelValue="updateField(index, field.key, $event)"
+                />
+              </DynamicFieldToggle>
 
               <!-- link (autocomplete pagine/post/CPT) -->
               <FieldLink
@@ -337,6 +359,7 @@ import { staccaUnita } from '@/utils/fieldLabel';
 import FieldFontFamily from './fields/FieldFontFamily.vue';
 import FieldSelect from './fields/FieldSelect.vue';
 import FieldLink from './fields/FieldLink.vue';
+import DynamicFieldToggle from './DynamicFieldToggle.vue';
 import FieldToggle from './fields/FieldToggle.vue';
 import BackgroundControls from './BackgroundControls.vue';
 import DynamicQueryPanel from './DynamicQueryPanel.vue';
@@ -386,7 +409,8 @@ const props = defineProps({
   modelValue: { type: Array, default: () => [] },
   itemFields: { type: Array, default: () => [] },
   newItemDefaults: { type: Object, default: () => ({}) },
-  itemLabel: { type: String, default: 'Item' },
+  // In italiano anche quando la tile non lo dice: prima «+ Aggiungi Item» (16 nov 2026).
+  itemLabel: { type: String, default: 'Voce' },
   tileId: { type: String, default: '' },
   tileSettings: { type: Object, default: () => ({}) },
   supportsDynamic: { type: Boolean, default: false },
@@ -403,9 +427,24 @@ const props = defineProps({
   // senza, la voce mostrerebbe il valore salvato («cime») invece del nome («Cime (guglie)»).
   etichettaOpzioni: { type: Array, default: null },
   miniaturaDa: { type: String, default: '' },
+  // Quante voci restano almeno: di solito una (la × dell'ultima è spenta). 0 per le liste facoltative, che si
+  // svuotano del tutto: gli indicatori del Configuratore (16 nov 2026, prima l'ultimo non si toglieva).
+  minimo: { type: Number, default: 1 },
+  // La chiave del ripetitore nelle impostazioni della tile («items»): serve ai link collegabili delle voci.
+  chiave: { type: String, default: '' },
 });
 
-const emit = defineEmits(['update:modelValue', 'update:dynamic-query', 'update:dynamic-item-map']);
+const emit = defineEmits(['update:modelValue', 'update:dynamic-query', 'update:dynamic-item-map', 'update:dynamic']);
+
+// I link delle voci scritte a mano si collegano a un campo del contenuto (17 nov 2026): non nello specchio dello
+// Stile, non quando una «Sorgente dinamica» riempie le voci (lì il link lo dà la ricerca), e solo se si sa quale
+// ripetitore e quale tile.
+function linkCollegabile(field) {
+  return field.type === 'link' && !!props.tileId && !!props.chiave && !props.strutturaFissa && !isDynamicQueryActive.value;
+}
+function chiaveCollegamento(element, field) {
+  return props.chiave + '.@' + element.id + '.' + field.key;
+}
 
 // Le spiegazioni dei campi `description` delle voci restano nelle voci (riga con la (i)):
 // senza questo salirebbero nella (i) della sezione che contiene l'editor, una per voce.
@@ -424,7 +463,37 @@ const ensureArray = (v) => Array.isArray(v) ? v : [];
 // Risolve le options di un sub-field di tipo 'select' supportando sia
 // `field.options` (statiche) sia `field.optionsSource` (dinamiche da oloData).
 // Mirror della logica in InspectorField.vue per i sub-field nei content-items.
-function resolveSelectOptions(field) {
+// `optionsSource: 'altreVoci'`: le ALTRE voci dello stesso ripetitore, per scegliere un riferimento senza scriverne
+// il nome a mano (la condizione di un campo del Form: «mostra se il campo… »). `voci: { valore, etichetta }` dice
+// quali chiavi della voce usare (predefinite name e label); la prima riga è «nessuna».
+function resolveSelectOptions(field, voce) {
+  if (field.optionsSource === 'altreVoci') {
+    const valore = field.voci?.valore || 'name';
+    const etichetta = field.voci?.etichetta || 'label';
+    const altre = localItems.value.filter((it) => it && it !== voce && it.id !== voce?.id && String(it[valore] || '').trim());
+    const opzioni = altre.map((it) => ({ value: String(it[valore]), label: String(it[etichetta] || it[valore]) + ' (' + it[valore] + ')' }));
+    const attuale = voce && voce[field.key];
+    if (attuale && !opzioni.some((o) => o.value === String(attuale))) opzioni.push({ value: String(attuale), label: String(attuale) });
+    return [{ value: '', label: field.nessuna || t('— Nessuna —') }, ...opzioni];
+  }
+  if (field.optionsSource === 'vociDi') {
+    // Le voci di un ALTRO ripetitore della stessa tile (`voci: { lista, valore, etichetta, automatico }`): il gruppo di
+    // un'opzione del Configuratore si sceglie fra i gruppi, invece di scriverne a mano l'ID (16 nov 2026). Una voce
+    // con l'id automatico (`automatico`, es. «ci-…») vale per la sua etichetta, come nel renderer.
+    const v = field.voci || {};
+    const lista = (props.tileSettings || {})[v.lista || 'fields'];
+    const valore = v.valore || 'id';
+    const etichetta = v.etichetta || 'label';
+    const valoreDi = (it) => {
+      const x = String(it[valore] || '').trim();
+      return (!x || (v.automatico && /^ci-\d{9,}/.test(x))) ? String(it[etichetta] || '').trim() : x;
+    };
+    const opzioni = (Array.isArray(lista) ? lista : []).filter((it) => it && valoreDi(it))
+      .map((it) => ({ value: valoreDi(it), label: String(it[etichetta] || valoreDi(it)) }));
+    const attuale = voce && voce[field.key];
+    if (attuale && !opzioni.some((o) => o.value === String(attuale))) opzioni.push({ value: String(attuale), label: String(attuale) });
+    return [{ value: '', label: field.nessuna || t('— Scegli —') }, ...opzioni];
+  }
   if (Array.isArray(field.options) && field.options.length) {
     // Supporta sia array di { value, label } sia array di stringhe semplici
     return field.options.map(o => (o && typeof o === 'object') ? o : { value: o, label: String(o) });
@@ -505,21 +574,33 @@ function stripHtml(html) {
   return tmp.textContent || tmp.innerText || '';
 }
 
+/** Il valore di un campo della voce come lo legge chi la cerca: per un menu l'etichetta dell'opzione, non il valore. */
+function valoreLeggibile(element, chiave) {
+  const val = element[chiave];
+  if (val === undefined || val === null || val === '') return '';
+  const fieldDef = props.itemFields.find(f => f.key === chiave);
+  // Anche le opzioni dinamiche (`optionsSource`: il corso di una lezione si legge col nome, non col codice).
+  const opzioni = fieldDef ? (fieldDef.type === 'select' ? resolveSelectOptions(fieldDef, element) : null) : props.etichettaOpzioni;
+  if (Array.isArray(opzioni)) {
+    const opt = opzioni.find(o => o && String(o.value) === String(val));
+    if (opt) return String(opt.label);
+  }
+  return stripHtml(String(val));
+}
+
 function getItemLabel(element) {
   if (!labelField.value) return t(props.itemLabel);
+  const campo = String(labelField.value);
+  // `etichettaDa: 'giorno+inizio+corso'`: più campi insieme, separati da « · » («Lunedì · 07:00 · Indoor cycling»).
+  if (campo.includes('+')) {
+    const parti = campo.split('+').map(k => valoreLeggibile(element, k.trim())).filter(Boolean);
+    return parti.length ? parti.join(' · ') : t('Senza titolo');
+  }
   // `etichettaDa: 'testo|tipo'`: il primo campo non vuoto (una voce senza testo, come
   // un'immagine o un separatore, si chiama col suo tipo invece di «Senza titolo»).
-  const chiave = String(labelField.value).split('|').find(k => element[k]) || '';
-  const val = chiave ? element[chiave] : '';
-  if (!val) return t('Senza titolo');
-  // Per campi select: mostra la label dell'opzione, non il value
-  const fieldDef = props.itemFields.find(f => f.key === chiave);
-  const opzioni = fieldDef ? (fieldDef.type === 'select' ? fieldDef.options : null) : props.etichettaOpzioni;
-  if (Array.isArray(opzioni)) {
-    const opt = opzioni.find(o => o.value === val);
-    if (opt) return opt.label;
-  }
-  return stripHtml(String(val)) || t('Senza titolo');
+  const chiave = campo.split('|').find(k => element[k]) || '';
+  if (!chiave) return t('Senza titolo');
+  return valoreLeggibile(element, chiave) || t('Senza titolo');
 }
 
 function emitUpdate() {
@@ -542,6 +623,11 @@ function pickImage(index, fieldKey) {
   });
 }
 
+/** Un indirizzo che il browser mostra come immagine (le anteprime delle voci). */
+function eImmagine(url) {
+  return /\.(jpe?g|png|gif|webp|avif|svg|bmp)(\?.*)?$/i.test(String(url || ''));
+}
+
 function mediaButtonLabel(value, field) {
   const type = detectMediaType(field.key, field);
   const labels = {
@@ -549,7 +635,8 @@ function mediaButtonLabel(value, field) {
     video: { pick: t('Seleziona video'),    change: t('Cambia video') },
     audio: { pick: t('Seleziona audio'),    change: t('Cambia audio') },
     'application/pdf': { pick: t('Seleziona PDF'), change: t('Cambia PDF') },
-    all:   { pick: t('Seleziona media'),    change: t('Cambia media') },
+    // Un campo che accetta ogni file (i Documenti della Scheda tecnica, gli allegati): «file», non «media».
+    all:   { pick: t('Seleziona file'),     change: t('Cambia file') },
   };
   const l = labels[type] || labels.all;
   return value ? l.change : l.pick;
@@ -766,22 +853,38 @@ const sezioneDi = computed(() => {
 function campoVisibileNellaVoce(field, i, element) {
   const campi = props.itemFields || [];
   const voce = element || {};
+  // `condizioneTile`: una condizione su un'impostazione della TILE, non della voce (16 nov 2026: «Numero o scritta»
+  // di ogni passo non conta quando i «Numeri automatici» sono accesi, e allora non si mostra). Vale anche per un
+  // separatore, e una sezione i cui campi sono tutti nascosti da lei sparisce col suo titolo.
+  const perTile = (f) => !f.condizioneTile || sharedIsFieldVisible({ condition: f.condizioneTile }, props.tileSettings || {});
   if (field.type === 'separator') {
+    if (!perTile(field)) return false;
     const dopo = [];
     for (let k = i + 1; k < campi.length && campi[k]?.type !== 'separator'; k++) dopo.push(campi[k]);
-    return isSectionVisible(field, dopo, voce);
+    return isSectionVisible(field, dopo, voce, (f) => isFieldVisible(f, voce) && perTile(f));
   }
   if (!isFieldVisible(field, voce)) return false;
+  if (!perTile(field)) return false;
   const s = sezioneDi.value[i];
-  return s < 0 || isFieldVisible(campi[s], voce);
+  return s < 0 || (isFieldVisible(campi[s], voce) && perTile(campi[s]));
 }
 
 function removeItem(index) {
-  if (localItems.value.length <= 1) return;
+  if (localItems.value.length <= props.minimo) return;
   const removed = localItems.value[index];
   if (expandedId.value === removed.id) expandedId.value = null;
   localItems.value.splice(index, 1);
   emitUpdate();
+  // I collegamenti della voce tolta («items.@<id>.…») non servono più
+  const prefisso = props.chiave ? props.chiave + '.@' + removed.id + '.' : '';
+  const restanti = { ...(props.dynamic || {}) };
+  let tolti = 0;
+  if (prefisso) {
+    for (const k of Object.keys(restanti)) {
+      if (k.startsWith(prefisso)) { delete restanti[k]; tolti++; }
+    }
+  }
+  if (tolti) emit('update:dynamic', restanti, true);
 }
 </script>
 

@@ -87,7 +87,7 @@ class Olobuild_Viewer360_Tile extends Olobuild_Tile_Base {
         if ( empty( $src ) ) {
             return '<div style="padding:40px;text-align:center;color:var(--olo-color-text-muted,#9CA3AF);background:var(--olo-color-muted,#F3F4F6);border-radius:12px">'
                  . '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 8px;display:block"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg>'
-                 . '<p style="font-size:1em;margin:0">' . esc_html( olobuild_t( 'Inserisci una foto o video 360° equirectangular.' ) ) . '</p>'
+                 . '<p style="font-size:1em;margin:0">' . esc_html( olobuild_t( 'Scegli nel Contenuto una foto o un video a 360°: equirettangolare, largo il doppio dell’altezza.' ) ) . '</p>'
                  . '</div>';
         }
 
@@ -177,6 +177,24 @@ class Olobuild_Viewer360_Tile extends Olobuild_Tile_Base {
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php endif; ?>
+        <?php if ( ! $is_object ) : ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS fisso; $uid è generato internamente ('olo-v360-' . wp_rand()). ?>
+        <style>
+        <?php /* Pannellum scrive display:block in linea sul pulsante dello schermo intero: l'icona è un blocco centrato.
+                 I comandi di Pannellum (quadratini bianchi con le icone nere della libreria) come quelli della barra del video:
+                 tondi, vetro scuro, segni chiari. Prima (1.4.976) solo col video: nel panorama da foto restavano i
+                 quadratini, anche lo schermo intero (17 nov 2026). */ ?>
+        #<?php echo $uid; ?> .pnlm-controls-container{top:12px;left:12px}
+        #<?php echo $uid; ?> .pnlm-zoom-controls{width:auto;height:auto;margin:0;border:0;border-radius:0;background:none;box-shadow:none;display:flex;flex-direction:column;gap:.375rem}
+        #<?php echo $uid; ?> .pnlm-zoom-controls .pnlm-control,#<?php echo $uid; ?> .pnlm-fullscreen-toggle-button{position:static;width:36px;height:36px;margin:0;border:0;border-radius:50%;box-shadow:none;background:color-mix(in srgb,var(--olo-color-dark,#111111) 58%,transparent) none!important;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:var(--olo-color-light,#ffffff);display:grid;place-items:center;font:400 22px/1 system-ui,sans-serif;cursor:pointer;transition:background-color .2s}
+        #<?php echo $uid; ?> .pnlm-fullscreen-toggle-button{margin-top:.375rem}
+        #<?php echo $uid; ?> .pnlm-zoom-controls .pnlm-control:hover,#<?php echo $uid; ?> .pnlm-fullscreen-toggle-button:hover{background-color:color-mix(in srgb,var(--olo-color-dark,#111111) 78%,transparent)}
+        #<?php echo $uid; ?> .pnlm-zoom-in::before{content:'+'}
+        #<?php echo $uid; ?> .pnlm-zoom-out::before{content:'\2212'}
+        #<?php echo $uid; ?> .pnlm-fullscreen-toggle-button::before{content:'';display:block;width:16px;height:16px;margin:10px auto 0;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5'/%3E%3C/svg%3E") center/contain no-repeat}
+        </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+        <?php endif; ?>
         <?php if ( $is_vid ) : ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS fisso; $uid è generato internamente ('olo-v360-' . wp_rand()). ?>
         <style>
@@ -202,14 +220,6 @@ class Olobuild_Viewer360_Tile extends Olobuild_Tile_Base {
         #<?php echo $uid; ?>.is-partito .olo-v360-avvia{display:none}
         #<?php echo $uid; ?>.is-ambiente .olo-v360-barra,#<?php echo $uid; ?>.is-ambiente .olo-v360-tempo{display:none}
         #<?php echo $uid; ?>.is-ambiente .olo-v360-ui{left:auto;padding:.3125rem}
-        <?php /* Lo zoom di Pannellum (quadratini bianchi con le icone nere della libreria) come i comandi della barra:
-                 tondi, vetro scuro, segni chiari (1.4.976). */ ?>
-        #<?php echo $uid; ?> .pnlm-controls-container{top:12px;left:12px}
-        #<?php echo $uid; ?> .pnlm-zoom-controls{width:auto;height:auto;margin:0;border:0;border-radius:0;background:none;box-shadow:none;display:flex;flex-direction:column;gap:.375rem}
-        #<?php echo $uid; ?> .pnlm-zoom-controls .pnlm-control{position:static;width:36px;height:36px;margin:0;border:0;border-radius:50%;background:color-mix(in srgb,var(--olo-color-dark,#111111) 58%,transparent) none!important;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:var(--olo-color-light,#ffffff);display:grid;place-items:center;font:400 22px/1 system-ui,sans-serif;transition:background-color .2s}
-        #<?php echo $uid; ?> .pnlm-zoom-controls .pnlm-control:hover{background-color:color-mix(in srgb,var(--olo-color-dark,#111111) 78%,transparent)}
-        #<?php echo $uid; ?> .pnlm-zoom-in::before{content:'+'}
-        #<?php echo $uid; ?> .pnlm-zoom-out::before{content:'\2212'}
         #<?php echo $uid; ?>.is-errore .olo-v360-avvia-cerchio{display:none}
         @media (prefers-reduced-motion:reduce){#<?php echo $uid; ?> .olo-v360-ui,#<?php echo $uid; ?> .olo-v360-avvia-cerchio{transition:none}}
         </style>

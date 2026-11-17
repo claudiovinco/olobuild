@@ -337,6 +337,9 @@ function initSlider(container) {
     // spaziatura e padding si moltiplicano per --mps-k, che dentro la tela vale 1 (CSS). Prima il carattere
     // restava quello di progetto e sul telefono un titolo di 120 usciva dallo slider.
     container.style.setProperty('--mps-k', String(scaleX));
+    // La scala anche per il carattere minimo leggibile (olo-proslider.css --mps-den, PHP carattere_leggibile):
+    // --mps-k dentro la tela torna 1, questa no.
+    container.style.setProperty('--mps-scala', String(scaleX));
     if (!schermoPieno) {
       // Più alta del formato vince sulle regole per formato del PHP (aspect-ratio e height:auto con !important).
       if (altezza > finalH) {

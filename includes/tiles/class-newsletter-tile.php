@@ -237,7 +237,7 @@ class Olobuild_Newsletter_Tile extends Olobuild_Tile_Base {
                   <input type="checkbox" id="<?php echo esc_attr( $uid ); ?>-priv" required style="margin-top:2px;flex-shrink:0" />
                 <?php endif; ?>
                 <label <?php if ( ! empty( $s['privacy_required'] ) ) echo 'for="' . esc_attr( $uid ) . '-priv"'; ?>>
-                  <?php echo wp_kses_post( $s['privacy_text'] ); ?>
+                  <?php echo $this->sanitize_richtext( (string) $s['privacy_text'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitize_richtext() toglie i <p> dell'editor e passa da wp_kses_post() ?>
                 </label>
               </div>
             <?php endif; ?>

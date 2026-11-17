@@ -106,7 +106,7 @@ export default {
         { key: 'content', label: t('Contenuto'), type: 'textarea' },
         { key: 'video', label: t('Video URL'), type: 'text', placeholder: t('https://...mp4 o YouTube/Vimeo') },
         { key: 'image', label: t('Immagine'), type: 'image' },
-        { key: 'hover_image', label: t('Immagine hover'), type: 'image' },
+        { key: 'hover_image', label: t('Immagine al passaggio'), type: 'image' },
       ],
       newItemDefaults: { title: t('Nuovo pannello'), content: 'Contenuto del pannello.', image: '', video: '', icon: '', hover_image: '', widget_template_id: 0, children: [] },
       itemLabel: 'Pannello',
@@ -120,7 +120,7 @@ export default {
     { type: 'separator', label: t('Comportamento') },
     // Chiave storica `toggle_mode`: accesa, il renderer passa `multiple: true` a UIkit.
     { key: 'toggle_mode', label: t('Più pannelli aperti insieme'), type: 'toggle' },
-    { key: 'default_open', label: t('Aperto di default'), type: 'select', options: [
+    { key: 'default_open', label: t('Aperti all’inizio'), type: 'select', options: [
       { value: 'first', label: t('Primo pannello') },
       { value: 'all', label: t('Tutti i pannelli') },
       { value: 'none', label: t('Nessuno') },
@@ -128,87 +128,53 @@ export default {
     { key: 'faq_schema', label: t('Schema FAQ (SEO)'), type: 'toggle' },
   ],
 
+  // Stile nelle zone standard (16 nov 2026, prima di «Una tile in un minuto»): Aspetto · Testo · Intestazione ·
+  // Icona · Pannello aperto · Immagini · Forma. Prima tredici sezioni in ordine sparso («Preset stile», «Tweak effetto
+  // preset», «Glassmorphism», «Effetti pannello (hover)»…), con Proporzioni e Adattamento finiti in fondo dopo gli
+  // effetti, e gli stili coi nomi di marchi altrui e i colori scritti a mano (ora i token della palette).
   styleFields: [
-    { type: 'separator', label: t('Preset stile') },
+    { type: 'separator', label: t('Aspetto') },
     { key: 'preset', label: t('Stile'), type: 'select', options: [
-      { value: 'card-soft',         label: t('Card Soft (Stripe-style)') },
-      { value: 'minimal-underline', label: t('Minimal Underline (Apple)') },
-      { value: 'pill-brand',        label: t('Pill Brand (Linear)') },
-      { value: 'outline-sharp',     label: t('Outline Sharp') },
-      { value: 'glass-soft',        label: t('Glass Soft (glassmorphism soft)') },
-      { value: 'liquid-glass',      label: t('Liquid Glass (Vision Pro)') },
-      { value: 'neon-cyber',        label: t('Neon Cyberpunk (Tron)') },
-      { value: 'brutalist-block',   label: t('Brutalist Block (neo-brutalist)') },
-      { value: 'magnetic-liquid',   label: t('Magnetic Liquid (next-gen)') },
-      { value: 'sticker',           label: t('Sticker / Scrapbook') },
-      { value: 'retro-terminal',    label: t('Retro Terminal (CRT)') },
-      { value: '3d-tilt',           label: t('3D Card Tilt') },
-      { value: 'custom',            label: t('Personalizzato (usa controlli sotto)') },
+      { value: 'card-soft',         label: t('Schede morbide') },
+      { value: 'minimal-underline', label: t('Righe sottili') },
+      { value: 'pill-brand',        label: t('Voce aperta nel primario') },
+      { value: 'outline-sharp',     label: t('Contorno primario') },
+      { value: 'glass-soft',        label: t('Vetro') },
+      { value: 'liquid-glass',      label: t('Vetro liquido') },
+      { value: 'neon-cyber',        label: t('Neon su scuro') },
+      { value: 'brutalist-block',   label: t('Blocchi netti') },
+      { value: 'magnetic-liquid',   label: t('Voce aperta scura') },
+      { value: 'sticker',           label: t('Adesivo') },
+      { value: 'retro-terminal',    label: t('Terminale') },
+      { value: '3d-tilt',           label: t('Inclinato in 3D') },
+      { value: 'custom',            label: t('Personalizzato') },
     ]},
-    { type: 'separator', label: t('Tweak effetto preset'),
-      condition: { field: 'preset', op: 'in', value: ['liquid-glass','neon-cyber','brutalist-block','magnetic-liquid','sticker','retro-terminal','3d-tilt'] } },
     { key: 'effect_color', label: t('Colore effetto'), type: 'color',
       condition: { field: 'preset', op: 'in', value: ['neon-cyber','brutalist-block','magnetic-liquid','sticker','retro-terminal'] } },
     { key: 'effect_intensity', label: t('Intensità effetto'), type: 'select',
       options: [
         { value: 'low',    label: t('Bassa') },
-        { value: 'medium', label: t('Media (default)') },
+        { value: 'medium', label: t('Media') },
         { value: 'high',   label: t('Alta') },
       ],
       condition: { field: 'preset', op: 'in', value: ['liquid-glass','neon-cyber','brutalist-block','magnetic-liquid','sticker','retro-terminal','3d-tilt'] } },
-    { key: 'effect_speed', label: t('Velocità animazioni'), type: 'range',
+    { key: 'effect_speed', label: t('Durata effetto'), type: 'range', unit: 'ms',
       min: 0, max: 4000, step: 100,
       condition: { field: 'preset', op: 'in', value: ['neon-cyber','magnetic-liquid','retro-terminal','3d-tilt'] } },
-
-    { type: 'separator', label: t('Icona') },
-    { key: 'icon_position', label: t('Posizione icona'), type: 'select', options: [
-      { value: 'right', label: t('Destra') },
-      { value: 'left', label: t('Sinistra') },
+    ...shadowField,
+    { key: 'panel_hover_lift', label: t('Sollevamento al passaggio'), type: 'toggle' },
+    { key: 'panel_hover_shadow', label: t('Ombra al passaggio'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
+      { value: 'sm', label: t('Leggera') },
+      { value: 'md', label: t('Media') },
+      { value: 'lg', label: t('Grande') },
     ]},
-    { key: 'icon_style', label: t('Stile icona'), type: 'select', options: [
-      { value: 'chevron', label: t('Chevron ›') },
-      { value: 'plus', label: t('Più/Meno ＋') },
-      { value: 'arrow', label: t('Freccia ↓') },
-      { value: 'caret', label: t('Triangolo ▼') },
-    ]},
-    { key: 'animate_icon', label: t('Anima icona'), type: 'toggle' },
-    // Prima le icone erano fisse sul primario.
-    { key: 'icon_color', label: t('Colore icone'), type: 'color',
-      description: t('Vale per le icone delle voci e per la freccia. Vuoto: icone delle voci nel colore primario, freccia del colore del titolo (sulla voce aperta il colore attivo del titolo o il primario).') },
-    { key: 'icon_shape', label: t('Forma icona'), type: 'select', options: [
-      { value: 'none', label: t('Nessuna (icona piatta)') },
-      { value: 'pill', label: t('Pill (riquadro)') },
-      { value: 'circle', label: t('Cerchio') },
-    ]},
-    { key: 'icon_shape_size', label: t('Dimensione riquadro'), type: 'range', min: 24, max: 48, step: 1,
-      condition: { field: 'icon_shape', op: 'in', value: [ 'pill', 'circle' ] } },
-    { key: 'icon_shape_bg', label: t('Sfondo riquadro'), type: 'color',
-      condition: { field: 'icon_shape', op: 'in', value: [ 'pill', 'circle' ] } },
+    { key: 'backdrop_blur', label: t('Sfocatura dietro'), type: 'range', unit: 'px', min: 0, max: 20, step: 1,
+      description: t('Sfoca quello che sta dietro le voci (effetto vetro): si vede con gli sfondi trasparenti.') },
+    { key: 'backdrop_saturate', label: t('Saturazione dietro'), type: 'range', unit: '%', min: 100, max: 200, step: 5,
+      condition: { field: 'backdrop_blur', op: 'gt', value: 0 } },
 
-    { type: 'separator', label: t('Animazione') },
-    { key: 'animation_speed', label: t('Velocità animazione'), type: 'range', min: 100, max: 800, step: 50 },
-    { key: 'content_transition', label: t('Transizione contenuto'), type: 'select', options: [
-      { value: 'none', label: t('Nessuna') },
-      { value: 'fade', label: t('Dissolvenza') },
-      { value: 'slide', label: t('Scorrimento') },
-    ]},
-
-    ...textEffectsFields([
-      { value: 'title', label: t('Solo Titolo') },
-      { value: 'content', label: t('Solo Contenuto') },
-      { value: 'all', label: t('Tutti gli elementi testuali') },
-    ]),
-
-    { type: 'separator', label: t('Media pannello') },
-    { key: 'media_align', label: t('Allineamento media'), type: 'select', options: [
-      { value: 'right', label: t('Destra') },
-      { value: 'left', label: t('Sinistra') },
-    ]},
-    { key: 'media_width', label: t('Larghezza media'), type: 'range', min: 20, max: 50, step: 5 },
-    withHover({ key: 'media_radius', label: t('Raggio'), type: 'border-radius' }),
-
-    { type: 'separator', label: t('Tipografia') },
+    { type: 'separator', label: t('Testo') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Intestazione'),
       responsiveKeys: [],
@@ -221,7 +187,7 @@ export default {
       },
       sizeMin: 12, sizeMax: 22, sizeStep: 1,
     },
-    { type: 'typography', label: t('Contenuto'),
+    { type: 'typography', label: t('Testo del pannello'),
       responsiveKeys: [],
       keys: {
         size:  'content_font_size',
@@ -230,19 +196,76 @@ export default {
       sizeMin: 11, sizeMax: 20, sizeStep: 1,
     },
 
+    ...textEffectsFields([
+      { value: 'title', label: t('Solo le intestazioni') },
+      { value: 'content', label: t('Solo i pannelli') },
+      { value: 'all', label: t('Tutto il testo') },
+    ]),
+
     { type: 'separator', label: t('Intestazione') },
-    { key: 'header_bg', label: t('Sfondo intestazione'), type: 'color' },
-    { key: 'header_bg_active', label: t('Sfondo intestazione attiva'), type: 'color' },
-    { key: 'header_padding', label: t('Padding intestazione'), type: 'spacing', min: 0, max: 80,
+    { key: 'header_bg', label: t('Sfondo'), type: 'color' },
+    { key: 'header_bg_active', label: t('Sfondo voce aperta'), type: 'color' },
+    { key: 'header_padding', label: t('Padding'), type: 'spacing', min: 0, max: 80,
       legacyKeys: { y: 'header_padding_y', x: 'header_padding_x' } },
 
-    { type: 'separator', label: t('Contenuto pannello') },
-    { key: 'content_bg', label: t('Sfondo contenuto'), type: 'color' },
-    { key: 'content_padding', label: t('Padding contenuto'), type: 'spacing', min: 0, max: 80,
-      legacyKeys: { y: 'content_padding_y', x: 'content_padding_x' } },
+    { type: 'separator', label: t('Icona') },
+    { key: 'icon_position', label: t('Posizione'), type: 'select', options: [
+      { value: 'right', label: t('Destra') },
+      { value: 'left', label: t('Sinistra') },
+      { value: 'none', label: t('Nessuna') },
+    ]},
+    { key: 'icon_style', label: t('Simbolo'), type: 'select', options: [
+      { value: 'chevron', label: t('Freccia a punta ›') },
+      { value: 'plus', label: t('Più e meno ＋') },
+      { value: 'arrow', label: t('Freccia ↓') },
+      { value: 'caret', label: t('Triangolo ▼') },
+    ], condition: { field: 'icon_position', op: 'neq', value: 'none' } },
+    { key: 'animate_icon', label: t('Gira all’apertura'), type: 'toggle',
+      condition: { field: 'icon_position', op: 'neq', value: 'none' } },
+    // Prima le icone erano fisse sul primario.
+    { key: 'icon_color', label: t('Colore icone'), type: 'color',
+      description: t('Vale per le icone delle voci e per la freccia. Vuoto: icone delle voci nel colore primario, freccia del colore del titolo (sulla voce aperta il colore attivo del titolo o il primario).') },
+    { key: 'icon_shape', label: t('Forma'), type: 'select', options: [
+      { value: 'none', label: t('Nessuna (icona piatta)') },
+      { value: 'pill', label: t('Riquadro') },
+      { value: 'circle', label: t('Cerchio') },
+    ]},
+    { key: 'icon_shape_size', label: t('Dimensione forma'), type: 'range', unit: 'px', min: 24, max: 48, step: 1,
+      condition: { field: 'icon_shape', op: 'in', value: [ 'pill', 'circle' ] } },
+    { key: 'icon_shape_bg', label: t('Sfondo forma'), type: 'color',
+      condition: { field: 'icon_shape', op: 'in', value: [ 'pill', 'circle' ] } },
 
-    { type: 'separator', label: t('Bordo e separatore') },
-    { key: 'separator_style', label: t('Stile separatore'), type: 'select', options: [
+    { type: 'separator', label: t('Pannello aperto') },
+    { key: 'content_bg', label: t('Sfondo'), type: 'color' },
+    { key: 'content_padding', label: t('Padding'), type: 'spacing', min: 0, max: 80,
+      legacyKeys: { y: 'content_padding_y', x: 'content_padding_x' } },
+    { key: 'content_transition', label: t('Apertura'), type: 'select', options: [
+      { value: 'none', label: t('Immediata') },
+      { value: 'fade', label: t('Dissolvenza') },
+      { value: 'slide', label: t('Scorrimento') },
+    ]},
+    { key: 'animation_speed', label: t('Durata apertura'), type: 'range', unit: 'ms', min: 100, max: 800, step: 50,
+      condition: { field: 'content_transition', op: 'neq', value: 'none' } },
+
+    { type: 'separator', label: t('Immagini') },
+    { key: 'media_align', label: t('Posizione'), type: 'select', options: [
+      { value: 'right', label: t('Destra') },
+      { value: 'left', label: t('Sinistra') },
+    ]},
+    { key: 'media_width', label: t('Larghezza'), type: 'range', unit: '%', min: 20, max: 50, step: 5 },
+    // La cornice vale per TUTTE le immagini dei pannelli: una per pannello
+    // renderebbe i media di larghezza uguale ma altezza diversa.
+    { key: 'aspect_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions(),
+      description: t('Con «Auto» l\'immagine tiene la sua altezza naturale.') },
+    { key: 'object_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI,
+      condition: { field: 'aspect_ratio', op: 'neq', value: 'auto' } },
+    withHover({ key: 'media_radius', label: t('Raggio'), type: 'border-radius' }),
+
+    { type: 'separator', label: t('Forma') },
+    { key: 'gap', label: t('Gap'), type: 'range', unit: 'px', min: 0, max: 48, step: 4,
+      description: t('Lo spazio fra una voce e l’altra: a 0 le voci formano un solo blocco.') },
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
+    { key: 'separator_style', label: t('Separatore'), type: 'select', options: [
       { value: 'border', label: t('Bordo') },
       { value: 'shadow', label: t('Ombra') },
       { value: 'none', label: t('Nessuno') },
@@ -263,30 +286,6 @@ export default {
           show: (s) => (s.separator_style || 'border') === 'border' && (parseFloat(s.gap) || 0) > 0 },
       ])),
 
-    { type: 'separator', label: t('Effetti pannello (hover)') },
-    { key: 'panel_hover_lift', label: t('Sollevamento al hover'), type: 'toggle' },
-    { key: 'panel_hover_shadow', label: t('Ombra al hover'), type: 'select', options: [
-      { value: 'none', label: t('Nessuna') },
-      { value: 'sm', label: t('Leggera') },
-      { value: 'md', label: t('Media') },
-      { value: 'lg', label: t('Grande') },
-    ]},
-
-    { type: 'separator', label: t('Glassmorphism') },
-    { key: 'backdrop_blur', label: t('Sfocatura sfondo'), type: 'range', min: 0, max: 20, step: 1 },
-    { key: 'backdrop_saturate', label: t('Saturazione sfondo'), type: 'range', min: 100, max: 200, step: 5 },
-
-    { type: 'separator', label: t('Forma') },
-    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4 },
-    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
-
-    ...shadowField,
     ...wowEffectsFields(),
-    // La cornice vale per TUTTE le immagini dei pannelli: una per pannello
-    // renderebbe i media di larghezza uguale ma altezza diversa.
-    { key: 'aspect_ratio', label: t('Proporzioni immagini'), type: 'select', options: ratioOptions(),
-      description: t('Con «Auto» l\'immagine tiene la sua altezza naturale.') },
-    { key: 'object_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI,
-      condition: { field: 'aspect_ratio', op: 'neq', value: 'auto' } },
   ],
 };

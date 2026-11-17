@@ -178,7 +178,7 @@ export default {
     { key: 'disposizione', label: t('Disposizione'), type: 'select', options: [
       { value: 'riga', label: t('Campo e pulsante in riga') },
       { value: 'colonna', label: t('Pulsante sotto il campo') },
-    ], description: t('In riga: sul telefono il pulsante va comunque sotto, largo quanto il campo.') },
+    ], description: t('In riga: quando la tile è stretta (il telefono, una colonna stretta) il pulsante va comunque sotto, largo quanto il campo.') },
     { key: 'larghezza_max', label: t('Larghezza massima'), type: 'range', min: 320, max: 960, step: 10, unit: 'px' },
     { key: 'allineamento', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('A sinistra') },

@@ -226,7 +226,9 @@ class Olobuild_Magnetic_Cursor {
             'label'      => (string) ( $o['label_text'] ?? 'Apri' ),
             'blend'      => in_array( $o['blend_mode'], self::BLEND_MODES, true ) ? $o['blend_mode'] : 'normal',
             'sel'        => (string) $o['magnetic_selector'],
-            'hideSys'    => ! empty( $o['hide_system'] ),
+            // Nel canvas del builder la freccia resta: l'effetto si vede, ma sopra le barre e i pulsanti del builder
+            // si lavorava con l'ombrello di Scroscio senza sapere dov'era la punta (17 nov 2026).
+            'hideSys'    => ! empty( $o['hide_system'] ) && empty( $_GET['olo_builder_iframe'] ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- solo lettura: il canvas del builder
         ];
         echo '<script>window.OLO_CURSORE=' . wp_json_encode( $cfg ) . ';</script>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_json_encode() of sanitized settings
         echo '<script src="' . esc_url( OLOBUILD_URL . 'assets/js/olo-cursori.js?ver=' . OLOBUILD_VERSION ) . '" defer></script>'; // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript -- stampato nel footer dopo l'accodamento
@@ -284,7 +286,7 @@ class Olobuild_Magnetic_Cursor {
         $hotColor  = $o['hot_color'] !== '' ? $o['hot_color'] : $o['ring_color'];
         $hotFill   = $o['hot_fill'] !== '' ? $o['hot_fill'] : 'transparent';
         $blend     = $o['blend_mode'];
-        $hideSys   = ! empty( $o['hide_system'] );
+        $hideSys   = ! empty( $o['hide_system'] ) && empty( $_GET['olo_builder_iframe'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nel canvas del builder la freccia resta
 
         $ringHot = $ring * $hotScale;
 

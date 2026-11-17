@@ -56,7 +56,7 @@ export default {
   },
 
   fields: [
-    { key: 'items', label: t('Elementi'), type: 'content-items', supportsDynamic: true,
+    { key: 'items', label: t('Voci'), type: 'content-items', supportsDynamic: true, etichettaDa: 'term',
       itemFields: [
         { key: 'term', label: t('Termine'), type: 'text' },
         { key: 'definition', label: t('Definizione'), type: 'textarea' },
@@ -67,35 +67,26 @@ export default {
       itemLabel: 'Voce',
     },
 
-    { type: 'separator', label: t('Layout') },
-    { key: 'show_icon', label: t('Mostra icona'), type: 'toggle' },
-    { key: 'separator', label: t('Separatore tra voci'), type: 'toggle' },
-    { key: 'striped', label: t('Righe alternate'), type: 'toggle' },
+    { key: 'show_icon', label: t('Mostra le icone'), type: 'toggle' },
   ],
 
+  // Zone standard (16 nov 2026): Aspetto · Testo · Effetti testo · Icone · Bordo · Disposizione. Prima «Preset stilistico»,
+  // «Icona — Aspetto», «Tipografia», «Colori», e filo e righe alterne nel Contenuto.
   styleFields: [
-    { type: 'separator', label: t('Preset stilistico') },
+    { type: 'separator', label: t('Aspetto') },
     { key: 'preset', label: t('Stile'), type: 'select', options: [
-      { value: 'modern-clean',     label: t('Modern Clean') },
-      { value: 'minimal-mono',     label: t('Minimal Mono') },
-      { value: 'magazine-spec',    label: t('Magazine Spec Sheet') },
-      { value: 'editorial-serif',  label: t('Editorial Serif') },
-      { value: 'compact-inline',   label: t('Compact Inline') },
-      { value: 'glass-rows',       label: t('Glass Rows') },
-      { value: 'neon-tech',        label: t('Neon Tech') },
-      { value: 'brutalist-block',  label: t('Brutalist Block') },
-      { value: 'gradient-soft',    label: t('Gradient Soft') },
-      { value: 'sticky-notes',     label: t('Sticky Notes') },
-      { value: 'retro-terminal',   label: t('Retro Terminal') },
-      { value: 'tilt-cards',       label: t('Tilt Cards') },
-      { value: 'custom',           label: t('Personalizzato') },
+      { value: 'clean', label: t('Pulita') },
+      { value: 'essential', label: t('Essenziale') },
+      { value: 'spec', label: t('Scheda tecnica') },
+      { value: 'striped', label: t('A righe alterne') },
+      { value: 'grid', label: t('In griglia') },
+      { value: 'bold', label: t('Termini forti') },
+      { value: 'custom', label: t('Personalizzato') },
     ]},
+    ...shadowField,
+
+    { type: 'separator', label: t('Testo') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-
-    { type: 'separator', label: t('Icona — Aspetto') },
-    { key: 'icon_size', label: t('Dim. icona'), type: 'range', min: 14, max: 32, step: 2 },
-
-    { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Termine'),
       responsiveKeys: [],
       keys: {
@@ -113,36 +104,36 @@ export default {
       },
       sizeMin: 12, sizeMax: 20, sizeStep: 1,
     },
-    { type: 'typography', label: t('Icona'),
-      keys: {
-        color: 'icon_color',
-      },
-    },
-    { key: 'text_align', label: t('Allineamento testo'), type: 'select', options: [
-      { value: 'left', label: t('Sinistra') },
-      { value: 'center', label: t('Centrato') },
-      { value: 'right', label: t('Destra') },
-      { value: 'justify', label: t('Giustificato') },
-    ]},
-    { key: 'spacing', label: t('Spaziatura tra voci'), type: 'range', min: 4, max: 32, step: 2 },
-
-    { type: 'separator', label: t('Colori') },
-    { key: 'border_color', label: t('Colore bordo separatore'), type: 'color' },
-    { key: 'striped_color', label: t('Colore riga alternata'), type: 'color' },
-
     ...textEffectsFields([
       { value: 'term', label: t('Solo termine') },
       { value: 'definition', label: t('Solo definizione') },
       { value: 'both', label: t('Termine e definizione') },
     ]),
 
-    ...shadowField,
+    { type: 'separator', label: t('Icone'), show: (s) => s.show_icon !== false },
+    { key: 'icon_color', label: t('Colore icone'), type: 'color' },
+    { key: 'icon_size', label: t('Dimensione icone'), type: 'range', unit: 'px', min: 14, max: 32, step: 2 },
+
     ...borderFields(),
+
     { type: 'separator', label: t('Disposizione') },
-    { key: 'layout', label: t('Layout'), type: 'select', options: [
-      { value: 'stacked', label: t('Impilato') },
-      { value: 'inline', label: t('In linea') },
-      { value: 'grid', label: t('Griglia') },
+    { key: 'layout', label: t('Disposizione'), type: 'select', options: [
+      { value: 'stacked', label: t('Termine sopra, definizione sotto') },
+      { value: 'inline', label: t('Termine e definizione affiancati') },
+      { value: 'grid', label: t('In griglia') },
     ]},
+    { key: 'text_align', label: t('Allineamento'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
+      { value: 'justify', label: t('Giustificato') },
+    ]},
+    { key: 'spacing', label: t('Gap voci'), type: 'range', unit: 'px', min: 4, max: 32, step: 2 },
+    { key: 'separator', label: t('Filo fra le voci'), type: 'toggle' },
+    { key: 'border_color', label: t('Colore filo'), type: 'color',
+      condition: { field: 'separator', operator: '==', value: true } },
+    { key: 'striped', label: t('Righe alterne'), type: 'toggle' },
+    { key: 'striped_color', label: t('Colore righe alterne'), type: 'color',
+      condition: { field: 'striped', operator: '==', value: true } },
   ],
 };

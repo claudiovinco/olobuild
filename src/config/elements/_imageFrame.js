@@ -122,7 +122,10 @@ export const ADATTAMENTI = [
  */
 export function imageFrameFields(key, opts = {}) {
   const cond = opts.condition;
-  const con = (f) => (cond ? { ...f, condition: cond } : f);
+  // Un campo con una condizione SUA (le proporzioni personalizzate: «solo con Personalizzato») la tiene: la sua contiene
+  // già quella del gruppo. Sovrascriverla mostrava il campo con qualsiasi proporzione (Cartellone, Scheda tecnica,
+  // Griglia articoli, Hero a striscia: 17 nov 2026).
+  const con = (f) => (cond && !f.condition ? { ...f, condition: cond } : f);
   const out = [];
 
   if (opts.separator !== false) {

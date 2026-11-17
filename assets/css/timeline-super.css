@@ -24,6 +24,9 @@
   --tl-card-bd:color-mix(in srgb,var(--tl-card-bg,#fff) 88%,#7c8aa0);
   --disp:var(--olo-font-heading,"Instrument Serif",Georgia,serif);
   --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+  /* il carattere del testo per etichette, link e barre: --sans non era definita e «font:700 9.5px var(--sans,inherit)»
+     diventava invalida, così le etichette ereditavano il testo grande della pagina (16 nov 2026) */
+  --sans:var(--olo-font-family,'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);
   position:relative;
   padding:clamp(26px,4vw,52px) clamp(14px,3vw,36px);
   border-radius:16px;
@@ -68,7 +71,9 @@
 
 .olo-tlsuper .it-date{display:flex;flex-direction:column;gap:3px;padding:0 30px;}
 .olo-tlsuper .it-date .yr{font-family:var(--tl-yr-family,var(--disp));font-size:var(--tl-yr-size,34px);line-height:.9;color:var(--tl-yr-color,var(--cat));}
-.olo-tlsuper .it-date .ph{font:600 10px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint-text);}
+/* l'etichetta accanto alla data ripeteva quella della card: resta solo la pillola nella card, che «Mostra le etichette»
+   accende e spegne (16 nov 2026) */
+.olo-tlsuper .it-date .ph{display:none;font:600 10px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint-text);}
 /* Stato della tappa (campo «Stato» della voce): esce solo se la tappa lo dichiara, in
    ogni layout. Prima lo si calcolava dallo scorrimento («Fatto / In corso / In arrivo»). */
 .olo-tlsuper .tl-st{display:inline-block;font:700 9px/1.4 var(--mono);letter-spacing:.07em;text-transform:uppercase;padding:3px 8px;border-radius:99px;width:max-content;white-space:nowrap;border:1px solid transparent;}
@@ -109,7 +114,9 @@
 .olo-tlsuper .super.one .rail,.olo-tlsuper .super.one .rail-fill{left:21px;}
 .olo-tlsuper .super.one .it{grid-template-columns:1fr;}
 .olo-tlsuper .super.one .it-node{left:21px;}
-.olo-tlsuper .super.one .it-card{grid-column:1!important;justify-self:start!important;margin:0 0 0 58px!important;}
+/* a una colonna la card riempie il blocco (560 px al massimo): a 380 px restava una striscia stretta con mezzo blocco
+   vuoto accanto (16 nov 2026); «Larghezza massima card» la restringe ancora */
+.olo-tlsuper .super.one .it-card{grid-column:1!important;justify-self:stretch!important;margin:0 0 0 58px!important;max-width:var(--tl-card-maxw,none);}
 .olo-tlsuper .super.one .it-card::before{left:-8px!important;right:auto!important;border-right:0!important;border-top:0!important;border-left:1px solid var(--tl-card-bd)!important;border-bottom:1px solid var(--tl-card-bd)!important;}
 .olo-tlsuper .super.one .it-date{grid-column:1!important;justify-self:start!important;flex-direction:row;align-items:center!important;gap:10px;margin:0 0 8px 58px!important;text-align:left!important;padding:0;}
 .olo-tlsuper .super.one .it-date .yr{font-size:var(--tl-yr-size,24px);}
@@ -160,10 +167,15 @@
 /* numero nel nodo: 11 px, con una categoria chiara (oro, giallo) al 60% restava sotto 4,5:1 sul bianco del nodo */
 .olo-tlsuper .it-node .lab{display:none;font:700 11px var(--mono);color:color-mix(in srgb,var(--cat) 50%,var(--olo-color-text,#1f2937));}
 .olo-tlsuper .super.node-dot .it-node>svg,.olo-tlsuper .super.node-dot .it-node>[uk-icon]{display:none;}
+.olo-tlsuper .super.node-dot .it-node>.olo-lucide-icon,.olo-tlsuper .super.node-dot .it-node>.olo-custom-icon{display:none!important;}
 .olo-tlsuper .super.node-dot .it-node .pip{display:block;}
 .olo-tlsuper .super.node-dot .it-node{width:18px;height:18px;}
+/* anche le icone Lucide e quelle caricate (span con display:inline-flex in linea, da cui l'!important): con il numero
+   o l'anno nel nodo la bandierina restava sopra il numero (16 nov 2026) */
 .olo-tlsuper .super.node-num .it-node>svg,.olo-tlsuper .super.node-num .it-node>[uk-icon],
 .olo-tlsuper .super.node-year .it-node>svg,.olo-tlsuper .super.node-year .it-node>[uk-icon]{display:none;}
+.olo-tlsuper .super.node-num .it-node>.olo-lucide-icon,.olo-tlsuper .super.node-num .it-node>.olo-custom-icon,
+.olo-tlsuper .super.node-year .it-node>.olo-lucide-icon,.olo-tlsuper .super.node-year .it-node>.olo-custom-icon{display:none!important;}
 .olo-tlsuper .super.node-num .it-node .lab,.olo-tlsuper .super.node-year .it-node .lab{display:block;}
 /* nodo pieno (raggiunto) o timeline scure: il numero torna al colore del nodo */
 .olo-tlsuper .super.line-scroll .it.reached .it-node .lab{color:inherit;}
@@ -378,6 +390,20 @@
   .olo-tlsuper .super .it-date .yr{font-size:var(--tl-yr-size,24px);}
   .olo-tlsuper .super.comet .comet{left:21px!important;}
 }
+/* La stessa colonna unica quando è stretta LA TIMELINE, non la finestra: in una colonna a metà pagina le schede
+   restavano ai due lati del filo, larghe un terzo, e il testo andava a capo a ogni parola (16 nov 2026). */
+.olo-tlsuper{container-type:inline-size;container-name:olo-tl;}
+@container olo-tl (max-width:640px){
+  .olo-tlsuper .super{max-width:560px;margin-left:0;}
+  .olo-tlsuper .super .rail,.olo-tlsuper .super .rail-fill{left:21px!important;}
+  .olo-tlsuper .super .it{grid-template-columns:1fr!important;}
+  .olo-tlsuper .super .it-node{left:21px!important;}
+  .olo-tlsuper .super .it-card{grid-column:1!important;justify-self:start!important;margin:0 0 0 58px!important;}
+  .olo-tlsuper .super .it-card::before{left:-8px!important;right:auto!important;}
+  .olo-tlsuper .super .it-date{grid-column:1!important;justify-self:start!important;flex-direction:row;align-items:center!important;gap:10px;margin:0 0 8px 58px!important;text-align:left!important;padding:0;}
+  .olo-tlsuper .super .it-date .yr{font-size:var(--tl-yr-size,24px);}
+  .olo-tlsuper .super.comet .comet{left:21px!important;}
+}
 
 /* ── Schedule / Run-of-show (orario a sx · filo verticale · nodo) ── */
 .olo-tlsuper .olo-tl-sched{max-width:760px;margin:0 auto;position:relative;}
@@ -391,3 +417,4 @@
 .olo-tlsuper .olo-tl-slot__c p{font-size:14px;color:var(--olo-color-text-muted,#6b7280);margin:0;line-height:1.6;}
 .olo-tlsuper .olo-tl-slot__c .tl-st{margin-bottom:6px;}
 @media(max-width:600px){.olo-tlsuper .olo-tl-sched::before{left:0;}.olo-tlsuper .olo-tl-slot{grid-template-columns:1fr;gap:6px;}.olo-tlsuper .olo-tl-slot__t{text-align:left;}.olo-tlsuper .olo-tl-slot__c{padding-left:24px;}.olo-tlsuper .olo-tl-slot__c::before{left:-24px;}}
+@container olo-tl (max-width:520px){.olo-tlsuper .olo-tl-sched::before{left:0;}.olo-tlsuper .olo-tl-slot{grid-template-columns:1fr;gap:6px;}.olo-tlsuper .olo-tl-slot__t{text-align:left;}.olo-tlsuper .olo-tl-slot__c{padding-left:24px;}.olo-tlsuper .olo-tl-slot__c::before{left:-24px;}}

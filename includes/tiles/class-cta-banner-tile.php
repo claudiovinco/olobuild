@@ -163,8 +163,14 @@ class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-ctab <?php echo esc_attr( $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- unescaped fragments on this line are fixed-literal ternaries plus the absint()/intval() clamped gap and duration; everything else (padding included, via the integer-forced spacing_css() helper) is esc_attr()'d ?>" style="<?php echo esc_attr( $bg_css ); ?>;<?php if ( $banner_radius ) echo 'border-radius:' . esc_attr( $banner_radius ) . ';'; ?>padding:<?php echo esc_attr( $banner_padding ); ?>;color:<?php echo esc_attr( $text_c ); ?>;display:grid;grid-template-columns:<?php echo esc_attr( $grid_cols ); ?>;gap:<?php echo (int) $gap; ?>px;align-items:<?php echo esc_attr( $valign === 'start' ? 'flex-start' : ( $valign === 'end' ? 'flex-end' : 'center' ) ); ?>;<?php echo ( $layout === 'stack' ) ? 'text-align:center;justify-items:center;' : ''; ?>transition:<?php echo $banner_radius_h ? 'border-radius ' . (int) $banner_rdur . 'ms ease' : 'none'; ?>">
+        <div class="olo-ctab <?php echo esc_attr( $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- unescaped fragments on this line are fixed-literal ternaries plus the absint()/intval() clamped gap and duration; everything else (padding included, via the integer-forced spacing_css() helper) is esc_attr()'d ?>" style="<?php echo esc_attr( $bg_css ); ?>;<?php if ( $banner_radius ) echo 'border-radius:' . esc_attr( $banner_radius ) . ';'; ?>padding:<?php echo esc_attr( $banner_padding ); ?>;color:<?php echo esc_attr( $text_c ); ?>;display:grid;container-type:inline-size;container-name:olo-ctab;transition:<?php echo $banner_radius_h ? 'border-radius ' . (int) $banner_rdur . 'ms ease' : 'none'; ?>">
             <?php echo $bg_layers; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup di sfondo_elemento(): Olobuild_CSS_Builder::get_bg_html_markup() esegue esc_url/esc_attr su ogni attributo ?>
+            <?php /* align-content: alto quanto la colonna, le parti una sotto l'altra restano UNITE dove le mette
+                     l'Allineamento verticale (senza, le righe si spartivano l'altezza: titolo in cima, pulsanti in fondo).
+                     Il banner è il contenitore, le sue parti stanno in una griglia interna: così titolo, testo e pulsanti si
+                     mettono uno sotto l'altro quando è stretto IL BANNER, non la finestra. In una colonna a metà pagina le tre
+                     colonne restavano affiancate e i pulsanti uscivano dal riquadro (16 nov 2026). */ ?>
+            <div class="olo-ctab__in" style="position:relative;display:grid;grid-template-columns:<?php echo esc_attr( $grid_cols ); ?>;gap:<?php echo (int) $gap; ?>px;align-items:<?php echo esc_attr( $valign === 'start' ? 'flex-start' : ( $valign === 'end' ? 'flex-end' : 'center' ) ); ?>;align-content:<?php echo esc_attr( $valign === 'start' ? 'start' : ( $valign === 'end' ? 'end' : 'center' ) ); ?>;<?php echo ( $layout === 'stack' ) ? 'text-align:center;justify-items:center;' : ''; ?>">
 
             <!-- Headline -->
             <?php if ( ! empty( $s['headline'] ) || ! empty( $s['headline_accent'] ) ) : ?>
@@ -196,6 +202,7 @@ class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
+            </div>
         </div>
 
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from the internally generated $uid, safe_color_css()-validated hover colours and build_border_radius_css() (intval-based) radii. ?>
@@ -218,16 +225,19 @@ class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
             .uk-grid > :has(.<?php echo $uid; ?>) { align-self: stretch; }
             .uk-grid > :has(.<?php echo $uid; ?>) > div:has(.<?php echo $uid; ?>), .olo-frontend-tile:has(> .<?php echo $uid; ?>) { height: 100%; }
             .<?php echo $uid; ?> { height: 100%; box-sizing: border-box; }
+            .<?php echo $uid; ?> > .olo-ctab__in { height: 100%; }
             <?php endif; ?>
-            @media (max-width: 800px) {
-                .<?php echo $uid; ?> { grid-template-columns: 1fr !important; text-align: center; justify-items: center; gap: 20px !important; }
+            <?php // Sotto i 720 px di banner (prima: sotto gli 800 px di finestra) le parti vanno una sotto l'altra, centrate. ?>
+            @container olo-ctab (max-width: 720px) {
+                .<?php echo $uid; ?> .olo-ctab__in { grid-template-columns: 1fr !important; text-align: center; justify-items: center; gap: 20px !important; }
+                .<?php echo $uid; ?> .olo-ctab__ctas { justify-content: center; }
             }
             <?php if ( ! empty( $s['cta_text'] ) && ! empty( $s['cta2_text'] ) ) : ?>
             <?php // Sul telefono, quando i due pulsanti vanno a capo, ognuno prende tutta la riga: restavano larghi
                   // quanto la loro scritta («Prenota l'assistenza» 198 px, «Chiamaci» 130 px). Il gruppo, centrato
                   // nella colonna, è largo quanto il suo contenuto (al più la riga) e i pulsanti lo riempiono: se
                   // stanno in fila restano in fila, se vanno a capo il gruppo è largo quanto la riga. ?>
-            @media (max-width: 479px) {
+            @container olo-ctab (max-width: 400px) {
                 .<?php echo $uid; ?> .olo-ctab__ctas { max-width: 100%; }
                 .<?php echo $uid; ?> .olo-ctab__ctas > a { flex: 1 1 0; min-width: fit-content; box-sizing: border-box; }
             }

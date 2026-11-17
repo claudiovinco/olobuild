@@ -2,9 +2,12 @@ import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEff
 import { t } from '@/i18n';
 
 /**
- * Tile Table — split CONTENUTO/STILE.
- *   fields[]      → struttura (has_header/striped/bordered/hover/compact/first_col_bold/responsive_mode)
- *   styleFields[] → preset, bg, typo, colori, shadow, border
+ * Tile Tabella — righe di celle di testo (table_data), la prima può essere l'intestazione.
+ *   fields[]      → Dati (finestra a griglia: celle, righe, colonne, allineamento) · Struttura (intestazione, prima
+ *                   colonna come titolo di riga)
+ *   styleFields[] → Aspetto (stile, sfondi, righe alternate, linee, passaggio, ombra) · Testo (intestazione, celle) ·
+ *                   Forma (righe compatte) · Disposizione (sul telefono) · contenitore
+ * Renderer: includes/tiles/class-table-tile.php.
  */
 export default {
   type: 'table',
@@ -27,6 +30,8 @@ export default {
     hover_effect: true,
     compact: false,
     first_col_bold: false,
+    tb_head_font_family: '', tb_head_font_size: '', tb_head_font_weight: '', tb_head_text_transform: '', tb_head_letter_spacing: '',
+    tb_cell_font_family: '', tb_cell_font_size: '', tb_cell_font_weight: '', tb_cell_line_height: '',
     col_alignments: [],
     responsive_mode: 'scroll',
     header_bg: '',
@@ -57,65 +62,64 @@ export default {
   },
 
   fields: [
-    {
-      key: '_table_info',
-      type: 'html',
-      html: '<div style="font-size:11px;color:#9CA3AF;margin:-4px 0 8px;line-height:1.4">Clicca sulle celle nel canvas per modificarle. Usa i pulsanti + e − per aggiungere o rimuovere righe e colonne.</div>',
-    },
+    // I dati si scrivono in una finestra a griglia (FieldTabella): prima si modificavano solo nel canvas Vue, che non si
+    // monta più dal 25 set 2026, e una nota in linea mandava a cliccare celle che non rispondevano (16 nov 2026).
+    { key: 'table_data', label: t('Dati'), type: 'tabella' },
 
     { type: 'separator', label: t('Struttura') },
-    { key: 'has_header', label: t('Riga intestazione'), type: 'toggle' },
-    { key: 'striped', label: t('Righe alternate'), type: 'toggle' },
-    { key: 'bordered', label: t('Con bordi'), type: 'toggle' },
-    { key: 'compact', label: t('Compatto'), type: 'toggle' },
-    { key: 'responsive_mode', label: t('Responsive'), type: 'select', options: [
-      { value: 'scroll', label: t('Scroll orizzontale') },
-      { value: 'stack', label: t('Stack verticale') },
-    ]},
+    { key: 'has_header', label: t('Riga intestazione'), type: 'toggle',
+      description: t('La prima riga dei Dati fa da intestazione: ha il suo sfondo e il suo carattere, e sul telefono dà il nome alle celle.') },
   ],
 
+  // Zone dello standard (16 nov 2026, episodio 27): Aspetto · Testo · Forma · Disposizione. Prima: «Preset stilistico»
+  // coi dodici stili inglesi a colori fissi (che cambiavano anche la Riga intestazione, un contenuto), «Header» e
+  // «Celle» col solo colore, righe alternate, bordi, compattezza e comportamento sul telefono nel Contenuto.
   styleFields: [
-    { type: 'separator', label: t('Preset stilistico') },
+    { type: 'separator', label: t('Aspetto') },
     { key: 'preset', label: t('Stile'), type: 'select', options: [
-      { value: 'modern-clean',     label: t('Modern Clean') },
-      { value: 'magazine-editorial', label: t('Magazine Editorial') },
-      { value: 'minimal-line',     label: t('Minimal Line') },
-      { value: 'striped-classic',  label: t('Striped Classic') },
-      { value: 'compact-data',     label: t('Compact Data') },
-      { value: 'glass-tier',       label: t('Glass Tier') },
-      { value: 'neon-grid',        label: t('Neon Grid') },
-      { value: 'brutalist-stamp',  label: t('Brutalist Stamp') },
-      { value: 'gradient-soft',    label: t('Gradient Soft') },
-      { value: 'sticker-fun',      label: t('Sticker Fun') },
-      { value: 'retro-terminal',   label: t('Retro Terminal') },
-      { value: 'tilt-card',        label: t('Tilt Card') },
-      { value: 'custom',           label: t('Personalizzato') },
-    ]},
-    { key: 'hover_effect', label: t('Effetto hover'), type: 'toggle' },
-    { type: 'separator', label: t('Tipografia') },
-    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-    { type: 'typography', label: t('Header'),
-      responsiveKeys: [],
-      keys: {
-        color: 'header_text_color',
-      },
-      sizeMin: 12, sizeMax: 60,
-    },
-    { type: 'typography', label: t('Celle'),
-      responsiveKeys: [],
-      keys: {
-        color: 'text_color',
-      },
-      sizeMin: 12, sizeMax: 60,
-    },
-
-    { key: 'first_col_bold', label: t('Prima colonna in grassetto'), type: 'toggle' },
-    { type: 'separator', label: t('Colori') },
-    { key: 'header_bg', label: t('Sfondo intestazione'), type: 'color' },
-    { key: 'border_color', label: t('Colore bordi'), type: 'color' },
-    { key: 'even_row_bg', label: t('Sfondo righe pari'), type: 'color' },
-
+      { value: 'chiara',     label: t('Chiara') },
+      { value: 'scura',      label: t('Scura') },
+      { value: 'primario',   label: t('Primario') },
+      { value: 'righe',      label: t('A righe') },
+      { value: 'essenziale', label: t('Essenziale') },
+      { value: 'compatta',   label: t('Compatta') },
+      { value: 'custom',     label: t('Personalizzato') },
+    ], description: t('Cambia insieme intestazione, righe, linee e caratteri, coi colori del sito. Poi ogni controllo qui sotto si regola da solo.') },
+    { key: 'header_bg', label: t('Sfondo intestazione'), type: 'color',
+      condition: { field: 'has_header', op: 'neq', value: false } },
+    { key: 'striped', label: t('Righe alternate'), type: 'toggle' },
+    { key: 'even_row_bg', label: t('Sfondo righe alternate'), type: 'color',
+      condition: { field: 'striped', op: 'neq', value: false } },
+    { key: 'bordered', label: t('Linee fra le righe'), type: 'toggle' },
+    { key: 'border_color', label: t('Colore delle linee'), type: 'color',
+      description: t('Le linee fra le righe e, sul telefono, il bordo delle schede.') },
+    { key: 'hover_effect', label: t('Evidenzia la riga al passaggio'), type: 'toggle' },
     ...shadowField,
+
+    { type: 'separator', label: t('Testo') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { type: 'typography', label: t('Intestazione'), responsiveKeys: [],
+      keys: { family: 'tb_head_font_family', size: 'tb_head_font_size', weight: 'tb_head_font_weight',
+              transform: 'tb_head_text_transform', letterSpacing: 'tb_head_letter_spacing', color: 'header_text_color' },
+      sizeMin: 10, sizeMax: 40, sizeStep: 1,
+      condition: { field: 'has_header', op: 'neq', value: false } },
+    { type: 'typography', label: t('Celle'), responsiveKeys: [],
+      keys: { family: 'tb_cell_font_family', size: 'tb_cell_font_size', weight: 'tb_cell_font_weight',
+              lineHeight: 'tb_cell_line_height', color: 'text_color' },
+      sizeMin: 10, sizeMax: 40, sizeStep: 1 },
+    { key: 'first_col_bold', label: t('Prima colonna come titolo di riga'), type: 'toggle',
+      description: t('La prima cella di ogni riga diventa il titolo della riga, in grassetto; nelle schede del telefono è il titolo della scheda.') },
+
+    { type: 'separator', label: t('Forma') },
+    { key: 'compact', label: t('Righe compatte'), type: 'toggle',
+      description: t('Meno spazio attorno al testo delle celle e un carattere un po’ più piccolo: per tabelle lunghe.') },
+
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'responsive_mode', label: t('Sul telefono'), type: 'select', options: [
+      { value: 'scroll', label: t('Scorre di lato') },
+      { value: 'stack', label: t('Una scheda per riga') },
+    ], description: t('Scorre di lato: la tabella resta com’è e si scorre col dito. Una scheda per riga: ogni riga diventa una scheda, coi nomi dell’intestazione accanto ai valori.') },
+
     ...borderFields(),
   ],
 };

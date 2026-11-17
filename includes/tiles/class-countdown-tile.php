@@ -48,6 +48,7 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
         'number_font_size_tablet' => '',
         'number_font_size_mobile' => '',
         'number_font_weight'  => '700',
+        'number_font_family'  => '',
         'label_font_size'     => '12',
         'label_font_weight'   => '500',
         'separator_font_size' => '32',
@@ -117,6 +118,7 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
 
         $num_fs  = absint( $s['number_font_size'] );
         $num_fw  = absint( $s['number_font_weight'] );
+        $num_ff  = $this->resolve_font_family( $s['number_font_family'] ?? '' );
         $lbl_fs  = absint( $s['label_font_size'] );
         $lbl_fw  = absint( $s['label_font_weight'] );
         $sep_fs  = absint( $s['separator_font_size'] );
@@ -141,6 +143,20 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
         $item_pad_sides = Olobuild_Tile_Utils::spacing_sides( $s['item_padding'] ?? 0, [], [ 0, 0, 0, 0 ] );
         $item_pad       = Olobuild_Tile_Utils::sides_css( $item_pad_sides );
         $item_pad_any   = array_sum( $item_pad_sides ) > 0;
+        // Le caselle stanno su UNA riga finché ci stanno: la «larghezza minima» scende fino a dividersi lo spazio della
+        // tile. Prima, in una colonna stretta, quattro caselle da 96 px andavano a capo e «Secondi» restava da solo sotto
+        // (16 nov 2026). Si contano le unità mostrate e i separatori (circa mezza misura del loro carattere).
+        $n_unita = 0;
+        foreach ( [ 'show_days', 'show_hours', 'show_minutes', 'show_seconds' ] as $k_unita ) {
+            if ( ! isset( $s[ $k_unita ] ) || ! empty( $s[ $k_unita ] ) ) $n_unita++;
+        }
+        $n_unita   = max( 1, $n_unita );
+        $n_sep     = ( '' !== trim( (string) ( $s['separator'] ?? '' ) ) ) ? $n_unita - 1 : 0;
+        // + 4 px di margine: a filo, una casella con tre cifre (215 giorni) sforava di poco e andava a capo.
+        $riserva   = ( $n_unita + $n_sep - 1 ) * 8 + $n_sep * (int) round( $sep_fs * 0.6 ) + 4;
+        $min_w_css = function ( $w ) use ( $riserva, $n_unita ) {
+            return 'min(' . (int) $w . 'px, calc((100% - ' . (int) $riserva . 'px) / ' . (int) $n_unita . '))';
+        };
 
         ob_start();
         ?>
@@ -164,7 +180,8 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
                 <?php if ( $item_radius_css ) : ?>border-radius: <?php echo $item_radius_css; ?>;<?php endif; ?>
                 <?php if ( $item_pad_any ) : ?>padding: <?php echo esc_attr( $item_pad ); ?>;<?php endif; ?>
                 <?php if ( ! $is_inline ) : ?>
-                min-width: <?php echo $min_w; ?>px;
+                min-width: <?php echo $min_w_css( $min_w ); ?>;
+                box-sizing: border-box;
                 <?php else : ?>
                 display: inline-flex;
                 align-items: baseline;
@@ -176,6 +193,9 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
                 font-weight: <?php echo $num_fw; ?>;
                 line-height: 1.15;
                 color: <?php echo $accent; ?>;
+                <?php // Cifre tutte larghe uguali: col carattere proporzionale il numero «ballava» a ogni secondo. ?>
+                font-variant-numeric: tabular-nums;
+                <?php if ( $num_ff !== '' && $num_ff !== 'inherit' ) : ?>font-family: <?php echo $num_ff; ?>;<?php endif; ?>
             }
             .<?php echo $uid; ?> .mcd-label {
                 font-size: <?php echo $lbl_fs; ?>px;
@@ -201,6 +221,29 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
                 <?php endif; ?>
             }
             .<?php echo $uid; ?>.mcd-live > .mcd-item, .<?php echo $uid; ?>.mcd-live > .mcd-sep { display: none; }
+            <?php
+            // Il disegno che uno stile ha e che non è un valore (16 nov 2026): prima i nomi promettevano anelli,
+            // cartellini e vetro e il renderer non disegnava niente di loro.
+            $cd_preset = sanitize_key( $s['preset'] ?? '' );
+            if ( ! $is_inline && 'flip-cards' === $cd_preset ) : ?>
+            .<?php echo $uid; ?> .mcd-item { background: none; padding: 0; border-radius: 0; }
+            .<?php echo $uid; ?> .mcd-num { position: relative; background: <?php echo $item_bg ?: 'var(--olo-color-dark, #16263d)'; ?>; border-radius: <?php echo $item_radius_css ?: '10px'; ?>; padding: .12em .32em; box-shadow: 0 10px 22px -12px rgba(16,24,40,.45); overflow: hidden; }
+            .<?php echo $uid; ?> .mcd-num::before { content: ""; position: absolute; inset: 0 0 50% 0; background: linear-gradient(rgba(255,255,255,.07), rgba(255,255,255,.02)); }
+            .<?php echo $uid; ?> .mcd-num::after { content: ""; position: absolute; left: 0; right: 0; top: calc(50% - 1px); height: 2px; background: rgba(0,0,0,.35); }
+            .<?php echo $uid; ?> .mcd-label { margin-top: .7em; }
+            <?php elseif ( ! $is_inline && 'circle-rings' === $cd_preset ) : ?>
+            .<?php echo $uid; ?> .mcd-num { width: 2.3em; height: 2.3em; margin: 0 auto .4em; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: .09em solid color-mix(in srgb, currentColor 20%, transparent); border-top-color: currentColor; border-right-color: currentColor; box-sizing: border-box; }
+            <?php elseif ( 'glass-tier' === $cd_preset ) : ?>
+            .<?php echo $uid; ?> .mcd-item { -webkit-backdrop-filter: blur(12px) saturate(140%); backdrop-filter: blur(12px) saturate(140%); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--olo-color-light, #fff) 32%, transparent), 0 14px 30px -18px rgba(0,0,0,.5); }
+            <?php elseif ( 'neon-clock' === $cd_preset ) : ?>
+            .<?php echo $uid; ?> .mcd-item { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--olo-color-accent) 45%, transparent), 0 0 24px color-mix(in srgb, var(--olo-color-accent) 22%, transparent); }
+            .<?php echo $uid; ?> .mcd-num { text-shadow: 0 0 12px color-mix(in srgb, currentColor 70%, transparent), 0 0 28px color-mix(in srgb, currentColor 35%, transparent); }
+            <?php elseif ( 'gradient-aurora' === $cd_preset ) : ?>
+            .<?php echo $uid; ?> .mcd-num { background: linear-gradient(135deg, <?php echo $accent; ?>, var(--olo-color-accent, #f59e0b)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+            <?php elseif ( ! $is_inline && 'sticker-fun' === $cd_preset ) : ?>
+            .<?php echo $uid; ?> .mcd-item { border: 2px solid var(--olo-color-text, #1f2937); box-shadow: 4px 4px 0 var(--olo-color-text, #1f2937); transform: rotate(-2deg); }
+            .<?php echo $uid; ?> .mcd-item:nth-of-type(even) { transform: rotate(1.6deg); }
+            <?php endif; ?>
             .<?php echo $uid; ?> .mcd-live-msg {
                 text-align: <?php echo $allinea; ?>;
                 font-size: 1.5em;
@@ -225,9 +268,25 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
                 echo $this->css_per_dispositivo( $s, 'number_font_size', '.' . $uid . ' .mcd-sep', function ( $v ) {
                     return 'padding-top:' . (int) round( max( 12, min( 200, absint( $v ) ) ) * 0.15 ) . 'px';
                 } );
-                echo $this->css_per_dispositivo( $s, 'item_min_width', '.' . $uid . ' .mcd-item', function ( $v ) {
-                    return 'min-width:' . min( 400, absint( $v ) ) . 'px';
+                echo $this->css_per_dispositivo( $s, 'item_min_width', '.' . $uid . ' .mcd-item', function ( $v ) use ( $min_w_css ) {
+                    return 'min-width:' . $min_w_css( min( 400, absint( $v ) ) );
                 } );
+                // Sul telefono, senza una misura scelta per lui, i numeri si stringono con lo schermo: con «215» giorni
+                // da 56 px la quarta casella andava a capo da sola (16 nov 2026). Una misura scelta vince sempre.
+                $nessuna_mobile = '' === trim( (string) ( $s['number_font_size_mobile'] ?? '' ) )
+                    && '' === trim( (string) ( $s['number_font_size_mobile_landscape'] ?? '' ) );
+                if ( $nessuna_mobile ) {
+                    $fs_tab = absint( $s['number_font_size_tablet'] ?? 0 ) ?: $num_fs;
+                    $vw     = $n_unita >= 4 ? 7.5 : ( 3 === $n_unita ? 10 : 14 );
+                    echo '@media (max-width:640px){.' . $uid . ' .mcd-num{font-size:min(' . (int) $fs_tab . 'px,' . $vw . 'vw)}}';
+                }
+                // …e si stringono anche il padding laterale della tile e delle caselle: coi 32 px di serie per lato e
+                // le scritte («SECONDI») le caselle restavano più larghe dello spazio e l'ultima andava a capo.
+                $p_tile = $pad_sides_all;
+                $p_item = $item_pad_sides;
+                echo '@media (max-width:640px){.' . $uid . '{padding-left:min(' . (int) $p_tile['left'] . 'px,4vw);padding-right:min(' . (int) $p_tile['right'] . 'px,4vw)}'
+                    . '.' . $uid . ' .mcd-item{' . ( $item_pad_any ? 'padding-left:min(' . (int) $p_item['left'] . 'px,2.4vw);padding-right:min(' . (int) $p_item['right'] . 'px,2.4vw);' : '' ) . '}'
+                    . '.' . $uid . ' .mcd-label{letter-spacing:.04em}}';
             }
             ?>
         </style>
@@ -341,6 +400,8 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
             }
 
             var vals=el.querySelectorAll('.mcd-num');
+            <?php // Una data che non si legge (un anno a sei cifre scritto nel campo) mostrava «NaN» in ogni casella. ?>
+            if(isNaN(target)){vals.forEach(function(v){v.textContent='00';});return;}
 
             function handleExpired(){
                 if(expireAction==='hide'){

@@ -74,6 +74,11 @@
     }), n, blocchi = [];
     while ((n = w.nextNode())) {
       var p = n.parentElement;
+      // Livelli dello Slider Pro: finché il suo script non ha messo la tela alla larghezza di progetto (stile in linea
+      // «width») i titoli grandi non ci stanno e vanno a capo a metà; misurati lì finivano tutti al 55% e restavano
+      // così (17 nov 2026: l'apertura di Scroscio al telefono con testi da 7 px). Si riprova al controllo dopo.
+      var tela = p.closest('.mps-layers-wrap');
+      if (tela && !tela.style.width) continue;
       visti.set(p, larghezza);
       if (p.closest('script,style,noscript,svg,textarea,input,select,[contenteditable="true"]')) continue;
       if (!(parseFloat(getComputedStyle(p).fontSize) >= MIN_PX)) continue;

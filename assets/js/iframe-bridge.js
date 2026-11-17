@@ -265,7 +265,14 @@
     }
     if (selectedId) {
       var pe = findTileEl(selectedId);
-      if (pe) showHoverToolbar(pe, selectedId);
+      if (pe) {
+        showHoverToolbar(pe, selectedId);
+      } else if (hoverToolbar) {
+        // La tile appena aggiunta non è ancora nel canvas: la barra di prima (la sezione su cui passava il
+        // trascinamento) non resta sopra la pagina; torna sulla tile col render (riallineaBarra).
+        hoverToolbar.style.display = 'none';
+        hoverToolbar._forEl = null;
+      }
     } else {
       hideHoverToolbar();
     }
@@ -294,9 +301,29 @@
     var el = findTileEl(tileId);
     if (el === hoveredEl) {
       clearTimeout(passaggioRinviato);
+      // Dalla barra si torna sulla sua tile: il «nascondi» partito uscendo dalla barra non vale più. Prima scattava
+      // 400 ms dopo e la barra spariva col mouse fermo sulla tile (17 nov 2026, dopo «Sposta giù»).
+      clearTimeout(hoverToolbarTimeout);
+      if (hoverToolbar && hoverToolbar.style.display === 'none' && !previewMode && !activeEditEl) showHoverToolbar(el, tileId);
       return;
     }
     clearTimeout(passaggioRinviato);
+    // Selezionata la sezione (o la riga, la colonna) dal percorso dell'inspector, le tile che ha dentro e che partono dal
+    // suo stesso angolo avrebbero la barra nello stesso punto: passandoci sopra per raggiungere la barra, «SEZIONE»
+    // diventava «NASTRO» e il cestino toglieva la tile invece della sezione (17 nov 2026). Lì la barra resta della
+    // selezione; per agire sulla tile dentro basta cliccarla.
+    var selEl = selectedId ? findTileEl(selectedId) : null;
+    if (selEl && el && el !== selEl && selEl.contains(el)) {
+      var rs = selEl.getBoundingClientRect(), rt = el.getBoundingClientRect();
+      if (Math.abs(rs.top - rt.top) < 3 && Math.abs(rs.left - rt.left) < 3) {
+        if (hoveredEl !== selEl) {
+          if (hoveredEl) hoveredEl.classList.remove('olo-builder-hover');
+          hoveredEl = selEl;
+          showHoverToolbar(selEl, selectedId);
+        }
+        return;
+      }
+    }
     if (hoveredEl && el && el.contains(hoveredEl)) {
       passaggioRinviato = setTimeout(function () { passaAllaTile(el, tileId); }, 280);
       return;
@@ -309,6 +336,10 @@
     hoveredEl = el;
     if (el && tileId !== selectedId) {
       el.classList.add('olo-builder-hover');
+      showHoverToolbar(el, tileId);
+    } else if (el) {
+      // Tornando sulla tile selezionata la barra torna sua: restava quella della sezione appena attraversata
+      // («SEZIONE» sopra la tile appena inserita, 17 nov 2026).
       showHoverToolbar(el, tileId);
     }
   }
@@ -936,6 +967,10 @@
     if (window.OloPdfPro && typeof window.OloPdfPro.initAll === 'function') {
       try { window.OloPdfPro.initAll(); } catch(e) {}
     }
+    // Ricerca Live aggiunta o ridisegnata nel canvas (16 nov 2026): prima partiva solo all'apertura della pagina
+    if (window.OloLiveSearch && typeof window.OloLiveSearch.initAll === 'function') {
+      try { window.OloLiveSearch.initAll(); } catch(e) {}
+    }
 
     // Re-init virtual tour viewer
     if (typeof window.__olotourBoot === 'function') {
@@ -1306,9 +1341,15 @@
     var label = el.tagName === 'SECTION' ? 'Sezione' : (tileNames[tileType] || tileType || 'Elemento');
     // Nella lingua dell'editor (1.4.579): il dizionario del builder sta nella pagina che ospita la tela, stessa
     // origine. Prima l'etichetta restava in italiano («TITOLO») anche con l'editor in un'altra lingua.
+    var nomeDalBuilder = '';
     try {
+      // Il nome che il builder dà alla tile (registro degli elementi, già tradotto): l'elenco qui sopra ne aveva
+      // ottanta, le altre mostravano il tipo interno («announcementbar» invece di «Barra Annuncio»).
+      if (el.tagName !== 'SECTION' && tileType && window.parent && window.parent !== window && typeof window.parent.__oloNomeTile === 'function') {
+        nomeDalBuilder = String(window.parent.__oloNomeTile(tileType) || '');
+      }
       var diz = window.parent && window.parent !== window && window.parent.oloData && window.parent.oloData.translations;
-      if (diz && diz[label]) { label = diz[label]; }
+      if (nomeDalBuilder) { label = nomeDalBuilder; } else if (diz && diz[label]) { label = diz[label]; }
     } catch (errDiz) { /* tela su un'altra origine: resta il nome italiano */ }
     tb.querySelector('.olo-iframe-toolbar-label').textContent = label;
     tb.setAttribute('data-for-tile', tileId);
@@ -1336,8 +1377,60 @@
 
   function hideHoverToolbar() {
     hoverToolbarTimeout = setTimeout(function() {
-      if (hoverToolbar) hoverToolbar.style.display = 'none';
+      if (!hoverToolbar) return;
+      // Finito il passaggio su un'altra tile, la barra torna su quella selezionata (spariva del tutto).
+      var selEl = selectedId ? findTileEl(selectedId) : null;
+      if (selEl && !previewMode && !activeEditEl && !gripDragging) {
+        showHoverToolbar(selEl, selectedId);
+        return;
+      }
+      hoverToolbar.style.display = 'none';
     }, 400);
+  }
+
+  // La barra è posizionata in coordinate del documento: dopo un render completo, una patch, il cambio di vista
+  // (telefono, tablet) o una tile che cambia altezza restava dov'era, sopra la tile sbagliata o sul testo di una
+  // fascia sottile (17 nov 2026: la Barra Annuncio coperta da «Sezione»). Si rimette sulla tile selezionata; se la
+  // tile che indicava non c'è più, si nasconde.
+  function riallineaBarra() {
+    if (hoveredEl && !root.contains(hoveredEl)) hoveredEl = null;
+    if (!hoverToolbar || previewMode || activeEditEl || gripDragging) return;
+    var selEl = selectedId ? findTileEl(selectedId) : null;
+    if (selEl) {
+      showHoverToolbar(selEl, selectedId);
+      return;
+    }
+    var perEl = hoverToolbar._forEl;
+    if (!perEl || !root.contains(perEl)) {
+      // La tile che indicava è stata ridisegnata (Sposta su/giù, una modifica): la barra spariva e, col puntatore fermo
+      // sulla tile, non tornava finché non si usciva e si rientrava (17 nov 2026). Ora segue la stessa tile ridisegnata
+      // o, se non c'è più, quella sotto il puntatore.
+      var idPer = hoverToolbar.getAttribute('data-for-tile');
+      var nuovo = idPer ? findTileEl(idPer) : null;
+      if (!nuovo && ultimoPuntatore) {
+        var sotto = document.elementFromPoint(ultimoPuntatore[0], ultimoPuntatore[1]);
+        idPer = sotto && !sotto.closest('.olo-iframe-toolbar') ? findTileId(sotto) : null;
+        nuovo = idPer ? findTileEl(idPer) : null;
+      }
+      if (nuovo && hoverToolbar.style.display !== 'none') {
+        if (hoveredEl && hoveredEl !== nuovo) hoveredEl.classList.remove('olo-builder-hover');
+        if (!hoveredEl || !root.contains(hoveredEl)) hoveredEl = nuovo;
+        showHoverToolbar(nuovo, idPer);
+      } else {
+        hoverToolbar.style.display = 'none';
+        hoverToolbar._forEl = null;
+      }
+    } else if (hoverToolbar.style.display !== 'none') {
+      showHoverToolbar(perEl, hoverToolbar.getAttribute('data-for-tile'));
+    }
+  }
+  // L'ultima posizione del puntatore nel canvas (per riallineaBarra: la tile sotto il mouse dopo un ridisegno)
+  var ultimoPuntatore = null;
+  document.addEventListener('mousemove', function (e) { ultimoPuntatore = [e.clientX, e.clientY]; }, true);
+  var riallineaTimer = null;
+  function riallineaBarraPoi(ms) {
+    clearTimeout(riallineaTimer);
+    riallineaTimer = setTimeout(riallineaBarra, ms || 120);
   }
 
   function executeInlineScripts(container) {
@@ -1574,6 +1667,7 @@
           if (forceHoverState.enabled && forceHoverState.tileId) {
             applyForceHover(true, forceHoverState.tileId);
           }
+          riallineaBarra();
         }, 50);
         // Report height + layout snapshot for drag-and-drop hit-testing
         setTimeout(function() {
@@ -1598,6 +1692,8 @@
               if (selectedIds.indexOf(d.tileId) !== -1) {
                 newEl.classList.add('olo-builder-selected');
               }
+              // La tile può aver cambiato altezza (e con lei quelle sotto): la barra torna al suo posto.
+              riallineaBarraPoi(60);
 
               // Scoped CSS (hover + responsive) — rimpiazza eventuale <style data-tile-id="X">
               // precedente per evitare accumulo di rules stale dopo molte patch sullo stesso tile.
@@ -1878,6 +1974,8 @@
   document.documentElement.addEventListener('mouseleave', function() { if (markedZone && !zoneMarkerTimer) hideZoneMarker(300); });
   window.addEventListener('scroll', refreshZoneMarker, { passive: true });
   window.addEventListener('resize', refreshZoneMarker);
+  // Vista telefono/tablet/computer: il builder ridimensiona l'iframe, la pagina si ridispone.
+  window.addEventListener('resize', function () { riallineaBarraPoi(160); });
   // (HTML5 drag già bloccato al top del modulo, vedi commento v3.55.29.)
   window.addEventListener('message', onMessage, false);
 

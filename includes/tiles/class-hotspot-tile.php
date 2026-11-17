@@ -336,6 +336,15 @@ class Olobuild_Hotspot_Tile extends Olobuild_Tile_Base {
                 transform: translateY(-50%);
                 border-right-color: <?php echo $tooltip_bg; ?>;
             }
+            <?php
+            // Tipografia del fumetto (Stile › Fumetto): solo le parti impostate, dopo le misure di sempre.
+            foreach ( [ '.olo-hs-tooltip-title' => 'hs_title', '.olo-hs-tooltip-desc' => 'hs_desc' ] as $hs_sel => $hs_pre ) {
+                $hs_typo = $this->tipografia_css( $s, $hs_pre );
+                if ( '' !== $hs_typo ) {
+                    echo '.' . esc_attr( $uid ) . ' ' . $hs_sel . '{' . $hs_typo . '}';
+                }
+            }
+            ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
@@ -463,8 +472,14 @@ class Olobuild_Hotspot_Tile extends Olobuild_Tile_Base {
                     }
                 }
                 container.addEventListener('click', function(e){
-                    /* Dentro il fumetto (il link, il testo) non si chiude niente. */
-                    if(e.target.closest('.olo-hs-tooltip')){return}
+                    /* Il link nel fumetto funziona; il resto del fumetto lo chiude. Sul telefono il fumetto copre
+                       gli altri punti: toccarlo non faceva niente, e per aprirne un altro bisognava indovinare un
+                       posto libero fuori dall'immagine (16 nov 2026). */
+                    if(e.target.closest('.olo-hs-tooltip')){
+                        if(e.target.closest('a, button')){return}
+                        closeAll();
+                        return;
+                    }
                     var marker = e.target.closest('.olo-hs-marker');
                     if(!marker){
                         closeAll();

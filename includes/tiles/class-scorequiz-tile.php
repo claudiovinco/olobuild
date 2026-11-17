@@ -41,6 +41,11 @@ class Olobuild_ScoreQuiz_Tile extends Olobuild_Tile_Base {
         'card_border'   => '',
         'radius'        => '',
         'align'         => 'left',
+        // Stile → Testo: vuoti = come prima (titolo col carattere dei titoli, da 26 a 40 px; domanda 20 px, 600).
+        'heading_font_family' => '', 'heading_font_size' => '', 'heading_font_size_tablet' => '', 'heading_font_size_mobile' => '',
+        'heading_font_weight' => '',
+        'question_font_family' => '', 'question_font_size' => '', 'question_font_size_tablet' => '', 'question_font_size_mobile' => '',
+        'question_font_weight' => '',
     ];
 
     public function get_controls() { return []; }
@@ -173,6 +178,28 @@ class Olobuild_ScoreQuiz_Tile extends Olobuild_Tile_Base {
             $line = 'color-mix(in srgb, ' . $testo_card . ' 22%, transparent)';
         }
 
+        // Titolo e domanda (Stile → Testo, 17 nov 2026). Il titolo prende il carattere dei titoli col ripiego dei titoli,
+        // come le altre tile: prima `var(--olo-font-family-heading, inherit)` dove la tipografia globale non sceglie un
+        // carattere ripiegava sul testo (un sans in grassetto accanto ai titoli con le grazie della pagina).
+        $fam_h  = $this->resolve_font_family( (string) ( $s['heading_font_family'] ?? '' ) ?: 'heading' );
+        $fw_h   = $this->font_weight_css( $s['heading_font_weight'] ?? '' ) ?: 'var(--olo-font-weight-heading, 700)';
+        $fs_h   = (float) ( $s['heading_font_size'] ?? 0 );
+        $fs_h   = $fs_h > 0 ? max( 16, min( 96, $fs_h ) ) . 'px' : 'clamp(26px,3.6vw,40px)';
+        $fam_q  = $this->resolve_font_family( (string) ( $s['question_font_family'] ?? '' ) );
+        $fw_q   = $this->font_weight_css( $s['question_font_weight'] ?? '' ) ?: '600';
+        $fs_q   = (float) ( $s['question_font_size'] ?? 0 );
+        $fs_q   = $fs_q > 0 ? max( 14, min( 40, $fs_q ) ) . 'px' : '20px';
+        $per_disp = '';
+        foreach ( [ 'tablet' => 960, 'mobile' => 480 ] as $disp => $px ) {
+            $vh = (float) ( $s[ 'heading_font_size_' . $disp ] ?? 0 );
+            $vq = (float) ( $s[ 'question_font_size_' . $disp ] ?? 0 );
+            $r  = ( $vh > 0 ? '.' . $uid . ' .osq-h{font-size:' . max( 16, min( 96, $vh ) ) . 'px}' : '' )
+                . ( $vq > 0 ? '.' . $uid . ' .osq-q{font-size:' . max( 14, min( 40, $vq ) ) . 'px}' : '' );
+            if ( '' !== $r ) {
+                $per_disp .= '@media (max-width:' . $px . 'px){' . $r . '}';
+            }
+        }
+
         ob_start();
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist (with fixed var() fallbacks), text colours chosen by testo_su() among those or fixed var() literals, Olobuild_Tile_Utils::border_css()/border_color(), radius_force_css() (absint corners in px), fixed literals; $uid is an internal md5-based id. ?>
@@ -181,13 +208,13 @@ class Olobuild_ScoreQuiz_Tile extends Olobuild_Tile_Base {
         <style>
             .<?php echo $uid; ?>{--sq-accent:<?php echo $accent; ?>;--sq-on:<?php echo $on; ?>;--sq-line:<?php echo $line; ?>;--sq-text:<?php echo $testo_card; ?>;<?php if ( $center ) echo 'text-align:center;'; ?><?php if ( '' !== $colore_radice ) echo 'color:' . $colore_radice . ';'; ?>}
             .<?php echo $uid; ?> .osq-eyebrow{display:block;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--sq-accent);margin-bottom:0.625rem;}
-            .<?php echo $uid; ?> .osq-h{font-family:var(--olo-font-family-heading,inherit);font-size:clamp(26px,3.6vw,40px);line-height:1.12;margin:0;color:<?php echo $testo_zona; ?>;}
+            .<?php echo $uid; ?> .osq-h{font-family:<?php echo $fam_h; ?>;font-size:<?php echo $fs_h; ?>;font-weight:<?php echo $fw_h; ?>;line-height:1.12;margin:0;color:<?php echo $testo_zona; ?>;text-wrap:balance;}
             .<?php echo $uid; ?> .osq-intro{font-size:15.5px;line-height:1.6;opacity:.8;margin:0.75rem 0 0;}
             .<?php echo $uid; ?> .osq-card{margin-top:1.5rem;background:<?php echo $cardbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $line ] ) ); ?>border-radius:<?php echo $raggio ?: '1rem'; ?>;padding:clamp(1.25rem,3vw,2rem);text-align:left;<?php echo $center ? 'max-width:640px;margin-left:auto;margin-right:auto;' : ''; ?><?php if ( '' !== $colore_card ) echo 'color:' . $colore_card . ';'; ?>}
             .<?php echo $uid; ?> .osq-bar{height:4px;border-radius:<?php echo $raggio ?: '6.1875rem'; ?>;background:var(--sq-line);overflow:hidden;margin-bottom:1.125rem;}
             .<?php echo $uid; ?> .osq-bar i{display:block;height:100%;width:0;background:var(--sq-accent);transition:width .3s ease;}
             .<?php echo $uid; ?> .osq-step{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.8;}
-            .<?php echo $uid; ?> .osq-q{font-size:20px;font-weight:600;line-height:1.35;margin:0.5rem 0 1rem;color:var(--sq-text);outline:0;}
+            .<?php echo $uid; ?> .osq-q{<?php if ( '' !== $fam_q ) echo 'font-family:' . $fam_q . ';'; ?>font-size:<?php echo $fs_q; ?>;font-weight:<?php echo $fw_q; ?>;line-height:1.35;margin:0.5rem 0 1rem;color:var(--sq-text);outline:0;text-wrap:balance;}
             .<?php echo $uid; ?> .osq-opts{display:grid;gap:0.625rem;}
             .<?php echo $uid; ?> .osq-opt{font:inherit;font-size:15.5px;text-align:left;padding:0.875rem 1.125rem;border-radius:<?php echo $raggio ?: '0.75rem'; ?>;border:1.5px solid var(--sq-line);background:transparent;color:var(--sq-text);cursor:pointer;transition:border-color .15s,background .15s;}
             .<?php echo $uid; ?> .osq-opt:hover{border-color:var(--sq-accent);background:color-mix(in srgb,var(--sq-accent) 8%,transparent);}
@@ -197,11 +224,12 @@ class Olobuild_ScoreQuiz_Tile extends Olobuild_Tile_Base {
             <?php // Il titolo dell'esito è un titolo: carattere e peso dei titoli del tema, come l'intestazione del
                   // quiz (.osq-h). Usciva nel carattere del testo in grassetto, e coi titoli serif stonava (Leva
                   // Consulenza: DM Sans 700 accanto a DM Serif Display 400). Senza i token, il grassetto di prima. ?>
-            .<?php echo $uid; ?> .osq-res-t{font-family:var(--olo-font-family-heading,inherit);font-size:clamp(24px,3vw,32px);font-weight:var(--olo-font-weight-heading,700);color:var(--sq-accent);margin:0.375rem 0 0.5rem;outline:0;}
+            .<?php echo $uid; ?> .osq-res-t{font-family:<?php echo $fam_h; ?>;font-size:clamp(24px,3vw,32px);font-weight:var(--olo-font-weight-heading,700);color:var(--sq-accent);margin:0.375rem 0 0.5rem;outline:0;}
             .<?php echo $uid; ?> .osq-res-p{font-size:15.5px;line-height:1.6;margin:0 0 1.125rem;}
             .<?php echo $uid; ?> .osq-score{font-size:13px;opacity:.8;margin:0 0 0.875rem;}
             .<?php echo $uid; ?> .osq-link{display:inline-flex;align-items:center;gap:0.5rem;font-weight:600;font-size:15px;color:var(--sq-on);background:var(--sq-accent);padding:0.75rem 1.5rem;border-radius:<?php echo $raggio ?: '62.4375rem'; ?>;text-decoration:none;}
             .<?php echo $uid; ?> [hidden]{display:none !important;}
+                    <?php echo $per_disp; ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-scorequiz <?php echo esc_attr( $uid ); ?>" data-scorequiz>

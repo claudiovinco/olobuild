@@ -3,7 +3,7 @@
     <template v-if="layer">
       <!-- Header -->
       <div class="mb-p-2 mb-border-b mb-border-gray-700 mb-text-xs mb-font-semibold mb-text-gray-300">
-        {{ t('Livello') }} {{ layer.type.charAt(0).toUpperCase() + layer.type.slice(1) }}
+        {{ t('Livello') }} {{ nomeTipo }}
       </div>
 
       <!-- Tabs -->
@@ -126,7 +126,7 @@
           <div>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="layer.initiallyHidden === true" @change="up('initiallyHidden', $event.target.checked)" class="mb-rounded" />
-              <span class="mps-label mb-mb-0">{{ t("Nascosto all'avvio (mostrabile via toggle)") }}</span>
+              <span class="mps-label mb-mb-0">{{ t("Nascosto all'avvio (lo mostra un altro livello)") }}</span>
             </label>
           </div>
 
@@ -260,8 +260,8 @@
           <!-- Parallax depth -->
           <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
           <div>
-            <label class="mps-label">Parallax depth</label>
-            <NumberScrubber theme="dark" :modelValue="layer.parallaxDepth || 0" :min="0" :max="10" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" ariaLabel="Parallax depth" @update:modelValue="up('parallaxDepth', $event)" />
+            <label class="mps-label">{{ t('Profondità parallasse') }}</label>
+            <NumberScrubber theme="dark" :modelValue="layer.parallaxDepth || 0" :min="0" :max="10" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" :ariaLabel="t('Profondità parallasse')" @update:modelValue="up('parallaxDepth', $event)" />
           </div>
         </template>
 
@@ -270,7 +270,7 @@
           <!-- Breakpoint indicator -->
           <div v-if="activeBreakpoint !== 'desktop'" class="mb-bg-yellow-900/30 mb-border mb-border-yellow-700/50 mb-rounded mb-p-2 mb-mb-2">
             <div class="mb-flex mb-items-center mb-justify-between">
-              <span class="mb-text-[10px] mb-text-yellow-400">{{ t('Override per') }} {{ activeBreakpoint }} {{ t('— valori non impostati ereditano dal livello superiore') }}</span>
+              <span class="mb-text-[10px] mb-text-yellow-400">{{ t('Valori per') }} {{ nomeSchermo }} {{ t('— quelli non impostati ereditano dallo schermo più grande') }}</span>
               <button
                 v-if="hasAnyOverride"
                 @click="clearAllOverrides"
@@ -282,7 +282,7 @@
           <div v-if="activeBreakpoint !== 'desktop'" class="mb-mb-2">
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="rv('visible') !== false" @change="up('visible', $event.target.checked)" class="mb-rounded" />
-              <span class="mps-label mb-mb-0">{{ t('Visibile su') }} {{ activeBreakpoint }}</span>
+              <span class="mps-label mb-mb-0">{{ t('Visibile su') }} {{ nomeSchermo }}</span>
             </label>
           </div>
           <div>
@@ -1261,6 +1261,13 @@ function setAnimMode(mode) {
 const showIconPicker = ref(false);
 
 const activeTab = ref('Contenuto');
+
+// Il nome del livello e dello schermo come li legge chi usa l'editor (17 nov 2026: «Livello Button», «Visibile su mobile»)
+const NOMI_TIPO = { text: t('Testo'), button: t('Pulsante'), image: t('Immagine'), video: t('Video'), icon: t('Icona'),
+  shape: t('Forma'), audio: t('Audio') };
+const nomeTipo = computed(() => NOMI_TIPO[props.layer?.type] || (props.layer?.type || ''));
+const NOMI_SCHERMO = { desktop: 'Desktop', notebook: 'Notebook', tablet: 'Tablet', mobile: 'Mobile' };
+const nomeSchermo = computed(() => NOMI_SCHERMO[props.activeBreakpoint] || props.activeBreakpoint);
 const tabs = ['Contenuto', 'Posizione', 'Stile', 'Animazione'];
 
 // Responsive: risolve il valore effettivo per il breakpoint attivo
@@ -1559,7 +1566,7 @@ const OPTS_ACTION_TYPE = [
   { value: 'goToSlide', label: 'Vai a slide N' },
   { value: 'openUrl', label: 'Apri URL' },
   { value: 'scrollBelow', label: 'Scroll sotto slider' },
-  { value: 'toggleLayer', label: 'Toggle visibilita layer' },
+  { value: 'toggleLayer', label: t('Mostra o nasconde un livello') },
   { value: 'setState', label: t('Imposta uno stato') },
   { value: 'cycleState', label: t('Stato successivo (a giro)') },
 ];
@@ -1596,9 +1603,9 @@ const OPTS_BORDER_STYLE = [
   { value: 'double', label: 'Doppio' },
 ];
 const OPTS_OBJECT_FIT = [
-  { value: 'cover', label: 'Cover' },
-  { value: 'contain', label: 'Contain' },
-  { value: 'fill', label: 'Fill' },
+  { value: 'cover', label: 'Copri (taglia)' },
+  { value: 'contain', label: 'Contieni (intera)' },
+  { value: 'fill', label: 'Riempi (deforma)' },
   { value: 'none', label: 'Nessuno' },
 ];
 const OPTS_OBJECT_POSITION = [

@@ -19,6 +19,8 @@ class Olobuild_Table_Tile extends Olobuild_Tile_Base {
         'hover_effect'      => true,
         'compact'           => false,
         'first_col_bold'    => false,
+        'tb_head_font_family' => '', 'tb_head_font_size' => '', 'tb_head_font_weight' => '', 'tb_head_text_transform' => '', 'tb_head_letter_spacing' => '',
+        'tb_cell_font_family' => '', 'tb_cell_font_size' => '', 'tb_cell_font_weight' => '', 'tb_cell_line_height' => '',
         'col_alignments'    => [],
         'responsive_mode'   => 'scroll',
         'header_bg'         => '',
@@ -85,6 +87,16 @@ class Olobuild_Table_Tile extends Olobuild_Tile_Base {
         $css = '<style>';
         $css .= ".{$uid}{width:100%;border-collapse:collapse;color:{$text_color};font-size:" . ( $compact ? '13px' : '15px' ) . '}';
         $css .= ".{$uid} th,.{$uid} td{padding:{$pad};text-align:left}";
+        // Il carattere di intestazione e celle (Stile → Testo, 16 nov 2026): prima solo il colore. Il colore resta
+        // header_text_color / text_color, già sulla riga e sulla tabella.
+        $tipo_testa = $this->tipografia_css( $s, 'tb_head', [ 'color' => '' ] );
+        if ( '' !== $tipo_testa ) {
+            $css .= ".{$uid} thead th{" . $tipo_testa . '}';
+        }
+        $tipo_celle = $this->tipografia_css( $s, 'tb_cell', [ 'color' => '' ] );
+        if ( '' !== $tipo_celle ) {
+            $css .= ".{$uid} tbody td,.{$uid} tbody th{" . $tipo_celle . '}';
+        }
         if ( $bordered ) {
             $css .= ".{$uid} th,.{$uid} td{border-bottom:1px solid {$border_color}}";
         }
@@ -100,7 +112,9 @@ class Olobuild_Table_Tile extends Olobuild_Tile_Base {
             $css .= ".{$uid} tbody td::before{content:attr(data-label);font-weight:600;text-align:left;margin-right:12px}";
             // La prima colonna in grassetto è un <th scope="row">: nella scheda fa da titolo e prende tutta la
             // larghezza (restava una cella larga quanto il testo, col filo sotto più corto della scheda).
-            $css .= ".{$uid} tbody th{display:block;text-align:left}";
+            // ...e ha lo sfondo e il colore dell'intestazione (che nelle schede è nascosta): prima aveva lo stesso peso
+            // delle etichette «Persone», «Un'ora» e non si capiva dove cominciasse una scheda (16 nov 2026).
+            $css .= ".{$uid} tbody th{display:block;text-align:left;background:{$header_bg};color:{$header_tc}}";
             $css .= '}';
         }
         $css .= '</style>';

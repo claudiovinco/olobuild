@@ -16,10 +16,11 @@ class Olobuild_WorkList_Tile extends Olobuild_Tile_Base {
     protected $category = 'layout';
     protected $defaults = [
         'items' => [
-            [ 'number' => '01', 'title' => 'Marisol',     'category' => 'Brand identity',     'year' => '2026', 'link_url' => '' ],
-            [ 'number' => '02', 'title' => 'Atlas Press',  'category' => 'Editorial · web',    'year' => '2025', 'link_url' => '' ],
-            [ 'number' => '03', 'title' => 'Field Museum', 'category' => 'Wayfinding',         'year' => '2025', 'link_url' => '' ],
-            [ 'number' => '04', 'title' => 'Cobalt',       'category' => 'Identity · product', 'year' => '2024', 'link_url' => '' ],
+            // In italiano come la partenza del config (16 nov 2026: erano progetti e categorie in inglese).
+            [ 'number' => '01', 'title' => 'Residenza Aurora', 'category' => 'Architettura',     'year' => '2026', 'link_url' => '' ],
+            [ 'number' => '02', 'title' => 'Bottega Marini',   'category' => 'Identità visiva',  'year' => '2025', 'link_url' => '' ],
+            [ 'number' => '03', 'title' => 'Studio Ferri',     'category' => 'Interni · arredo', 'year' => '2025', 'link_url' => '' ],
+            [ 'number' => '04', 'title' => 'Caffè Centrale',   'category' => 'Sito web',         'year' => '2024', 'link_url' => '' ],
         ],
         'divider_color'     => 'var(--olo-color-border, #d7d1c2)',
         'row_padding_y'     => 26,
@@ -48,7 +49,9 @@ class Olobuild_WorkList_Tile extends Olobuild_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'olo-worklist-' . wp_rand( 10000, 99999 );
 
-        $heading = "var(--olo-font-family-heading, 'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
+        // Il ripiego dei titoli è quello di tutte le tile (resolve_font_family('heading')): senza un carattere dei titoli
+        // scelto nel sito questa tile ripiegava su DM Sans mentre i titoli accanto andavano su Georgia (16 nov 2026).
+        $heading = $this->resolve_font_family( 'heading' );
         $body    = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
         // Vuoto = il mono del tema (--olo-font-family-mono), come dice l'inspector; il monospazio di sistema solo se il tema non ne ha uno.
         $mono_fb = "var(--olo-font-family-mono, ui-monospace,'SF Mono',Menlo,Consolas,monospace)";
@@ -116,6 +119,9 @@ class Olobuild_WorkList_Tile extends Olobuild_Tile_Base {
         $cols_m = max( 32, $num_w ) . 'px minmax(0,1fr)';
         if ( $show_year )  $cols_m .= ' auto';
         if ( $show_arrow ) $cols_m .= ' auto';
+        // Colonne dell'anno e della freccia nella griglia stretta (la categoria va sotto il titolo).
+        $col_anno    = 3;
+        $col_freccia = $show_year ? 4 : 3;
 
         // Griglia e padding della riga stanno nel <style> sotto, non in linea: in linea battevano
         // sia il :hover (l'«Indentazione hover» non spostava niente) sia la regola del telefono
@@ -167,12 +173,26 @@ class Olobuild_WorkList_Tile extends Olobuild_Tile_Base {
                 .<?php echo $uid; ?> .olo-worklist__t { font-size: <?php echo (int) $title_t; ?>px !important; }
             }
             <?php endif; ?>
-            @media (max-width: 640px) {
-                .<?php echo $uid; ?> .olo-worklist__row { grid-template-columns: <?php echo $cols_m; ?>; gap: 14px; }
-                .<?php echo $uid; ?> .olo-worklist__cat { display: none; }
-                .<?php echo $uid; ?> .olo-worklist__t { font-size: <?php echo $title_m ? (int) $title_m . 'px' : 'min(' . (int) ( $title_t ? $title_t : $title_size ) . 'px, 9vw)'; ?> !important; overflow-wrap: anywhere; }
-                .<?php echo $uid; ?> .olo-worklist__yr { text-align: right; }
+            /* Si adatta alla larghezza della SUA colonna, non solo dello schermo (16 nov 2026): in mezza pagina i titoli
+               andavano a capo e la categoria si schiacciava; sul telefono la categoria spariva. Contenitore con nome, come
+               Hover List e Info Cards (olo-cell c'è solo nel builder). */
+            .<?php echo $uid; ?> { container-type: inline-size; container-name: olo-worklist; }
+            @container olo-worklist (max-width: 640px) {
+                .<?php echo $uid; ?> .olo-worklist__row { grid-template-columns: <?php echo $cols_m; ?>; column-gap: .875rem; row-gap: .25rem; }
+                .<?php echo $uid; ?> .olo-worklist__n { grid-column: 1; grid-row: 1 / span 2; }
+                .<?php echo $uid; ?> .olo-worklist__t { grid-column: 2; grid-row: 1; font-size: min(<?php echo (int) ( $title_t ? $title_t : $title_size ); ?>px, 32px) !important; overflow-wrap: anywhere; }
+                .<?php echo $uid; ?> .olo-worklist__cat { grid-column: 2; grid-row: 2; }
+                .<?php echo $uid; ?> .olo-worklist__yr { grid-column: <?php echo (int) $col_anno; ?>; grid-row: 1 / span 2; text-align: right; }
+                .<?php echo $uid; ?> .olo-worklist__arrow { grid-column: <?php echo (int) $col_freccia; ?>; grid-row: 1 / span 2; }
             }
+            @container olo-worklist (max-width: 420px) {
+                .<?php echo $uid; ?> .olo-worklist__t { font-size: min(<?php echo (int) ( $title_t ? $title_t : $title_size ); ?>px, 26px) !important; }
+            }
+            <?php if ( $title_m ) : ?>
+            @media (max-width: 640px) {
+                .<?php echo $uid; ?> .olo-worklist__t { font-size: <?php echo (int) $title_m; ?>px !important; }
+            }
+            <?php endif; ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php

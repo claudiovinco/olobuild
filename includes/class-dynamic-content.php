@@ -196,24 +196,16 @@ class Olobuild_Dynamic_Content {
             case 'permalink':
                 return get_permalink( $post_id );
 
+            case 'first_term_url':
+                // La pagina del primo termine: lo stesso termine di «Primo termine» (17 nov 2026, link dinamici).
+                $termine = $this->primo_termine( $post_id );
+                if ( ! $termine ) return '';
+                $link = get_term_link( $termine );
+                return is_wp_error( $link ) ? '' : $link;
+
             case 'first_term':
-                // Il nome del primo termine, dalle tassonomie pubbliche del tipo di contenuto: prima le
-                // gerarchiche (categorie), poi le altre (tag). Niente post_format: col suo filtro di WP,
-                // wp_get_object_terms( …, fields => names ) restituiva nomi VUOTI per tutte le tassonomie.
-                // get_the_terms legge la cache dei termini che la query degli elenchi ha già caricato.
-                $post_obj = get_post( $post_id );
-                if ( ! $post_obj ) return '';
-                $taxonomies = array_filter( get_object_taxonomies( $post_obj->post_type, 'objects' ), function ( $tx ) {
-                    return $tx->public && 'post_format' !== $tx->name;
-                } );
-                uasort( $taxonomies, function ( $a, $b ) { return (int) $b->hierarchical - (int) $a->hierarchical; } );
-                foreach ( $taxonomies as $tx ) {
-                    $terms = get_the_terms( $post_obj, $tx->name );
-                    if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
-                        return $terms[0]->name;
-                    }
-                }
-                return '';
+                $termine = $this->primo_termine( $post_id );
+                return $termine ? $termine->name : '';
 
             default:
                 // Try as a post field
@@ -223,6 +215,28 @@ class Olobuild_Dynamic_Content {
                 }
                 return null;
         }
+    }
+
+    /**
+     * Il primo termine del contenuto, dalle tassonomie pubbliche del suo tipo: prima le gerarchiche (categorie), poi le
+     * altre (tag). Niente post_format: col suo filtro di WP, wp_get_object_terms( …, fields => names ) restituiva nomi
+     * VUOTI per tutte le tassonomie. get_the_terms legge la cache dei termini che la query degli elenchi ha già caricato.
+     * Lo usano «Primo termine» (il nome) e «Link della categoria» (la sua pagina): sempre lo stesso termine.
+     */
+    private function primo_termine( $post_id ) {
+        $post_obj = get_post( $post_id );
+        if ( ! $post_obj ) return null;
+        $taxonomies = array_filter( get_object_taxonomies( $post_obj->post_type, 'objects' ), function ( $tx ) {
+            return $tx->public && 'post_format' !== $tx->name;
+        } );
+        uasort( $taxonomies, function ( $a, $b ) { return (int) $b->hierarchical - (int) $a->hierarchical; } );
+        foreach ( $taxonomies as $tx ) {
+            $terms = get_the_terms( $post_obj, $tx->name );
+            if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
+                return $terms[0];
+            }
+        }
+        return null;
     }
 
     /**
@@ -493,6 +507,12 @@ class Olobuild_Dynamic_Content {
     private function adapt_acf_value( $value ) {
         if ( ! is_array( $value ) || empty( $value ) ) {
             return $value;
+        }
+
+        // Campo «Link» di ACF (url, title, target) e campo «File» col formato array (url, filename…, senza larghezza
+        // come le immagini): l'indirizzo, che un collegamento dinamico mette in un campo link (17 nov 2026).
+        if ( isset( $value['url'] ) && is_string( $value['url'] ) && ( array_key_exists( 'target', $value ) || ( isset( $value['filename'] ) && ! isset( $value['width'] ) ) ) ) {
+            return $value['url'];
         }
 
         // OSM map field: associative array with 'lat' and 'lng'
@@ -932,6 +952,13 @@ class Olobuild_Dynamic_Content {
                     $item[ $item_key ] = sprintf( '%02d', $i + 1 );
                 } elseif ( 'post_year' === $wp_field ) {
                     $item[ $item_key ] = get_the_date( 'Y', $post );
+                } elseif ( false !== strpos( (string) $wp_field, ':' ) ) {
+                    // Un campo di un'altra sorgente, «sorgente:campo» (17 nov 2026): il link dei biglietti di uno
+                    // spettacolo, un campo link dei Tipi di contenuto, un campo personalizzato. Il campo può avere a sua
+                    // volta i due punti (le foto social dei Tipi di contenuto: «campi:foto:45»).
+                    list( $sorgente, $campo ) = explode( ':', (string) $wp_field, 2 );
+                    $valore            = $this->resolve_field( sanitize_key( $sorgente ), $campo, $post->ID );
+                    $item[ $item_key ] = is_scalar( $valore ) ? $valore : '';
                 } else {
                     $item[ $item_key ] = $this->resolve_field( 'current_post', $wp_field, $post->ID );
                 }
@@ -1322,6 +1349,8 @@ class Olobuild_Dynamic_Content {
                     [ 'key' => 'post_date',        'label' => 'Data',           'type' => 'text' ],
                     [ 'key' => 'author_name',      'label' => 'Autore',         'type' => 'text' ],
                     [ 'key' => 'permalink',        'label' => 'Permalink',      'type' => 'url' ],
+                    // La pagina della categoria del contenuto (il primo termine, come «Primo termine»): «Altri Monumenti →».
+                    [ 'key' => 'first_term_url',   'label' => 'Link della categoria', 'type' => 'url' ],
                 ],
             ],
             'site' => [
@@ -1504,7 +1533,7 @@ class Olobuild_Dynamic_Content {
                 [ 'key' => 'media_alt',         'label' => 'Testo alternativo', 'type' => 'text' ],
                 [ 'key' => 'media_description', 'label' => 'Descrizione',   'type' => 'text' ],
                 [ 'key' => 'media_title',       'label' => 'Titolo media',  'type' => 'text' ],
-                [ 'key' => 'media_url',         'label' => 'URL file',      'type' => 'text' ],
+                [ 'key' => 'media_url',         'label' => 'URL file',      'type' => 'url' ],
                 [ 'key' => 'media_file_size',   'label' => 'Dimensione file','type' => 'text' ],
             ],
         ];
@@ -1569,6 +1598,11 @@ class Olobuild_Dynamic_Content {
                     'number'   => 'text',
                     'email'    => 'text',
                     'url'      => 'url',
+                    // Anche questi danno un indirizzo (link dinamici, 17 nov 2026): il link e il file li riduce
+                    // adapt_acf_value() al solo indirizzo, la pagina lo è già.
+                    'link'      => 'url',
+                    'page_link' => 'url',
+                    'file'      => 'url',
                     'image'    => 'image',
                     'wysiwyg'  => 'html',
                 ];

@@ -62,42 +62,34 @@ export default {
   // ═══ CONTENUTO ════════════════════════════════════════════════
   fields: [
     { type: 'separator', label: t('Statistiche') },
-    { key: 'items', label: t('Voci'), type: 'content-items',
+    { key: 'items', label: t('Voci'), type: 'content-items', etichettaDa: 'value',
       itemLabel: t('Statistica'),
       defaults: { value: '00', label: t('Etichetta') },
       itemFields: [
-        { key: 'value', label: t('Valore (es. 500+, 92%)'), type: 'text' },
+        { key: 'value', label: t('Valore'), type: 'text', placeholder: '500+' },
         { key: 'label', label: t('Etichetta'), type: 'text' },
       ],
     },
   ],
 
   // ═══ STILE ════════════════════════════════════════════════════
+  // Zone standard (16 nov 2026): Aspetto · Valore · Etichetta · Forma · Disposizione. Prima «Forma» conteneva la
+  // variante, e colonne e padding stavano in una zona «Banda» che valeva anche per le altre varianti.
   styleFields: [
-    { type: 'separator', label: t('Forma') },
-    { key: 'forma', label: t('Forma'), type: 'select', ui: 'dropdown', options: [
+    { type: 'separator', label: t('Aspetto') },
+    { key: 'forma', label: t('Variante'), type: 'select', ui: 'dropdown', options: [
       { value: 'banda',    label: t('Banda con divisori') },
       { value: 'riga',     label: t('Riga, dentro un testo') },
       { value: 'elenco',   label: t('Elenco, in una colonna') },
       { value: 'schede',   label: t('Schede') },
       { value: 'evidenza', label: t('Un numero in evidenza') },
-    ], description: t('Banda: i numeri in colonne a tutta larghezza. Riga: in fila e piccoli, sotto un paragrafo. Elenco: uno sotto l\'altro col nome accanto, accanto a una foto o a un testo. Schede: ogni numero in un riquadro. In evidenza: il primo grande, gli altri in una riga sotto.') },
-
-    { type: 'separator', label: t('Banda') },
-    { key: 'columns',        label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1, responsive: true,
-      show: (s) => ['banda', 'schede'].includes(s.forma || 'banda') },
-    { key: 'band_padding', label: t('Padding banda'), type: 'spacing', min: 0, max: 120,
-      legacyKeys: { y: 'band_padding_y' } },
-    { key: 'align', label: t('Allineamento'), type: 'select', options: [
-      { value: 'left',   label: t('Sinistra') },
-      { value: 'center', label: t('Centro') },
-    ]},
-
-    { type: 'separator', label: t('Divisori') },
+    ], description: t('Banda: i numeri in colonne a tutta larghezza. Riga: in fila e piccoli, sotto un paragrafo. Elenco: uno sotto l’altro col nome accanto, accanto a una foto o a un testo. Schede: ogni numero in un riquadro. In evidenza: il primo grande, gli altri in una riga sotto.') },
     { key: 'show_dividers', label: t('Divisori tra le celle'), type: 'toggle',
       show: (s) => ['banda', 'elenco'].includes(s.forma || 'banda') },
     { key: 'band_border',   label: t('Bordo sopra e sotto'),   type: 'toggle' },
-    { key: 'divider_color', label: t('Colore linee'),          type: 'color' },
+    { key: 'divider_color', label: t('Colore linee'),          type: 'color',
+      show: (s) => s.forma === 'evidenza' || s.band_border !== false
+        || (s.show_dividers !== false && ['banda', 'elenco'].includes(s.forma || 'banda')) },
 
     { type: 'separator', label: t('Valore') },
     // Lo stile tipografico vale per il SOLO valore (l'etichetta resta in mono):
@@ -112,5 +104,17 @@ export default {
     // mono del tema).
     { type: 'typography', label: t('Etichetta'), responsiveKeys: [],
       keys: { family: 'mono_font_family', size: 'label_size', weight: 'label_weight', color: 'label_color', uppercase: 'label_uppercase' }, sizeMin: 10, sizeMax: 22 },
+
+    { type: 'separator', label: t('Forma') },
+    { key: 'band_padding', label: t('Padding'), type: 'spacing', min: 0, max: 120,
+      legacyKeys: { y: 'band_padding_y' } },
+
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'columns',        label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1, responsive: true,
+      show: (s) => ['banda', 'schede'].includes(s.forma || 'banda') },
+    { key: 'align', label: t('Allineamento'), type: 'select', options: [
+      { value: 'left',   label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+    ]},
   ],
 };

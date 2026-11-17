@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Olobuild_Stackscroll_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'stackscroll';
-    protected $name     = 'Card impilate (StackScroll)';
+    protected $name     = 'Card impilate';
     protected $icon     = 'dashicons-index-card';
     protected $category = 'layout';
     protected $defaults = [
@@ -130,7 +130,9 @@ class Olobuild_Stackscroll_Tile extends Olobuild_Tile_Base {
         // Titolo display (additivo, no-op di default): heading-font + clamp grande.
         // Default false → resa IDENTICA ai temi esistenti (font ereditato, clamp 28..48).
         $title_display = ! empty( $s['title_display'] );
-        $title_font_css = $title_display ? 'font-family: var(--olo-font-family-heading, var(--olo-font-family, inherit));' : '';
+        // Il carattere dei titoli dal ripiego comune: sul sito --olo-font-family-heading può esistere VUOTA, e allora
+        // var(--olo-font-family-heading, …) non ripiegava e il «Titolo grande» restava nel carattere del testo.
+        $title_font_css = $title_display ? 'font-family: ' . $this->resolve_font_family( 'heading' ) . ';' : '';
         $title_size_css = $title_display ? 'clamp(40px, 4.4vw, 60px)' : 'clamp(28px, 3.4vw, 48px)';
 
         $shadow_css = $this->stack_shadow_css( $s );
@@ -152,8 +154,13 @@ class Olobuild_Stackscroll_Tile extends Olobuild_Tile_Base {
         <style>
             .<?php echo $uid; ?> { position: relative; }
 
+            <?php // La pila misura sé stessa (contenitore con nome): in una colonna stretta di una pagina larga la
+                  // card passava a una colonna sola solo sotto gli 880 px di FINESTRA, e restava a due colonne
+                  // schiacciate (16 nov 2026, «Una tile in un minuto»). ?>
             .<?php echo $uid; ?> .olo-stack__list {
                 position: relative;
+                container-type: inline-size;
+                container-name: olostack;
             }
 
             .<?php echo $uid; ?> .scard {
@@ -264,6 +271,32 @@ class Olobuild_Stackscroll_Tile extends Olobuild_Tile_Base {
                 .<?php echo $uid; ?> .scard__txt { order: 1; padding: clamp(24px, 6vw, <?php echo $pad; ?>px); }
                 .<?php echo $uid; ?> .scard__media { order: 2; min-height: 240px; }
             }
+
+            /* La stessa cosa quando è stretta la PILA (una colonna a metà pagina), non la finestra; e il titolo
+               scende a gradini: la misura in vw restava quella di uno schermo largo. */
+            @container olostack (max-width: 760px) {
+                .<?php echo $uid; ?> .scard { grid-template-columns: 1fr; min-height: 0; }
+                .<?php echo $uid; ?> .scard__txt { order: 1; padding: min(2em, <?php echo $pad; ?>px); }
+                .<?php echo $uid; ?> .scard__media { order: 2; min-height: 240px; }
+                .<?php echo $uid; ?> .scard__title { font-size: <?php echo $title_display ? '42px' : '34px'; ?>; }
+            }
+            @container olostack (max-width: 460px) {
+                .<?php echo $uid; ?> .scard__txt { padding: min(1.5em, <?php echo $pad; ?>px); }
+                .<?php echo $uid; ?> .scard__title { font-size: <?php echo $title_display ? '34px' : '28px'; ?>; }
+                .<?php echo $uid; ?> .scard__text { font-size: 15px; }
+                .<?php echo $uid; ?> .scard__media { min-height: 200px; }
+            }
+            <?php
+            // Il controllo Tipografia di ogni testo (Stile › Testo): solo le parti impostate, dopo le misure di sempre
+            // e dopo i gradini qui sopra, così le sostituiscono. Coi campi vuoti la card resta disegnata com'era.
+            foreach ( [ '.scard__title' => 'ss_title', '.scard__title .acc' => 'ss_accent', '.scard__eyebrow' => 'ss_eyebrow',
+                        '.scard__text' => 'ss_text', '.scard__num' => 'ss_num' ] as $ss_sel => $ss_pre ) {
+                $ss_typo = $this->tipografia_css( $s, $ss_pre );
+                if ( '' !== $ss_typo ) {
+                    echo '.' . $uid . ' ' . $ss_sel . '{' . $ss_typo . '}';
+                }
+            }
+            ?>
 
             /* Fallback statico: reduced-motion → niente pila, flusso verticale normale.
                Sovrascrive lo sticky e annulla l'eventuale scala impilamento. */

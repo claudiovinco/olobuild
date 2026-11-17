@@ -35,7 +35,24 @@ class Olobuild_HoursStrip_Tile extends Olobuild_Tile_Base {
         'note_color'       => 'var(--olo-color-text-soft, #8d8a82)',
         'note_size'        => 13,
         'mono_font_family' => '',
+        // Oggi in evidenza (16 nov 2026): spento nelle tile già salvate, acceso nella partenza del builder.
+        'evidenzia_oggi'   => false,
+        'scritta_oggi'     => 'Oggi',
+        'colore_oggi'      => '',
     ];
+
+    /** I giorni salvati ('1,2,3') → numeri ISO validi (1 lunedì … 7 domenica), come la Lavagna a gesso. */
+    private static function giorni( $v ) {
+        $out = [];
+        foreach ( preg_split( '/[\s,|]+/', (string) $v ) as $g ) {
+            $g = (int) $g;
+            if ( $g >= 1 && $g <= 7 ) {
+                $out[ $g ] = $g;
+            }
+        }
+        ksort( $out );
+        return array_values( $out );
+    }
 
     public function get_controls() { return []; }
 
@@ -43,7 +60,9 @@ class Olobuild_HoursStrip_Tile extends Olobuild_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'olo-hoursstrip-' . wp_rand( 10000, 99999 );
 
-        $heading = "var(--olo-font-family-heading, 'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
+        // Il ripiego dei titoli è quello di tutte le tile (resolve_font_family('heading')): senza un carattere dei titoli
+        // scelto nel sito questa tile ripiegava su DM Sans mentre i titoli accanto andavano su Georgia (16 nov 2026).
+        $heading = $this->resolve_font_family( 'heading' );
         $body    = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
         // Vuoto = il mono del tema (--olo-font-family-mono), come dice l'inspector; il monospazio di sistema solo se il tema non ne ha uno.
         $mono_fb = "var(--olo-font-family-mono, ui-monospace,'SF Mono',Menlo,Consolas,monospace)";
@@ -76,12 +95,28 @@ class Olobuild_HoursStrip_Tile extends Olobuild_Tile_Base {
 
         $items = is_array( $s['items'] ) ? $s['items'] : [];
 
+        // Oggi in evidenza: la fascia i cui giorni comprendono oggi, nel fuso orario del sito (gli orari sono quelli del
+        // negozio, non di chi guarda). Lo decide lo script qui sotto, così vale anche da una pagina in cache.
+        $oggi_on  = ! empty( $s['evidenzia_oggi'] );
+        $oggi_tx  = trim( (string) ( $s['scritta_oggi'] ?? '' ) );
+        $oggi_col = $this->safe_color_css( (string) ( $s['colore_oggi'] ?? '' ) ) ?: 'var(--olo-color-primary, #e1474f)';
+        $oggi_txc = Olobuild_Tile_Utils::testo_su_fondo( $oggi_col, 'var(--olo-color-primary-contrast, #ffffff)' ) ?: 'var(--olo-color-primary-contrast, #ffffff)';
+
         $band_style = 'padding:' . $pad_css . ';';
         if ( $band_brd ) $band_style .= 'border-top:1px solid ' . $line . ';border-bottom:1px solid ' . $line . ';';
         // Spazio fra le righe a ogni larghezza (prima solo nel ripiego sotto i 760 px: con le colonne scelte per
         // un dispositivo, o con più voci che colonne, le righe restavano incollate).
         $grid_style = 'display:grid;grid-template-columns:repeat(' . $cols . ',minmax(0,1fr));row-gap:26px;';
-        $cell_style = 'display:flex;flex-direction:column;gap:7px;padding:4px 24px;';
+        // Cella come contenitore (olo-hs-cella): l'orario scende a gradini con la sua larghezza, mai oltre la dimensione
+        // scelta, e il padding laterale cresce con la colonna. In una colonna a metà pagina «10 — 13» andava su tre righe
+        // e «Chiuso» usciva dalla cella (16 nov 2026).
+        $cell_style = 'display:flex;flex-direction:column;gap:7px;padding:4px clamp(8px, 8%, 24px);container-type:inline-size;container-name:olo-hs-cella;';
+        $gradini    = '';
+        foreach ( [ 200 => 52, 160 => 42, 130 => 34, 105 => 27, 80 => 21 ] as $largo => $px ) {
+            if ( (int) $t_size > $px ) {
+                $gradini .= '@container olo-hs-cella (max-width:' . (int) $largo . 'px){.' . $uid . ' .olo-hoursstrip__time{font-size:' . (int) $px . 'px !important;}}';
+            }
+        }
 
         // Colonne in vigore a ogni larghezza, nell'ordine in cui il CSS qui sotto le applica: quelle scelte per
         // dispositivo (css_per_dispositivo, la più stretta vince) e, dove non ce ne sono, i ripieghi fissi
@@ -109,18 +144,31 @@ class Olobuild_HoursStrip_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-hoursstrip <?php echo esc_attr( $uid ); ?>" style="<?php echo esc_attr( $band_style ); ?>">
+        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-hoursstrip <?php echo esc_attr( $uid ); ?>" style="<?php echo esc_attr( $band_style ); ?>">
             <div class="olo-hoursstrip__grid" style="<?php echo esc_attr( $grid_style ); ?>">
                 <?php foreach ( $items as $idx => $it ) :
                     $day  = $it['day'] ?? '';
                     $time = $it['time'] ?? '';
                     $note = $it['note'] ?? '';
+                    $sett = $oggi_on ? self::giorni( $it['settimana'] ?? '' ) : [];
+                    // Il trattino resta attaccato a ciò che lo precede: se la riga non basta va a capo DOPO il trattino
+                    // («10 —» / «13», «Lun —» / «Ven»), mai con il trattino da solo su una riga.
+                    $lega = function ( $txt ) {
+                        return preg_replace( '/\s+([\x{2014}\x{2013}])\s+/u', "\u{00A0}$1 ", (string) $txt );
+                    };
                 ?>
-                    <div class="olo-hoursstrip__cell" style="<?php echo esc_attr( $cell_style ); ?>">
-                        <?php if ( $day !== '' ) : ?>
-                            <div class="olo-hoursstrip__day" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $d_size; ?>px;text-transform:uppercase;letter-spacing:0.06em;color:<?php echo esc_attr( $d_color ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.day'; ?>"><?php echo esc_html( $day ); ?></div>
+                    <div class="olo-hoursstrip__cell" style="<?php echo esc_attr( $cell_style ); ?>"<?php echo $sett ? ' data-settimana="' . esc_attr( implode( ',', $sett ) ) . '"' : ''; ?>>
+                        <?php if ( $day !== '' || $sett ) : ?>
+                            <div class="olo-hoursstrip__testa">
+                                <?php if ( $day !== '' ) : ?>
+                                <div class="olo-hoursstrip__day" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $d_size; ?>px;text-transform:uppercase;letter-spacing:0.06em;color:<?php echo esc_attr( $d_color ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.day'; ?>"><?php echo esc_html( $lega( $day ) ); ?></div>
+                                <?php endif; ?>
+                                <?php if ( $sett && '' !== $oggi_tx ) : ?>
+                                <span class="olo-hoursstrip__oggi" hidden><?php echo esc_html( $oggi_tx ); ?></span>
+                                <?php endif; ?>
+                            </div>
                         <?php endif; ?>
-                        <div class="olo-hoursstrip__time" style="font-family:<?php echo esc_attr( $tfam ); ?>;font-weight:<?php echo esc_attr( $t_wt ); ?>;font-size:<?php echo (int) $t_size; ?>px;line-height:1.05;letter-spacing:-0.01em;color:<?php echo esc_attr( $t_color ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.time'; ?>"><?php echo esc_html( $time ); ?></div>
+                        <div class="olo-hoursstrip__time" style="font-family:<?php echo esc_attr( $tfam ); ?>;font-weight:<?php echo esc_attr( $t_wt ); ?>;font-size:<?php echo (int) $t_size; ?>px;line-height:1.05;letter-spacing:-0.01em;color:<?php echo esc_attr( $t_color ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.time'; ?>"><?php echo esc_html( $lega( $time ) ); ?></div>
                         <?php if ( $note !== '' ) : ?>
                             <div class="olo-hoursstrip__note" style="font-size:<?php echo (int) $n_size; ?>px;line-height:1.4;color:<?php echo esc_attr( $n_color ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.note'; ?>"><?php echo esc_html( $note ); ?></div>
                         <?php endif; ?>
@@ -130,6 +178,18 @@ class Olobuild_HoursStrip_Tile extends Olobuild_Tile_Base {
         </div>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from the internally generated $uid, the safe_color_css() whitelisted divider colour and integer column counts/thresholds. ?>
         <style>
+            <?php echo $gradini; ?>
+            <?php if ( $oggi_on ) : ?>
+            .<?php echo $uid; ?> .olo-hoursstrip__oggi { position: absolute; top: 0; left: clamp(8px, 8%, 24px); transform: translateY(-50%); display: inline-flex; align-items: center; padding: 0.15em 0.8em; border-radius: 99em; background: <?php echo $oggi_col; ?>; color: <?php echo $oggi_txc; ?>; font: 600 10px/1.5 <?php echo $mono; ?>; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
+            .<?php echo $uid; ?> .olo-hoursstrip__oggi[hidden] { display: none; }
+            <?php // La fascia di oggi: un fondo tenue arrotondato che sporge di poco sopra e sotto (margine negativo: la
+                  // banda non cambia altezza) e niente divisori accanto, che taglierebbero il fondo. La scritta sta a
+                  // cavallo del bordo superiore, allineata al testo: accanto al giorno, in una cella stretta andava a capo
+                  // e abbassava l'orario rispetto alle altre fasce. ?>
+            .<?php echo $uid; ?> .olo-hoursstrip__cell.is-oggi { position: relative; background: color-mix(in srgb, <?php echo $oggi_col; ?> 8%, transparent); border-radius: 0.75em; margin: -0.75em 0; padding-top: 1em !important; padding-bottom: 1em !important; border-left-color: transparent !important; }
+            .<?php echo $uid; ?> .olo-hoursstrip__cell.is-oggi + .olo-hoursstrip__cell { border-left-color: transparent !important; }
+            .<?php echo $uid; ?> .is-oggi .olo-hoursstrip__day { color: <?php echo $oggi_col; ?> !important; }
+            <?php endif; ?>
             <?php if ( $dividers ) : ?>
             .<?php echo $uid; ?> .olo-hoursstrip__cell:not(:nth-child(<?php echo (int) $cols; ?>n+1)) { border-left: 1px solid <?php echo $line; ?>; }
             <?php endif; ?>
@@ -158,6 +218,52 @@ class Olobuild_HoursStrip_Tile extends Olobuild_Tile_Base {
             ?>
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+        <?php if ( $oggi_on ) :
+            $tz  = function_exists( 'wp_timezone_string' ) ? (string) wp_timezone_string() : '';
+            $cfg = [
+                'tz'  => ( '' !== $tz && false !== strpos( $tz, '/' ) ) ? $tz : ( 'UTC' === $tz ? 'UTC' : '' ),
+                'off' => (int) round( wp_timezone()->getOffset( new DateTime( 'now', wp_timezone() ) ) / 60 ),
+            ];
+            ?>
+        <script>
+        (function(){
+            var el = document.getElementById(<?php echo wp_json_encode( $uid ); ?>);
+            if (!el) { return; }
+            var C = <?php echo wp_json_encode( $cfg ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON da wp_json_encode() del fuso del sito ?>;
+            function giorno() {
+                var d = new Date();
+                try {
+                    if (C.tz) {
+                        var o = {};
+                        new Intl.DateTimeFormat('en-US', { timeZone: C.tz, weekday: 'short' }).formatToParts(d).forEach(function (p) { o[p.type] = p.value; });
+                        var w = { Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6, Sun: 7 }[o.weekday];
+                        if (w) { return w; }
+                    }
+                } catch (e) {}
+                var s = new Date(d.getTime() + (C.off + d.getTimezoneOffset()) * 60000);
+                return s.getDay() === 0 ? 7 : s.getDay();
+            }
+            function segna() {
+                var w = ',' + giorno() + ',';
+                var celle = el.querySelectorAll('.olo-hoursstrip__cell');
+                for (var i = 0; i < celle.length; i++) {
+                    var gg = celle[i].getAttribute('data-settimana');
+                    var oggi = gg ? (',' + gg + ',').indexOf(w) !== -1 : false;
+                    celle[i].classList.toggle('is-oggi', oggi);
+                    var b = celle[i].querySelector('.olo-hoursstrip__oggi');
+                    if (b) { b.hidden = !oggi; }
+                }
+            }
+            segna();
+            // A mezzanotte la fascia cambia anche a pagina aperta; il controllo si ferma quando la tile non c'è più
+            // (nel builder ogni modifica la ridisegna).
+            var giro = setInterval(function () {
+                if (!el.isConnected) { clearInterval(giro); return; }
+                segna();
+            }, 60000);
+        })();
+        </script>
+        <?php endif; ?>
         <?php
         return ob_get_clean();
     }

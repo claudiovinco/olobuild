@@ -15,7 +15,7 @@ const R = (n) => ({ tl: n, tr: n, br: n, bl: n, linked: true });
  */
 export default {
   type: 'product-cards',
-  name: t('Product Cards'),
+  name: t('Schede prodotto'),
   icon: 'dashicons-portfolio',
   category: 'layout',
 
@@ -87,49 +87,51 @@ export default {
   },
 
   // ═══ CONTENUTO ═══════════════════════════════════════════════
+  // 16 nov 2026 (episodio 29): nomi in italiano (Card, Brand label, Badge testo, CTA testo, CTA URL, Label outline…),
+  // spiegazioni nelle (i), la foto in alto nel Contenuto (è il prodotto, non uno stile: stava nello specchio dello
+  // Stile), «Scheda» nuova coi suoi valori (la chiave era `defaults`, che il ripetitore non legge) e lo Stile nelle zone.
   fields: [
-    { type: 'separator', label: t('Product cards') },
-    { key: 'items', label: t('Cards'), type: 'content-items', supportsDynamic: true,
-      itemLabel: t('Card'),
-      // Card aggiunta: colori dal tema (primario, tinta tenue), testi neutri in italiano.
-      defaults: { letter: 'A', letter_color: 'var(--olo-color-primary, #e1474f)', logo_image: '', top_bg: { type: 'solid', color: 'var(--olo-color-muted, #f6f7f9)' }, screenshot_label: '', brand_label: t('Categoria'), brand_color: 'var(--olo-color-primary, #e1474f)', show_badge: false, badge_text: '', badge_bg: 'var(--olo-color-primary, #e1474f)', badge_color: 'var(--olo-color-primary-contrast, #ffffff)', title: t('Nuovo '), title_accent: t('prodotto'), title_accent_italic: true, description: t('Una riga che racconta il prodotto.'), price: '', cta_text: t('Scopri'), cta_url: '#' },
+    { type: 'separator', label: t('Schede') },
+    { key: 'items', label: t('Schede'), type: 'content-items', supportsDynamic: true,
+      itemLabel: t('Scheda'), etichettaDa: 'title', miniaturaDa: 'logo_image',
+      // Scheda aggiunta: colori dal tema (primario, tinta tenue), testi neutri in italiano.
+      newItemDefaults: { letter: 'A', letter_color: 'var(--olo-color-primary, #e1474f)', logo_image: '', top_bg: { type: 'solid', color: 'var(--olo-color-muted, #f6f7f9)' }, screenshot_label: '', brand_label: t('Categoria'), brand_color: 'var(--olo-color-primary, #e1474f)', show_badge: false, badge_text: '', badge_bg: 'var(--olo-color-primary, #e1474f)', badge_color: 'var(--olo-color-primary-contrast, #ffffff)', title: t('Nuovo '), title_accent: t('prodotto'), title_accent_italic: true, description: t('Una riga che racconta il prodotto.'), price: '', cta_text: t('Scopri'), cta_url: '#' },
       itemFields: [
-        { key: 'letter',              label: t('Lettera monogramma'), type: 'text' },
-        { key: 'logo_image',          label: t('Logo prodotto (sostituisce la lettera)'), type: 'image' },
+        { key: 'top_bg',              label: t('Sfondo / media in alto'), type: 'background', showParallax: false,
+          description: t('La metà alta della scheda: la foto del prodotto, o una tinta o una sfumatura con la lettera o il logo sopra.') },
         { key: 'hover_image',         label: t('Seconda foto al passaggio'), type: 'image',
           description: t('Col mouse sopra la scheda, la foto lascia il posto a questa (un altro lato del prodotto, il dettaglio, l\'abbinamento). Sul telefono resta la prima.') },
-        { key: 'screenshot_label',    label: t('Label outline (metà alta)'), type: 'text' },
-        { key: 'brand_label',         label: t('Brand label'),        type: 'text' },
-        { key: 'show_badge',          label: t('Mostra badge pill'),  type: 'toggle' },
-        { key: 'badge_text',          label: t('Badge testo'),        type: 'text' },
-        { key: 'title',               label: t('Titolo (base)'),      type: 'text' },
-        { key: 'title_accent',        label: t('Suffisso titolo'),    type: 'text' },
+        { key: 'letter',              label: t('Lettera'), type: 'text',
+          description: t('Una lettera grande sopra lo sfondo in alto, come un monogramma. Vuota: niente.') },
+        { key: 'logo_image',          label: t('Logo'), type: 'image',
+          description: t('Al posto della lettera.') },
+        { key: 'screenshot_label',    label: t('Scritta in alto'), type: 'text',
+          description: t('Una piccola scritta a filo, sopra la foto o la lettera.') },
+        { key: 'brand_label',         label: t('Marca o categoria'), type: 'text' },
+        { key: 'show_badge',          label: t('Mostra il badge'),  type: 'toggle' },
+        { key: 'badge_text',          label: t('Testo del badge'),  type: 'text', condition: { field: 'show_badge', op: 'eq', value: true } },
+        { key: 'title',               label: t('Titolo'),      type: 'text' },
+        { key: 'title_accent',        label: t('Seconda parte del titolo'), type: 'text',
+          description: t('Attaccata al titolo e, se vuoi, in corsivo (Stile → Ogni scheda).') },
         { key: 'description',         label: t('Descrizione'),        type: 'editor', mode: 'inline' },
         { key: 'price',               label: t('Prezzo'),             type: 'text' },
-        { key: 'cta_text',            label: t('CTA testo'),          type: 'text' },
-        { key: 'cta_url',             label: t('CTA URL'),            type: 'link' },
+        { key: 'cta_text',            label: t('Testo del pulsante'), type: 'text' },
+        { key: 'cta_url',             label: t('Collegamento'),       type: 'link' },
       ],
     },
 
     { type: 'separator', label: t('Visibilità') },
-    { key: 'show_screenshot_label', label: t('Mostra label outline (metà alta)'), type: 'toggle' },
-    { key: 'cta_arrow',             label: t('Mostra freccia → al CTA'),         type: 'toggle' },
+    { key: 'show_screenshot_label', label: t('Mostra la scritta in alto'), type: 'toggle' },
+    { key: 'cta_arrow',             label: t('Freccia accanto al pulsante'), type: 'toggle' },
   ],
 
   // ═══ STILE ════════════════════════════════════════════════════
+  // Zone: Aspetto · Testo · Forma · Disposizione · Ogni scheda.
   styleFields: [
-    { type: 'separator', label: t('Griglia') },
-    { key: 'columns', label: t('Numero colonne'), type: 'range', min: 1, max: 6, step: 1 },
-    { key: 'columns_mobile', label: t('Colonne sul telefono'), type: 'range', min: 1, max: 2, step: 1,
-      description: t('Sotto i 700 px. Due vanno bene per schede brevi (copertine, prodotti col solo nome e il prezzo).') },
-    { key: 'gap',     label: t('Gap card'), type: 'range', min: 0, max: 60, step: 2 },
-
-    { type: 'separator', label: t('Card') },
-    { key: 'card_bg',      label: t('Sfondo card'),     type: 'background', showParallax: false },
+    { type: 'separator', label: t('Aspetto') },
+    { key: 'card_bg',      label: t('Sfondo scheda'),     type: 'background', showParallax: false },
     { key: 'card_color',   label: t('Colore testo'),    type: 'color' },
-    { key: 'card_padding', label: t('Padding card'), type: 'spacing', min: 0, max: 80 },
-    withHover({ key: 'card_radius', label: t('Raggio card'), type: 'border-radius' }, { hoverKey: 'card_radius_hover', hoverDurationKey: 'card_radius_hover_duration' }),
-    { key: 'card_shadow', label: t('Ombra card'), type: 'select', options: [
+    { key: 'card_shadow', label: t('Ombra scheda'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
       { value: 'sm',   label: t('Leggera') },
       { value: 'md',   label: t('Media') },
@@ -140,51 +142,57 @@ export default {
     { key: 'card_shadow_custom', label: t('Ombra personalizzata'), type: 'box-shadow',
       legacyKeys: { h: 'card_shadow_h', v: 'card_shadow_v', blur: 'card_shadow_blur', spread: 'card_shadow_spread', color: 'card_shadow_color', inset: 'card_shadow_inset' },
       condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_border', label: t('Bordo card'), type: 'border' },
-
-    { key: 'items', type: 'content-items', label: t('Cards'), itemLabel: t('Card'), etichettaDa: 'title', miniaturaDa: 'logo_image', itemFields: [
-        { key: 'letter_color',        label: t('Colore lettera'),     type: 'color' },
-        { key: 'top_bg',              label: t('Sfondo metà alta'),   type: 'background', showParallax: false },
-        { key: 'brand_color',         label: t('Colore brand'),       type: 'color' },
-        { key: 'badge_bg',            label: t('Badge sfondo'),       type: 'color' },
-        { key: 'badge_color',         label: t('Badge testo colore'), type: 'color' },
-        { key: 'title_accent_italic', label: t('Suffisso italico'),   type: 'toggle' },
-    ] },
-    { type: 'separator', label: t('Metà alta (lettera)') },
-    // Senza voce «Auto»: la metà alta è un riquadro con sfondo (colore o immagine),
-    // non un <img>, e senza aspect-ratio non avrebbe nessuna altezza — la card si
-    // schiaccerebbe sul testo. I cinque rapporti di prima sono tutti nel set canonico.
-    { key: 'top_aspect_ratio', label: t('Proporzioni'), type: 'select',
-      options: ratioOptions({ auto: false }) },
-    { key: 'top_padding', label: t('Padding'), type: 'spacing', min: 0, max: 80 },
-    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-
-    { type: 'typography', label: t('Lettera'), responsiveKeys: [], keys: { size: 'letter_size', italic: 'letter_italic', family: 'letter_font_family' }, sizeMin: 40, sizeMax: 280, sizeStep: 4 },
-    { key: 'logo_height',   label: t('Altezza logo'),       type: 'range', min: 16, max: 160, step: 2 },
-
-    { key: 'letter_align', label: t('Allineamento lettera'), type: 'select', options: [
-      { value: 'left',   label: t('Sinistra') },
-      { value: 'center', label: t('Centrato') },
-      { value: 'right',  label: t('Destra') },
-    ]},
-    { key: 'screenshot_label_color', label: t('Colore label outline'), type: 'color' },
-
-    { type: 'separator', label: t('Metà bassa') },
-    { type: 'typography', label: t('Brand'), responsiveKeys: [], keys: { size: 'brand_size', letterSpacing: 'brand_letter_spacing' }, sizeMin: 10, sizeMax: 22 },
-
-    { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { size: 'title_size', weight: 'title_weight', family: 'title_font_family' }, sizeMin: 16, sizeMax: 80, sizeStep: 2 },
-
-    { type: 'typography', label: t('Descrizione'), responsiveKeys: [], keys: { size: 'description_size' }, sizeMin: 11, sizeMax: 22 },
-    // Vuoto = colore del testo della card.
-    { type: 'typography', label: t('Prezzo'), responsiveKeys: [], keys: { size: 'price_size', color: 'price_color' }, sizeMin: 12, sizeMax: 40 },
-    { type: 'typography', label: t('Pulsante'), responsiveKeys: [], keys: { size: 'cta_size' }, sizeMin: 9, sizeMax: 16 },
-
-    { type: 'separator', label: t('Hover card') },
-    { key: 'card_hover_effect', label: t('Effetto hover'), type: 'select', options: [
+    { key: 'card_border', label: t('Bordo scheda'), type: 'border' },
+    { key: 'card_hover_effect', label: t('Al passaggio'), type: 'select', options: [
       { value: 'none',  label: t('Nessuno') },
       { value: 'lift',  label: t('Sollevamento') },
       { value: 'scale', label: t('Scala') },
       { value: 'tilt',  label: t('Inclinazione 3D') },
     ]},
+    { key: 'screenshot_label_color', label: t('Colore scritta in alto'), type: 'color',
+      condition: { field: 'show_screenshot_label', op: 'neq', value: false } },
+
+    { type: 'separator', label: t('Testo') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { type: 'typography', label: t('Lettera'), responsiveKeys: [], keys: { size: 'letter_size', italic: 'letter_italic', family: 'letter_font_family' }, sizeMin: 40, sizeMax: 280, sizeStep: 4 },
+    { type: 'typography', label: t('Marca'), responsiveKeys: [], keys: { size: 'brand_size', letterSpacing: 'brand_letter_spacing' }, sizeMin: 10, sizeMax: 22,
+      letterSpacingUnit: 'em' },   // il renderer la scrive in em (0–0,3): il controllo la mostrava in px
+    { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { size: 'title_size', weight: 'title_weight', family: 'title_font_family' }, sizeMin: 16, sizeMax: 80, sizeStep: 2 },
+    { type: 'typography', label: t('Descrizione'), responsiveKeys: [], keys: { size: 'description_size' }, sizeMin: 11, sizeMax: 22 },
+    // Vuoto = colore del testo della scheda.
+    { type: 'typography', label: t('Prezzo'), responsiveKeys: [], keys: { size: 'price_size', color: 'price_color' }, sizeMin: 12, sizeMax: 40 },
+    { type: 'typography', label: t('Pulsante'), responsiveKeys: [], keys: { size: 'cta_size' }, sizeMin: 9, sizeMax: 16 },
+
+    { type: 'separator', label: t('Forma') },
+    { key: 'card_padding', label: t('Padding scheda'), type: 'spacing', min: 0, max: 80 },
+    withHover({ key: 'card_radius', label: t('Raggio scheda'), type: 'border-radius' }, { hoverKey: 'card_radius_hover', hoverDurationKey: 'card_radius_hover_duration' }),
+    // Senza voce «Auto»: la metà alta è un riquadro con sfondo (colore o immagine),
+    // non un <img>, e senza aspect-ratio non avrebbe nessuna altezza — la card si
+    // schiaccerebbe sul testo. I cinque rapporti di prima sono tutti nel set canonico.
+    { key: 'top_aspect_ratio', label: t('Proporzioni in alto'), type: 'select',
+      options: ratioOptions({ auto: false }) },
+    { key: 'top_padding', label: t('Padding in alto'), type: 'spacing', min: 0, max: 80 },
+    { key: 'logo_height',   label: t('Altezza logo'),       type: 'range', min: 16, max: 160, step: 2, unit: 'px' },
+
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1,
+      description: t('Al massimo: se le schede resterebbero più strette di 220 px, in una colonna stretta della pagina, la griglia ne mette meno da sola.') },
+    { key: 'columns_mobile', label: t('Colonne sul telefono'), type: 'range', min: 1, max: 2, step: 1,
+      description: t('Sotto i 700 px. Due vanno bene per schede brevi (copertine, prodotti col solo nome e il prezzo).') },
+    { key: 'gap',     label: t('Gap'), type: 'range', min: 0, max: 60, step: 2, unit: 'px' },
+    { key: 'letter_align', label: t('Allineamento lettera'), type: 'select', options: [
+      { value: 'left',   label: t('Sinistra') },
+      { value: 'center', label: t('Centrato') },
+      { value: 'right',  label: t('Destra') },
+    ]},
+
+    { type: 'separator', label: t('Ogni scheda') },
+    { key: 'items', type: 'content-items', label: t('Schede'), itemLabel: t('Scheda'), etichettaDa: 'title', miniaturaDa: 'logo_image', itemFields: [
+        { key: 'letter_color',        label: t('Colore lettera'),     type: 'color' },
+        { key: 'brand_color',         label: t('Colore marca'),       type: 'color' },
+        { key: 'badge_bg',            label: t('Sfondo badge'),       type: 'color' },
+        { key: 'badge_color',         label: t('Colore testo badge'), type: 'color' },
+        { key: 'title_accent_italic', label: t('Seconda parte in corsivo'), type: 'toggle' },
+    ] },
   ],
 };

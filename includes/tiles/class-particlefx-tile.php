@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'particlefx';
-    protected $name     = 'Particelle (ParticleFX)';
+    protected $name     = 'Particelle';
     protected $icon     = 'dashicons-art';
     protected $category = 'atmosphere';
     protected $defaults = [
@@ -127,7 +127,9 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
         $s_y      = max( 0, min( 100, floatval( $s['sparks_y'] ?? 70 ) ) ) / 100;
         $s_dir    = max( -180, min( 180, floatval( $s['sparks_dir'] ?? 35 ) ) );
         $s_spread = max( 10, min( 180, floatval( $s['sparks_spread'] ?? 50 ) ) );
-        $connect  = ! empty( $s['connect_lines'] );
+        // Le linee della costellazione solo con le Stelle (16 nov 2026, ep. 32): passando dalla costellazione di
+        // partenza alla neve o ai petali restavano linee fra i fiocchi. Nessun tema le usava con altri tipi.
+        $connect  = ! empty( $s['connect_lines'] ) && 'stars' === $preset;
         $conn_d   = max( 20,  min( 300,   intval( $s['connect_distance'] ) ) );
         $hover    = ! empty( $s['interact_on_hover'] );
         // Pioggia (1.4.957): con «Reagisci al cursore» il puntatore è un ombrello largo così (metà della larghezza), sotto non piove.
@@ -211,6 +213,36 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
             if ( canvas.dataset.oloPfx ) { return; }   // idempotente: una init per istanza
             canvas.dataset.oloPfx = '1';
 
+            // Nel builder la tile si ridisegna a ogni modifica: il suo involucro sparisce, ma il canvas (spostato nella
+            // sezione) restava lì senza lo <style> della tile, cioè nel flusso: la sezione raddoppiava d'altezza a ogni
+            // ritocco e il canvas diventava una macchia (16 nov 2026, ep. 32). Ora lo stile essenziale sta sull'elemento
+            // e un canvas la cui tile non c'è più si smonta (ciclo fermo, osservatori scollegati, canvas tolto).
+            var casa = canvas.parentNode;
+            canvas.style.position = 'absolute';
+            canvas.style.inset = '0';
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            canvas.style.display = 'block';
+            var smontata = false, strato = null;
+            function smonta() {
+                if ( smontata ) { return; }
+                smontata = true;
+                stop();
+                if ( ro ) { ro.disconnect(); }
+                if ( io ) { io.disconnect(); }
+                if ( canvas.parentNode ) { canvas.parentNode.removeChild( canvas ); }
+                if ( strato && strato.parentNode ) { strato.parentNode.removeChild( strato ); }
+            }
+            function orfana() {
+                if ( casa && ! casa.isConnected ) { smonta(); return true; }
+                return smontata;
+            }
+            canvas.__oloPfxOrfana = orfana;
+            var altri = document.querySelectorAll( 'canvas.olo-particles' );
+            for ( var ai = 0; ai < altri.length; ai++ ) {
+                if ( altri[ ai ] !== canvas && altri[ ai ].__oloPfxOrfana ) { altri[ ai ].__oloPfxOrfana(); }
+            }
+
             var CFG = <?php echo wp_json_encode( $cfg ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JSON in <script> built by wp_json_encode() from clamped numerics, whitelisted enums and safe_color_css()'d colors. ?>;
 
             // Posizionamento. "page" = overlay fisso su tutta la finestra, SOPRA il contenuto
@@ -230,6 +262,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
                 layer.appendChild( canvas );
                 canvas.style.pointerEvents = 'none';   // su tutta la pagina non blocca mai i click
                 host = layer;
+                strato = layer;
             } else if ( CFG.scope === 'over' ) {
                 // Sopra il contenuto della sezione: in fondo alla sezione, sopra il contenitore del
                 // contenuto, trasparente ai click (pointer-events none: si clicca ciò che c'è sotto).
@@ -415,6 +448,12 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
                 var n = targetCount();
                 for ( var i = 0; i < n; i++ ) {
                     var p = makeOne(); placeY( p );
+                    // neve, petali, palloni e bolle: la scena parte già in corso, a ogni altezza. Nascevano tutti fuori
+                    // dal campo e per qualche secondo non si vedeva niente (nel builder dopo ogni ritocco; su tutta la
+                    // pagina, partendo sopra il documento, arrivavano in vista dopo molto). 16 nov 2026, ep. 32.
+                    if ( CFG.preset === 'snow' || CFG.preset === 'petals' || CFG.preset === 'soccer' || CFG.preset === 'bubbles' ) {
+                        p.y = pageMode ? rnd( 0, FH ) : rnd( 0, H );
+                    }
                     // braci: la scena parte già accesa, a ogni altezza e a ogni punto della loro vita
                     if ( CFG.preset === 'embers' ) { if ( ! pageMode ) { p.y = rnd( 0, H ); } p.life = rnd( .1, 1 ); }
                     parts.push( p );
@@ -678,6 +717,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
 
             function frame() {
                 if ( ! running ) { return; }
+                if ( orfana() ) { return; }
                 step();
                 drawAll();
                 if ( CFG.preset === 'confetti' && confettiDone() ) {
@@ -687,7 +727,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
             }
 
             function start() {
-                if ( running ) { return; }
+                if ( running || orfana() ) { return; }
                 if ( ! started ) { started = true; if ( ! parts.length ) { build(); } }
                 running = true;
                 if ( reduce ) {
@@ -708,6 +748,7 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
             // — tipico durante lo scroll quando i tile lazy si caricano — aggiorna il campo e
             // adatta il numero di particelle, ma quelle già in scena restano (niente reset).
             function reflow() {
+                if ( orfana() ) { return; }
                 var prevW = W, prevH = H;
                 resize();
                 if ( CFG.preset === 'confetti' ) { return; }   // burst one-shot: non rigenerare

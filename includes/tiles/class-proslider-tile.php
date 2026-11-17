@@ -1060,8 +1060,38 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         return $fuori ? 'calc(' . $n . 'px * var(--mps-k, 1))' : $n . 'px';
     }
 
+    /**
+     * Il carattere più piccolo che un testo può avere SULLO SCHERMO (17 nov 2026). Lo Slider Pro riduce la tela col
+     * dispositivo (a 820 px la tela del tablet è a 0,8, a 390 quella del telefono a 0,61): i testi disegnati per la
+     * tela finivano a 8–12 px. Paragrafi (testi da 40 caratteri, non in maiuscolo) almeno 14 px, le altre scritte e
+     * i pulsanti almeno 11. 0 = nessun minimo (altri tipi di livello).
+     */
+    private function minimo_leggibile( $layer, $type ) {
+        if ( 'button' === $type ) {
+            return 11;
+        }
+        if ( 'text' !== $type ) {
+            return 0;
+        }
+        $testo     = trim( wp_strip_all_tags( (string) ( $layer['content'] ?? '' ) ) );
+        $maiuscolo = 'uppercase' === ( $layer['textTransform'] ?? '' );
+        return ( mb_strlen( $testo ) >= 40 && ! $maiuscolo ) ? 14 : 11;
+    }
+
+    /**
+     * Il carattere del livello col minimo leggibile: dentro la tela scalata --mps-k vale 1 e --mps-den è la scala
+     * (olo-proslider.css: un minimo di 14 px sullo schermo è 14 / scala sulla tela); fuori dalla tela (livelli con
+     * fusione) --mps-k è la scala e --mps-den non c'è (1). La scala la scrive il runtime (--mps-scala).
+     */
+    private function carattere_leggibile( $n, $minimo ) {
+        $base = 'calc(' . $n . 'px * var(--mps-k, 1))';
+        return $minimo ? 'max(' . $base . ', calc(' . $minimo . 'px / var(--mps-den, 1)))' : $base;
+    }
+
     private function render_layer_content( $layer, $type, $fuori = false ) {
-        $font_size   = $this->px_livello( absint( $layer['fontSize'] ?? 24 ), $fuori );
+        $font_size   = in_array( $type, [ 'text', 'button' ], true )
+            ? $this->carattere_leggibile( absint( $layer['fontSize'] ?? 24 ), $this->minimo_leggibile( $layer, $type ) )
+            : $this->px_livello( absint( $layer['fontSize'] ?? 24 ), $fuori );
         $font_weight = esc_attr( $layer['fontWeight'] ?? '700' );
         $font_style  = esc_attr( $layer['fontStyle'] ?? 'normal' );
         $color       = $this->safe_color_css( $layer['color'] ?? '#ffffff' );
@@ -1706,7 +1736,11 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                         $rules .= '#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '{' . $props . '}';
                     }
                     if ( $fs_ov > 0 ) {
-                        $rules .= '#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '>:is(h1,h2,h3,h4,h5,h6,p,span,div,a),#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '>.mps-mp>:is(h1,h2,h3,h4,h5,h6,p,span,div,a){font-size:calc(' . $fs_ov . 'px * var(--mps-k, 1))!important}';
+                        $tipo_ov = (string) ( $layer['type'] ?? 'text' );
+                        $fs_css  = in_array( $tipo_ov, [ 'text', 'button' ], true )
+                            ? $this->carattere_leggibile( $fs_ov, $this->minimo_leggibile( $layer, $tipo_ov ) )
+                            : 'calc(' . $fs_ov . 'px * var(--mps-k, 1))';
+                        $rules .= '#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '>:is(h1,h2,h3,h4,h5,h6,p,span,div,a),#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '>.mps-mp>:is(h1,h2,h3,h4,h5,h6,p,span,div,a){font-size:' . $fs_css . '!important}';
                     }
                     if ( $ta_ov ) {
                         $rules .= '#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . ',#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '>:is(h1,h2,h3,h4,h5,h6,p,span,div,a),#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '>.mps-mp>:is(h1,h2,h3,h4,h5,h6,p,span,div,a){text-align:' . $ta_ov . '!important}';

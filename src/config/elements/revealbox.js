@@ -5,11 +5,9 @@ import { t } from '@/i18n';
 
 /**
  * Tile RevealBox — split CONTENUTO/STILE.
- *   fields[]      → effetto reveal (type+perspective), sfondo globale (media),
- *                   zona visibile (top_media+top_content+top_icon), zona rivelata (bottom_media+bottom_content+bottom_icon+cta),
- *                   reveal_amount per slide
- *   styleFields[] → visible_height, icon size/color, content tipografia, overlay colori,
- *                   transition speed/easing, border radius, padding, border
+ *   fields[]      → le due zone (icona, testo, sfondo/media) e il comportamento (effetto, scorrimento, durata, andamento)
+ *   styleFields[] → Aspetto (sfondo comune) · Testo · Zona visibile · Zona rivelata (velo, icona, allineamenti, padding)
+ *                   · Forma (altezza, prospettiva 3D, raggio, bordo)
  *
  * Sfondi UNIFICATI sul pannello media universale (type:'background'), PER ZONA:
  *   - `media`        → sfondo globale dietro entrambe le zone (ex image_url/image_position/image_size)
@@ -82,22 +80,25 @@ export default {
     ...borderEffectDefaults,
   },
 
-  // Come nasce dalla palette: la foto di una tavola apparecchiata con il nome della serata su un
-  // velo leggero; al passaggio del mouse il riquadro scorre in su e svela, su una seconda foto
-  // velata, il menu con il prezzo. Raggio morbido e transizione fluida.
+  // Come nasce dalla palette: la foto di una tavola apparecchiata col nome della serata sulla sfumatura
+  // scura in basso; al passaggio del mouse il riquadro scorre in su e svela, sul colore scuro del sito,
+  // il menu con il prezzo. Raggio morbido e transizione fluida.
   partenza: {
     visible_height: '340',
     border_radius: { tl: 16, tr: 16, br: 16, bl: 16 },
-    top_media: { type: 'image', image_url: demo('tavola'), image_size: 'cover', image_position: 'center center' },
-    // Paragrafi e non un titolo: i titoli (h1-h6) prendono il colore del testo della zona solo
-    // dove la zona ha un fondo (foto, velo o sfondo comune); i paragrafi lo prendono sempre.
-    top_content: t('<p><strong>La cena in terrazza</strong></p><p>Il venerdì e il sabato sera</p>'),
-    top_font_size: '20',
+    // La foto si vede piena: la sfumatura scura sale dal basso solo dove c'è il testo (mai un velo su tutta la foto).
+    top_media: { type: 'image', image_url: demo('tavola'), image_size: 'cover', image_position: 'center center',
+      overlay_color: 'var(--olo-color-dark, #16263d)', overlay_opacity: 80, overlay_fade: 'bottom', overlay_fade_reach: 60 },
+    // Titolo e riga sotto: i titoli (h1-h6) prendono il colore del testo della zona dove la zona ha un fondo
+    // (foto, velo o sfondo comune), qui sempre; prima erano due paragrafi uguali, senza gerarchia.
+    top_content: t('<h3>La cena in terrazza</h3><p>Il venerdì e il sabato sera</p>'),
+    top_font_size: '18',
     top_padding: '28',
-    overlay_opacity: '30',
-    bottom_media: { type: 'image', image_url: demo('piatti-alto'), image_size: 'cover', image_position: 'center center' },
-    bottom_content: t('<p><strong>Menu degustazione · 45 €</strong></p><p>Cinque portate con i vini abbinati, dalle 20. Prenota entro il giovedì.</p>'),
-    reveal_overlay_opacity: '70',
+    overlay_opacity: '0',
+    // La zona rivelata in tinta col colore scuro del sito: il menu si legge pieno, senza velare una seconda foto.
+    bottom_media: { type: 'solid', color: 'var(--olo-color-dark, #16263d)' },
+    bottom_content: t('<h3>Menu degustazione · 45 €</h3><p>Cinque portate con i vini abbinati, dalle 20. Prenota entro il giovedì.</p>'),
+    reveal_overlay_opacity: '0',
     bottom_align: 'center',
     bottom_justify: 'center',
     bottom_padding: '32',
@@ -113,50 +114,54 @@ export default {
     reveal_overlay_color: 'var(--olo-color-dark, #16263d)',
   },
 
+  // Zone come la Flip card (17 nov 2026). Contenuto: le due zone, ognuna col suo testo e il suo sfondo (il media
+  // principale della zona, prima in fondo allo Stile), poi il Comportamento. Stile: Aspetto · Testo · Zona visibile
+  // · Zona rivelata · Forma. Chiavi invariate.
   fields: [
-    { type: 'separator', label: t('Effetto reveal') },
-    { key: 'reveal_effect', label: t('Tipo effetto'), type: 'select', options: [
+    { type: 'separator', label: t('Zona visibile') },
+    { key: 'top_icon', label: t('Icona'), type: 'icon' },
+    { key: 'top_content', label: t('Testo'), type: 'editor', mode: 'block' },
+    { key: 'top_media', label: t('Sfondo / media'), type: 'background', showParallax: false },
+
+    { type: 'separator', label: t('Zona rivelata') },
+    { key: 'bottom_icon', label: t('Icona'), type: 'icon' },
+    { key: 'bottom_content', label: t('Testo'), type: 'editor', mode: 'block' },
+    { key: 'bottom_media', label: t('Sfondo / media'), type: 'background', showParallax: false },
+
+    { type: 'separator', label: t('Comportamento') },
+    { key: 'reveal_effect', label: t('Effetto'), type: 'select', options: [
       { value: 'slide-up', label: t('Scorrimento ↑') },
       { value: 'slide-down', label: t('Scorrimento ↓') },
       { value: 'slide-left', label: t('Scorrimento ←') },
       { value: 'slide-right', label: t('Scorrimento →') },
       { value: 'fade', label: t('Dissolvenza') },
-      { value: 'zoom-in', label: t('Zoom in') },
-      { value: 'zoom-out', label: t('Zoom out') },
+      { value: 'zoom-in', label: t('Si ingrandisce e svanisce') },
+      { value: 'zoom-out', label: t('Si rimpicciolisce e svanisce') },
       { value: 'flip-x', label: t('Giro 3D orizzontale') },
       { value: 'flip-y', label: t('Giro 3D verticale') },
-      { value: 'rotate-in', label: t('Rotazione') },
-    ]},
-    { key: 'reveal_amount', label: t('Scorrimento (px, 0 = auto)'), type: 'number', min: 0, max: 800, placeholder: t('auto'),
+      { value: 'rotate-in', label: t('Ruota e svanisce') },
+    ], description: t('La zona rivelata compare al passaggio del mouse, col tocco sul telefono (un altro tocco la richiude) e col tasto Tab da tastiera.') },
+    { key: 'reveal_amount', label: t('Scorrimento'), type: 'number', unit: 'px', min: 0, max: 800, placeholder: t('auto'),
+      description: t('Di quanto scorre la zona visibile. Vuoto o 0: tutta l’altezza del riquadro (a sinistra e a destra, tutta la larghezza).'),
       condition: { field: 'reveal_effect', operator: 'in', value: ['slide-up', 'slide-down', 'slide-left', 'slide-right'] } },
-
-
-
-    { type: 'separator', label: t('Zona visibile — Contenuto') },
-    { key: 'top_icon', label: t('Icona'), type: 'icon' },
-    { key: 'top_content', label: t('Contenuto visibile'), type: 'editor', mode: 'block' },
-
-
-    { type: 'separator', label: t('Zona rivelata — Contenuto') },
-    { key: 'bottom_icon', label: t('Icona'), type: 'icon' },
-    { key: 'bottom_content', label: t('Contenuto rivelato'), type: 'editor', mode: 'block' },
+    { key: 'transition_speed', label: t('Durata'), type: 'range', unit: 's', min: 0.1, max: 2, step: 0.1 },
+    { key: 'transition_easing', label: t('Andamento'), type: 'select', options: [
+      { value: 'ease', label: t('Morbido') },
+      { value: 'ease-in-out', label: t('Morbido ai due capi') },
+      { value: 'ease-out', label: t('Rallenta alla fine') },
+      { value: 'cubic-bezier(0.4,0,0.2,1)', label: t('Fluido') },
+      { value: 'linear', label: t('Costante') },
+    ]},
   ],
 
   styleFields: [
-    { type: 'separator', label: t('Effetto reveal — Aspetto') },
-    { key: 'perspective', label: t('Prospettiva 3D'), type: 'range', min: 200, max: 2000, step: 50,
-      condition: { field: 'reveal_effect', operator: 'in', value: ['flip-x', 'flip-y'] } },
+    { type: 'separator', label: t('Aspetto') },
+    { key: 'media', label: t('Sfondo comune'), type: 'background', showParallax: false,
+      description: t('Dietro tutte e due le zone: si vede dove una zona non ha uno sfondo suo.') },
 
-    { type: 'separator', label: t('Zona visibile — Aspetto') },
-    { key: 'visible_height', label: t('Altezza visibile'), type: 'range', min: 100, max: 800, step: 10 },
-    { key: 'top_icon_size', label: t('Dimensione icona'), type: 'range', min: 0.5, max: 6, step: 0.1,
-      condition: { field: 'top_icon', operator: '!=', value: '' } },
-    { key: 'top_icon_color', label: t('Colore icona'), type: 'color',
-      condition: { field: 'top_icon', operator: '!=', value: '' } },
-    { key: 'top_media', label: t('Zona alta — sfondo (immagine, video, gradiente…)'), type: 'background', showParallax: false },
-    { type: 'separator', label: t('Tipografia') },
+    { type: 'separator', label: t('Testo') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-    { type: 'typography', label: t('Zona Visibile'),
+    { type: 'typography', label: t('Testo della zona visibile'),
       responsiveKeys: [],
       keys: {
         size:  'top_font_size',
@@ -164,6 +169,23 @@ export default {
       },
       sizeMin: 10, sizeMax: 72,
     },
+    { type: 'typography', label: t('Testo della zona rivelata'),
+      responsiveKeys: [],
+      keys: {
+        size:  'bottom_font_size',
+        color: 'bottom_text_color',
+      },
+      sizeMin: 10, sizeMax: 72,
+    },
+
+    { type: 'separator', label: t('Zona visibile') },
+    { key: 'overlay_color', label: t('Colore del velo'), type: 'color' },
+    { key: 'overlay_opacity', label: t('Opacità del velo'), type: 'range', unit: '%', min: 0, max: 100 },
+    { key: 'top_icon_color', label: t('Colore icona'), type: 'color',
+      condition: { field: 'top_icon', operator: '!=', value: '' } },
+    { key: 'top_icon_size', label: t('Dimensione icona'), type: 'range', unit: '×', min: 0.5, max: 6, step: 0.1,
+      description: t('In proporzione: 1 = 20 px.'),
+      condition: { field: 'top_icon', operator: '!=', value: '' } },
     { key: 'top_align', label: t('Allineamento verticale'), type: 'select', options: [
       { value: 'flex-start', label: t('Alto') },
       { value: 'center', label: t('Centro') },
@@ -176,25 +198,14 @@ export default {
     ]},
     { key: 'top_padding', label: t('Padding'), type: 'spacing', min: 0, max: 120 },
 
-    { type: 'separator', label: t('Zona visibile — Overlay') },
-    { key: 'overlay_color', label: t('Colore overlay'), type: 'color' },
-    { key: 'overlay_opacity', label: t('Opacità overlay'), type: 'range', min: 0, max: 100 },
-
-    { type: 'separator', label: t('Zona rivelata — Aspetto') },
-    { key: 'bottom_icon_size', label: t('Dimensione icona'), type: 'range', min: 0.5, max: 6, step: 0.1,
-      condition: { field: 'bottom_icon', operator: '!=', value: '' } },
+    { type: 'separator', label: t('Zona rivelata') },
+    { key: 'reveal_overlay_color', label: t('Colore del velo'), type: 'color' },
+    { key: 'reveal_overlay_opacity', label: t('Opacità del velo'), type: 'range', unit: '%', min: 0, max: 100 },
     { key: 'bottom_icon_color', label: t('Colore icona'), type: 'color',
       condition: { field: 'bottom_icon', operator: '!=', value: '' } },
-    { key: 'bottom_media', label: t('Zona bassa — sfondo (immagine, video, gradiente…)'), type: 'background', showParallax: false },
-    { type: 'separator', label: t('Tipografia') },
-    { type: 'typography', label: t('Zona Rivelata'),
-      responsiveKeys: [],
-      keys: {
-        size:  'bottom_font_size',
-        color: 'bottom_text_color',
-      },
-      sizeMin: 10, sizeMax: 72,
-    },
+    { key: 'bottom_icon_size', label: t('Dimensione icona'), type: 'range', unit: '×', min: 0.5, max: 6, step: 0.1,
+      description: t('In proporzione: 1 = 20 px.'),
+      condition: { field: 'bottom_icon', operator: '!=', value: '' } },
     { key: 'bottom_align', label: t('Allineamento verticale'), type: 'select', options: [
       { value: 'flex-start', label: t('Alto') },
       { value: 'center', label: t('Centro') },
@@ -207,25 +218,14 @@ export default {
     ]},
     { key: 'bottom_padding', label: t('Padding'), type: 'spacing', min: 0, max: 120 },
 
-    { type: 'separator', label: t('Zona rivelata — Overlay') },
-    { key: 'reveal_overlay_color', label: t('Colore overlay rivelato'), type: 'color' },
-    { key: 'reveal_overlay_opacity', label: t('Opacità overlay rivelato'), type: 'range', min: 0, max: 100 },
-
-    { type: 'separator', label: t('Transizione') },
-    { key: 'transition_speed', label: t('Velocità transizione'), type: 'range', min: 0.1, max: 2, step: 0.1 },
-    { key: 'transition_easing', label: t('Curva transizione'), type: 'select', options: [
-      { value: 'ease', label: t('Ease') },
-      { value: 'ease-in-out', label: t('Ease In/Out') },
-      { value: 'ease-out', label: t('Ease Out') },
-      { value: 'cubic-bezier(0.4,0,0.2,1)', label: t('Smooth') },
-      { value: 'linear', label: t('Lineare') },
-    ]},
+    { type: 'separator', label: t('Forma') },
+    { key: 'visible_height', label: t('Altezza'), type: 'range', unit: 'px', min: 100, max: 800, step: 10 },
+    { key: 'perspective', label: t('Prospettiva 3D'), type: 'range', unit: 'px', min: 200, max: 2000, step: 50,
+      description: t('Più è bassa, più il giro è profondo e vicino.'),
+      condition: { field: 'reveal_effect', operator: 'in', value: ['flip-x', 'flip-y'] } },
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
     // `tile_padding` resta nei defaults ma non ha più un campo: nessun renderer lo leggeva
     // (il padding delle zone è nei loro «Padding», quello del riquadro nel Contenitore).
-
     ...borderFields(), // bordo, hover ed effetti sul riquadro (ora ha la classe $uid che il PHP usa)
-    { type: 'separator', label: t('Sfondo globale') },
-    { key: 'media', label: t('Sfondo entrambe le zone (immagine, video, gradiente…)'), type: 'background', showParallax: false },
   ],
 };

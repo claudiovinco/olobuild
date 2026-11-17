@@ -55,6 +55,8 @@
         :title="resetHint"
         @focus="onFocus"
         @input="onNum($event.target.value)"
+        @blur="applicaSospeso"
+        @keydown.enter="applicaSospeso"
         @dblclick="onReset"
         @wheel="onWheel"
         @keydown.esc="close"
@@ -197,7 +199,25 @@ function emitNumber(n) {
   else emit('update:modelValue', String(n));
 }
 
-function onNum(raw) { emitRaw(raw); }
+// Un numero SOTTO il minimo mentre si scrive è quasi sempre un numero a metà («4» di «46»): applicarlo subito faceva
+// passare il titolo per 18 px prima di arrivare a 46 (16 nov 2026). Si tiene in sospeso e si applica all'uscita dal
+// campo o con Invio; se nel frattempo il numero cresce oltre il minimo, si applica subito quello.
+let sospeso = null;
+function onNum(raw) {
+  const n = parseFloat(raw);
+  if (raw !== '' && isFinite(n) && minN.value != null && isFinite(minN.value) && minN.value > 0 && n < minN.value) {
+    sospeso = raw;
+    return;
+  }
+  sospeso = null;
+  emitRaw(raw);
+}
+function applicaSospeso() {
+  if (sospeso === null) return;
+  const raw = sospeso;
+  sospeso = null;
+  emitRaw(raw);
+}
 function onSlider(raw) { emitNumber(parseNum(raw)); }
 
 function clamp(n) {

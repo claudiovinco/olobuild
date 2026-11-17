@@ -225,7 +225,11 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo $uid; ?> .olo-price-inner { display: flex; flex-direction: column; height: 100%; }
             .<?php echo $uid; ?> .olo-price-cta-wrap, .<?php echo $uid; ?> .olo-price-cta { margin-top: auto; }
-            /* Equal-height: propaga l'altezza della colonna (stretch) attraverso il wrapper del tile. */
+            /* Equal-height: propaga l'altezza della colonna (stretch) attraverso il wrapper del tile. La colonna
+               diventa una pila flessibile e il ramo della scheda prende lo spazio che RESTA: col solo 100% una tile
+               sopra la scheda (un titolo, un'etichetta) la faceva sbordare sulla riga sotto (16 nov 2026). */
+            [class*="uk-width"]:has(.<?php echo $uid; ?>) { display: flex; flex-direction: column; }
+            [class*="uk-width"]:has(.<?php echo $uid; ?>) > :has(.<?php echo $uid; ?>) { flex: 1 1 auto; min-height: 0; }
             .olo-frontend-tile:has(.<?php echo $uid; ?>), [data-olo-lazy]:has(.<?php echo $uid; ?>) { height: 100%; }
             <?php if ( $tile_r_hover_css !== '' ) : ?>.<?php echo $uid; ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>:hover{border-radius:<?php echo $tile_r_hover_css; ?> !important}<?php endif; ?>
             <?php if ( $has_mb && $mb['css'] !== '' ) : ?>
@@ -251,6 +255,27 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
             .<?php echo $uid; ?> .olo-price-inner { position: relative; z-index: 2; }
 
+            <?php
+            // Il disegno che uno stile ha e che non è un valore (16 nov 2026): prima «Vetro», «Neon», «Adesivo»,
+            // «Scontrino» e «Inclinato in 3D» erano solo colori, e «Aurora» una sfumatura che il renderer scartava.
+            $pr_preset = sanitize_key( $s['preset'] ?? '' );
+            if ( 'gradient-aurora' === $pr_preset && '' === $this->safe_color_css( $s['bg_color'] ?? '' ) && ! $has_media ) : ?>
+            .<?php echo $uid; ?> { background: linear-gradient(140deg, var(--olo-color-primary, #e1474f), color-mix(in srgb, var(--olo-color-primary, #e1474f) 45%, var(--olo-color-accent, #f59e0b))); }
+            <?php elseif ( 'glass-tier' === $pr_preset ) : ?>
+            .<?php echo $uid; ?> { -webkit-backdrop-filter: blur(14px) saturate(140%); backdrop-filter: blur(14px) saturate(140%); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--olo-color-light, #fff) 35%, transparent); }
+            <?php elseif ( 'neon-cyber' === $pr_preset ) : ?>
+            .<?php echo $uid; ?> { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--olo-color-accent) 55%, transparent), 0 0 30px color-mix(in srgb, var(--olo-color-accent) 22%, transparent); }
+            .<?php echo $uid; ?> .olo-pricing-amount { text-shadow: 0 0 14px color-mix(in srgb, currentColor 65%, transparent); }
+            <?php elseif ( 'sticker-fun' === $pr_preset ) : ?>
+            .<?php echo $uid; ?> { border: 2px solid var(--olo-color-text, #1f2937); box-shadow: 6px 6px 0 var(--olo-color-text, #1f2937); transform: rotate(-1deg); }
+            <?php elseif ( 'retro-receipt' === $pr_preset ) : ?>
+            .<?php echo $uid; ?> { font-family: var(--olo-font-family-mono, ui-monospace, Menlo, Consolas, monospace); -webkit-mask: radial-gradient(8px at 50% 100%, #0000 98%, #000) 50% / 16px 100%; mask: radial-gradient(8px at 50% 100%, #0000 98%, #000) 50% / 16px 100%; padding-bottom: 2.75rem; }
+            .<?php echo $uid; ?> .olo-price-features li { border-bottom-style: dashed !important; }
+            <?php elseif ( 'tilt-floating' === $pr_preset ) : ?>
+            .<?php echo $uid; ?> { transform: rotate(-1.5deg); transition: transform .4s cubic-bezier(.2,.7,.3,1), box-shadow .4s; }
+            .<?php echo $uid; ?>:hover { transform: rotate(0deg) translateY(-6px); }
+            @media (prefers-reduced-motion: reduce) { .<?php echo $uid; ?> { transition: none; } }
+            <?php endif; ?>
             /* Badge */
             <?php if ( $popular ) : ?>
             /* align-self: la card è una colonna flex e il badge veniva stirato a tutta larghezza. */

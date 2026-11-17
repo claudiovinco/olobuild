@@ -84,7 +84,22 @@ const selectedField = ref(props.binding?.field || '');
 const previewValue = ref(null);
 const previewLoading = ref(false);
 
-const bindingSources = computed(() => getBindingSources());
+// Su un link (17 nov 2026) solo i campi indirizzo: il titolo o la data dentro un URL non porterebbero da nessuna
+// parte. Restano il campo personalizzato (si scrive il nome a mano) e le sorgenti con almeno un indirizzo.
+const perLink = computed(() => props.fieldType === 'link');
+const eUrl = (x) => x?.type === 'url';
+const soloPerIlCampo = (campi) => {
+  if (!perLink.value || !Array.isArray(campi)) return campi;
+  return campi
+    .map((x) => (Array.isArray(x?.fields) ? { ...x, fields: x.fields.filter(eUrl) } : x))
+    .filter((x) => (Array.isArray(x?.fields) ? x.fields.length > 0 : eUrl(x)));
+};
+
+const bindingSources = computed(() => getBindingSources(props.fieldType).filter((s) => {
+  if (!perLink.value) return true;
+  const f = getFieldsForSource(s.value);
+  return f === 'manual' || (Array.isArray(soloPerIlCampo(f)) && soloPerIlCampo(f).length > 0);
+}));
 
 // Opzioni FieldSelect (label RAW: t() la applica FieldSelect internamente;
 // le label dinamiche passano per t() come fallback identità).
@@ -103,7 +118,7 @@ function onSourceChange(value) {
 
 const fieldsForSource = computed(() => {
   if (!selectedSource.value) return [];
-  return getFieldsForSource(selectedSource.value);
+  return soloPerIlCampo(getFieldsForSource(selectedSource.value));
 });
 
 const flatFieldOpts = computed(() => {

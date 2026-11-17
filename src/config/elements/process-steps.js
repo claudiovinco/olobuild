@@ -61,51 +61,56 @@ export default {
   },
 
   fields: [
-    { type: 'separator', label: t('Passi') },
-    { key: 'items', label: t('Passi'), type: 'content-items',
+    { key: 'items', label: t('Passi'), type: 'content-items', etichettaDa: 'title|number',
       itemLabel: t('Passo'),
       defaults: { number: '00', title: t('Nuovo passo'), description: t('Descrizione del passo.') },
       itemFields: [
-        { key: 'number', label: t('Numero / etichetta'), type: 'text' },
+        { key: 'number', label: t('Numero o scritta'), type: 'text',
+          condizioneTile: { field: 'auto_number', operator: '!=', value: true } },
         { key: 'title', label: t('Titolo'), type: 'text' },
         { key: 'description', label: t('Descrizione'), type: 'textarea' },
       ],
     },
-    { key: 'auto_number', label: t('Numerazione automatica (01, 02, …)'), type: 'toggle' },
+    { key: 'auto_number', label: t('Numeri automatici (01, 02, …)'), type: 'toggle',
+      description: t('Accesa, i passi si numerano da soli nell’ordine in cui stanno e il campo «Numero» di ogni voce non conta.') },
   ],
 
+  // Zone standard (16 nov 2026): Testo · Numero · Schede · Disposizione. Le colonne sono un massimo: in una colonna
+  // di pagina stretta i passi vanno a capo (prima uscivano dalla tile).
   styleFields: [
-    { type: 'separator', label: t('Layout') },
-    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1, responsive: true },
-    { key: 'gap', label: t('Gap colonne'), type: 'range', min: 0, max: 80, step: 2 },
+    { type: 'separator', label: t('Testo') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { type: 'typography', label: t('Numero'), responsiveKeys: [], keys: { size: 'number_size', family: 'number_font', weight: 'number_weight', color: 'number_color' }, sizeMin: 12, sizeMax: 96, sizeStep: 2 },
+    { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { size: 'title_size', family: 'title_font', weight: 'title_weight', color: 'title_color' }, sizeMin: 14, sizeMax: 48 },
+    { type: 'typography', label: t('Descrizione'), responsiveKeys: [], keys: { size: 'desc_size', color: 'desc_color' }, sizeMin: 11, sizeMax: 22 },
+
+    { type: 'separator', label: t('Numero') },
+    { key: 'number_style', label: t('Forma'), type: 'select', options: [
+      { value: 'plain', label: t('Solo il numero, grande') },
+      { value: 'circle', label: t('Cerchio pieno') },
+      { value: 'outline', label: t('Cerchio col bordo') },
+    ]},
+    { key: 'number_bg', label: t('Colore cerchio'), type: 'color',
+      description: t('Il fondo del cerchio pieno o il bordo del cerchio vuoto.'),
+      condition: { field: 'number_style', operator: '!=', value: 'plain' } },
+
+    { type: 'separator', label: t('Schede') },
+    { key: 'card_bg', label: t('Sfondo scheda'), type: 'color',
+      description: t('Vuoto: i passi stanno sul fondo della sezione, senza scheda.') },
+    { key: 'card_border', label: t('Bordo scheda'), type: 'border', legacyWidth: 1 },
+    { key: 'card_radius', label: t('Raggio scheda'), type: 'border-radius' },
+    { key: 'card_padding', label: t('Padding scheda'), type: 'spacing', min: 0, max: 80 },
+
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1, responsive: true,
+      description: t('Il massimo: dove la colonna è stretta i passi vanno a capo da soli.') },
+    { key: 'gap', label: t('Gap colonne'), type: 'range', unit: 'px', min: 0, max: 80, step: 2 },
+    { key: 'item_gap', label: t('Gap interno'), type: 'range', unit: 'px', min: 0, max: 40, step: 2,
+      description: t('Lo spazio fra numero, titolo e descrizione.') },
     { key: 'align', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
     ]},
-    { key: 'item_gap', label: t('Gap interno (numero/titolo/testo)'), type: 'range', min: 0, max: 40, step: 2 },
-
-    { type: 'separator', label: t('Numero') },
-    { key: 'number_style', label: t('Stile numero'), type: 'select', options: [
-      { value: 'plain', label: t('Semplice (grande)') },
-      { value: 'circle', label: t('Cerchio pieno') },
-      { value: 'outline', label: t('Cerchio bordato') },
-    ]},
-    { key: 'number_bg', label: t('Sfondo/bordo cerchio'), type: 'color',
-      condition: { field: 'number_style', operator: '!=', value: 'plain' } },
-    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-    { type: 'typography', label: t('Numero'), responsiveKeys: [], keys: { size: 'number_size', family: 'number_font', weight: 'number_weight', color: 'number_color' }, sizeMin: 12, sizeMax: 96, sizeStep: 2 },
-
-    { type: 'separator', label: t('Titolo') },
-    { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { size: 'title_size', family: 'title_font', weight: 'title_weight', color: 'title_color' }, sizeMin: 14, sizeMax: 48 },
-
-    { type: 'separator', label: t('Descrizione') },
-    { type: 'typography', label: t('Descrizione'), responsiveKeys: [], keys: { size: 'desc_size', color: 'desc_color' }, sizeMin: 11, sizeMax: 22 },
-
-    { type: 'separator', label: t('Card (opzionale)') },
-    { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
-    { key: 'card_border', label: t('Bordo card'), type: 'border', legacyWidth: 1 },
-    { key: 'card_radius', label: t('Raggio'), type: 'border-radius' },
-    { key: 'card_padding', label: t('Padding card'), type: 'spacing', min: 0, max: 80 },
   ],
 };

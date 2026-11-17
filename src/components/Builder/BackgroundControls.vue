@@ -608,16 +608,17 @@ import NumberScrubber from './fields/NumberScrubber.vue';
 // Opzioni dei FieldSelect (label RAW: t() la applica FieldSelect internamente).
 // meshPresets / glowPresets / crtModels sono già array { value, label } e si
 // passano direttamente a :options.
+// Nomi in italiano (17 nov 2026: «Cover», «Contain», «Fade», «Slide»… comparivano così in ogni tile).
 const SIZE_OPTS = [
-  { value: 'cover', label: 'Cover' },
-  { value: 'contain', label: 'Contain' },
-  { value: 'auto', label: 'Auto' },
+  { value: 'cover', label: 'Copri (taglia)' },
+  { value: 'contain', label: 'Contieni (intera)' },
+  { value: 'auto', label: 'Dimensione originale' },
 ];
 
 const VIDEO_FIT_OPTS = [
-  { value: 'cover', label: 'Cover' },
-  { value: 'contain', label: 'Contain' },
-  { value: 'fill', label: 'Riempi' },
+  { value: 'cover', label: 'Copri (taglia)' },
+  { value: 'contain', label: 'Contieni (intera)' },
+  { value: 'fill', label: 'Riempi (deforma)' },
   { value: 'none', label: 'Nessuno (dimensione originale)' },
 ];
 
@@ -631,13 +632,13 @@ const OVERLAY_FADE_OPTS = [
   { value: 'top', label: t('Dall’alto') },
 ];
 const GALLERY_TRANSITION_OPTS = [
-  { value: 'fade', label: 'Fade' },
-  { value: 'crossfade', label: 'Crossfade' },
-  { value: 'slide', label: 'Slide' },
-  { value: 'slide-up', label: 'Slide Up' },
+  { value: 'fade', label: 'Dissolvenza' },
+  { value: 'crossfade', label: 'Dissolvenza incrociata' },
+  { value: 'slide', label: 'Scorrimento ←' },
+  { value: 'slide-up', label: 'Scorrimento ↑' },
   { value: 'zoom', label: 'Zoom' },
-  { value: 'blur', label: 'Blur' },
-  { value: 'flip', label: 'Flip' },
+  { value: 'blur', label: 'Sfocatura' },
+  { value: 'flip', label: 'Giro' },
   { value: 'none', label: 'Nessuna' },
 ];
 

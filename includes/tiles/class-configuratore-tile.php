@@ -862,6 +862,10 @@ class Olobuild_Configuratore_Tile extends Olobuild_Tile_Base {
         echo "{$sel} .ocfg-riga dt{margin:0 0 .2rem;color:var(--ocfg-ptenue);font-size:12px;font-weight:600;letter-spacing:.06em;line-height:1.3;text-transform:uppercase}";
         echo "{$sel} .ocfg-riga dd{display:flex;align-items:baseline;justify-content:space-between;gap:.75rem;margin:0;line-height:1.45}";
         echo "{$sel} .ocfg-riga dd + dd{margin-top:.2rem}";
+        // Il prezzo base sulla riga della sua etichetta: sotto, da solo a destra, lasciava un buco a sinistra (16 nov 2026).
+        echo "{$sel} .ocfg-riga--base{display:flex;align-items:baseline;justify-content:space-between;gap:.75rem}";
+        echo "{$sel} .ocfg-riga--base dt{margin:0}";
+        echo "{$sel} .ocfg-riga--base .ocfg-riga-nome{display:none}";
         echo "{$sel} .ocfg-riga-nome{min-width:0}";
         echo "{$sel} .ocfg-riga-prezzo{flex:none;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600}";
         echo "{$sel} .ocfg-riga.is-manca dd{color:var(--ocfg-err);font-weight:600}";

@@ -38,6 +38,8 @@ export default {
     card_border: '',
     radius: '',
     align: 'left',
+    heading_font_family: '', heading_font_size: '', heading_font_size_tablet: '', heading_font_size_mobile: '', heading_font_weight: '',
+    question_font_family: '', question_font_size: '', question_font_size_tablet: '', question_font_size_mobile: '', question_font_weight: '',
   },
 
   // Come nasce dalla palette: un quiz vero per scegliere fra tre pacchetti di assistenza, con
@@ -66,8 +68,8 @@ export default {
       defaults: { text: t('Nuova domanda'), options: t('Risposta A') + '|1\n' + t('Risposta B') + '|2' },
       itemFields: [
         { key: 'text', label: t('Domanda'), type: 'text' },
-        { key: 'options', label: t('Risposte (una per riga)'), type: 'textarea',
-          description: t('Scrivi «Risposta|punti», per esempio «Spesso|3». Senza punti la risposta vale 0.') },
+        { key: 'options', label: t('Risposte'), type: 'textarea',
+          description: t('Una per riga, scritta «Risposta|punti»: per esempio «Spesso|3». Senza punti la risposta vale 0.') },
       ],
     },
 
@@ -99,6 +101,13 @@ export default {
     { key: 'card_bg', label: t('Sfondo scheda'), type: 'color',
       description: t('Su uno sfondo scuro (della scheda o del contenitore) i testi passano al chiaro da soli.') },
     { key: 'card_border', label: t('Bordo scheda'), type: 'border', legacyWidth: 1 },
+
+    // 17 nov 2026: il titolo e la domanda si regolano (prima nessuna tipografia, e il titolo ripiegava sul testo).
+    { type: 'separator', label: t('Testo') },
+    { type: 'typography', label: t('Titolo'), responsiveKeys: ['size'],
+      keys: { family: 'heading_font_family', size: 'heading_font_size', weight: 'heading_font_weight' }, sizeMin: 16, sizeMax: 96 },
+    { type: 'typography', label: t('Domanda'), responsiveKeys: ['size'],
+      keys: { family: 'question_font_family', size: 'question_font_size', weight: 'question_font_weight' }, sizeMin: 14, sizeMax: 40 },
 
     { type: 'separator', label: t('Forma') },
     { key: 'radius', label: t('Raggio'), type: 'border-radius' },

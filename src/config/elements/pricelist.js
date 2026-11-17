@@ -79,57 +79,55 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    // ── Items ──
-    { key: 'items', label: t('Elementi'), type: 'content-items',
+    { key: 'items', label: t('Voci'), type: 'content-items',
       itemFields: [
         { key: 'title', label: t('Nome'), type: 'text' },
         { key: 'description', label: t('Descrizione'), type: 'text' },
         { key: 'price', label: t('Prezzo'), type: 'text' },
         { key: 'image_url', label: t('Immagine'), type: 'image' },
         { key: 'highlighted', label: t('In evidenza'), type: 'toggle' },
-        { key: 'badge', label: t('Badge'), type: 'text' },
+        { key: 'badge', label: t('Etichetta'), type: 'text',
+          description: t('Una parola accanto al nome, per esempio «Novità» o «Il più scelto». Vuoto = nessuna.') },
       ],
-      newItemDefaults: { title: t('Nuovo piatto'), description: t('Descrizione del piatto'), price: '€0', image_url: '', highlighted: false, badge: '' },
-      itemLabel: 'Piatto',
+      newItemDefaults: { title: t('Nuova voce'), description: t('Una riga che la racconta'), price: '€0', image_url: '', highlighted: false, badge: '' },
+      itemLabel: t('Voce'),
     },
-
-    // ── Immagine ──
-    { type: 'separator', label: t('Immagine') },
-    { key: 'show_image', label: t('Mostra immagine'), type: 'toggle' },
-
+    { key: 'show_image', label: t('Mostra le immagini'), type: 'toggle' },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
+  // Zone standard (16 nov 2026): Aspetto · Testo · Immagini · Puntini · Etichetta · Forma · Disposizione. Prima
+  // «Colori extra», «Spaziatura», «Card» e i preset coi nomi in inglese.
   styleFields: [
-    { type: 'separator', label: t('Preset stilistico') },
+    { type: 'separator', label: t('Aspetto') },
     { key: 'preset', label: t('Stile'), type: 'select', options: [
-      { value: 'modern-clean',    label: t('Modern Clean') },
-      { value: 'minimal-mono',    label: t('Minimal Mono') },
-      { value: 'magazine-bold',   label: t('Magazine Bold') },
-      { value: 'editorial-serif', label: t('Editorial Serif') },
-      { value: 'compact-inline',  label: t('Compact Inline') },
-      { value: 'glass-frosted',   label: t('Glass Frosted') },
-      { value: 'neon-glow',       label: t('Neon Glow') },
-      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
-      { value: 'gradient-aurora', label: t('Gradient Aurora') },
-      { value: 'sticker-fun',     label: t('Sticker Fun') },
-      { value: 'retro-terminal',  label: t('Retro Terminal') },
-      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'modern-clean',    label: t('Pulito') },
+      { value: 'minimal-mono',    label: t('Essenziale') },
+      { value: 'magazine-bold',   label: t('Rivista') },
+      { value: 'editorial-serif', label: t('Menù con grazie') },
+      { value: 'compact-inline',  label: t('Compatto') },
+      { value: 'glass-frosted',   label: t('Vetro') },
+      { value: 'neon-glow',       label: t('Neon su scuro') },
+      { value: 'brutalist-stamp', label: t('Timbro netto') },
+      { value: 'gradient-aurora', label: t('Sfumato') },
+      { value: 'sticker-fun',     label: t('Adesivo') },
+      { value: 'retro-terminal',  label: t('Terminale') },
+      { value: 'tilt-3d',         label: t('Biglietti') },
       { value: 'custom',          label: t('Personalizzato') },
     ] },
-    ...textEffectsFields([
-      { value: 'title', label: t('Solo Titolo') },
-      { value: 'description', label: t('Solo Descrizione') },
-      { value: 'all', label: t('Tutti gli elementi testuali') },
-    ]),
+    { key: 'card_bg', label: t('Sfondo voce'), type: 'color' },
+    { key: 'highlighted_bg', label: t('Sfondo voce in evidenza'), type: 'color' },
+    { key: 'hover_lift', label: t('Si solleva al passaggio'), type: 'toggle' },
+    ...shadowField,
 
-    { type: 'separator', label: t('Tipografia') },
+    { type: 'separator', label: t('Testo') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     // Dimensione e colore per ogni testo: le misure erano fisse nel renderer (badge a 9 px).
-    { type: 'typography', label: t('Titolo'),
+    { type: 'typography', label: t('Nome'),
       responsiveKeys: [],
       keys: {
         size: 'title_size',
+        family: 'title_font',
         color: 'title_color',
       },
       sizeMin: 12, sizeMax: 40,
@@ -146,11 +144,12 @@ export default {
       responsiveKeys: [],
       keys: {
         size: 'price_size',
+        family: 'price_font',
         color: 'price_color',
       },
       sizeMin: 12, sizeMax: 48,
     },
-    { type: 'typography', label: t('Badge'),
+    { type: 'typography', label: t('Etichetta'),
       responsiveKeys: [],
       keys: {
         size: 'badge_size',
@@ -158,28 +157,14 @@ export default {
       },
       sizeMin: 9, sizeMax: 20,
     },
+    ...textEffectsFields([
+      { value: 'title', label: t('Solo i nomi') },
+      { value: 'description', label: t('Solo le descrizioni') },
+      { value: 'all', label: t('Tutto il testo') },
+    ]),
 
-    // ── Card ──
-    { type: 'separator', label: t('Card') },
-    { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
-    { key: 'card_border_color', label: t('Bordo card'), type: 'border', legacyWidth: 1 },
-    withHover({ key: 'card_border_radius', label: t('Raggio card'), type: 'border-radius'}),
-    { key: 'hover_lift', label: t('Effetto hover'), type: 'toggle' },
-
-    // ── Separatore ──
-    { type: 'separator', label: t('Separatore') },
-    { key: 'separator_style', label: t('Stile separatore'), type: 'select', options: [
-      { value: 'dotted', label: t('Puntinato') },
-      { value: 'dashed', label: t('Tratteggiato') },
-      { value: 'solid', label: t('Continuo') },
-      { value: 'none', label: t('Nessuno') },
-    ]},
-    { key: 'separator_color', label: t('Colore separatore'), type: 'color',
-      condition: { field: 'separator_style', operator: '!=', value: 'none' } },
-
-    // ── Immagine ──
-    { type: 'separator', label: t('Immagine') },
-    { key: 'image_size', label: t('Dimensione immagine'), type: 'range', min: 30, max: 120, step: 5,
+    { type: 'separator', label: t('Immagini'), condition: { field: 'show_image', value: true } },
+    { key: 'image_size', label: t('Dimensione'), type: 'range', unit: 'px', min: 30, max: 120, step: 5,
       condition: { field: 'show_image', value: true } },
     withHover({ key: 'image_border_radius', label: t('Raggio immagine'), type: 'border-radius',
       condition: { field: 'show_image', value: true } }),
@@ -190,28 +175,33 @@ export default {
       contextKeys: {},
       condition: { field: 'show_image', value: true } },
 
-    // ── Spaziatura ──
-    { type: 'separator', label: t('Spaziatura') },
-    { key: 'gap', label: t('Gap elementi'), type: 'range', min: 0, max: 32, step: 2 },
-    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 32 },
+    { type: 'separator', label: t('Puntini') },
+    { key: 'separator_style', label: t('Fra nome e prezzo'), type: 'select', options: [
+      { value: 'dotted', label: t('Puntini') },
+      { value: 'dashed', label: t('Trattini') },
+      { value: 'solid', label: t('Linea') },
+      { value: 'none', label: t('Niente') },
+    ]},
+    { key: 'separator_color', label: t('Colore'), type: 'color',
+      condition: { field: 'separator_style', operator: '!=', value: 'none' } },
 
-    // ── Colori extra (non gestiti dai popover Tipografia) ──
-    { type: 'separator', label: t('Colori extra') },
-    { key: 'highlighted_bg', label: t('Sfondo evidenziato'), type: 'color' },
-
-    // ── Badge ──
-    { type: 'separator', label: t('Badge') },
-    { key: 'badge_bg', label: t('Sfondo'), type: 'color' },
-    { key: 'badge_border', label: t('Bordo badge'), type: 'border',
+    { type: 'separator', label: t('Etichetta') },
+    { key: 'badge_bg', label: t('Sfondo etichetta'), type: 'color' },
+    { key: 'badge_border', label: t('Bordo etichetta'), type: 'border',
       legacyKeys: { width: 'badge_border_width', style: 'badge_border_style', color: 'badge_border_color' } },
-    withHover({ key: 'badge_border_radius', label: t('Raggio'), type: 'border-radius'}),
+    withHover({ key: 'badge_border_radius', label: t('Raggio etichetta'), type: 'border-radius'}),
 
-    ...shadowField,
+    { type: 'separator', label: t('Forma') },
+    { key: 'card_border_color', label: t('Bordo voce'), type: 'border', legacyWidth: 1 },
+    withHover({ key: 'card_border_radius', label: t('Raggio voce'), type: 'border-radius'}),
+    { key: 'gap', label: t('Gap fra le voci'), type: 'range', unit: 'px', min: 0, max: 32, step: 2 },
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 32 },
     ...borderFields(),
+
     { type: 'separator', label: t('Disposizione') },
     { key: 'price_position', label: t('Posizione prezzo'), type: 'select', options: [
       { value: 'right', label: t('A destra') },
-      { value: 'below', label: t('Sotto il titolo') },
+      { value: 'below', label: t('Sotto il nome') },
     ]},
   ],
 };

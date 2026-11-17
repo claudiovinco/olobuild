@@ -252,19 +252,25 @@ class Olobuild_Schedatecnica_Tile extends Olobuild_Tile_Base {
         $tag_t    = 'h1' === $tag_n ? 'h2' : ( 'h2' === $tag_n ? 'h3' : 'h4' );
         $cornice  = Olobuild_Tile_Utils::image_frame( $s, 'img', [ 'ratio' => '4/3', 'fit' => 'contain' ] );
         $riquadro = '' !== $sfondo || '' !== $bordo || 'none' !== $ombra;
+        // Con uno «Sfondo scheda» scelto il testo della scheda diventa chiaro o scuro secondo il fondo: le certificazioni
+        // e quanto non ha un colore suo restavano nel colore della pagina, scuri su una scheda scura (17 nov 2026).
+        $testo_sch = '' !== $sfondo ? Olobuild_Tile_Utils::testo_su_fondo( $sfondo, 'var(--olo-color-text, #374151)' ) : '';
 
         ob_start();
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS da colori passati da safe_color_css() e dagli helper di Olobuild_Tile_Utils, numeri forzati, costanti interne e selettori generati qui
         echo '<style>';
-        echo "{$sel}{--ostec-acc:{$accento};--ostec-su-acc:{$su_acc};--ostec-linea:{$linea};--ostec-r:{$raggio};--ostec-rp:{$r_puls};--ostec-gap:{$gap}px;--ostec-foto:{$larg}%}";
-        echo "{$sel} .ostec-scheda{display:grid;gap:var(--ostec-gap);align-items:start;padding:{$pad};" . ( $riquadro ? 'border-radius:var(--ostec-r);' : '' ) . ( '' !== $sfondo ? "background:{$sfondo};" : '' ) . $bordo . ( 'none' !== $ombra ? "box-shadow:{$ombra};" : '' ) . '}';
+        // La tile misura sé stessa (container query): foto affiancata o sopra secondo la colonna in cui sta, non lo schermo.
+        echo "{$sel}{container-type:inline-size;container-name:ostec;--ostec-acc:{$accento};--ostec-su-acc:{$su_acc};--ostec-linea:{$linea};--ostec-r:{$raggio};--ostec-rp:{$r_puls};--ostec-gap:{$gap}px;--ostec-foto:{$larg}%}";
+        echo "{$sel} .ostec-scheda{display:grid;gap:var(--ostec-gap);align-items:start;padding:{$pad};" . ( $riquadro ? 'border-radius:var(--ostec-r);' : '' ) . ( '' !== $sfondo ? "background:{$sfondo};" : '' ) . ( '' !== $testo_sch ? "color:{$testo_sch};" : '' ) . $bordo . ( 'none' !== $ombra ? "box-shadow:{$ombra};" : '' ) . '}';
         if ( $foto && 'sopra' !== $pos ) {
             echo "{$sel} .ostec-scheda{grid-template-columns:" . ( 'destra' === $pos ? 'minmax(0,1fr) minmax(0,var(--ostec-foto))' : 'minmax(0,var(--ostec-foto)) minmax(0,1fr)' ) . '}';
             if ( 'destra' === $pos ) {
                 echo "{$sel} .ostec-foto{order:2}";
             }
             echo "{$sel} .ostec-foto{position:sticky;top:1.5rem}";
-            echo '@media (max-width:960px){' . "{$sel} .ostec-scheda{grid-template-columns:minmax(0,1fr)}{$sel} .ostec-foto{position:static;order:0}" . '}';
+            // Sotto i 720 px di tile la foto va sopra: era una regola sullo schermo (960 px) e in una colonna stretta del
+            // computer foto e testo restavano affiancati in 200 px, con la tabella che usciva dal bordo (17 nov 2026).
+            echo '@container ostec (max-width:719px){' . "{$sel} .ostec-scheda{grid-template-columns:minmax(0,1fr)}{$sel} .ostec-foto{position:static;order:0}" . '}';
         }
         echo "{$sel} .ostec-foto{margin:0;overflow:hidden;border-radius:var(--ostec-r);background:color-mix(in srgb, currentColor 5%, transparent);" . ( '' !== $cornice['contenitore'] ? $cornice['contenitore'] : '' ) . '}';
         echo "{$sel} .ostec-foto img{display:block;width:100%;height:100%;" . ( '' !== $cornice['immagine'] ? $cornice['immagine'] : 'object-fit:contain;' ) . '}';
@@ -290,12 +296,15 @@ class Olobuild_Schedatecnica_Tile extends Olobuild_Tile_Base {
         echo "{$sel} .ostec-gruppo:last-child{margin-bottom:0}";
         echo "{$sel} .ostec-gruppo-tit{margin:0 0 .25rem;opacity:.7}";
         echo "{$sel} .ostec-righe{margin:0}";
-        echo "{$sel} .ostec-riga{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:.6rem 0;border-bottom:1px solid var(--ostec-linea)}";
+        // Nome a sinistra, valore a destra; quando non ci stanno sulla stessa riga il valore va sotto, sempre a destra (prima il
+        // valore non andava a capo: schiacciava il nome a una parola per riga e usciva dal bordo).
+        echo "{$sel} .ostec-riga{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:.15rem 1rem;padding:.6rem 0;border-bottom:1px solid var(--ostec-linea)}";
         if ( ! empty( $s['righe_alternate'] ) ) {
             echo "{$sel} .ostec-riga{padding:.6rem .75rem;border-bottom:0}{$sel} .ostec-riga:nth-child(odd){background:color-mix(in srgb, currentColor 5%, transparent);border-radius:.35rem}";
         }
-        echo "{$sel} .ostec-riga dt{margin:0;opacity:.8;min-width:0}";
-        echo "{$sel} .ostec-riga dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}";
+        echo "{$sel} .ostec-riga dt{margin:0;opacity:.8;flex:1 1 9rem;min-width:0;overflow-wrap:break-word}";
+        echo "{$sel} .ostec-riga dd{margin:0 0 0 auto;max-width:100%;text-align:right;font-variant-numeric:tabular-nums}";
+        echo "{$sel} .ostec-val,{$sel} .ostec-un{white-space:nowrap}";
         echo "{$sel} .ostec-un{opacity:.65;margin-left:.3em}";
         echo "{$sel} .ostec-doc-lista{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}";
         echo "{$sel} .ostec-doc-link{display:flex;align-items:center;gap:.85rem;padding:.75rem 0;border-bottom:1px solid var(--ostec-linea);color:inherit;text-decoration:none}";

@@ -3,7 +3,7 @@
     <div class="mps-modal-overlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999999;background:#111827;display:flex;flex-direction:column;outline:none;" @keydown="onKeydown" tabindex="-1" ref="modalEl">
       <!-- Header bar -->
       <div class="mb-flex mb-items-center mb-justify-between mb-bg-gray-800 mb-border-b mb-border-gray-700 mb-px-4 mb-py-2 mb-shrink-0">
-        <h2 class="mb-text-sm mb-font-bold mb-text-gray-200">{{ t('Editor ProSlider') }}</h2>
+        <h2 class="mb-text-sm mb-font-bold mb-text-gray-200">{{ t('Editor dello Slider Pro') }}</h2>
         <div class="mb-flex mb-items-center mb-gap-2">
           <button @click="save" class="mb-px-4 mb-py-1.5 mb-bg-primary-600 mb-text-white mb-text-xs mb-font-semibold mb-rounded hover:mb-bg-primary-500 mb-transition-colors">
             {{ t('Salva e chiudi') }}
@@ -32,7 +32,7 @@
           <!-- Global Layers section -->
           <div class="mb-border-t mb-border-gray-700 mb-px-2 mb-py-2 mb-bg-gray-800">
             <div class="mb-flex mb-items-center mb-justify-between mb-mb-1">
-              <span class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Layer Globali') }}</span>
+              <span class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Livelli globali') }}</span>
               <div class="mb-flex mb-gap-1">
                 <button @click="addGlobalLayer('text')" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-white mb-px-1" :title="t('Testo')">T</button>
                 <button @click="addGlobalLayer('button')" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-white mb-px-1" :title="t('Bottone')">B</button>
@@ -50,7 +50,7 @@
                 <button @click.stop="removeGlobalLayer(gl.id)" class="mb-text-gray-400 hover:mb-text-red-400 mb-ml-1">&times;</button>
               </div>
             </div>
-            <div v-else class="mb-text-[9px] mb-text-gray-500 mb-italic">{{ t('Nessun layer globale') }}</div>
+            <div v-else class="mb-text-[9px] mb-text-gray-500 mb-italic">{{ t('Nessun livello globale') }}</div>
           </div>
         </div>
 
@@ -185,7 +185,7 @@
 
           <!-- Breakpoint bar -->
           <div class="mb-flex mb-items-center mb-gap-1 mb-px-3 mb-py-1 mb-border-b mb-border-gray-700 mb-bg-gray-800">
-            <span class="mb-text-[10px] mb-text-gray-500 mb-mr-1">Breakpoint:</span>
+            <span class="mb-text-[10px] mb-text-gray-500 mb-mr-1">{{ t('Schermo:') }}</span>
             <button v-for="bp in breakpoints" :key="bp.key"
               @click="activeBreakpoint = bp.key"
               :class="['mb-px-2 mb-py-0.5 mb-rounded mb-text-[10px] mb-transition-colors', activeBreakpoint === bp.key ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-400 hover:mb-bg-gray-600']"

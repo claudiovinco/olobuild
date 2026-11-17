@@ -14,7 +14,11 @@ class Olobuild_Textpath_Tile extends Olobuild_Tile_Base {
         'text'            => 'Testo che segue un tracciato curvo',
         'path_preset'     => 'arc',
         'custom_path'     => '',
+        'font_family'     => '',
         'font_size'       => '24',
+        'font_weight'     => '',
+        'text_transform'  => '',
+        'font_italic'     => false,
         'text_color'      => '',
         'letter_spacing'  => '2',
         'animation'       => 'none',
@@ -46,6 +50,15 @@ class Olobuild_Textpath_Tile extends Olobuild_Tile_Base {
         $fsize   = max( 12, min( 72, intval( $s['font_size'] ) ) );
         $color   = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
         $spacing = max( 0, min( 20, intval( $s['letter_spacing'] ) ) );
+        // Carattere, peso, maiuscolo e corsivo del controllo «Testo» (16 nov 2026, ep. 33): nello style, perché var()
+        // non vale negli attributi di presentazione dell'SVG.
+        $famiglia  = $this->resolve_font_family( $s['font_family'] ?? '' );
+        $peso      = in_array( (string) ( $s['font_weight'] ?? '' ), [ '100', '200', '300', '400', '500', '600', '700', '800', '900' ], true ) ? (string) $s['font_weight'] : '';
+        $maiuscolo = in_array( (string) ( $s['text_transform'] ?? '' ), [ 'none', 'uppercase', 'lowercase', 'capitalize' ], true ) ? (string) $s['text_transform'] : '';
+        $stile_testo = 'font-family:' . ( $famiglia ?: 'inherit' ) . ';'
+            . ( $peso ? 'font-weight:' . $peso . ';' : '' )
+            . ( ! empty( $s['font_italic'] ) ? 'font-style:italic;' : '' )
+            . ( $maiuscolo ? 'text-transform:' . $maiuscolo . ';' : '' );
         $anim    = in_array( $s['animation'], [ 'none', 'scroll', 'continuous' ], true ) ? $s['animation'] : 'none';
         $speed   = max( 1, min( 20, intval( $s['animation_speed'] ) ) );
 
@@ -82,6 +95,12 @@ class Olobuild_Textpath_Tile extends Olobuild_Tile_Base {
             // piu' lo spazio per le lettere, che stanno a cavallo del tracciato.
             $m       = (int) ceil( $fsize * 0.6 ) + 4;
             $viewbox = '43 ' . ( 13.7 - $m ) . ' 300 ' . ( 131.6 + 2 * $m );
+        }
+        if ( $preset === 'circle' ) {
+            // Le lettere stanno a cavallo del tracciato (raggio 140 in un riquadro di 300): sporgevano di mezza altezza
+            // dal riquadro, e sul telefono, a tutta larghezza, arrivavano al bordo dello schermo (16 nov 2026, ep. 33).
+            $m       = (int) ceil( $fsize * 0.6 ) + 4;
+            $viewbox = ( -$m ) . ' ' . ( -$m ) . ' ' . ( 300 + 2 * $m ) . ' ' . ( 300 + 2 * $m );
         }
         $chiuso = ( $preset === 'circle' ) || (bool) preg_match( '/z\s*$/i', $path_d );
 
@@ -131,7 +150,7 @@ class Olobuild_Textpath_Tile extends Olobuild_Tile_Base {
                     fill="<?php echo $color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- validated via the safe_color_css() whitelist above ?>"
                     font-size="<?php echo (int) $fsize; ?>"
                     letter-spacing="<?php echo (int) $spacing; ?>"
-                    font-family="inherit"
+                    style="<?php echo esc_attr( $stile_testo ); ?>"
                 >
                     <?php list( $tp_cls, $tp_data ) = $this->tfx_attrs( $s, 'text', wp_strip_all_tags( $s['text'] ?? '' ) ); ?>
                     <textPath
@@ -174,6 +193,7 @@ class Olobuild_Textpath_Tile extends Olobuild_Tile_Base {
                 var m = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                 m.setAttribute('font-size', text.getAttribute('font-size'));
                 m.setAttribute('letter-spacing', text.getAttribute('letter-spacing'));
+                m.setAttribute('style', text.getAttribute('style') || '');   // carattere, peso, maiuscolo, corsivo
                 m.setAttribute('visibility', 'hidden');
                 m.textContent = str;
                 svg.appendChild(m);
@@ -186,7 +206,13 @@ class Olobuild_Textpath_Tile extends Olobuild_Tile_Base {
                 text.setAttribute('font-size', corpo);
                 var giro = path.getTotalLength();
                 var lungo = misura(frase);
-                if (lungo > giro) { text.setAttribute('font-size', (corpo * giro / lungo * 0.97).toFixed(2)); }
+                if (lungo > giro) { text.setAttribute('font-size', (corpo * giro / lungo * 0.97).toFixed(2)); return; }
+                /* Su un tracciato chiuso (il Cerchio) una frase che copre quasi tutto il giro lasciava un buco: si
+                   distribuisce sull'intero giro e l'anello si chiude, come un timbro. Una frase corta resta com'è. */
+                if (chiuso && lungo > giro * 0.6) {
+                    tp.setAttribute('textLength', (giro * 0.995).toFixed(2));
+                    tp.setAttribute('lengthAdjust', 'spacing');
+                }
             }
 
             function entra() {

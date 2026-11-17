@@ -183,7 +183,8 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
         $items = is_array( $s['items'] ) ? $s['items'] : [];
         $hover_effect = in_array( $s['card_hover_effect'] ?? 'none', [ 'none', 'lift', 'scale', 'glow', 'tilt' ], true ) ? ( $s['card_hover_effect'] ?? 'none' ) : 'none';
 
-        $container_style = $container_bg_css . ';' . ( $c_radius ? 'border-radius:' . $c_radius . ';' : '' ) . 'padding:' . $c_pad . ';' . ( $c_radius_h ? 'transition:border-radius ' . $c_rdur . 'ms ease;' : '' );
+        // La fascia è il contenitore (olo-icards): colonne e titolo si adattano alla SUA larghezza (regole in fondo).
+        $container_style = $container_bg_css . ';' . ( $c_radius ? 'border-radius:' . $c_radius . ';' : '' ) . 'padding:' . $c_pad . ';container-type:inline-size;container-name:olo-icards;' . ( $c_radius_h ? 'transition:border-radius ' . $c_rdur . 'ms ease;' : '' );
         $grid_style = 'display:grid;grid-template-columns:repeat(' . $cols . ',minmax(0,1fr));gap:' . $items_gap . 'px;';
 
         // Card style template
@@ -372,6 +373,26 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
             if ( $ic_tel_c === '' ) : ?>
             @media (max-width: 640px) {
                 .<?php echo $uid; ?> .olo-icards__grid { grid-template-columns: minmax(0,1fr) !important; }
+            }
+            <?php endif; ?>
+            <?php
+            // Fascia stretta (una colonna a metà pagina, una barra laterale): sotto i 760 px al più due schede per riga,
+            // sotto i 500 una, e il titolo scende a gradini. Prima tre schede da 140 px in una colonna a metà pagina: il
+            // titolo a 72 px tagliato e la descrizione una parola per riga (16 nov 2026). Dopo le regole per dispositivo:
+            // in una fascia stretta vince anche sulle colonne scelte per il tablet.
+            if ( $cols > 2 ) : ?>
+            @container olo-icards (max-width: 760px) {
+                .<?php echo $uid; ?> .olo-icards__grid { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
+            }
+            <?php endif; ?>
+            <?php if ( $cols > 1 ) : ?>
+            @container olo-icards (max-width: 500px) {
+                .<?php echo $uid; ?> .olo-icards__grid { grid-template-columns: minmax(0,1fr) !important; }
+            }
+            <?php endif; ?>
+            <?php if ( $cols > 1 && $title_size > 56 ) : ?>
+            @container olo-icards (max-width: 760px) and (min-width: 501px) {
+                .<?php echo $uid; ?> .olo-icards__title { font-size: 56px !important; }
             }
             <?php endif; ?>
         </style>

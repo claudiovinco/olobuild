@@ -57,7 +57,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         'input_placeholder_opacity' => '0.4',
         'gap'               => '16',
         'submit_bg'         => '',
-        'submit_color'      => '#FFFFFF',
+        'submit_color'      => 'var(--olo-color-primary-contrast)',
         'submit_radius'     => '6',
         'submit_padding_x'  => '32',
         'submit_padding_y'  => '14',
@@ -396,7 +396,17 @@ JS;
         // Multi-step setup
         $is_multistep = ! empty( $s['enable_multistep'] );
         $step_style   = $s['step_style'] ?? 'progress';
+        // Le condizioni valgono appena un campo ne ha una: prima servivano ANCHE l'interruttore «Abilita condizioni», in
+        // un'altra sezione, e senza la condizione scelta nel campo restava muta (16 nov 2026). La chiave storica resta.
         $has_conditions = ! empty( $s['enable_conditions'] );
+        if ( ! $has_conditions && is_array( $s['fields'] ?? null ) ) {
+            foreach ( $s['fields'] as $f_cond ) {
+                if ( is_array( $f_cond ) && '' !== trim( (string) ( $f_cond['condition_field'] ?? '' ) ) ) {
+                    $has_conditions = true;
+                    break;
+                }
+            }
+        }
         $has_recaptcha  = ! empty( $s['recaptcha_enabled'] );
         $recaptcha_site_key = '';
         if ( $has_recaptcha ) {
@@ -616,6 +626,13 @@ JS;
             .<?php echo $uid; ?> .uk-select:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px <?php echo $input_bg; ?> inset !important;-webkit-text-fill-color:<?php echo $input_color; ?> !important;transition:background-color 5000s ease-in-out 0s}
             .<?php echo $uid; ?> .uk-form-icon{color:<?php echo $input_color; ?>;opacity:0.5}
             .<?php echo $uid; ?> .uk-form-icon:hover{opacity:0.8}
+            <?php // L'icona del calendario (e dell'orologio) dei campi data e ora: Chrome la disegna nera e sui campi scuri spariva (Mano Libera, 16 nov 2026). Ora è una maschera nel colore del testo del campo. ?>
+            .<?php echo $uid; ?> input[type=date]::-webkit-calendar-picker-indicator,
+            .<?php echo $uid; ?> input[type=datetime-local]::-webkit-calendar-picker-indicator,
+            .<?php echo $uid; ?> input[type=time]::-webkit-calendar-picker-indicator{background:currentColor;-webkit-mask:var(--olo-f-ico) center/1.1em 1.1em no-repeat;mask:var(--olo-f-ico) center/1.1em 1.1em no-repeat;opacity:.7;cursor:pointer}
+            .<?php echo $uid; ?> input[type=date],.<?php echo $uid; ?> input[type=datetime-local]{--olo-f-ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4.5' width='18' height='16.5' rx='2.5'/%3E%3Cpath d='M3 9.5h18M8 2.5v4M16 2.5v4'/%3E%3C/svg%3E")}
+            .<?php echo $uid; ?> input[type=time]{--olo-f-ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E")}
+            .<?php echo $uid; ?> input::-webkit-calendar-picker-indicator:hover{opacity:1}
             <?php // UIkit fa posto all'icona solo nei campi di testo (.uk-input): nella tendina l'icona copriva il testo. ?>
             .<?php echo $uid; ?> .uk-form-icon:not(.uk-form-icon-flip) ~ .uk-select{padding-left:2.5em !important}
             .<?php echo $uid; ?> .olo-f-btn{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #e1474f)'; ?>;color:<?php echo $btn_color; ?>;<?php if ( $submit_ff ) : ?>font-family:<?php echo $submit_ff; ?>;<?php endif; ?>border:none<?php if ( $btn_border_css !== '' ) : ?>;<?php echo rtrim( $btn_border_css, ';' ); ?><?php endif; ?>;border-radius:<?php echo $btn_radius; ?>;padding:<?php echo Olobuild_Tile_Utils::sides_css( $btn_pad ); ?>;font-size:<?php echo $btn_fs; ?>px;font-weight:<?php echo $btn_fw; ?>;cursor:pointer;transition:background <?php echo $btn_bg_dur; ?> ease,<?php echo $btn_hover_border['transition'] ?: 'border-color 0.2s ease'; ?>,transform 0.15s ease;display:inline-flex;align-items:center;gap:8px<?php if ( $btn_ls > 0 ) : ?>;letter-spacing:<?php echo $btn_ls; ?>px<?php endif; ?><?php if ( $btn_tt !== 'none' ) : ?>;text-transform:<?php echo $btn_tt; ?><?php endif; ?><?php if ( $btn_full ) : ?>;width:100%;justify-content:center<?php endif; ?>}
@@ -976,7 +993,7 @@ JS;
                                 ?>
                                 <div class="olo-f-star-wrap" id="<?php echo $star_id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- id composed of literal prefix, esc_attr()-escaped name and wp_rand() ?>" style="display:flex;gap:4px;cursor:pointer">
                                     <?php for ( $si = 1; $si <= $max_stars; $si++ ) : ?>
-                                        <span class="olo-f-star" data-val="<?php echo (int) $si; ?>" style="font-size:28px;color:#9CA3AF;transition:color .15s" role="button" tabindex="0" aria-label="<?php echo (int) $si; ?> stelle">&#9733;</span>
+                                        <span class="olo-f-star" data-val="<?php echo (int) $si; ?>" style="font-size:28px;color:var(--olo-color-border, #9CA3AF);transition:color .15s" role="button" tabindex="0" aria-label="<?php echo (int) $si; ?> stelle">&#9733;</span>
                                     <?php endfor; ?>
                                     <input type="hidden" name="fields[<?php echo esc_attr( $fname ); ?>]" value=""<?php echo esc_attr( $req_attr ); ?> />
                                 </div>
@@ -986,11 +1003,11 @@ JS;
                                     if(!w)return;
                                     var stars=w.querySelectorAll('.olo-f-star');
                                     var inp=w.querySelector('input[type="hidden"]');
-                                    var accent='<?php echo esc_js( $this->safe_color_css( $s['check_accent_color'] ?? '' ) ?: '#F59E0B' ); ?>';
+                                    var accent='<?php echo esc_js( $this->safe_color_css( $s['check_accent_color'] ?? '' ) ?: 'var(--olo-color-warning, #F59E0B)' ); ?>';
                                     function set(v){
                                         inp.value=v;
                                         stars.forEach(function(s){
-                                            s.style.color=parseInt(s.dataset.val)<=v?accent:'#9CA3AF';
+                                            s.style.color=parseInt(s.dataset.val)<=v?accent:'var(--olo-color-border, #9CA3AF)';
                                         });
                                     }
                                     stars.forEach(function(s){
@@ -998,12 +1015,12 @@ JS;
                                         s.addEventListener('keydown',function(e){if(e.key==='Enter'){set(parseInt(s.dataset.val))}});
                                         s.addEventListener('mouseenter',function(){
                                             var val=parseInt(s.dataset.val);
-                                            stars.forEach(function(st){st.style.color=parseInt(st.dataset.val)<=val?accent:'#9CA3AF'});
+                                            stars.forEach(function(st){st.style.color=parseInt(st.dataset.val)<=val?accent:'var(--olo-color-border, #9CA3AF)'});
                                         });
                                     });
                                     w.addEventListener('mouseleave',function(){
                                         var cur=parseInt(inp.value)||0;
-                                        stars.forEach(function(s){s.style.color=parseInt(s.dataset.val)<=cur?accent:'#9CA3AF'});
+                                        stars.forEach(function(s){s.style.color=parseInt(s.dataset.val)<=cur?accent:'var(--olo-color-border, #9CA3AF)'});
                                     });
                                 })();
                                 </script>

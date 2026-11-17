@@ -118,11 +118,14 @@ export default {
   },
 
   fields: [
-    { key: 'eyebrow', label: t('Occhiello (sopra il titolo)'), type: 'text' },
-    { key: 'title', label: t('Titolo'), type: 'text',
-      description: t('Usa <em>parola</em> per evidenziarla in corsivo con il colore accento.') },
+    // 16 nov 2026 (episodio 37): il titolo con l'editor, il corsivo fa la parola d'accento (prima HTML a mano: <em>);
+    // la privacy con l'editor e il suo collegamento (prima «Testo privacy (HTML)»); etichette senza parentesi né
+    // inglese (Placeholder, Redirect, Content Lock, Honeypot); sei stili onesti coi colori del sito.
+    { key: 'eyebrow', label: t('Occhiello'), type: 'text' },
+    { key: 'title', label: t('Titolo'), type: 'editor', mode: 'inline', strumenti: ['corsivo'],
+      description: t('Le parole in corsivo prendono il colore d’accento.') },
     { key: 'subtitle', label: t('Sottotitolo'), type: 'textarea', rows: 2 },
-    { key: 'icon_type', label: t('Icona'), type: 'select', options: [
+    { key: 'icon_type', label: t('Sopra il titolo'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
       { value: 'icon', label: t('Icona del set') },
       { value: 'emoji', label: t('Testo') },
@@ -135,27 +138,29 @@ export default {
     { key: 'icon_image', label: t('Immagine icona'), type: 'image',
       condition: { field: 'icon_type', value: 'image' } },
 
-    { type: 'separator', label: t('Form') },
+    { type: 'separator', label: t('Modulo') },
     { key: 'show_name', label: t('Mostra campo nome'), type: 'toggle' },
-    { key: 'name_placeholder', label: t('Placeholder nome'), type: 'text',
+    { key: 'name_placeholder', label: t('Testo nel campo nome'), type: 'text',
       condition: { field: 'show_name', value: true } },
-    { key: 'email_placeholder', label: t('Placeholder email'), type: 'text' },
+    { key: 'email_placeholder', label: t('Testo nel campo email'), type: 'text' },
     { key: 'button_text', label: t('Testo pulsante'), type: 'text' },
     { key: 'button_icon', label: t('Icona nel pulsante'), type: 'toggle' },
     { key: 'button_icon_name', label: t('Icona'), type: 'icon', condition: { field: 'button_icon', value: true },
       description: t('Vuota: la freccia.') },
-    { key: 'privacy_text', label: t('Testo privacy (HTML)'), type: 'textarea', rows: 2, placeholder: 'Accetto la <a href="/privacy">privacy policy</a>' },
+    { key: 'privacy_text', label: t('Testo privacy'), type: 'editor', mode: 'inline',
+      description: t('La riga sotto il modulo, col collegamento alla pagina della privacy: seleziona le parole e premi il pulsante del collegamento.') },
     { key: 'privacy_required', label: t('Privacy obbligatoria'), type: 'toggle',
       condition: { field: 'privacy_text', operator: '!=', value: '' } },
 
-    { type: 'separator', label: t('Successo') },
-    { key: 'success_message', label: t('Messaggio successo'), type: 'textarea', rows: 2 },
-    { key: 'redirect_url', label: t('Redirect dopo iscrizione'), type: 'link', placeholder: t('https://...') },
+    { type: 'separator', label: t('Dopo l’iscrizione') },
+    { key: 'success_message', label: t('Messaggio'), type: 'textarea', rows: 2 },
+    { key: 'redirect_url', label: t('Pagina'), type: 'link', placeholder: t('https://...'),
+      description: t('La pagina dove va chi si è appena iscritto. Vuota: resta qui e vede il messaggio.') },
 
-    { type: 'separator', label: t('Content Lock') },
-    { key: 'content_lock', label: t('Blocca contenuto successivo'), type: 'toggle',
+    { type: 'separator', label: t('Contenuto riservato') },
+    { key: 'content_lock', label: t('Blocca il contenuto che segue'), type: 'toggle',
       description: t('Sfoca il primo blocco che viene dopo la tile nella pagina (la tile sotto nella stessa colonna, altrimenti la colonna o la sezione che segue) finché il visitatore non si iscrive. Nel canvas del builder il blocco resta in chiaro per poterlo modificare.') },
-    { key: 'lock_message', label: t('Messaggio blocco'), type: 'text',
+    { key: 'lock_message', label: t('Messaggio sul contenuto bloccato'), type: 'text',
       condition: { field: 'content_lock', value: true } },
 
     // Provider (Mailchimp, Brevo, ActiveCampaign, ConvertKit, HubSpot, webhook), le loro chiavi
@@ -164,27 +169,21 @@ export default {
     // controlli che li offrivano non facevano niente e sono tolti; le chiavi salvate restano nei
     // default. Tornano quando l'endpoint li userà, con le chiavi globali di Configurazione →
     // Integrazioni form come il Form Contatti (mai chiavi API nella tile).
-    { type: 'separator', label: t('Anti-spam') },
-    { key: 'honeypot', label: t('Honeypot (consigliato)'), type: 'toggle' },
+    { type: 'separator', label: t('Contro lo spam') },
+    { key: 'honeypot', label: t('Campo trappola'), type: 'toggle',
+      description: t('Un campo invisibile che le persone non vedono e i programmi automatici riempiono: chi lo riempie non viene iscritto. Consigliato.') },
   ],
 
   styleFields: [
-    { type: 'separator', label: t('Preset stilistico') },
+    { type: 'separator', label: t('Aspetto') },
     { key: 'preset', label: t('Stile'), type: 'select', options: [
-      { value: 'modern-clean',    label: t('Modern Clean') },
-      { value: 'minimal-inline',  label: t('Minimal Inline') },
-      { value: 'magazine-promo',  label: t('Magazine Promo') },
-      { value: 'centered-card',   label: t('Centered Card') },
-      { value: 'split-image',     label: t('Split with Image') },
-      { value: 'glass-floating',  label: t('Glass Floating') },
-      { value: 'neon-cyber',      label: t('Neon Cyber') },
-      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
-      { value: 'gradient-aurora', label: t('Gradient Aurora') },
-      { value: 'sticky-note',     label: t('Sticky Note') },
-      { value: 'retro-zine',      label: t('Retro Zine') },
-      { value: 'tilt-card',       label: t('Tilt Card') },
-      { value: 'custom',          label: t('Personalizzato') },
-    ]},
+      { value: 'chiaro',     label: t('Chiaro') },
+      { value: 'scheda',     label: t('Scheda') },
+      { value: 'scuro',      label: t('Scuro') },
+      { value: 'tinta',      label: t('Tinta') },
+      { value: 'linea',      label: t('Linea') },
+      { value: 'custom',     label: t('Personalizzato') },
+    ], description: t('Cambia insieme fondo, testi, campi e pulsante, coi colori del sito. Poi ogni controllo qui sotto si regola da solo.') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     ...textEffectsFields([
@@ -193,26 +192,19 @@ export default {
       { value: 'all', label: t('Tutti gli elementi testuali') },
     ]),
 
-    { type: 'separator', label: t('Successo — Animazione') },
-    { key: 'success_animation', label: t('Animazione successo'), type: 'select', options: [
-      { value: 'fade', label: t('Fade') },
-      { value: 'slide-up', label: t('Scivola su') },
-      { value: 'checkmark', label: t('Checkmark animato') },
-    ]},
-
-    { type: 'separator', label: t('Contenitore') },
-    { key: 'max_width', label: t('Larghezza max'), type: 'range', min: 320, max: 1200, step: 10 },
+    { type: 'separator', label: t('Forma') },
+    { key: 'max_width', label: t('Larghezza massima'), type: 'range', min: 320, max: 1200, step: 10, unit: 'px' },
     { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
     ]},
     { key: 'bg_color', label: t('Sfondo'), type: 'color' },
-    { key: 'box_border', label: t('Colore bordo box'), type: 'color' },
+    { key: 'box_border', label: t('Colore bordo'), type: 'color' },
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius'}),
     { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 60 },
 
-    { type: 'separator', label: t('Tipografia') },
+    { type: 'separator', label: t('Testo') },
     { type: 'typography', label: t('Titolo'),
       responsiveKeys: [],
       keys: {
@@ -223,7 +215,8 @@ export default {
       sizeMin: 14, sizeMax: 48, sizeStep: 1,
     },
     { key: 'eyebrow_color', label: t('Colore occhiello'), type: 'color' },
-    { key: 'title_accent_color', label: t('Colore accento titolo (em)'), type: 'color' },
+    { key: 'title_accent_color', label: t('Colore accento'), type: 'color',
+      description: t('Le parole in corsivo del titolo. Vuoto: il primario del sito.') },
     { type: 'typography', label: t('Sottotitolo'),
       responsiveKeys: [],
       keys: {
@@ -243,42 +236,50 @@ export default {
       sizeMin: 11, sizeMax: 20, sizeStep: 1,
     },
 
-    { type: 'separator', label: t('Icona — Aspetto') },
+    { type: 'separator', label: t('Icona') },
     { key: 'icon_size', label: t('Dimensione icona'), type: 'range', min: 24, max: 96, step: 2 },
     { key: 'icon_color', label: t('Colore icona'), type: 'color' },
 
-    { type: 'separator', label: t('Stile input') },
-    { key: 'input_bg', label: t('Sfondo input'), type: 'color' },
-    { key: 'input_color', label: t('Colore testo input'), type: 'color' },
-    { key: 'input_placeholder_color', label: t('Colore placeholder'), type: 'color' },
-    { key: 'input_border', label: t('Bordo input'), type: 'color' },
-    { key: 'input_focus_border', label: t('Bordo focus'), type: 'color' },
-    withHover({ key: 'input_radius', label: t('Raggio input'), type: 'border-radius'}),
-    { key: 'input_height', label: t('Altezza input'), type: 'range', min: 32, max: 56, step: 2 },
+    { type: 'separator', label: t('Campi') },
+    { key: 'input_bg', label: t('Sfondo campi'), type: 'color' },
+    { key: 'input_color', label: t('Colore testo campi'), type: 'color' },
+    { key: 'input_placeholder_color', label: t('Suggerimento'), type: 'color',
+      description: t('Il testo grigio nei campi vuoti.') },
+    { key: 'input_border', label: t('Bordo campi'), type: 'color' },
+    { key: 'input_focus_border', label: t('Bordo mentre si scrive'), type: 'color' },
+    withHover({ key: 'input_radius', label: t('Raggio campi'), type: 'border-radius'}),
+    { key: 'input_height', label: t('Altezza campi'), type: 'range', min: 32, max: 56, step: 2, unit: 'px' },
 
-    { type: 'separator', label: t('Stile pulsante') },
+    { type: 'separator', label: t('Pulsante') },
     withHover({ key: 'btn_bg', label: t('Sfondo pulsante'), type: 'color' }, { hoverKey: 'btn_hover_bg', defaultDuration: 200 }),
     withHover({ key: 'btn_radius', label: t('Raggio pulsante'), type: 'border-radius'}),
 
-    { type: 'separator', label: t('Messaggi & Privacy') },
-    { key: 'privacy_color', label: t('Colore testo privacy'), type: 'color' },
-    { key: 'success_bg', label: t('Sfondo messaggio successo'), type: 'color' },
-    { key: 'success_color', label: t('Colore testo successo'), type: 'color' },
-    { key: 'error_bg', label: t('Sfondo messaggio errore'), type: 'color' },
-    { key: 'error_color', label: t('Colore testo errore'), type: 'color' },
+    { type: 'separator', label: t('Messaggi e privacy') },
+    { key: 'privacy_color', label: t('Testo privacy'), type: 'color' },
+    { key: 'success_bg', label: t('Sfondo conferma'), type: 'color' },
+    { key: 'success_color', label: t('Testo conferma'), type: 'color' },
+    { key: 'error_bg', label: t('Sfondo errore'), type: 'color' },
+    { key: 'error_color', label: t('Testo errore'), type: 'color' },
+    { key: 'success_animation', label: t('Animazione'), type: 'select', options: [
+      { value: 'fade', label: t('Dissolvenza') },
+      { value: 'slide-up', label: t('Scivola su') },
+      { value: 'checkmark', label: t('Spunta animata') },
+    ], description: t('Come compare il messaggio di conferma dopo l’iscrizione.') },
 
     ...shadowField,
     ...borderFields(),
-    { type: 'separator', label: t('Content Lock') },
-    { key: 'lock_blur', label: t('Sfocatura contenuto'), type: 'range', min: 0, max: 20, step: 1,
+    { type: 'separator', label: t('Contenuto riservato'), condition: { field: 'content_lock', value: true } },
+    { key: 'lock_blur', label: t('Sfocatura contenuto'), type: 'range', min: 0, max: 20, step: 1, unit: 'px',
       condition: { field: 'content_lock', value: true } },
-    { key: 'lock_height', label: t('Altezza anteprima'), type: 'range', min: 50, max: 500, step: 10,
+    { key: 'lock_height', label: t('Altezza anteprima'), type: 'range', min: 50, max: 500, step: 10, unit: 'px',
       condition: { field: 'content_lock', value: true } },
     { type: 'separator', label: t('Disposizione') },
-    { key: 'layout', label: t('Layout'), type: 'select', options: [
-      { value: 'horizontal', label: t('Orizzontale (inline)') },
-      { value: 'vertical', label: t('Verticale (stacked)') },
-      { value: 'minimal', label: t('Minimal (solo email)') },
-    ]},
+    { key: 'layout', label: t('Modulo'), type: 'select', ui: 'dropdown', options: [
+      { value: 'horizontal', label: t('In riga') },
+      { value: 'vertical', label: t('In colonna') },
+      // «Minimal» impilava i campi come «In colonna» e stringeva solo il pulsante, che in colonna è largo quanto il
+      // modulo: identico. Resta per i valori già salvati, non si propone più (16 nov 2026).
+      { value: 'minimal', label: t('In colonna'), soloSeAttiva: true },
+    ], description: t('In riga: campi e pulsante uno accanto all’altro. In colonna: uno sotto l’altro, col pulsante largo quanto il modulo.') },
   ],
 };

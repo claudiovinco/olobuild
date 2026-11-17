@@ -112,7 +112,9 @@ export default {
     { key: 'etichetta', label: t('Etichetta'), type: 'text',
       description: t('Una parola sopra il nome, in evidenza: «Nuova serie», «Disponibile a magazzino». Vuota: niente.') },
     { key: 'descrizione', label: t('Descrizione breve'), type: 'textarea', supportsDynamic: true },
-    { key: 'immagine', label: t('Foto'), type: 'image', supportsDynamic: true },
+    // Niente PNG grigio di segnaposto (17 nov 2026): la tile ha il suo («La foto del prodotto», solo nel builder) e col
+    // segnaposto la foto risultava piena: le condizioni della foto non agivano e sul sito restava un rettangolo grigio.
+    { key: 'immagine', label: t('Foto'), type: 'image', supportsDynamic: true, segnaposto: false },
 
     { type: 'separator', label: t('Specifiche') },
     { key: 'titolo_specifiche', label: t('Titolo delle specifiche'), type: 'text' },
@@ -218,6 +220,8 @@ export default {
     { key: 'larghezza_foto', label: t('Larghezza della foto'), type: 'range', min: 25, max: 65, step: 1, unit: '%',
       condition: [conFoto, { field: 'foto_posizione', op: 'neq', value: 'sopra' }] },
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 120, step: 2, unit: 'px' },
-    { key: 'colonne_specifiche', label: t('Colonne delle specifiche'), type: 'range', min: 1, max: 2, step: 1 },
+    { key: 'colonne_specifiche', label: t('Colonne delle specifiche'), type: 'select', options: [
+      { value: 1, label: '1' }, { value: 2, label: '2' },
+    ] },
   ],
 };

@@ -29,7 +29,7 @@
        select: emette gli stessi value stringa — è SOLO una resa alternativa. -->
   <!-- Con le icone (allineamenti, lati, direzioni, misure…: iconeOpzioni) i pulsanti mostrano l'icona e il nome
        compare nel popup al passaggio e al focus: scritti, nella colonna stretta, si tagliavano («Sini…»). -->
-  <div v-else-if="isSegmented" class="fsel-seg" :class="{ 'fsel-seg--icone': icone }" role="radiogroup" :aria-label="ariaLabel || undefined">
+  <div v-else-if="isSegmented" ref="segEl" class="fsel-seg" :class="{ 'fsel-seg--icone': icone }" role="radiogroup" :aria-label="ariaLabel || undefined">
     <button
       v-for="(opt, i) in flatOptions"
       :key="opt.value"
@@ -135,7 +135,7 @@
 
 <script setup>
 import { t } from '@/i18n';
-import { ref, computed, nextTick, onBeforeUnmount } from 'vue';
+import { ref, computed, nextTick, onBeforeUnmount, watch } from 'vue';
 import { useStylesStore } from '@/stores/styles';
 import { resolveColorToken } from '@/utils/colorToken';
 import { iconeOpzioni } from '@/utils/iconeOpzioni';
@@ -203,12 +203,37 @@ const selected = computed(() => flatOptions.value.find(o => isActive(o)) || null
 const icone = computed(() => (props.ui === 'dropdown' || hasGroups.value || conAnteprime.value)
   ? null : iconeOpzioni(flatOptions.value, props.campo));
 
+// Pulsanti affiancati SOLO se i nomi ci stanno: undici lettere a voce non bastavano a dirlo, perché quattro voci
+// da dieci lettere nella colonna stretta accanto all'etichetta si tagliavano («Chev… Più/M… Frecc… Trian…» nello
+// stile icona della Fisarmonica, 16 nov 2026). Quando un pulsante taglia il suo nome la scelta diventa un menu.
+const stretto = ref(false);
+const segEl = ref(null);
+let osservatore = null;
+function misura() {
+  const el = segEl.value;
+  if (!el || icone.value || props.ui === 'segmented') return;
+  if (!el.offsetParent || el.clientWidth === 0) return; // ancora nascosto (sezione chiusa): si rimisura quando compare
+  if ([...el.querySelectorAll('.fsel-seg-btn')].some((b) => b.scrollWidth > b.clientWidth + 1)) {
+    stretto.value = true;
+    if (osservatore) { osservatore.disconnect(); osservatore = null; }
+  }
+}
+watch(segEl, (el) => {
+  if (osservatore) { osservatore.disconnect(); osservatore = null; }
+  if (!el || typeof ResizeObserver === 'undefined') return;
+  osservatore = new ResizeObserver(() => misura());
+  osservatore.observe(el);
+  nextTick(misura);
+});
+onBeforeUnmount(() => { if (osservatore) osservatore.disconnect(); });
+
 const isSegmented = computed(() => {
   if (props.ui === 'dropdown') return false;
   if (conAnteprime.value) return false; // le miniature stanno nel popup
   if (hasGroups.value) return false; // i gruppi hanno senso solo nel popup
   if (props.ui === 'segmented') return true;
   if (icone.value) return true; // fino a cinque icone stanno in fila, qualunque sia la lunghezza dei nomi
+  if (stretto.value) return false;
   const opts = flatOptions.value;
   if (opts.length < 2 || opts.length > SEG_MAX_OPTIONS) return false;
   return opts.every(o => String(t(o.label || '')).length <= SEG_MAX_LABEL);

@@ -66,7 +66,8 @@ FIRME = {
     'presa-diretta': dict(dosato=2, ingresso='flip-x', testo='glitch', immagini='tilt', forma='steps'),
     'anima': dict(dosato=2, ingresso='fade-up-big', testo='reveal-letter', immagini='tilt', forma='curve'),
     'fondente': dict(dosato=2, ingresso='zoom-in-up', testo='gradient-anim', testo_colori=(P, A), immagini='zoom', forma='drips'),
-    'mano-libera': dict(dosato=2, ingresso='flip-y', testo='underline-grow', testo_colori=(P, ''), immagini='tilt', forma='steps'),
+    # senza sagoma: i gradini velati di primario uscivano come una fascia marrone estranea fra due sezioni scure (16 nov 2026)
+    'mano-libera': dict(dosato=2, ingresso='flip-y', testo='underline-grow', testo_colori=(P, ''), immagini='tilt'),
     'girotondo': dict(dosato=2, ingresso='zoom-in', testo='wave', immagini='tilt', forma='clouds'),
     'strapiombo': dict(dosato=2, ingresso='zoom-in-up', testo='underline-grow', testo_colori=(P, ''), immagini='zoom', forma='peak'),
     'fornace': dict(dosato=2, ingresso='blur-in', testo='gradient-anim', testo_colori=(P, A), immagini='fuoco', forma='wave'),

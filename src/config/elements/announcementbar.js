@@ -14,8 +14,8 @@ export default {
 
   defaults: {
     typography_preset: '',
-    text: 'Complimentary shipping & returns worldwide · ',
-    accent_text: 'The Nocturne collection has arrived',
+    text: t('Spedizione gratuita sopra i 50 € · '),
+    accent_text: t('Scopri la nuova collezione'),
     link_url: '',
     dismissible: false,
     bg_color: '',
@@ -47,18 +47,25 @@ export default {
   },
 
   fields: [
+    // 16 nov 2026 (episodio 38): etichette senza parentesi, le spiegazioni nelle (i); lo Stile nelle zone Aspetto,
+    // Testo, Forma, Disposizione; i testi di riserva in italiano (erano quelli inglesi del blueprint).
     { key: 'text', label: t('Testo'), type: 'text' },
-    { key: 'accent_text', label: t('Testo evidenziato (accento)'), type: 'text' },
-    { key: 'link_url', label: t('Link (opzionale, rende cliccabile la barra)'), type: 'link' },
-    { key: 'dismissible', label: t('Chiudibile (X + memoria)'), type: 'toggle' },
+    { key: 'accent_text', label: t('Parte evidenziata'), type: 'text',
+      description: t('Le parole dopo il testo, nel colore d’accento: la novità, l’offerta, la data.') },
+    { key: 'link_url', label: t('Link'), type: 'link',
+      description: t('Facoltativo: con un link tutta la barra si può cliccare.') },
+    { key: 'dismissible', label: t('Si può chiudere'), type: 'toggle',
+      description: t('Una × a destra: chi la chiude non la rivede su quel dispositivo, finché il testo non cambia.') },
   ],
 
   styleFields: [
-    { type: 'separator', label: t('Colori') },
-    { key: 'bg_color', label: t('Sfondo'), type: 'color' },
-    { key: 'accent_color', label: t('Accento'), type: 'color' },
+    { type: 'separator', label: t('Aspetto') },
+    { key: 'bg_color', label: t('Colore di fondo'), type: 'color' },
+    { key: 'accent_color', label: t('Colore accento'), type: 'color',
+      description: t('Il colore della parte evidenziata. Vuoto: il primario del sito.') },
+    { key: 'bg', label: t('Sfondo'), type: 'background', showParallax: false },
 
-    { type: 'separator', label: t('Tipografia') },
+    { type: 'separator', label: t('Testo') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Testo'),
       responsiveKeys: [],
@@ -72,18 +79,17 @@ export default {
       },
       sizeMin: 9, sizeMax: 18, sizeStep: 1,
     },
-    { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
-      { value: 'center', label: t('Centro') }, { value: 'left', label: t('Sinistra') }, { value: 'right', label: t('Destra') },
-    ]},
 
-    { type: 'separator', label: t('Spaziatura') },
+    { type: 'separator', label: t('Forma') },
     { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 40 },
+    { key: 'border_bottom', label: t('Filo sotto'), type: 'range', min: 0, max: 4, step: 1, unit: 'px',
+      description: t('Una riga sottile lungo il bordo inferiore, per staccare la barra dal menu. 0: nessuna.') },
+    { key: 'border_color', label: t('Colore del filo'), type: 'color',
+      condition: { field: 'border_bottom', op: 'gt', value: 0 } },
 
-    { type: 'separator', label: t('Bordo inferiore') },
-    { key: 'border_bottom', label: t('Spessore'), type: 'range', min: 0, max: 4, step: 1 },
-    { key: 'border_color', label: t('Colore bordo'), type: 'color' },
-
-    { type: 'separator', label: t('Sfondo creativo') },
-    { key: 'bg', label: t('Sfondo completo'), type: 'background', showParallax: false },
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') }, { value: 'center', label: t('Centro') }, { value: 'right', label: t('Destra') },
+    ]},
   ],
 };

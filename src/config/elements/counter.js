@@ -89,7 +89,7 @@ export default {
     { key: 'label', label: t('Etichetta'), type: 'text' },
     { key: 'prefix', label: t('Prefisso'), type: 'text' },
     { key: 'suffix', label: t('Suffisso'), type: 'text' },
-    { key: 'icon_emoji', label: t('Icona / Emoji'), type: 'icon' },
+    { key: 'icon_emoji', label: t('Icona'), type: 'icon' },
 
     { type: 'separator', label: t('Conteggio') },
     { key: 'vivo', label: t('Dal vivo'), type: 'toggle',
@@ -116,35 +116,33 @@ export default {
     { key: 'vivo_decimali', label: t('Decimali'), type: 'range', min: 0, max: 2, step: 1,
       condition: { field: 'vivo', value: true } },
 
-    { type: 'separator', label: t('Sfondo') },
-    { key: 'overlay', label: t('Overlay scuro sul media'), type: 'toggle' },
   ],
 
+  // 17 nov 2026 (episodio 44): lo Stile nelle zone Aspetto · Testo · Forma; il velo sul media dal Contenuto allo Stile,
+  // accanto allo Sfondo; stili onesti coi colori del sito (erano dodici nomi inglesi a colori fissi che scrivevano la
+  // vecchia chiave bg_color invece dello Sfondo); le unità nei cursori.
   styleFields: [
-    { type: 'separator', label: t('Preset stilistico') },
+    { type: 'separator', label: t('Aspetto') },
     { key: 'preset', label: t('Stile'), type: 'select', options: [
-      { value: 'modern-bold',      label: t('Modern Bold') },
-      { value: 'minimal-thin',     label: t('Minimal Thin') },
-      { value: 'magazine-editorial', label: t('Magazine Editorial') },
-      { value: 'centered-circle',  label: t('Centered Circle') },
-      { value: 'highlight-box',    label: t('Highlight Box') },
-      { value: 'glass-card',       label: t('Glass Card') },
-      { value: 'neon-glow',        label: t('Neon Glow') },
-      { value: 'brutalist-mega',   label: t('Brutalist Mega') },
-      { value: 'gradient-aurora',  label: t('Gradient Aurora') },
-      { value: 'sticker-badge',    label: t('Sticker Badge') },
-      { value: 'retro-digital',    label: t('Retro Digital') },
-      { value: 'tilt-3d',          label: t('3D Tilt') },
-      { value: 'custom',           label: t('Personalizzato') },
-    ]},
+      { value: 'semplice', label: t('Semplice') },
+      { value: 'riquadro', label: t('Riquadro tenue') },
+      { value: 'scheda',   label: t('Scheda') },
+      { value: 'pieno',    label: t('Pieno') },
+      { value: 'scuro',    label: t('Scuro') },
+      { value: 'custom',   label: t('Personalizzato') },
+    ], description: t('Cambia insieme sfondo, testi, raggio e spazi, coi colori del sito. Poi ogni controllo qui sotto si regola da solo.') },
+    { key: 'media_bg', label: t('Sfondo'), type: 'background', showParallax: false,
+      description: t('Immagine, video, gradiente o colore dietro il numero.') },
+    { key: 'overlay', label: t('Velo scuro sul media'), type: 'toggle' },
+    { key: 'overlay_color', label: t('Colore del velo'), type: 'color',
+      condition: { field: 'overlay', value: true } },
+    { key: 'overlay_opacity', label: t('Opacità del velo'), type: 'range', min: 10, max: 100, step: 5, unit: '%',
+      condition: { field: 'overlay', value: true } },
+    ...shadowField,
+    ...borderFields(),
+
+    { type: 'separator', label: t('Testo') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-
-    ...textEffectsFields([ { value: 'label', label: t('Solo Etichetta') } ]),
-
-    { type: 'separator', label: t('Icona') },
-    { key: 'icon_size', label: t('Dimensione icona'), type: 'range', min: 16, max: 80, step: 2 },
-
-    { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Numero'),
       responsiveKeys: [],
       keys: {
@@ -167,20 +165,13 @@ export default {
       },
       sizeMin: 10, sizeMax: 32, sizeStep: 1,
     },
+    // Gli effetti del testo hanno un loro separatore: dopo le tipografie, se no Numero ed Etichetta finivano nella
+    // sezione «Effetti testo».
+    ...textEffectsFields([ { value: 'label', label: t('Solo Etichetta') } ]),
 
-    { type: 'separator', label: t('Colori') },
-    { key: 'overlay_color', label: t('Colore overlay'), type: 'color',
-      condition: { field: 'overlay', value: true } },
-    { key: 'overlay_opacity', label: t('Opacità overlay'), type: 'range', min: 10, max: 100, step: 5,
-      condition: { field: 'overlay', value: true } },
-
-    { type: 'separator', label: t('Aspetto tile') },
+    { type: 'separator', label: t('Forma') },
     { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 80 },
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
-
-    ...shadowField,
-    ...borderFields(),
-    { type: 'separator', label: t('Sfondo') },
-    { key: 'media_bg', label: t('Sfondo (immagine, video, gradiente, colore…)'), type: 'background', showParallax: false },
+    { key: 'icon_size', label: t('Dimensione icona'), type: 'range', min: 16, max: 80, step: 2, unit: 'px' },
   ],
 };

@@ -127,6 +127,22 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
 
     const STATI = [ 'ultimi', 'esaurito', 'annullato', 'gratuito', 'prenotazione', 'rinviato' ];
 
+    /**
+     * Gli appuntamenti d'esempio contano da OGGI (fra 12, 26 e 33 giorni), come nel config: con le date fisse una tile
+     * trascinata dopo il 14 novembre 2026 nasceva col primo spettacolo già passato (attenuato, senza «Biglietti»), e
+     * il builder la crea dai default del PHP, non da quelli del config.
+     */
+    public function get_defaults() {
+        $d    = $this->defaults;
+        $oggi = (int) current_time( 'timestamp' );
+        foreach ( [ 12, 26, 33 ] as $i => $giorni ) {
+            if ( isset( $d['voci'][ $i ] ) ) {
+                $d['voci'][ $i ]['data'] = gmdate( 'Y-m-d', $oggi + $giorni * DAY_IN_SECONDS );
+            }
+        }
+        return $d;
+    }
+
     public function get_controls() {
         return [];
     }
@@ -445,6 +461,8 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
         echo "{$sel} .ocrt-passato .ocrt-btn{display:none}";
         echo "{$sel} [hidden]{display:none!important}";
 
+        // La tile misura sé stessa: le viste si dispongono secondo la colonna in cui sta, non lo schermo.
+        echo "{$sel}{container-type:inline-size;container-name:ocrt}";
         if ( 'lista' === $vista ) {
             $colonne = 'var(--ocrt-ld) minmax(0,1fr)' . ( $immag ? ' minmax(11rem,17rem)' : '' );
             echo "{$sel} .ocrt-voce{display:grid;grid-template-columns:{$colonne};gap:1.2rem 2.2rem;align-items:start;padding:{$pad};border-bottom:1px solid var(--ocrt-linea);" . ( $sfondo ? "background:{$sfondo};" : '' ) . ( $bordo ? "border:{$bordo};border-radius:var(--ocrt-r);margin-bottom:var(--ocrt-gap);" : '' ) . ( 'none' !== $ombra ? "box-shadow:{$ombra};" : '' ) . 'transition:background-color .3s}';
@@ -458,9 +476,12 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
             echo "{$sel} .ocrt-data{display:flex;flex-direction:column;align-items:flex-start;gap:.15rem;padding-top:.2rem}";
             echo "{$sel} .ocrt-gg{line-height:.9}";
             echo "{$sel} .ocrt-lato{display:flex;flex-direction:column;gap:1rem}";
-            echo "{$sel} .ocrt-lato .ocrt-azioni{margin-top:0}";
-            echo '@media (max-width:960px){' . "{$sel} .ocrt-voce{grid-template-columns:var(--ocrt-ld) minmax(0,1fr)}{$sel} .ocrt-lato{grid-column:2;grid-row:auto}{$sel} .ocrt-corpo{grid-column:2;grid-row:1}{$sel} .ocrt-img{max-width:22rem}" . '}';
-            echo '@media (max-width:640px){' . "{$sel} .ocrt-voce{grid-template-columns:1fr;gap:.9rem}{$sel} .ocrt-data{flex-direction:row;align-items:baseline;gap:.6rem;flex-wrap:wrap}{$sel} .ocrt-lato,{$sel} .ocrt-corpo{grid-column:1;grid-row:auto}{$sel} .ocrt-img{max-width:none}" . '}';
+            // i pulsanti a destra: il tondo del calendario cade nello stesso punto con e senza «Biglietti» (17 nov 2026)
+            echo "{$sel} .ocrt-lato .ocrt-azioni{margin-top:0;justify-content:flex-end}";
+            // Le soglie sono sulla larghezza della TILE (container «ocrt», 17 nov 2026): in una colonna stretta del computer
+            // data, testo e pulsanti restavano affiancati in 445 px, il testo a una parola per riga e «Biglietti» sul genere.
+            echo '@container ocrt (max-width:860px){' . "{$sel} .ocrt-voce{grid-template-columns:var(--ocrt-ld) minmax(0,1fr)}{$sel} .ocrt-lato{grid-column:2;grid-row:auto}{$sel} .ocrt-corpo{grid-column:2;grid-row:1}{$sel} .ocrt-img{max-width:22rem}{$sel} .ocrt-lato .ocrt-azioni{justify-content:flex-start}" . '}';
+            echo '@container ocrt (max-width:560px){' . "{$sel} .ocrt-voce{grid-template-columns:1fr;gap:.9rem}{$sel} .ocrt-data{flex-direction:row;align-items:baseline;gap:.6rem;flex-wrap:wrap}{$sel} .ocrt-lato,{$sel} .ocrt-corpo{grid-column:1;grid-row:auto}{$sel} .ocrt-img{max-width:none}" . '}';
         } elseif ( 'schede' === $vista ) {
             echo "{$sel} .ocrt-elenco{display:grid;grid-template-columns:repeat(var(--ocrt-col),minmax(0,1fr));gap:var(--ocrt-gap)}";
             echo "{$sel} .ocrt-mese{grid-column:1/-1}";
@@ -471,11 +492,12 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
             echo "{$sel} .ocrt-corpo{display:flex;flex-direction:column;flex:1;padding:{$pad}}";
             echo "{$sel} .ocrt-corpo .ocrt-azioni{margin-top:auto;padding-top:1.1rem}";
             echo "{$sel} .ocrt-quando{margin:0 0 .45rem;font-size:.85rem;opacity:.75}";
-            echo '@media (max-width:960px){' . "{$sel} .ocrt-elenco{grid-template-columns:repeat(min(2,var(--ocrt-col)),minmax(0,1fr))}" . '}';
-            echo '@media (max-width:640px){' . "{$sel} .ocrt-elenco{grid-template-columns:1fr}" . '}';
+            echo '@container ocrt (max-width:860px){' . "{$sel} .ocrt-elenco{grid-template-columns:repeat(min(2,var(--ocrt-col)),minmax(0,1fr))}" . '}';
+            echo '@container ocrt (max-width:520px){' . "{$sel} .ocrt-elenco{grid-template-columns:1fr}" . '}';
             echo $this->css_per_dispositivo( $s, 'colonne', "{$sel} .ocrt-elenco", $this->decl_colonne( 4 ) );
         } else {
             echo "{$sel} .ocrt-pross{display:grid;grid-template-columns:" . ( $immag ? 'minmax(0,1.05fr) minmax(0,1fr)' : 'minmax(0,1fr)' ) . ";gap:clamp(1.5rem,4vw,4rem);align-items:center;" . ( $sfondo ? "background:{$sfondo};padding:clamp(1.25rem,3vw,2.5rem);border-radius:var(--ocrt-r);" : '' ) . ( $bordo ? "border:{$bordo};" : '' ) . ( 'none' !== $ombra ? "box-shadow:{$ombra};" : '' ) . '}';
+            echo "{$sel} .ocrt-pross.ocrt-senza-img{grid-template-columns:minmax(0,1fr)}";
             if ( ! $intera && ! $rapp_scelto ) {
                 echo "{$sel} .ocrt-pross .ocrt-img{aspect-ratio:4/5}";
             }
@@ -490,7 +512,7 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
             echo "{$sel} .ocrt-cifre b{font-weight:400;line-height:1;font-variant-numeric:tabular-nums}";
             echo "{$sel} .ocrt-cifre i{font-style:normal;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;opacity:.7;margin-top:.35rem}";
             echo "{$sel} .ocrt-adesso{font-size:1.2rem;color:var(--ocrt-acc)}";
-            echo '@media (max-width:960px){' . "{$sel} .ocrt-pross{grid-template-columns:1fr}" . ( $intera || $rapp_scelto ? '' : "{$sel} .ocrt-pross .ocrt-img{aspect-ratio:16/10}" ) . '}';
+            echo '@container ocrt (max-width:760px){' . "{$sel} .ocrt-pross{grid-template-columns:1fr}" . ( $intera || $rapp_scelto ? '' : "{$sel} .ocrt-pross .ocrt-img{aspect-ratio:16/10}" ) . '}';
             if ( $biglietto ) {
                 $trat = 'color-mix(in srgb, currentColor 30%, transparent)';
                 echo "{$sel} .ocrt-pross.ocrt-biglietto{grid-template-columns:auto minmax(0,1fr) auto;gap:0;align-items:stretch;padding:0;" . ( $bordo ? '' : 'border:1px solid var(--ocrt-linea);' ) . '}';
@@ -519,7 +541,7 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
                 // Il tagliando va sotto quando il BIGLIETTO è stretto, non lo schermo: in una colonna (il prossimo
                 // concerto accanto all'ultima notizia, coro 3 nov 2026) a 1100 px il titolo andava a capo parola per
                 // parola. Sotto, il conto e i pulsanti stanno in fila finché ci stanno.
-                echo "{$sel}{container-type:inline-size;container-name:ocrt-biglietto}";
+                echo "{$sel}{container-type:inline-size;container-name:ocrt ocrt-biglietto}";
                 echo '@container ocrt-biglietto (max-width:779px){'
                     . "{$sel} .ocrt-pross.ocrt-biglietto{grid-template-columns:auto minmax(0,1fr)}"
                     . "{$sel} .ocrt-biglietto .ocrt-data{min-width:0}"
@@ -687,8 +709,10 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
                     . ( $meta ? '<p class="ocrt-meta">' . esc_html( implode( ' · ', $meta ) ) . '</p>' : '' ) . $sopra . '</div>';
                 return $h . '<div class="ocrt-lato">' . $conto . $azioni . '</div></article>';
             }
-            $h  = '<article class="' . $cls . ' ocrt-pross"' . $attr . '>';
-            if ( $immag ) {
+            // senza la foto dell'appuntamento il testo prende tutta la larghezza: il riquadro vuoto lasciava mezza tile grigia
+            $con_img = $immag && '' !== $img_html;
+            $h       = '<article class="' . $cls . ' ocrt-pross' . ( $immag && ! $con_img ? ' ocrt-senza-img' : '' ) . '"' . $attr . '>';
+            if ( $con_img ) {
                 $h .= '<figure class="ocrt-img">' . $img_html . '</figure>';
             }
             $h .= '<div class="ocrt-corpo"><span class="ocrt-occ">' . esc_html( (string) $s['occhiello_prossimo'] ) . '</span>'

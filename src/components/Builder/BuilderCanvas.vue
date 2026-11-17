@@ -319,16 +319,24 @@ useAutoScroll(
 // ── Live iframe preview ──
 const { iframeReady, iframeHeight, postToIframe } = useIframeBridge(iframeRef);
 
+// Cache-buster FISSATO all'apertura del template (e a ogni cambio di template): prima seguiva updated_at, che cambia a
+// OGNI salvataggio, e l'anteprima si ricaricava dopo ogni «Salva»: un secondo di «Pagina vuota» e il canvas che tornava
+// in cima alla pagina (16 nov 2026). Il contenuto lo manda comunque il builder (renderFull, col CSS della pagina).
+const bustFissato = { id: null, v: '' };
+
 const iframeSrc = computed(() => {
   const base = window.oloData?.siteInfo?.home_url || window.oloData?.home_url || window.location.origin;
   // Passa il template_id al PHP serve_builder_iframe: se trova un post che usa
   // questo template, redirezionerà l'iframe al permalink reale (in modo che
   // header/footer/regole vengano applicati come in produzione).
   const tplId = builderStore.currentTemplate?.id || 0;
-  // Cache-buster basato su updated_at del template (cambia solo quando il template muta).
-  // Evita che il browser serva una response cached vecchia (es. 403 dopo cambio capability).
-  const updatedAt = builderStore.currentTemplate?.updated_at || '';
-  const buster = updatedAt ? '&v=' + encodeURIComponent(updatedAt) : '';
+  // Cache-buster da updated_at del template all'apertura: evita che il browser serva una response cached vecchia
+  // (es. 403 dopo cambio capability), senza ricaricare l'anteprima a ogni salvataggio.
+  if (bustFissato.id !== tplId) {
+    bustFissato.id = tplId;
+    bustFissato.v = builderStore.currentTemplate?.updated_at || '';
+  }
+  const buster = bustFissato.v ? '&v=' + encodeURIComponent(bustFissato.v) : '';
   // Pagina per cui il builder ha risolto header e footer (oloData.resolvedZones):
   // il PHP porta l'iframe lì, così il canvas mostra le zone che si modificano.
   // Sempre, anche 0 (olo_ctx): il contesto vale per tutta la sessione, e il PHP

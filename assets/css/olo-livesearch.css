@@ -124,9 +124,11 @@
   appearance: none;
 }
 
+/* Il colore del testo del campo, attenuato: col colore della lente, che di partenza è il primario, il suggerimento
+   usciva rosso e poco leggibile (16 nov 2026). */
 .olo-ls-input::placeholder {
-  color: var(--ls-icon-color, #9ca3af);
-  opacity: .7;
+  color: var(--ls-input-color, #374151);
+  opacity: .72;
 }
 
 /* Nasconde tutte le decorazioni native del browser su input[type=search] */

@@ -25,17 +25,20 @@
         <span class="rte-sep"></span>
 
         <button
+          v-if="!strumenti || strumenti.includes('grassetto')"
           type="button"
           @click="editor?.chain().focus().toggleBold().run()"
           :class="{ active: editor?.isActive('bold') }"
-          :title="t('Bold')"
+          :title="t('Grassetto')"
         ><strong>B</strong></button>
         <button
+          v-if="!strumenti || strumenti.includes('corsivo')"
           type="button"
           @click="editor?.chain().focus().toggleItalic().run()"
           :class="{ active: editor?.isActive('italic') }"
-          :title="t('Italic')"
+          :title="t('Corsivo')"
         ><em>I</em></button>
+        <template v-if="!strumenti">
         <button
           type="button"
           @click="editor?.chain().focus().toggleUnderline().run()"
@@ -171,10 +174,11 @@
               :class="{ active: currentFontSize === s }" @click="setFontSize(s)">{{ s }}</button>
           </div>
         </div>
+        </template>
       </div>
 
       <!-- Row 2: paragraph formatting (block mode only) -->
-      <div v-if="mode === 'block'" class="rte-row">
+      <div v-if="mode === 'block' && !strumenti" class="rte-row">
         <button
           type="button"
           @click="editor?.chain().focus().setTextAlign('left').run()"
@@ -325,6 +329,11 @@ import { t } from '@/i18n';
 const props = defineProps({
   modelValue: { type: String, default: '' },
   mode: { type: String, default: 'inline', validator: v => ['block', 'inline'].includes(v) },
+  // Solo alcuni pulsanti (es. ['corsivo'] per una citazione, dove il renderer tiene solo il corsivo): una barra
+  // piena offrirebbe colori, link e dimensioni che poi non si vedrebbero. Vuoto = barra completa.
+  strumenti: { type: Array, default: null },
+  // In linea, Maiusc+Invio va a capo (<br>): serve dove la riga spezzata fa parte del disegno (Manifesto, 16 nov 2026).
+  aCapo: { type: Boolean, default: false },
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -448,7 +457,7 @@ function buildExtensions() {
       bulletList: props.mode === 'block' ? {} : false,
       orderedList: props.mode === 'block' ? {} : false,
       blockquote: props.mode === 'block' ? {} : false,
-      hardBreak: props.mode === 'block',
+      hardBreak: props.mode === 'block' || props.aCapo,
       horizontalRule: props.mode === 'block' ? {} : false,
       underline: false,
       link: false,
@@ -496,7 +505,8 @@ const editor = useEditor({
   editorProps: {
     handleKeyDown: props.mode === 'inline'
       ? (view, event) => {
-          if (event.key === 'Enter') {
+          // Con aCapo, Maiusc+Invio passa all'editor e diventa un <br>: prima anche lui veniva fermato qui.
+          if (event.key === 'Enter' && !(props.aCapo && event.shiftKey)) {
             event.preventDefault();
             return true;
           }

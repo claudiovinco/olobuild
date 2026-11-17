@@ -27,6 +27,7 @@ class Olobuild_WorldMap_Tile extends Olobuild_Tile_Base {
         'colore_1'            => 'var(--olo-color-warning, #F59E0B)',
         'colore_2'            => 'var(--olo-color-success, #10B981)',
         'colore_vuoto'        => '',
+        'colore_mare'         => '',
         'colore_confini'      => '',
         'spessore_confini'    => 0.6,
         'inquadratura'        => 'mondo',
@@ -39,6 +40,31 @@ class Olobuild_WorldMap_Tile extends Olobuild_Tile_Base {
     ];
 
     const LINGUE = [ 'it', 'en', 'fr', 'de', 'es' ];
+
+    /**
+     * Le regioni dell'«Inquadratura» (17 nov 2026, richiesta dell'utente: «focalizzarsi solo in una parte di mappa,
+     * come l'Europa»): gli stati che decidono il riquadro, che si calcola come per «Solo i paesi colorati». Tutti gli
+     * altri si disegnano lo stesso: quelli vicini entrano nella cornice. Fuori di proposito: la Russia (allargherebbe
+     * l'Europa fino al Pacifico e l'Asia fino all'Europa: resta tagliata dal bordo), Turchia e Caucaso fuori
+     * dall'Europa; Islanda, Norvegia (con le Svalbard) e Groenlandia, che allargherebbero il riquadro di mare e ghiaccio
+     * (l'Islanda resta comunque in vista); le isole oltre la linea del cambio di data (Tonga, Samoa, Kiribati), che in
+     * questa proiezione stanno sul bordo sinistro e allargherebbero l'Oceania a tutto il mondo.
+     */
+    const REGIONI = [
+        'europa'      => [ 'AL', 'AT', 'BA', 'BE', 'BG', 'BY', 'CH', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HR', 'HU',
+            'IE', 'IT', 'LT', 'LU', 'LV', 'MD', 'ME', 'MK', 'NL', 'PL', 'PT', 'RO', 'RS', 'SE', 'SI', 'SK', 'UA', 'XK',
+            'AD', 'LI', 'MC', 'MT', 'SM', 'VA' ],
+        'nordamerica' => [ 'CA', 'US', 'MX', 'GT', 'BZ', 'HN', 'SV', 'NI', 'CR', 'PA', 'CU', 'JM', 'HT', 'DO', 'PR', 'BS', 'TT',
+            'AG', 'BB', 'DM', 'GD', 'KN', 'LC', 'VC' ],
+        'sudamerica'  => [ 'AR', 'BO', 'BR', 'CL', 'CO', 'EC', 'FK', 'GY', 'PE', 'PY', 'SR', 'UY', 'VE' ],
+        'africa'      => [ 'AO', 'BF', 'BI', 'BJ', 'BW', 'CD', 'CF', 'CG', 'CI', 'CM', 'DJ', 'DZ', 'EG', 'EH', 'ER', 'ET', 'GA', 'GH', 'GM',
+            'GN', 'GQ', 'GW', 'KE', 'LR', 'LS', 'LY', 'MA', 'MG', 'ML', 'MR', 'MW', 'MZ', 'NA', 'NE', 'NG', 'RW', 'SD', 'SL', 'SN', 'SO',
+            'SS', 'SZ', 'TD', 'TG', 'TN', 'TZ', 'UG', 'ZA', 'ZM', 'ZW', 'CV', 'KM', 'MU', 'SC', 'ST' ],
+        'mediooriente' => [ 'AE', 'CY', 'EG', 'IL', 'IQ', 'IR', 'JO', 'KW', 'LB', 'OM', 'PS', 'QA', 'SA', 'SY', 'TR', 'YE', 'BH' ],
+        'asia'        => [ 'AF', 'BD', 'BN', 'BT', 'CN', 'ID', 'IN', 'JP', 'KG', 'KH', 'KP', 'KR', 'KZ', 'LA', 'LK', 'MM', 'MN', 'MY', 'NP',
+            'PH', 'PK', 'TH', 'TJ', 'TL', 'TM', 'TW', 'UZ', 'VN', 'SG', 'MV' ],
+        'oceania'     => [ 'AU', 'NZ', 'PG', 'FJ', 'NC', 'SB', 'VU', 'FM', 'MH', 'NR', 'PW', 'TV' ],
+    ];
 
     public function get_controls() { return []; }
 
@@ -175,15 +201,20 @@ class Olobuild_WorldMap_Tile extends Olobuild_Tile_Base {
             list( $v, $nome, $c ) = $voce( $st );
             $tracciati .= '<path class="owm-s' . ( $v ? ' owm-' . $v : '' ) . '" data-c="' . esc_attr( $c ) . '" d="' . esc_attr( (string) $st['d'] ) . '"><title>' . esc_html( $nome ) . '</title></path>';
         }
-        // «Solo i paesi colorati»: la cartina si stringe sul loro riquadro; i puntini restano grandi come prima a vedersi
+        // «Solo i paesi colorati» o una regione: la cartina si stringe sul loro riquadro; i puntini restano grandi come
+        // prima a vedersi. Gli stati colorati fuori dalla regione restano colorati ma fuori vista; la legenda li conta.
         $vista  = (string) $dati['viewBox'];
         $raggio = 2.6;
-        if ( 'colorati' === (string) $s['inquadratura'] ) {
+        $inq    = (string) $s['inquadratura'];
+        $rq     = null;
+        if ( 'colorati' === $inq ) {
             $rq = self::riquadro( $dati, $scelti );
-            if ( $rq ) {
-                $vista  = implode( ' ', $rq );
-                $raggio = round( 2.6 * max( 0.25, $rq[2] / 1000 ), 2 );
-            }
+        } elseif ( isset( self::REGIONI[ $inq ] ) ) {
+            $rq = self::riquadro( $dati, array_fill_keys( self::REGIONI[ $inq ], 1 ) );
+        }
+        if ( $rq ) {
+            $vista  = implode( ' ', $rq );
+            $raggio = round( 2.6 * max( 0.25, $rq[2] / 1000 ), 2 );
         }
         $puntini = '';
         foreach ( (array) ( $dati['puntini'] ?? [] ) as $st ) {
@@ -205,7 +236,10 @@ class Olobuild_WorldMap_Tile extends Olobuild_Tile_Base {
 
         $c1     = $this->safe_color_css( $s['colore_1'] ) ?: 'var(--olo-color-warning, #F59E0B)';
         $c2     = $this->safe_color_css( $s['colore_2'] ) ?: 'var(--olo-color-success, #10B981)';
-        $vuoto  = $this->safe_color_css( $s['colore_vuoto'] ) ?: 'transparent';
+        // Il mare (17 nov 2026, richiesta dell'utente: «il mare azzurro»): il fondo della sola cartina. Con il mare gli
+        // stati senza colore diventano chiari, se non se ne sceglie uno: trasparenti avrebbero preso il colore dell'acqua.
+        $mare   = $this->safe_color_css( $s['colore_mare'] );
+        $vuoto  = $this->safe_color_css( $s['colore_vuoto'] ) ?: ( '' !== $mare ? 'var(--olo-color-light, #ffffff)' : 'transparent' );
         // Confini di serie: il colore del testo, velato (chiari su fondo scuro, scuri su fondo chiaro)
         $confini  = $this->safe_color_css( $s['colore_confini'] ) ?: 'color-mix(in srgb, currentColor 40%, transparent)';
         $spessore = max( 0, min( 3, floatval( $s['spessore_confini'] ) ) );
@@ -250,7 +284,7 @@ class Olobuild_WorldMap_Tile extends Olobuild_Tile_Base {
         <style>
             .<?php echo $uid; ?>{--owm-1:<?php echo $c1; ?>;--owm-2:<?php echo $c2; ?>;--owm-0:<?php echo $vuoto; ?>;--owm-b:<?php echo $confini; ?>;display:flex;flex-direction:column;gap:0.75rem;}
             <?php // ritagliata sui paesi colorati taglia al suo bordo: il resto del mondo si allargava fuori dalla cartina ?>
-            .<?php echo $uid; ?> .owm-mappa{display:block;width:100%;height:auto;overflow:<?php echo $vista === (string) $dati['viewBox'] ? 'visible' : 'hidden'; ?>;}
+            .<?php echo $uid; ?> .owm-mappa{display:block;width:100%;height:auto;overflow:<?php echo ( $vista === (string) $dati['viewBox'] && '' === $mare ) ? 'visible' : 'hidden'; ?>;<?php echo '' !== $mare ? 'background:' . $mare . ';' : ''; ?>}
             .<?php echo $uid; ?> .owm-s{fill:var(--owm-0);stroke:var(--owm-b);stroke-width:<?php echo $spessore; ?>px;vector-effect:non-scaling-stroke;stroke-linejoin:round;transition:fill .2s ease;}
             .<?php echo $uid; ?> .owm-1{fill:var(--owm-1);}
             .<?php echo $uid; ?> .owm-2{fill:var(--owm-2);}

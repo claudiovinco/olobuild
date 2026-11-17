@@ -51,23 +51,26 @@ export default {
     { key: 'author', label: t('Autore'), type: 'text' },
   ],
 
+  // Zone standard (16 nov 2026): Aspetto · Testo · Effetti testo · Disposizione · Bordo. Prima «Preset stilistico» con
+  // i nomi in inglese e due menu chiamati «Stile».
   styleFields: [
-    { type: 'separator', label: t('Preset stilistico') },
+    { type: 'separator', label: t('Aspetto') },
     { key: 'preset', label: t('Stile'), type: 'select', options: [
-      { value: 'editorial-classic', label: t('Editorial Classic') },
-      { value: 'magazine-pull',     label: t('Magazine Pull') },
-      { value: 'minimal-line',      label: t('Minimal Line') },
-      { value: 'big-mark',          label: t('Big Mark') },
-      { value: 'centered-script',   label: t('Centered Script') },
-      { value: 'glass-frosted',     label: t('Glass Frosted') },
-      { value: 'neon-quote',        label: t('Neon Quote') },
-      { value: 'brutalist-stamp',   label: t('Brutalist Stamp') },
-      { value: 'gradient-text',     label: t('Gradient Text') },
-      { value: 'sticky-note',       label: t('Sticky Note') },
-      { value: 'retro-typewriter',  label: t('Retro Typewriter') },
-      { value: 'tilt-card',         label: t('Card in rilievo') },
+      { value: 'editorial-classic', label: t('Classica') },
+      { value: 'magazine-pull',     label: t('Da rivista') },
+      { value: 'minimal-line',      label: t('Essenziale') },
+      { value: 'big-mark',          label: t('Virgolette grandi') },
+      { value: 'centered-script',   label: t('Corsivo centrato') },
+      { value: 'glass-frosted',     label: t('Vetro') },
+      { value: 'neon-quote',        label: t('Neon') },
+      { value: 'brutalist-stamp',   label: t('Timbro') },
+      { value: 'gradient-text',     label: t('Sfumata') },
+      { value: 'sticky-note',       label: t('Foglietto') },
+      { value: 'retro-typewriter',  label: t('Macchina da scrivere') },
+      { value: 'tilt-card',         label: t('In rilievo') },
       { value: 'custom',            label: t('Personalizzato') },
     ]},
+    ...shadowField,
 
     // La citazione non aveva né colori né tipografia: restavano i grigi fissi di UIkit,
     // illeggibili su uno sfondo scuro. Autore senza colore = quello della citazione attenuato.
@@ -82,24 +85,23 @@ export default {
       keys: { family: 'author_font_family', size: 'author_font_size', weight: 'author_font_weight', color: 'author_color' },
       sizeMin: 10, sizeMax: 32 },
 
-    { type: 'separator', label: t('Layout') },
-    { key: 'style', label: t('Stile'), type: 'select', options: [
-      { value: 'default', label: t('Predefinito') },
-      { value: 'footer', label: t('Citazione a piè di pagina') },
-    ]},
+    ...textEffectsFields([
+      { value: 'content', label: t('Solo la citazione') },
+      { value: 'author', label: t('Solo l\'autore') },
+      { value: 'all', label: t('Citazione e autore') },
+    ]),
+
+    { type: 'separator', label: t('Disposizione') },
     { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
     ]},
+    { key: 'style', label: t('Firma'), type: 'select', options: [
+      { value: 'default', label: t('Trattino e nome') },
+      { value: 'footer', label: t('In calce, in corsivo') },
+    ]},
 
-    ...textEffectsFields([
-      { value: 'content', label: t('Solo Contenuto') },
-      { value: 'author', label: t('Solo Autore') },
-      { value: 'all', label: t('Tutti gli elementi testuali') },
-    ]),
-
-    ...shadowField,
     ...borderFields(),
   ],
 };

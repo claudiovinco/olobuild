@@ -1634,6 +1634,14 @@ class Olobuild_Cookie_Consent {
                             wrap.setAttribute('data-cc-iframe-cat', cat);
                             wrap.setAttribute('data-cc-iframe-src', src);
                             wrap.style.cssText = 'background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;padding:32px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;' + (iframes[i].width ? 'width:'+iframes[i].width+'px;' : 'width:100%;') + (iframes[i].height ? 'height:'+iframes[i].height+'px;' : '');
+                            // Un iframe che riempie il suo riquadro (il Video in proporzione, la copertina dopo il play):
+                            // il segnaposto lo riempie allo stesso modo. Nel flusso restava alto 200 px in cima e sotto
+                            // il riquadro vuoto, senza più la copertina (16 nov 2026).
+                            var pos = '';
+                            try { pos = window.getComputedStyle(iframes[i]).position; } catch(err){}
+                            if(pos === 'absolute' || (iframes[i].style && iframes[i].style.position === 'absolute')){
+                                wrap.style.cssText += 'position:absolute;top:0;left:0;width:100%;height:100%;min-height:0;padding:16px;box-sizing:border-box;border:0;border-radius:inherit;z-index:2;';
+                            }
                             wrap.innerHTML = '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'
                                 + '<p style="margin:12px 0 8px;color:#4b5563;font-size:14px"><?php echo esc_js( __( 'Questo contenuto richiede il consenso ai cookie', 'olobuild' ) ); ?></p>'
                                 + '<button class="olo-cc-iframe-load" style="background:<?php echo esc_js( $embBtnBg ); ?>;color:<?php echo esc_js( $embBtnTx ); ?>;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600"><?php echo esc_js( __( 'Accetta e carica', 'olobuild' ) ); ?></button>';

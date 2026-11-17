@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Olobuild_TrustStrip_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'trust-strip';
-    protected $name     = 'Trust Strip';
+    protected $name     = 'Striscia garanzie';
     protected $icon     = 'dashicons-yes-alt';
     protected $category = 'layout';
     protected $defaults = [
@@ -33,8 +33,8 @@ class Olobuild_TrustStrip_Tile extends Olobuild_Tile_Base {
         'gap'             => 24,
         'variant'         => 'inline',
         'logo_height'     => 18,
-        'pill_bg'         => 'rgba(255,255,255,0.05)',
-        'pill_border'     => 'rgba(255,255,255,0.12)',
+        'pill_bg'         => 'color-mix(in srgb, currentColor 6%, transparent)',
+        'pill_border'     => 'color-mix(in srgb, currentColor 16%, transparent)',
         'pill_text_color' => '',
         'badge_bg'        => 'var(--olo-color-surface-alt, #D8FF4A)',
         'badge_color'     => 'var(--olo-color-dark, #1B2A4E)',
@@ -76,21 +76,27 @@ class Olobuild_TrustStrip_Tile extends Olobuild_Tile_Base {
 
         $items = is_array( $s['items'] ) ? $s['items'] : [];
 
+        // «Forza una riga»: se le voci non ci stanno la striscia scorre di lato (prima uscivano dalla pagina, che sul
+        // telefono scorreva tutta in orizzontale) e l'allineamento è «safe», per non nascondere la prima voce (16 nov 2026).
+        $una_riga  = 'nowrap' === $flow;
         $row_style = sprintf(
-            'display:flex;flex-wrap:%s;align-items:center;justify-content:%s;gap:%dpx;font-family:%s;font-size:%dpx;color:%s;line-height:1.5;',
+            'display:flex;flex-wrap:%s;align-items:center;justify-content:%s;gap:%dpx;font-family:%s;font-size:%dpx;color:%s;line-height:1.5;%s',
             esc_attr( $flow ),
-            esc_attr( $align_map[ $align ] ),
+            esc_attr( ( $una_riga && in_array( $align, [ 'center', 'right' ], true ) ? 'safe ' : '' ) . $align_map[ $align ] ),
             $gap,
             esc_attr( $fam ),
             $text_size,
-            esc_attr( $text_color )
+            esc_attr( $text_color ),
+            $una_riga ? 'overflow-x:auto;scrollbar-width:thin;' : ''
         );
 
         // ── Variante PILL: ogni voce in un box "glass" (logo + label + badge) ──
         if ( $variant === 'pill' ) {
             $logo_h    = max( 10, min( 64, absint( $s['logo_height'] ?? 18 ) ) );
-            $pill_bg   = $this->safe_color_css( $s['pill_bg'] ?? '' ) ?: 'rgba(255,255,255,0.05)';
-            $pill_bd   = $this->safe_color_css( $s['pill_border'] ?? '' ) ?: 'rgba(255,255,255,0.12)';
+            // Vetro che si vede su chiaro e su scuro: il colore del testo velato (prima bianco al 5%, invisibile su una
+            // sezione chiara).
+            $pill_bg   = $this->safe_color_css( $s['pill_bg'] ?? '' ) ?: 'color-mix(in srgb, currentColor 6%, transparent)';
+            $pill_bd   = $this->safe_color_css( $s['pill_border'] ?? '' ) ?: 'color-mix(in srgb, currentColor 16%, transparent)';
             $pill_txt  = $this->safe_color_css( $s['pill_text_color'] ?? '' ) ?: $text_color;
             // Riserve dal tema (tinta tenue + scuro, come il config): prima un badge lime e
             // blu notte fissi quando il colore veniva svuotato.
@@ -126,16 +132,20 @@ class Olobuild_TrustStrip_Tile extends Olobuild_Tile_Base {
             return ob_get_clean();
         }
 
+        // Con «A capo se serve» un separatore che cade a inizio o fine riga resta spaiato («· Pagamenti sicuri ·»): uno
+        // script minimo lo nasconde (visibility, così le righe non si rimescolano) e ricontrolla quando cambia la
+        // larghezza (16 nov 2026). Senza separatori o con «Forza una riga» non serve.
+        $id_riga = ( $sep_char && ! $una_riga ) ? wp_unique_id( 'olo-tstrip-' ) : '';
         ob_start();
         ?>
-        <div class="olo-tstrip" style="<?php echo esc_attr( $row_style ); ?>">
+        <div class="olo-tstrip"<?php echo $id_riga ? ' id="' . esc_attr( $id_riga ) . '"' : ''; ?> style="<?php echo esc_attr( $row_style ); ?>">
             <?php $last = count( $items ) - 1; foreach ( $items as $idx => $it ) :
                 $icon       = $it['icon'] ?? '';
                 $icon_color = $this->safe_color_css( $it['icon_color'] ?? '' ) ?: 'var(--olo-color-success, #10b981)';
                 $text       = $it['text'] ?? '';
                 if ( $text === '' && $icon === '' ) continue;
             ?>
-                <span class="olo-tstrip__item" style="display:inline-flex;align-items:center;gap:8px">
+                <span class="olo-tstrip__item" style="display:inline-flex;align-items:center;gap:8px<?php echo $una_riga ? ';flex-shrink:0;white-space:nowrap' : ''; ?>">
                     <?php if ( $icon ) : ?>
                         <span style="color:<?php echo esc_attr( $icon_color ); ?>;display:inline-flex;align-items:center">
                             <?php echo $this->render_icon_html( $icon, $icon_ratio ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup built by render_icon_html() (esc_attr()'d UIkit attrs / sanitized SVG library) ?>
@@ -150,6 +160,12 @@ class Olobuild_TrustStrip_Tile extends Olobuild_Tile_Base {
                 <?php endif; ?>
             <?php endforeach; ?>
         </div>
+        <?php if ( $id_riga ) : ?>
+        <script>(function(){var r=document.getElementById(<?php echo wp_json_encode( $id_riga ); ?>);if(!r){return;}
+function c(e){var b=e.getBoundingClientRect();return b.top+b.height/2;}
+function a(){var s=r.querySelectorAll('.olo-tstrip__sep');for(var i=0;i<s.length;i++){var e=s[i],p=e.previousElementSibling,n=e.nextElementSibling;e.style.visibility='';if(!p||!n){e.style.visibility='hidden';continue;}var t=c(e);e.style.visibility=Math.abs(c(p)-t)<8?(Math.abs(c(n)-t)<8?'':'hidden'):'hidden';}}
+a();if(window.ResizeObserver){new ResizeObserver(function(){requestAnimationFrame(a);}).observe(r);}else{window.addEventListener('resize',a);}window.addEventListener('load',a);})();</script>
+        <?php endif; ?>
         <?php
         return ob_get_clean();
     }

@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 class Olobuild_ScrubText_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'scrubtext';
-    protected $name     = 'Manifesto — Scrub testo';
+    protected $name     = 'Manifesto';
     protected $icon     = 'dashicons-editor-textcolor';
     protected $category = 'text';
     protected $defaults = [
@@ -157,7 +157,7 @@ class Olobuild_ScrubText_Tile extends Olobuild_Tile_Base {
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-scrubtext <?php echo esc_attr( $uid ); ?>">
-            <p class="ost-p" data-olo-wave<?php if ( $scrub ) : ?> data-st-scrub<?php endif; ?>><?php echo wp_kses_post( $s['text'] ); ?></p>
+            <p class="ost-p" data-olo-wave<?php if ( $scrub ) : ?> data-st-scrub<?php endif; ?>><?php echo $this->sanitize_richtext( (string) $s['text'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitize_richtext() toglie i <p> dell'editor e passa da wp_kses_post() ?></p>
             <?php if ( $show_lead && $lead !== '' ) : ?>
                 <p class="ost-lead"<?php if ( $scrub ) : ?> data-st-scrub<?php endif; ?>><?php echo wp_kses_post( $lead ); ?></p>
             <?php endif; ?>

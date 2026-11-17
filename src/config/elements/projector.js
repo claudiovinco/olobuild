@@ -1,4 +1,4 @@
-import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, shadowField } from './_shared.js';
 import { t } from '@/i18n';
 
 /**
@@ -57,7 +57,9 @@ export default {
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'eyebrow', label: t('Occhiello'), type: 'text' },
-    { key: 'heading', label: t('Titolo'), type: 'text' },
+    // 16 nov 2026 (episodio 35): il titolo con l'editor, il corsivo fa le parole d'accento (prima HTML a mano: <em>).
+    { key: 'heading', label: t('Titolo'), type: 'editor', mode: 'inline', strumenti: ['corsivo'],
+      description: t('Le parole in corsivo prendono il colore d’accento.') },
     { key: 'intro', label: t('Introduzione'), type: 'textarea' },
 
     { type: 'separator', label: t('Cursore') },
@@ -71,7 +73,7 @@ export default {
     { key: 'show_contrib', label: t('Mostra il valore scelto sotto il cursore'), type: 'toggle' },
 
     { type: 'separator', label: t('Calcolo') },
-    { key: 'years', label: t('Fattore (o anni)'), type: 'number', step: 0.01,
+    { key: 'years', label: t('Fattore'), type: 'number', step: 0.01,
       description: t('Con crescita 0 il risultato è valore × fattore: prezzo a persona, costo a notte, ore per unità. Con una crescita è il numero di anni.') },
     { key: 'rate', label: t('Crescita annua'), type: 'number', min: 0, max: 1, step: 0.01,
       description: t('0 = moltiplica soltanto. Maggiore di 0: versamento annuo che cresce per gli anni indicati (0.06 = 6%).') },
@@ -84,9 +86,11 @@ export default {
     { key: 'decimals', label: t('Decimali'), type: 'number', min: 0, max: 4, step: 1 },
     { key: 'note', label: t('Nota a piè'), type: 'textarea' },
 
-    { type: 'separator', label: t('Lista scalata (facoltativa)') },
-    { key: 'list_items', label: t('Voci'), type: 'content-items', itemLabel: t('Voce'),
-      defaults: { name: t('Nuova voce'), amount: 100, unit: 'g' },
+    // Facoltativa: senza voci si vede il risultato, quindi l'ultima voce si può togliere (minimo 0). La voce nuova
+    // nasce coi suoi valori (newItemDefaults: con «defaults» il ripetitore la creava vuota).
+    { type: 'separator', label: t('Lista che scala') },
+    { key: 'list_items', label: t('Voci'), type: 'content-items', itemLabel: t('Voce'), minimo: 0, etichettaDa: 'name',
+      newItemDefaults: { name: t('Nuova voce'), amount: 100, unit: 'g' },
       itemFields: [
         { key: 'name', label: t('Nome'), type: 'text' },
         { key: 'amount', label: t('Quantità'), type: 'number', step: 0.01 },
@@ -98,28 +102,25 @@ export default {
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
+  // Zone dello standard: Aspetto · Forma · Disposizione (prima «Zona» e «Aspetto tile», l'ombra con un menu suo).
   styleFields: [
-    { type: 'separator', label: t('Zona') },
-    { key: 'zone_accent', label: t('Colore zona (accento)'), type: 'color',
-      description: t("Il colore di cursore, occhiello e risultato.") },
+    { type: 'separator', label: t('Aspetto') },
+    { key: 'zone_accent', label: t('Colore accento'), type: 'color',
+      description: t("Il colore di cursore, occhiello, parole in corsivo del titolo e risultato.") },
     // Prima il fondo era fisso (grigio chiaro della Palette): niente versione scura.
     { key: 'card_bg', label: t('Sfondo pannello'), type: 'color',
       description: t('Vuoto: il grigio chiaro della Palette. Su uno sfondo scuro i testi e i fili passano al chiaro da soli.') },
+    ...shadowField,
+
+    { type: 'separator', label: t('Forma') },
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 96 },
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
+    ...borderFields(),
+
+    { type: 'separator', label: t('Disposizione') },
     { key: 'align', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
     ]},
-
-    { type: 'separator', label: t('Aspetto tile') },
-    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 96 },
-    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
-    { key: 'shadow', label: t('Ombra'), type: 'select', options: [
-      { value: 'none', label: t('Nessuna') },
-      { value: 'sm', label: t('Piccola') },
-      { value: 'md', label: t('Media') },
-      { value: 'lg', label: t('Grande') },
-      { value: 'xl', label: t('Extra grande') },
-    ]},
-    ...borderFields(),
   ],
 };

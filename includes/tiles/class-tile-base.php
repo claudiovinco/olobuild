@@ -242,6 +242,19 @@ abstract class Olobuild_Tile_Base {
             'mono'       => "var(--olo-font-family-mono, ui-monospace, 'SF Mono', Menlo, Consolas, monospace)",
         ];
         if ( isset( $roles[ $v ] ) ) return $roles[ $v ];
+        // Il token di ruolo SENZA ripiego, come lo salva il campo «Carattere» (Titoli, Monospazio): dove la
+        // tipografia globale non sceglie un carattere la variabile vale «initial» e la dichiarazione ereditava il
+        // testo (la citazione «Editoriale con grazie» usciva senza grazie). Prende il ripiego del suo ruolo. Il
+        // token del Testo resta com'è: ereditare il testo del sito è proprio il suo ripiego giusto.
+        static $token_ruolo = [
+            'var(--olo-font-family-heading)' => 'heading',
+            'var(--olo-font-family-mono)'    => 'mono',
+        ];
+        $compatto = preg_replace( '/\s+/', '', $v );
+        if ( isset( $token_ruolo[ $compatto ] ) ) {
+            $ruolo = $token_ruolo[ $compatto ];
+            return ! empty( $legacy_map[ $ruolo ] ) ? $legacy_map[ $ruolo ] : $roles[ $ruolo ];
+        }
         // CSS pronto: consenti solo caratteri leciti per un font-family
         // (lettere, cifre, spazi, virgole, apici, trattini, parentesi per var()).
         if ( preg_match( '/^[\w\s,\'"()\-]+$/u', $v ) && strpos( $v, '--' ) === false ) {
@@ -359,6 +372,17 @@ abstract class Olobuild_Tile_Base {
      * !important: le tile hanno ripieghi responsive fissi (e a volte la griglia in linea), e il
      * valore scelto per il dispositivo deve vincere su quelli. Senza valore restano i ripieghi.
      */
+    /**
+     * Colonne che si adattano alla colonna della pagina: al massimo $n, mai più strette di $min px. In una colonna
+     * stretta le schede vanno a capo da sole invece di ridursi a una parola per riga (Testimonianza, Process Steps:
+     * 16 nov 2026). Valore per grid-template-columns.
+     */
+    protected function colonne_adattive( $n, $gap, $min = 180 ) {
+        $n   = max( 1, (int) $n );
+        $gap = max( 0, (int) $gap );
+        return 'repeat(auto-fill,minmax(max(' . (int) $min . 'px,calc((100% - ' . ( ( $n - 1 ) * $gap ) . 'px) / ' . $n . ')),1fr))';
+    }
+
     protected function decl_colonne( $max ) {
         return function ( $v ) use ( $max ) {
             $n = max( 1, min( (int) $max, absint( $v ) ) );
@@ -482,6 +506,9 @@ abstract class Olobuild_Tile_Base {
         $color_in = $s['effect_color'] ?? '';
         $color    = $color_in ? $this->safe_color_css( $color_in ) : '';
         $uid      = $this->preset_uid( $sel );
+        // Le trasparenze con color-mix: valgono anche coi colori della palette (var(--olo-color-…)), che color_to_rgb
+        // non sa leggere; senza colore scelto, il primario del sito (prima un arancio scritto a mano, 16 nov 2026).
+        $mix      = function ( $c, $alfa ) { return 'color-mix(in srgb, ' . $c . ' ' . round( floatval( $alfa ) * 100, 1 ) . '%, transparent)'; };
         // «Intensità effetto» (effect_intensity, 14 tile): prima nessun renderer la leggeva.
         // Scala bagliori e linee di scansione; «medio» = i valori di sempre.
         $int_map  = [ 'subtle' => 0.6, 'low' => 0.6, 'medium' => 1.0, 'high' => 1.6, 'intense' => 1.6, 'strong' => 1.6 ];
@@ -514,29 +541,25 @@ abstract class Olobuild_Tile_Base {
         }
 
         if ( $scan ) {
-            $sc_c   = $color ?: '#00ff8c';
-            $sc_rgb = $this->color_to_rgb( $sc_c );
-            $sc_a   = $al( '0.06' );
-            $css   .= $sel . "{background-image:repeating-linear-gradient(0deg,transparent 0,transparent 2px,rgba({$sc_rgb},{$sc_a}) 2px,rgba({$sc_rgb},{$sc_a}) 3px);}";
+            $sc_c   = $color ?: 'var(--olo-color-success, #22c55e)';
+            $sc_l   = $mix( $sc_c, $al( '0.06' ) );
+            $css   .= $sel . "{background-image:repeating-linear-gradient(0deg,transparent 0,transparent 2px,{$sc_l} 2px,{$sc_l} 3px);}";
         }
 
         if ( $glow ) {
-            $g_c   = $color ?: '#ff6a2a';
-            $g_rgb = $this->color_to_rgb( $g_c );
+            $g_c   = $color ?: 'var(--olo-color-primary)';
             $pulse = $speed > 0 ? $speed : 2200;
             $kf    = "olo-wow-glow-{$uid}";
             $g12 = $px( '12' ); $g24 = $px( '24' );
-            $a05 = $al( '0.5' ); $a015 = $al( '0.15' ); $a085 = $al( '0.85' ); $a030 = $al( '0.30' );
-            $css  .= "@keyframes {$kf}{0%,100%{box-shadow:0 0 {$g12}px rgba({$g_rgb},{$a05}),inset 0 0 {$g12}px rgba({$g_rgb},{$a015})}50%{box-shadow:0 0 {$g24}px rgba({$g_rgb},{$a085}),inset 0 0 {$g24}px rgba({$g_rgb},{$a030})}}";
+            $a05 = $mix( $g_c, $al( '0.5' ) ); $a015 = $mix( $g_c, $al( '0.15' ) ); $a085 = $mix( $g_c, $al( '0.85' ) ); $a030 = $mix( $g_c, $al( '0.30' ) );
+            $css  .= "@keyframes {$kf}{0%,100%{box-shadow:0 0 {$g12}px {$a05},inset 0 0 {$g12}px {$a015}}50%{box-shadow:0 0 {$g24}px {$a085},inset 0 0 {$g24}px {$a030}}}";
             $css  .= $sel . "{animation:{$kf} {$pulse}ms ease-in-out infinite;}";
         }
 
         if ( $t_glow && $title !== '' ) {
-            $tg_c   = $color ?: '';
-            $tg_c   = $tg_c ?: '#ff6a2a';
-            $tg_rgb = $this->color_to_rgb( $tg_c );
-            $t8     = $px( '8' ); $a06 = $al( '0.6' );
-            $css   .= $sel . ' ' . $title . "{text-shadow:0 0 {$t8}px rgba({$tg_rgb},{$a06});}";
+            $tg_c   = $color ?: 'var(--olo-color-primary)';
+            $t8     = $px( '8' ); $a06 = $mix( $tg_c, $al( '0.6' ) );
+            $css   .= $sel . ' ' . $title . "{text-shadow:0 0 {$t8}px {$a06};}";
         }
 
         if ( ! empty( $s['wow_terminal_prompt'] ) && $title !== '' ) {

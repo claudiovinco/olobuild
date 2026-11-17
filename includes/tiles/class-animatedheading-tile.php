@@ -19,6 +19,7 @@ class Olobuild_Animatedheading_Tile extends Olobuild_Tile_Base {
         'font_size_tablet' => '',
         'font_size_mobile' => '',
         'font_weight'     => '700',
+        'font_family'     => '',
         'typing_speed'    => '100',
         'pause_time'      => '2000',
         'highlight_style' => 'underline',
@@ -46,9 +47,15 @@ class Olobuild_Animatedheading_Tile extends Olobuild_Tile_Base {
         $tag   = in_array($s['tag'], ['h1','h2','h3','h4','h5','h6','p'], true) ? $s['tag'] : 'h2';
         $align = in_array($s['alignment'], ['left','center','right'], true) ? $s['alignment'] : 'center';
         $clr   = $this->safe_color_css($s['text_color']) ?: 'var(--olo-color-text, #374151)';
-        $aclr  = $this->safe_color_css($s['animated_color']) ?: 'var(--olo-color-primary, #e1474f)';
+        // Sotto la pillola dell'evidenziatore la parola, se non ha un colore suo, prende quello del titolo: il primario
+        // sul primario al 30% stava a 2,7:1, sotto la soglia anche per i testi grandi.
+        $su_pillola = 'highlight' === $s['animation'] && 'background' === $s['highlight_style'];
+        $aclr  = $this->safe_color_css($s['animated_color']) ?: ( $su_pillola ? $clr : 'var(--olo-color-primary, #e1474f)' );
         $fs    = absint($s['font_size']) ?: 36;
         $fw    = absint($s['font_weight']) ?: 700;
+        // Il carattere dei titoli del sito (con ripiego Georgia), o quello scelto: col solo tag il titolo prendeva la regola
+        // del tema, che in molti siti è il carattere del testo.
+        $fam   = $this->resolve_font_family( (string) ( $s['font_family'] ?? '' ) ?: 'heading' );
         $anim  = $s['animation'];
         $speed = absint($s['typing_speed']) ?: 100;
         $pause = absint($s['pause_time']) ?: 2000;
@@ -59,13 +66,20 @@ class Olobuild_Animatedheading_Tile extends Olobuild_Tile_Base {
         // capo, e a ogni cambio tutta la pagina sotto saliva e scendeva (Teatro Darsena: 115 px).
         $dentro = [ 'left' => 'start', 'center' => 'center', 'right' => 'end' ][ $align ];
         $cursore = 'typing' === $anim;
+        // Scritta a macchina o svelata da sinistra, la parola parte dall'inizio del suo spazio anche nel titolo centrato:
+        // centrata, ogni lettera nuova spostava le altre e il cursore, a parola cancellata, restava staccato a metà spazio.
+        if ( ( $cursore || 'clip' === $anim ) && 'center' === $align ) {
+            $dentro = 'start';
+        }
 
         ob_start();
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, absint() for sizes, in_array() whitelists for enums, fixed literals and the internally generated $uid. ?>
         <style>
-        .<?php echo $uid; ?> { text-align: <?php echo $align; ?>; padding: 24px 16px; }
-        .<?php echo $uid; ?> .olo-ah-heading { color: <?php echo $clr; ?>; font-size: <?php echo $fs; ?>px; font-weight: <?php echo $fw; ?>; margin: 0; line-height: 1.2; }
+        <?php // Niente padding proprio (era 24px 16px, senza un controllo): allineato a sinistra il titolo rientrava di 16 px
+        // rispetto alle altre tile della colonna. Lo spazio attorno si dà dal Contenitore, come per le altre tile. ?>
+        .<?php echo $uid; ?> { text-align: <?php echo $align; ?>; }
+        .<?php echo $uid; ?> .olo-ah-heading { color: <?php echo $clr; ?>; font-family: <?php echo $fam; ?>; font-size: <?php echo $fs; ?>px; font-weight: <?php echo $fw; ?>; margin: 0; line-height: 1.2; }
         <?php // Sul telefono la misura si riduce da sola, mai oltre quella che avrebbe (quella del tablet se
         // c'è, se no quella scelta): 76px portavano «astronauti» fuori dallo schermo. Le misure del tablet
         // vengono PRIMA della riduzione, quelle del telefono DOPO e vincono. Prima la regola del tablet (fino

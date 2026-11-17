@@ -326,6 +326,11 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
                 margin: 0;
                 float: none;
             }
+            <?php // Il titolo è un link (UIkit): la sottolineatura dei link del tema compariva al passaggio e al tocco (16 nov 2026). ?>
+            .<?php echo esc_attr( $uid ); ?> .uk-accordion-title,
+            .<?php echo esc_attr( $uid ); ?> .uk-accordion-title:hover,
+            .<?php echo esc_attr( $uid ); ?> .uk-accordion-title:focus,
+            .<?php echo esc_attr( $uid ); ?> .uk-accordion-title:active { text-decoration: none; }
             .<?php echo esc_attr( $uid ); ?> .uk-accordion-title:hover {
                 <?php if ( $header_bg ) : ?>filter: brightness(0.97);<?php else : ?>background: rgba(0,0,0,0.025);<?php endif; ?>
             }

@@ -5,6 +5,7 @@ import './assets/styles/main.scss';
 import { guardStaleBundle } from './utils/staleBundleGuard';
 import { ritornoPer } from './utils/ritornoZona';
 import { installaTestoTroncato } from './utils/testoTroncato';
+import { getElementDef } from './config/elementRegistry';
 
 // Header o footer aperto dal chip «Apri il template»: la voce del «Torna a «…»» si
 // controlla qui, prima di ogni ricarica (bundle vecchio qui sotto, nuovo tentativo di
@@ -35,6 +36,9 @@ app.provide('oloData', window.oloData || {
 });
 
 app.mount('#olobuilder-app');
+// Il nome di ogni tile per la barra degli strumenti dentro il canvas (iframe-bridge.js), che da sola conosceva
+// solo un elenco fisso di ottanta nomi.
+window.__oloNomeTile = (tipo) => (getElementDef(tipo) || {}).name || '';
 // Le scritte tagliate dei pannelli si leggono intere in un popup al passaggio del mouse.
 installaTestoTroncato();
 

@@ -49,7 +49,7 @@
                           <span class="st-grip" :title="t('Trascina')"><svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor"><circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/><circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/></svg></span>
                           <button class="st-toggle" :class="{ 'st-toggle--open': isExpanded(row.id) }" @click.stop="toggle(row.id)"><svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg></button>
                           <span class="st-icon" v-html="nodeIcon('row')"></span>
-                          <span class="st-name">{{ row.settings?._label || 'Row' }}</span>
+                          <span class="st-name">{{ row.settings?._label || t('Riga') }}</span>
                         </div>
                         <div v-if="isExpanded(row.id)" class="st-sub" style="margin-left:10px;padding-left:5px">
                           <div v-for="col in (row.children || [])" v-show="isVisible(col.id)" :key="col.id" class="st-item">
@@ -58,7 +58,7 @@
                               <button v-if="col.children?.length" class="st-toggle" :class="{ 'st-toggle--open': isExpanded(col.id) }" @click.stop="toggle(col.id)"><svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg></button>
                               <span v-else class="st-toggle-ph"></span>
                               <span class="st-icon" v-html="nodeIcon('column')"></span>
-                              <span class="st-name">{{ col.settings?._label || 'Column' }}</span>
+                              <span class="st-name">{{ col.settings?._label || t('Colonna') }}</span>
                             </div>
                             <div v-if="isExpanded(col.id) && col.children?.length" class="st-sub" style="margin-left:10px;padding-left:5px">
                               <div class="st-list" v-olo-drop-target="listEndDrop('elements', col.id)">
@@ -172,7 +172,7 @@
                       </button>
                       <span class="st-icon" v-html="nodeIcon('row')"></span>
                       <input v-if="renamingId === row.id" class="st-rename-input" :style="renameInputStyle" :value="renameValue" @input="renameValue = $event.target.value" @keydown.enter.prevent="confirmRename(row)" @keydown.escape="cancelRename()" @blur="confirmRename(row)" @click.stop />
-                      <span v-else class="st-name" @click.stop="onNameClick(row)" :title="row.settings?._label || 'Row'">{{ row.settings?._label || 'Row' }}</span>
+                      <span v-else class="st-name" @click.stop="onNameClick(row)" :title="row.settings?._label || t('Riga')">{{ row.settings?._label || t('Riga') }}</span>
                       <span class="st-actions">
                         <button :title="t('Duplica')" :aria-label="t('Duplica')" @click.stop="duplicate(row.id)">
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -209,7 +209,7 @@
                           </button>
                           <span class="st-icon" v-html="nodeIcon('column')"></span>
                           <input v-if="renamingId === col.id" class="st-rename-input" :style="renameInputStyle" :value="renameValue" @input="renameValue = $event.target.value" @keydown.enter.prevent="confirmRename(col)" @keydown.escape="cancelRename()" @blur="confirmRename(col)" @click.stop />
-                          <span v-else class="st-name" @click.stop="onNameClick(col)" :title="col.settings?._label || 'Column'">{{ col.settings?._label || 'Column' }}</span>
+                          <span v-else class="st-name" @click.stop="onNameClick(col)" :title="col.settings?._label || t('Colonna')">{{ col.settings?._label || t('Colonna') }}</span>
                         </div>
 
                         <!-- Column children: Elements -->
@@ -374,7 +374,7 @@
                           <span class="st-grip" :title="t('Trascina')"><svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor"><circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/><circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/></svg></span>
                           <button class="st-toggle" :class="{ 'st-toggle--open': isExpanded(row.id) }" @click.stop="toggle(row.id)"><svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg></button>
                           <span class="st-icon" v-html="nodeIcon('row')"></span>
-                          <span class="st-name">{{ row.settings?._label || 'Row' }}</span>
+                          <span class="st-name">{{ row.settings?._label || t('Riga') }}</span>
                         </div>
                         <div v-if="isExpanded(row.id)" class="st-sub" style="margin-left:10px;padding-left:5px">
                           <div v-for="col in (row.children || [])" v-show="isVisible(col.id)" :key="col.id" class="st-item">
@@ -383,7 +383,7 @@
                               <button v-if="col.children?.length" class="st-toggle" :class="{ 'st-toggle--open': isExpanded(col.id) }" @click.stop="toggle(col.id)"><svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg></button>
                               <span v-else class="st-toggle-ph"></span>
                               <span class="st-icon" v-html="nodeIcon('column')"></span>
-                              <span class="st-name">{{ col.settings?._label || 'Column' }}</span>
+                              <span class="st-name">{{ col.settings?._label || t('Colonna') }}</span>
                             </div>
                             <div v-if="isExpanded(col.id) && col.children?.length" class="st-sub" style="margin-left:10px;padding-left:5px">
                               <div class="st-list" v-olo-drop-target="listEndDrop('elements', col.id)">
@@ -1384,7 +1384,9 @@ watch(function() { return builderStore.selectedTileId; }, function(newId) {
       setTimeout(function() { el.style.transition = prevTransition || ''; }, 500);
     }, 400);
   });
-});
+// immediate: aprendo la scheda Struttura con una tile già selezionata l'albero partiva dall'alto e la tile restava
+// fuori vista (17 nov 2026)
+}, { immediate: true });
 </script>
 
 <style scoped>
