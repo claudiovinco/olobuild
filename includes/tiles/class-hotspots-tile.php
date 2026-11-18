@@ -26,6 +26,11 @@ class Olobuild_Hotspots_Tile extends Olobuild_Tile_Base {
         'zone_accent'  => '',
         'zone_on'      => 'var(--olo-color-surface, #ffffff)',
         'panel_bg'     => '',
+        // La foto sotto i segnaposto (18 nov 2026): prima il pannello era solo il riquadro tratteggiato di prova, e i
+        // segnaposto indicavano il vuoto. Vuota = il riquadro com'era.
+        'image'           => '',
+        'image_alt'       => '',
+        'object_position' => 'center center',
         'card_bg'      => '',
         'card_border'  => '',
         'align'        => 'left',
@@ -43,6 +48,8 @@ class Olobuild_Hotspots_Tile extends Olobuild_Tile_Base {
         $cardbg  = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-surface, #ffffff)';
         $line    = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
         $center  = ( ( $s['align'] ?? 'left' ) === 'center' );
+        $foto    = esc_url( (string) ( $s['image'] ?? '' ) );
+        $fuoco   = preg_match( '/^[a-z0-9.%\s-]{1,40}$/i', (string) ( $s['object_position'] ?? '' ) ) ? $s['object_position'] : 'center center';
         $serif   = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)";
         $sans    = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";
         // La whitelist deve coprire TUTTE le voci offerte dal select (le canoniche
@@ -80,8 +87,9 @@ class Olobuild_Hotspots_Tile extends Olobuild_Tile_Base {
             <?php if ( $s['eyebrow'] !== '' ) : ?><span class="osp-eyebrow"><?php echo esc_html( $s['eyebrow'] ); ?></span><?php endif; ?>
             <?php if ( $s['heading'] !== '' ) : ?><h2 class="osp-h"><?php echo esc_html( $s['heading'] ); ?></h2><?php endif; ?>
             <?php if ( $s['intro'] !== '' ) : ?><p class="osp-intro"><?php echo esc_html( $s['intro'] ); ?></p><?php endif; ?>
-            <div class="osp-panel">
-                <span class="osp-panel__label"><?php echo esc_html( $s['panel_label'] ?? '' ); ?></span>
+            <div class="osp-panel"<?php echo $foto ? ' style="background-image:none"' : ''; ?>>
+                <?php if ( $foto ) : ?><img class="osp-panel__img" src="<?php echo $foto; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url() above ?>" alt="<?php echo esc_attr( (string) ( $s['image_alt'] ?? '' ) ); ?>" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:<?php echo esc_attr( $fuoco ); ?>"><?php endif; ?>
+                <?php if ( '' !== trim( (string) ( $s['panel_label'] ?? '' ) ) ) : ?><span class="osp-panel__label"><?php echo esc_html( $s['panel_label'] ); ?></span><?php endif; ?>
                 <?php foreach ( $items as $it ) :
                     $x = max( 0, min( 100, floatval( $it['x'] ?? 50 ) ) );
                     $y = max( 0, min( 100, floatval( $it['y'] ?? 50 ) ) );

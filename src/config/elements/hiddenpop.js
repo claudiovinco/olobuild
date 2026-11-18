@@ -55,6 +55,7 @@ export default {
     trigger_threshold: 50,
     trigger_direction: 'down',
     exit_intent: false,
+    scroll_trigger: true,
     retrigger: false,
     // Trigger sequenza-tasti (Konami) — additivo, default OFF: gli altri trigger restano invariati
     key_sequence: false,
@@ -104,15 +105,18 @@ export default {
 
     { type: 'separator', label: t('Trigger') },
     { key: 'exit_intent', label: t('Exit Intent (mouse verso top)'), type: 'toggle' },
+    { key: 'scroll_trigger', label: t('Si apre scorrendo'), type: 'toggle',
+      condition: { field: 'exit_intent', op: 'eq', value: false },
+      description: t('Acceso: il popup si apre quando il visitatore scorre fino al punto di attivazione. Spento: si apre solo con la sequenza di tasti qui sotto, ed è davvero nascosto.') },
     { key: 'trigger_threshold', label: t('Punto di attivazione (% viewport)'), type: 'range', min: 10, max: 90, step: 5,
-      condition: { field: 'exit_intent', op: 'eq', value: false } },
+      condition: [{ field: 'exit_intent', op: 'eq', value: false }, { field: 'scroll_trigger', op: 'eq', value: true }] },
     { key: 'trigger_direction', label: t('Direzione scroll'), type: 'select', options: [
       { value: 'down', label: t('Solo verso il basso') },
       { value: 'up', label: t('Solo verso l\'alto') },
       { value: 'both', label: t('Entrambe le direzioni') },
-    ], condition: { field: 'exit_intent', op: 'eq', value: false } },
+    ], condition: [{ field: 'exit_intent', op: 'eq', value: false }, { field: 'scroll_trigger', op: 'eq', value: true }] },
     { key: 'retrigger', label: t('Ri-attiva a ogni passaggio'), type: 'toggle',
-      condition: { field: 'exit_intent', op: 'eq', value: false } },
+      condition: [{ field: 'exit_intent', op: 'eq', value: false }, { field: 'scroll_trigger', op: 'eq', value: true }] },
 
     { type: 'separator', label: t('Sequenza di tasti (Konami)') },
     { key: 'key_sequence', label: t('Apri con sequenza di tasti'), type: 'toggle',

@@ -749,7 +749,7 @@ trait Olobuild_Renderer_Page_Trait {
             foreach ( $tiles as $sec ) {
                 $eff = $sec['settings']['sticky_effect'] ?? 'none';
                 if ( $eff === 'cover' || $eff === 'reveal' ) $has_any_sticky_v = true;
-                if ( $eff === 'cover-h' || $eff === 'reveal-h' ) $has_any_sticky_h = true;
+                if ( $eff === 'cover-h' || $eff === 'reveal-h' || $eff === 'ruota' ) $has_any_sticky_h = true;
             }
             if ( $has_any_sticky_v || $has_any_sticky_h ) : ?>
                 <script>
@@ -842,8 +842,26 @@ trait Olobuild_Renderer_Page_Trait {
                             var svela=false;
                             sections.forEach(function(item,i){
                                 item.svela=(item.marker.dataset.stickyH==='reveal-h');
+                                item.dir=item.marker.dataset.hDir||'destra';
                                 if(i>0){if(item.svela){svela=true;}}
                             });
+                            /* Percorso (18 nov 2026): se una sezione arriva da sinistra, da sotto o da sopra, i pannelli
+                               stanno su un piano (ognuno accanto al precedente dalla parte scelta) e la vista ci si sposta
+                               sopra, frenando a ogni pannello come su dei gradini. Ruota: i pannelli sul bordo di una
+                               ruota col perno sotto lo schermo, a «Angolo» gradi l'uno dall'altro; scorrendo la ruota gira
+                               e il pannello di turno arriva dritto in cima. Con meno movimento la Ruota resta verticale. */
+                            var ruota=(sections[0].marker.dataset.stickyH==='ruota');
+                            var percorso=false;
+                            if(!svela){if(!ruota){sections.forEach(function(item,i){if(i>0){if(item.dir!=='destra'){percorso=true;}}});}}
+                            if(ruota){if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){return;}}
+                            var px=[0],py=[0];
+                            for(var k=1;k<n;k++){
+                                var dk=sections[k].dir;
+                                px[k]=px[k-1]+(dk==='destra'?1:(dk==='sinistra'?-1:0));
+                                py[k]=py[k-1]+(dk==='sotto'?1:(dk==='sopra'?-1:0));
+                            }
+                            var gradi=ruota?(parseFloat(sections[0].marker.dataset.ruotaGradi)||24):0;
+                            if(ruota){sections.forEach(function(item){if(item.dir==='sinistra'){gradi=-Math.abs(gradi);}});}
                             var group=document.createElement('div');
                             group.className='olo-h-group';
                             group.style.height=(viewH*n)+'px';
@@ -864,6 +882,12 @@ trait Olobuild_Renderer_Page_Trait {
                                     item.sec.style.display='flex';
                                     item.sec.style.flexDirection='column';
                                     item.sec.style.justifyContent=(allinea==='bottom')?'flex-end':'center';
+                                }
+                                if(percorso||ruota){
+                                    item.sec.style.setProperty('position','absolute','important');
+                                    item.sec.style.left='0';
+                                    item.sec.style.top='0';
+                                    item.sec.style.height=viewH+'px';
                                 }
                                 if(svela){
                                     /* con «important»: le sezioni con lo sfondo hanno uk-position-relative,
@@ -887,6 +911,8 @@ trait Olobuild_Renderer_Page_Trait {
                                 filo.setAttribute('aria-hidden','true');
                                 viewport.appendChild(filo);
                             }
+                            if(percorso){group.classList.add('olo-h-percorso');}
+                            if(ruota){group.classList.add('olo-h-ruota');}
                             group.appendChild(viewport);
                             /* Insert before the first marker and hide all originals */
                             run[0].parentNode.insertBefore(group,run[0]);
@@ -938,6 +964,27 @@ trait Olobuild_Renderer_Page_Trait {
                                             if(bordo>=0){filo.style.left=bordo.toFixed(3)+'%';filo.style.opacity='1';}
                                             else{filo.style.opacity='0';}
                                         }
+                                    }else if(percorso){
+                                        var Wp=viewport.clientWidth,i0=Math.min(n-2,Math.floor(pos)),f=pos-i0;
+                                        f=f*f*(3-2*f);
+                                        var cx=px[i0]+(px[i0+1]-px[i0])*f,cy=py[i0]+(py[i0+1]-py[i0])*f;
+                                        sections.forEach(function(item,i){
+                                            item.sec.style.left=(px[i]*Wp)+'px';
+                                            item.sec.style.top=(py[i]*viewH)+'px';
+                                            item.sec.style.visibility=(Math.abs(i-pos)>1.5)?'hidden':'';
+                                        });
+                                        track.style.transform='translate3d('+(-cx*Wp).toFixed(1)+'px,'+(-cy*viewH).toFixed(1)+'px,0)';
+                                    }else if(ruota){
+                                        var Wr=viewport.clientWidth,ar=Math.abs(gradi)*Math.PI/180;
+                                        var Rr=Math.max(viewH*1.2,(Wr*0.6)/Math.sin(ar/2));
+                                        var orig='50% '+(viewH/2+Rr).toFixed(1)+'px';
+                                        track.style.transformOrigin=orig;
+                                        sections.forEach(function(item,i){
+                                            item.sec.style.transformOrigin=orig;
+                                            item.sec.style.transform='rotate('+(i*gradi)+'deg)';
+                                            item.sec.style.visibility=(Math.abs(i-pos)>1.6)?'hidden':'';
+                                        });
+                                        track.style.transform='rotate('+(-pos*gradi).toFixed(3)+'deg)';
                                     }else{
                                         track.style.transform='translateX('+ (-p*maxShift) +'%)';
                                     }

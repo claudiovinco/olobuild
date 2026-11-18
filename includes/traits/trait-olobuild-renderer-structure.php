@@ -39,7 +39,8 @@ trait Olobuild_Renderer_Structure_Trait {
         // Sticky effect
         $sticky_effect = $s['sticky_effect'] ?? 'none';
         $is_sticky_v = in_array( $sticky_effect, [ 'cover', 'reveal' ], true );
-        $is_sticky_h = in_array( $sticky_effect, [ 'cover-h', 'reveal-h' ], true );
+        // «ruota» (18 nov 2026): le sezioni sul bordo di una ruota che gira scorrendo; si raggruppa come le orizzontali.
+        $is_sticky_h = in_array( $sticky_effect, [ 'cover-h', 'reveal-h', 'ruota' ], true );
         $is_sticky = $is_sticky_v || $is_sticky_h;
         $sticky_top = intval( $s['sticky_top'] ?? 0 );
 
@@ -410,7 +411,15 @@ trait Olobuild_Renderer_Structure_Trait {
             // Mark section with data for JS to build the horizontal scroll group
             // Dove sta il contenuto nel pannello alto una schermata: in alto (com'era), al centro o in basso.
             $h_align = in_array( $s['sticky_h_align'] ?? '', [ 'center', 'bottom' ], true ) ? $s['sticky_h_align'] : 'top';
-            $html = '<div class="olo-h-marker" data-sticky-h="' . esc_attr( $sticky_effect ) . '" data-sticky-top="' . $sticky_top . '" data-h-align="' . esc_attr( $h_align ) . '" style="display:contents">' . $html . '</div>';
+            // Da dove arriva la sezione rispetto alla precedente (18 nov 2026): a destra com'era, a sinistra, sotto o
+            // sopra. Con direzioni diverse il gruppo diventa un percorso (a scala, a zigzag); nella Ruota destra e
+            // sinistra danno il verso in cui gira, e «Angolo» i gradi fra una sezione e l'altra.
+            $h_dir   = in_array( $s['sticky_h_dir'] ?? '', [ 'sinistra', 'sotto', 'sopra' ], true ) ? $s['sticky_h_dir'] : 'destra';
+            $h_extra = ' data-h-dir="' . esc_attr( $h_dir ) . '"';
+            if ( 'ruota' === $sticky_effect ) {
+                $h_extra .= ' data-ruota-gradi="' . max( 6, min( 90, absint( $s['sticky_ruota_gradi'] ?? 24 ) ?: 24 ) ) . '"';
+            }
+            $html = '<div class="olo-h-marker" data-sticky-h="' . esc_attr( $sticky_effect ) . '" data-sticky-top="' . $sticky_top . '" data-h-align="' . esc_attr( $h_align ) . '"' . $h_extra . ' style="display:contents">' . $html . '</div>';
         }
 
         return $html;

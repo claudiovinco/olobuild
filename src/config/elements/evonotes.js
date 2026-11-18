@@ -21,6 +21,7 @@ export default {
 
   defaults: {
     toggle_label: 'Perché questa evoluzione',
+    toggle_side: 'right',
     toggle_label_active: 'Nascondi motivazioni',
     show_hint: true,
     hint_text: 'Tocca i numeri per leggere ogni scelta — Prima → Ora',
@@ -44,6 +45,10 @@ export default {
     { key: 'toggle_label_active', label: t('Etichetta quando attivo'), type: 'text' },
 
     { type: 'separator', label: t('Hint') },
+    { key: 'toggle_side', label: t('Lato del pulsante'), type: 'select', options: [
+      { value: 'right', label: t('A destra') },
+      { value: 'left', label: t('A sinistra') },
+    ], description: t('Il pulsante che accende le note resta fisso in basso, su questo lato. A sinistra non si sovrappone a «torna in cima».') },
     { key: 'show_hint', label: t('Mostra hint in basso'), type: 'toggle' },
     { key: 'hint_text', label: t('Testo hint'), type: 'text',
       condition: { field: 'show_hint', op: 'eq', value: true } },

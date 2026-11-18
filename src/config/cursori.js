@@ -38,6 +38,11 @@ export const CURSORI = [
   ['irrigatore', 'Irrigatore (spruzza a ventaglio)'], ['diamante', 'Tagliavetro (graffia e crepa)'], ['atomo', 'Atomo (elettroni che girano, fotone al clic)'],
   ['cerchio', 'Cerchio aereo (dondola, capriola sui link)'], ['ipnosi', 'Ipnosi (la spirale che gira)'],
   ['miccia', 'Miccia (faville, fuoco d’artificio al clic)'],
+  ['tornante', 'Tornante (paracarro e strada tratteggiata, il numero del tornante al clic)'],
+  ['persiana', 'Persiana (le stecche si aprono sui link, sbatte al clic)'],
+  ['raggi', 'Raggi (ruota di bici che gira, campanello al clic)'],
+  ['oculare', 'Oculare (reticolo del microscopio, a fuoco quando ti fermi)'],
+  ['doppione', 'Doppione (il gemello allo specchio dall’altra parte dello schermo)'],
 ];
 
 // Gli stili che mostrano una parola (la «Parola del cursore», label_text).

@@ -24,6 +24,8 @@ export default {
     scroll_entrance: '',
     sticky_top: '',
     sticky_h_align: 'top',
+    sticky_h_dir: 'destra',
+    sticky_ruota_gradi: 24,
     scroll_snap: false,
     snap_dots: false,
     snap_dot_color: '',
@@ -83,14 +85,26 @@ export default {
       { value: 'reveal', label: t('Reveal') },
       { value: 'cover-h', label: t('Cover orizzontale') },
       { value: 'reveal-h', label: t('Reveal orizzontale') },
-    ]},
+      { value: 'ruota', label: t('Ruota') },
+    ], description: t('Cover e Reveal tengono ferma la sezione mentre passa la successiva. Cover orizzontale, Reveal orizzontale e Ruota uniscono le sezioni di seguito con lo stesso effetto in un gruppo alto una schermata: scorrendo, la vista passa dall’una all’altra. Nella Ruota le sezioni stanno sul bordo di una ruota enorme col perno sotto lo schermo, e la ruota gira.') },
     { key: 'sticky_top', label: t('Offset dall\'alto'), type: 'number', min: 0, placeholder: '0', condition: { field: 'sticky_effect', operator: '!=', value: 'none' } },
     { key: 'sticky_h_align', label: t('Contenuto nel pannello'), type: 'select', options: [
       { value: 'top', label: t('In alto') },
       { value: 'center', label: t('Al centro') },
       { value: 'bottom', label: t('In basso') },
-    ], condition: { field: 'sticky_effect', op: 'in', value: ['cover-h', 'reveal-h'] },
+    ], condition: { field: 'sticky_effect', op: 'in', value: ['cover-h', 'reveal-h', 'ruota'] },
       description: t('Le sezioni orizzontali sono alte una schermata: qui scegli dove sta il loro contenuto. «Reveal orizzontale» scopre la sezione sopra la precedente, da destra; «Cover orizzontale» la fa arrivare spinta di lato. Sul telefono il gruppo resta orizzontale se ogni sezione sta in una schermata.') },
+
+    { key: 'sticky_h_dir', label: t('Arriva da'), type: 'select', options: [
+      { value: 'destra', label: t('Destra') },
+      { value: 'sinistra', label: t('Sinistra') },
+      { value: 'sotto', label: t('Sotto') },
+      { value: 'sopra', label: t('Sopra') },
+    ], condition: { field: 'sticky_effect', op: 'in', value: ['cover-h', 'ruota'] },
+      description: t('Da dove entra questa sezione rispetto alla precedente. Tutte da destra: il binario orizzontale di sempre. Alternando le direzioni il gruppo diventa un percorso: un po’ a destra, un po’ giù, poi a sinistra, come una scala o dei tornanti. «Sopra» fa salire la vista mentre scorri in giù. Nella Ruota Destra e Sinistra scelgono il verso in cui gira.') },
+    { key: 'sticky_ruota_gradi', label: t('Angolo'), type: 'range', min: 6, max: 90, step: 1, unit: '°',
+      condition: { field: 'sticky_effect', op: 'eq', value: 'ruota' },
+      description: t('I gradi fra una sezione e l’altra sul bordo della ruota. Pochi gradi: una ruota grande, le sezioni vicine si vedono appena ai lati. Tanti: una ruota piccola che gira molto.') },
 
     { type: 'separator', label: t('Arrivo') },
     { key: 'scroll_entrance', label: t('Arrivo con lo scorrimento'), type: 'select', options: [

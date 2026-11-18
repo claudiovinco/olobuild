@@ -243,7 +243,13 @@ class Olobuild_SectionHeader_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
         </div>
 
+        <?php
+        // min-width:0 sulle caselle della griglia: di suo una casella è larga almeno quanto la sua parola più lunga, e un
+        // titolo grande in una colonna stretta usciva dalla tile sopra la colonna accanto («Ti richiamiamo» di Capriola sul
+        // modulo, 18 nov 2026). Così resta nella colonna e olo-parole-intere.js lo rimpicciolisce quanto basta.
+        ?>
         <style>
+            .olo-sechead > * { min-width: 0; }
             @media (max-width:960px) {
                 .olo-sechead__headline { --olo-sh-fs-now: var(--olo-sh-fs-t, var(--olo-sh-fs)); }
             }

@@ -839,7 +839,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                     })();
                     </script>
                 <?php elseif ( $mob_style === 'offcanvas' ) : ?>
-                    <div id="<?php echo esc_attr( $nav_id ); ?>" uk-offcanvas="overlay: true" role="dialog" aria-label="<?php echo esc_attr__( 'Mobile menu', 'olobuild' ); ?>">
+                    <div id="<?php echo esc_attr( $nav_id ); ?>" class="olo-tokens" uk-offcanvas="overlay: true" role="dialog" aria-label="<?php echo esc_attr__( 'Mobile menu', 'olobuild' ); ?>">
                         <div class="uk-offcanvas-bar">
                             <button class="uk-offcanvas-close" type="button" uk-close aria-label="<?php echo esc_attr__( 'Close menu', 'olobuild' ); ?>"></button>
                             <ul class="uk-nav uk-nav-default uk-nav-parent-icon" uk-nav>

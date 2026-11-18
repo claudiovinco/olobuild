@@ -569,7 +569,7 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
             </button>
             <?php endif; ?>
 
-            <div id="<?php echo esc_attr( $uid ); ?>" class="uk-modal-full olo-pop--preset-<?php echo esc_attr( $preset_id ); ?>" <?php echo $modal_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- uk-modal options composed of fixed literals only ?>>
+            <div id="<?php echo esc_attr( $uid ); ?>" class="uk-modal-full olo-tokens olo-pop--preset-<?php echo esc_attr( $preset_id ); ?>" <?php echo $modal_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- uk-modal options composed of fixed literals only ?>>
                 <div class="uk-modal-dialog">
                     <?php if ( ! empty( $s['modal_close_button'] ) ) : ?>
                         <button class="uk-modal-close-full uk-close-large" type="button" uk-close style="z-index:10;"></button>
@@ -589,7 +589,7 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
             </button>
             <?php endif; ?>
 
-            <div id="<?php echo esc_attr( $uid ); ?>" class="olo-pop--preset-<?php echo esc_attr( $preset_id ); ?>" <?php echo $modal_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- uk-modal options composed of fixed literals only ?>>
+            <div id="<?php echo esc_attr( $uid ); ?>" class="olo-tokens olo-pop--preset-<?php echo esc_attr( $preset_id ); ?>" <?php echo $modal_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- uk-modal options composed of fixed literals only ?>>
                 <div class="<?php echo esc_attr( $dialog_class ); ?>">
                     <?php if ( ! empty( $s['modal_close_button'] ) ) : ?>
                         <button class="uk-modal-close-default" type="button" uk-close></button>

@@ -3811,6 +3811,203 @@
     };
   };
 
+  // Tornante (per Tornanti, 18 nov 2026): un paracarro bianco e rosso sulla punta, che lascia dietro di sé la strada
+  // fatta (un tratteggio che sbiadisce); a ogni clic sale un cartello col numero del tornante, da 48 in giù. Sui link il
+  // paracarro si alza.
+  STILI.tornante = function () {
+    var T = tela({ mondo: true }), st = {}, scia = [], cartelli = [], numero = 48, alza = 0, ux = null, uy = null;
+    var rosso = risolvi(CFG.ringColor || '#e5322d'), giallo = risolvi(CFG.dotColor || '#ffc400');
+    window.addEventListener('pointerdown', function (e) {
+      if (meno || e.pointerType === 'touch') return;
+      cartelli.push({ x: mx, y: my, t: performance.now(), n: numero });
+      numero = numero > 1 ? numero - 1 : 48;
+      chiedi();
+    });
+    function rett(g, x, y, w, h, r) {
+      g.beginPath();
+      if (g.roundRect) g.roundRect(x, y, w, h, r); else g.rect(x, y, w, h);
+    }
+    return {
+      frame: function (t) {
+        passo(st, t);
+        if (!meno) {
+          if (ux === null || Math.hypot(mx - ux, my - uy) > 2) { scia.push({ x: mx, y: my, t: t }); ux = mx; uy = my; }
+          if (scia.length > 90) scia.shift();
+        }
+        alza += ((hot ? 1 : 0) - alza) * 0.18;
+        scia = scia.filter(function (q) { return t - q.t < 1100; });
+        var g = pulisci(T), i;
+        g.lineCap = 'round'; g.lineJoin = 'round';
+        for (i = 1; i < scia.length; i++) {
+          g.globalAlpha = (1 - (t - scia[i].t) / 1100) * 0.5; g.strokeStyle = '#1c2226'; g.lineWidth = 7;
+          g.beginPath(); g.moveTo(scia[i - 1].x, scia[i - 1].y); g.lineTo(scia[i].x, scia[i].y); g.stroke();
+        }
+        g.setLineDash([5, 5]);
+        for (i = 1; i < scia.length; i++) {
+          g.globalAlpha = (1 - (t - scia[i].t) / 1100) * 0.9; g.strokeStyle = '#ffffff'; g.lineWidth = 1.6;
+          g.beginPath(); g.moveTo(scia[i - 1].x, scia[i - 1].y); g.lineTo(scia[i].x, scia[i].y); g.stroke();
+        }
+        g.setLineDash([]);
+        cartelli = cartelli.filter(function (c) { return t - c.t < 1300; });
+        cartelli.forEach(function (c) {
+          var e = (t - c.t) / 1300, y = c.y - 18 - e * 46;
+          g.globalAlpha = 1 - e; g.fillStyle = giallo; g.strokeStyle = '#1c2226'; g.lineWidth = 1.5;
+          rett(g, c.x - 15, y - 11, 30, 20, 4); g.fill(); g.stroke();
+          g.fillStyle = '#1c2226'; g.font = '700 12px system-ui, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+          g.fillText(String(c.n), c.x, y - 1);
+        });
+        g.globalAlpha = 1;
+        var h = 15 + alza * 6, w = 7;
+        g.fillStyle = '#ffffff'; g.strokeStyle = '#1c2226'; g.lineWidth = 1.2;
+        rett(g, mx - w / 2, my - h, w, h, 3); g.fill(); g.stroke();
+        g.fillStyle = rosso; g.fillRect(mx - w / 2 + 0.6, my - h + 2.5, w - 1.2, 3.2);
+        return scia.length > 0 || cartelli.length > 0 || Math.abs((hot ? 1 : 0) - alza) > 0.01;
+      }
+    };
+  };
+
+  // Persiana (per Persiana, 18 nov 2026): una piccola persiana verde sulla punta, con le stecche chiuse; sui link le
+  // stecche si aprono e lasciano passare una lama di luce calda; al clic la persiana sbatte, si apre tutta e si richiude.
+  STILI.persiana = function () {
+    var T = tela({ mondo: true }), st = {}, apri = 0, colpo = 0;
+    var verde = risolvi(CFG.ringColor || '#2f5d50'), luce = risolvi(CFG.dotColor || '#e0b04a');
+    window.addEventListener('pointerdown', function (e) { if (meno || e.pointerType === 'touch') return; colpo = 1; chiedi(); });
+    return {
+      frame: function (t) {
+        var s = passo(st, t);
+        colpo = Math.max(0, colpo - 0.035 * s);
+        var voglia = Math.max(hot ? 0.7 : 0, Math.sin(colpo * Math.PI));
+        apri += (voglia - apri) * 0.2 * s;
+        var g = pulisci(T), W = 16, H = 20, x = mx - W / 2, y = my - H / 2;
+        if (apri > 0.02) {
+          var al = g.createRadialGradient(mx, my, 1, mx, my, 26);
+          al.addColorStop(0, luce); al.addColorStop(1, 'rgba(255,200,80,0)');
+          g.globalAlpha = apri * 0.55; g.fillStyle = al; g.beginPath(); g.arc(mx, my, 26, 0, 6.283); g.fill(); g.globalAlpha = 1;
+        }
+        g.fillStyle = 'rgba(255,255,255,.9)'; g.fillRect(x - 1.5, y - 1.5, W + 3, H + 3);
+        g.strokeStyle = verde; g.lineWidth = 1.6; g.strokeRect(x, y, W, H);
+        for (var k = 0; k < 6; k++) {
+          var yy = y + 2.5 + k * 3.1, alto = 1.8 * (1 - apri) + 0.3;
+          g.fillStyle = verde; g.fillRect(x + 2, yy, W - 4, alto);
+          if (apri > 0.05) { g.globalAlpha = apri; g.fillStyle = luce; g.fillRect(x + 2, yy + alto, W - 4, 0.9 * apri); g.globalAlpha = 1; }
+        }
+        return colpo > 0 || Math.abs((hot ? 0.7 : 0) - apri) > 0.01;
+      }
+    };
+  };
+
+  // Raggi (per Ruota Libera, 18 nov 2026): una ruota di bici sulla punta, che gira quanto ci si muove (come se rotolasse
+  // sotto il puntatore) e piano piano si ferma; sui link la ruota si fa più grande; al clic suona il campanello: due archi
+  // che vibrano e la scritta «drin».
+  STILI.raggi = function () {
+    var T = tela({ mondo: true }), st = {}, ang = 0, vang = 0, gonfia = 0, drin = [], px = null;
+    var gomma = risolvi(CFG.ringColor || '#ff6a1a'), mozzo = risolvi(CFG.dotColor || '#2cd3a8');
+    window.addEventListener('pointerdown', function (e) {
+      if (meno || e.pointerType === 'touch') return;
+      drin.push({ x: mx, y: my, t: performance.now() }); if (drin.length > 4) drin.shift(); vang += 0.6; chiedi();
+    });
+    return {
+      frame: function (t) {
+        var s = passo(st, t);
+        if (px !== null) { if (!meno) vang += (mx - px) / 11 * 0.5; }
+        px = mx;
+        vang *= Math.pow(0.9, s); ang += vang * s;
+        gonfia += ((hot ? 1 : 0) - gonfia) * 0.16 * s;
+        var g = pulisci(T), R = 10 + gonfia * 4, k, q;
+        g.save(); g.translate(mx, my); g.rotate(ang);
+        g.strokeStyle = gomma; g.lineWidth = 2.6; g.beginPath(); g.arc(0, 0, R, 0, 6.283); g.stroke();
+        g.strokeStyle = 'rgba(255,255,255,.85)'; g.lineWidth = 0.8;
+        for (k = 0; k < 10; k++) { var a = k / 10 * 6.283; g.beginPath(); g.moveTo(0, 0); g.lineTo(Math.cos(a) * (R - 1.4), Math.sin(a) * (R - 1.4)); g.stroke(); }
+        g.fillStyle = mozzo; g.beginPath(); g.arc(0, 0, 2.4, 0, 6.283); g.fill();
+        g.restore();
+        drin = drin.filter(function (d) { return t - d.t < 900; });
+        drin.forEach(function (d) {
+          var e = (t - d.t) / 900, v = Math.sin(e * 40) * 2 * (1 - e);
+          g.globalAlpha = 1 - e; g.strokeStyle = mozzo; g.lineWidth = 1.6;
+          for (q = 0; q < 2; q++) {
+            g.beginPath(); g.arc(d.x + v, d.y, 16 + q * 6 + e * 10, -0.9, 0.9); g.stroke();
+            g.beginPath(); g.arc(d.x - v, d.y, 16 + q * 6 + e * 10, Math.PI - 0.9, Math.PI + 0.9); g.stroke();
+          }
+          g.fillStyle = gomma; g.font = '800 12px system-ui, sans-serif'; g.textAlign = 'center';
+          g.fillText('drin', d.x, d.y - 26 - e * 18);
+        });
+        g.globalAlpha = 1;
+        return Math.abs(vang) > 0.002 || drin.length > 0 || Math.abs((hot ? 1 : 0) - gonfia) > 0.01;
+      }
+    };
+  };
+
+  // Oculare (per Vetrino, 18 nov 2026): l'oculare del microscopio sulla punta, un cerchio col reticolo e la scala; mentre
+  // ci si muove è sfocato (sdoppiato), quando ci si ferma va a fuoco; sui link ingrandisce; al clic, per un attimo, dentro
+  // l'oculare compare una cellula colorata come in un vetrino.
+  STILI.oculare = function () {
+    var T = tela({ mondo: true }), st = {}, fuoco = 1, zoom = 0, cellule = [], ux = null, uy = null;
+    var viola = risolvi(CFG.ringColor || '#7b3fe4'), rosa = risolvi(CFG.dotColor || '#e8467c');
+    window.addEventListener('pointerdown', function (e) { if (meno || e.pointerType === 'touch') return; cellule.push({ t: performance.now() }); chiedi(); });
+    function disegna(g, x, y, R, a) {
+      g.globalAlpha = a; g.strokeStyle = viola; g.lineWidth = 1.6; g.beginPath(); g.arc(x, y, R, 0, 6.283); g.stroke();
+      g.lineWidth = 0.8; g.beginPath(); g.moveTo(x - R + 3, y); g.lineTo(x + R - 3, y); g.moveTo(x, y - R + 3); g.lineTo(x, y + R - 3); g.stroke();
+      for (var k = -4; k <= 4; k++) {
+        if (!k) continue;
+        var l = k % 2 ? 1.6 : 3; g.beginPath(); g.moveTo(x + k * R / 5.5, y - l); g.lineTo(x + k * R / 5.5, y + l); g.stroke();
+      }
+    }
+    return {
+      frame: function (t) {
+        var s = passo(st, t), corsa = 0;
+        if (ux !== null) { if (!meno) corsa = Math.min(1, Math.hypot(mx - ux, my - uy) / 9); }
+        ux = mx; uy = my;
+        fuoco += ((1 - corsa) - fuoco) * 0.12 * s;
+        zoom += ((hot ? 1 : 0) - zoom) * 0.16 * s;
+        var g = pulisci(T), R = 12 + zoom * 6, d = (1 - fuoco) * 4;
+        cellule = cellule.filter(function (c) { return t - c.t < 1200; });
+        cellule.forEach(function (c) {
+          var e = (t - c.t) / 1200, a = e < 0.2 ? e / 0.2 : 1 - (e - 0.2) / 0.8;
+          g.globalAlpha = a * 0.85; g.fillStyle = rosa; g.beginPath(); g.ellipse(mx + 2, my - 1, R * 0.55, R * 0.42, 0.5, 0, 6.283); g.fill();
+          g.fillStyle = viola; g.beginPath(); g.arc(mx + 3, my - 2, R * 0.2, 0, 6.283); g.fill();
+        });
+        if (d > 0.3) { disegna(g, mx - d, my, R, 0.35); disegna(g, mx + d, my, R, 0.35); }
+        disegna(g, mx, my, R, d > 0.3 ? 0.55 : 1);
+        g.globalAlpha = 1;
+        return fuoco < 0.99 || cellule.length > 0 || Math.abs((hot ? 1 : 0) - zoom) > 0.01;
+      }
+    };
+  };
+
+  // Doppione (per Doppio Senso, 18 nov 2026): il puntatore ha un gemello allo specchio, dall'altra parte dello schermo,
+  // una freccia girata che fa le stesse cose al contrario; un filo sottile li unisce passando per il centro. Sui link si
+  // accendono tutti e due; al clic da ciascuno parte un'onda.
+  STILI.doppione = function () {
+    var T = tela({ mondo: true }), st = {}, luce = 0, onde = [];
+    var oro = risolvi(CFG.ringColor || '#e8b04b'), carta = risolvi(CFG.dotColor || '#eee8dc');
+    window.addEventListener('pointerdown', function (e) { if (meno || e.pointerType === 'touch') return; onde.push({ x: mx, y: my, t: performance.now() }); chiedi(); });
+    function freccia(g, x, y, verso, col) {
+      g.save(); g.translate(x, y); g.scale(verso, 1);
+      g.fillStyle = col; g.strokeStyle = 'rgba(0,0,0,.55)'; g.lineWidth = 1;
+      g.beginPath(); g.moveTo(0, 0); g.lineTo(0, 16); g.lineTo(4.2, 12.2); g.lineTo(7, 18.5); g.lineTo(9.4, 17.4); g.lineTo(6.6, 11.3); g.lineTo(12, 11.3); g.closePath();
+      g.fill(); g.stroke(); g.restore();
+    }
+    return {
+      frame: function (t) {
+        var s = passo(st, t), W = window.innerWidth, gx = W - mx;
+        luce += ((hot ? 1 : 0) - luce) * 0.16 * s;
+        var g = pulisci(T);
+        g.globalAlpha = 0.22 + luce * 0.3; g.strokeStyle = oro; g.lineWidth = 1; g.setLineDash([3, 6]);
+        g.beginPath(); g.moveTo(mx, my); g.quadraticCurveTo(W / 2, my - 40, gx, my); g.stroke(); g.setLineDash([]);
+        onde = onde.filter(function (o) { return t - o.t < 800; });
+        onde.forEach(function (o) {
+          var e = (t - o.t) / 800; g.globalAlpha = 1 - e; g.strokeStyle = oro; g.lineWidth = 1.4;
+          g.beginPath(); g.arc(o.x, o.y, 6 + e * 26, 0, 6.283); g.stroke();
+          g.beginPath(); g.arc(W - o.x, o.y, 6 + e * 26, 0, 6.283); g.stroke();
+        });
+        g.globalAlpha = 0.55 + luce * 0.45;
+        freccia(g, gx, my, -1, luce > 0.5 ? oro : carta);
+        g.globalAlpha = 1;
+        return onde.length > 0 || Math.abs((hot ? 1 : 0) - luce) > 0.01;
+      }
+    };
+  };
+
   /* ── cursore della sezione (2 nov 2026) ──
      Una sezione con data-olo-cursore ha un cursore suo: entrandoci il cursore cambia, uscendo torna quello della
      pagina. Ogni stile si crea la prima volta che serve e poi resta, coi suoi nodi nascosti quando non è attivo; i suoi

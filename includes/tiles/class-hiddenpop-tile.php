@@ -41,6 +41,9 @@ class Olobuild_Hiddenpop_Tile extends Olobuild_Tile_Base {
         'trigger_threshold'   => 50,
         'trigger_direction'   => 'down',
         'exit_intent'         => false,
+        // Si apre scorrendo (18 nov 2026): spento, il popup si apre solo con la sequenza di tasti. Prima il trigger a
+        // scorrimento restava sempre acceso, e un popup «nascosto» compariva da solo a metà pagina.
+        'scroll_trigger'      => true,
         'retrigger'           => false,
         'key_sequence'                 => false,
         'key_sequence_keys'            => '↑↑↓↓←→←→ba',
@@ -99,6 +102,7 @@ class Olobuild_Hiddenpop_Tile extends Olobuild_Tile_Base {
         $close_overlay = ! empty( $s['popup_close_overlay'] );
 
         $exit_intent = ! empty( $s['exit_intent'] );
+        $scroll_on   = ! array_key_exists( 'scroll_trigger', $s ) || ! empty( $s['scroll_trigger'] );
         $display_device   = sanitize_text_field( $s['display_device'] ?? '' );
         $display_referrer = sanitize_text_field( $s['display_referrer'] ?? '' );
 
@@ -283,8 +287,9 @@ class Olobuild_Hiddenpop_Tile extends Olobuild_Tile_Base {
             <div class="olo-hiddenpop-marker" id="<?php echo esc_attr( $uid ); ?>-marker" style="height:1px;width:100%;pointer-events:none;"></div>
         </div>
 
-        <!-- Modal -->
-        <div id="<?php echo esc_attr( $uid ); ?>-modal" <?php echo $modal_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute composed only of the fixed internal literals 'uk-modal' and 'bg-close: false' ?>>
+        <!-- Modal. «olo-tokens»: UIkit sposta la finestra in fondo al body, fuori dal template, e senza la classe perdeva
+             colori e caratteri del tema (fondo bianco e pulsante blu nelle demo, 18 nov 2026) -->
+        <div id="<?php echo esc_attr( $uid ); ?>-modal" class="olo-tokens" <?php echo $modal_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute composed only of the fixed internal literals 'uk-modal' and 'bg-close: false' ?>>
             <div class="uk-modal-dialog uk-margin-auto-vertical">
                 <?php if ( ! empty( $s['modal_close_button'] ) ) : ?>
                     <button class="uk-modal-close-default" type="button" uk-close></button>
@@ -384,6 +389,7 @@ class Olobuild_Hiddenpop_Tile extends Olobuild_Tile_Base {
             var freq      = '<?php echo esc_js( $freq ); ?>';
             var maxTimes  = <?php echo intval( $max_times ); ?>;
             var exitIntent = <?php echo $exit_intent ? 'true' : 'false'; ?>;
+            var aScorrimento = <?php echo $scroll_on ? 'true' : 'false'; ?>;
             var device    = '<?php echo esc_js( $display_device ); ?>';
             var referrer  = '<?php echo esc_js( $display_referrer ); ?>';
             var fired     = false;
@@ -467,7 +473,7 @@ class Olobuild_Hiddenpop_Tile extends Olobuild_Tile_Base {
                   }
                 }
               });
-            } else {
+            } else if (aScorrimento) {
               /* ── Scroll trigger mode ── */
 
               /* Track scroll direction */

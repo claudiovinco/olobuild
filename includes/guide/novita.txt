@@ -3,6 +3,45 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.1242 - 2026-11-18 (Cinque temi fuori dal comune)
+- Nella Vetrina e nel selettore cinque temi nuovi, ognuno con un modo diverso di scorrere la pagina. Tornanti (noleggio di e-bike a Bormio): il sito va a tornanti, un po’ a destra, un po’ in giù e un po’ a sinistra, e una bici segue la strada disegnata sopra la valle. Ruota Libera (ciclofficina a Padova): le sezioni stanno sul bordo di una ruota che gira mentre scorri. Persiana (agenzia immobiliare a Lucca): la facciata si allontana e scopre il salotto. Vetrino (laboratorio di analisi a Parma): uno zoom che dal volto arriva alla molecola. Doppio Senso (traduttori a Trieste): le due metà della pagina scorrono in senso contrario.
+
+## v1.4.1241 - 2026-11-18 (Slider Pro: i cerchi restano cerchi)
+- Slider Pro fermo a scorrimento: in una finestra più alta del 16:9 un livello tondo più grande della tela (un cerchio con gli angoli tondi al massimo) resta un cerchio. Prima la scena lo allungava in altezza come una foto a tutto campo, e diventava un ovale (le lenti dello zoom di Vetrino al computer).
+
+## v1.4.1240 - 2026-11-18 (I cinque temi rifiniti)
+- Temi in preparazione rifiniti dopo il giro di tutte le pagine al computer e al telefono: in Doppio Senso le colonne che scorrono in senso contrario non salgono più sul titolo (e sul telefono, dove vanno una sotto l’altra, nemmeno sulla colonna di prima); in Vetrino il terminale non mostra più la riga di prova «Apri la demo»; in Tornanti i pallini delle fermate stanno al centro della testata e al telefono la quota e i pulsanti dell’apertura scendono sotto la strada.
+
+## v1.4.1239 - 2026-11-18 (Evo Notes: il lato del pulsante)
+- Evo Notes → «Lato del pulsante»: il pulsante fisso che accende le note sta a destra (come prima) o a sinistra. A destra si sovrapponeva a «torna in cima», che i temi mettono in basso a destra.
+
+## v1.4.1238 - 2026-11-18 (Cinque temi in preparazione)
+- Cinque temi nuovi in preparazione: Tornanti, Ruota Libera, Persiana, Vetrino e Doppio Senso. Si aprono solo dal loro indirizzo di demo; entrano nella Vetrina e nel selettore quando hanno le loro anteprime.
+- Titoli di sezione dei temi: la seconda riga va in corsivo solo se il carattere dei titoli ha il corsivo. Prima, con un carattere senza corsivo, il browser la inclinava finta.
+
+## v1.4.1237 - 2026-11-18 (Hotspots con la sua foto)
+- Hotspots: i segnaposto stanno sopra una foto (Contenuto → Foto, col testo alternativo; il punto focale nello Stile). Prima il pannello era solo un riquadro tratteggiato di prova, con la scritta «SCENE», e i segnaposto indicavano il vuoto. Senza foto resta com'era.
+
+## v1.4.1236 - 2026-11-18 (Le finestre coi colori del tema)
+- Popup, Popup Nascosto e menu laterale del Nav Menu: le finestre si aprono coi colori e i caratteri del tema anche quando la pagina ne mostra uno diverso da quello del sito (le demo dei temi, le pagine con uno stile proprio). UIkit le sposta in fondo alla pagina, fuori dal template, e prima prendevano il fondo bianco e il pulsante blu di serie.
+
+## v1.4.1235 - 2026-11-18 (Il Popup Nascosto davvero nascosto)
+- Popup Nascosto → Trigger → «Si apre scorrendo»: spento, il popup si apre solo con la sequenza di tasti. Prima il trigger a scorrimento restava sempre acceso, e un popup «nascosto» si apriva da solo a metà pagina anche con la sequenza.
+
+## v1.4.1234 - 2026-11-18 (Cinque cursori nuovi)
+- Cursori (Avanzate → Effetti mouse): Tornante (un paracarro che lascia la strada tratteggiata e al clic conta i tornanti), Persiana (le stecche si aprono sui link e lasciano passare la luce), Raggi (una ruota di bici che gira quanto ti muovi, col campanello al clic), Oculare (il reticolo del microscopio, sfocato mentre corri e a fuoco quando ti fermi) e Doppione (un gemello allo specchio dall'altra parte dello schermo).
+
+## v1.4.1233 - 2026-11-18 (I titoli rimisurati col loro carattere)
+- Titoli: la misura che tiene le parole dentro la colonna si rifà quando arrivano i caratteri del tema. Prima un titolo misurato col carattere di riserva, più stretto, restava largo dopo, e una parola lunga a 100 px usciva dalla colonna (Bialbero, Controtempo, Ring).
+
+## v1.4.1232 - 2026-11-18 (Sezioni a percorso e a ruota)
+- Sezioni → Effetto sticky → «Arriva da»: in un gruppo di sezioni «Cover orizzontale» ogni sezione sceglie da dove entra rispetto alla precedente: da destra (come prima), da sinistra, da sotto o da sopra. Alternando le direzioni il sito procede a scala o a tornanti, un po' di lato e un po' in giù, e la vista frena a ogni sezione come su un gradino. «Sopra» fa salire la vista mentre scorri in giù.
+- Sezioni → Effetto sticky → «Ruota»: le sezioni di seguito con la Ruota stanno sul bordo di una ruota enorme col perno sotto lo schermo, a «Angolo» gradi l'una dall'altra. Scorrendo la ruota gira, e la sezione di turno arriva dritta in cima mentre le altre scendono inclinate ai lati. «Arriva da» Destra o Sinistra sceglie il verso. Con il movimento ridotto le sezioni restano una sotto l'altra.
+
+## v1.4.1231 - 2026-11-18 (I titoli restano nella loro colonna)
+- Titoli: una parola più larga della sua colonna non esce più sopra la colonna accanto. Il titolo si rimpicciolisce quanto basta perché ci stia, come succedeva già alle parole spezzate a metà riga. Era il caso di «Ti richiamiamo per l'orario.» di Capriola, che in una finestra da 1000 px copriva il modulo della prenotazione.
+- Section Header: le sue caselle non superano più la larghezza della tile, nemmeno con una parola molto lunga.
+
 ## v1.4.1230 - 2026-11-18 (Vetrina: Capriola com'è adesso)
 - Vetrina dei temi: le anteprime di Capriola (foto del computer e del telefono, video) mostrano l'apertura nuova, col solo video tondo.
 

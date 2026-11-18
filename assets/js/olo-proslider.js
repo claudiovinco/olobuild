@@ -301,10 +301,19 @@ function initSlider(container) {
       if (tondo(cs) || (dentro && tondo(dentro))) return false;
       return fondo(cs) || (!!dentro && fondo(dentro));
     };
+    // Un cerchio (angoli tondi almeno quanto metà del lato più corto) che copre la tela resta un cerchio: allungato
+    // nell'altezza in più diventava un ovale (le lenti di Vetrino, più grandi della tela). Non si allunga: resta al
+    // centro con la composizione, e la scena in più la copre lui stesso, o quello che c'è sotto (18 nov 2026).
+    var cerchio = function (cs) {
+      var r = cs.borderTopLeftRadius || '';
+      if (/%/.test(r)) return parseFloat(r) >= 50;
+      return parseFloat(r) > 0 && parseFloat(r) >= Math.min(parseFloat(cs.width) || 0, parseFloat(cs.height) || 0) / 2 - 1;
+    };
     layerWraps.forEach(function (w) {
       qsa(w, ':scope > .olo-proslider-layer, :scope > .mps-stato > .olo-proslider-layer').forEach(function (el) {
         if (el.hasAttribute('data-timeline-name')) return; // in alto a sinistra per regola: lo posa la sua timeline
         var cs = getComputedStyle(el), t = frazione(cs.top, h0), hh = frazione(cs.height, h0), b = bordo(t, hh);
+        if (b === 'pieno' && cerchio(cs)) return;
         if (!b && velo(el, cs)) b = t <= 0.02 ? 'velo-su' : (t + hh >= 0.98 ? 'velo-giu' : '');
         if (!b) return;
         segna(el);

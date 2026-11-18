@@ -22,6 +22,8 @@ class Olobuild_EvoNotes_Tile extends Olobuild_Tile_Base {
         'toggle_label'        => 'Perché questa evoluzione',
         'toggle_label_active' => 'Nascondi motivazioni',
         'show_hint'           => true,
+        // Il lato del pulsante fisso (18 nov 2026): a destra stava sopra «torna in cima», che i temi mettono lì.
+        'toggle_side'         => 'right',
         'hint_text'           => 'Tocca i numeri per leggere ogni scelta — Prima → Ora',
         'kicker_label'        => 'Evoluzione',
         'accent'              => '',
@@ -89,7 +91,7 @@ class Olobuild_EvoNotes_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist or fixed var()/color-mix() literals, font stacks and paddings are fixed literals, $uid is internally generated. ?>
         <style>
-            .<?php echo $uid; ?>-toggle{position:fixed;right:22px;bottom:22px;z-index:90;display:inline-flex;align-items:center;gap:10px;background:<?php echo $accent; ?>;color:<?php echo $on_acc; ?>;font-family:<?php echo $sans; ?>;font-weight:700;font-size:13.5px;line-height:1.2;border:0;border-radius:999px;padding:13px 19px;cursor:pointer;box-shadow:0 14px 38px -10px <?php echo $glow; ?>;transition:transform .15s,background .15s;}
+            .<?php echo $uid; ?>-toggle{position:fixed;<?php echo 'left' === ( $s['toggle_side'] ?? 'right' ) ? 'left' : 'right'; ?>:22px;bottom:22px;z-index:90;display:inline-flex;align-items:center;gap:10px;background:<?php echo $accent; ?>;color:<?php echo $on_acc; ?>;font-family:<?php echo $sans; ?>;font-weight:700;font-size:13.5px;line-height:1.2;border:0;border-radius:999px;padding:13px 19px;cursor:pointer;box-shadow:0 14px 38px -10px <?php echo $glow; ?>;transition:transform .15s,background .15s;}
             .<?php echo $uid; ?>-toggle:hover{transform:translateY(-2px);}
             .<?php echo $uid; ?>-toggle:focus-visible{outline:none;box-shadow:0 14px 38px -10px <?php echo $glow; ?>,0 0 0 3px <?php echo $ring; ?>;}
             .<?php echo $uid; ?>-toggle .evn-ic{width:16px;height:16px;display:grid;place-items:center;}

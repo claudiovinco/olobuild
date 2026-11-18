@@ -63,6 +63,16 @@ def caratteri(tid):
     return nome(ty.get('font_family')), nome(ty.get('font_family_heading'))
 
 
+def corsivo_vero(tid):
+    try:
+        th = json.load(open(os.path.join(TEMI, tid, 'theme.json'), encoding='utf-8'))
+    except (OSError, ValueError):
+        return True
+    st = th.get('styles') or {}
+    titoli = caratteri(tid)[1]
+    return bool(titoli) and titoli in (st.get('google_fonts_italic') or [])
+
+
 def occhiello_apertura(tid, built, v):
     """L'occhiello dell'apertura (Slider Pro della prima sezione: il testo piccolo in maiuscolo in alto) prende la voce del
     tema: nei temi che non usano il monospazio, il carattere del testo o dei titoli."""
@@ -100,6 +110,10 @@ def applica_tema(tid, nome_file, built, conta=None):
         return
     pr = (json.load(open(PROFILI, encoding='utf-8')) if os.path.exists(PROFILI) else {}).get(tid)
     v = voce(tid, pr)
+    # «in corsivo» solo se il carattere dei titoli ha il corsivo caricato (styles.google_fonts_italic): se no il browser
+    # lo inclina finto, storto (18 nov 2026, Ruota Libera in Bricolage Grotesque). Allora resta dello stesso colore.
+    if v['riga2'] == 'corsivo' and not corsivo_vero(tid):
+        v = dict(v, riga2='tinta')
     occhiello_apertura(tid, built, v)
 
     def w(n):

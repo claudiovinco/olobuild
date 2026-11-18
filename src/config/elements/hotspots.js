@@ -20,6 +20,9 @@ export default {
     heading: t('Esplora'),
     intro: '',
     panel_label: 'SCENE',
+    image: '',
+    image_alt: '',
+    object_position: 'center center',
     aspect_ratio: '16/10',
     items: [
       { x: 28, y: 36, title: 'Punto 1', text: 'Descrizione del punto.', meta: '' },
@@ -39,6 +42,9 @@ export default {
     { key: 'heading', label: t('Titolo'), type: 'text' },
     { key: 'intro', label: t('Introduzione'), type: 'textarea' },
     { key: 'panel_label', label: t('Etichetta pannello'), type: 'text' },
+    { key: 'image', label: t('Foto'), type: 'image',
+      description: t('La foto su cui stanno i segnaposto: una stanza, una mappa, un oggetto. Vuota, il pannello resta il riquadro tratteggiato.') },
+    { key: 'image_alt', label: t('Testo alternativo foto'), type: 'text', condition: { field: 'image', op: 'notEmpty' } },
 
     { type: 'separator', label: t('Marker') },
     { key: 'items', label: t('Punti'), type: 'content-items',
@@ -56,6 +62,8 @@ export default {
 
   styleFields: [
     { type: 'separator', label: t('Stile') },
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position', contextKeys: { src: 'image' },
+      condition: { field: 'image', op: 'notEmpty' } },
     { key: 'zone_accent', label: t('Colore marker'), type: 'color' },
     { key: 'zone_on', label: t('Testo su accento'), type: 'color' },
     { key: 'panel_bg', label: t('Sfondo pannello'), type: 'color' },
