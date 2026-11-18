@@ -664,6 +664,7 @@ abstract class Olobuild_Tile_Base {
     protected function bg_media_parts( $bg, $scope = '', $con_velo = true ) {
         $out = [ 'has' => false, 'css' => '', 'markup' => '' ];
         if ( is_array( $bg ) && ! empty( $bg['type'] ) && $bg['type'] !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
+            $bg   = Olobuild_CSS_Builder::sfondo_dal_contenuto( $bg ); // la foto, il video o la galleria dal contenuto
             $cssb = new Olobuild_CSS_Builder();
             // con_velo: il velo dello Sfondo (overlay) sopra foto, video e galleria dello slot
             $out['css']    = trim( (string) $cssb->get_bg_inline_css( $bg, $con_velo ) );

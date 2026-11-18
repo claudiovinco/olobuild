@@ -29,7 +29,8 @@
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;opacity:.85"><path d="M6 9l6 6 6-6"/></svg>
         </button>
         <div v-if="showNewMenu" class="tpl-new-menu">
-          <div class="grp-head">{{ t('Standard') }}</div>
+          <!-- Cosa crea ogni famiglia: nella (i) del gruppo, non in linea (18 nov 2026, «serve chiarezza sull'uso di questo menu») -->
+          <div class="grp-head">{{ t('Standard') }}<InfoTip :titolo="t('Standard')" :testo="infoStandard" /></div>
           <div v-for="opt in standardNewOptions" :key="opt.id" class="item" @click="createNew(opt.type)">
             <span class="ic-box" :style="{ background: opt.gradient }">
               <component :is="opt.iconSvg"/>
@@ -37,7 +38,7 @@
             {{ opt.label }}
           </div>
           <hr v-if="postTypes.length" />
-          <div v-if="postTypes.length" class="grp-head">{{ t('Template Single') }}</div>
+          <div v-if="postTypes.length" class="grp-head">{{ t('Template Single') }}<InfoTip :titolo="t('Template Single')" :testo="infoSingle" /></div>
           <div v-for="pt in postTypes" :key="pt.value" class="item" @click="createNewSingle(pt.value)">
             <span class="ic-box" :style="{ background: TONE_BG.purple }">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
@@ -47,7 +48,7 @@
           <!-- Archivi: la pagina che elenca i contenuti (blog, categoria, tag, autore, archivio di un tipo).
                «Tutti gli archivi» = il generico, per i tipi che non ne hanno uno loro (olobuild_active_archive). -->
           <hr />
-          <div class="grp-head">{{ t('Template archivio') }}</div>
+          <div class="grp-head">{{ t('Template archivio') }}<InfoTip :titolo="t('Template archivio')" :testo="infoArchivio" /></div>
           <div class="item" :title="t('Per gli archivi dei tipi che non hanno un template loro')" @click="createNewArchive('')">
             <span class="ic-box" :style="{ background: TONE_BG.teal }">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/></svg>
@@ -786,6 +787,27 @@ onUnmounted(() => {
 
 /* ─── Preview shape sub-component ──────────────────────────────────── */
 import TplPreviewShape from './TplPreviewShape.vue';
+import InfoTip from '@/components/Builder/InfoTip.vue';
+
+/* ─── Le (i) dei gruppi del menu «Nuovo Template» ─────────────────── */
+const infoStandard = [
+  t('Le pagine e le parti di tutto il sito.'),
+  t('Pagina: una pagina col suo indirizzo, come Home o Contatti. «Pubblica» la mette sul sito.'),
+  t('Header e Footer: la testata e il piè di pagina di tutte le pagine, dopo «Attiva».'),
+  t('Mega Panel: il pannello grande che si apre da una voce del menu.'),
+  t('Widget: un blocco da riusare dentro altre tile, come le schede o la fisarmonica.'),
+  t('404: la pagina che compare quando un indirizzo non esiste.'),
+];
+const infoSingle = [
+  t('La pagina di ogni contenuto di un tipo: un solo disegno per tutti gli articoli, tutti i prodotti, tutti gli eventi.'),
+  t('Col fulmine ogni parte prende i dati del contenuto aperto. Dopo «Pubblica», «Attiva» lo usa sul sito.'),
+  t('Le voci sono tante quanti i tipi di contenuto: ogni tipo che crei per la Redazione (Impostazioni › Tipi di contenuto) aggiunge qui la sua.'),
+];
+const infoArchivio = [
+  t("La pagina che elenca i contenuti di un tipo, per esempio /eventi/: una griglia con «Segui l'archivio aperto» mostra quelli della pagina."),
+  t('«Tutti gli archivi» vale per gli elenchi che non hanno un template loro: categorie, tag, autori, date.'),
+  t('Anche qui, ogni tipo di contenuto che crei per la Redazione aggiunge la sua voce.'),
+];
 </script>
 
 <style scoped>
@@ -868,6 +890,7 @@ import TplPreviewShape from './TplPreviewShape.vue';
   to   { opacity: 1; transform: none; }
 }
 .tpl-new-menu .grp-head {
+  display: flex; align-items: center; gap: 6px;
   font-size: 10px; font-weight: 700;
   color: var(--ot-text-muted);
   letter-spacing: .06em; text-transform: uppercase;

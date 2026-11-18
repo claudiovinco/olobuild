@@ -13,7 +13,7 @@
 
     <!-- Dynamic source active message -->
     <div v-if="isDynamicQueryActive" class="cie-dynamic-info">
-      {{ t('&#9889; Sorgente dinamica accesa: le voci vengono dai contenuti scelti qui sopra') }}
+      {{ t('&#9889; Sorgente dinamica accesa: le voci vengono dalla scelta qui sopra') }}
     </div>
 
     <!-- Static items list (hidden when query active) -->

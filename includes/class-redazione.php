@@ -1197,6 +1197,31 @@ class Olobuild_Redazione {
     }
 
     /** Una versione: cosa cambia rispetto a ora (il testo riga per riga, l'elenco del resto) e ciò che serve a riprenderla. */
+    /** Un valore di un campo come lo legge chi scrive: la data per esteso, l'etichetta di una scelta, Sì o No. */
+    private static function leggibile( $c, $v ) {
+        $v = trim( wp_strip_all_tags( is_scalar( $v ) ? (string) $v : '' ) );
+        if ( '' === $v ) {
+            return '—';
+        }
+        switch ( $c['tipo'] ) {
+            case 'data':
+                $ts = strtotime( $v );
+                return $ts ? date_i18n( get_option( 'date_format' ), $ts ) : $v;
+            case 'sino':
+                return $v ? __( 'Sì', 'olobuild' ) : __( 'No', 'olobuild' );
+            case 'scelta':
+                foreach ( explode( "\n", (string) ( $c['opzioni'] ?? '' ) ) as $riga ) {
+                    $p = strpos( $riga, '|' );
+                    if ( trim( false === $p ? $riga : substr( $riga, 0, $p ) ) === $v ) {
+                        return trim( false === $p ? $riga : substr( $riga, $p + 1 ) );
+                    }
+                }
+                return $v;
+            default:
+                return wp_html_excerpt( $v, 90, '…' );
+        }
+    }
+
     public static function rest_versione( WP_REST_Request $r ) {
         $post = get_post( (int) $r['id'] );
         $rid  = (int) $r['versione']; // wp_get_post_revision() vuole una variabile (per riferimento)
@@ -1208,17 +1233,28 @@ class Olobuild_Redazione {
         $m      = self::modulo_salvato( $v->ID );
         $ora    = self::modulo_di( $post );
         $cambia = [];
+        // Com'era e com'è (18 nov 2026): «Diverso da adesso: Ora» diceva QUALE campo è cambiato, non come; per i campi
+        // che si leggono (testi, date, ore, numeri, scelte, link) la versione mostra «questa versione → adesso».
+        $valori = [];
         if ( normalize_whitespace( $v->post_title ) !== normalize_whitespace( $post->post_title ) ) {
             $cambia[] = __( 'Titolo', 'olobuild' );
+            $valori[] = [ 'nome' => __( 'Titolo', 'olobuild' ), 'prima' => self::leggibile( [ 'tipo' => 'testo' ], $v->post_title ),
+                'adesso' => self::leggibile( [ 'tipo' => 'testo' ], $post->post_title ) ];
         }
         if ( post_type_supports( $post->post_type, 'excerpt' ) && normalize_whitespace( $v->post_excerpt ) !== normalize_whitespace( $post->post_excerpt ) ) {
             $cambia[] = __( 'Riassunto', 'olobuild' );
+            $valori[] = [ 'nome' => __( 'Riassunto', 'olobuild' ), 'prima' => self::leggibile( [ 'tipo' => 'testo' ], $v->post_excerpt ),
+                'adesso' => self::leggibile( [ 'tipo' => 'testo' ], $post->post_excerpt ) ];
         }
         if ( $m ) {
             $t = Olobuild_Tipi_Contenuto::del_tipo( $post->post_type );
             foreach ( $t ? $t['campi'] : [] as $c ) {
                 if ( (string) ( $m['campi'][ $c['chiave'] ] ?? '' ) !== (string) ( $ora['campi'][ $c['chiave'] ] ?? '' ) ) {
                     $cambia[] = $c['etichetta'];
+                    if ( in_array( $c['tipo'], [ 'testo', 'testo_lungo', 'formattato', 'numero', 'data', 'ora', 'link', 'scelta', 'sino', 'testo_social' ], true ) ) {
+                        $valori[] = [ 'nome' => $c['etichetta'], 'prima' => self::leggibile( $c, $m['campi'][ $c['chiave'] ] ?? '' ),
+                            'adesso' => self::leggibile( $c, $ora['campi'][ $c['chiave'] ] ?? '' ) ];
+                    }
                 }
             }
             foreach ( self::tassonomie( $post->post_type ) as $x ) {
@@ -1241,6 +1277,7 @@ class Olobuild_Redazione {
             'quando'      => self::quando( get_post_timestamp( $v, 'modified' ) ),
             'autore'      => self::nome_utente( $v->post_author ),
             'cambia'      => $cambia,
+            'valori'      => $valori,
             'differenze'  => $differenze,
             'fotografia'  => (bool) $m,
             'wpConfronta' => admin_url( 'revision.php?revision=' . $v->ID ),

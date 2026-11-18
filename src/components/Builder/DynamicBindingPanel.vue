@@ -87,16 +87,24 @@ const previewLoading = ref(false);
 // Su un link (17 nov 2026) solo i campi indirizzo: il titolo o la data dentro un URL non porterebbero da nessuna
 // parte. Restano il campo personalizzato (si scrive il nome a mano) e le sorgenti con almeno un indirizzo.
 const perLink = computed(() => props.fieldType === 'link');
-const eUrl = (x) => x?.type === 'url';
+// Allo stesso modo (18 nov 2026, lo Sfondo dal contenuto) su un'immagine solo i campi foto, su un video solo i campi
+// video: la data o il titolo non darebbero niente da mostrare.
+const filtro = computed(() => {
+  if (perLink.value) return (x) => x?.type === 'url';
+  if (props.fieldType === 'image') return (x) => x?.type === 'image';
+  if (props.fieldType === 'video') return (x) => x?.genere === 'video' || /video|trailer/i.test(String(x?.key || ''));
+  return null;
+});
 const soloPerIlCampo = (campi) => {
-  if (!perLink.value || !Array.isArray(campi)) return campi;
+  const ok = filtro.value;
+  if (!ok || !Array.isArray(campi)) return campi;
   return campi
-    .map((x) => (Array.isArray(x?.fields) ? { ...x, fields: x.fields.filter(eUrl) } : x))
-    .filter((x) => (Array.isArray(x?.fields) ? x.fields.length > 0 : eUrl(x)));
+    .map((x) => (Array.isArray(x?.fields) ? { ...x, fields: x.fields.filter(ok) } : x))
+    .filter((x) => (Array.isArray(x?.fields) ? x.fields.length > 0 : ok(x)));
 };
 
 const bindingSources = computed(() => getBindingSources(props.fieldType).filter((s) => {
-  if (!perLink.value) return true;
+  if (!filtro.value) return true;
   const f = getFieldsForSource(s.value);
   return f === 'manual' || (Array.isArray(soloPerIlCampo(f)) && soloPerIlCampo(f).length > 0);
 }));

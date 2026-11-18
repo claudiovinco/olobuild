@@ -11,6 +11,16 @@ class Olobuild_Archive_Integration {
     /** @var int|null Il template d'archivio di questa richiesta, scelto una volta che la query principale è fatta. */
     private static $scelto = null;
 
+    /**
+     * Nel builder, il template d'archivio che si sta disegnando (18 nov 2026): fuori da un archivio vero le tile con
+     * «Segui l'archivio aperto» mostrano i contenuti del suo tipo («Archivio: Eventi» → gli eventi), come faranno sul sito.
+     * Prima mostravano gli articoli, e in un sito senza articoli «Nessun articolo trovato». La impostano i render del
+     * builder (Olobuild_Rest_Api) solo per la durata del render.
+     *
+     * @var array|null [ 'post_type' => … ]
+     */
+    public static $anteprima_builder = null;
+
     /** Le tile che possono seguire l'archivio aperto, col loro numero per pagina predefinito. */
     const TILE_CHE_SEGUONO = [ 'queryloop' => 6, 'postgrid' => 12 ];
 
@@ -156,7 +166,7 @@ class Olobuild_Archive_Integration {
     public static function argomenti_dell_archivio() {
         global $wp_the_query;
         if ( ! ( $wp_the_query instanceof WP_Query ) || ! ( $wp_the_query->is_archive() || $wp_the_query->is_home() || $wp_the_query->is_search() ) ) {
-            return null;
+            return is_array( self::$anteprima_builder ) ? self::$anteprima_builder : null;
         }
         return self::variabili_pulite( (array) $wp_the_query->query );
     }

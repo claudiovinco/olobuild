@@ -54510,3 +54510,143 @@ msgstr "Der neueste"
 #: OLObuild 1.4.1190
 msgid "Il contenuto che il canvas usa per mostrare il template: cambialo per vedere lo stesso disegno coi dati di un altro. Sul sito ogni pagina usa il suo."
 msgstr "Der Inhalt, mit dem die Arbeitsfläche die Vorlage zeigt: Wechsle ihn, um dasselbe Design mit den Daten eines anderen zu sehen. Auf der Website verwendet jede Seite ihren eigenen."
+
+#: OLObuild 1.4.1190
+msgid "(campo)"
+msgstr "(Feld)"
+
+#: OLObuild 1.4.1190
+msgid "Dall’ultima data"
+msgstr "Vom letzten Datum"
+
+#: OLObuild 1.4.1190
+msgid "Dalla prima data"
+msgstr "Vom ersten Datum"
+
+#: OLObuild 1.4.1190
+msgid "Dall’ora più tarda"
+msgstr "Von der spätesten Uhrzeit"
+
+#: OLObuild 1.4.1190
+msgid "Dall’ora più presto"
+msgstr "Von der frühesten Uhrzeit"
+
+#: OLObuild 1.4.1190
+msgid "&#9889; Sorgente dinamica accesa: le voci vengono dalla scelta qui sopra"
+msgstr "&#9889; Dynamische Quelle aktiv: Die Einträge kommen aus der Auswahl oben"
+
+#: OLObuild 1.4.1190
+msgid "Inserisci una tile o una riga"
+msgstr "Eine Tile oder eine Zeile einfügen"
+
+#: OLObuild 1.4.1190
+msgid "Nessuna tile trovata"
+msgstr "Keine Tile gefunden"
+
+#: OLObuild 1.4.1190
+msgid "Nuova tile"
+msgstr "Neue Tile"
+
+#: OLObuild 1.4.1190
+msgid "Cerca una tile"
+msgstr "Tile suchen"
+
+#: OLObuild 1.4.1190
+msgid "Aggiungi una tile o scegli un layout per iniziare"
+msgstr "Füge eine Tile hinzu oder wähle ein Layout, um zu beginnen"
+
+#: OLObuild 1.4.1190
+msgid "Aggiungi una tile"
+msgstr "Tile hinzufügen"
+
+#: OLObuild 1.4.1190
+msgid "Le pagine e le parti di tutto il sito."
+msgstr "Die Seiten und die Teile der ganzen Website."
+
+#: OLObuild 1.4.1190
+msgid "Pagina: una pagina col suo indirizzo, come Home o Contatti. «Pubblica» la mette sul sito."
+msgstr "Seite: eine Seite mit eigener Adresse, wie Startseite oder Kontakt. „Veröffentlichen“ bringt sie auf die Website."
+
+#: OLObuild 1.4.1190
+msgid "Header e Footer: la testata e il piè di pagina di tutte le pagine, dopo «Attiva»."
+msgstr "Header und Footer: Kopf- und Fußbereich aller Seiten, nach „Aktivieren“."
+
+#: OLObuild 1.4.1190
+msgid "Mega Panel: il pannello grande che si apre da una voce del menu."
+msgstr "Mega Panel: das große Panel, das sich von einem Menüpunkt aus öffnet."
+
+#: OLObuild 1.4.1190
+msgid "Widget: un blocco da riusare dentro altre tile, come le schede o la fisarmonica."
+msgstr "Widget: ein Block, den du in anderen Tiles wiederverwendest, etwa in Tabs oder im Akkordeon."
+
+#: OLObuild 1.4.1190
+msgid "404: la pagina che compare quando un indirizzo non esiste."
+msgstr "404: die Seite, die erscheint, wenn eine Adresse nicht existiert."
+
+#: OLObuild 1.4.1190
+msgid "La pagina di ogni contenuto di un tipo: un solo disegno per tutti gli articoli, tutti i prodotti, tutti gli eventi."
+msgstr "Die Seite jedes Inhalts eines Typs: ein einziger Entwurf für alle Beiträge, alle Produkte, alle Veranstaltungen."
+
+#: OLObuild 1.4.1190
+msgid "Col fulmine ogni parte prende i dati del contenuto aperto. Dopo «Pubblica», «Attiva» lo usa sul sito."
+msgstr "Mit dem Blitz übernimmt jeder Teil die Daten des geöffneten Inhalts. Nach „Veröffentlichen“ setzt „Aktivieren“ es auf der Website ein."
+
+#: OLObuild 1.4.1190
+msgid "La pagina che elenca i contenuti di un tipo, per esempio /eventi/: una griglia con «Segui l'archivio aperto» mostra quelli della pagina."
+msgstr "Die Seite, die die Inhalte eines Typs auflistet, zum Beispiel /eventi/: Ein Raster mit „Dem geöffneten Archiv folgen“ zeigt die Inhalte dieser Seite."
+
+#: OLObuild 1.4.1190
+msgid "«Tutti gli archivi» vale per gli elenchi che non hanno un template loro: categorie, tag, autori, date."
+msgstr "„Alle Archive“ gilt für die Listen ohne eigenes Template: Kategorien, Schlagwörter, Autoren, Daten."
+
+#: OLObuild 1.4.1190
+msgid "Il sito usa questo template per la pagina di ogni contenuto"
+msgstr "Die Website nutzt dieses Template für die Seite jedes Inhalts"
+
+#: OLObuild 1.4.1190
+msgid "Usa questo template per la pagina di ogni contenuto"
+msgstr "Dieses Template für die Seite jedes Inhalts verwenden"
+
+#: OLObuild 1.4.1190
+msgid "Cerca una tile da inserire…"
+msgstr "Tile zum Einfügen suchen…"
+
+#: OLObuild 1.4.1190
+msgid "Cerca una tile da aggiungere o già nel canvas…"
+msgstr "Tile zum Hinzufügen oder im Canvas suchen…"
+
+#: OLObuild 1.4.1190
+msgid "Nessun risultato per"
+msgstr "Keine Ergebnisse für"
+
+#: OLObuild 1.4.1190
+msgid "Scrivi il nome di una tile da aggiungere o già nel canvas"
+msgstr "Gib den Namen einer Tile ein, die du hinzufügen willst oder die schon im Canvas ist"
+
+#: OLObuild 1.4.1190
+msgid "Copia una tile dal canvas"
+msgstr "Eine Tile aus dem Canvas kopieren"
+
+#: OLObuild 1.4.1190
+msgid "Tile nel canvas"
+msgstr "Tiles im Canvas"
+
+#: OLObuild 1.4.1190
+msgid "Le voci sono tante quanti i tipi di contenuto: ogni tipo che crei per la Redazione (Impostazioni › Tipi di contenuto) aggiunge qui la sua."
+msgstr "Es gibt so viele Einträge wie Inhaltstypen: Jeder Typ, den du für die Redaktion anlegst (Einstellungen › Inhaltstypen), fügt hier seinen hinzu."
+
+#: OLObuild 1.4.1190
+msgid "Anche qui, ogni tipo di contenuto che crei per la Redazione aggiunge la sua voce."
+msgstr "Auch hier fügt jeder Inhaltstyp, den du für die Redaktion anlegst, seinen Eintrag hinzu."
+
+#: OLObuild 1.4.1190
+msgid "Scelte a mano"
+msgstr "Von Hand ausgewählt"
+
+#: OLObuild 1.4.1190
+msgid "Col fulmine lo sfondo prende la foto dal contenuto che la pagina mostra: in un template Single, l'immagine in evidenza o un campo foto di ogni evento, notizia o prodotto. Se il contenuto non ne ha, resta la foto scelta a mano."
+msgstr "Mit dem Blitz nimmt der Hintergrund das Foto aus dem Inhalt, den die Seite zeigt: in einer Single-Vorlage das Beitragsbild oder ein Fotofeld jeder Veranstaltung, Nachricht oder jedes Produkts. Hat der Inhalt keines, bleibt das von Hand gewählte Foto."
+
+#: OLObuild 1.4.1190
+msgid "Col fulmine lo sfondo prende il video dal contenuto che la pagina mostra, per esempio il trailer di ogni evento. Serve un file video della libreria: i link di YouTube e Vimeo vanno nella tile Video. Se il contenuto non ne ha, resta il video scelto a mano."
+msgstr "Mit dem Blitz nimmt der Hintergrund das Video aus dem Inhalt, den die Seite zeigt, zum Beispiel den Trailer jeder Veranstaltung. Es braucht eine Videodatei aus der Mediathek: Links von YouTube und Vimeo gehören in die Video-Kachel. Hat der Inhalt keines, bleibt das von Hand gewählte Video."

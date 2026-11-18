@@ -14,12 +14,12 @@
           ref="panelRef"
           class="ip-panel mb-relative"
           role="dialog"
-          :aria-label="t('Inserisci modulo o riga')"
+          :aria-label="t('Inserisci una tile o una riga')"
           tabindex="-1"
         >
           <!-- Header -->
           <div class="ip-header">
-            <span class="ip-title">{{ t('Inserisci modulo o riga') }}</span>
+            <span class="ip-title">{{ t('Inserisci una tile o una riga') }}</span>
             <button class="ip-close" @click="close" :aria-label="t('Chiudi')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
             </button>
@@ -70,7 +70,7 @@
                 </div>
               </template>
               <div v-if="filteredModules.length === 0" class="ip-empty">
-                {{ t('Nessun modulo trovato') }}
+                {{ t('Nessuna tile trovata') }}
               </div>
             </div>
 
@@ -158,13 +158,13 @@ const insertAtIndex = ref(null); // section index to insert at
 const insertZone = ref('body');  // zona del «+»: 'header' | 'body' | 'footer'
 
 const tabs = [
-  { key: 'module', label: 'Nuovo modulo' },
+  { key: 'module', label: 'Nuova tile' },
   { key: 'row', label: 'Nuova riga' },
   { key: 'library', label: 'Da libreria' },
 ];
 
 const searchPlaceholder = computed(() => {
-  if (activeTab.value === 'module') return t('Cerca un modulo');
+  if (activeTab.value === 'module') return t('Cerca una tile');
   if (activeTab.value === 'row') return t('Cerca layout riga');
   return t('Cerca in libreria');
 });

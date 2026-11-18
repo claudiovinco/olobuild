@@ -280,13 +280,40 @@ function initSlider(container) {
       if (t <= 0.02) return 'su';
       return t + h >= 0.98 ? 'giu' : '';
     };
+    // Un velo (un livello vuoto che è solo una sfumatura o un colore trasparente) attaccato al bordo alto o basso si
+    // allunga fino al bordo della scena. Il velo in cima che fa leggere il menu (Elastan) partiva dalla tela, centrata
+    // nell'altezza in più: a una finestra più alta del 16:9 restava sopra una fascia chiara alta quanto lo scarto, con
+    // la testata sopra il video senza velo (18 nov 2026).
+    // (Un livello forma ha dentro un div vuoto: conta che non abbia testo né media.)
+    var velo = function (el, cs) {
+      if ((el.textContent || '').trim() || el.querySelector('img, video, svg, canvas, picture, iframe, object')) return false;
+      var dentro = el.children.length === 1 ? getComputedStyle(el.children[0]) : null;
+      var fondo = function (s) {
+        if (/gradient\(/.test(s.backgroundImage)) return true;
+        var m = /rgba\([^)]*,\s*([\d.]+)\)/.exec(s.backgroundColor);
+        return !!m && parseFloat(m[1]) > 0 && parseFloat(m[1]) < 1;
+      };
+      // Una forma con gli angoli tondi è disegno, non velo (il vaso di Clorofilla perdeva il fondo arrotondato).
+      var tondo = function (s) {
+        return ['borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomLeftRadius', 'borderBottomRightRadius']
+          .some(function (k) { return parseFloat(s[k]) > 0; });
+      };
+      if (tondo(cs) || (dentro && tondo(dentro))) return false;
+      return fondo(cs) || (!!dentro && fondo(dentro));
+    };
     layerWraps.forEach(function (w) {
       qsa(w, ':scope > .olo-proslider-layer, :scope > .mps-stato > .olo-proslider-layer').forEach(function (el) {
         if (el.hasAttribute('data-timeline-name')) return; // in alto a sinistra per regola: lo posa la sua timeline
         var cs = getComputedStyle(el), t = frazione(cs.top, h0), hh = frazione(cs.height, h0), b = bordo(t, hh);
+        if (!b && velo(el, cs)) b = t <= 0.02 ? 'velo-su' : (t + hh >= 0.98 ? 'velo-giu' : '');
         if (!b) return;
         segna(el);
-        if (b === 'pieno') {
+        if (b === 'velo-su') {
+          el.style.setProperty('top', (t * h0 - s0).toFixed(1) + 'px', 'important');
+          el.style.setProperty('height', (hh * h0 + s0).toFixed(1) + 'px', 'important');
+        } else if (b === 'velo-giu') {
+          el.style.setProperty('height', (hh * h0 + s0).toFixed(1) + 'px', 'important');
+        } else if (b === 'pieno') {
           el.style.setProperty('top', (t * H - s0).toFixed(1) + 'px', 'important');
           el.style.setProperty('height', (hh * H).toFixed(1) + 'px', 'important');
         } else {

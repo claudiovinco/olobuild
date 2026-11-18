@@ -670,6 +670,12 @@ trait Olobuild_Builder_Tiles_Trait {
         $result     = [];
         foreach ( $post_types as $pt ) {
             if ( in_array( $pt->name, [ 'page', 'attachment' ], true ) ) continue;
+            // Gli Spettacoli di OLObuild sono registrati sempre: nei menu (Nuovo Template, Anteprima con, archivi…) solo
+            // dove il sito li usa o ne ha già il template (18 nov 2026: in un teatro «Spettacoli» accanto a «Eventi» confondeva).
+            if ( class_exists( 'Olobuild_Spettacoli' ) && Olobuild_Spettacoli::TIPO === $pt->name && ! Olobuild_Spettacoli::in_uso()
+                && ! get_option( 'olobuild_active_single_' . $pt->name ) && ! get_option( 'olobuild_active_archive_' . $pt->name ) ) {
+                continue;
+            }
             $result[] = [
                 'value' => $pt->name,
                 'label' => $pt->label,

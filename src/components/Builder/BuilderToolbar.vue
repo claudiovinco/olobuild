@@ -32,7 +32,7 @@
         v-else
         @click="startEditTitle"
         class="olo-tb-titolo mb-text-primary-400 mb-font-bold mb-text-sm mb-cursor-pointer hover:mb-underline"
-        :title="templateTitle + (templateType === 'single' ? ' (' + t('Singolo') + ': ' + singleLabel + ')' : '') + ' — ' + t('Clicca per rinominare')"
+        :title="templateTitle + (templateType === 'single' ? ' (Single: ' + singleLabel + ')' : '') + ' — ' + t('Clicca per rinominare')"
       >{{ templateTitle }}</span>
       <span
         v-if="templateType === 'header'"
@@ -44,9 +44,9 @@
       >{{ t('Footer') }}</span>
       <span
         v-if="templateType === 'single'"
-        :title="t('Singolo') + ': ' + singleLabel"
+        :title="'Single: ' + singleLabel"
         class="olo-tb-tipo mb-ml-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-amber-600/20 mb-text-amber-300 mb-border mb-border-amber-500/30"
-      >{{ t('Singolo') }}: {{ singleLabel }}</span>
+      >Single: {{ singleLabel }}</span>
       <span
         v-if="templateType === 'archive'"
         class="mb-ml-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-cyan-600/20 mb-text-cyan-300 mb-border mb-border-cyan-500/30"
@@ -628,6 +628,7 @@
       <button
         v-if="templateType === 'single' && isPublished && singlePostType"
         @click="toggleActivateSingle"
+        :title="isActiveSingle ? t('Il sito usa questo template per la pagina di ogni contenuto') + ': ' + singleLabel : t('Usa questo template per la pagina di ogni contenuto') + ': ' + singleLabel"
         :class="[
           'mb-px-4 mb-py-1.5 mb-text-xs mb-font-medium mb-rounded-md mb-border mb-transition-colors',
           isActiveSingle

@@ -1700,7 +1700,7 @@ msgid "Assistente AI (Ctrl+Shift+A)"
 msgstr "AI Assistant (Ctrl+Shift+A)"
 
 msgid "Attiva"
-msgstr "Enable"
+msgstr "Activate"
 
 msgid "Attiva modalità hover"
 msgstr "Enable hover mode"
@@ -2207,7 +2207,7 @@ msgid "Direzione"
 msgstr "Direction"
 
 msgid "Disattiva"
-msgstr "Disable"
+msgstr "Deactivate"
 
 msgid "Disattiva modalità hover"
 msgstr "Disable hover mode"
@@ -53095,3 +53095,143 @@ msgstr "The most recent"
 #: OLObuild 1.4.1190
 msgid "Il contenuto che il canvas usa per mostrare il template: cambialo per vedere lo stesso disegno coi dati di un altro. Sul sito ogni pagina usa il suo."
 msgstr "The content the canvas uses to show the template: change it to see the same design with another one’s data. On the site each page uses its own."
+
+#: OLObuild 1.4.1190
+msgid "(campo)"
+msgstr "(field)"
+
+#: OLObuild 1.4.1190
+msgid "Dall’ultima data"
+msgstr "From the latest date"
+
+#: OLObuild 1.4.1190
+msgid "Dalla prima data"
+msgstr "From the earliest date"
+
+#: OLObuild 1.4.1190
+msgid "Dall’ora più tarda"
+msgstr "From the latest time"
+
+#: OLObuild 1.4.1190
+msgid "Dall’ora più presto"
+msgstr "From the earliest time"
+
+#: OLObuild 1.4.1190
+msgid "&#9889; Sorgente dinamica accesa: le voci vengono dalla scelta qui sopra"
+msgstr "&#9889; Dynamic source on: the items come from the choice above"
+
+#: OLObuild 1.4.1190
+msgid "Inserisci una tile o una riga"
+msgstr "Insert a tile or a row"
+
+#: OLObuild 1.4.1190
+msgid "Nessuna tile trovata"
+msgstr "No tiles found"
+
+#: OLObuild 1.4.1190
+msgid "Nuova tile"
+msgstr "New tile"
+
+#: OLObuild 1.4.1190
+msgid "Cerca una tile"
+msgstr "Search a tile"
+
+#: OLObuild 1.4.1190
+msgid "Aggiungi una tile o scegli un layout per iniziare"
+msgstr "Add a tile or choose a layout to get started"
+
+#: OLObuild 1.4.1190
+msgid "Aggiungi una tile"
+msgstr "Add a tile"
+
+#: OLObuild 1.4.1190
+msgid "Le pagine e le parti di tutto il sito."
+msgstr "The pages and the parts of the whole site."
+
+#: OLObuild 1.4.1190
+msgid "Pagina: una pagina col suo indirizzo, come Home o Contatti. «Pubblica» la mette sul sito."
+msgstr "Page: a page with its own address, like Home or Contact. “Publish” puts it on the site."
+
+#: OLObuild 1.4.1190
+msgid "Header e Footer: la testata e il piè di pagina di tutte le pagine, dopo «Attiva»."
+msgstr "Header and Footer: the header and footer of every page, after “Activate”."
+
+#: OLObuild 1.4.1190
+msgid "Mega Panel: il pannello grande che si apre da una voce del menu."
+msgstr "Mega Panel: the large panel that opens from a menu item."
+
+#: OLObuild 1.4.1190
+msgid "Widget: un blocco da riusare dentro altre tile, come le schede o la fisarmonica."
+msgstr "Widget: a block to reuse inside other tiles, such as tabs or the accordion."
+
+#: OLObuild 1.4.1190
+msgid "404: la pagina che compare quando un indirizzo non esiste."
+msgstr "404: the page shown when an address doesn’t exist."
+
+#: OLObuild 1.4.1190
+msgid "La pagina di ogni contenuto di un tipo: un solo disegno per tutti gli articoli, tutti i prodotti, tutti gli eventi."
+msgstr "The page of every item of a type: one design for all posts, all products, all events."
+
+#: OLObuild 1.4.1190
+msgid "Col fulmine ogni parte prende i dati del contenuto aperto. Dopo «Pubblica», «Attiva» lo usa sul sito."
+msgstr "With the lightning bolt each part takes the data of the open item. After “Publish”, “Activate” uses it on the site."
+
+#: OLObuild 1.4.1190
+msgid "La pagina che elenca i contenuti di un tipo, per esempio /eventi/: una griglia con «Segui l'archivio aperto» mostra quelli della pagina."
+msgstr "The page that lists the items of a type, for example /eventi/: a grid with “Follow the open archive” shows the ones on that page."
+
+#: OLObuild 1.4.1190
+msgid "«Tutti gli archivi» vale per gli elenchi che non hanno un template loro: categorie, tag, autori, date."
+msgstr "“All archives” applies to the lists without a template of their own: categories, tags, authors, dates."
+
+#: OLObuild 1.4.1190
+msgid "Il sito usa questo template per la pagina di ogni contenuto"
+msgstr "The site uses this template for the page of every item"
+
+#: OLObuild 1.4.1190
+msgid "Usa questo template per la pagina di ogni contenuto"
+msgstr "Use this template for the page of every item"
+
+#: OLObuild 1.4.1190
+msgid "Cerca una tile da inserire…"
+msgstr "Search a tile to insert…"
+
+#: OLObuild 1.4.1190
+msgid "Cerca una tile da aggiungere o già nel canvas…"
+msgstr "Search a tile to add or already on the canvas…"
+
+#: OLObuild 1.4.1190
+msgid "Nessun risultato per"
+msgstr "No results for"
+
+#: OLObuild 1.4.1190
+msgid "Scrivi il nome di una tile da aggiungere o già nel canvas"
+msgstr "Type the name of a tile to add or already on the canvas"
+
+#: OLObuild 1.4.1190
+msgid "Copia una tile dal canvas"
+msgstr "Copy a tile from the canvas"
+
+#: OLObuild 1.4.1190
+msgid "Tile nel canvas"
+msgstr "Tiles on the canvas"
+
+#: OLObuild 1.4.1190
+msgid "Le voci sono tante quanti i tipi di contenuto: ogni tipo che crei per la Redazione (Impostazioni › Tipi di contenuto) aggiunge qui la sua."
+msgstr "There are as many items as content types: every type you create for the Newsroom (Settings › Content types) adds its own here."
+
+#: OLObuild 1.4.1190
+msgid "Anche qui, ogni tipo di contenuto che crei per la Redazione aggiunge la sua voce."
+msgstr "Here too, every content type you create for the Newsroom adds its own item."
+
+#: OLObuild 1.4.1190
+msgid "Scelte a mano"
+msgstr "Chosen by hand"
+
+#: OLObuild 1.4.1190
+msgid "Col fulmine lo sfondo prende la foto dal contenuto che la pagina mostra: in un template Single, l'immagine in evidenza o un campo foto di ogni evento, notizia o prodotto. Se il contenuto non ne ha, resta la foto scelta a mano."
+msgstr "With the lightning bolt the background takes the photo from the content the page shows: in a Single template, the featured image or a photo field of each event, news item or product. If the content has none, the photo chosen by hand stays."
+
+#: OLObuild 1.4.1190
+msgid "Col fulmine lo sfondo prende il video dal contenuto che la pagina mostra, per esempio il trailer di ogni evento. Serve un file video della libreria: i link di YouTube e Vimeo vanno nella tile Video. Se il contenuto non ne ha, resta il video scelto a mano."
+msgstr "With the lightning bolt the background takes the video from the content the page shows, for example the trailer of each event. It needs a video file from the library: YouTube and Vimeo links go in the Video tile. If the content has none, the video chosen by hand stays."

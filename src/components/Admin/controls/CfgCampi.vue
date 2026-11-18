@@ -203,8 +203,9 @@ function setFormato(c, f, acceso) {
 /** La riga del campo chiuso: tipo, larghezza se non intera, scelte, reti e categorie. */
 function sommario(c) {
   const tipo = (TIPI.find((x) => x.value === c.tipo) || TIPI[0]).label;
-  // Il tipo si ripete solo se il nome non lo dice già («Allegati · Allegati»).
-  const parti = tipo === c.etichetta ? [] : [tipo];
+  // Il tipo c'è sempre, anche quando il campo si chiama come lui: «Ora» diceva solo «Un terzo», e accanto agli altri
+  // («Testo · Un terzo») sembrava un campo senza tipo (17 nov 2026).
+  const parti = [tipo];
   const l = LARGHEZZE.find((x) => x.value === c.larghezza);
   if (l && l.value !== 'piena') parti.push(t(l.label));
   if (c.tipo === 'scelta') {
@@ -267,6 +268,9 @@ function togliCategoria(c, id) {
 function aggiungi() {
   const c = { _id: nuovoId(), etichetta: '', chiave: '', tipo: 'testo', larghezza: 'piena', aiuto: '', opzioni: '', formati: props.formati.map((f) => f.value), reti: 'tutte', categorie: [] };
   props.campi.push(c);
+  // Il campo nuovo si apre e quelli già scritti si richiudono nella loro riga (nome e riassunto): con nove campi aperti la
+  // scheda diventava lunghissima e non si vedeva più l'elenco (17 nov 2026).
+  aperti.clear();
   aperti.add(c._id);
   emit('cambia');
   nextTick(() => nomi[c._id]?.focus());

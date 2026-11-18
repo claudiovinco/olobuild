@@ -3,6 +3,55 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.1217 - 2026-11-18 (Le aperture che scorrono senza fasce chiare)
+- Slider Pro fermo in cima mentre la pagina scorre: un velo (una sfumatura o un colore trasparente) attaccato al bordo alto o basso della composizione arriva fino al bordo dello schermo. In una finestra più alta del 16:9 (un notebook a 1000 px, un tablet in verticale, uno schermo 16:10) sopra e sotto la composizione restava una fascia chiara senza velo, e il menu sopra il video si leggeva male. Sistemati Elastan, Staffa, Aerostato, Tavola Errante, Pista Nera e gli altri temi con un velo così (18 in tutto); le forme con gli angoli tondi, come il vaso di Clorofilla, restano come sono disegnate.
+
+## v1.4.1216 - 2026-11-18 (Lo sfondo dal contenuto)
+- Lo Sfondo di sezioni, righe, colonne e tile prende la foto, il video o la galleria dal contenuto che la pagina mostra: accanto a «Foto» e «Video» c'è il fulmine (per esempio l'immagine in evidenza o il trailer di ogni evento in un template Single), e per la Galleria si sceglie il campo con le foto. Se il contenuto non li ha, restano quelli scelti a mano. Il video di sfondo vuole un file della libreria; i link di YouTube e Vimeo restano alla tile Video.
+- Nel pannello del fulmine, un campo immagine propone solo i campi foto e un campo video solo i campi video, come già un link solo gli indirizzi.
+
+## v1.4.1215 - 2026-11-18 (Redazione: le versioni dicono com'era)
+- Redazione › Versioni: scegliendo una versione, sotto «Diverso da adesso» compaiono i valori di prima e di adesso dei campi che si leggono (titolo, riassunto, date, ore, numeri, scelte, testi, link), per esempio «Ora: 17:00 → 18:00». Prima la versione diceva solo quale campo era cambiato.
+
+## v1.4.1214 - 2026-11-18 (Salvare un template Single o Archivio)
+- Salvando un template Single o Archivio il messaggio dice il suo nome («Salvato: Single: Eventi»): prima diceva «Salvato: Pagina», come se fosse una pagina del sito.
+
+## v1.4.1213 - 2026-11-18 (Ricerca rapida: Invio inserisce la prima tile)
+- Nella ricerca rapida Invio inserisce la tile evidenziata in cima: prima, se la finestra si apriva sotto il puntatore del mouse fermo, si evidenziava la voce che ci capitava sotto e Invio inseriva quella (cercando «Testo» poteva arrivare un HTML / Codice). Ora il mouse sceglie una voce solo quando si muove.
+
+## v1.4.1212 - 2026-11-18 (Ricerca rapida: prima la tile col nome cercato)
+- La ricerca rapida del builder (il «+» di una colonna o della barretta) mette in cima la tile che si chiama come quello che si scrive, poi quelle il cui nome comincia così, poi le altre: «Video» propone il Video prima della Video Playlist, «Testo» il Testo. Prima l'ordine era quello della barra e la tile cercata poteva restare fuori dai primi otto risultati.
+
+## v1.4.1211 - 2026-11-18 (Nuovo Template: una voce per ogni tipo di contenuto)
+- Nel menu «Nuovo Template» la (i) di Template Single e di Template archivio dice anche che le voci crescono coi tipi: ogni tipo di contenuto creato per la Redazione (Impostazioni › Tipi di contenuto) aggiunge la sua.
+
+## v1.4.1210 - 2026-11-18 (Il canvas mostra lo spazio sotto la testata come il sito)
+- Sotto una testata classica il sito toglie lo spazio in alto alla prima sezione (se non ha uno sfondo, un padding scritto nello Stile o un «Padding verticale» scelto): ora lo toglie anche il canvas del builder, che prima mostrava aria sopra un titolo che sul sito restava attaccato alla testata. Per dare spazio alla prima sezione: Stile › «Padding verticale» (Piccolo, Grande…).
+
+## v1.4.1209 - 2026-11-18 (Template d'archivio: nel builder i contenuti giusti)
+- Disegnando un template «Archivio: Eventi» (o di un altro tipo) le tile con «Segui l'archivio aperto», come la Griglia articoli, mostrano già nel builder i contenuti di quel tipo, come faranno sul sito. Prima mostravano gli articoli, e in un sito senza articoli dicevano «Nessun articolo trovato».
+
+## v1.4.1208 - 2026-11-18 (Builder: il «+» di una colonna e gli interruttori)
+- Il «+» della barretta di una colonna (o di una riga) apre la ricerca e inserisce la tile DENTRO la colonna, in fondo: prima la metteva accanto alle colonne, direttamente nella riga, e la seconda colonna andava a capo.
+- Gli interruttori dell'inspector mostrano lo stato vero: un valore non ancora salvato si vedeva «acceso» (per esempio «Attiva scroll fisso» in ogni colonna nuova) mentre il sito lo legge spento; ora mostrano il predefinito della tile.
+- La ricerca rapida del builder parla di tile («Aggiungi una tile», «Cerca una tile da inserire…») ed è tradotta nelle altre lingue.
+
+## v1.4.1207 - 2026-11-18 (Nuovo Template: cosa crea ogni voce)
+- Costruisci › Blocchi & Pagine › «Nuovo Template»: accanto a Standard, Template Single e Template archivio una (i) spiega cosa crea ogni voce (una pagina, la testata e il piè di pagina, il pannello di un menu, un blocco da riusare, la 404; la pagina di ogni contenuto di un tipo; la pagina che li elenca e «Tutti gli archivi» per categorie, tag, autori e date).
+- Il template singolo nuovo si chiama col nome del tipo («Single: Eventi», non «Single: eventi») e la barra del builder dice «Single» come il menu e la lista; «Attiva» spiega che il sito userà il template per la pagina di ogni contenuto (in inglese il pulsante dice «Activate»).
+- Nel menu e negli altri elenchi dei tipi gli Spettacoli compaiono solo sui siti che li usano: in un sito con i suoi «Eventi», «Spettacoli» accanto confondeva.
+- Le tile si chiamano tile anche nella pagina vuota («Aggiungi una tile») e nella finestra «Inserisci una tile o una riga».
+
+## v1.4.1206 - 2026-11-17 (Tipi di contenuto: i campi già scritti si richiudono)
+- Impostazioni › Tipi di contenuto: «Aggiungi un campo» apre il campo nuovo e richiude nella loro riga (nome e riassunto) quelli già scritti, così l'elenco dei campi resta leggibile anche quando sono tanti. La riga dice sempre il tipo del campo («Ora · Un terzo»), anche quando il campo si chiama come lui.
+
+## v1.4.1205 - 2026-11-17 (Sorgente dinamica: la spiegazione nella (i))
+- «Sorgente dinamica», Foto di un campo: la spiegazione di «Foto al massimo» si apre dalla (i) invece di stare scritta sotto il campo; il riquadro sotto le voci dice «le voci vengono dalla scelta qui sopra», che vale anche per le foto.
+
+## v1.4.1202 - 2026-11-17 (Sorgente dinamica: l'ordine per un campo)
+- «Sorgente dinamica», Ordina per: oltre a data di pubblicazione, titolo, ultima modifica, ordine casuale e ordine del menu, i campi del tipo scelto che hanno un ordine (data, ora, numero, testo, scelta): gli spettacoli di una stagione per la loro data, i prodotti per il prezzo. La direzione si dice con le parole del campo («Dalla prima data», «Dal numero più basso»).
+- Mappatura campi: propone solo i campi del tipo di contenuto scelto. La data del contenuto si chiama «Data di pubblicazione», per non confonderla con un campo «Data».
+
 ## v1.4.1201 - 2026-11-17 (Ripetitori: la voce chiusa dice a cosa è collegata)
 - Ripetitori: una voce che prende il suo nome da un campo collegato a un contenuto, chiusa, si chiama col collegamento («⚡ Titolo») invece che col testo scritto a mano, che sul sito non compare (la riga del titolo di un template singolo).
 

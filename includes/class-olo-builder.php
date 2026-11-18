@@ -503,8 +503,8 @@ class Olobuild_Builder {
      */
     public static function get_iframe_empty_html() {
         $title       = esc_html__( 'Pagina vuota', 'olobuild' );
-        $text        = esc_html__( 'Aggiungi un modulo o scegli un layout per iniziare', 'olobuild' );
-        $add_module  = esc_html__( 'Aggiungi modulo', 'olobuild' );
+        $text        = esc_html__( 'Aggiungi una tile o scegli un layout per iniziare', 'olobuild' );
+        $add_module  = esc_html__( 'Aggiungi una tile', 'olobuild' );
         $add_row     = esc_html__( 'Scegli layout', 'olobuild' );
         return '<div class="olo-iframe-empty">'
              . '<div class="olo-iframe-empty-card">'

@@ -32,9 +32,63 @@ class Olobuild_CSS_Builder {
      * @param array $style Tile style.
      * @return array Background config with 'type' key.
      */
+    /**
+     * Lo sfondo preso dal contenuto della pagina (18 nov 2026): la foto, il video o la galleria che i controlli dello
+     * Sfondo collegano col fulmine (`bg.dinamico`: `immagine` / `video` = { source, field } come gli altri collegamenti,
+     * `galleria` = { lista } come «Foto di un campo»). Vale per sezioni, righe, colonne e tile, nel builder (col
+     * contenuto dell'anteprima) e sul sito. Il valore del contenuto vince; se il contenuto non ce l'ha, resta quello
+     * scelto a mano.
+     */
+    public static function sfondo_dal_contenuto( $bg ) {
+        if ( ! is_array( $bg ) || empty( $bg['dinamico'] ) || ! is_array( $bg['dinamico'] ) || ! class_exists( 'Olobuild_Dynamic_Content' ) ) {
+            return $bg;
+        }
+        $pid = (int) get_the_ID();
+        if ( ! $pid ) {
+            return $bg;
+        }
+        $d   = $bg['dinamico'];
+        $dc  = new Olobuild_Dynamic_Content();
+        $url = function ( $v, $misura = 'full' ) {
+            if ( is_array( $v ) ) {
+                $v = $v['url'] ?? ( $v['id'] ?? '' );
+            }
+            if ( is_numeric( $v ) && (int) $v > 0 ) {
+                return (string) wp_get_attachment_image_url( (int) $v, $misura );
+            }
+            return is_string( $v ) ? trim( $v ) : '';
+        };
+        $tipo = (string) ( $bg['type'] ?? '' );
+        if ( 'image' === $tipo && ! empty( $d['immagine']['source'] ) && ! empty( $d['immagine']['field'] ) ) {
+            $u = $url( $dc->resolve_field( sanitize_key( $d['immagine']['source'] ), (string) $d['immagine']['field'], $pid ) );
+            if ( '' !== $u ) {
+                $bg['image_url'] = $u;
+            }
+        } elseif ( 'video' === $tipo && ! empty( $d['video']['source'] ) && ! empty( $d['video']['field'] ) ) {
+            $v = $dc->resolve_field( sanitize_key( $d['video']['source'] ), (string) $d['video']['field'], $pid );
+            $u = is_numeric( $v ) && (int) $v > 0 ? (string) wp_get_attachment_url( (int) $v ) : ( is_string( $v ) ? trim( $v ) : '' );
+            // Lo sfondo è un <video>: un file, non la pagina di YouTube o di Vimeo (quelli restano alla tile Video).
+            if ( '' !== $u && ! preg_match( '#(youtube\.com|youtu\.be|vimeo\.com)#i', $u ) ) {
+                $bg['video_url'] = $u;
+            }
+        } elseif ( 'gallery' === $tipo && ! empty( $d['galleria']['lista'] ) ) {
+            $foto = [];
+            foreach ( $dc->image_list_ids( (string) $d['galleria']['lista'], $pid ) as $aid ) {
+                $u = (string) wp_get_attachment_image_url( (int) $aid, 'full' );
+                if ( '' !== $u ) {
+                    $foto[] = [ 'id' => (int) $aid, 'url' => $u, 'alt' => (string) get_post_meta( (int) $aid, '_wp_attachment_image_alt', true ) ];
+                }
+            }
+            if ( $foto ) {
+                $bg['gallery_images'] = $foto;
+            }
+        }
+        return $bg;
+    }
+
     public function get_effective_bg( $style ) {
         if ( ! empty( $style['bg'] ) && ! empty( $style['bg']['type'] ) ) {
-            $bg = $style['bg'];
+            $bg = self::sfondo_dal_contenuto( $style['bg'] );
             // Il bg "moderno" (oggetto style.bg con type esplicito) ha SEMPRE priorità sul
             // legacy bg_color/bg_type piatto. Se l'utente ha scelto "Nessuno", lo si rispetta:
             // niente fallback al vecchio bg_color residuo (bug: lo sfondo "non si toglieva").

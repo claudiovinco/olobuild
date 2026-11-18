@@ -23,7 +23,7 @@
               ref="inputRef"
               v-model="query"
               type="text"
-              :placeholder="targetColumnId ? 'Cerca elemento da inserire...' : 'Cerca elemento da aggiungere o tile nel canvas...'"
+              :placeholder="targetColumnId ? t('Cerca una tile da inserire…') : t('Cerca una tile da aggiungere o già nel canvas…')"
               class="finder-input mb-flex-1 mb-bg-transparent mb-text-sm mb-outline-none"
               @keydown.down.prevent="moveSelection(1)"
               @keydown.up.prevent="moveSelection(-1)"
@@ -39,26 +39,26 @@
               v-if="allResults.length === 0 && query.length > 0"
               class="mb-px-4 mb-py-6 mb-text-center mb-text-sm" style="color: #999"
             >
-              Nessun risultato per "{{ query }}"
+              {{ t('Nessun risultato per') }} «{{ query }}»
             </div>
 
             <div
               v-if="allResults.length === 0 && query.length === 0"
               class="mb-px-4 mb-py-6 mb-text-center mb-text-sm" style="color: #999"
             >
-              {{ t('Digita per cercare elementi da aggiungere o tile nel canvas') }}
+              {{ t('Scrivi il nome di una tile da aggiungere o già nel canvas') }}
             </div>
 
             <!-- Sezione: Aggiungi elemento -->
             <template v-if="addResults.length > 0">
               <div class="finder-section-label mb-px-4 mb-py-1.5 mb-text-[10px] mb-font-semibold mb-uppercase mb-tracking-wider mb-border-b">
-                {{ t('Aggiungi elemento') }}
+                {{ t('Aggiungi una tile') }}
               </div>
               <button
                 v-for="(item, idx) in addResults"
                 :key="'add-' + item.type"
                 @click="addElement(item.type)"
-                @mouseenter="selectedIndex = idx"
+                @mousemove="alPassaggio(idx, $event)"
                 :class="[
                   'finder-result mb-w-full mb-flex mb-items-center mb-gap-3 mb-px-4 mb-py-2 mb-text-left mb-transition-colors',
                   idx === selectedIndex ? 'finder-result--active' : ''
@@ -75,13 +75,13 @@
             <!-- Sezione: Tile nel canvas -->
             <template v-if="canvasResults.length > 0">
               <div class="finder-section-label mb-px-4 mb-py-1.5 mb-text-[10px] mb-font-semibold mb-uppercase mb-tracking-wider mb-border-b" :class="addResults.length > 0 ? 'mb-mt-1 mb-border-t' : ''">
-                {{ targetColumnId ? 'Copia tile dal canvas' : 'Tile nel canvas' }}
+                {{ targetColumnId ? t('Copia una tile dal canvas') : t('Tile nel canvas') }}
               </div>
               <button
                 v-for="(item, idx) in canvasResults"
                 :key="item.id"
                 @click="selectCanvasTile(item)"
-                @mouseenter="selectedIndex = addResults.length + idx"
+                @mousemove="alPassaggio(addResults.length + idx, $event)"
                 :class="[
                   'finder-result mb-w-full mb-flex mb-items-center mb-gap-3 mb-px-4 mb-py-2 mb-text-left mb-transition-colors',
                   (addResults.length + idx) === selectedIndex ? 'finder-result--active' : ''
@@ -160,13 +160,26 @@ const addResults = computed(() => {
   const q = query.value.trim().toLowerCase();
   if (!q) return [];
 
-  const matched = [];
-  for (const el of availableElements.value) {
-    if (matched.length >= 8) break;
-    const searchText = `${el.type} ${el.name} ${el.nomePhp} ${el.categoryLabel}`.toLowerCase();
-    if (searchText.includes(q)) matched.push(el);
-  }
-  return matched;
+  // Il nome cercato prima (18 nov 2026): si prendevano le prime otto tile nell'ordine della barra, così «Video»
+  // proponeva «Video Playlist» e «Testo» lo Specimen variabile, e la tile col nome esatto poteva restare fuori.
+  // Ordine: nome uguale, nome che comincia così, una parola del nome che comincia così, nome che lo contiene, poi
+  // il tipo e la categoria; a pari merito l'ordine della barra.
+  const punti = (el) => {
+    const nome = String(el.name || '').toLowerCase();
+    if (nome === q) return 0;
+    if (nome.startsWith(q)) return 1;
+    if (nome.split(/[\s\-–—·/()]+/).some((p) => p.startsWith(q))) return 2;
+    if (nome.includes(q)) return 3;
+    if (`${el.type} ${el.nomePhp}`.toLowerCase().includes(q)) return 4;
+    if (String(el.categoryLabel || '').toLowerCase().includes(q)) return 5;
+    return -1;
+  };
+  return availableElements.value
+    .map((el, i) => ({ el, p: punti(el), i }))
+    .filter((x) => x.p >= 0)
+    .sort((a, b) => a.p - b.p || a.i - b.i)
+    .slice(0, 8)
+    .map((x) => x.el);
 });
 
 // ─── Tile nel canvas ───
@@ -327,7 +340,22 @@ function selectCurrent() {
 
 watch(query, () => {
   selectedIndex.value = 0;
+  ultimoPuntatore = null;
 });
+
+// La voce si sceglie col mouse solo se il puntatore si MUOVE (18 nov 2026): la finestra si apre (e i risultati cambiano
+// a ogni lettera) sotto un puntatore fermo, e il passaggio «finto» del browser sceglieva la voce che ci capitava sotto;
+// Invio inseriva quella («Testo» → HTML / Codice) invece della prima.
+let ultimoPuntatore = null;
+function alPassaggio(idx, e) {
+  const qui = e.clientX + ',' + e.clientY;
+  if (ultimoPuntatore === null || qui === ultimoPuntatore) {
+    ultimoPuntatore = qui;
+    return;
+  }
+  ultimoPuntatore = qui;
+  selectedIndex.value = idx;
+}
 
 // ─── Apri/Chiudi ───
 function open(columnId) {
@@ -335,6 +363,7 @@ function open(columnId) {
   visible.value = true;
   query.value = '';
   selectedIndex.value = 0;
+  ultimoPuntatore = null;
   nextTick(() => {
     inputRef.value?.focus();
   });

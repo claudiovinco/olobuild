@@ -316,6 +316,13 @@ html.orz-modale-aperta, html.orz-modale-aperta body { overflow: hidden; }
 .orz-legenda-voce { padding: 1px 8px; border-radius: 6px; font-size: 12px; }
 .orz-legenda--prima { background: #fdecec; color: #7a1a1a; }
 .orz-legenda--ora { background: #e7f6ec; color: #14532d; }
+.orz-valori { display: grid; gap: 8px; margin: 0 0 18px; padding: 12px 14px; border: 1px solid var(--orz-linea); border-radius: 8px; background: var(--orz-carta); }
+.orz-valori-riga { display: grid; grid-template-columns: minmax(90px, 160px) 1fr; gap: 4px 12px; align-items: baseline; }
+.orz .orz-valori dt { margin: 0; font-size: 13px; font-weight: 600; color: var(--orz-testo-2); }
+.orz .orz-valori dd { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; margin: 0; font-size: 13px; }
+.orz-valori .orz-legenda-voce { font-size: 13px; }
+.orz-valori-freccia { color: var(--orz-testo-3); }
+@container (max-width: 520px) { .orz-valori-riga { grid-template-columns: 1fr; } }
 .orz .orz-riga-info--a-capo { flex-wrap: wrap; margin-top: 10px; }
 
 /* Il confronto di wp_text_diff(): righe tolte (questa versione) in rosso, aggiunte (adesso) in verde */

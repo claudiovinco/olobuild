@@ -827,7 +827,10 @@ class Olobuild_Tipi_Contenuto {
                     }
                     continue;
                 }
-                $voci[] = [ 'key' => $c['chiave'], 'label' => $nome . ' › ' . $c['etichetta'], 'type' => $tipo ];
+                // post_type e genere (17 nov 2026): la Sorgente dinamica propone solo i campi del tipo scelto, e per ordinare
+                // solo quelli che hanno un ordine (date, ore, numeri, testi, scelte).
+                $voci[] = [ 'key' => $c['chiave'], 'label' => $nome . ' › ' . $c['etichetta'], 'type' => $tipo, 'post_type' => $t['chiave'],
+                    'genere' => $c['tipo'] ];
             }
         }
         return $voci;

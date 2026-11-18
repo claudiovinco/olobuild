@@ -855,6 +855,13 @@ export const useBuilderStore = defineStore('builder', {
       if (zone === 'globali') return t('Widget globali');
       if (zone === 'header') return t('Header') + titoloTra(this.headerTemplate);
       if (zone === 'footer') return t('Footer') + titoloTra(this.footerTemplate);
+      // Un template Single o Archivio non è una pagina (18 nov 2026: salvando «Single: Eventi» diceva «Salvato:
+      // Pagina»): si chiama col suo nome, che dice già cos'è.
+      const tpl = this.currentTemplate;
+      if (tpl && (tpl.type === 'single' || tpl.type === 'archive')) {
+        const nome = typeof tpl.title === 'string' ? tpl.title.trim() : '';
+        return nome || t('Template');
+      }
       return this.unifiedMode ? t('Pagina') : t('Template');
     },
 

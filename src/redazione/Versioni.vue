@@ -49,6 +49,17 @@
                 <span class="orz-cambia-nome">{{ t('Diverso da adesso') }}:</span>
                 <span v-for="c in d.cambia" :key="c" class="orz-chip">{{ c }}</span>
               </div>
+              <!-- Com'era e com'è, per i campi che si leggono (la data, l'ora, il prezzo…). -->
+              <dl v-if="d.valori && d.valori.length" class="orz-valori">
+                <div v-for="x in d.valori" :key="x.nome" class="orz-valori-riga">
+                  <dt>{{ x.nome }}</dt>
+                  <dd>
+                    <span class="orz-legenda-voce orz-legenda--prima" :title="t('Questa versione')">{{ x.prima }}</span>
+                    <span class="orz-valori-freccia" aria-hidden="true">→</span>
+                    <span class="orz-legenda-voce orz-legenda--ora" :title="t('Adesso')">{{ x.adesso }}</span>
+                  </dd>
+                </div>
+              </dl>
               <p v-if="!d.fotografia" class="orz-nota">{{ t('Di questa versione restano solo titolo, testo e riassunto.') }}</p>
 
               <div class="orz-blocco">

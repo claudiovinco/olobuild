@@ -86,9 +86,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <h2 id="elementi">5. Aggiungere e sistemare gli elementi</h2>
 <ol class="passi">
-	<li><strong>Aggiungi.</strong> Trascina una tile dal pannello Elementi nel canvas, oppure fai clic sulla sua scheda: la tile si inserisce dopo l'elemento selezionato, o in fondo alla pagina. In una pagina vuota usa <span class="ui">Aggiungi modulo</span> o <span class="ui">Scegli layout</span>.</li>
+	<li><strong>Aggiungi.</strong> Trascina una tile dal pannello Elementi nel canvas, oppure fai clic sulla sua scheda: la tile si inserisce dopo l'elemento selezionato, o in fondo alla pagina. In una pagina vuota usa <span class="ui">Aggiungi una tile</span> o <span class="ui">Scegli layout</span>.</li>
 	<li><strong>Cerca.</strong> <kbd>Ctrl</kbd> <kbd>K</kbd> apre il Finder, che trova una tile per nome senza scorrere le categorie.</li>
-	<li><strong>Inserisci una sezione.</strong> Il pulsante <span class="ui">+</span> fra due sezioni apre <span class="ui">Inserisci modulo o riga</span>, con un modulo nuovo, una riga vuota o un blocco pronto dalla libreria.</li>
+	<li><strong>Inserisci una sezione.</strong> Il pulsante <span class="ui">+</span> fra due sezioni apre <span class="ui">Inserisci una tile o una riga</span>, con una tile nuova, una riga vuota o un blocco pronto dalla libreria.</li>
 	<li><strong>Sposta e duplica.</strong> Passando sopra un elemento compaiono i comandi per trascinarlo, spostarlo su o giù, duplicarlo ed eliminarlo. Il clic destro apre il menu completo, con Copia, Incolla, Copia stile e Incolla stile.</li>
 	<li><strong>Scrivi.</strong> Fai doppio clic su un testo per modificarlo direttamente nel canvas. <kbd>Esc</kbd> annulla la modifica in corso.</li>
 </ol>

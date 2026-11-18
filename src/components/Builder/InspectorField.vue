@@ -379,7 +379,7 @@
           @update:itemMap="emit('update:dynamic', { _itemMap: $event })"
         />
         <div v-if="dynamic?._query?.enabled" class="if-dynamic-info">
-          {{ t('&#9889; Sorgente dinamica accesa: le voci vengono dai contenuti scelti qui sopra') }}
+          {{ t('&#9889; Sorgente dinamica accesa: le voci vengono dalla scelta qui sopra') }}
         </div>
         <FieldGallery
           v-else
@@ -1129,6 +1129,12 @@ const effectiveValue = computed(() => {
     return h;
   }
   const v = normalValue();
+  // Un interruttore senza valore salvato mostra il default della tile (quello che legge il renderer): prima la
+  // stringa vuota diventava «acceso» (18 nov 2026, «Attiva scroll fisso» acceso in ogni colonna nuova).
+  if (props.field.type === 'toggle' && (v === undefined || v === null || v === '')) {
+    const d = fieldDefaultValue.value;
+    return d === undefined || d === null || d === '' ? false : d;
+  }
   // Un menu senza valore salvato mostra il suo `default` (quello che il renderer usa davvero) invece di «—»:
   // «Fusione» del Contenitore, per esempio, era vuoto su ogni tile pur essendo «Normale» (16 nov 2026).
   if (props.field.type === 'select' && (v === undefined || v === null || v === '') && props.field.default !== undefined

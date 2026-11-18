@@ -353,7 +353,9 @@ async function createAndOpenBuilder(typeOrObj = 'page') {
       title = postType ? `${t('Archivio')}: ${etichetta}` : t('Tutti gli archivi');
       settings = { archive_post_type: postType };
     } else {
-      title = type === 'single' ? `Single: ${postType}` : 'Template senza titolo';
+      // Col nome del tipo («Single: Eventi»), come il menu e l'archivio: la chiave («eventi») restava nel titolo (18 nov 2026)
+      const nomeTipo = (oloData.postTypes || []).find(p => p.value === postType)?.label || postType;
+      title = type === 'single' ? `Single: ${nomeTipo}` : 'Template senza titolo';
       settings = type === 'single' ? { single_post_type: postType } : {};
     }
   } else {

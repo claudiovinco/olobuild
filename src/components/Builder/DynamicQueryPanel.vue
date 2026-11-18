@@ -43,7 +43,8 @@
           />
         </div>
         <div class="dqp-field" style="display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:10px;">
-          <label class="dqp-label" style="margin:0;">{{ t('Foto al massimo') }}</label>
+          <!-- La spiegazione nella (i), non in linea (regola dell'inspector, 17 nov 2026) -->
+          <label class="dqp-label" style="margin:0;display:flex;align-items:center;gap:4px;">{{ t('Foto al massimo') }}<InfoTip :titolo="t('Foto al massimo')" :testo="t('0 = tutte. Sono le foto del contenuto che la pagina mostra (nel builder, quello dell\'anteprima): senza foto l\'elemento non compare sul sito.')" /></label>
           <NumberScrubber
             :modelValue="localQuery.images_max || 0"
             :min="0" :max="60" :step="1" :defaultValue="0"
@@ -52,7 +53,6 @@
             @update:modelValue="updateQuery('images_max', $event || 0)"
           />
         </div>
-        <p class="dqp-hint">{{ t('0 = tutte. Sono le foto del contenuto che la pagina mostra (nel builder, quello dell\'anteprima): senza foto l\'elemento non compare sul sito.') }}</p>
       </template>
 
       <!-- Righe di un campo: le voci scritte nel contenuto che la pagina mostra, una per riga, parti divise da «|»
@@ -119,7 +119,7 @@
         <div class="dqp-row">
           <div class="dqp-field dqp-field--half">
             <label class="dqp-label">{{ t('Ordina per') }}</label>
-            <FieldSelect ui="dropdown" :model-value="localQuery.orderby" :options="ORDERBY_OPTS" @update:model-value="updateQuery('orderby', $event)" />
+            <FieldSelect ui="dropdown" :model-value="localQuery.orderby" :options="ordinaOpts" @update:model-value="updateQuery('orderby', $event)" />
           </div>
           <!-- In ordine casuale la direzione non conta: il controllo si nasconde -->
           <div v-if="localQuery.orderby !== 'rand'" class="dqp-field dqp-field--half">
@@ -246,7 +246,7 @@ const selectedTaxTerms = computed(() => {
 });
 
 const ORDERBY_OPTS = [
-  { value: 'date', label: 'Data' },
+  { value: 'date', label: 'Data di pubblicazione' },
   { value: 'title', label: 'Titolo' },
   { value: 'modified', label: 'Ultima modifica' },
   { value: 'rand', label: 'Casuale' },
@@ -261,8 +261,25 @@ const ORDER_LABELS = {
   title: ['Dalla Z alla A', 'Dalla A alla Z'],
   menu_order: ['Dal numero più alto', 'Dal numero più basso'],
 };
+// Oltre ai criteri di WordPress, i campi del tipo scelto che hanno un ordine (17 nov 2026): gli spettacoli per la loro
+// data, i corsi per l'ora, i prodotti per il prezzo. Il PHP legge «campo:<chiave>» (resolve_query).
+const GENERI_ORDINABILI = ['data', 'ora', 'numero', 'testo', 'scelta'];
+const campiOrdinabili = computed(() => (sources.value?.campi?.fields || [])
+  .filter((c) => c && c.post_type && c.post_type === localQuery.value.post_type && GENERI_ORDINABILI.includes(c.genere)));
+const ordinaOpts = computed(() => [
+  ...ORDERBY_OPTS,
+  ...campiOrdinabili.value.map((c) => ({ value: 'campo:' + c.key, label: String(c.label).split(' › ').pop() + ' ' + t('(campo)') })),
+]);
+const PAROLE_CAMPO = {
+  data: ['Dall’ultima data', 'Dalla prima data'],
+  ora: ['Dall’ora più tarda', 'Dall’ora più presto'],
+  numero: ['Dal numero più alto', 'Dal numero più basso'],
+};
 const orderOpts = computed(() => {
-  const [disc, asc] = ORDER_LABELS[localQuery.value.orderby] || ['Decrescente', 'Crescente'];
+  const ob = String(localQuery.value.orderby || '');
+  const campo = ob.startsWith('campo:') ? campiOrdinabili.value.find((c) => 'campo:' + c.key === ob) : null;
+  const [disc, asc] = campo ? (PAROLE_CAMPO[campo.genere] || ['Dalla Z alla A', 'Dalla A alla Z'])
+    : (ORDER_LABELS[ob] || ['Decrescente', 'Crescente']);
   return [{ value: 'DESC', label: disc }, { value: 'ASC', label: asc }];
 });
 
@@ -272,7 +289,7 @@ const WP_FIELD_OPTS = [
   { value: 'post_excerpt', label: 'Riassunto' },
   { value: 'post_content', label: 'Testo' },
   { value: 'featured_image', label: 'Immagine in evidenza' },
-  { value: 'post_date', label: 'Data' },
+  { value: 'post_date', label: 'Data di pubblicazione' },
   { value: 'author_name', label: 'Autore' },
   { value: 'permalink', label: 'Link del contenuto' },
   { value: 'first_term', label: 'Prima categoria' },
@@ -291,6 +308,8 @@ function campiDelGenere(generi) {
     if (!src || src.available === false || !Array.isArray(src.fields)) continue;
     for (const c of src.fields) {
       if (!generi.includes(c?.type)) continue;
+      // Solo i campi del tipo scelto (un evento non ha l'indirizzo dei negozi); quelli senza tipo valgono per tutti.
+      if (c.post_type && localQuery.value.post_type && c.post_type !== localQuery.value.post_type) continue;
       extra.push({ value: sorgente + ':' + c.key, label: sorgente === 'spettacolo' ? t('Spettacolo') + ' › ' + t(c.label) : c.label });
     }
   }

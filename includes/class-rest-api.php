@@ -1758,6 +1758,28 @@ class Olobuild_Rest_Api {
      *
      * @return WP_Post|null
      */
+    /**
+     * La modalità della testata (classic | overlay) dalle sue tile: quella del Menu di navigazione (o del Mega Menu), come
+     * Olobuild_Header_Integration::detect_header_mode() sul sito; senza menu, overlay.
+     */
+    private static function modo_testata( $nodi ) {
+        foreach ( (array) $nodi as $n ) {
+            if ( ! is_array( $n ) ) {
+                continue;
+            }
+            if ( in_array( $n['type'] ?? '', [ 'navmenu', 'megamenu' ], true ) ) {
+                return 'classic' === ( $n['settings']['header_mode'] ?? 'overlay' ) ? 'classic' : 'overlay';
+            }
+            if ( ! empty( $n['children'] ) ) {
+                $m = self::modo_testata( $n['children'] );
+                if ( '' !== $m ) {
+                    return $m;
+                }
+            }
+        }
+        return '';
+    }
+
     private static function post_anteprima_single( $post_type, $preview_post_id = 0 ) {
         if ( $preview_post_id ) {
             $scelto = get_post( $preview_post_id );
@@ -1826,6 +1848,12 @@ class Olobuild_Rest_Api {
         $footer_tiles = $body['footer_tiles'] ?? [];
         $page_settings = $body['page_settings'] ?? [];
         $template_type = $body['template_type'] ?? 'page';
+        // Un template d'archivio: le tile che seguono l'archivio mostrano i contenuti del suo tipo (anche «Tutti gli
+        // archivi»: gli articoli). Solo per questo render.
+        if ( 'archive' === $template_type && class_exists( 'Olobuild_Archive_Integration' ) ) {
+            $tipo_archivio = sanitize_key( (string) ( $body['archive_post_type'] ?? '' ) );
+            Olobuild_Archive_Integration::$anteprima_builder = [ 'post_type' => post_type_exists( $tipo_archivio ) ? $tipo_archivio : 'post' ];
+        }
         $preview_post_id = $body['preview_post_id'] ?? 0;
 
         if ( empty( $tiles ) && empty( $header_tiles ) && empty( $footer_tiles ) ) {
@@ -1878,7 +1906,10 @@ class Olobuild_Rest_Api {
         // Header (wrap in .olo-template so frontend.css container max-width rules apply consistently with the public site)
         if ( ! empty( $header_tiles ) && is_array( $header_tiles ) ) {
             ob_start();
-            echo '<header class="olo-site-header olo-header-classic" data-olo-zone="header"><div class="olo-template"' . $bg_inline( $header_bg ) . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $bg_inline() closure returns '' or a style attribute esc_attr()'d at construction
+            // La modalità vera della testata del sito (il canvas la disegna sempre nel flusso): frontend.css la usa per
+            // togliere, come sul sito, lo spazio in alto alla prima sezione sotto una testata classica (18 nov 2026).
+            $modo_testata = self::modo_testata( $header_tiles ) ?: 'overlay';
+            echo '<header class="olo-site-header olo-header-classic" data-olo-zone="header" data-olo-modo="' . esc_attr( $modo_testata ) . '"><div class="olo-template"' . $bg_inline( $header_bg ) . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $bg_inline() closure returns '' or a style attribute esc_attr()'d at construction
             $renderer->render_tiles_array( $header_tiles, $page_settings );
             echo '</div></header>';
             $parts[] = ob_get_clean();
@@ -1974,6 +2005,9 @@ class Olobuild_Rest_Api {
 
         $renderer->builder_mode = false;
 
+        if ( class_exists( 'Olobuild_Archive_Integration' ) ) {
+            Olobuild_Archive_Integration::$anteprima_builder = null;
+        }
         // Restore original post context
         if ( $template_type === 'single' && $original_post !== null ) {
             global $post, $wp_query;
@@ -2079,6 +2113,12 @@ class Olobuild_Rest_Api {
         $tile = $body['tile'] ?? null;
         $page_settings = $body['page_settings'] ?? [];
         $template_type = $body['template_type'] ?? 'page';
+        // Un template d'archivio: le tile che seguono l'archivio mostrano i contenuti del suo tipo (anche «Tutti gli
+        // archivi»: gli articoli). Solo per questo render.
+        if ( 'archive' === $template_type && class_exists( 'Olobuild_Archive_Integration' ) ) {
+            $tipo_archivio = sanitize_key( (string) ( $body['archive_post_type'] ?? '' ) );
+            Olobuild_Archive_Integration::$anteprima_builder = [ 'post_type' => post_type_exists( $tipo_archivio ) ? $tipo_archivio : 'post' ];
+        }
         // template_id + counter_hint servono al patch incrementale per generare
         // lo STESSO css_id (`ms-X-Y`) del full render — altrimenti hover CSS e
         // responsive rules non matchano con il nuovo nodo.
@@ -2135,6 +2175,9 @@ class Olobuild_Rest_Api {
         }
         $scoped_css = trim( $hover_css_str . "\n" . $responsive_css_str );
 
+        if ( class_exists( 'Olobuild_Archive_Integration' ) ) {
+            Olobuild_Archive_Integration::$anteprima_builder = null;
+        }
         // Restore post context
         if ( $template_type === 'single' && $original_post !== null ) {
             global $post, $wp_query;

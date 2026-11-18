@@ -75,11 +75,20 @@
 
       <!-- Immagine -->
       <div v-else-if="bg.type === 'image'" class="type-body">
-        <div v-if="bg.image_url" class="thumb">
-          <img :src="bg.image_url" :alt="t('Sfondo')" />
-          <button type="button" class="thumb-x" :title="t('Rimuovi immagine')" @click="updateField('image_url', '')">&times;</button>
-        </div>
-        <button type="button" class="btn-soft" @click="pickBgImage">{{ bg.image_url ? t('Cambia immagine') : t('Seleziona immagine') }}</button>
+        <!-- Il fulmine (18 nov 2026): la foto dello sfondo dal contenuto della pagina, per esempio l'immagine in evidenza
+             di ogni evento in un template Single. Senza foto nel contenuto resta quella scelta a mano. -->
+        <DynamicFieldToggle
+          :field="{ key: 'immagine', label: t('Foto'), type: 'image', description: AIUTO_DAL_CONTENUTO }"
+          tile-id="sfondo"
+          :dynamic="collegamenti"
+          @update:dynamic="(x, togli) => collega('immagine', x, togli)"
+        >
+          <div v-if="bg.image_url" class="thumb">
+            <img :src="bg.image_url" :alt="t('Sfondo')" />
+            <button type="button" class="thumb-x" :title="t('Rimuovi immagine')" @click="updateField('image_url', '')">&times;</button>
+          </div>
+          <button type="button" class="btn-soft" @click="pickBgImage">{{ bg.image_url ? t('Cambia immagine') : t('Seleziona immagine') }}</button>
+        </DynamicFieldToggle>
 
         <div class="row">
           <span class="rowlab">{{ t('Dimensione') }}</span>
@@ -112,14 +121,21 @@
 
       <!-- Video -->
       <div v-else-if="bg.type === 'video'" class="type-body">
-        <div v-if="bg.video_url" class="thumb">
-          <div class="thumb-video">
-            <img v-if="bg.video_poster" :src="bg.video_poster" :alt="t('Poster video')" />
-            <span v-else class="thumb-vico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span>
+        <DynamicFieldToggle
+          :field="{ key: 'video', label: t('Video'), type: 'video', description: AIUTO_VIDEO_DAL_CONTENUTO }"
+          tile-id="sfondo"
+          :dynamic="collegamenti"
+          @update:dynamic="(x, togli) => collega('video', x, togli)"
+        >
+          <div v-if="bg.video_url" class="thumb">
+            <div class="thumb-video">
+              <img v-if="bg.video_poster" :src="bg.video_poster" :alt="t('Poster video')" />
+              <span v-else class="thumb-vico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span>
+            </div>
+            <button type="button" class="thumb-x" :title="t('Rimuovi video')" @click="removeVideo">&times;</button>
           </div>
-          <button type="button" class="thumb-x" :title="t('Rimuovi video')" @click="removeVideo">&times;</button>
-        </div>
-        <button type="button" class="btn-soft" @click="pickBgVideo">{{ bg.video_url ? t('Cambia video') : t('Seleziona video') }}</button>
+          <button type="button" class="btn-soft" @click="pickBgVideo">{{ bg.video_url ? t('Cambia video') : t('Seleziona video') }}</button>
+        </DynamicFieldToggle>
         <button type="button" class="btn-soft" @click="pickBgPoster">{{ bg.video_poster ? t('Cambia poster') : t('Seleziona poster') }}</button>
 
         <div class="row">
@@ -163,6 +179,14 @@
 
       <!-- Galleria -->
       <div v-else-if="bg.type === 'gallery'" class="type-body">
+        <!-- Le foto dal contenuto: le stesse liste della Sorgente dinamica › Foto di un campo (la Galleria di un evento). -->
+        <div v-if="listeFoto.length" class="row">
+          <span class="rowlab">{{ t('Foto') }}</span>
+          <div class="selwrap">
+            <FieldSelect ui="dropdown" :model-value="galleriaCollegata" :options="opzioniGalleria" @update:model-value="collegaGalleria" />
+          </div>
+        </div>
+        <template v-if="!galleriaCollegata">
         <div class="gallery-head">
           <span class="gcount">{{ (bg.gallery_images || []).length }} {{ t('immagini selezionate') }}</span>
           <button v-if="(bg.gallery_images || []).length" type="button" class="gclear" :title="t('Svuota')" @click="updateField('gallery_images', [])">
@@ -176,6 +200,7 @@
           </div>
         </div>
         <button type="button" class="btn-soft" @click="pickGalleryImages">{{ (bg.gallery_images || []).length ? t('Cambia immagini') : t('Seleziona immagini') }}</button>
+        </template>
 
         <div class="tgl-row">
           <button type="button" class="tgl" :class="{ on: bg.gallery_loop !== false }" :aria-pressed="bg.gallery_loop !== false" @click="updateField('gallery_loop', !(bg.gallery_loop !== false))"><b></b></button>
@@ -604,6 +629,8 @@ import FieldColor from './fields/FieldColor.vue';
 import FieldSelect from './fields/FieldSelect.vue';
 import FieldObjectPosition from './fields/FieldObjectPosition.vue';
 import NumberScrubber from './fields/NumberScrubber.vue';
+import DynamicFieldToggle from './DynamicFieldToggle.vue';
+import { useDynamicContent } from '@/composables/useDynamicContent';
 
 // Opzioni dei FieldSelect (label RAW: t() la applica FieldSelect internamente).
 // meshPresets / glowPresets / crtModels sono già array { value, label } e si
@@ -1018,6 +1045,31 @@ function onGradientUpdate(newGrad) {
 
 function updateField(key, value) {
   emit('update:modelValue', { ...bg.value, [key]: value });
+}
+
+/* ---------- Lo sfondo dal contenuto (18 nov 2026): bg.dinamico, risolto nel PHP (Olobuild_CSS_Builder::sfondo_dal_contenuto) ---------- */
+const AIUTO_DAL_CONTENUTO = t('Col fulmine lo sfondo prende la foto dal contenuto che la pagina mostra: in un template Single, l\'immagine in evidenza o un campo foto di ogni evento, notizia o prodotto. Se il contenuto non ne ha, resta la foto scelta a mano.');
+const AIUTO_VIDEO_DAL_CONTENUTO = t('Col fulmine lo sfondo prende il video dal contenuto che la pagina mostra, per esempio il trailer di ogni evento. Serve un file video della libreria: i link di YouTube e Vimeo vanno nella tile Video. Se il contenuto non ne ha, resta il video scelto a mano.');
+const collegamenti = computed(() => ({ ...(bg.value.dinamico || {}) }));
+function collega(chiave, aggiornato, togli) {
+  const d = { ...(bg.value.dinamico || {}) };
+  if (togli || !aggiornato || !aggiornato[chiave]) delete d[chiave];
+  else d[chiave] = aggiornato[chiave];
+  updateField('dinamico', Object.keys(d).length ? d : null);
+}
+const { sources: fontiDinamiche, fetchSources } = useDynamicContent();
+fetchSources();
+const listeFoto = computed(() => (fontiDinamiche.value && fontiDinamiche.value.image_lists) || []);
+const galleriaCollegata = computed(() => (bg.value.dinamico && bg.value.dinamico.galleria && bg.value.dinamico.galleria.lista) || '');
+const opzioniGalleria = computed(() => [
+  { value: '', label: 'Scelte a mano' },
+  ...listeFoto.value.map((l) => ({ value: l.value, label: l.label })),
+]);
+function collegaGalleria(v) {
+  const d = { ...(bg.value.dinamico || {}) };
+  if (v) d.galleria = { lista: v };
+  else delete d.galleria;
+  updateField('dinamico', Object.keys(d).length ? d : null);
 }
 
 // Commit numerico robusto (NumberScrubber): scarta NaN tornando al default,

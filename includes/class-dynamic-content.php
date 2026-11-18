@@ -911,6 +911,25 @@ class Olobuild_Dynamic_Content {
             return $query->posts;
         }
 
+        // Ordine per un campo del contenuto («campo:data», 17 nov 2026): gli spettacoli di una stagione per la loro data,
+        // non per quella di pubblicazione. Le date dei Tipi di contenuto sono salvate AAAA-MM-GG e si ordinano come testo;
+        // un campo «Numero» come numero. Restano fuori i contenuti senza quel campo.
+        $args['order'] = 'ASC' === strtoupper( (string) $args['order'] ) ? 'ASC' : 'DESC';
+        if ( 0 === strpos( (string) $args['orderby'], 'campo:' ) ) {
+            $chiave = sanitize_key( substr( (string) $args['orderby'], 6 ) );
+            $numero = false;
+            if ( class_exists( 'Olobuild_Tipi_Contenuto' ) ) {
+                $t = Olobuild_Tipi_Contenuto::del_tipo( $args['post_type'] );
+                foreach ( $t ? (array) $t['campi'] : [] as $c ) {
+                    if ( ( $c['chiave'] ?? '' ) === $chiave ) {
+                        $numero = 'numero' === ( $c['tipo'] ?? '' );
+                    }
+                }
+            }
+            $args['meta_key'] = $chiave; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- ordine per un campo scelto nella Sorgente dinamica, volume limitato (posts_per_page)
+            $args['orderby']  = [ $numero ? 'meta_value_num' : 'meta_value' => $args['order'], 'date' => 'DESC' ];
+        }
+
         // Taxonomy filter
         $taxonomy = $query_config['taxonomy'] ?? '';
         $terms    = $query_config['terms'] ?? [];
@@ -1355,7 +1374,7 @@ class Olobuild_Dynamic_Content {
                     [ 'key' => 'post_excerpt',     'label' => 'Riassunto',       'type' => 'text' ],
                     [ 'key' => 'post_content',     'label' => 'Testo',            'type' => 'html' ],
                     [ 'key' => 'featured_image',   'label' => 'Immagine in evidenza', 'type' => 'image' ],
-                    [ 'key' => 'post_date',        'label' => 'Data',           'type' => 'text' ],
+                    [ 'key' => 'post_date',        'label' => 'Data di pubblicazione', 'type' => 'text' ],
                     [ 'key' => 'author_name',      'label' => 'Autore',         'type' => 'text' ],
                     [ 'key' => 'permalink',        'label' => 'Link del contenuto', 'type' => 'url' ],
                     // La pagina della categoria del contenuto (il primo termine, come «Primo termine»): «Altri Monumenti →».

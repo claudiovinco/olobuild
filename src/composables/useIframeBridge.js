@@ -85,7 +85,7 @@ export function useIframeBridge(iframeRef) {
 
     if ((!tiles || !tiles.length) && (!headerTiles || !headerTiles.length) && (!footerTiles || !footerTiles.length)) {
       const emptyHtml = (window.oloData && window.oloData.iframeEmptyHtml)
-        || '<div class="olo-iframe-empty"><div class="olo-iframe-empty-card"><h3 class="olo-iframe-empty-title">Pagina vuota</h3><p class="olo-iframe-empty-text">Aggiungi un modulo o scegli un layout per iniziare</p><div class="olo-iframe-empty-actions"><button type="button" class="olo-iframe-empty-btn" data-olo-empty-action="add-module"><span class="olo-iframe-empty-btn-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="3 3"/><path d="M12 8v8M8 12h8"/></svg></span><span class="olo-iframe-empty-btn-label">Aggiungi modulo</span></button><button type="button" class="olo-iframe-empty-btn" data-olo-empty-action="add-row"><span class="olo-iframe-empty-btn-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><span class="olo-iframe-empty-btn-label">Scegli layout</span></button></div></div></div>';
+        || '<div class="olo-iframe-empty"><div class="olo-iframe-empty-card"><h3 class="olo-iframe-empty-title">Pagina vuota</h3><p class="olo-iframe-empty-text">Aggiungi una tile o scegli un layout per iniziare</p><div class="olo-iframe-empty-actions"><button type="button" class="olo-iframe-empty-btn" data-olo-empty-action="add-module"><span class="olo-iframe-empty-btn-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="3 3"/><path d="M12 8v8M8 12h8"/></svg></span><span class="olo-iframe-empty-btn-label">Aggiungi una tile</span></button><button type="button" class="olo-iframe-empty-btn" data-olo-empty-action="add-row"><span class="olo-iframe-empty-btn-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><span class="olo-iframe-empty-btn-label">Scegli layout</span></button></div></div></div>';
       postToIframe('olo:render', { html: emptyHtml });
       lastTileSnapshot = null;
       return;
@@ -114,6 +114,10 @@ export function useIframeBridge(iframeRef) {
         if (tpl.settings?.preview_post_id) {
           body.preview_post_id = tpl.settings.preview_post_id;
         }
+      } else if (tpl && tpl.type === 'archive') {
+        // Il template d'archivio: le tile con «Segui l'archivio aperto» mostrano i contenuti del suo tipo (18 nov 2026)
+        body.template_type = 'archive';
+        body.archive_post_type = tpl.settings?.archive_post_type || '';
       }
 
       console.log('[IframeBridge] POST /builder/render body.page_settings.page_bg:', body?.page_settings?.page_bg);
@@ -215,6 +219,7 @@ export function useIframeBridge(iframeRef) {
       // Come il render completo: anche settings.post_type, se no la tile ritoccata si disegnava con un altro contenuto.
       post_type:          tpl?.settings?.single_post_type || tpl?.settings?.post_type || tpl?.post_type || 'post',
       preview_post_id:    tpl?.settings?.preview_post_id || 0,
+      archive_post_type:  tpl?.settings?.archive_post_type || '',
     };
 
     patchInFlight = true;
@@ -534,6 +539,20 @@ export function useIframeBridge(iframeRef) {
 
       case 'olo:add-tile-after':
         if (d.tileId) {
+          // Il «+» di una colonna (o di una riga) inserisce DENTRO la colonna, in fondo: una tile accanto alle
+          // colonne finiva figlia diretta della riga e la rompeva (18 nov 2026, la seconda colonna andava a capo).
+          const bersaglio = tilesStore.getTileById(d.tileId);
+          let colonnaId = null;
+          if (bersaglio?.type === 'column') colonnaId = bersaglio.id;
+          else if (bersaglio?.type === 'row') {
+            const colonne = (bersaglio.children || []).filter((c) => c.type === 'column');
+            colonnaId = colonne.length ? colonne[colonne.length - 1].id : null;
+          }
+          if (colonnaId && window.__oloOpenFinder) {
+            builderStore.insertAfterTileId = null;
+            window.__oloOpenFinder(colonnaId);
+            break;
+          }
           // Open Finder to insert a tile right after the clicked one (same column)
           builderStore.insertAfterTileId = d.tileId;
           window.dispatchEvent(new CustomEvent('olo:open-finder-after', { detail: { tileId: d.tileId } }));
