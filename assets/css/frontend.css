@@ -2048,6 +2048,132 @@ html:has(.olo-frontend-grid) {
 .olo-h-ruota .olo-h-track > .uk-section {
   backface-visibility: hidden;
 }
+/* Pagina, Canali, Ascensore (18 nov 2026, sera): i pannelli impilati nella cornice fissata, il passaggio lo fa lo
+   script (la pagina che gira, la neve del televisore, le porte dell'ascensore). */
+.olo-sticky-pagina > .uk-container,
+.olo-sticky-canali > .uk-container,
+.olo-sticky-ascensore > .uk-container {
+  width: 100%;
+  box-sizing: border-box;
+}
+.olo-h-pagina .olo-h-track,
+.olo-h-canali .olo-h-track,
+.olo-h-ascensore .olo-h-track {
+  display: block;
+  position: relative;
+  will-change: auto;
+}
+.olo-h-pagina .olo-h-track {
+  perspective: 2600px;
+}
+.olo-h-pagina .olo-h-track > .uk-section {
+  backface-visibility: hidden;
+  will-change: transform, filter;
+}
+/* Canali: la neve (una tela piccola ingrandita a pixel) e il numero del canale in alto a destra, sotto la testata */
+.olo-h-neve {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  image-rendering: pixelated;
+}
+.olo-h-osd {
+  position: absolute;
+  top: calc(var(--olo-h-testata, 0px) + 22px);
+  right: clamp(16px, 3vw, 40px);
+  z-index: 62;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .45s;
+  font-family: var(--olo-font-family-mono, ui-monospace, monospace);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--olo-h-colore, var(--olo-color-accent));
+  text-shadow: 0 0 8px color-mix(in srgb, var(--olo-h-colore, var(--olo-color-accent)) 70%, transparent),
+    2px 2px 0 color-mix(in srgb, var(--olo-color-dark) 85%, transparent);
+}
+.olo-h-osd.olo-h-osd-on {
+  opacity: 1;
+  transition-duration: .06s;
+}
+.olo-h-osd-num {
+  font-size: clamp(30px, 4vw, 56px);
+  font-weight: 700;
+  line-height: 1;
+}
+.olo-h-osd-nome {
+  font-size: clamp(11px, 1.05vw, 14px);
+}
+/* Ascensore: le due porte di metallo spazzolato (colore: «Colore» della prima sezione) e la fila dei piani in basso */
+.olo-h-porte {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  overflow: hidden;
+  pointer-events: none;
+}
+.olo-h-porta {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50.2%;
+  background:
+    linear-gradient(90deg, transparent 0, color-mix(in srgb, var(--olo-color-light) 12%, transparent) 46%, transparent 100%),
+    repeating-linear-gradient(90deg,
+      color-mix(in srgb, var(--olo-h-colore, var(--olo-color-dark)) 88%, var(--olo-color-light)) 0 2px,
+      var(--olo-h-colore, var(--olo-color-dark)) 2px 5px);
+}
+.olo-h-porta-sx {
+  left: 0;
+  transform: translate3d(-100%, 0, 0);
+  box-shadow: inset -3px 0 0 color-mix(in srgb, var(--olo-color-dark) 55%, transparent);
+}
+.olo-h-porta-dx {
+  right: 0;
+  transform: translate3d(100%, 0, 0);
+  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--olo-color-light) 14%, transparent);
+}
+.olo-h-piani {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(14px, 2.4vh, 26px);
+  z-index: 63;
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 1vw, 12px);
+  max-width: calc(100% - 32px);
+  padding: 8px 16px;
+  border-radius: 999px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  background: color-mix(in srgb, var(--olo-color-dark) 80%, transparent);
+  font-family: var(--olo-font-family-mono, ui-monospace, monospace);
+  font-size: 13px;
+  line-height: 1;
+  color: color-mix(in srgb, var(--olo-color-light) 48%, transparent);
+}
+.olo-h-piano {
+  min-width: 1.3em;
+  text-align: center;
+  transition: color .25s, text-shadow .25s;
+}
+.olo-h-piano-on {
+  font-weight: 700;
+  color: var(--olo-color-accent);
+  text-shadow: 0 0 10px currentColor;
+}
+.olo-h-freccia {
+  min-width: 1em;
+  color: var(--olo-color-accent);
+}
 /* «Reveal orizzontale»: pannelli impilati, il nuovo si scopre da destra sopra il precedente.
    Il filo di luce segue il bordo che si apre (posizione e opacità dallo script). */
 .olo-h-reveal .olo-h-track {

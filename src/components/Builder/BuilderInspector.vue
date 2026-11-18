@@ -1118,7 +1118,7 @@
               <div class="mb-flex mb-items-center mb-justify-between">
                 <span class="mb-flex mb-items-center mb-gap-2">
                   <span class="mb-text-xs mb-text-gray-300">{{ t('Cursore del sito') }}</span>
-                  <InfoTip :titolo="t('Cursore del sito')" :testo="[t('Il cursore che segue il mouse in tutto il sito, al posto della freccia. Ogni pagina può sceglierne un altro in «Cursore di questa pagina». Su telefoni e tablet, e nel canvas del builder, resta quello di sistema.'), t('Si salva da solo a ogni modifica — non serve il tasto Salva del template.')]" />
+                  <InfoTip :titolo="t('Cursore del sito')" :testo="[t('Il cursore che segue il mouse in tutto il sito, al posto della freccia. Ogni pagina può sceglierne un altro in «Cursore di questa pagina». Su telefoni e tablet, e nel canvas del builder, resta quello di sistema; solo la Torcia resta anche su telefoni e tablet, con la luce ferma al centro dello schermo.'), t('Si salva da solo a ogni modifica — non serve il tasto Salva del template.')]" />
                 </span>
                 <span class="mb-text-[9px] mb-uppercase mb-tracking-wide mb-text-gray-500 mb-bg-gray-800 mb-rounded mb-px-1.5 mb-py-0.5">{{ t('Globale sito') }}</span>
               </div>

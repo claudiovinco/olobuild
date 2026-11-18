@@ -88,6 +88,22 @@ Media: `scripts/temi/cinque_media.py` (Pexels), disegni `cinque_disegni.py`, log
     elementi fissi fuori dalla finestra si tolgono e lo stato di ogni livello si blocca com'è sullo schermo. Riportato
     nell'originale `T:\TECNICA\olo-booking\bin\theme-previews.py` (non committato).
 
+15. **Cerchi allungati nello Slider Pro** (1.4.1241): con lo scorrimento fissato, in una finestra più alta del 16:9 la scena
+    allunga in altezza i livelli che toccano i due bordi della tela (giusto per un video o una foto a tutto campo). Le
+    lenti di Vetrino, cerchi più grandi della tela, diventavano ovali: 0,9 a 1440 × 900, 0,75 in 4:3. Ora un livello con
+    gli angoli tondi almeno quanto metà del lato corto resta com'è, al centro della composizione (`cerchio()` in
+    `scenaAPieno`, `olo-proslider.js`). Misurato dopo: 37440 × 37440 nelle tre finestre.
+16. **Livelli solo per il telefono** (1.4.1243, segnalato dall'utente): in Ruota Libera, al computer, le lettere della
+    scritta sul fianco della ruota giravano accanto al logo. Le scritte del telefono erano livelli a parte, «nascosti» al
+    computer con un riquadro di 0,1 × 0,1 % in alto a sinistra, perché lo Slider Pro sapeva nascondere un livello solo sul
+    notebook, sul tablet o sul telefono. Ora c'è «Visibile su Desktop» anche sul computer, e la visibilità si calcola
+    formato per formato nella sua fascia, come la eredita l'editor (prima il display:none del tablet valeva anche per il
+    telefono, e «Visibile su Mobile» si vedeva nell'editor ma non sul sito). Corretti anche Tornanti e il velo del
+    telefono di tutti i temi (`kit.veli`); nei 4335 livelli dei temi nessuno cambia aspetto.
+17. **Testi dell'apertura sotto la testata, al telefono** (1.4.1244): l'occhiello di Ruota Libera e «Italiano» di Doppio
+    Senso finivano sotto la testata sovrapposta (alta 85 px). Controllo: `scratchpad/cinque/sotto_testata.py`. Al
+    telefono le scritte sul copertone di Ruota Libera uscivano dallo schermo: più corte e a ±27°.
+
 ## 3. Le tile poco usate messe alla prova
 
 | Tile | Usi prima | Dove | Esito |
@@ -135,12 +151,6 @@ Media: `scripts/temi/cinque_media.py` (Pexels), disegni `cinque_disegni.py`, log
   l'andamento «costante» (la scala cresce in proporzione): ogni lente compare minuscola dentro la precedente.
 - **Doppio Senso**: le due metà (video della penna e della città riflessa) scorrono in senso opposto; «Doppio» scende e
   «Senso» sale fino alla stessa riga. Sul telefono gli spostamenti valgono il 44 %: i due titoli partono più vicini.
-15. **Cerchi allungati nello Slider Pro** (1.4.1241): con lo scorrimento fissato, in una finestra più alta del 16:9 la scena
-    allunga in altezza i livelli che toccano i due bordi della tela (giusto per un video o una foto a tutto campo). Le
-    lenti di Vetrino, cerchi più grandi della tela, diventavano ovali: 0,9 a 1440 × 900, 0,75 in 4:3. Ora un livello con
-    gli angoli tondi almeno quanto metà del lato corto resta com'è, al centro della composizione (`cerchio()` in
-    `scenaAPieno`, `olo-proslider.js`). Misurato dopo: 37440 × 37440 nelle tre finestre.
-
 ## 5. Com'è finita
 
 - 1.4.1240: i ritocchi del giro (Doppio Senso, Vetrino, Tornanti). 1.4.1241: i cerchi dello Slider Pro. 1.4.1242: i cinque
@@ -149,5 +159,5 @@ Media: `scripts/temi/cinque_media.py` (Pexels), disegni `cinque_disegni.py`, log
   bollino e il suo video.
 - Giro finale di tutte le pagine a 1440 e a 390 per i cinque temi, senza errori nella console.
 - Pagina di prova `prova-percorso` tolta dal sottosito (404).
-- Niente commit né treno: tutto dalla 1.4.1231 sta solo sul sottosito.
+- 1.4.1242 col treno su tutti i siti (commit 4525b0d7); 1.4.1243–1245 (commit cd9150a6) col difetto 16 e 17 e le anteprime v2 di Ruota Libera e del telefono di Doppio Senso.
 - Da fare: il Contatore Visite (difetto 8); decidere se rigenerare i temi già scritti col corsivo finto (difetto 9).

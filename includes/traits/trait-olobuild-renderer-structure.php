@@ -40,7 +40,8 @@ trait Olobuild_Renderer_Structure_Trait {
         $sticky_effect = $s['sticky_effect'] ?? 'none';
         $is_sticky_v = in_array( $sticky_effect, [ 'cover', 'reveal' ], true );
         // «ruota» (18 nov 2026): le sezioni sul bordo di una ruota che gira scorrendo; si raggruppa come le orizzontali.
-        $is_sticky_h = in_array( $sticky_effect, [ 'cover-h', 'reveal-h', 'ruota' ], true );
+        // «pagina», «canali», «ascensore» (18 nov, sera): pannelli impilati con un passaggio diverso fra l'uno e l'altro.
+        $is_sticky_h = in_array( $sticky_effect, [ 'cover-h', 'reveal-h', 'ruota', 'pagina', 'canali', 'ascensore' ], true );
         $is_sticky = $is_sticky_v || $is_sticky_h;
         $sticky_top = intval( $s['sticky_top'] ?? 0 );
 
@@ -418,6 +419,18 @@ trait Olobuild_Renderer_Structure_Trait {
             $h_extra = ' data-h-dir="' . esc_attr( $h_dir ) . '"';
             if ( 'ruota' === $sticky_effect ) {
                 $h_extra .= ' data-ruota-gradi="' . max( 6, min( 90, absint( $s['sticky_ruota_gradi'] ?? 24 ) ?: 24 ) ) . '"';
+            }
+            // Canali e Ascensore: il nome del canale o del piano di questa sezione, e il colore del numero del canale
+            // o delle porte (della prima sezione del gruppo).
+            if ( in_array( $sticky_effect, [ 'canali', 'ascensore' ], true ) ) {
+                $etichetta = trim( wp_strip_all_tags( (string) ( $s['sticky_etichetta'] ?? '' ) ) );
+                if ( '' !== $etichetta ) {
+                    $h_extra .= ' data-h-etichetta="' . esc_attr( $etichetta ) . '"';
+                }
+                $colore = trim( (string) ( $s['sticky_colore'] ?? '' ) );
+                if ( '' !== $colore && preg_match( '/^(#[0-9a-fA-F]{3,8}|var\(--olo-color-[a-z0-9-]+\)|rgba?\([0-9., %]+\)|color-mix\([^;{}<>]+\))$/', $colore ) ) {
+                    $h_extra .= ' data-h-colore="' . esc_attr( $colore ) . '"';
+                }
             }
             $html = '<div class="olo-h-marker" data-sticky-h="' . esc_attr( $sticky_effect ) . '" data-sticky-top="' . $sticky_top . '" data-h-align="' . esc_attr( $h_align ) . '"' . $h_extra . ' style="display:contents">' . $html . '</div>';
         }

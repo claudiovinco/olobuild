@@ -749,7 +749,7 @@ trait Olobuild_Renderer_Page_Trait {
             foreach ( $tiles as $sec ) {
                 $eff = $sec['settings']['sticky_effect'] ?? 'none';
                 if ( $eff === 'cover' || $eff === 'reveal' ) $has_any_sticky_v = true;
-                if ( $eff === 'cover-h' || $eff === 'reveal-h' || $eff === 'ruota' ) $has_any_sticky_h = true;
+                if ( in_array( $eff, [ 'cover-h', 'reveal-h', 'ruota', 'pagina', 'canali', 'ascensore' ], true ) ) $has_any_sticky_h = true;
             }
             if ( $has_any_sticky_v || $has_any_sticky_h ) : ?>
                 <script>
@@ -851,8 +851,21 @@ trait Olobuild_Renderer_Page_Trait {
                                ruota col perno sotto lo schermo, a «Angolo» gradi l'uno dall'altro; scorrendo la ruota gira
                                e il pannello di turno arriva dritto in cima. Con meno movimento la Ruota resta verticale. */
                             var ruota=(sections[0].marker.dataset.stickyH==='ruota');
+                            /* Pagina, Canali, Ascensore (18 nov 2026, sera): pannelli impilati, un passaggio diverso fra
+                               l'uno e l'altro. Pagina: quello di turno gira come la pagina di un libro sul lato opposto a
+                               quello da cui arriva il successivo (Destra: il perno a sinistra; Sinistra: a destra; Sotto: in
+                               alto, come un calendario; Sopra: in basso) e scopre il successivo. Canali: si cambia canale,
+                               con la neve del televisore a metà strada e il numero del canale in alto a destra. Ascensore:
+                               le porte si chiudono, la fila dei piani cambia, le porte si riaprono sul pannello dopo.
+                               «Etichetta» della sezione = il nome del canale o del piano. Con meno movimento restano una
+                               sotto l'altra. */
+                            var passo=sections[0].marker.dataset.stickyH;
+                            var sfoglia=(passo==='pagina'),canali=(passo==='canali'),ascensore=(passo==='ascensore');
+                            var impilati=(sfoglia||canali||ascensore);
+                            if(impilati){if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){return;}}
+                            sections.forEach(function(item){item.etichetta=item.marker.dataset.hEtichetta||'';});
                             var percorso=false;
-                            if(!svela){if(!ruota){sections.forEach(function(item,i){if(i>0){if(item.dir!=='destra'){percorso=true;}}});}}
+                            if(!svela){if(!ruota){if(!impilati){sections.forEach(function(item,i){if(i>0){if(item.dir!=='destra'){percorso=true;}}});}}}
                             if(ruota){if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){return;}}
                             var px=[0],py=[0];
                             for(var k=1;k<n;k++){
@@ -865,6 +878,9 @@ trait Olobuild_Renderer_Page_Trait {
                             var group=document.createElement('div');
                             group.className='olo-h-group';
                             group.style.height=(viewH*n)+'px';
+                            /* i passaggi impilati tengono fermo ogni pannello più a lungo: il cambio prende solo una parte
+                               della corsa, il resto è per leggere */
+                            if(impilati){group.style.height=Math.round(viewH*(1+(n-1)*(ascensore?1.7:(canali?1.35:1.4))))+'px';}
                             var viewport=document.createElement('div');
                             viewport.className='olo-h-viewport';
                             viewport.style.top=stickyTop+'px';
@@ -883,11 +899,18 @@ trait Olobuild_Renderer_Page_Trait {
                                     item.sec.style.flexDirection='column';
                                     item.sec.style.justifyContent=(allinea==='bottom')?'flex-end':'center';
                                 }
-                                if(percorso||ruota){
+                                if(percorso||ruota||impilati){
                                     item.sec.style.setProperty('position','absolute','important');
                                     item.sec.style.left='0';
                                     item.sec.style.top='0';
                                     item.sec.style.height=viewH+'px';
+                                }
+                                if(impilati){
+                                    item.sec.style.zIndex=String(sfoglia?(n-i):(i+1));
+                                    if(sfoglia){
+                                        var dnx=sections[i+1]?sections[i+1].dir:'destra';
+                                        item.sec.style.transformOrigin=(dnx==='sinistra')?'100% 50%':((dnx==='sotto')?'50% 0%':((dnx==='sopra')?'50% 100%':'0% 50%'));
+                                    }
                                 }
                                 if(svela){
                                     /* con «important»: le sezioni con lo sfondo hanno uk-position-relative,
@@ -913,6 +936,41 @@ trait Olobuild_Renderer_Page_Trait {
                             }
                             if(percorso){group.classList.add('olo-h-percorso');}
                             if(ruota){group.classList.add('olo-h-ruota');}
+                            var neve=null,nctx=null,neveDist=0,neveGiro=false,osd=null,osdNum=null,osdNome=null,osdTimer=0;
+                            var portaSx=null,portaDx=null,fila=null,freccia=null,piani=[];
+                            function figlio(padre,tag,classe){var e=document.createElement(tag);e.className=classe;padre.appendChild(e);return e;}
+                            if(impilati){
+                                group.classList.add('olo-h-'+passo);
+                                var hdrO=document.querySelector('.olo-site-header.olo-header-overlay');
+                                group.style.setProperty('--olo-h-testata',(hdrO?hdrO.offsetHeight:0)+'px');
+                                var coloreP=sections[0].marker.dataset.hColore;
+                                if(coloreP){group.style.setProperty('--olo-h-colore',coloreP);}
+                                if(canali){
+                                    neve=figlio(viewport,'canvas','olo-h-neve');neve.width=180;neve.height=100;
+                                    neve.setAttribute('aria-hidden','true');nctx=neve.getContext('2d');
+                                    osd=figlio(viewport,'div','olo-h-osd');osd.setAttribute('aria-hidden','true');
+                                    osdNum=figlio(osd,'span','olo-h-osd-num');osdNome=figlio(osd,'span','olo-h-osd-nome');
+                                }
+                                if(ascensore){
+                                    var porte=figlio(viewport,'div','olo-h-porte');porte.setAttribute('aria-hidden','true');
+                                    portaSx=figlio(porte,'span','olo-h-porta olo-h-porta-sx');portaDx=figlio(porte,'span','olo-h-porta olo-h-porta-dx');
+                                    fila=figlio(viewport,'div','olo-h-piani');fila.setAttribute('aria-hidden','true');
+                                    freccia=figlio(fila,'span','olo-h-freccia');
+                                    sections.forEach(function(item,i){var pz=figlio(fila,'span','olo-h-piano');pz.textContent=item.etichetta||String(i);piani.push(pz);});
+                                }
+                            }
+                            /* la neve del televisore: pixel grigi a caso su una tela piccola, ingrandita; gira solo finché si vede */
+                            function disegnaNeve(){
+                                var w=neve.width,h=neve.height,img=nctx.createImageData(w,h),d=img.data;
+                                for(var q=0;q<d.length;q+=4){var v=(Math.random()*255)|0;d[q]=v;d[q+1]=v;d[q+2]=v;d[q+3]=255;}
+                                nctx.putImageData(img,0,0);
+                            }
+                            function giroNeve(){if(neveDist>0.001){disegnaNeve();requestAnimationFrame(giroNeve);}else{neveGiro=false;}}
+                            function mostraCanale(ch){
+                                var nn=ch+1;osdNum.textContent='CH '+(nn<10?'0':'')+nn;osdNome.textContent=sections[ch].etichetta;
+                                osd.classList.add('olo-h-osd-on');clearTimeout(osdTimer);
+                                osdTimer=setTimeout(function(){osd.classList.remove('olo-h-osd-on');},2600);
+                            }
                             group.appendChild(viewport);
                             /* Insert before the first marker and hide all originals */
                             run[0].parentNode.insertBefore(group,run[0]);
@@ -963,6 +1021,57 @@ trait Olobuild_Renderer_Page_Trait {
                                         if(filo){
                                             if(bordo>=0){filo.style.left=bordo.toFixed(3)+'%';filo.style.opacity='1';}
                                             else{filo.style.opacity='0';}
+                                        }
+                                    }else if(impilati){
+                                        var j0=Math.min(n-2,Math.floor(pos)),g=pos-j0;
+                                        if(sfoglia){
+                                            /* fermo all'inizio e alla fine del tratto, la pagina gira nel mezzo */
+                                            var fp=Math.max(0,Math.min(1,(g-0.1)/0.8));fp=fp*fp*(3-2*fp);
+                                            sections.forEach(function(item,i){
+                                                var tr='',luce='',om='',vis='hidden';
+                                                if(i===j0){
+                                                    vis='';
+                                                    if(fp>0){
+                                                        var a=(fp*100).toFixed(2),dn=sections[i+1].dir;
+                                                        tr=(dn==='sinistra')?'rotateY(-'+a+'deg)':((dn==='sotto')?'rotateX(-'+a+'deg)':((dn==='sopra')?'rotateX('+a+'deg)':'rotateY('+a+'deg)'));
+                                                        luce='brightness('+(1-0.4*Math.min(1,fp*1.5)).toFixed(3)+')';
+                                                        om='0 0 90px color-mix(in srgb, var(--olo-color-dark) 55%, transparent)';
+                                                    }
+                                                }else if(i===j0+1){
+                                                    vis='';
+                                                    if(fp<1){luce='brightness('+(0.5+0.5*fp).toFixed(3)+')';}
+                                                }
+                                                item.sec.style.visibility=vis;item.sec.style.transform=tr;
+                                                item.sec.style.filter=luce;item.sec.style.boxShadow=om;
+                                            });
+                                        }else if(canali){
+                                            var dist=Math.max(0,1-Math.abs(g-0.5)/0.1),ch=(g<0.5)?j0:(j0+1);
+                                            sections.forEach(function(item,i){
+                                                var su=(i===ch);
+                                                item.sec.style.visibility=su?'':'hidden';
+                                                if(su){
+                                                    if(dist>0.001){
+                                                        item.sec.style.transform='translate3d('+((Math.random()-0.5)*dist*40).toFixed(1)+'px,'+((Math.random()-0.5)*dist*16).toFixed(1)+'px,0) scaleY('+(1+dist*0.05).toFixed(3)+')';
+                                                        item.sec.style.filter='contrast('+(1+dist*0.9).toFixed(2)+') saturate('+Math.max(0,1-dist*0.85).toFixed(2)+') brightness('+(1+dist*0.35).toFixed(2)+')';
+                                                    }else{item.sec.style.transform='';item.sec.style.filter='';}
+                                                }
+                                            });
+                                            neveDist=dist;neve.style.opacity=(dist*0.94).toFixed(3);
+                                            if(dist>0.001){if(!neveGiro){neveGiro=true;requestAnimationFrame(giroNeve);}}
+                                            if(group._oloCh!==ch){group._oloCh=ch;mostraCanale(ch);}
+                                        }else if(ascensore){
+                                            /* aperte, si chiudono, chiuse (si cambia piano), si riaprono, aperte */
+                                            var chiude=Math.max(0,Math.min(1,(g-0.16)/0.26)),apre=Math.max(0,Math.min(1,(g-0.58)/0.26));
+                                            var pc=(g<0.5)?chiude:(1-apre);pc=pc*pc*(3-2*pc);
+                                            var pi=(g<0.5)?j0:(j0+1);
+                                            sections.forEach(function(item,i){item.sec.style.visibility=(i===pi)?'':'hidden';});
+                                            var scossa=(pc>0.98)?Math.sin(g*140)*1.4:0;
+                                            portaSx.style.transform='translate3d('+((pc-1)*100).toFixed(2)+'%,'+scossa.toFixed(2)+'px,0)';
+                                            portaDx.style.transform='translate3d('+((1-pc)*100).toFixed(2)+'%,'+scossa.toFixed(2)+'px,0)';
+                                            var giu=(pos>=(group._oloPos||0));group._oloPos=pos;
+                                            var sale=(sections[j0+1].dir!=='sotto');
+                                            freccia.textContent=(pc>0.5)?((sale===giu)?'▲':'▼'):'';
+                                            piani.forEach(function(pz,i){pz.classList.toggle('olo-h-piano-on',i===pi);});
                                         }
                                     }else if(percorso){
                                         var Wp=viewport.clientWidth,i0=Math.min(n-2,Math.floor(pos)),f=pos-i0;

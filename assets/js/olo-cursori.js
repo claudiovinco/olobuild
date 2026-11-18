@@ -11,7 +11,10 @@
   var CFG = window.OLO_CURSORE;
   if (!CFG || window.__oloCursore) return;
   var mm = window.matchMedia ? function (q) { return window.matchMedia(q).matches; } : function () { return false; };
-  if (mm('(hover: none)') || mm('(pointer: coarse)')) return;
+  // Su telefoni e tablet niente cursore, tranne la Torcia (18 nov 2026): lì la pagina al buio è il tema, non un ornamento
+  // del puntatore, e la luce sta ferma al centro dello schermo mentre la pagina le scorre sotto.
+  var touchSolo = mm('(hover: none)') || mm('(pointer: coarse)');
+  if (touchSolo && CFG.style !== 'torcia') return;
   window.__oloCursore = true;
   var meno = mm('(prefers-reduced-motion: reduce)');
   var html = document.documentElement;
@@ -4004,6 +4007,248 @@
         freccia(g, gx, my, -1, luce > 0.5 ? oro : carta);
         g.globalAlpha = 1;
         return onde.length > 0 || Math.abs((hot ? 1 : 0) - luce) > 0.01;
+      }
+    };
+  };
+
+  // Un rettangolo con gli angoli tondi (per i disegni dei cursori qui sotto).
+  function tondo(g, x, y, w, h, r) {
+    g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r);
+    g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath();
+  }
+
+  // Segnalibro (per Dorso, 18 nov 2026): un nastro di raso appeso alla punta, con la coda a coda di rondine, che dondola
+  // quando ti muovi e si ferma piano; sui link si allunga; al clic, lì dove hai cliccato, si piega l'angolo di una pagina.
+  STILI.segnalibro = function () {
+    var T = tela({ mondo: true }), st = {}, ang = 0, vang = 0, lung = 0, orecchie = [], ux = null;
+    var raso = risolvi(CFG.ringColor || '#8c1c2b'), oro = risolvi(CFG.dotColor || '#c9a24a');
+    window.addEventListener('pointerdown', function (e) {
+      if (meno || e.pointerType === 'touch') return;
+      orecchie.push({ x: mx, y: my, t: performance.now() }); if (orecchie.length > 5) orecchie.shift(); chiedi();
+    });
+    return {
+      frame: function (t) {
+        var s = passo(st, t), dx = ux === null ? 0 : mx - ux;
+        ux = mx;
+        if (meno) { ang = 0; vang = 0; } else {
+          vang += (-dx * 0.006 - ang * 0.07) * s; vang *= Math.pow(0.9, s); ang += vang * s;
+        }
+        lung += ((hot ? 1 : 0) - lung) * 0.15 * s;
+        var g = pulisci(T), L = 30 + lung * 16, W = 9;
+        g.save(); T.glifo(g, mx, my); g.rotate(ang);
+        g.fillStyle = raso; g.beginPath(); g.moveTo(-W / 2, 0); g.lineTo(W / 2, 0); g.lineTo(W / 2, L);
+        g.lineTo(0, L - 6); g.lineTo(-W / 2, L); g.closePath(); g.fill();
+        g.globalAlpha = 0.22; g.fillStyle = '#ffffff'; g.fillRect(-W / 2 + 1.6, 1, 1.3, L - 5); g.globalAlpha = 1;
+        g.fillStyle = oro; g.beginPath(); g.arc(0, 0, 3.2, 0, 6.283); g.fill();
+        g.restore();
+        orecchie = orecchie.filter(function (o) { return t - o.t < 1500; });
+        orecchie.forEach(function (o) {
+          var e = (t - o.t) / 1500, k = Math.min(1, e / 0.18), a = e < 0.18 ? 1 : 1 - (e - 0.18) / 0.82, q = 26 * k;
+          g.globalAlpha = a * 0.25; g.fillStyle = '#000000';
+          g.beginPath(); g.moveTo(o.x, o.y); g.lineTo(o.x + q + 3, o.y); g.lineTo(o.x, o.y + q + 3); g.closePath(); g.fill();
+          g.globalAlpha = a; g.fillStyle = oro;
+          g.beginPath(); g.moveTo(o.x + q, o.y); g.lineTo(o.x + q, o.y + q); g.lineTo(o.x, o.y + q); g.closePath(); g.fill();
+          g.strokeStyle = raso; g.lineWidth = 1; g.stroke();
+        });
+        g.globalAlpha = 1;
+        return Math.abs(vang) > 0.0008 || Math.abs(ang) > 0.002 || orecchie.length > 0 || Math.abs((hot ? 1 : 0) - lung) > 0.01;
+      }
+    };
+  };
+
+  // Torcia (per Lanterna, 18 nov 2026): la pagina al buio; si vede solo dove punti la torcia, nell'alone caldo del
+  // fascio, e sui link il fascio si allarga. Unico cursore che resta su telefoni e tablet: lì la torcia sta al centro
+  // dello schermo e la pagina le scorre sotto. Col tasto Tab la luce va sull'elemento col focus. L'interruttore in basso
+  // a sinistra (la «Parola del cursore», di serie «Luce») accende la luce in tutta la pagina e la tiene accesa per la
+  // visita. Con meno movimento la luce non insegue: sta sul puntatore.
+  STILI.torcia = function () {
+    var v = nodo('torcia');
+    v.classList.remove(P);
+    v.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:' + (Z - 2) + ';transition:opacity .7s;'
+      + 'background:radial-gradient(circle var(--ot-r,190px) at var(--ot-x,50vw) var(--ot-y,45vh),'
+      + 'color-mix(in srgb,var(--oc-ring) 10%,transparent) 0,transparent 55%,rgba(4,4,7,.94) 100%)';
+    var p = touchSolo ? null : nodo('punto');
+    var cssT = document.createElement('style');
+    cssT.textContent = '.olo-cur-interruttore{position:fixed;left:16px;bottom:16px;z-index:' + (Z - 1) + ';display:inline-flex;'
+      + 'align-items:center;gap:8px;padding:9px 15px 9px 11px;border-radius:999px;cursor:pointer;'
+      + 'border:1px solid color-mix(in srgb,var(--oc-ring) 50%,transparent);'
+      + 'background:color-mix(in srgb,var(--olo-color-dark,#0b0b10) 84%,transparent);color:var(--olo-color-light,#f4efe4);'
+      + 'font:600 13px/1 var(--olo-font-family,system-ui),system-ui,sans-serif;letter-spacing:.04em}'
+      + '.olo-cur-interruttore:focus-visible{outline:2px solid var(--oc-ring);outline-offset:3px}'
+      + '.olo-cur-interruttore svg{width:18px;height:18px;flex:none;color:var(--oc-ring)}'
+      + '.olo-cur-interruttore[aria-pressed="true"] svg{filter:drop-shadow(0 0 6px var(--oc-ring))}';
+    document.head.appendChild(cssT);
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'olo-tokens olo-cur-interruttore';
+    b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" '
+      + 'stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.7.5 1.1 1.3 1.1 2.2h5'
+      + 'c0-.9.4-1.7 1.1-2.2A6 6 0 0 0 12 3z"/></svg><span></span>';
+    b.lastChild.textContent = (CFG.label && CFG.label !== 'Apri') ? CFG.label : 'Luce';
+    document.body.appendChild(b);
+    if (nodiNuovi) nodiNuovi.push(b);
+    var acceso = false;
+    try { acceso = window.sessionStorage.getItem('olo-torcia') === '1'; } catch (e) { acceso = false; }
+    function metti(on) {
+      acceso = on;
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      v.style.opacity = on ? '0' : '1';
+      try { window.sessionStorage.setItem('olo-torcia', on ? '1' : '0'); } catch (e) { /* senza memoria resta per la pagina */ }
+    }
+    b.addEventListener('click', function () { metti(!acceso); });
+    metti(acceso);
+    var fx = null, fy = null, fr = 0, umx = mx, umy = my;
+    document.addEventListener('focusin', function (e) {
+      var el = e.target, ok = false;
+      if (!el || !el.getBoundingClientRect || el === b) return;
+      try { ok = el.matches(':focus-visible'); } catch (er) { ok = false; }
+      if (!ok) return;
+      var r = el.getBoundingClientRect();
+      fx = r.left + r.width / 2; fy = r.top + r.height / 2; fr = Math.max(150, Math.hypot(r.width, r.height) * 0.8);
+      chiedi();
+    });
+    window.addEventListener('resize', chiedi);
+    var x = innerWidth / 2, y = innerHeight * 0.45, r = 190;
+    return {
+      frame: function () {
+        if (mx !== umx || my !== umy) { fx = null; umx = mx; umy = my; }
+        var tx, ty, tr;
+        if (fx !== null) { tx = fx; ty = fy; tr = fr; }
+        else if (touchSolo || mx < -100) { tx = innerWidth / 2; ty = innerHeight * 0.45; tr = Math.min(innerWidth * 0.46, 230); }
+        else { tx = mx; ty = my; tr = hot ? 260 : 190; }
+        var k = meno ? 1 : 0.2;
+        x += (tx - x) * k; y += (ty - y) * k; r += (tr - r) * (meno ? 1 : 0.12);
+        v.style.setProperty('--ot-x', x.toFixed(1) + 'px');
+        v.style.setProperty('--ot-y', y.toFixed(1) + 'px');
+        v.style.setProperty('--ot-r', r.toFixed(1) + 'px');
+        if (p) sposta(p, mx, my);
+        return Math.abs(tx - x) + Math.abs(ty - y) > 0.3 || Math.abs(tr - r) > 0.5;
+      }
+    };
+  };
+
+  // Telecomando (per Zapping, 18 nov 2026): un piccolo telecomando sulla punta, col led rosso che si accende sui link;
+  // al clic parte il lampo dell'infrarosso e accanto compare il numero del canale, che sale a ogni clic.
+  STILI.telecomando = function () {
+    var T = tela(), st = {}, led = 0, lampi = [], canale = 0;
+    var corpo = risolvi(CFG.ringColor || '#1d1d22'), rosso = risolvi(CFG.dotColor || '#ff3b30');
+    window.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'touch') return;
+      canale = canale % 99 + 1;
+      lampi.push({ x: mx, y: my, t: performance.now(), n: canale }); if (lampi.length > 4) lampi.shift(); chiedi();
+    });
+    return {
+      frame: function (t) {
+        var s = passo(st, t), q, c;
+        led += ((hot ? 1 : 0) - led) * 0.2 * s;
+        var g = pulisci(T);
+        g.save(); g.translate(mx, my); g.rotate(-0.55);
+        g.fillStyle = corpo; tondo(g, -7, 2, 14, 36, 5); g.fill();
+        g.strokeStyle = 'rgba(255,255,255,.28)'; g.lineWidth = 0.8; tondo(g, -7, 2, 14, 36, 5); g.stroke();
+        g.fillStyle = 'rgba(255,255,255,.6)';
+        for (q = 0; q < 3; q++) for (c = 0; c < 2; c++) { g.beginPath(); g.arc(-3 + c * 6, 17 + q * 6, 1.4, 0, 6.283); g.fill(); }
+        g.globalAlpha = 0.35 + led * 0.65; g.fillStyle = rosso; g.beginPath(); g.arc(0, 7, 2.2, 0, 6.283); g.fill();
+        g.globalAlpha = 1; g.restore();
+        lampi = lampi.filter(function (l) { return t - l.t < 1100; });
+        lampi.forEach(function (l) {
+          var e = (t - l.t) / 1100;
+          g.globalAlpha = 1 - e; g.strokeStyle = rosso; g.lineWidth = 1.5;
+          for (q = 0; q < 3; q++) { g.beginPath(); g.arc(l.x, l.y, 7 + q * 7 + e * 16, -2.5, -1.3); g.stroke(); }
+          g.fillStyle = rosso; g.font = '700 16px ui-monospace, monospace'; g.textAlign = 'left';
+          g.fillText('CH ' + (l.n < 10 ? '0' : '') + l.n, l.x + 16, l.y - 18 - e * 12);
+        });
+        g.globalAlpha = 1;
+        return lampi.length > 0 || Math.abs((hot ? 1 : 0) - led) > 0.01;
+      }
+    };
+  };
+
+  // Pulsante (per Torre, 18 nov 2026): il pulsante di chiamata dell'ascensore sulla punta, un anello d'ottone con la
+  // freccia in su; sui link si accende; al clic si illumina del tutto, fa «din» e da lì si allarga un anello di luce.
+  STILI.pulsante = function () {
+    var T = tela(), st = {}, luce = 0, botta = 0, din = [];
+    var ottone = risolvi(CFG.ringColor || '#c9a45c'), lume = risolvi(CFG.dotColor || '#ffd66b');
+    window.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'touch') return;
+      botta = 1; din.push({ x: mx, y: my, t: performance.now() }); if (din.length > 4) din.shift(); chiedi();
+    });
+    return {
+      frame: function (t) {
+        var s = passo(st, t);
+        luce += ((hot ? 1 : 0) - luce) * 0.18 * s; botta *= Math.pow(0.93, s);
+        var g = pulisci(T), acceso = Math.min(1, luce * 0.7 + botta);
+        g.save(); g.translate(mx, my);
+        g.fillStyle = '#26211a'; g.beginPath(); g.arc(0, 0, 12, 0, 6.283); g.fill();
+        g.strokeStyle = ottone; g.lineWidth = 3; g.beginPath(); g.arc(0, 0, 12, 0, 6.283); g.stroke();
+        if (acceso > 0.02) {
+          g.globalAlpha = acceso; g.fillStyle = lume; g.shadowColor = lume; g.shadowBlur = 10 * acceso;
+          g.beginPath(); g.arc(0, 0, 8.5, 0, 6.283); g.fill(); g.shadowBlur = 0; g.globalAlpha = 1;
+        }
+        g.fillStyle = acceso > 0.5 ? '#26211a' : ottone;
+        g.beginPath(); g.moveTo(0, -5); g.lineTo(4.6, 2.6); g.lineTo(-4.6, 2.6); g.closePath(); g.fill();
+        g.restore();
+        din = din.filter(function (d) { return t - d.t < 1000; });
+        din.forEach(function (d) {
+          var e = (t - d.t) / 1000;
+          g.globalAlpha = 1 - e; g.strokeStyle = lume; g.lineWidth = 2 * (1 - e) + 0.5;
+          g.beginPath(); g.arc(d.x, d.y, 14 + e * 30, 0, 6.283); g.stroke();
+          g.fillStyle = lume; g.font = 'italic 700 14px Georgia, serif'; g.textAlign = 'center';
+          g.fillText('din', d.x, d.y - 24 - e * 20);
+        });
+        g.globalAlpha = 1;
+        return botta > 0.01 || din.length > 0 || Math.abs((hot ? 1 : 0) - luce) > 0.01;
+      }
+    };
+  };
+
+  // Bilancia (per Scontrino, 18 nov 2026): il quadrante di una bilancia da banco sulla punta; la lancetta segna quanto
+  // ti muovi (fino a un chilo) e torna a zero quando ti fermi; sui link segna «€»; al clic esce un pezzo di scontrino
+  // col peso, che cade girando.
+  STILI.bilancia = function () {
+    var T = tela({ mondo: true }), st = {}, peso = 0, euro = 0, strappi = [], ux = null, uy = null;
+    var smalto = risolvi(CFG.ringColor || '#f2efe6'), rosso = risolvi(CFG.dotColor || '#d8342b'), china = '#1f1c18';
+    window.addEventListener('pointerdown', function (e) {
+      if (meno || e.pointerType === 'touch') return;
+      strappi.push({ x: mx, y: my, t: performance.now(), g: Math.max(50, Math.round(peso / 10) * 10), r: (Math.random() - 0.5) * 0.6 });
+      if (strappi.length > 5) strappi.shift(); chiedi();
+    });
+    function kg(gr) { return (gr / 1000).toFixed(3).replace('.', ',') + ' kg'; }
+    return {
+      frame: function (t) {
+        var s = passo(st, t), corsa = 0;
+        if (ux !== null) { if (!meno) corsa = Math.hypot(mx - ux, my - uy); }
+        ux = mx; uy = my;
+        peso += (Math.min(1000, corsa * 45) - peso) * 0.12 * s;
+        euro += ((hot ? 1 : 0) - euro) * 0.16 * s;
+        var g = pulisci(T), a = -2.3 + 4.6 * Math.min(1, peso / 1000), k;
+        g.save(); T.glifo(g, mx, my);
+        g.fillStyle = smalto; g.beginPath(); g.arc(0, 0, 15, 0, 6.283); g.fill();
+        g.strokeStyle = china; g.lineWidth = 1.6; g.stroke();
+        g.lineWidth = 0.8;
+        for (k = 0; k <= 10; k++) {
+          var b = -2.3 + 4.6 * k / 10, l = k % 5 ? 2.5 : 4.5;
+          g.beginPath(); g.moveTo(Math.sin(b) * (13 - l), -Math.cos(b) * (13 - l)); g.lineTo(Math.sin(b) * 13, -Math.cos(b) * 13); g.stroke();
+        }
+        g.strokeStyle = rosso; g.lineWidth = 1.5; g.beginPath(); g.moveTo(0, 0); g.lineTo(Math.sin(a) * 11, -Math.cos(a) * 11); g.stroke();
+        g.fillStyle = china; g.beginPath(); g.arc(0, 0, 1.8, 0, 6.283); g.fill();
+        g.font = '700 9px ui-monospace, monospace'; g.textAlign = 'center';
+        g.fillText(euro > 0.5 ? '€' : Math.round(peso / 10) * 10 + ' g', 0, 26);
+        g.restore();
+        strappi = strappi.filter(function (q) { return t - q.t < 1600; });
+        strappi.forEach(function (q) {
+          var e = (t - q.t) / 1600, y = q.y + 16 + e * e * 160, w = 58, h = 26, z;
+          g.save(); g.globalAlpha = e < 0.7 ? 1 : 1 - (e - 0.7) / 0.3;
+          g.translate(q.x, y); g.rotate(q.r + e * q.r * 3);
+          g.fillStyle = '#fbfaf5'; g.beginPath(); g.moveTo(-w / 2, -h / 2); g.lineTo(w / 2, -h / 2); g.lineTo(w / 2, h / 2);
+          for (z = 0; z < 8; z++) g.lineTo(w / 2 - (z + 0.5) * w / 8, h / 2 + (z % 2 ? 0 : 3));
+          g.lineTo(-w / 2, h / 2); g.closePath(); g.fill();
+          g.strokeStyle = 'rgba(0,0,0,.12)'; g.lineWidth = 0.6; g.stroke();
+          g.fillStyle = china; g.font = '600 9px ui-monospace, monospace'; g.textAlign = 'center';
+          g.fillText('1 x ' + kg(q.g), 0, 3);
+          g.restore();
+        });
+        g.globalAlpha = 1;
+        return peso > 1 || strappi.length > 0 || Math.abs((hot ? 1 : 0) - euro) > 0.01;
       }
     };
   };

@@ -3,6 +3,13 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.1254 - 2026-11-19 (Altri cinque temi fuori dal comune)
+- Nella Vetrina e nel selettore cinque temi nuovi, ognuno con un passaggio fra le sezioni che non si era mai visto. Dorso (legatoria a Firenze): il sito si sfoglia, la copertina di cuoio si apre e le sezioni girano come pagine. Lanterna (escape room a Genova): il sito è al buio e si vede solo dove punti la torcia. Zapping (cineclub a Torino): il televisore si spegne come un vecchio tubo e il sito cambia canale, con la neve fra un canale e l'altro. Torre (B&B in una torre a San Gimignano): il sito è un ascensore, le porte si chiudono e si riaprono sul piano dopo. Scontrino (salumeria a Bologna): il sito esce dalla stampante come uno scontrino.
+
+## v1.4.1246 - 2026-11-18 (Sezioni che si sfogliano, cambiano canale e salgono in ascensore)
+- Sezioni → Stile → Effetto sticky: tre passaggi nuovi. «Pagina»: ogni sezione gira come la pagina di un libro e scopre la successiva («Arriva da» sceglie il lato: libro, libro giapponese, calendario). «Canali»: fra una sezione e l'altra la neve del televisore, e in alto a destra il numero del canale col suo nome. «Ascensore»: le porte si chiudono, la fila dei piani in basso cambia piano e le porte si riaprono sulla sezione dopo. «Etichetta» dà il nome al canale o al piano, «Colore» al numero del canale o al metallo delle porte.
+- Avanzate → Effetti mouse: cinque cursori nuovi. Segnalibro (il nastro che dondola, l'angolo della pagina che si piega al clic), Torcia (la pagina al buio, si vede dove punti; resta anche su telefoni e tablet, con la luce al centro dello schermo, e l'interruttore in basso a sinistra accende la luce), Telecomando, Pulsante dell'ascensore, Bilancia.
+
 ## v1.4.1245 - 2026-11-18 (Ruota Libera e Doppio Senso al telefono)
 - Ruota Libera al telefono: i testi dell'apertura partono sotto la testata (l'occhiello le stava sotto, dietro al logo e a «Partecipa»), e le scritte sul copertone sono più corte e più vicine, così restano dentro lo schermo e «Ciclofficina» sta su una riga.
 - Doppio Senso al telefono: «Italiano» in cima alla metà sinistra non sta più sopra il logo.

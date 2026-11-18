@@ -43,7 +43,13 @@ export const CURSORI = [
   ['raggi', 'Raggi (ruota di bici che gira, campanello al clic)'],
   ['oculare', 'Oculare (reticolo del microscopio, a fuoco quando ti fermi)'],
   ['doppione', 'Doppione (il gemello allo specchio dall’altra parte dello schermo)'],
+  ['segnalibro', 'Segnalibro (il nastro che dondola, l’angolo della pagina al clic)'],
+  ['torcia', 'Torcia (la pagina al buio, si vede dove punti; resta anche sul telefono)'],
+  ['telecomando', 'Telecomando (il led sui link, il numero del canale al clic)'],
+  ['pulsante', 'Pulsante dell’ascensore (si accende sui link, «din» al clic)'],
+  ['bilancia', 'Bilancia (la lancetta pesa quanto ti muovi, lo scontrino al clic)'],
 ];
 
 // Gli stili che mostrano una parola (la «Parola del cursore», label_text).
-export const CURSORI_CON_PAROLA = ['etichetta', 'testo', 'cartellino'];
+// La Torcia la usa per l'interruttore che accende la luce (di serie «Luce»).
+export const CURSORI_CON_PAROLA = ['etichetta', 'testo', 'cartellino', 'torcia'];

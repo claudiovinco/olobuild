@@ -35,6 +35,9 @@ def testimonianza(K, t, testo, nome, ruolo, size=34, linea=None):
     return t.classic('testimonial', {
         'quote': testo, 'author_name': nome, 'author_role': ruolo, 'avatar': '', 'rating': '', 'text_color': C['testo'],
         'star_color': C['acc'], 'author_color': C['tenue'], 'quote_accent_color': C['acc'], 'quote_font': 'heading',
+        # il corsivo della citazione solo nei temi col corsivo vero: di serie è acceso, e con un carattere dei titoli
+        # senza corsivo (Cinzel, Bungee, Marcellus) il browser lo inclinava finto (19 nov 2026)
+        'quote_italic': bool(K.corsivo),
         'quote_size': size, 'author_uppercase': True, 'quote_uppercase': False, 'layout': 'editorial', 'show_line': True,
         'line_color': linea or C['acc']}, style={})
 
