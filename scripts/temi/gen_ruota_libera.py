@@ -89,56 +89,64 @@ def apertura(t):
     via = lambda da, a: {'inizio': 0, 'fine': 100, 'tappe': [{'p': 0, 'o': 100, 'y': 0}, {'p': da, 'o': 100, 'y': 0},
                                                              {'p': a, 'o': 0, 'y': -18}, {'p': 100, 'o': 0, 'y': -18}]}
     gira = lambda da: {'inizio': 0, 'fine': 100, 'andamento': 'costante', 'tappe': [{'p': 0, 'r': da}, {'p': 100, 'r': da + 240}]}
-    L = K.veli('rl-velo', 'alto', 36, 62, colore=C['nero'], forza=88, mobile_alto=36)
+    L = K.veli('rl-velo', 'alto', 36, 62, colore=C['nero'], forza=88, mobile_alto=43)
     L += [
         K.livello('rl-ruota', tipo='image', imageSrc=K.img('ruota-libera-ruota.svg'), imageAlt='Una ruota di bici che gira',
                   objectFit='contain', x=14, y=44, w=72, h=128, entra='fadeInUp', ritardo=200, durata=1200,
                   customCSS='transform-origin:50% 50%;', scrollMove=gira(0),
                   responsive={'mobile': {'x': -25, 'y': 50, 'width': 150, 'height': 68.57}}),
     ]
-    for k, (testo, ang) in enumerate((('Ruota Libera', -34), ('ciclofficina popolare', 0), ('Padova · 28 × 1,75', 34))):
+    # sul telefono scritte più corte e più vicine: a ±34° uscivano dallo schermo («uota Libera», «Padova · 28 × 1»)
+    # e «ciclofficina popolare» andava su due righe
+    for k, (testo, ang, tel, ang_tel) in enumerate((('Ruota Libera', -34, 'Ruota Libera', -27),
+                                                    ('ciclofficina popolare', 0, 'ciclofficina', 0),
+                                                    ('Padova · 28 × 1,75', 34, 'Padova', 27))):
         comune = dict(contenuto=testo, size=14, peso='700', colore=mix(C['chiaro'], 82), align='center', letterSpacing=4,
                       textTransform='uppercase', fontFamily=MONO, lineHeight=1.0, entra='fadeIn', ritardo=900, durata=900,
                       scrollMove=gira(ang))
         L.append(K.livello('rl-fianco%d' % k, x=39, y=45.7, w=22, h=3, customCSS='transform-origin:50% 2077%;',
                            responsive={'mobile': {'visible': False}}, **comune))
-        L.append(K.livello('rl-fianco%dt' % k, x=0, y=0, w=0.1, h=0.1, customCSS='transform-origin:50% 1861%;',
-                           responsive={'mobile': {'x': 30, 'y': 50.8, 'width': 40, 'height': 1.8, 'fontSize': 20}},
-                           **dict(comune, contenuto=testo)))
+        # la stessa scritta per il telefono, col perno sul centro della ruota del telefono: nascosta al computer
+        # (prima era un riquadro di 0,1 % nell'angolo e le lettere, una per riga, giravano accanto al logo)
+        L.append(K.livello('rl-fianco%dt' % k, x=30, y=50.8, w=40, h=1.8, visible=False,
+                           customCSS='transform-origin:50% 1861%;',
+                           responsive={'mobile': {'visible': True, 'x': 30, 'y': 50.8, 'width': 40, 'height': 1.8,
+                                                  'fontSize': 20}},
+                           **dict(comune, contenuto=tel, letterSpacing=3, scrollMove=gira(ang_tel))))
     L += [
         K.livello('rl-o', contenuto='Ruota Libera · ciclofficina popolare · Padova', x=10, y=9, w=80, size=13, peso='600',
                   colore=mix(C['chiaro'], 86), align='center', letterSpacing=3, textTransform='uppercase', fontFamily=MONO,
-                  ritardo=150, responsive={'mobile': {'fontSize': m(10), 'x': 4, 'y': 5.4, 'width': 92}}),
+                  ritardo=150, responsive={'mobile': {'fontSize': m(10), 'x': 4, 'y': 12.4, 'width': 92}}),
         # prima frase
         K.livello('rl-t1', contenuto='La bici si aggiusta.', tag='h1', x=6, y=14, w=88, size=92, peso='800',
                   colore=C['chiaro'], align='center', fontFamily=FONT_T, lineHeight=1.0, entra='fadeInUp', ritardo=300,
-                  durata=900, scrollMove=via(26, 34), responsive={'mobile': {'fontSize': m(46), 'x': 5, 'y': 9, 'width': 90}}),
+                  durata=900, scrollMove=via(26, 34), responsive={'mobile': {'fontSize': m(46), 'x': 5, 'y': 16.0, 'width': 90}}),
         K.livello('rl-t1b', contenuto='Insieme.', x=6, y=26, w=88, size=92, peso='800', colore=C['acc'], align='center',
                   fontFamily=FONT_T, lineHeight=1.0, entra='fadeInUp', ritardo=450, durata=900, scrollMove=via(26, 34),
-                  responsive={'mobile': {'fontSize': m(46), 'x': 5, 'y': 20.6, 'width': 90}}),
+                  responsive={'mobile': {'fontSize': m(46), 'x': 5, 'y': 27.6, 'width': 90}}),
         K.livello('rl-sub', contenuto='Porti la tua bici, trovi gli attrezzi e qualcuno che ti mostra come si fa.',
                   x=24, y=38.5, w=52, size=20, peso='500', colore=mix(C['chiaro'], 90), align='center', lineHeight=1.4,
-                  ritardo=600, scrollMove=via(26, 34), responsive={'mobile': {'fontSize': m(16), 'x': 8, 'y': 27, 'width': 84}}),
+                  ritardo=600, scrollMove=via(26, 34), responsive={'mobile': {'fontSize': m(16), 'x': 8, 'y': 34.0, 'width': 84}}),
         # seconda frase
         K.livello('rl-t2', contenuto='Si paga<br>quello che si può.', x=6, y=15, w=88, size=88, peso='800', colore=C['chiaro'],
                   align='center', fontFamily=FONT_T, lineHeight=1.0, entra='fadeIn', ritardo=0, scrollMove=poi(36, 44, 60, 66),
-                  responsive={'mobile': {'fontSize': m(44), 'x': 5, 'y': 10, 'width': 90}}),
+                  responsive={'mobile': {'fontSize': m(44), 'x': 5, 'y': 17.0, 'width': 90}}),
         K.livello('rl-t2s', contenuto='Un’offerta per gli attrezzi e i ricambi: chi non può, non paga.', x=24, y=38, w=52,
                   size=20, peso='500', colore=mix(C['chiaro'], 90), align='center', lineHeight=1.4, entra='fadeIn', ritardo=0,
-                  scrollMove=poi(38, 46, 60, 66), responsive={'mobile': {'fontSize': m(16), 'x': 8, 'y': 28.4, 'width': 84}}),
+                  scrollMove=poi(38, 46, 60, 66), responsive={'mobile': {'fontSize': m(16), 'x': 8, 'y': 35.4, 'width': 84}}),
         # terza frase e pulsanti
         K.livello('rl-t3', contenuto='Martedì e giovedì,<br>dalle 18 alle 21.', x=6, y=15, w=88, size=88, peso='800',
                   colore=C['acc2'], align='center', fontFamily=FONT_T, lineHeight=1.0, entra='fadeIn', ritardo=0,
-                  scrollMove=poi(68, 76), responsive={'mobile': {'fontSize': m(44), 'x': 5, 'y': 10, 'width': 90}}),
+                  scrollMove=poi(68, 76), responsive={'mobile': {'fontSize': m(44), 'x': 5, 'y': 17.0, 'width': 90}}),
         K.livello('rl-b1', tipo='button', contenuto='Vieni in officina', x=36, y=39, w='auto', size=15, peso='700',
                   colore=C['on_acc'], bgColor=C['acc'], padding=18, borderRadius=999, buttonUrl=OFFICINA, entra='fadeIn',
                   ritardo=0, scrollMove=poi(76, 84), hover={'bgColor': C['acc2'], 'duration': 250},
-                  responsive={'mobile': {'x': 8, 'y': 29.6, 'fontSize': m(13)}}),
+                  responsive={'mobile': {'x': 8, 'y': 36.6, 'fontSize': m(13)}}),
         K.livello('rl-b2', tipo='button', contenuto='La bici sospesa', x=52, y=39, w='auto', size=15, peso='700',
                   colore=C['chiaro'], bgColor='transparent', padding=18, borderRadius=999, borderWidth=1,
                   borderColor=mix(C['chiaro'], 60), buttonUrl=SOSPESA, entra='fadeIn', ritardo=0, scrollMove=poi(76, 84),
                   hover={'bgColor': mix(C['chiaro'], 14), 'duration': 250},
-                  responsive={'mobile': {'x': 52, 'y': 29.6, 'fontSize': m(13)}}),
+                  responsive={'mobile': {'x': 52, 'y': 36.6, 'fontSize': m(13)}}),
     ]
     sl = [K.diapositiva('rl-1', K.sfondo_video(V_OFFICINA, overlay=0.32, colore=C['nero']), L, durata=600000)]
     return K.proslider(t, sl, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='fade', showArrows=False, showDots=False,

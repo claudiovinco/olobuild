@@ -3,6 +3,14 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.1245 - 2026-11-18 (Ruota Libera e Doppio Senso al telefono)
+- Ruota Libera al telefono: i testi dell'apertura partono sotto la testata (l'occhiello le stava sotto, dietro al logo e a «Partecipa»), e le scritte sul copertone sono più corte e più vicine, così restano dentro lo schermo e «Ciclofficina» sta su una riga.
+- Doppio Senso al telefono: «Italiano» in cima alla metà sinistra non sta più sopra il logo.
+
+## v1.4.1243 - 2026-11-18 (Slider Pro: un livello solo per il telefono)
+- Slider Pro → livello → Posizione: «Visibile su Desktop» c'è anche sul computer. Così un livello si nasconde al computer e si rimette «Visibile su Mobile» solo per il telefono. Prima non si poteva, e i temi lo tenevano grande un pixel nell'angolo in alto a sinistra: in Ruota Libera le lettere della scritta sul fianco della ruota giravano accanto al logo.
+- Slider Pro: un livello nascosto sul notebook o sul tablet e rimesso «Visibile su Mobile» si vede anche sul sito, come già nell'editor. Prima la regola del tablet valeva anche per il telefono.
+
 ## v1.4.1242 - 2026-11-18 (Cinque temi fuori dal comune)
 - Nella Vetrina e nel selettore cinque temi nuovi, ognuno con un modo diverso di scorrere la pagina. Tornanti (noleggio di e-bike a Bormio): il sito va a tornanti, un po’ a destra, un po’ in giù e un po’ a sinistra, e una bici segue la strada disegnata sopra la valle. Ruota Libera (ciclofficina a Padova): le sezioni stanno sul bordo di una ruota che gira mentre scorri. Persiana (agenzia immobiliare a Lucca): la facciata si allontana e scopre il salotto. Vetrino (laboratorio di analisi a Parma): uno zoom che dal volto arriva alla molecola. Doppio Senso (traduttori a Trieste): le due metà della pagina scorrono in senso contrario.
 

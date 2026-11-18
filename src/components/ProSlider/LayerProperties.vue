@@ -278,8 +278,9 @@
               >{{ t('Reset tutti') }}</button>
             </div>
           </div>
-          <!-- Visibility toggle per breakpoint -->
-          <div v-if="activeBreakpoint !== 'desktop'" class="mb-mb-2">
+          <!-- Visibility toggle per breakpoint (anche Desktop: un livello solo per il telefono si nasconde qui e si
+               rimette «Visibile su Mobile»; gli schermi senza valore ereditano dal più grande, come sul sito) -->
+          <div class="mb-mb-2">
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="rv('visible') !== false" @change="up('visible', $event.target.checked)" class="mb-rounded" />
               <span class="mps-label mb-mb-0">{{ t('Visibile su') }} {{ nomeSchermo }}</span>

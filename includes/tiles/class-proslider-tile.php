@@ -1637,6 +1637,58 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
 
     /* ─── Responsive Media Queries ───────────────────────── */
 
+    /** La fascia di larghezze di ogni formato, dal più grande (le soglie di generate_responsive_css). */
+    private const FASCE_FORMATO = [
+        'desktop'  => '(min-width:1240.02px)',
+        'notebook' => '(min-width:1024.02px) and (max-width:1240px)',
+        'tablet'   => '(min-width:640.02px) and (max-width:1024px)',
+        'mobile'   => '(max-width:640px)',
+    ];
+
+    /**
+     * Il livello si vede in questo formato? Ogni formato eredita dal più grande, come nell'editor (rv() di
+     * LayerProperties): il computer è il livello stesso (`visible`), gli altri le sue regole per formato.
+     */
+    private function visibile_nel_formato( $layer, $formato ) {
+        $visibile = ! ( isset( $layer['visible'] ) && false === $layer['visible'] );
+        if ( 'desktop' === $formato ) {
+            return $visibile;
+        }
+        $resp = is_array( $layer['responsive'] ?? null ) ? $layer['responsive'] : [];
+        foreach ( [ 'notebook', 'tablet', 'mobile' ] as $f ) {
+            $ov = $resp[ $f ] ?? null;
+            if ( is_array( $ov ) && isset( $ov['visible'] ) && is_bool( $ov['visible'] ) ) {
+                $visibile = $ov['visible'];
+            }
+            if ( $f === $formato ) {
+                break;
+            }
+        }
+        return $visibile;
+    }
+
+    /**
+     * I livelli nascosti, formato per formato, ognuno nella sua sola fascia. Prima il display:none di un formato
+     * valeva per tutti quelli più piccoli: un livello nascosto sul tablet e «Visibile su Mobile» si vedeva nell'editor
+     * ma non sul sito, e un livello solo per il telefono non si poteva fare (si teneva grande un pixel al computer).
+     */
+    private function visibilita_css( $uid, $livelli ) {
+        $css = '';
+        foreach ( self::FASCE_FORMATO as $formato => $fascia ) {
+            $sel = [];
+            foreach ( $livelli as $layer ) {
+                $id = $layer['id'] ?? '';
+                if ( $id && ! $this->visibile_nel_formato( $layer, $formato ) ) {
+                    $sel[] = '#' . $uid . ' .mps-layer-' . esc_attr( $id );
+                }
+            }
+            if ( $sel ) {
+                $css .= '@media' . $fascia . '{' . implode( ',', $sel ) . '{display:none!important}}';
+            }
+        }
+        return $css;
+    }
+
     private function generate_responsive_css( $uid, $settings, $slides, $desktop_height ) {
         $breakpoints = [
             'notebook' => 1240,
@@ -1644,6 +1696,16 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             'mobile'   => 640,
         ];
         $css = '';
+
+        // Valgono anche per i livelli globali, che prima restavano fuori.
+        $tutti_livelli = [];
+        foreach ( $slides as $slide ) {
+            if ( empty( $slide['layers'] ) || ! is_array( $slide['layers'] ) ) continue;
+            foreach ( $slide['layers'] as $layer ) { $tutti_livelli[] = $layer; }
+        }
+        foreach ( ( is_array( $settings['globalLayers'] ?? null ) ? $settings['globalLayers'] : [] ) as $layer ) {
+            $tutti_livelli[] = $layer;
+        }
 
         foreach ( $breakpoints as $bp_name => $max_width ) {
             $rules = '';
@@ -1682,15 +1744,6 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             // Layer responsive overrides. Posizione e misura del livello sono IN LINEA (render_layer): senza
             // !important nessuna regola per formato le batteva. La dimensione del carattere sta sull'elemento
             // del testo (render_layer_content, in linea anche lei): la regola va lì, non sul contenitore.
-            // Valgono anche per i livelli globali, che prima restavano fuori.
-            $tutti_livelli = [];
-            foreach ( $slides as $slide ) {
-                if ( empty( $slide['layers'] ) || ! is_array( $slide['layers'] ) ) continue;
-                foreach ( $slide['layers'] as $layer ) { $tutti_livelli[] = $layer; }
-            }
-            foreach ( ( is_array( $settings['globalLayers'] ?? null ) ? $settings['globalLayers'] : [] ) as $layer ) {
-                $tutti_livelli[] = $layer;
-            }
             {
                 foreach ( $tutti_livelli as $layer ) {
                     $resp = $layer['responsive'] ?? [];
@@ -1702,10 +1755,10 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
 
                     $props = '';
 
-                    // Visibility
-                    if ( isset( $ov['visible'] ) && $ov['visible'] === false ) {
-                        $props .= 'display:none!important;';
-                    } else {
+                    // Nascosto in questo formato (anche per eredità da uno più grande): niente posizione né misura,
+                    // il display:none sta nelle regole per fascia di visibilita_css().
+                    if ( ! $this->visibile_nel_formato( $layer, $bp_name ) ) continue;
+                    {
                         if ( isset( $ov['x'] ) ) {
                             $props .= 'left:' . floatval( $ov['x'] ) . '%!important;';
                         }
@@ -1753,6 +1806,6 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             }
         }
 
-        return $css;
+        return $css . $this->visibilita_css( $uid, $tutti_livelli );
     }
 }

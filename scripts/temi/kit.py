@@ -393,14 +393,17 @@ class Kit:
         if mobile_alto is not None:
             # testi in alto sul telefono: il velo scende dall'alto fin poco sotto l'ultimo testo
             ha = min(100, mobile_alto + 12)
-            return [desk, self.livello(lid + 'm', tipo='shape', x=0, y=0, w=0.1, h=0.1,
+            # il velo del telefono è nascosto al computer (visible False) e torna sul telefono: prima era grande
+            # 0,1 × 0,1 % nell'angolo, e lo Slider Pro non sapeva nascondere un livello al computer (1.4.1243)
+            return [desk, self.livello(lid + 'm', tipo='shape', x=0, y=0, w=100, h=ha, visible=False,
                                        shapeGradient=g(180, round(mobile_alto / ha * 100)), entra='fadeIn', ritardo=0,
                                        durata=600, esce='fadeOut',
-                                       responsive={'mobile': {'x': 0, 'y': 0, 'width': 100, 'height': ha}})]
+                                       responsive={'mobile': {'visible': True, 'x': 0, 'y': 0, 'width': 100, 'height': ha}})]
         return [desk,
-                self.livello(lid + 'm', tipo='shape', x=0, y=0, w=0.1, h=0.1, shapeGradient=g(0, round((100 - mobile_da) / hm * 100)),
+                self.livello(lid + 'm', tipo='shape', x=0, y=mobile_da - 10, w=100, h=hm, visible=False,
+                             shapeGradient=g(0, round((100 - mobile_da) / hm * 100)),
                              entra='fadeIn', ritardo=0, durata=600, esce='fadeOut',
-                             responsive={'mobile': {'x': 0, 'y': mobile_da - 10, 'width': 100, 'height': hm}})]
+                             responsive={'mobile': {'visible': True, 'x': 0, 'y': mobile_da - 10, 'width': 100, 'height': hm}})]
 
     @staticmethod
     def formati_intermedi(livelli):

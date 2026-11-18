@@ -98,7 +98,7 @@ def apertura(t):
                   responsive={'mobile': {'x': 49.8, 'y': 0, 'width': 0.4, 'height': 100}}),
         K.livello('ds-it', contenuto='Italiano', x=4, y=6, w=40, size=13, peso='600', colore=mix(C['chiaro'], 86),
                   letterSpacing=3, textTransform='uppercase', fontFamily=MONO, ritardo=200,
-                  responsive={'mobile': {'fontSize': m(10), 'x': 4, 'y': 4.4, 'width': 42}}),
+                  responsive={'mobile': {'fontSize': m(10), 'x': 4, 'y': 12.4, 'width': 42}}),  # sotto la testata (85 px)
         K.livello('ds-en', contenuto='English', x=56, y=90, w=40, size=13, peso='600', colore=mix(C['chiaro'], 86),
                   align='right', letterSpacing=3, textTransform='uppercase', fontFamily=MONO, ritardo=200,
                   responsive={'mobile': {'fontSize': m(10), 'x': 54, 'y': 94, 'width': 42}}),
