@@ -3,6 +3,64 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.1230 - 2026-11-18 (Vetrina: Capriola com'è adesso)
+- Vetrina dei temi: le anteprime di Capriola (foto del computer e del telefono, video) mostrano l'apertura nuova, col solo video tondo.
+
+## v1.4.1229 - 2026-11-18 (Capriola: la ragazza nel tondo e il pulsante pericoloso)
+- Capriola: nell'apertura resta solo l'acrobata a testa in giù nel video tondo, che scorrendo fa mezzo giro e la rimette dritta. Niente più corda, niente cerchio d'acciaio e niente dondolio.
+- Capriola: nella sezione «Chi è a testa in giù?» c'è il pulsante «Non cliccare 5 volte, pericolo». Chi lo preme cinque volte vede il sito capovolgersi per tre secondi e poi la scritta «Te l'avevamo detto.». Con il movimento ridotto resta solo la scritta. È la Sorpresa nascosta delle Avanzate, che si può mettere su qualsiasi tile.
+
+## v1.4.1228 - 2026-11-18 (Il marchio del piè di pagina nella prima colonna)
+- Piè di pagina dei temi: il logo e il nome stanno in cima alla prima colonna, sopra la presentazione e i contatti, alla misura di un marchio (il logo alto circa 40 px, al massimo largo 200; il nome scritto al massimo 32 px). Prima, in 98 temi, avevano una riga tutta per sé e il logo si allargava fino a 1200 px. Sistemati 149 piè di pagina.
+- Tile Immagine: un numero senza unità in Larghezza, Altezza o Larghezza massima vale in px. «220» in Larghezza massima era scartato in silenzio dal browser e l'immagine prendeva tutta la colonna.
+- Girandola: il logo nuovo, in Epilogue, si vede anche nei browser che avevano già scaricato quello di prima.
+
+## v1.4.1227 - 2026-11-18 (Vetrina: le anteprime in movimento intere)
+- Vetrina dei temi: le anteprime in movimento sono registrate in 4:3, come il riquadro delle schede. Prima erano 16:10 e, per riempire il riquadro, perdevano un pezzo a destra e a sinistra; ora mostrano tutta la larghezza della pagina e coincidono con la foto della scheda, così quando parte il video non salta niente. Rifatte per tutti i 201 temi.
+- Capriola, Abbaglio e Girandola hanno le loro anteprime nella Vetrina (foto del computer e del telefono, video); nell'elenco delle sale di Abbaglio i nomi stanno nel carattere del testo, così al telefono non escono dalla riga.
+
+## v1.4.1226 - 2026-11-18 (I loghi del piè di pagina, piccoli)
+- Nei piè di pagina dei temi il nome del marchio non è più gigante: il nome scritto va a 36 px (32 sul tablet, 28 sul telefono) e il logo in immagine ha l'altezza di una testata, come nei siti classici. Le disposizioni restano (in fondo, in cima, nella prima colonna, al centro). Cambiano 131 temi.
+- Girandola: i titoli e il nome in Epilogue grassetto, forti ma senza l'aria da festa per bambini; le lettere dell'apertura sono misurate sul carattere vero, al computer e al telefono, così la parola che arriva in cielo ha le spaziature giuste. Lo stesso per le lettere di Abbaglio.
+
+## v1.4.1225 - 2026-11-18 (Tre temi che si scoprono scorrendo)
+- Tre temi nuovi, fatti per far venire voglia di scorrere. Capriola, scuola di acrobatica aerea a Bologna: un'acrobata a testa in giù nel cerchio, e scorrendo il cerchio fa mezzo giro e lei torna dritta mentre le parole finiscono sottosopra. Abbaglio, museo delle illusioni a Genova: le lettere del nome sparse sopra una spirale si incastrano in un solo punto dello scorrimento, e più giù due griglie ferme fanno nascere onde che non ci sono. Girandola, fuochi d'artificio a Napoli: le lettere aspettano a terra come razzi, poi partono una alla volta e scoppiano in cielo.
+- Tre cursori nuovi in Effetti di pagina › Cursore: il cerchio aereo che dondola e fa la capriola sui link, la spirale dell'ipnosi, la miccia con le faville e il fuoco d'artificio al clic.
+
+## v1.4.1224 - 2026-11-18 (Il piè di pagina che si scopre, anche con la Luce di pagina)
+- Piè di pagina «Si scopre da sotto»: sulle pagine con la Luce di pagina (lo strato di colore che segue le sezioni) il piè di pagina restava coperto da quella luce e non si vedeva scoprirsi. Ora la luce si ferma dove finisce la pagina, e il piè di pagina compare mentre la pagina sale. Lightbox e popup della pagina restano interi.
+
+## v1.4.1223 - 2026-11-18 (Caso studio: sul telefono una colonna sotto l'altra)
+- La pagina «Caso studio di un progetto» di Blocchi & Pagine: sul telefono la scheda del progetto, i testi della sfida e della soluzione, le due foto e i crediti vanno uno sotto l'altro («Impila su mobile» nelle righe a più colonne). Prima restavano affiancati e stretti.
+
+## v1.4.1222 - 2026-11-18 (Blocchi & Pagine: il Caso studio con la sua miniatura)
+- La pagina «Caso studio di un progetto» ha la sua miniatura in Blocchi & Pagine, e il link al progetto vicino sta sul fondo della pagina invece che in un riquadro colorato quasi vuoto.
+
+## v1.4.1221 - 2026-11-18 (Cric: lo schermo del cruscotto su tablet e notebook)
+- Tema Cric: lo schermo del cruscotto dice nell'ordine il sistema, la spia, il prezzo e poi cosa può essere, così la spiegazione, che sui tablet si allunga, non copre più il prezzo (fino a 1024 px il prezzo non si vedeva). Su tablet e notebook il cruscotto è un po' più grande e la riga «Cric · officina meccanica · Torino» sta sotto la testata del sito invece che sotto il suo bordo. Le anteprime del tema nella Vetrina (le foto e il video) mostrano il cruscotto nuovo.
+
+## v1.4.1220 - 2026-11-18 (Cric: il cruscotto in basso, con la strada sopra)
+- Tema Cric: il cruscotto dell'apertura è più basso e più piccolo, e sopra si vede la strada che scorre. È disegnato da capo, più vero: la plancia con la palpebra cucita, i quadranti con la ghiera cromata, i numeri retroilluminati, la zona rossa, gli aghi affusolati col perno e il riflesso del vetro, l'orologio e il contachilometri sui piccoli display, lo schermo in mezzo con la sua cornice. Le spie e i testi dello schermo seguono il disegno, al computer e al telefono.
+- Gradini di luce: le barre accostate non lasciano più un filo di fondo fra l'una e l'altra.
+
+## v1.4.1219 - 2026-11-18 (Vetrina: «Affina per stile» leggibile sui fondi scuri)
+- Vetrina dei temi: i selettori di «Affina per stile» (gesto, fondo, carattere, colore) prendono il colore dei filtri e della ricerca, come le pillole delle categorie. Su un fondo scuro restavano scuri e non si leggevano; anche l'elenco che si apre ha il suo fondo chiaro.
+- Immagine disegnata: quando lo Stile globale non ha un carattere dei titoli (i temi lo mettono nelle loro pagine), il titolo si scrive in Inter invece di non disegnare l'immagine.
+
+## v1.4.1218 - 2026-11-18 (Idee dai siti d'ispirazione)
+- Sfondo › Grana: un velo di grana fine sopra qualsiasi sfondo (tinta, gradiente, foto, video), come la carta o la pellicola. Fra i Generativi arrivano i «Gradini di luce» (bande di colore che salgono dal basso, a scalini netti o morbidi), fra i Gradienti mesh la «Seta» e fra i Pattern il Vichy e i Mezzitoni.
+- Piè di pagina: in Impostazioni pagina del template del piè di pagina, «Si scopre da sotto»: il piè di pagina resta fermo in fondo e la pagina, scorrendo via, lo scopre come un sipario.
+- Impostazioni pagina › «Passaggio fra le pagine», per tutto il sito: la pagina nuova arriva in dissolvenza, sale come una tendina, entra con uno zoom o si apre in un cerchio dal punto del clic (Chrome, Edge e Safari recenti; per chi chiede meno movimento resta fermo).
+- Vetrina dei temi: passando su un tema parte la sua anteprima in movimento (dieci secondi della pagina vera; anche nel selettore dei temi del builder), e la barra «Affina per stile» filtra per gesto dell'apertura, fondo chiaro o scuro, carattere e colore, coi numeri accanto.
+- Titolo: la misura «Riempie la larghezza» porta la riga da un bordo all'altro della sua colonna, a ogni larghezza dello schermo.
+- Testo su tracciato: il timbro può girare mentre scorri la pagina (avanti scendendo, indietro salendo) e tenere un'icona ferma al centro del cerchio.
+- Filtro sfondo › «Vetro liquido» (Leggero, Medio, Forte): il vetro sfoca e in più deforma quello che c'è dietro, come una lastra spessa. Lo disegnano Chrome ed Edge; negli altri browser resta il vetro sfocato.
+- La tile «Sfondo Goo / Aurora» diventa «Goo / Aurora / Sfera»: la modalità «Sfera di luce» mette dietro la sezione una sfera luminosa che respira, coi colori della palette che girano dentro; la luce segue il puntatore e al clic, o al tocco, la sfera dà un battito.
+- Configurazione › SEO › «Immagine disegnata»: ogni contenuto senza un'immagine di condivisione sua ne ha una 1200 × 630 col titolo, il nome del sito e la foto in evidenza, nel colore e nel carattere del sito (Foto con titolo, Metà e metà, Solo colore). È quella che WhatsApp, Facebook e LinkedIn mostrano quando qualcuno condivide la pagina; si ridisegna da sola quando cambi il titolo o la foto.
+- Il giro guidato del builder: la prima volta, cinque passi indicati sullo schermo (inserisci una tile, cambia lo stile, collega un dato, guarda sul telefono, salva e pubblica). Si rifà dalla finestra delle Scorciatoie.
+- Blocchi & Pagine: la stella mette un blocco nei Preferiti, in cima alle categorie; e la pagina nuova «Caso studio di un progetto» per i portfolio, col titolo, il riassunto e la foto in evidenza presi dal contenuto.
+- Avanzate › «Sorpresa nascosta», su qualsiasi elemento: dopo cinque clic, o col codice Konami, partono i coriandoli, la pagina si capovolge o compare un tuo messaggio.
+
 ## v1.4.1217 - 2026-11-18 (Le aperture che scorrono senza fasce chiare)
 - Slider Pro fermo in cima mentre la pagina scorre: un velo (una sfumatura o un colore trasparente) attaccato al bordo alto o basso della composizione arriva fino al bordo dello schermo. In una finestra più alta del 16:9 (un notebook a 1000 px, un tablet in verticale, uno schermo 16:10) sopra e sotto la composizione restava una fascia chiara senza velo, e il menu sopra il video si leggeva male. Sistemati Elastan, Staffa, Aerostato, Tavola Errante, Pista Nera e gli altri temi con un velo così (18 in tutto); le forme con gli angoli tondi, come il vaso di Clorofilla, restano come sono disegnate.
 

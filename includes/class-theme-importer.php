@@ -68,11 +68,21 @@ class Olobuild_Theme_Importer {
             if ( $lib !== '' && $pm !== '' ) {
                 $screenshot_mobile = $lib . '/themes/' . $theme_id . '/screenshot-mobile-' . $pm . '.jpg?v=' . rawurlencode( $pm );
             }
+            // L'anteprima in movimento (1.4.1218): l'apertura della demo ripresa col gesto del tema, 640×400, 10 s,
+            // anteprima-<preview_video_v>.mp4 nella libreria remota. La Vetrina e il selettore la fanno partire al passaggio.
+            $preview_video = '';
+            $pvv = isset( $data['preview_video_v'] ) ? sanitize_file_name( (string) $data['preview_video_v'] ) : '';
+            if ( $lib !== '' && $pvv !== '' ) {
+                $preview_video = $lib . '/themes/' . $theme_id . '/anteprima-' . $pvv . '.mp4';
+            }
             $themes[] = array_merge( [
                 'id' => $data['id'], 'name' => $data['name'] ?? $theme_id,
                 'description' => $data['description'] ?? '', 'author' => $data['author'] ?? '',
                 'version' => $data['version'] ?? '1.0', 'screenshot' => $screenshot,
                 'screenshot_mobile' => $screenshot_mobile,
+                'preview_video' => $preview_video,
+                // I filtri della Vetrina (1.4.1218, scripts/temi/filtri_vetrina.py): gesto dell'effetto e carattere dei titoli.
+                'filtri' => isset( $data['filtri'] ) && is_array( $data['filtri'] ) ? $data['filtri'] : [],
                 'tags' => $data['tags'] ?? [], 'dir' => $dir, 'created' => (string) ( $data['created'] ?? '' ),
                 // Dipendenza da un plugin esterno (schema: vedi check_requires_plugin).
                 // Null = tema autonomo (99/100). Il selettore mostra badge + «Scopri» quando

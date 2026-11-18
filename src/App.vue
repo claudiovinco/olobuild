@@ -15,7 +15,7 @@
     </a>
     <BuilderToolbar @back="goToList" @open-revisions="onOpenRevisions" @open-finder="openFinder" @open-ai="aiAssistantRef?.open()" @open-library="templateLibraryRef?.open()" @open-themes="themeSelectorRef?.open()" />
     <div class="mb-flex mb-flex-1 mb-overflow-hidden">
-      <BuilderSidebar v-if="!builderStore.previewMode && !sidebarCollapsed" :style="{ width: sidebarWidth + 'px', flexShrink: 0 }" role="complementary" :aria-label="t('Pannello elementi')" @save-as-template="section => templateLibraryRef?.openSaveDialog(section)" />
+      <BuilderSidebar v-if="!builderStore.previewMode && !sidebarCollapsed" data-giro="elementi" :style="{ width: sidebarWidth + 'px', flexShrink: 0 }" role="complementary" :aria-label="t('Pannello elementi')" @save-as-template="section => templateLibraryRef?.openSaveDialog(section)" />
       <!-- Resize handle + collapse toggle -->
       <div v-if="!builderStore.previewMode" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,0.5);border-right:1px solid rgba(0,0,0,0.06)">
         <button @click="toggleSidebar" @mousedown.stop
@@ -43,7 +43,7 @@
         </button>
         <div v-if="!inspectorCollapsed" @mousedown.prevent="startInspectorResize($event)" style="flex:1;width:16px;cursor:col-resize"></div>
       </div>
-      <BuilderInspector v-if="!builderStore.previewMode && !inspectorCollapsed" :style="{ width: inspectorWidth + 'px', flexShrink: 0 }" role="complementary" :aria-label="t('Proprietà')" />
+      <BuilderInspector v-if="!builderStore.previewMode && !inspectorCollapsed" data-giro="inspector" :style="{ width: inspectorWidth + 'px', flexShrink: 0 }" role="complementary" :aria-label="t('Proprietà')" />
     </div>
     <!-- Finder / Ricerca rapida (Ctrl+K) -->
     <BuilderFinder ref="builderFinderRef" />
@@ -55,6 +55,8 @@
     <TemplateLibrary ref="templateLibraryRef" />
     <!-- Temi -->
     <ThemeSelector ref="themeSelectorRef" />
+    <!-- Il giro guidato (1.4.1218): la prima volta in questo browser, poi dalle Scorciatoie -->
+    <GiroGuidato v-if="!builderStore.previewMode" />
     <!-- Insert Panel (clean mode) -->
     <InsertPanel ref="insertPanelRef" @open-library="pos => templateLibraryRef?.open(pos)" />
   </div>
@@ -78,6 +80,7 @@ import AIAssistant from './components/Builder/AIAssistant.vue';
 import TemplateLibrary from './components/Builder/TemplateLibrary.vue';
 import ThemeSelector from './components/Builder/ThemeSelector.vue';
 import InsertPanel from './components/Builder/InsertPanel.vue';
+import GiroGuidato from './components/Builder/GiroGuidato.vue';
 import { annunciaStileSostituito } from './utils/styleSnapshots';
 
 const builderStore = useBuilderStore();

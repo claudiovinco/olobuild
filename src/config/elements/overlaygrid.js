@@ -247,7 +247,7 @@ export default {
     { type: 'separator', label: t('Disposizione') },
     { key: 'layout_mode', label: t('Disposizione'), type: 'select', options: [
       { value: 'uniform', label: t('Griglia') },
-      { value: 'masonry', label: t('Mosaico') },
+      { value: 'masonry', label: t('Mosaico (bento)') },
     ], description: t('Nel mosaico le card con «Cella alta» o «Cella larga» occupano due righe o due colonne; l’altezza diventa quella di una riga.') },
     { key: 'match_height', label: t('Altezza uniforme'), type: 'toggle',
       condition: { field: 'layout_mode', op: 'eq', value: 'uniform' } },

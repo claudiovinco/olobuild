@@ -122,7 +122,7 @@ trait Olobuild_Renderer_Structure_Trait {
         $has_bg_video   = ( $tile_bg['type'] === 'video' && ! empty( $tile_bg['video_url'] ) );
         $has_bg_gallery = ( $tile_bg['type'] === 'gallery' && ! empty( $tile_bg['gallery_images'] ) && is_array( $tile_bg['gallery_images'] ) );
         $has_bg_any     = ( $tile_bg['type'] !== 'none' );
-        $has_overlay    = ( $has_bg_any && ! empty( $tile_bg['overlay_opacity'] ) && intval( $tile_bg['overlay_opacity'] ) > 0 );
+        $has_overlay    = ( $has_bg_any && ! empty( $tile_bg['overlay_opacity'] ) && intval( $tile_bg['overlay_opacity'] ) > 0 ) || Olobuild_CSS_Builder::ha_grana( $tile_bg );
 
         if ( $has_bg_image || $has_bg_video || $has_bg_gallery ) {
             $classes[] = 'uk-position-relative';
@@ -312,7 +312,7 @@ trait Olobuild_Renderer_Structure_Trait {
         if ( '' !== $cursore_sez ) {
             $html .= ' data-olo-cursore="' . esc_attr( $cursore_sez ) . '"';
         }
-        $html .= $scrollspy_attr . $el_parallax_attr . $snap_data_attr . $mouse_attrs . $this->anim->build_spotlight_attr( $advanced ) . $this->anim->build_smear_attr( $advanced ) . '>';
+        $html .= $scrollspy_attr . $el_parallax_attr . $snap_data_attr . $mouse_attrs . $this->anim->build_spotlight_attr( $advanced ) . $this->anim->build_smear_attr( $advanced ) . $this->anim->build_sorpresa_attr( $advanced ) . '>';
 
         $bg_layers_html = '';
         if ( $has_bg_image ) {
@@ -350,7 +350,8 @@ trait Olobuild_Renderer_Structure_Trait {
         if ( $has_overlay ) {
             $ov_color   = esc_attr( $tile_bg['overlay_color'] ?? '#000000' );
             $ov_opacity = intval( $tile_bg['overlay_opacity'] ) / 100;
-            $bg_layers_html .= '<div class="uk-position-cover" style="background: ' . esc_attr( Olobuild_CSS_Builder::velo_fondo( $tile_bg, $ov_color ) ) . '; opacity: ' . $ov_opacity . '; pointer-events: none" aria-hidden="true"></div>';
+            if ( $ov_opacity > 0 ) { $bg_layers_html .= '<div class="uk-position-cover" style="background: ' . esc_attr( Olobuild_CSS_Builder::velo_fondo( $tile_bg, $ov_color ) ) . '; opacity: ' . $ov_opacity . '; pointer-events: none" aria-hidden="true"></div>'; }
+            $bg_layers_html .= Olobuild_CSS_Builder::grana_markup( $tile_bg );
         }
 
         // bg_scope=section: emit bg layers as siblings of the container (full edge-to-edge bg)
@@ -451,7 +452,7 @@ trait Olobuild_Renderer_Structure_Trait {
         $has_bg_video   = ( $tile_bg['type'] === 'video' && ! empty( $tile_bg['video_url'] ) );
         $has_bg_gallery = ( $tile_bg['type'] === 'gallery' && ! empty( $tile_bg['gallery_images'] ) && is_array( $tile_bg['gallery_images'] ) );
         $has_bg_any     = ( $tile_bg['type'] !== 'none' );
-        $has_overlay    = ( $has_bg_any && ! empty( $tile_bg['overlay_opacity'] ) && intval( $tile_bg['overlay_opacity'] ) > 0 );
+        $has_overlay    = ( $has_bg_any && ! empty( $tile_bg['overlay_opacity'] ) && intval( $tile_bg['overlay_opacity'] ) > 0 ) || Olobuild_CSS_Builder::ha_grana( $tile_bg );
 
         // Row spacing/decorations — apply_flex=false: il flex va sul <div uk-grid>
         // interno (vedi $row_flex_styles più sotto), non sul wrapper esterno.
@@ -693,7 +694,7 @@ trait Olobuild_Renderer_Structure_Trait {
         $row_scrollspy_attr = $this->anim->build_scrollspy_attr( $advanced );
         $row_el_parallax_attr = $this->anim->build_element_parallax_attr( $advanced );
         $row_mouse_attrs = $this->anim->build_mouse_attrs( $advanced );
-        $row_spotlight_attr = $this->anim->build_spotlight_attr( $advanced ) . $this->anim->build_smear_attr( $advanced );
+        $row_spotlight_attr = $this->anim->build_spotlight_attr( $advanced ) . $this->anim->build_smear_attr( $advanced ) . $this->anim->build_sorpresa_attr( $advanced );
         // Tutti gli attributi-effetto della row in un'unica stringa: vanno sul
         // wrapper quando esiste, altrimenti direttamente sul nodo griglia
         // (prima i mouse attrs venivano calcolati ma mai stampati, e le row
@@ -746,7 +747,10 @@ trait Olobuild_Renderer_Structure_Trait {
             if ( $has_overlay ) {
                 $ov_color   = esc_attr( $tile_bg['overlay_color'] ?? '#000000' );
                 $ov_opacity = intval( $tile_bg['overlay_opacity'] ) / 100;
-                $html .= '<div class="uk-position-cover" style="background: ' . esc_attr( Olobuild_CSS_Builder::velo_fondo( $tile_bg, $ov_color ) ) . '; opacity: ' . $ov_opacity . '; pointer-events: none"></div>';
+                if ( $ov_opacity > 0 ) {
+                    $html .= '<div class="uk-position-cover" style="background: ' . esc_attr( Olobuild_CSS_Builder::velo_fondo( $tile_bg, $ov_color ) ) . '; opacity: ' . $ov_opacity . '; pointer-events: none"></div>';
+                }
+                $html .= Olobuild_CSS_Builder::grana_markup( $tile_bg );
             }
         }
 
@@ -1908,7 +1912,7 @@ trait Olobuild_Renderer_Structure_Trait {
         $has_col_bg_image = ( $col_bg['type'] === 'image' && ! empty( $col_bg['image_url'] ) );
         $has_col_bg_video = ( $col_bg['type'] === 'video' && ! empty( $col_bg['video_url'] ) );
         $has_col_bg_any   = ( $col_bg['type'] !== 'none' );
-        $has_col_overlay  = ( $has_col_bg_any && ! empty( $col_bg['overlay_opacity'] ) && intval( $col_bg['overlay_opacity'] ) > 0 );
+        $has_col_overlay  = ( $has_col_bg_any && ! empty( $col_bg['overlay_opacity'] ) && intval( $col_bg['overlay_opacity'] ) > 0 ) || Olobuild_CSS_Builder::ha_grana( $col_bg );
 
         if ( ! $has_col_bg_image && ! $has_col_bg_video && $col_bg['type'] !== 'none' ) {
             $bg_css = $this->css->get_bg_inline_css( $col_bg );
@@ -1962,7 +1966,7 @@ trait Olobuild_Renderer_Structure_Trait {
         if ( ! empty( $inline_styles ) ) {
             $html .= ' style="' . esc_attr( implode( '; ', $inline_styles ) ) . '"';
         }
-        $html .= $col_scrollspy_attr . $col_el_parallax_attr . $col_mouse_attrs . $this->anim->build_spotlight_attr( $advanced ) . $this->anim->build_smear_attr( $advanced ) . '>';
+        $html .= $col_scrollspy_attr . $col_el_parallax_attr . $col_mouse_attrs . $this->anim->build_spotlight_attr( $advanced ) . $this->anim->build_smear_attr( $advanced ) . $this->anim->build_sorpresa_attr( $advanced ) . '>';
 
         // Background image cover for column
         if ( $has_col_bg_image ) {
@@ -1987,7 +1991,10 @@ trait Olobuild_Renderer_Structure_Trait {
         if ( $has_col_overlay ) {
             $ov_color   = esc_attr( $col_bg['overlay_color'] ?? '#000000' );
             $ov_opacity = intval( $col_bg['overlay_opacity'] ) / 100;
-            $html .= '<div class="uk-position-cover" style="background: ' . esc_attr( Olobuild_CSS_Builder::velo_fondo( $col_bg, $ov_color ) ) . '; opacity: ' . $ov_opacity . '; pointer-events: none" aria-hidden="true"></div>';
+            if ( $ov_opacity > 0 ) {
+                $html .= '<div class="uk-position-cover" style="background: ' . esc_attr( Olobuild_CSS_Builder::velo_fondo( $col_bg, $ov_color ) ) . '; opacity: ' . $ov_opacity . '; pointer-events: none" aria-hidden="true"></div>';
+            }
+            $html .= Olobuild_CSS_Builder::grana_markup( $col_bg );
         }
 
         // Column children content (z-index above bg if needed)
@@ -2043,7 +2050,7 @@ trait Olobuild_Renderer_Structure_Trait {
         $has_bg_image   = ( $tile_bg['type'] === 'image' && ! empty( $tile_bg['image_url'] ) );
         $has_bg_video   = ( $tile_bg['type'] === 'video' && ! empty( $tile_bg['video_url'] ) );
         $has_bg_gallery = ( $tile_bg['type'] === 'gallery' && ! empty( $tile_bg['gallery_images'] ) && is_array( $tile_bg['gallery_images'] ) );
-        $has_overlay    = ( $tile_bg['type'] !== 'none' && ! empty( $tile_bg['overlay_opacity'] ) && intval( $tile_bg['overlay_opacity'] ) > 0 );
+        $has_overlay    = ( $tile_bg['type'] !== 'none' && ! empty( $tile_bg['overlay_opacity'] ) && intval( $tile_bg['overlay_opacity'] ) > 0 ) || Olobuild_CSS_Builder::ha_grana( $tile_bg );
         if ( $has_bg_image || $has_bg_video || $has_bg_gallery ) {
             $inline_styles[] = 'overflow: clip';
         } elseif ( $tile_bg['type'] !== 'none' ) {
@@ -2094,7 +2101,7 @@ trait Olobuild_Renderer_Structure_Trait {
             . $this->anim->build_element_parallax_attr( $advanced )
             . $this->anim->build_mouse_attrs( $advanced )
             . $this->anim->build_spotlight_attr( $advanced )
-            . $this->anim->build_smear_attr( $advanced );
+            . $this->anim->build_smear_attr( $advanced ) . $this->anim->build_sorpresa_attr( $advanced );
 
         // Impilare: le sotto-colonne a tutta larghezza una sotto l'altra. Sul telefono
         // («Impila su mobile», come prima) e fino al tablet orizzontale («Impila su
@@ -2182,7 +2189,10 @@ trait Olobuild_Renderer_Structure_Trait {
         if ( $has_overlay ) {
             $ov_color   = ! empty( $bg['overlay_color'] ) ? esc_attr( $bg['overlay_color'] ) : 'var(--olo-color-dark, #000000)';
             $ov_opacity = intval( $bg['overlay_opacity'] ) / 100;
-            $out       .= '<div class="uk-position-cover" style="background: ' . esc_attr( Olobuild_CSS_Builder::velo_fondo( $bg, $ov_color ) ) . '; opacity: ' . $ov_opacity . '; pointer-events: none"></div>';
+            if ( $ov_opacity > 0 ) {
+                $out       .= '<div class="uk-position-cover" style="background: ' . esc_attr( Olobuild_CSS_Builder::velo_fondo( $bg, $ov_color ) ) . '; opacity: ' . $ov_opacity . '; pointer-events: none"></div>';
+            }
+            $out .= Olobuild_CSS_Builder::grana_markup( $bg );
         }
         return '<div class="olo-ic-sfondo" aria-hidden="true" style="position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit; overflow: hidden">' . $out . '</div>';
     }

@@ -36,7 +36,7 @@ import { t } from '@/i18n';
  */
 export default {
   type: 'goo',
-  name: t('Sfondo Goo / Aurora'),
+  name: t('Sfondo Goo / Aurora / Sfera'),
   icon: 'dashicons-art',
   category: 'atmosphere',
   defaults: {
@@ -61,6 +61,14 @@ export default {
     aurora_blur: 60,
     blend_mode: 'normal',
     layer_opacity: 90,
+
+    // Sfera di luce (1.4.1218)
+    orb_speed: 1,
+    orb_mouse: true,
+    orb_size: 360,
+    orb_x: 50,
+    orb_y: 50,
+    orb_glow: 60,
 
     // Contenuto sopra al layer (slot HTML editabile inline)
     content: '',
@@ -106,12 +114,19 @@ export default {
     { key: 'mode', label: t('Modalità'), type: 'select', options: [
       { value: 'goo',    label: t('Goo (metaball che si fondono)') },
       { value: 'aurora', label: t('Aurora (blob sfumati, senza fusione)') },
-    ], description: t('Goo: i blob si fondono come gocce (filtro SVG) e uno insegue il cursore. Aurora: aloni morbidi sfocati che derivano, senza fusione metaball.') },
+      { value: 'sfera',  label: t('Sfera di luce (respira e segue il mouse)') },
+    ], description: t('Goo: i blob si fondono come gocce (filtro SVG) e uno insegue il cursore. Aurora: aloni morbidi sfocati che derivano, senza fusione metaball. Sfera di luce: una sola sfera luminosa che respira, coi colori della palette che girano dentro; la luce segue il puntatore e al clic dà un battito.') },
+
+    { type: 'separator', label: t('Sfera'), condition: { field: 'mode', op: 'eq', value: 'sfera' } },
+    { key: 'orb_speed', label: t('Respiro'), type: 'range', min: 0, max: 2, step: 0.1,
+      description: t('Quanto in fretta la sfera respira e i colori girano dentro: 0 = ferma, 1 = un respiro ogni sei secondi circa.') },
+    { key: 'orb_mouse', label: t('Reagisce al mouse'), type: 'toggle',
+      description: t('La sfera si sporge verso il puntatore, la luce lo segue e l\'alone cresce quando ti avvicini; al clic, o al tocco sul telefono, dà un battito.') },
 
     { type: 'separator', label: t('Palette') },
     { type: 'description', description: t('Lascia vuoti gli slot per usare i ruoli colore del tema. I colori impostati hanno la precedenza.') },
 
-    { type: 'separator', label: t('Blob') },
+    { type: 'separator', label: t('Blob'), condition: { field: 'mode', op: 'neq', value: 'sfera' } },
     { key: 'blob_count', label: t('Numero blob'), type: 'range', min: 3, max: 8, step: 1 },
     { key: 'drift_speed', label: t('Velocità deriva'), type: 'range', min: 0, max: 2, step: 0.05,
       description: t('0 = blob fermi. La deriva è un movimento sinusoidale lento.') },
@@ -119,7 +134,7 @@ export default {
       condition: { field: 'drift_speed', op: 'gt', value: 0 },
       description: t('Quanto si spostano i blob mentre derivano: 1 è lo spostamento di sempre (pochi pixel), con blob grandi e molto sfocati servono valori alti perché il movimento si veda.') },
 
-    { type: 'separator', label: t('Goo') },
+    { type: 'separator', label: t('Goo'), condition: { field: 'mode', op: 'eq', value: 'goo' } },
     { key: 'goo_strength', label: t('Intensità fusione'), type: 'range', min: 8, max: 28, step: 1,
       condition: { field: 'mode', op: 'eq', value: 'goo' },
       description: t('Alpha del feColorMatrix: più alto = bordi più netti e fusione più marcata tra i blob vicini.') },
@@ -127,7 +142,7 @@ export default {
       condition: { field: 'mode', op: 'eq', value: 'goo' },
       description: t('Un blob extra insegue il puntatore con easing. Disattivato su touch.') },
 
-    { type: 'separator', label: t('Aurora') },
+    { type: 'separator', label: t('Aurora'), condition: { field: 'mode', op: 'eq', value: 'aurora' } },
     { key: 'blend_mode', label: t('Fusione colori (blend)'), type: 'select', options: [
       { value: 'normal',     label: t('Normale') },
       { value: 'screen',     label: t('Screen (schiarisce)') },
@@ -142,16 +157,24 @@ export default {
     { key: 'color_1', label: t('Colore 1'), type: 'color' },
     { key: 'color_2', label: t('Colore 2'), type: 'color' },
     { key: 'color_3', label: t('Colore 3'), type: 'color' },
-    { key: 'color_4', label: t('Colore 4'), type: 'color' },
-    { key: 'color_5', label: t('Colore 5'), type: 'color' },
-    { type: 'separator', label: t('Blob') },
-    { key: 'blob_size_min', label: t('Dimensione minima'), type: 'range', min: 60, max: 500, step: 10 },
-    { key: 'blob_size_max', label: t('Dimensione massima'), type: 'range', min: 100, max: 700, step: 10 },
+    { key: 'color_4', label: t('Colore 4'), type: 'color', condition: { field: 'mode', op: 'neq', value: 'sfera' } },
+    { key: 'color_5', label: t('Colore 5'), type: 'color', condition: { field: 'mode', op: 'neq', value: 'sfera' } },
     { key: 'layer_opacity', label: t('Opacità sfondo'), type: 'range', min: 20, max: 100, step: 5 },
-    { type: 'separator', label: t('Goo') },
+    { type: 'separator', label: t('Blob'), condition: { field: 'mode', op: 'neq', value: 'sfera' } },
+    { key: 'blob_size_min', label: t('Dimensione minima'), type: 'range', min: 60, max: 500, step: 10,
+      condition: { field: 'mode', op: 'neq', value: 'sfera' } },
+    { key: 'blob_size_max', label: t('Dimensione massima'), type: 'range', min: 100, max: 700, step: 10,
+      condition: { field: 'mode', op: 'neq', value: 'sfera' } },
+    { type: 'separator', label: t('Sfera'), condition: { field: 'mode', op: 'eq', value: 'sfera' } },
+    { key: 'orb_size', label: t('Dimensione sfera'), type: 'range', min: 120, max: 800, step: 10, unit: 'px',
+      description: t('Sul telefono la sfera non supera i nove decimi dello schermo.') },
+    { key: 'orb_x', label: t('Posizione orizzontale'), type: 'range', min: 0, max: 100, step: 1, unit: '%' },
+    { key: 'orb_y', label: t('Posizione verticale'), type: 'range', min: 0, max: 100, step: 1, unit: '%' },
+    { key: 'orb_glow', label: t('Alone'), type: 'range', min: 0, max: 100, step: 5, unit: '%' },
+    { type: 'separator', label: t('Goo'), condition: { field: 'mode', op: 'eq', value: 'goo' } },
     { key: 'cursor_blob_size', label: t('Dimensione blob cursore'), type: 'range', min: 100, max: 500, step: 10,
       condition: { field: 'follow_cursor', op: 'eq', value: true } },
-    { type: 'separator', label: t('Aurora') },
+    { type: 'separator', label: t('Aurora'), condition: { field: 'mode', op: 'eq', value: 'aurora' } },
     { key: 'aurora_blur', label: t('Sfocatura'), type: 'range', min: 10, max: 140, step: 5,
       condition: { field: 'mode', op: 'eq', value: 'aurora' },
       description: t('Quanto sono morbidi gli aloni. In modalità Aurora i blob non si fondono: si sfocano e si miscelano.') },

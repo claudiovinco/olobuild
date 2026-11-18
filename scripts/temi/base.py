@@ -46,6 +46,11 @@ def _collect():
 
 
 _collect()
+# Il campione del titolo è il nome nel piede di Acqua Viva, sceso da 40 a 32 px il 18 nov 2026 (piedi_piccoli: i marchi
+# dei piè di pagina piccoli): i titoli nuovi che non dicono la loro misura restano a 40 px come prima.
+if SAMPLES.get('headline', {}).get('id') == 'acqua-viva-footer-5':
+    SAMPLES['headline'] = copy.deepcopy(SAMPLES['headline'])
+    SAMPLES['headline']['settings']['heading_font_size'] = 40
 
 
 def rgba(hx, a):
@@ -262,6 +267,10 @@ def write_theme(theme, builds, media):
         h = builds['home.json']
         numeri.applica(theme['id'], h['content'] if isinstance(h, dict) else h)
     os.makedirs(out, exist_ok=True)
+    # Un tema nuovo: i ritocchi qui sotto (titoli_stile legge i caratteri) cercano theme.json prima che si scriva in fondo.
+    if not os.path.exists(os.path.join(out, 'theme.json')):
+        with open(os.path.join(out, 'theme.json'), 'w', encoding='utf-8', newline='\n') as fh:
+            fh.write(json.dumps(theme, ensure_ascii=False, separators=(',', ':')))
     used = {}
     ids = set()
     import togli_indicazioni  # niente frasi che spiegano l'effetto prima che si veda (utente, 13 nov 2026)
@@ -305,6 +314,12 @@ def write_theme(theme, builds, media):
             for k in ('preview_v', 'preview_mobile_v'):
                 if str(prima.get(k, '')).isdigit() and int(prima[k]) > int(str(theme.get(k) or '1')):
                     theme[k] = str(prima[k])
+            # l'anteprima in movimento (1.4.1218) la mette un altro script: il generatore la tiene
+            if str(prima.get('preview_video_v', '')).isdigit() and not theme.get('preview_video_v'):
+                theme['preview_video_v'] = str(prima['preview_video_v'])
+            # i filtri della Vetrina (gesto, carattere) li scrive filtri_vetrina.py: il generatore li tiene
+            if isinstance(prima.get('filtri'), dict) and not theme.get('filtri'):
+                theme['filtri'] = prima['filtri']
         except (ValueError, OSError):
             pass
     with open(p_tema, 'w', encoding='utf-8', newline='\n') as fh:

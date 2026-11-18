@@ -197,6 +197,7 @@ export function createThemePicker(opts = {}) {
       const synth = synthPreviewInner(t).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
       return `<div class="otmp-pv otmp-pv-shot${t.light ? ' light' : ''}" data-synth="${synth}">
           <img class="otmp-shot" src="${esc(t.screenshot)}" alt="${esc(t.name || '')} — anteprima" loading="lazy" decoding="async" onerror="var p=this.parentNode;p.classList.remove('otmp-pv-shot');p.innerHTML=p.getAttribute('data-synth')||'';"/>
+          ${t.preview_video ? `<video class="otmp-vid" muted playsinline preload="none" aria-hidden="true" tabindex="-1" data-src="${esc(t.preview_video)}"></video>` : ''}
           ${zone}
         </div>`;
     }
@@ -358,6 +359,28 @@ export function createThemePicker(opts = {}) {
       card.onclick = pick;
       card.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } };
     });
+    // L'anteprima in movimento (1.4.1218): l'apertura del tema parte al passaggio, finita lascia scorrere la pagina
+    if (!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+      grid.querySelectorAll('.otmp-card').forEach(card => {
+        const vid = card.querySelector('.otmp-vid');
+        if (!vid) return;
+        const pv = vid.parentNode;
+        pv.classList.add('con-video');
+        const via = () => {
+          if (!vid.getAttribute('src')) vid.setAttribute('src', vid.getAttribute('data-src'));
+          pv.classList.remove('finito');
+          pv.classList.add('gioca');
+          try { vid.currentTime = 0; } catch (e) { /* non ancora caricato */ }
+          const p = vid.play();
+          if (p && p.catch) p.catch(() => {});
+        };
+        const ferma = () => { pv.classList.remove('gioca', 'finito'); vid.pause(); };
+        card.addEventListener('mouseenter', via);
+        card.addEventListener('mouseleave', ferma);
+        vid.addEventListener('playing', () => vid.classList.add('pronto'));
+        vid.addEventListener('ended', () => { pv.classList.remove('gioca'); pv.classList.add('finito'); });
+      });
+    }
     // il link "Dettagli" non deve selezionare/attivare la card
     grid.querySelectorAll('[data-stop]').forEach(a => a.addEventListener('click', e => e.stopPropagation()));
 
@@ -637,7 +660,9 @@ const CSS = `
 .otmp-blankpv svg{width:34px;height:34px;}
 .otmp-pv-shot{padding:0;background:var(--img);}
 .otmp-shot{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:object-position .6s ease;}
-.otmp-card:hover .otmp-shot,.otmp-card:focus-within .otmp-shot{object-position:bottom center;transition:object-position 9s linear;}
+.otmp-card:hover .otmp-pv:not(.con-video) .otmp-shot,.otmp-card:focus-within .otmp-pv:not(.con-video) .otmp-shot,.otmp-card:hover .otmp-pv.finito .otmp-shot{object-position:bottom center;transition:object-position 9s linear;}
+.otmp-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;opacity:0;transition:opacity .35s ease;pointer-events:none;}
+.otmp-pv.gioca .otmp-vid.pronto{opacity:1;}
 
 .otmp-cb{padding:15px 16px 16px;display:flex;flex-direction:column;flex:1;}
 /* La categoria: sul chiaro testo neutro col pallino del colore del tema (certi accenti, lime e

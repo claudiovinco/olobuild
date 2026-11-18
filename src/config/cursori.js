@@ -36,6 +36,8 @@ export const CURSORI = [
   ['trucioli', 'Trucioli (la pialla stacca i ricci)'], ['martello', 'Martello (al clic batte e fa scintille)'],
   ['bullone', 'Bullone (si avvita sui link)'], ['scovolo', 'Scovolo (lascia la fuliggine)'],
   ['irrigatore', 'Irrigatore (spruzza a ventaglio)'], ['diamante', 'Tagliavetro (graffia e crepa)'], ['atomo', 'Atomo (elettroni che girano, fotone al clic)'],
+  ['cerchio', 'Cerchio aereo (dondola, capriola sui link)'], ['ipnosi', 'Ipnosi (la spirale che gira)'],
+  ['miccia', 'Miccia (faville, fuoco d’artificio al clic)'],
 ];
 
 // Gli stili che mostrano una parola (la «Parola del cursore», label_text).

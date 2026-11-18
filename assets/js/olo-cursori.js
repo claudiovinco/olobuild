@@ -3437,6 +3437,118 @@
     };
   };
 
+  // Cerchio aereo (per Capriola): il cerchio dell'acrobatica appeso a un tratto di corda accanto al puntatore; quando ci
+  // si muove dondola come un pendolo e si assesta; sui link fa una capriola intera, una per ogni link.
+  STILI.cerchio = function () {
+    var T = tela(), st = {}, ang = 0, vang = 0, capo = 0, meta = 0, eraSu = false;
+    var anello = risolvi(CFG.ringColor || '#ff5a3c'), corpo = risolvi(CFG.dotColor || '#ffffff');
+    return {
+      frame: function (t) {
+        var s = passo(st, t), o = scosta();
+        if (hot && !eraSu) meta += 6.283;
+        eraSu = !!hot;
+        if (meno) { ang = 0; vang = 0; capo = meta; } else {
+          vang = (vang + (-vx * 0.012 - ang * 0.06) * s) * Math.pow(0.92, s);
+          ang = Math.max(-1.1, Math.min(1.1, ang + vang * s));
+          capo += (meta - capo) * 0.09 * s;
+        }
+        vx *= 0.8; vy *= 0.8;
+        var g = pulisci(T);
+        g.save(); g.translate(mx + o[0] + 4, my + o[1] - 6); g.rotate(ang);
+        g.globalAlpha = 0.7; g.strokeStyle = corpo; g.lineWidth = 1.2;
+        g.beginPath(); g.moveTo(0, 0); g.lineTo(0, 10); g.stroke(); g.globalAlpha = 1;
+        g.translate(0, 21); g.rotate(capo);
+        g.strokeStyle = anello; g.lineWidth = 2.6; g.beginPath(); g.arc(0, 0, 11, 0, 6.283); g.stroke();
+        g.strokeStyle = corpo; g.lineWidth = 1.6; g.lineCap = 'round'; g.beginPath(); g.moveTo(0, 3); g.lineTo(0, -7); g.stroke();
+        g.fillStyle = corpo; g.beginPath(); g.arc(0, 5.6, 2.4, 0, 6.283); g.fill();
+        g.restore();
+        return Math.abs(vang) > 0.002 || Math.abs(ang) > 0.002 || Math.abs(meta - capo) > 0.01 || Math.abs(vx) > 0.05;
+      }
+    };
+  };
+
+  // Ipnosi (per Abbaglio): una piccola spirale op art, bianca e nera, che gira accanto al puntatore e sembra risucchiare;
+  // più veloce quando ci si muove; sui link si allarga e accelera, come un'illusione che prende.
+  STILI.ipnosi = function () {
+    var T = tela(), st = {}, ang = 0, gonfia = 0;
+    var chiaro = risolvi(CFG.ringColor || '#ffffff'), scuro = risolvi(CFG.dotColor || '#111111');
+    return {
+      frame: function (t) {
+        var s = passo(st, t), o = scosta(), corsa = Math.min(1, Math.hypot(vx, vy) / 12);
+        vx *= 0.82; vy *= 0.82;
+        gonfia += ((hot ? 1 : 0) - gonfia) * 0.12 * s;
+        if (!meno) ang += (0.05 + corsa * 0.18 + gonfia * 0.2) * s;
+        var g = pulisci(T), R = 12 + gonfia * 6;
+        g.save(); g.translate(mx + o[0] + 4, my + o[1] + 4); g.rotate(ang);
+        g.fillStyle = scuro; g.beginPath(); g.arc(0, 0, R, 0, 6.283); g.fill();
+        g.strokeStyle = chiaro; g.lineWidth = R / 7; g.lineCap = 'round'; g.beginPath();
+        for (var k = 0; k <= 60; k++) {
+          var a = k / 60 * 6.283 * 2.6, r = R * 0.9 * k / 60;
+          g[k ? 'lineTo' : 'moveTo'](Math.cos(a) * r, Math.sin(a) * r);
+        }
+        g.stroke();
+        g.strokeStyle = chiaro; g.lineWidth = 1; g.globalAlpha = 0.5; g.beginPath(); g.arc(0, 0, R, 0, 6.283); g.stroke();
+        g.restore();
+        return true;
+      }
+    };
+  };
+
+  // Miccia (per Girandola): la scintilla di una miccia accesa accanto al puntatore, che lascia cadere faville mentre ci
+  // si muove; al clic scoppia un piccolo fuoco d'artificio nei colori del tema; sui link la scintilla si fa più grande.
+  STILI.miccia = function () {
+    var T = tela({ mondo: true }), st = {}, faville = [], scoppi = [], vivo = 0;
+    var oro = risolvi(CFG.ringColor || '#ffc94a'), rosa = risolvi(CFG.dotColor || '#ff3d7f');
+    var COLORI = [oro, rosa, '#3ddcff', '#ffffff'];
+    window.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'touch') return;
+      if (meno) return;
+      var c = COLORI[Math.floor(Math.random() * COLORI.length)];
+      for (var i = 0; i < 26; i++) {
+        var a = i / 26 * 6.283 + Math.random() * 0.2, f = 2.2 + Math.random() * 2.6;
+        scoppi.push({ x: mx, y: my, vx: Math.cos(a) * f, vy: Math.sin(a) * f, v: 1, c: i % 4 ? c : '#ffffff' });
+      }
+      chiedi();
+    });
+    return {
+      frame: function (t) {
+        var s = passo(st, t), o = scosta(), corsa = Math.hypot(vx, vy);
+        vx *= 0.85; vy *= 0.85;
+        vivo += ((hot ? 1 : 0) - vivo) * 0.15 * s;
+        var cx = mx + o[0] + 2, cy = my + o[1] + 2;
+        if (!meno) {
+          var n = corsa > 2 ? 2 : (Math.random() < 0.35 ? 1 : 0);
+          for (var i = 0; i < n; i++) {
+            var a = Math.random() * 6.283, f = 0.6 + Math.random() * 1.6;
+            faville.push({ x: cx, y: cy, vx: Math.cos(a) * f, vy: Math.sin(a) * f - 0.6, v: 1 });
+          }
+          if (faville.length > 90) faville.splice(0, faville.length - 90);
+        }
+        var g = pulisci(T);
+        faville = faville.filter(function (p) {
+          p.vy += 0.06 * s; p.x += p.vx * s; p.y += p.vy * s; p.v -= 0.035 * s;
+          if (p.v <= 0) return false;
+          g.globalAlpha = p.v; g.fillStyle = p.v > 0.6 ? '#fff6c8' : oro; g.fillRect(p.x - 0.8, p.y - 0.8, 1.6, 1.6);
+          return true;
+        });
+        scoppi = scoppi.filter(function (p) {
+          p.vx *= Math.pow(0.96, s); p.vy = p.vy * Math.pow(0.96, s) + 0.05 * s; p.x += p.vx * s; p.y += p.vy * s; p.v -= 0.02 * s;
+          if (p.v <= 0) return false;
+          g.globalAlpha = p.v; g.strokeStyle = p.c; g.lineWidth = 1.8; g.lineCap = 'round';
+          g.beginPath(); g.moveTo(p.x, p.y); g.lineTo(p.x - p.vx * 3, p.y - p.vy * 3); g.stroke();
+          return true;
+        });
+        g.globalAlpha = 1;
+        var R = 3 + vivo * 2.5 + Math.random() * 1.2;
+        var al = g.createRadialGradient(cx, cy, 0, cx, cy, R * 3.2);
+        al.addColorStop(0, 'rgba(255,246,200,.95)'); al.addColorStop(0.35, 'rgba(255,170,60,.55)'); al.addColorStop(1, 'rgba(255,120,40,0)');
+        g.fillStyle = al; g.beginPath(); g.arc(cx, cy, R * 3.2, 0, 6.283); g.fill();
+        g.fillStyle = '#fffbe8'; g.beginPath(); g.arc(cx, cy, R * 0.55, 0, 6.283); g.fill();
+        return true;
+      }
+    };
+  };
+
   // Martello (per Incudine): un martello da fabbro accanto al puntatore, alzato; al clic cala di colpo e dalla punta
   // escono le scintille del ferro battuto, che cadono e passano dal giallo al rosso. Sui link il martello si alza di più.
   STILI.martello = function () {

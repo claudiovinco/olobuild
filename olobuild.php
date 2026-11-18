@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Professional holonic page builder for WordPress with a drag & drop tile grid system.
- * Version:     1.4.1217
+ * Version:     1.4.1230
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
  * Text Domain: olobuild
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLOBUILD_VERSION', '1.4.1217' );
+define( 'OLOBUILD_VERSION', '1.4.1230' );
 define( 'OLOBUILD_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLOBUILD_URL', plugin_dir_url( __FILE__ ) );
 
@@ -559,6 +559,7 @@ require_once OLOBUILD_PATH . 'includes/class-role-manager.php';
 require_once OLOBUILD_PATH . 'includes/class-site-export.php';
 require_once OLOBUILD_PATH . 'includes/class-ai-assistant.php';
 require_once OLOBUILD_PATH . 'includes/class-seo-head.php';
+require_once OLOBUILD_PATH . 'includes/class-og-disegnata.php';
 require_once OLOBUILD_PATH . 'includes/class-seo-settings.php';
 require_once OLOBUILD_PATH . 'includes/class-seo-redirects.php';
 require_once OLOBUILD_PATH . 'includes/class-global-popups.php';
@@ -860,6 +861,10 @@ add_action( 'plugins_loaded', function () {
     require_once OLOBUILD_PATH . 'includes/class-magnetic-cursor.php';
     Olobuild_Magnetic_Cursor::init();
 
+    // Passaggio fra le pagine (1.4.1218, una scelta di tutto il sito)
+    require_once OLOBUILD_PATH . 'includes/class-transizioni.php';
+    Olobuild_Transizioni::init();
+
     // HUD mirino (feature globale di tema — crosshair + coordinate + sezione corrente)
     require_once OLOBUILD_PATH . 'includes/class-cursor-hud.php';
     Olobuild_Cursor_Hud::init();
@@ -903,6 +908,7 @@ add_action( 'plugins_loaded', function () {
 
     // SEO Head — JSON-LD, Open Graph, canonical, robots
     Olobuild_Seo_Head::instance()->init();
+    Olobuild_Og_Disegnata::init();
 
     // Accessibility — skip-nav, ARIA, focus styles
     Olobuild_Accessibility::instance()->init();

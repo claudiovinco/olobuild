@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Olobuild_Goo_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'goo';
-    protected $name     = 'Sfondo Goo / Aurora';
+    protected $name     = 'Sfondo Goo / Aurora / Sfera';
     protected $icon     = 'dashicons-art';
     protected $category = 'atmosphere';
     protected $defaults = [
@@ -57,6 +57,14 @@ class Olobuild_Goo_Tile extends Olobuild_Tile_Base {
         'aurora_blur'      => 60,
         'blend_mode'       => 'normal',
         'layer_opacity'    => 90,
+
+        // Sfera di luce (1.4.1218)
+        'orb_speed'        => 1,
+        'orb_mouse'        => true,
+        'orb_size'         => 360,
+        'orb_x'            => 50,
+        'orb_y'            => 50,
+        'orb_glow'         => 60,
 
         'content'          => '',
 
@@ -98,7 +106,7 @@ class Olobuild_Goo_Tile extends Olobuild_Tile_Base {
         $uid = 'olo-goo-' . wp_rand( 10000, 99999 );
 
         // ── Parametri (clampati) ──────────────────────────────────────────
-        $mode    = ( $s['mode'] === 'aurora' ) ? 'aurora' : 'goo';
+        $mode    = in_array( $s['mode'], [ 'aurora', 'sfera' ], true ) ? $s['mode'] : 'goo';
         // 'section' (default) = sfondo della sezione ospite; 'column' = sfondo della
         // colonna ospite (utile per card/box con goo per-cella, es. showcase landing);
         // 'page' = overlay fisso su tutta la pagina (layer fixed, pointer-events none).
@@ -133,6 +141,21 @@ class Olobuild_Goo_Tile extends Olobuild_Tile_Base {
             $palette = $this->default_palette();
         }
         $pal_n = count( $palette );
+
+        // ── Sfera di luce (1.4.1218): una sfera sola, coi primi tre colori della palette ──
+        $sfera     = ( $mode === 'sfera' );
+        $orb_size  = max( 120, min( 800, intval( $s['orb_size'] ?? 360 ) ) );
+        $orb_x     = max( 0, min( 100, intval( $s['orb_x'] ?? 50 ) ) );
+        $orb_y     = max( 0, min( 100, intval( $s['orb_y'] ?? 50 ) ) );
+        $orb_glow  = max( 0, min( 100, intval( $s['orb_glow'] ?? 60 ) ) ) / 100;
+        $orb_speed = max( 0, min( 2, floatval( $s['orb_speed'] ?? 1 ) ) );
+        $orb_c1    = $palette[0];
+        $orb_c2    = $palette[ 1 % $pal_n ];
+        $orb_c3    = $palette[ 2 % $pal_n ];
+        if ( $sfera ) {
+            $count = 0;
+            $follow = false;
+        }
 
         // ── Layout sezione ────────────────────────────────────────────────
         $min_h   = max( 80,  intval( $s['min_height'] ) );
@@ -181,6 +204,7 @@ class Olobuild_Goo_Tile extends Olobuild_Tile_Base {
             // blend del layer in modalità "tutta la pagina": usa quello scelto (aurora) o
             // "screen" di default (illumina senza coprire il contenuto opaco sottostante).
             'pageBlend' => ( $blend !== 'normal' ? $blend : 'screen' ),
+            'mouse'     => $sfera && ! empty( $s['orb_mouse'] ),
         ];
 
         ob_start();
@@ -206,6 +230,8 @@ class Olobuild_Goo_Tile extends Olobuild_Tile_Base {
                 overflow: hidden;
                 <?php if ( $mode === 'goo' ) : ?>
                 filter: url(#goo-<?php echo $uid; ?>);
+                <?php elseif ( $sfera ) : ?>
+                filter: none;
                 <?php else : ?>
                 filter: blur(<?php echo $blur; ?>px);
                 <?php endif; ?>
@@ -229,6 +255,41 @@ class Olobuild_Goo_Tile extends Olobuild_Tile_Base {
             /* Su touch / senza hover il blob-cursore è nascosto */
             @media (hover: none), (pointer: coarse) {
                 .olo-goo-stage-<?php echo $uid; ?> .olo-goo-cursor { display: none; }
+            }
+            <?php endif; ?>
+            <?php if ( $sfera ) :
+                $d_resp = $orb_speed > 0 ? round( 3.2 / $orb_speed, 2 ) : 0;
+                $d_giro = $orb_speed > 0 ? round( 16 / $orb_speed, 2 ) : 0;
+                $st     = '.olo-goo-stage-' . $uid;
+                ?>
+            /* Sfera di luce: niente transform sul contenitore (il respiro è uno scale), centrata coi margini. */
+            <?php echo $st; ?> .olo-goo-orb { --d: min(<?php echo $orb_size; ?>px, 90vmin); position: absolute; left: <?php echo $orb_x; ?>%; top: <?php echo $orb_y; ?>%;
+                width: var(--d); height: var(--d); margin: calc(var(--d) / -2) 0 0 calc(var(--d) / -2); --mx: 0; --my: 0; --v: 0;
+                <?php if ( $d_resp ) : ?>animation: olo-orb-respiro-<?php echo $uid; ?> <?php echo $d_resp; ?>s ease-in-out infinite alternate;<?php endif; ?> }
+            <?php echo $st; ?> .olo-goo-orb > span { position: absolute; border-radius: 50%; }
+            <?php echo $st; ?> .olo-goo-orb-alone { inset: -38%; background: radial-gradient(circle, <?php echo $orb_c1; ?> 0%, color-mix(in srgb, <?php echo $orb_c2; ?> 45%, transparent) 38%, transparent 66%);
+                filter: blur(calc(var(--d) * .08)); opacity: calc(<?php echo $orb_glow; ?> * (.72 + .5 * var(--v)));
+                <?php if ( $d_resp ) : ?>animation: olo-orb-alone-<?php echo $uid; ?> <?php echo $d_resp; ?>s ease-in-out infinite alternate;<?php endif; ?> }
+            <?php echo $st; ?> .olo-goo-orb-corpo { inset: 0; overflow: hidden; isolation: isolate;
+                background: radial-gradient(circle at 50% 64%, color-mix(in srgb, <?php echo $orb_c2; ?> 62%, #fff) 0%, <?php echo $orb_c1; ?> 56%, color-mix(in srgb, <?php echo $orb_c1; ?> 58%, #000) 100%);
+                transform: translate(calc(var(--mx) * 5%), calc(var(--my) * 5%)); }
+            <?php echo $st; ?> .olo-goo-orb-vortice { position: absolute; inset: -30%; background: conic-gradient(from 0deg, <?php echo $orb_c1; ?>, <?php echo $orb_c2; ?>, <?php echo $orb_c3; ?>, <?php echo $orb_c1; ?>);
+                filter: blur(calc(var(--d) * .07)); opacity: .62;
+                <?php if ( $d_giro ) : ?>animation: olo-orb-giro-<?php echo $uid; ?> <?php echo $d_giro; ?>s linear infinite;<?php endif; ?> }
+            <?php echo $st; ?> .olo-goo-orb-luce { position: absolute; inset: 0; border-radius: 50%;
+                background: radial-gradient(circle at calc(36% + var(--mx) * 14%) calc(30% + var(--my) * 14%), rgba(255,255,255,.92) 0, rgba(255,255,255,.28) 13%, rgba(255,255,255,0) 36%); }
+            <?php echo $st; ?> .olo-goo-orb-bordo { position: absolute; inset: 0; border-radius: 50%;
+                box-shadow: inset 0 0 0 1px rgba(255,255,255,.32), inset 0 calc(var(--d) * -.06) calc(var(--d) * .16) rgba(0,0,0,.3), inset 0 calc(var(--d) * .04) calc(var(--d) * .12) rgba(255,255,255,.2); }
+            <?php echo $st; ?> .olo-goo-orb-onda { inset: 0; border: 2px solid color-mix(in srgb, <?php echo $orb_c1; ?> 65%, #fff); opacity: 0; }
+            <?php echo $st; ?> .olo-orb-battito .olo-goo-orb-onda { animation: olo-orb-onda-<?php echo $uid; ?> .95s cubic-bezier(.2,.7,.2,1); }
+            <?php echo $st; ?> .olo-orb-battito .olo-goo-orb-corpo { animation: olo-orb-battito-<?php echo $uid; ?> .5s cubic-bezier(.3,.7,.3,1.4); }
+            @keyframes olo-orb-respiro-<?php echo $uid; ?> { from { transform: scale(.97); } to { transform: scale(1.04); } }
+            @keyframes olo-orb-alone-<?php echo $uid; ?> { from { scale: .9; } to { scale: 1.1; } }
+            @keyframes olo-orb-giro-<?php echo $uid; ?> { to { transform: rotate(360deg); } }
+            @keyframes olo-orb-onda-<?php echo $uid; ?> { from { scale: 1; opacity: .85; } to { scale: 1.7; opacity: 0; } }
+            @keyframes olo-orb-battito-<?php echo $uid; ?> { 30% { scale: .93; } 65% { scale: 1.05; } 100% { scale: 1; } }
+            @media (prefers-reduced-motion: reduce) {
+                <?php echo $st; ?> .olo-goo-orb, <?php echo $st; ?> .olo-goo-orb > span, <?php echo $st; ?> .olo-goo-orb-vortice { animation: none !important; }
             }
             <?php endif; ?>
         </style>
@@ -268,6 +329,9 @@ class Olobuild_Goo_Tile extends Olobuild_Tile_Base {
                         esc_attr( $palette[1 % $pal_n] )
                     );
                 }
+                if ( $sfera ) {
+                    echo '<div class="olo-goo-orb"><span class="olo-goo-orb-alone"></span><span class="olo-goo-orb-corpo"><i class="olo-goo-orb-vortice"></i><i class="olo-goo-orb-luce"></i><i class="olo-goo-orb-bordo"></i></span><span class="olo-goo-orb-onda"></span></div>';
+                }
                 // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
                 ?>
             </div>
@@ -306,9 +370,11 @@ class Olobuild_Goo_Tile extends Olobuild_Tile_Base {
                 ( <?php echo self::js_nel_body(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- costante JS interna ?> )( layer );
                 layer.appendChild( stage );
                 host = layer;
+                if ( CFG.mode === 'sfera' ) { FH = -1; }
                 // Movimento relativo allo scroll: lo stage copre l'INTERA pagina (FH) e viene
                 // traslato di -scrollY, così i blob scorrono COL documento invece di restare
                 // incollati allo schermo. Il blend/overflow restano sul layer fisso.
+                if ( FH === -1 ) { FH = 0; } else {
                 FH = Math.max( document.documentElement.scrollHeight || 0, window.innerHeight * 3 );
                 stage.style.top = '0'; stage.style.bottom = 'auto'; stage.style.height = FH + 'px';
                 SCROLL = window.scrollY || window.pageYOffset || 0;
@@ -322,6 +388,7 @@ class Olobuild_Goo_Tile extends Olobuild_Tile_Base {
                         var nh = Math.max( document.documentElement.scrollHeight || 0, window.innerHeight * 3 );
                         if ( nh > FH ) { FH = nh; stage.style.height = FH + 'px'; }   // cresce con il documento (lazy-load)
                     }).observe( document.documentElement );
+                }
                 }
             } else
             if ( CFG.scope === 'column' && ( host = wrap.closest('.olo-column, [class*="uk-width"]') ) ) {
@@ -351,6 +418,44 @@ class Olobuild_Goo_Tile extends Olobuild_Tile_Base {
             var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             var coarse = window.matchMedia && window.matchMedia('(hover: none), (pointer: coarse)').matches;
             var canFollow = CFG.follow && ! coarse;
+
+            // Sfera di luce: si sporge verso il puntatore, la luce lo segue, l'alone cresce avvicinandosi;
+            // al clic o al tocco un battito. Anche sul telefono (il tocco), fermo solo con meno movimento.
+            if ( CFG.mode === 'sfera' ) {
+                var orb = stage.querySelector('.olo-goo-orb');
+                if ( ! orb ) { return; }
+                if ( ! CFG.mouse ) { return; }
+                if ( reduce ) { return; }
+                var omx = 0, omy = 0, ov = 0, tmx = 0, tmy = 0, tv = 0, ogira = false;
+                var oframe = function () {
+                    omx += ( tmx - omx ) * 0.08; omy += ( tmy - omy ) * 0.08; ov += ( tv - ov ) * 0.08;
+                    orb.style.setProperty('--mx', omx.toFixed(3));
+                    orb.style.setProperty('--my', omy.toFixed(3));
+                    orb.style.setProperty('--v', ov.toFixed(3));
+                    if ( Math.abs( tmx - omx ) + Math.abs( tmy - omy ) + Math.abs( tv - ov ) > 0.003 ) { requestAnimationFrame( oframe ); } else { ogira = false; }
+                };
+                var spinta = function () { if ( ! ogira ) { ogira = true; requestAnimationFrame( oframe ); } };
+                var bersaglio = pageMode ? window : root;
+                bersaglio.addEventListener('pointermove', function ( e ) {
+                    var r = orb.getBoundingClientRect();
+                    var raggio = Math.max( r.width, 1 ) * 1.6;
+                    var dx = ( e.clientX - r.left - r.width / 2 ) / raggio;
+                    var dy = ( e.clientY - r.top - r.height / 2 ) / raggio;
+                    var dist = Math.sqrt( dx * dx + dy * dy );
+                    tv = Math.max( 0, 1 - dist );
+                    if ( dist > 1 ) { dx = dx / dist; dy = dy / dist; }
+                    tmx = dx; tmy = dy;
+                    spinta();
+                }, { passive: true });
+                ( pageMode ? document.documentElement : root ).addEventListener('pointerleave', function () { tmx = 0; tmy = 0; tv = 0; spinta(); });
+                bersaglio.addEventListener('pointerdown', function () {
+                    orb.classList.remove('olo-orb-battito');
+                    void orb.offsetWidth;
+                    orb.classList.add('olo-orb-battito');
+                }, { passive: true });
+                return;
+            }
+
             if ( CFG.drift <= 0 && ! canFollow ) { return; }   // niente da animare
 
             // Blob "drift": leggono ampiezza/fase/velocità dai data-attr (SSR).

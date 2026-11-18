@@ -39,14 +39,15 @@ def testimonianza(K, t, testo, nome, ruolo, size=34, linea=None):
         'line_color': linea or C['acc']}, style={})
 
 
-def elenco_hover(K, t, voci, link, size=48, peek=True):
-    """Righe grandi con la foto che si affaccia al passaggio: voci = [(nome, sotto, descrizione, foto)]."""
+def elenco_hover(K, t, voci, link, size=48, peek=True, nome_corpo=False):
+    """Righe grandi con la foto che si affaccia al passaggio: voci = [(nome, sotto, descrizione, foto)]. nome_corpo: i nomi nel
+    carattere del testo (per i titoli larghissimi, come Lexend Zetta, che al telefono uscirebbero dalla riga)."""
     C = K.c
     return t.classic('hoverlist', {
         'items': [{'name': n, 'sub': s, 'desc': d, 'number': '0%d' % (k + 1), 'image': K.img(f), 'link_url': link,
                    'color': C['acc']} for k, (n, s, d, f) in enumerate(voci)],
         'lead_mode': 'number', 'swatch_size': 18, 'swatch_shape': 'square', 'number_color': C['acc'],
-        'number_hover_color': C['testo'], 'name_font_family': 'heading', 'name_color': C['testo'], 'name_hover_color': C['acc'],
+        'number_hover_color': C['testo'], 'name_font_family': 'body' if nome_corpo else 'heading', 'name_color': C['testo'], 'name_hover_color': C['acc'],
         'name_size': size, 'name_weight': K.peso, 'name_uppercase': False, 'sub_color': C['tenue'], 'sub_hover_color': C['acc'],
         'sub_size': 12, 'sub_uppercase': True, 'desc_color': C['tenue'], 'desc_size': 15, 'row_padding_y': 22,
         'hover_indent': 28, 'hover_bg': mix(C['acc'], 6), 'line_color': C['filo'], 'peek': peek, 'peek_mode': 'image',

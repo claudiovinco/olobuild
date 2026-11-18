@@ -132,6 +132,7 @@ export default {
       { value: 'md', label: t('Medio') },
       { value: 'lg', label: t('Grande') },
       { value: 'xl', label: t('Extra grande') },
+      { value: 'riempi', label: t('Riempie la larghezza') },
     ]},
     { key: 'alignment', label: t('Allineamento'), type: 'select', responsive: true, options: [
       { value: 'left', label: t('Sinistra') },

@@ -50,6 +50,18 @@
               @update:modelValue="builderStore.updatePageSetting('archive_post_type', $event)"
             />
           </div>
+          <!-- Il piè di pagina che si scopre da sotto (1.4.1218): solo per i template del piè di pagina -->
+          <div v-if="builderStore.currentTemplate?.type === 'footer'" class="psp-row">
+            <label for="psp-piede-scopre" class="psp-label">{{ t('Si scopre da sotto') }}<InfoTip class="psp-info" :testo="t('Il piè di pagina resta fermo in fondo e la pagina, scorrendo via, lo scopre come un sipario che sale. Funziona quando il piè di pagina sta nella finestra; se è più alto, resta com’è.')" :titolo="t('Si scopre da sotto')" /></label>
+            <FieldToggle
+              id="psp-piede-scopre"
+              class="psp-switch"
+              role="switch"
+              :aria-checked="String(pageSettings.piede_scopre === true)"
+              :modelValue="pageSettings.piede_scopre === true"
+              @update:modelValue="builderStore.updatePageSetting('piede_scopre', $event)"
+            />
+          </div>
           <div class="psp-field">
             <span class="psp-label">{{ t('Larghezza max contenuto') }}</span>
             <FieldSelect
@@ -172,6 +184,17 @@
               />
             </div>
           </template>
+
+          <!-- Passaggio fra le pagine (1.4.1218): scelta di TUTTO il sito (option olobuild_transizioni), si salva da sola
+               come il Cursore del sito; renderer Olobuild_Transizioni -->
+          <div class="psp-row psp-row--fill">
+            <span class="psp-label">{{ t('Passaggio fra le pagine') }}<InfoTip class="psp-info" :testo="[t('Come si passa da una pagina all\'altra del sito: la pagina nuova arriva in dissolvenza, sale come una tendina, entra con uno zoom o si apre in un cerchio dal punto in cui hai cliccato.'), t('Vale per tutto il sito e si salva da sola. Funziona su Chrome, Edge e Safari recenti; negli altri browser le pagine cambiano come sempre, e niente movimento per chi ha chiesto di ridurlo.')]" :titolo="t('Passaggio fra le pagine')" /></span>
+            <FieldSelect ui="dropdown" :aria-label="t('Passaggio fra le pagine')" :modelValue="passaggio.passaggio || ''" :options="passaggioOptions" @update:modelValue="salvaPassaggio('passaggio', $event)" />
+          </div>
+          <div v-if="passaggio.passaggio" class="psp-row">
+            <span class="psp-label">{{ t('Durata del passaggio') }}</span>
+            <FieldRange compact unit="ms" :min="200" :max="1500" :step="50" :defaultValue="500" :aria-label="t('Durata del passaggio')" :modelValue="passaggio.durata || 500" @update:modelValue="salvaPassaggio('durata', interoNelRange($event, 200, 1500) || 500)" />
+          </div>
 
           <!-- Apertura: renderer Olobuild_Page_Intro (class-page-intro.php), stesse chiavi page_intro_* -->
           <div class="psp-row">
@@ -612,6 +635,42 @@ const introStyleOptions = [
 ];
 // La scritta vuota è il nome del sito (get_bloginfo nel PHP): lo si mostra come segnaposto.
 const siteName = (oloData.siteInfo && oloData.siteInfo.name) || '';
+// ── Passaggio fra le pagine (1.4.1218): option del sito, GET/PUT olobuild/v1/transizioni ──
+const PASSAGGIO_URL = `${(window.oloData?.restUrl || '').replace(/\/$/, '')}/transizioni`;
+const passaggio = ref({ passaggio: '', durata: 500 });
+const passaggioOptions = [
+  { value: '', label: t('Come sempre') },
+  { value: 'dissolvenza', label: t('Dissolvenza') },
+  { value: 'tendina', label: t('Tendina che sale') },
+  { value: 'zoom', label: t('Zoom') },
+  { value: 'cerchio', label: t('Cerchio dal clic') },
+];
+let passaggioTimer = null;
+(async () => {
+  try {
+    const r = await fetch(PASSAGGIO_URL, { headers: { 'X-WP-Nonce': window.oloData?.nonce } });
+    if (r.ok) passaggio.value = await r.json();
+  } catch (e) { /* senza risposta il campo resta «Come sempre» */ }
+})();
+function salvaPassaggio(chiave, valore) {
+  passaggio.value = { ...passaggio.value, [chiave]: valore };
+  clearTimeout(passaggioTimer);
+  passaggioTimer = setTimeout(async () => {
+    try {
+      const r = await fetch(PASSAGGIO_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData?.nonce },
+        body: JSON.stringify(passaggio.value),
+      });
+      if (!r.ok) throw new Error();
+      passaggio.value = await r.json();
+      toast.success(t('Passaggio fra le pagine salvato per tutto il sito.'));
+    } catch (e) {
+      toast.error(t('Il passaggio fra le pagine non si è salvato.'));
+    }
+  }, 500);
+}
+
 const effettiAttivi = computed(() =>
   pageSettings.value.page_crt_enabled === true || pageSettings.value.page_grain_enabled === true
     || pageSettings.value.page_intro_enabled === true || pageSettings.value.page_rovescia === true

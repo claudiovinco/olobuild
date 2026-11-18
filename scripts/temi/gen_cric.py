@@ -50,7 +50,7 @@ SPIE = [('olio', 'Olio motore', 'La spia dell’olio', 'Olio basso o pressione s
          'proviamo col tester.', 'da 110 € · un’ora'),
         ('motore', 'Gestione motore', 'La spia del motore', 'La centralina ha trovato un guasto: lo leggiamo con la diagnosi, '
          'e vi diciamo cos’è prima di toccare.', 'diagnosi 45 € · 30 minuti')]
-DISEGNI = ['cric-cruscotto-2.svg'] + ['cric-spia-%s.svg' % s[0] for s in SPIE] + ['cric-spia-%s-ok.svg' % s[0] for s in SPIE]
+DISEGNI = ['cric-cruscotto-3.svg'] + ['cric-spia-%s.svg' % s[0] for s in SPIE] + ['cric-spia-%s-ok.svg' % s[0] for s in SPIE]
 LOGHI = ['cric-logo-chiaro.png', 'cric-logo-scuro.png']
 MEDIA = set(PHOTOS) | set(DISEGNI) | set(LOGHI) | {v + '.mp4' for v in VIDEOS} | {v + '.jpg' for v in VIDEOS}
 
@@ -75,69 +75,90 @@ def build_footer():
 
 
 # ── L'apertura: la spia ──
+# Lo schermo del cruscotto 3 per formato: x e larghezza dei testi, poi le quote di etichetta (a), titolo (t), prezzo (p) e
+# descrizione (d), in % della tela. Computer: lo schermo è sx 850–1350, sy 205–505 del disegno → 38.6–61.4 × 66.1–90.3.
+SCHERMO = {
+    'desk': {'x': 39.9, 'w': 20.2, 'a': 67.4, 't': 69.8, 'p': 73.4, 'd': 76.2},
+    'tab': {'x': 37.9, 'w': 24.2, 'a': 59.6, 't': 61.8, 'p': 66.2, 'd': 69.4},
+    'tel': {'x': 21, 'w': 58, 'a': 75.7, 't': 77.1, 'p': 79.3, 'd': 81.0},
+}
+
+
+def nello_schermo(quota, fs_tel):
+    """Il posto di un testo dello schermo su telefono, tablet e notebook. Sul tablet si dice «visibile»: il kit nasconde le
+    scritte sotto l'84% (finirebbero sotto le linguette), e lo schermo arriva all'87%."""
+    T, B = SCHERMO['tel'], SCHERMO['tab']
+    tab = {'x': B['x'], 'y': B[quota], 'width': B['w']}
+    return {'mobile': {'fontSize': K.mob(fs_tel), 'x': T['x'], 'y': T[quota], 'width': T['w']},
+            'tablet': dict(tab, visible=True), 'notebook': dict(tab)}
+
+
 def apertura(t):
     m = K.mob
     tutte = ','.join(s[0] for s in SPIE)
     VUOTO = {'nome': 'spia', 'vale': '!' + tutte, 'effetto': 'fade', 'durata': 400}
     L = K.veli('cr-velo', 'alto', 26, 44, colore=C['nero'], forza=80, mobile_alto=22) + [
-        K.livello('cr-cruscotto', tipo='image', imageSrc=K.img(DISEGNI[0]), imageAlt='Il cruscotto di un’auto, di notte, coi due quadranti',
-                  objectFit='contain', x=0, y=34, w=100, h=77.8, entra='fadeInUp', ritardo=200, durata=900,
-                  responsive={'mobile': {'x': -50, 'y': 40, 'width': 200, 'height': 40}}),
-        # sul telefono sotto il cruscotto un fondo scuro per il testo della spia (sul computer è fuori tela)
-        K.livello('cr-fondo-tel', tipo='shape', bgColor='#07090C', x=-200, y=79, w=100, h=21, entra='fadeIn', ritardo=0, durata=300,
-                  responsive={'mobile': {'x': 0, 'y': 79, 'width': 100, 'height': 21}}),
+        # il cruscotto 3 (18 nov 2026, utente: «più basso e più piccolo, per fare spazio alla strada che scorre; più reale»):
+        # la plancia a tutta larghezza poggia sul fondo, il quadro sta nella metà bassa e sopra si vede la strada
+        K.livello('cr-cruscotto', tipo='image', imageSrc=K.img(DISEGNI[0]),
+                  imageAlt='Il cruscotto di un’auto, di notte: contagiri, tachimetro e lo schermo in mezzo',
+                  objectFit='contain', x=0, y=49.5, w=100, h=51.72, entra='fadeInUp', ritardo=200, durata=900,
+                  responsive={'mobile': {'x': -90.8, 'y': 62.6, 'width': 281.6, 'height': 37.45},
+                              'tablet': {'x': -9.4, 'y': 38.6, 'width': 118.8, 'height': 61.4},
+                              'notebook': {'x': -9.4, 'y': 38.6, 'width': 118.8, 'height': 61.4}}),
         K.livello('cr-o', contenuto='Cric · officina meccanica · Torino', x=6, y=13, w=50, size=13, peso='500', colore=mix(C['chiaro'], 82),
                   letterSpacing=3, textTransform='uppercase', fontFamily=MONO, ritardo=200,
-                  responsive={'mobile': {'fontSize': m(10), 'x': 6, 'y': 9, 'width': 88}}),
+                  responsive={'mobile': {'fontSize': m(10), 'x': 6, 'y': 9, 'width': 88}, 'tablet': {'y': 17.2}, 'notebook': {'y': 16.2}}),
         K.livello('cr-t', contenuto='Si è accesa una spia?', tag='h1', x=6, y=16.5, w=62, size=70, peso='600', colore=C['chiaro'],
                   fontFamily=FONT_T, lineHeight=1.0, entra='maskFromBottom', ritardo=300, durata=900,
-                  responsive={'mobile': {'fontSize': m(40), 'x': 6, 'y': 11.5, 'width': 88}}),
+                  responsive={'mobile': {'fontSize': m(40), 'x': 6, 'y': 11.5, 'width': 88}, 'tablet': {'y': 20.4}, 'notebook': {'y': 19.2}}),
         K.livello('cr-s', contenuto='Toccatela: vi diciamo cos’è, quanto costa e quanto ci vuole.', x=6, y=26.5, w=44, size=18, peso='400',
                   colore=mix(C['chiaro'], 90), lineHeight=1.5, ritardo=600,
                   responsive={'mobile': {'fontSize': m(14), 'x': 6, 'y': 23.5, 'width': 86}}),
         K.livello('cr-b1', tipo='button', contenuto='Prenota', x=72, y=16, w='auto', size=13, peso='700', colore=C['on_acc'], bgColor=C['acc'],
                   padding=18, borderRadius=6, letterSpacing=2, textTransform='uppercase', buttonUrl=PRENOTA, entra='fadeIn', ritardo=800,
-                  hover={'bgColor': '#FFFFFF', 'duration': 250}, responsive={'mobile': {'x': 6, 'y': 31, 'fontSize': m(12)}}),
+                  hover={'bgColor': '#FFFFFF', 'duration': 250}, responsive={'mobile': {'x': 6, 'y': 31, 'fontSize': m(12)}, 'tablet': {'y': 19.8}, 'notebook': {'y': 18.6}}),
         K.livello('cr-b2', tipo='button', contenuto='I servizi', x=82, y=16, w='auto', size=13, peso='700', colore=C['chiaro'],
                   bgColor='transparent', padding=18, borderRadius=6, borderWidth=1, borderColor=mix(C['chiaro'], 55), letterSpacing=2,
                   textTransform='uppercase', buttonUrl=SERVIZI, entra='fadeIn', ritardo=900,
-                  hover={'bgColor': mix(C['chiaro'], 14), 'duration': 250}, responsive={'mobile': {'x': 44, 'y': 31, 'fontSize': m(12)}}),
-        # il display prima della scelta
-        K.livello('cr-d0a', contenuto='Nessuna spia scelta', x=39.5, y=59, w=21, size=12, peso='500', colore=C['sec'], letterSpacing=2,
-                  textTransform='uppercase', fontFamily=MONO, ritardo=900, stato=VUOTO,
-                  responsive={'mobile': {'fontSize': m(10), 'x': 28, 'y': 53, 'width': 44}}),
-        K.livello('cr-d0b', contenuto='Toccatene una.', x=39.5, y=62.5, w=21, size=26, peso='600', colore=C['chiaro'], fontFamily=FONT_T,
-                  ritardo=1000, stato=VUOTO, responsive={'mobile': {'fontSize': m(18), 'x': 28, 'y': 55.5, 'width': 44}}),
-        K.livello('cr-d0c', contenuto='Quattro spie accese qui sopra: il guasto più comune per ognuna, con il prezzo.', x=39.5, y=68.5, w=21,
-                  size=14, peso='400', colore=mix(C['chiaro'], 80), lineHeight=1.45, ritardo=1100, stato=VUOTO,
-                  responsive={'mobile': {'fontSize': m(13), 'x': 6, 'y': 83, 'width': 88}}),
+                  hover={'bgColor': mix(C['chiaro'], 14), 'duration': 250}, responsive={'mobile': {'x': 44, 'y': 31, 'fontSize': m(12)}, 'tablet': {'y': 19.8}, 'notebook': {'y': 18.6}}),
+        # il display prima della scelta (le misure dello schermo per formato stanno in SCHERMO, qui sotto)
+        K.livello('cr-d0a', contenuto='Nessuna spia scelta', x=SCHERMO['desk']['x'], y=SCHERMO['desk']['a'], w=SCHERMO['desk']['w'], size=11,
+                  peso='500', colore=C['sec'], letterSpacing=2, textTransform='uppercase', fontFamily=MONO, ritardo=900, stato=VUOTO,
+                  responsive=nello_schermo('a', 10)),
+        K.livello('cr-d0b', contenuto='Toccatene una.', x=SCHERMO['desk']['x'], y=SCHERMO['desk']['t'], w=SCHERMO['desk']['w'], size=22,
+                  peso='600', colore=C['chiaro'], fontFamily=FONT_T, ritardo=1000, stato=VUOTO, responsive=nello_schermo('t', 17)),
+        K.livello('cr-d0c', contenuto='Quattro spie accese qui sopra: il guasto più comune per ognuna, con il prezzo.',
+                  x=SCHERMO['desk']['x'], y=SCHERMO['desk']['p'], w=SCHERMO['desk']['w'], size=13, peso='400', colore=mix(C['chiaro'], 80),
+                  lineHeight=1.45, ritardo=1100, stato=VUOTO, responsive=nello_schermo('p', 13)),
     ]
     for k, (nome, sistema, titolo, testo, prezzo) in enumerate(SPIE):
         ACCESA = {'nome': 'spia', 'vale': '!' + nome, 'effetto': 'nessuno'}
         SCELTA = lambda rit=0: {'nome': 'spia', 'vale': nome, 'effetto': 'su', 'durata': 450, 'ritardo': rit}
-        geo = dict(x=36.4 + k * 7.2, y=46, w=5.6, h=8.0)
-        geo_m = {'x': 26.25 + k * 12.5, 'y': 44.5, 'width': 10, 'height': 3.66}
+        geo = dict(x=39.0 + k * 6.0, y=59.6, w=4.0, h=5.4)
+        geo_m = {'x': 19.03 + k * 16.9, 'y': 70.1, 'width': 11.26, 'height': 3.6}
+        geo_t = {'x': round(36.93 + k * 7.128, 2), 'y': 50.9, 'width': 4.75, 'height': 5.9}
+        spia_resp = {'mobile': geo_m, 'tablet': dict(geo_t), 'notebook': dict(geo_t)}
+        D = SCHERMO['desk']
         L += [
             K.livello('cr-sp-' + nome, tipo='image', imageSrc=K.img('cric-spia-%s.svg' % nome), imageAlt=titolo, objectFit='contain',
                       entra='fadeIn', ritardo=1200 + k * 120, durata=400, stato=ACCESA,
                       action={'type': 'setState', 'target': 'spia', 'value': nome, 'label': titolo + ': cos’è'},
                       customCSS='--mps-attivo:#FFB020;', hover={'scale': 1.12, 'duration': 180},
-                      responsive={'mobile': geo_m}, **geo),
+                      responsive=spia_resp, **geo),
             K.livello('cr-ok-' + nome, tipo='image', imageSrc=K.img('cric-spia-%s-ok.svg' % nome), imageAlt=titolo + ', sistemata',
                       objectFit='contain', entra='fadeIn', ritardo=0, durata=300, stato={'nome': 'spia', 'vale': nome, 'effetto': 'nessuno'},
-                      responsive={'mobile': geo_m}, **geo),
-            K.livello('cr-n-' + nome, contenuto=sistema, x=39.5, y=59, w=21, size=12, peso='500', colore=C['acc'], letterSpacing=2,
+                      responsive={c: dict(v) for c, v in spia_resp.items()}, **geo),
+            # etichetta, titolo, prezzo e in fondo la descrizione: col carattere minimo è lei che si allunga
+            K.livello('cr-n-' + nome, contenuto=sistema, x=D['x'], y=D['a'], w=D['w'], size=11, peso='500', colore=C['acc'], letterSpacing=2,
                       textTransform='uppercase', fontFamily=MONO, entra='fadeIn', ritardo=0, stato=SCELTA(0),
-                      responsive={'mobile': {'fontSize': m(10), 'x': 28, 'y': 53, 'width': 44}}),
-            K.livello('cr-ti-' + nome, contenuto=titolo, x=39.5, y=62.5, w=21, size=24, peso='600', colore=C['chiaro'], fontFamily=FONT_T,
-                      lineHeight=1.1, entra='fadeIn', ritardo=0, stato=SCELTA(80),
-                      responsive={'mobile': {'fontSize': m(17), 'x': 28, 'y': 55.5, 'width': 44}}),
-            K.livello('cr-tx-' + nome, contenuto=testo, x=39.5, y=67.5, w=21, size=14, peso='400', colore=mix(C['chiaro'], 82),
-                      lineHeight=1.45, entra='fadeIn', ritardo=0, stato=SCELTA(160),
-                      responsive={'mobile': {'fontSize': m(13), 'x': 6, 'y': 82, 'width': 88}}),
-            K.livello('cr-pr-' + nome, contenuto=prezzo, x=39.5, y=78.5, w=21, size=14, peso='600', colore=C['acc'], fontFamily=MONO,
-                      entra='fadeIn', ritardo=0, stato=SCELTA(240),
-                      responsive={'mobile': {'fontSize': m(13), 'x': 6, 'y': 93.5, 'width': 88}}),
+                      responsive=nello_schermo('a', 10)),
+            K.livello('cr-ti-' + nome, contenuto=titolo, x=D['x'], y=D['t'], w=D['w'], size=21, peso='600', colore=C['chiaro'], fontFamily=FONT_T,
+                      lineHeight=1.1, entra='fadeIn', ritardo=0, stato=SCELTA(80), responsive=nello_schermo('t', 16)),
+            K.livello('cr-pr-' + nome, contenuto=prezzo, x=D['x'], y=D['p'], w=D['w'], size=13, peso='600', colore=C['acc'], fontFamily=MONO,
+                      entra='fadeIn', ritardo=0, stato=SCELTA(160), responsive=nello_schermo('p', 13)),
+            K.livello('cr-tx-' + nome, contenuto=testo, x=D['x'], y=D['d'], w=D['w'], size=13, peso='400', colore=mix(C['chiaro'], 82),
+                      lineHeight=1.45, entra='fadeIn', ritardo=0, stato=SCELTA(240), responsive=nello_schermo('d', 13)),
         ]
     sl = [K.diapositiva('cr-1', K.sfondo_video(V_NOTTE, overlay=0.15, colore=C['nero']), L, durata=600000)]
     return K.proslider(t, sl, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='fade', showArrows=False, showDots=False,

@@ -1014,6 +1014,14 @@ class Olobuild_Seo_Head {
                 return $custom;
             }
 
+            // L'immagine disegnata (1.4.1218): titolo, nome del sito e foto in evidenza nei colori del sito.
+            if ( class_exists( 'Olobuild_Og_Disegnata' ) && Olobuild_Og_Disegnata::attiva() ) {
+                $disegnata = Olobuild_Og_Disegnata::url_per( $post );
+                if ( $disegnata ) {
+                    return $disegnata;
+                }
+            }
+
             $thumb = get_the_post_thumbnail_url( $post, 'large' );
             if ( $thumb ) {
                 return $thumb;

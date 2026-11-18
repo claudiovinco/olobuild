@@ -119,6 +119,10 @@ def applica_tema(tid, nome_file, built):
     c = built['content'] if isinstance(built, dict) and 'content' in built else built
     if v and isinstance(c, list) and c:
         applica(c[0], v)
+    # il nome e il logo alla misura classica, in ogni disposizione (18 nov 2026, utente: «falli più classici, piccoli»)
+    import piedi_piccoli
+    if isinstance(c, list):
+        piedi_piccoli.rimpicciolisci(c, piedi_piccoli.nome_di(tid))
 
 
 def main():

@@ -1247,6 +1247,27 @@
             </div>
           </CollapseSection>
 
+          <!-- La sorpresa nascosta (1.4.1218): un gioco per chi la trova -->
+          <CollapseSection :title="t('Sorpresa nascosta')"
+            :info="[t('Un regalo per i curiosi: dopo cinque clic su questo elemento, o col codice Konami sulla tastiera (su, su, giù, giù, sinistra, destra, sinistra, destra, B, A), succede qualcosa.'), t('Sul telefono, dove la tastiera non c\'è, bastano i cinque tocchi. Se l\'elemento è un link a un\'altra pagina, il primo clic la apre: meglio un logo che porta alla pagina stessa, o un elemento senza link.'), t('Per chi ha chiesto meno movimento, coriandoli e capovolgimento diventano il messaggio.')]">
+            <div class="mb-space-y-3">
+              <div>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Cosa succede') }}</label>
+                <FieldSelect ui="dropdown" :model-value="tileAdvanced.sorpresa || ''" :options="SORPRESA_OPTIONS" @update:model-value="updateAdvanced('sorpresa', $event)" />
+              </div>
+              <template v-if="tileAdvanced.sorpresa">
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Come si trova') }}</label>
+                  <FieldSelect ui="segmented" :model-value="tileAdvanced.sorpresa_innesco || 'clic'" :options="SORPRESA_INNESCO_OPTIONS" @update:model-value="updateAdvanced('sorpresa_innesco', $event)" />
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ tileAdvanced.sorpresa === 'messaggio' ? t('Messaggio') : t('Messaggio (facoltativo)') }}</label>
+                  <input type="text" maxlength="160" :value="tileAdvanced.sorpresa_testo || ''" :placeholder="t('Hai trovato la sorpresa!')" @change="updateAdvanced('sorpresa_testo', $event.target.value)" class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-xs mb-text-gray-900" />
+                </div>
+              </template>
+            </div>
+          </CollapseSection>
+
           <!-- Infinite (Looping) Animations -->
           <CollapseSection :title="t('Animazione continua')">
             <div class="mb-space-y-3">
@@ -1653,6 +1674,17 @@ const STICKY_POSITION_OPTIONS = [
 ];
 
 // Dove agisce la torcia: dentro l'elemento, in tutta la sua sezione o su tutta la pagina (disco fisso).
+// La sorpresa nascosta (1.4.1218). Label RAW: FieldSelect applica t().
+const SORPRESA_OPTIONS = [
+  { value: '', label: 'Nessuna' },
+  { value: 'coriandoli', label: 'Coriandoli' },
+  { value: 'capovolto', label: 'La pagina si capovolge' },
+  { value: 'messaggio', label: 'Un messaggio' },
+];
+const SORPRESA_INNESCO_OPTIONS = [
+  { value: 'clic', label: 'Cinque clic' },
+  { value: 'konami', label: 'Codice Konami' },
+];
 const SPOTLIGHT_SCOPE_OPTIONS = [
   { value: 'element', label: 'Questo elemento' },
   { value: 'section', label: 'La sua sezione' },

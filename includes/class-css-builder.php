@@ -156,6 +156,9 @@ class Olobuild_CSS_Builder {
         if ( $bg['type'] === 'geo' ) {
             return $this->build_geo_css( $bg );
         }
+        if ( $bg['type'] === 'gradini' ) {
+            return $this->build_gradini_css( $bg );
+        }
         if ( $bg['type'] === 'image' && ! empty( $bg['image_url'] ) ) {
             $url      = esc_url_raw( $bg['image_url'] );
             $position = sanitize_text_field( $bg['image_position'] ?? 'center center' );
@@ -256,10 +259,29 @@ class Olobuild_CSS_Builder {
         return 'color-mix(in srgb, ' . $c . ' ' . min( 100, $op ) . '%, transparent)';
     }
 
+    /**
+     * La Grana dello Sfondo (1.4.1218): 0–100, uno strato di grana sopra lo sfondo e sotto il contenuto, per ogni tipo
+     * (tinta, gradiente, foto, video, galleria, generativi). Vive accanto alla Sovrapposizione: chi la disegna (sezione,
+     * riga, colonna, tile) tratta la grana come un velo in più.
+     */
+    public static function ha_grana( $bg ) {
+        return is_array( $bg ) && ( $bg['type'] ?? 'none' ) !== 'none' && (int) ( $bg['grana'] ?? 0 ) > 0;
+    }
+
+    /** Lo strato della grana (o ''): il disegno sta in frontend.css (.olo-bg-grana), qui solo l'intensità. */
+    public static function grana_markup( $bg ) {
+        if ( ! self::ha_grana( $bg ) ) {
+            return '';
+        }
+        $g = max( 1, min( 100, (int) $bg['grana'] ) );
+        return '<div class="olo-bg-grana" aria-hidden="true" style="--olo-grana:' . round( $g / 100 * 0.55, 3 ) . '"></div>';
+    }
+
     /** Il velo sopra un video o una galleria di sfondo (dopo il media, sotto il contenuto). */
     private static function velo_markup( $bg ) {
         $velo = self::velo_sfondo( $bg );
-        return '' === $velo ? '' : '<div class="olo-bg-velo" aria-hidden="true" style="position:absolute;inset:0;z-index:0;pointer-events:none;background:' . esc_attr( self::velo_fondo( $bg, $velo ) ) . '"></div>';
+        return ( '' === $velo ? '' : '<div class="olo-bg-velo" aria-hidden="true" style="position:absolute;inset:0;z-index:0;pointer-events:none;background:' . esc_attr( self::velo_fondo( $bg, $velo ) ) . '"></div>' )
+            . self::grana_markup( $bg );
     }
 
     /**
@@ -299,6 +321,73 @@ class Olobuild_CSS_Builder {
      * @param array $bg
      * @return string
      */
+    /**
+     * «Gradini di luce» (1.4.1218): barre accostate che salgono verso un picco, con le stesse fasce di colore a quote
+     * fisse e un alone morbido ai lati. Gemello JS: src/utils/gradiniCSS.js (getGradiniCSS), stessi conti.
+     *
+     * @param array $bg
+     * @return string
+     */
+    public function build_gradini_css( $bg ) {
+        $v = function ( $k, $d ) use ( $bg ) {
+            return ( ! isset( $bg[ $k ] ) || '' === $bg[ $k ] ) ? $d : $bg[ $k ];
+        };
+        $n      = max( 3, min( 16, (int) $v( 'gradini_n', 9 ) ) );
+        $picco  = max( 0, min( 100, (int) $v( 'gradini_picco', 50 ) ) );
+        $alt    = max( 10, min( 100, (int) $v( 'gradini_altezza', 72 ) ) );
+        $curva  = max( 0, min( 100, (int) $v( 'gradini_curva', 45 ) ) );
+        $alone  = max( 0, min( 100, (int) $v( 'gradini_alone', 60 ) ) );
+        $verso  = ! empty( $bg['gradini_alto'] ) ? 'to bottom' : 'to top';
+        $colori = [];
+        foreach ( (array) ( $bg['gradini_colori'] ?? [] ) as $c ) {
+            if ( '' !== $c && null !== $c ) {
+                $colori[] = (string) $c;
+            }
+        }
+        if ( ! $colori ) {
+            $colori = [ 'var(--olo-color-primary)', 'var(--olo-color-secondary, var(--olo-color-primary))', 'var(--olo-color-accent, var(--olo-color-primary))' ];
+        }
+        $m     = count( $colori );
+        $w     = 100 / $n;
+        $pk    = $picco / 100 * ( $n - 1 );
+        $f     = function ( $x ) { return rtrim( rtrim( number_format( $x, 3, '.', '' ), '0' ), '.' ); };
+        $barra = function ( $h, $alfa ) use ( $colori, $m, $alt, $verso, $f ) {
+            $stop   = [];
+            $ultimo = $this->glow_color_to_css( $colori[0], $alfa );
+            for ( $k = 0; $k < $m; $k++ ) {
+                $q = 1 === $m ? 0 : $alt * $k / ( $m - 1 );
+                if ( $q > $h - 4 && $k > 0 ) {
+                    break;
+                }
+                $ultimo = $this->glow_color_to_css( $colori[ $k ], $alfa );
+                $stop[] = $ultimo . ' ' . number_format( $q, 2, '.', '' ) . '%';
+            }
+            $stop[] = $ultimo . ' ' . number_format( max( 0, $h - 4 ), 2, '.', '' ) . '%';
+            $stop[] = 'transparent ' . number_format( $h, 2, '.', '' ) . '%';
+            return 'linear-gradient(' . $verso . ', ' . implode( ', ', $stop ) . ')';
+        };
+        $img  = [];
+        $size = [];
+        $pos  = [];
+        $fila = function ( $largh, $spost, $alfa ) use ( &$img, &$size, &$pos, $n, $pk, $alt, $curva, $w, $barra, $f ) {
+            for ( $i = 0; $i < $n; $i++ ) {
+                $dist   = abs( $i - $pk ) / max( 1, $n - 1 );
+                $h      = $alt * max( 0.1, 1 - $curva / 100 * 1.8 * $dist );
+                $img[]  = $barra( $h, $alfa );
+                $size[] = number_format( $largh, 3, '.', '' ) . '% 100%';
+                $pos[]  = number_format( $largh >= 100 ? 0 : ( $i * $w - $spost ) / ( 100 - $largh ) * 100, 3, '.', '' ) . '% 0';
+            }
+        };
+        // le barre si sovrappongono di un soffio: accostate e basta, gli arrotondamenti lasciavano un filo di fondo fra due barre
+        $fila( $w + 0.3, 0.15, 1 );
+        if ( $alone > 0 ) {
+            $fila( $w * 1.9, $w * 0.45, $alone / 100 * 0.6 );
+        }
+        $base = esc_attr( (string) $v( 'gradini_base', 'var(--olo-color-background, #0b0a0d)' ) );
+        return 'background-color: ' . $base . '; background-image: ' . implode( ', ', $img ) . '; background-size: ' . implode( ', ', $size )
+            . '; background-position: ' . implode( ', ', $pos ) . '; background-repeat: no-repeat';
+    }
+
     public function build_geo_css( $bg ) {
         $d = [
             'geo_base' => 'var(--olo-color-dark, #0f172a)', 'geo_rings' => 3, 'geo_rings_x' => 90, 'geo_rings_y' => 18,
@@ -572,8 +661,11 @@ class Olobuild_CSS_Builder {
             'corners' => [ [ 10, 12 ], [ 90, 14 ], [ 12, 88 ], [ 88, 86 ], [ 50, 50 ], [ 50, 8 ] ],
             'center'  => [ [ 50, 46 ], [ 34, 56 ], [ 66, 56 ], [ 50, 30 ], [ 42, 42 ], [ 58, 42 ] ],
             'top'     => [ [ 20, 8 ], [ 50, 3 ], [ 80, 8 ], [ 35, 22 ], [ 66, 18 ], [ 50, 32 ] ],
+            // Seta (1.4.1218): pieghe lunghe e sottili, sfalsate; gemello di meshCSS.js
+            'seta'    => [ [ 30, 18 ], [ 72, 40 ], [ 26, 62 ], [ 70, 84 ], [ 50, 6 ], [ 48, 96 ] ],
         ];
         $preset    = $bg['mesh_preset'] ?? 'spread';
+        $forma     = 'seta' === $preset ? 'ellipse 130% 20%' : 'circle';
         $positions = $positions_map[ $preset ] ?? $positions_map['spread'];
         $pcount    = count( $positions );
         $ccount    = count( $colors );
@@ -597,7 +689,7 @@ class Olobuild_CSS_Builder {
             $core = $this->glow_color_to_css( $col, $intensity );
             $mid  = $this->glow_color_to_css( $col, $intensity * 0.5 );
             $fade = $this->glow_color_to_css( $col, 0 );
-            $blobs[] = "radial-gradient(circle at {$pos[0]}% {$pos[1]}%, {$core} 0%, {$mid} {$midpos}%, {$fade} {$stop}%)";
+            $blobs[] = "radial-gradient({$forma} at {$pos[0]}% {$pos[1]}%, {$core} 0%, {$mid} {$midpos}%, {$fade} {$stop}%)";
         }
 
         $css = 'background-color: ' . $base
@@ -965,6 +1057,18 @@ class Olobuild_CSS_Builder {
                 $half = $size / 2;
                 $bg_image = "linear-gradient({$a45}deg,{$c} 25%,transparent 25%,transparent 75%,{$c} 75%,{$c}),linear-gradient({$a45}deg,{$c} 25%,transparent 25%,transparent 75%,{$c} 75%,{$c})";
                 $bg_pos = "0 0,{$half}px {$half}px";
+                break;
+            case 'gingham':
+                // Vichy (1.4.1218): due righe larghe metà del modulo che si incrociano, gemello di getPatternCSS.
+                $bg_image = "linear-gradient({$a90}deg,{$c} 50%,transparent 50%),linear-gradient({$a0}deg,{$c} 50%,transparent 50%)";
+                $bg_size  = "{$size}px {$size}px,{$size}px {$size}px";
+                break;
+            case 'halftone':
+                // Mezzitoni (1.4.1218): il retino che sfuma nel colore di fondo; la Rotazione orienta la sfumatura.
+                $dr       = $dot_r !== null ? $dot_r : max( 2, round( $size * 0.32 ) );
+                $a180     = $a0 + 180;
+                $bg_image = "linear-gradient({$a180}deg,transparent 0%,{$bg_clr} 92%),radial-gradient(circle,{$c} {$dr}px,transparent " . ( $dr + 0.6 ) . 'px)';
+                $bg_size  = "100% 100%,{$size}px {$size}px";
                 break;
             case 'graph-paper':
                 // Griglia rotabile: repeating-linear-gradient + rot, background-size auto.
@@ -1434,15 +1538,54 @@ class Olobuild_CSS_Builder {
         if ( $contrast != 100 )   $parts[] = 'contrast(' . $contrast . '%)';
         if ( $saturate != 100 )   $parts[] = 'saturate(' . $saturate . '%)';
 
+        // Vetro liquido (1.4.1218): 1 leggero, 2 medio, 3 forte. Il vetro sfocato resta per tutti; la distorsione va in
+        // una variabile che la regola di frontend.css usa solo dove il browser la sa disegnare (html.olo-vl-ok).
+        $liquido = max( 0, min( 3, (int) ( $style['backdrop_liquido'] ?? 0 ) ) );
+        if ( $liquido && empty( $parts ) ) {
+            $parts[] = 'blur(6px)';
+        }
+
         if ( empty( $parts ) ) {
             return [];
         }
 
         $val = implode( ' ', $parts );
-        return [
+        $out = [
             '-webkit-backdrop-filter: ' . $val,
             'backdrop-filter: ' . $val,
         ];
+        if ( $liquido ) {
+            self::$vetro_liquido[ $liquido ] = true;
+            if ( ! has_action( 'wp_footer', [ __CLASS__, 'stampa_vetro_liquido' ] ) ) {
+                add_action( 'wp_footer', [ __CLASS__, 'stampa_vetro_liquido' ], 5 );
+            }
+            $out[] = '--olo-bd: ' . $val;
+            $out[] = '--olo-vl: url(#olo-vl-' . $liquido . ')';
+        }
+        return $out;
+    }
+
+    /** I livelli del Vetro liquido usati nella pagina (1 leggero, 2 medio, 3 forte). */
+    public static $vetro_liquido = [];
+
+    /**
+     * I filtri SVG del Vetro liquido (una distorsione morbida per livello) e il segno per i browser che la disegnano
+     * dentro backdrop-filter (Chrome ed Edge): gli altri restano col vetro sfocato. Niente «&&» nello script.
+     */
+    public static function stampa_vetro_liquido() {
+        if ( ! self::$vetro_liquido ) {
+            return;
+        }
+        $forza = [ 1 => 18, 2 => 42, 3 => 80 ];
+        $f     = '';
+        foreach ( array_keys( self::$vetro_liquido ) as $l ) {
+            $f .= '<filter id="olo-vl-' . (int) $l . '" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">'
+                . '<feTurbulence type="fractalNoise" baseFrequency="0.006 0.011" numOctaves="2" seed="' . ( 3 + (int) $l ) . '" result="n"/>'
+                . '<feGaussianBlur in="n" stdDeviation="2" result="m"/>'
+                . '<feDisplacementMap in="SourceGraphic" in2="m" scale="' . (int) $forza[ $l ] . '" xChannelSelector="R" yChannelSelector="G"/></filter>';
+        }
+        echo '<svg aria-hidden="true" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden">' . $f . '</svg>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup fisso, numeri interi
+        echo '<script>(function(){var d=navigator.userAgentData;if(d){if(d.brands){if(d.brands.some(function(b){return /Chrom|Edge/.test(b.brand);})){document.documentElement.classList.add("olo-vl-ok");}}}})();</script>';
     }
 
     /**

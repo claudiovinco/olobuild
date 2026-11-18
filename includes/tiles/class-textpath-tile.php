@@ -27,6 +27,8 @@ class Olobuild_Textpath_Tile extends Olobuild_Tile_Base {
         'spin'            => false,
         'spin_speed'      => '14',
         'spin_direction'  => 'cw',
+        'spin_mode'       => 'continuo',
+        'center_icon'     => '',
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -66,6 +68,11 @@ class Olobuild_Textpath_Tile extends Olobuild_Tile_Base {
         $spin       = ! empty( $s['spin'] );
         $spin_speed = max( 3, min( 40, intval( $s['spin_speed'] ) ) );
         $spin_dir   = ( $s['spin_direction'] === 'ccw' ) ? 'reverse' : 'normal';
+        // Il timbro che gira mentre scorri (1.4.1218): niente animazione continua, la rotazione la scrive lo script.
+        $gira_scorri = $spin && 'scorrimento' === ( $s['spin_mode'] ?? 'continuo' );
+        if ( $gira_scorri ) {
+            $spin = false;
+        }
 
         // Path presets
         $presets = [
@@ -141,7 +148,9 @@ class Olobuild_Textpath_Tile extends Olobuild_Tile_Base {
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
-        <div class="olo-textpath <?php echo esc_attr( $uid ); ?>" id="<?php echo esc_attr( $uid ); ?>">
+        <?php $icona_centro = ( $preset === 'circle' ) ? $this->render_icon_html( (string) ( $s['center_icon'] ?? '' ), 2.2, 'class="olo-tp-centro" aria-hidden="true"' ) : ''; ?>
+        <?php if ( '' !== $icona_centro ) : ?><style>.<?php echo esc_attr( $uid ); ?>{position:relative}.<?php echo esc_attr( $uid ); ?> .olo-tp-centro{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:26%;height:auto;color:<?php echo $color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- safe_color_css() ?>;pointer-events:none}.<?php echo esc_attr( $uid ); ?> .olo-tp-centro svg{width:100%;height:auto}</style><?php endif; ?>
+        <div class="olo-textpath <?php echo esc_attr( $uid ); ?>" id="<?php echo esc_attr( $uid ); ?>"<?php echo $gira_scorri ? ' data-gira-scorri="' . ( 'reverse' === $spin_dir ? '-1' : '1' ) . '"' : ''; ?>>
             <svg viewBox="<?php echo esc_attr( $viewbox ); ?>" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <path id="<?php echo esc_attr( $path_id ); ?>" d="<?php echo esc_attr( $path_d ); ?>" fill="none" />
@@ -163,7 +172,15 @@ class Olobuild_Textpath_Tile extends Olobuild_Tile_Base {
                     ><?php echo $text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() at assignment above ?></textPath>
                 </text>
             </svg>
+            <?php echo $icona_centro; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html() ?>
         </div>
+        <?php if ( $gira_scorri ) : // la rotazione segue lo scorrimento: un terzo di giro ogni schermata, ferma per chi chiede meno movimento ?>
+        <script>(function(){var el=document.getElementById(<?php echo wp_json_encode( $uid ); ?>);if(!el){return;}var sv=el.querySelector('svg');if(!sv){return;}
+        if(window.matchMedia){if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){return;}}
+        var verso=parseFloat(el.getAttribute('data-gira-scorri'))||1,fatto=false;sv.style.transformBox='view-box';sv.style.transformOrigin='center';
+        function gira(){fatto=false;var g=(window.scrollY||0)/Math.max(1,window.innerHeight)*120*verso;sv.style.transform='rotate('+g.toFixed(2)+'deg)';}
+        window.addEventListener('scroll',function(){if(!fatto){fatto=true;requestAnimationFrame(gira);}},{passive:true});gira();})();</script>
+        <?php endif; ?>
 
         <script>
         (function(){

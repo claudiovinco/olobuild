@@ -37,6 +37,8 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
         'show_category'       => true,
         'show_zone'           => true,
         'show_phone'          => true,
+        'show_video'          => true,
+        'refine_bar'          => true,
         'card_label'          => 'Guarda la demo',
         'cta_text'            => 'Usa questo tema',
         'cta_url'             => '',
@@ -126,6 +128,10 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 'effetto'   => '' !== $effetto ? olobuild_t( $effetto ) : '',
                 'anteprima' => (string) ( $t['screenshot'] ?? '' ),
                 'telefono'  => (string) ( $t['screenshot_mobile'] ?? '' ),
+                'video'     => (string) ( $t['preview_video'] ?? '' ),
+                'gesto'     => sanitize_key( (string) ( $t['filtri']['gesto'] ?? '' ) ),
+                'carattere' => sanitize_key( (string) ( $t['filtri']['carattere'] ?? '' ) ),
+                'famiglia'  => self::famiglia_colore( (string) ( $t['accent'] ?? '' ) ),
                 'demo'      => Olobuild_Demo_Temi::indirizzo_tema( $id ),
                 'colore'    => (string) sanitize_hex_color( (string) ( $t['accent'] ?? '' ) ),
                 'scuro'     => empty( $t['light'] ),
@@ -145,6 +151,45 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
     }
 
     /** Un testo come lo confronta la ricerca: minuscolo, senza accenti, spazi semplici (il gemello JS è norma()). */
+    /**
+     * La famiglia di colore dell'accento del tema, per il filtro «Colore» (1.4.1218): rosso, arancio, giallo, verde,
+     * azzurro, blu, viola, rosa, o neutro (grigi, nero, bianco).
+     */
+    private static function famiglia_colore( $hex ) {
+        $hex = ltrim( (string) sanitize_hex_color( $hex ), '#' );
+        if ( strlen( $hex ) !== 6 ) {
+            return '';
+        }
+        $r = hexdec( substr( $hex, 0, 2 ) ) / 255;
+        $g = hexdec( substr( $hex, 2, 2 ) ) / 255;
+        $b = hexdec( substr( $hex, 4, 2 ) ) / 255;
+        $max = max( $r, $g, $b );
+        $min = min( $r, $g, $b );
+        $l   = ( $max + $min ) / 2;
+        $d   = $max - $min;
+        if ( $d < 0.06 || $l < 0.1 || $l > 0.95 ) {
+            return 'neutro';
+        }
+        $s = $d / ( 1 - abs( 2 * $l - 1 ) );
+        if ( $s < 0.16 ) {
+            return 'neutro';
+        }
+        if ( $max === $r ) {
+            $h = fmod( ( $g - $b ) / $d, 6 );
+        } elseif ( $max === $g ) {
+            $h = ( $b - $r ) / $d + 2;
+        } else {
+            $h = ( $r - $g ) / $d + 4;
+        }
+        $h = fmod( $h * 60 + 360, 360 );
+        foreach ( [ 14 => 'rosso', 40 => 'arancio', 66 => 'giallo', 165 => 'verde', 200 => 'azzurro', 252 => 'blu', 290 => 'viola', 345 => 'rosa' ] as $fino => $nome ) {
+            if ( $h < $fino ) {
+                return $nome;
+            }
+        }
+        return 'rosso';
+    }
+
     private static function per_la_ricerca( $testo ) {
         $testo = function_exists( 'remove_accents' ) ? remove_accents( $testo ) : $testo;
         $testo = function_exists( 'mb_strtolower' ) ? mb_strtolower( $testo, 'UTF-8' ) : strtolower( $testo );
@@ -286,7 +331,10 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ovt-card:focus-visible,.<?php echo $uid; ?> .ovt-filtro:focus-visible{outline:2px solid var(--ovt-acc);outline-offset:3px;}
             .<?php echo $uid; ?> .ovt-anteprima{position:relative;display:block;aspect-ratio:<?php echo $ratio; ?>;overflow:hidden;background:color-mix(in srgb,currentColor 6%,transparent);}
             .<?php echo $uid; ?> .ovt-anteprima img{display:block;width:100%;height:100%;object-fit:cover;object-position:top center;transition:object-position .6s ease;}
-            .<?php echo $uid; ?> .ovt-card:hover .ovt-anteprima img,.<?php echo $uid; ?> .ovt-card:focus-visible .ovt-anteprima img{object-position:bottom center;transition:object-position 9s linear;}
+            .<?php echo $uid; ?> .ovt-card:hover .ovt-anteprima:not(.con-video) img,.<?php echo $uid; ?> .ovt-card:focus-visible .ovt-anteprima:not(.con-video) img,.<?php echo $uid; ?> .ovt-card:hover .ovt-anteprima.ovt-finito img,.<?php echo $uid; ?> .ovt-card:focus-visible .ovt-anteprima.ovt-finito img{object-position:bottom center;transition:object-position 9s linear;}
+            /* L'anteprima in movimento: al passaggio parte l'apertura ripresa col suo gesto; finita, si vede scorrere la pagina */
+            .<?php echo $uid; ?> .ovt-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;opacity:0;transition:opacity .35s ease;pointer-events:none;}
+            .<?php echo $uid; ?> .ovt-anteprima.ovt-gioca .ovt-video.pronto{opacity:1;}
             .<?php echo $uid; ?> .ovt-effetto{position:absolute;left:var(--olo-space-sm);bottom:var(--olo-space-sm);max-width:calc(100% - 2 * var(--olo-space-sm));display:inline-flex;align-items:center;gap:var(--olo-space-xs);padding:var(--olo-space-xs) var(--olo-space-sm);border-radius:var(--olo-btn-border-radius);font-size:12px;font-weight:600;line-height:1.3;background:color-mix(in srgb,var(--olo-color-dark) 74%,transparent);color:var(--olo-color-light);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
             .<?php echo $uid; ?> .ovt-effetto i{flex:none;width:7px;height:7px;border-radius:50%;background:var(--ovt-tema, var(--ovt-acc));}
             .<?php echo $uid; ?> .ovt-tel{position:absolute;right:var(--olo-space-sm);bottom:var(--olo-space-sm);width:24%;aspect-ratio:390/844;overflow:hidden;border:3px solid var(--olo-color-dark);border-radius:13%/6%;background:var(--olo-color-light);box-shadow:0 0 0 1px color-mix(in srgb,var(--olo-color-light) 35%,transparent),0 10px 26px color-mix(in srgb,var(--olo-color-dark) 38%,transparent);}
@@ -351,6 +399,14 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 .<?php echo $uid; ?> .ovt-schermo[data-vista]{width:100%;max-width:none;height:100%;margin:0;border-radius:0;box-shadow:none;}
                 .<?php echo $uid; ?> .ovt-barra{gap:var(--olo-space-xs);padding:var(--olo-space-xs) var(--olo-space-sm);}}
             html.ovt-aperto,html.ovt-aperto body{overflow:hidden;}
+            .<?php echo $uid; ?> .ovt-affina{display:flex;flex-wrap:wrap;gap:var(--olo-space-sm) var(--olo-space-md);align-items:center;justify-content:<?php echo $giust; ?>;margin:0 0 var(--olo-space-md);<?php echo '' !== $filtri ? 'color:' . $filtri . ';' : ''; // il colore dei filtri e della ricerca: su un fondo scuro la barra si legge come loro ?>}
+            .<?php echo $uid; ?> .ovt-affina-sel option{color:#1f2937;background:#fff;}
+            .<?php echo $uid; ?> .ovt-affina-voce{display:inline-flex;align-items:center;gap:var(--olo-space-sm);margin:0;}
+            .<?php echo $uid; ?> .ovt-affina-nome{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.7;}
+            .<?php echo $uid; ?> .ovt-affina-sel{appearance:none;-webkit-appearance:none;font:inherit;font-size:14px;color:inherit;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;border:1px solid color-mix(in srgb,currentColor 22%,transparent);border-radius:100vmax;padding:var(--olo-space-sm) calc(var(--olo-space-sm) * 4) var(--olo-space-sm) calc(var(--olo-space-sm) * 1.75);cursor:pointer;max-width:100%;}
+            .<?php echo $uid; ?> .ovt-affina-sel.is-on{border-color:var(--ovt-acc);box-shadow:0 0 0 1px var(--ovt-acc) inset;}
+            .<?php echo $uid; ?> .ovt-affina-sel:focus-visible{outline:2px solid var(--ovt-acc);outline-offset:2px;}
+            .<?php echo $uid; ?> .ovt-affina-sel option{color:#111;background:#fff;}
             @media (prefers-reduced-motion:reduce){.<?php echo $uid; ?> .ovt-card,.<?php echo $uid; ?> .ovt-anteprima img,.<?php echo $uid; ?> .ovt-schermo,.<?php echo $uid; ?> .ovt-pal i{transition:none;}
                 .<?php echo $uid; ?> .ovt-card:hover .ovt-anteprima img{object-position:top center;}}
         </style>
@@ -370,6 +426,40 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 </label>
             </div>
             <?php endif; ?>
+            <?php if ( ! empty( $s['refine_bar'] ) ) :
+                // «Affina» (1.4.1218): gesto, fondo, carattere e colore, come i filtri delle gallerie di siti (Land-book).
+                $assi = [
+                    'gesto'     => [ olobuild_t( 'Effetto' ), olobuild_t( 'Tutti gli effetti' ), [ 'scorri' => olobuild_t( 'Si muove scorrendo' ), 'mouse' => olobuild_t( 'Segue il mouse' ), 'clic' => olobuild_t( 'Cambia al clic' ), 'fermo' => olobuild_t( 'Si muove da solo' ) ] ],
+                    'fondo'     => [ olobuild_t( 'Fondo' ), olobuild_t( 'Chiaro e scuro' ), [ 'scuro' => olobuild_t( 'Scuro' ), 'chiaro' => olobuild_t( 'Chiaro' ) ] ],
+                    'carattere' => [ olobuild_t( 'Carattere' ), olobuild_t( 'Tutti i caratteri' ), [ 'grazie' => olobuild_t( 'Con le grazie' ), 'senza' => olobuild_t( 'Senza grazie' ), 'decorativo' => olobuild_t( 'Decorativo' ) ] ],
+                    'colore'    => [ olobuild_t( 'Colore' ), olobuild_t( 'Tutti i colori' ), [ 'rosso' => olobuild_t( 'Rosso' ), 'arancio' => olobuild_t( 'Arancio' ), 'giallo' => olobuild_t( 'Giallo' ), 'verde' => olobuild_t( 'Verde' ), 'azzurro' => olobuild_t( 'Azzurro' ), 'blu' => olobuild_t( 'Blu' ), 'viola' => olobuild_t( 'Viola' ), 'rosa' => olobuild_t( 'Rosa' ), 'neutro' => olobuild_t( 'Neutro' ) ] ],
+                ];
+                $chiave_tema = [ 'gesto' => 'gesto', 'fondo' => null, 'carattere' => 'carattere', 'colore' => 'famiglia' ];
+                ?>
+            <div class="ovt-affina" role="group" aria-label="<?php echo esc_attr( olobuild_t( 'Affina la ricerca' ) ); ?>" data-olo-interactive>
+                <?php foreach ( $assi as $asse => $a ) :
+                    $ci = [];
+                    foreach ( $temi as $t ) {
+                        $val = null === $chiave_tema[ $asse ] ? ( $t['scuro'] ? 'scuro' : 'chiaro' ) : $t[ $chiave_tema[ $asse ] ];
+                        if ( '' !== $val ) {
+                            $ci[ $val ] = ( $ci[ $val ] ?? 0 ) + 1;
+                        }
+                    }
+                    if ( count( $ci ) < 2 ) {
+                        continue;
+                    }
+                    ?>
+                <label class="ovt-affina-voce"><span class="ovt-affina-nome"><?php echo esc_html( $a[0] ); ?></span>
+                    <select class="ovt-affina-sel" data-asse="<?php echo esc_attr( $asse ); ?>">
+                        <option value=""><?php echo esc_html( $a[1] ); ?></option>
+                        <?php foreach ( $a[2] as $v => $etichetta ) : if ( empty( $ci[ $v ] ) ) { continue; } ?>
+                        <option value="<?php echo esc_attr( $v ); ?>"><?php echo esc_html( $etichetta . ' (' . $ci[ $v ] . ')' ); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
             <?php if ( ! empty( $s['filter_bar'] ) && ( count( $categorie ) > 1 || ! empty( $requisiti ) ) ) : ?>
             <div class="ovt-filtri" role="group" aria-label="<?php echo esc_attr( olobuild_t( 'Categorie' ) ); ?>" data-olo-interactive>
                 <button type="button" class="ovt-filtro is-on" aria-pressed="true" data-cat=""><?php echo esc_html( (string) $s['filter_all_label'] ); ?><span class="ovt-n"><?php echo (int) count( $temi ); ?></span></button>
@@ -386,11 +476,13 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
             <ul class="ovt-griglia" role="list">
                 <?php foreach ( $temi as $t ) : ?>
-                <li class="ovt-voce" data-cat="<?php echo esc_attr( $t['categoria'] ); ?>" data-req="<?php echo esc_attr( $t['req'] ); ?>" data-cerca="<?php echo esc_attr( $t['cerca'] ); ?>">
+                <li class="ovt-voce" data-cat="<?php echo esc_attr( $t['categoria'] ); ?>" data-req="<?php echo esc_attr( $t['req'] ); ?>" data-cerca="<?php echo esc_attr( $t['cerca'] ); ?>" data-gesto="<?php echo esc_attr( $t['gesto'] ); ?>" data-fondo="<?php echo $t['scuro'] ? 'scuro' : 'chiaro'; ?>" data-carattere="<?php echo esc_attr( $t['carattere'] ); ?>" data-colore="<?php echo esc_attr( $t['famiglia'] ); ?>">
                     <a class="ovt-card" href="<?php echo esc_url( $t['demo'] ); ?>" data-tema="<?php echo esc_attr( $t['id'] ); ?>" data-nome="<?php echo esc_attr( $t['nome'] ); ?>" data-categoria="<?php echo esc_attr( $t['etichetta'] ); ?>"<?php echo $t['scuro'] ? ' data-scuro="1"' : ''; ?><?php echo '' !== $t['propri'] ? ' data-colori="' . esc_attr( $t['propri'] ) . '"' : ''; ?><?php echo '' !== $t['colore'] ? ' style="--ovt-tema:' . esc_attr( $t['colore'] ) . '"' : ''; ?><?php echo '' !== $t['req_url'] ? ' data-cta-url="' . esc_url( $t['req_url'] ) . '" data-cta-testo="' . esc_attr( sprintf( olobuild_t( 'Scopri %s' ), $t['req_nome'] ) ) . '"' : ''; ?>>
                         <?php $tel = ! empty( $s['show_phone'] ) && '' !== $t['telefono'] && '' !== $t['anteprima']; ?>
-                        <span class="ovt-anteprima<?php echo $tel ? ' con-tel' : ''; ?>">
+                        <?php $video = ! empty( $s['show_video'] ) && '' !== $t['video'] && '' !== $t['anteprima']; ?>
+                        <span class="ovt-anteprima<?php echo $tel ? ' con-tel' : ''; ?><?php echo $video ? ' con-video' : ''; ?>">
                             <?php if ( '' !== $t['anteprima'] ) : ?><img src="<?php echo esc_url( $t['anteprima'] ); ?>" alt="" loading="lazy" decoding="async" /><?php endif; ?>
+                            <?php if ( $video ) : ?><video class="ovt-video" muted playsinline preload="none" aria-hidden="true" tabindex="-1" data-src="<?php echo esc_url( $t['video'] ); ?>"></video><?php endif; ?>
                             <?php if ( ! empty( $s['show_zone'] ) && '' !== $t['effetto'] ) : ?><span class="ovt-effetto"><i></i><?php echo esc_html( $t['effetto'] ); ?></span><?php endif; ?>
                             <?php if ( $tel ) : // la stessa home sul telefono: scorre col mouse insieme a quella del computer (stesse regole di .ovt-anteprima img) ?><span class="ovt-tel"><img src="<?php echo esc_url( $t['telefono'] ); ?>" alt="" loading="lazy" decoding="async" /></span><?php endif; ?>
                         </span>
@@ -476,7 +568,8 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             // i temi che si vedrebbero scegliendo quel filtro, con l'altro gruppo com'è.
             // La ricerca si somma ai due gruppi: ogni parola scritta deve stare nel testo del tema (data-cerca,
             // già minuscolo e senza accenti dal PHP), in qualsiasi ordine.
-            var stato = { cat: '', req: '', q: [] };
+            var stato = { cat: '', req: '', q: [], assi: {} };
+            var affina = [].slice.call(root.querySelectorAll('.ovt-affina-sel'));
             var cerca = root.querySelector('.ovt-cerca-in'), azzera = root.querySelector('.ovt-cerca-x');
             var vuoto = root.querySelector('.ovt-vuoto');
             function norma(s) {
@@ -488,6 +581,9 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 if (ok) {
                     var testo = v.getAttribute('data-cerca') || '';
                     ok = stato.q.every(function (w) { return testo.indexOf(w) !== -1; });
+                }
+                if (ok) {
+                    ok = Object.keys(stato.assi).every(function (a) { return !stato.assi[a] || v.getAttribute('data-' + a) === stato.assi[a]; });
                 }
                 return ok;
             }
@@ -531,9 +627,18 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 vuoto.querySelector('[data-tutti]').addEventListener('click', function () {
                     if (cerca) { cerca.value = ''; if (azzera) { azzera.hidden = true; } }
                     stato.q = [];
+                    stato.assi = {};
+                    affina.forEach(function (sel) { sel.value = ''; sel.classList.remove('is-on'); });
                     filtra('', '');
                 });
             }
+            affina.forEach(function (sel) {
+                sel.addEventListener('change', function () {
+                    stato.assi[sel.getAttribute('data-asse')] = sel.value;
+                    sel.classList.toggle('is-on', sel.value !== '');
+                    filtra(stato.cat, stato.req);
+                });
+            });
             filtri.forEach(function (b) {
                 b.addEventListener('click', function () {
                     if (b.hasAttribute('data-req')) {
@@ -660,6 +765,30 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 var l = lista(), i = l.indexOf(attuale);
                 if (!l.length) { return; }
                 mostra(l[(i + n + l.length) % l.length], 'sostituisci');
+            }
+            // L'anteprima in movimento: parte al passaggio del mouse (o col fuoco della tastiera), si ferma all'uscita;
+            // quando finisce lascia il posto alla pagina che scorre. Niente video per chi ha chiesto meno movimento.
+            var menoMoto = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (!menoMoto) {
+                voci.forEach(function (v) {
+                    var a = v.querySelector('.ovt-card'), ant = a.querySelector('.ovt-anteprima.con-video'), vid = ant && ant.querySelector('.ovt-video');
+                    if (!vid) { return; }
+                    function via() {
+                        if (!vid.getAttribute('src')) { vid.setAttribute('src', vid.getAttribute('data-src')); }
+                        ant.classList.remove('ovt-finito');
+                        ant.classList.add('ovt-gioca');
+                        try { vid.currentTime = 0; } catch (e) { /* non ancora caricato */ }
+                        var p = vid.play();
+                        if (p && p.catch) { p.catch(function () {}); }
+                    }
+                    function ferma() { ant.classList.remove('ovt-gioca', 'ovt-finito'); vid.pause(); }
+                    a.addEventListener('mouseenter', via);
+                    a.addEventListener('mouseleave', ferma);
+                    a.addEventListener('focus', via);
+                    a.addEventListener('blur', ferma);
+                    vid.addEventListener('playing', function () { vid.classList.add('pronto'); });
+                    vid.addEventListener('ended', function () { ant.classList.remove('ovt-gioca'); ant.classList.add('ovt-finito'); });
+                });
             }
             voci.forEach(function (v) {
                 var a = v.querySelector('.ovt-card');

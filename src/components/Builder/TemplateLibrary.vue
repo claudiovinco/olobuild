@@ -127,6 +127,18 @@
                          i toni chiari (lime, ambra, azzurro) non si leggevano. -->
                     <span class="olo-tpl-cat"><span class="olo-tpl-dot" :style="{ background: getCategoryColor(tpl.category) }" aria-hidden="true"></span>{{ getCategoryLabel(tpl.category) }}</span>
                   </div>
+                  <!-- I preferiti (1.4.1218): la stella mette il blocco in «Preferiti», in cima alla scelta -->
+                  <button
+                    type="button"
+                    class="olo-tpl-fav"
+                    :class="{ on: isPreferito(tpl.id) }"
+                    :title="isPreferito(tpl.id) ? t('Togli dai preferiti') : t('Aggiungi ai preferiti')"
+                    :aria-label="isPreferito(tpl.id) ? t('Togli dai preferiti') : t('Aggiungi ai preferiti')"
+                    :aria-pressed="isPreferito(tpl.id) ? 'true' : 'false'"
+                    @click.stop="cambiaPreferito(tpl.id)"
+                    @keydown.enter.stop
+                    @keydown.space.stop
+                  >★</button>
                   <!-- Delete button for user templates -->
                   <button
                     v-if="tpl.is_user"
@@ -375,8 +387,20 @@ const saveCategoryOptions = categoryDefs.filter(c => c.key !== 'all');
 // Options { value, label } per i dropdown custom FieldSelect
 const saveCategorySelectOptions = saveCategoryOptions.map(cat => ({ value: cat.key, label: cat.label }));
 
+// I blocchi preferiti (1.4.1218): in questo browser, come le tile preferite della barra
+const PREF_KEY = 'olo_favorite_blocks';
+const preferiti = ref(new Set((() => { try { return JSON.parse(localStorage.getItem(PREF_KEY) || '[]'); } catch (e) { return []; } })()));
+function isPreferito(id) { return preferiti.value.has(id); }
+function cambiaPreferito(id) {
+  const s = new Set(preferiti.value);
+  if (s.has(id)) s.delete(id); else s.add(id);
+  preferiti.value = s;
+  try { localStorage.setItem(PREF_KEY, JSON.stringify([...s])); } catch (e) { /* niente memoria del browser */ }
+}
+
 const categoriesWithCount = computed(() => {
-  return categoryDefs
+  const n = templates.value.filter(t => preferiti.value.has(t.id)).length;
+  const lista = categoryDefs
     .map(cat => ({
       ...cat,
       count: cat.key === 'all'
@@ -384,6 +408,9 @@ const categoriesWithCount = computed(() => {
         : templates.value.filter(t => t.category === cat.key).length,
     }))
     .filter(cat => cat.count > 0 || cat.key === 'all');
+  // «Preferiti» subito dopo «Tutti», quando ce n'è almeno uno
+  if (n) lista.splice(1, 0, { key: '_preferiti', label: t('Preferiti'), color: '#F59E0B', count: n });
+  return lista;
 });
 
 const categoryFilterOptions = computed(() =>
@@ -392,7 +419,9 @@ const categoryFilterOptions = computed(() =>
 
 const filteredTemplates = computed(() => {
   let list = templates.value;
-  if (activeCategory.value !== 'all') {
+  if (activeCategory.value === '_preferiti') {
+    list = list.filter(t => preferiti.value.has(t.id));
+  } else if (activeCategory.value !== 'all') {
     list = list.filter(t => t.category === activeCategory.value);
   }
   if (searchQuery.value.trim()) {
@@ -1765,4 +1794,11 @@ defineExpose({ open, close, visible, openSaveDialog });
   display: flex;
   gap: 8px;
 }
+
+/* I preferiti (1.4.1218) */
+.olo-tpl-fav { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; padding: 0; border: 0;
+  border-radius: 6px; background: transparent; color: #c5c9d2; font-size: 15px; line-height: 1; cursor: pointer; transition: color .15s ease, background .15s ease; }
+.olo-tpl-fav:hover { color: #F59E0B; background: rgba(245, 158, 11, .1); }
+.olo-tpl-fav.on { color: #F59E0B; }
+.olo-tpl-fav:focus-visible { outline: 2px solid var(--olo-ui-accent, #e8622a); outline-offset: 1px; }
 </style>

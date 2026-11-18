@@ -19,6 +19,8 @@ export const patternList = [
   { value: 'dots-grid', label: 'Puntini griglia' },
   // Geometric
   { value: 'checkerboard', label: 'Scacchiera' },
+  { value: 'gingham', label: 'Vichy' },
+  { value: 'halftone', label: 'Mezzitoni' },
   { value: 'triangles', label: 'Triangoli' },
   { value: 'diamonds', label: 'Rombi' },
   { value: 'hexagons', label: 'Esagoni' },
@@ -188,6 +190,19 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
         backgroundSize,
         backgroundPosition: `0 0, ${half}px ${half}px`,
       };
+    }
+
+    // Vichy: due righe larghe metà del modulo che si incrociano; dove si sovrappongono il colore raddoppia.
+    case 'gingham': {
+      backgroundImage = `linear-gradient(${90 + rot}deg, ${c} 50%, transparent 50%), linear-gradient(${rot}deg, ${c} 50%, transparent 50%)`;
+      return { backgroundColor: bg, backgroundImage, backgroundSize: `${sz}px ${sz}px, ${sz}px ${sz}px` };
+    }
+
+    // Mezzitoni: il retino di punti che sfuma nel colore di fondo (la Rotazione orienta la sfumatura).
+    case 'halftone': {
+      const r = dotR || Math.max(2, sz * 0.32);
+      backgroundImage = `linear-gradient(${180 + rot}deg, transparent 0%, ${bg} 92%), radial-gradient(circle, ${c} ${r}px, transparent ${r + 0.6}px)`;
+      return { backgroundColor: bg, backgroundImage, backgroundSize: `100% 100%, ${sz}px ${sz}px` };
     }
 
     case 'triangles': {

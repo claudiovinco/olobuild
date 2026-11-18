@@ -446,9 +446,11 @@ class Olobuild_Image_Tile extends Olobuild_Tile_Base {
         // La CORNICE dell'immagine (proporzione, raggio, ombra) sta in $frame_style: senza didascalia è la
         // figure stessa, con la didascalia un riquadro dentro la figure (vedi sotto).
         $frame_style  = '';
-        $img_width   = trim( (string) ( $s['image_width'] ?? '100%' ) );
-        $img_height  = trim( (string) ( $s['height'] ?? '300px' ) );
-        $img_maxw    = trim( (string) ( $s['max_width'] ?? '' ) );
+        // Un numero senza unità vale px (css_len): «220» in Larghezza massima scriveva `max-width: 220;`, che il
+        // browser scarta in silenzio, e il logo del piè di pagina si allargava a tutta la riga (18 nov 2026).
+        $img_width   = Olobuild_Tile_Utils::css_len( $s['image_width'] ?? '100%' );
+        $img_height  = Olobuild_Tile_Utils::css_len( $s['height'] ?? '300px' );
+        $img_maxw    = Olobuild_Tile_Utils::css_len( $s['max_width'] ?? '' );
         $aspect      = $s['aspect_ratio'] ?? 'auto';
         $aspect_css  = '';
         if ( $aspect && $aspect !== 'auto' ) {

@@ -3403,3 +3403,37 @@ html:has(.olo-frontend-grid) {
 /* Colonna «Prima quando le colonne vanno in pila» (13 nov 2026) */
 @media (max-width:959px){.olo-col-primo-m{order:-1}}
 @media (max-width:639px){.olo-col-primo-s{order:-1}}
+
+/* La Grana dello Sfondo (1.4.1218): rumore fine sopra lo sfondo e sotto il contenuto, per ogni tipo di sfondo.
+   L'intensità arriva da --olo-grana (Olobuild_CSS_Builder::grana_markup). Grigio con l'alfa del rumore: si vede sul
+   chiaro e sullo scuro, senza fusioni che sul nero la cancellerebbero. */
+.olo-bg-grana {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: var(--olo-grana, .3);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
+}
+
+/* Il piè di pagina che si scopre da sotto (1.4.1218): fermo in fondo alla finestra, sotto la pagina che scorre via.
+   Le classi le mette lo script del piè di pagina (Olobuild_Footer_Integration::script_scopre) solo quando ci sta. */
+.olo-piede-scopre-on footer.olo-piede-scopre {
+  position: sticky;
+  bottom: 0;
+  z-index: 0;
+}
+.olo-sopra-piede {
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 28px 48px -28px rgba(0, 0, 0, .45);
+}
+
+/* Il Vetro liquido (1.4.1218, Filtro sfondo › Vetro liquido): dove il browser disegna un filtro SVG dentro
+   backdrop-filter (Chrome, Edge: html.olo-vl-ok) il vetro sfoca e deforma lo sfondo; altrove resta il vetro sfocato. */
+.olo-vl-ok [style*="--olo-vl:"] {
+  -webkit-backdrop-filter: var(--olo-vl) var(--olo-bd) !important;
+  backdrop-filter: var(--olo-vl) var(--olo-bd) !important;
+}

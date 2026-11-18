@@ -154,6 +154,13 @@ class Olobuild_Seo_Settings {
             if ( isset( $o['twitter_card_type'] ) && ! in_array( $o['twitter_card_type'], [ 'summary', 'summary_large_image' ], true ) ) {
                 unset( $o['twitter_card_type'] );
             }
+            // L'immagine disegnata (1.4.1218)
+            if ( isset( $o['og_disegnata'] ) ) {
+                $o['og_disegnata'] = ! empty( $o['og_disegnata'] );
+            }
+            if ( isset( $o['og_stile'] ) && ! in_array( $o['og_stile'], [ 'foto', 'meta', 'colore' ], true ) ) {
+                $o['og_stile'] = 'foto';
+            }
         }
         if ( self::OPT_TITLES === $option_key ) {
             // «Lingua sito» (la lingua è quella di WordPress e di OLOlang) e «Robots

@@ -131,7 +131,7 @@ class Olobuild_DescList_Tile extends Olobuild_Tile_Base {
             }
             <?php if ( $colonne > 1 ) : ?>
             .<?php echo $uid; ?>-box {
-                container-type: inline-size;
+                container: mdl / inline-size;
             }
             <?php
             // Per ogni numero di colonne la larghezza da cui entra (220 px a colonna, 40 fra l'una e l'altra); senza
@@ -140,7 +140,7 @@ class Olobuild_DescList_Tile extends Olobuild_Tile_Base {
                 $da = $c * 220 + ( $c - 1 ) * 40;
                 $a  = $c < $colonne ? ( $c + 1 ) * 220 + $c * 40 - 1 : 0;
                 ?>
-            @container (min-width: <?php echo (int) $da; ?>px)<?php echo $a ? ' and (max-width: ' . (int) $a . 'px)' : ''; ?> {
+            @container mdl (min-width: <?php echo (int) $da; ?>px)<?php echo $a ? ' and (max-width: ' . (int) $a . 'px)' : ''; ?> {
                 .<?php echo $uid; ?> {
                     display: grid;
                     grid-template-columns: repeat(<?php echo (int) $c; ?>, minmax(0, 1fr));

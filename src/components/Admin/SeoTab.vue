@@ -103,6 +103,27 @@
           </div>
         </div>
       </div>
+      <!-- L'immagine disegnata (1.4.1218): una per contenuto, col titolo e la foto in evidenza -->
+      <div class="cfg-row">
+        <div class="label-col">
+          <label>{{ t('Immagine disegnata') }}</label>
+          <div class="hint">{{ t('Per ogni contenuto senza un\'immagine sua: il titolo, il nome del sito e la foto in evidenza, nel colore e nel carattere del sito.') }}</div>
+        </div>
+        <div class="control-col">
+          <button class="cfg-switch" :class="{ 'is-on': social.og_disegnata }" role="switch" :aria-checked="social.og_disegnata ? 'true' : 'false'"
+            :aria-label="t('Immagine disegnata')" @click="setS('og_disegnata', !social.og_disegnata)"></button>
+          <template v-if="social.og_disegnata">
+            <div class="cfg-segment og-stili">
+              <button v-for="s in OG_STILI" :key="s.value" :class="{ 'is-on': (social.og_stile || 'foto') === s.value }" @click="setS('og_stile', s.value)">{{ s.label }}</button>
+            </div>
+            <div class="og-disegnata">
+              <img v-if="ogAnteprima.url" :src="ogAnteprima.url" :alt="t('Anteprima dell\'immagine disegnata')" width="1200" height="630" />
+              <span v-else class="og-disegnata-vuota">{{ ogAnteprima.errore || t('Disegno l\'anteprima…') }}</span>
+            </div>
+            <div v-if="ogAnteprima.titolo" class="text-xs mt-2" style="color:var(--c-text-faint);">{{ t('Prova su: %s').replace('%s', ogAnteprima.titolo) }}</div>
+          </template>
+        </div>
+      </div>
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Twitter handle') }}</label>
@@ -165,7 +186,7 @@
 </template>
 
 <script setup>
-import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, inject, watch, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import CfgSelect from './controls/CfgSelect.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob, conIniziali } from './cfgSave';
@@ -213,9 +234,34 @@ const INIZIALE_SOCIAL = {
   og_default_image: '',
 };
 const INIZIALE_SITEMAP = { enabled: true };
+
+// L'immagine disegnata (1.4.1218): tre stili; senza foto in evidenza il server usa «Solo colore»
+const OG_STILI = [
+  { value: 'foto',   label: t('Foto con titolo') },
+  { value: 'meta',   label: t('Metà e metà') },
+  { value: 'colore', label: t('Solo colore') },
+];
+const ogAnteprima = ref({ url: '', titolo: '', errore: '' });
+let ogRichiesta = 0;
+async function aggiornaOgAnteprima() {
+  if (!social.value.og_disegnata) return;
+  const mia = ++ogRichiesta;
+  ogAnteprima.value = { url: '', titolo: '', errore: '' };
+  try {
+    const r = await fetch(`${window.oloData.restUrl}seo/og-anteprima?stile=${encodeURIComponent(social.value.og_stile || 'foto')}`,
+      { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    const j = await r.json().catch(() => ({}));
+    if (mia !== ogRichiesta) return;
+    ogAnteprima.value = r.ok ? { url: j.url || '', titolo: j.titolo || '', errore: '' } : { url: '', titolo: '', errore: j.message || t('Anteprima non disponibile') };
+  } catch (e) {
+    if (mia === ogRichiesta) ogAnteprima.value = { url: '', titolo: '', errore: t('Anteprima non disponibile') };
+  }
+}
 const titles  = ref({ ...INIZIALE_TITLES });
 const social  = ref({ ...INIZIALE_SOCIAL });
 const sitemap = ref({ ...INIZIALE_SITEMAP });
+
+watch(() => [social.value.og_disegnata, social.value.og_stile], aggiornaOgAnteprima);
 
 const sitemapUrl = computed(() => window.oloData?.sitemapUrl || ((window.oloData?.siteUrl || '/') + 'wp-sitemap.xml'));
 const googleSearchConsole = 'https://search.google.com/search-console';
@@ -291,6 +337,11 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .og-preview-wrap { display: flex; gap: 12px; align-items: flex-start; }
+.og-stili { margin-top: 12px; }
+.og-disegnata { margin-top: 12px; width: 100%; max-width: 360px; aspect-ratio: 1200 / 630; border-radius: 8px; overflow: hidden;
+  background: var(--c-bg-soft, #f3f4f6); box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); display: grid; place-items: center; }
+.og-disegnata img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.og-disegnata-vuota { font-size: 12px; color: var(--c-text-faint); padding: 0 12px; text-align: center; }
 .og-preview { box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); position: relative; overflow: hidden; }
 .og-actions { flex: 1; }
 </style>

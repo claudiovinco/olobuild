@@ -54650,3 +54650,319 @@ msgstr "Mit dem Blitz nimmt der Hintergrund das Foto aus dem Inhalt, den die Sei
 #: OLObuild 1.4.1190
 msgid "Col fulmine lo sfondo prende il video dal contenuto che la pagina mostra, per esempio il trailer di ogni evento. Serve un file video della libreria: i link di YouTube e Vimeo vanno nella tile Video. Se il contenuto non ne ha, resta il video scelto a mano."
 msgstr "Mit dem Blitz nimmt der Hintergrund das Video aus dem Inhalt, den die Seite zeigt, zum Beispiel den Trailer jeder Veranstaltung. Es braucht eine Videodatei aus der Mediathek: Links von YouTube und Vimeo gehören in die Video-Kachel. Hat der Inhalt keines, bleibt das von Hand gewählte Video."
+
+#: OLObuild 1.4.1218
+msgid "Hai trovato la sorpresa!"
+msgstr "Du hast die Überraschung gefunden!"
+
+#: OLObuild 1.4.1218
+msgid "Sorpresa nascosta"
+msgstr "Versteckte Überraschung"
+
+#: OLObuild 1.4.1218
+msgid "Un regalo per i curiosi: dopo cinque clic su questo elemento, o col codice Konami sulla tastiera (su, su, giù, giù, sinistra, destra, sinistra, destra, B, A), succede qualcosa."
+msgstr "Ein Geschenk für Neugierige: nach fünf Klicks auf dieses Element oder mit dem Konami-Code auf der Tastatur (hoch, hoch, runter, runter, links, rechts, links, rechts, B, A) passiert etwas."
+
+#: OLObuild 1.4.1218
+msgid "Sul telefono, dove la tastiera non c'è, bastano i cinque tocchi. Se l'elemento è un link a un'altra pagina, il primo clic la apre: meglio un logo che porta alla pagina stessa, o un elemento senza link."
+msgstr "Auf dem Handy, wo es keine Tastatur gibt, reichen die fünf Tipper. Ist das Element ein Link zu einer anderen Seite, öffnet der erste Klick sie: besser ein Logo, das auf dieselbe Seite führt, oder ein Element ohne Link."
+
+#: OLObuild 1.4.1218
+msgid "Per chi ha chiesto meno movimento, coriandoli e capovolgimento diventano il messaggio."
+msgstr "Wer weniger Bewegung eingestellt hat, sieht statt Konfetti und Umdrehen die Nachricht."
+
+#: OLObuild 1.4.1218
+msgid "Come si trova"
+msgstr "Wie man sie findet"
+
+#: OLObuild 1.4.1218
+msgid "Messaggio (facoltativo)"
+msgstr "Nachricht (optional)"
+
+#: OLObuild 1.4.1218
+msgid "La pagina si capovolge"
+msgstr "Die Seite steht kopf"
+
+#: OLObuild 1.4.1218
+msgid "Un messaggio"
+msgstr "Eine Nachricht"
+
+#: OLObuild 1.4.1218
+msgid "Cinque clic"
+msgstr "Fünf Klicks"
+
+#: OLObuild 1.4.1218
+msgid "Codice Konami"
+msgstr "Konami-Code"
+
+#: OLObuild 1.4.1218
+msgid "Immagine disegnata"
+msgstr "Gestaltetes Bild"
+
+#: OLObuild 1.4.1218
+msgid "Per ogni contenuto senza un'immagine sua: il titolo, il nome del sito e la foto in evidenza, nel colore e nel carattere del sito."
+msgstr "Für jeden Inhalt ohne eigenes Bild: der Titel, der Name der Website und das Beitragsbild, in der Farbe und Schrift der Website."
+
+#: OLObuild 1.4.1218
+msgid "Anteprima dell'immagine disegnata"
+msgstr "Vorschau des gestalteten Bildes"
+
+#: OLObuild 1.4.1218
+msgid "Disegno l'anteprima…"
+msgstr "Vorschau wird gezeichnet…"
+
+#: OLObuild 1.4.1218
+msgid "Prova su: %s"
+msgstr "Getestet mit: %s"
+
+#: OLObuild 1.4.1218
+msgid "Foto con titolo"
+msgstr "Foto mit Titel"
+
+#: OLObuild 1.4.1218
+msgid "Metà e metà"
+msgstr "Halb und halb"
+
+#: OLObuild 1.4.1218
+msgid "Solo colore"
+msgstr "Nur Farbe"
+
+#: OLObuild 1.4.1218
+msgid "Il server non sa disegnare le immagini (manca GD con FreeType)."
+msgstr "Der Server kann keine Bilder zeichnen (GD mit FreeType fehlt)."
+
+#: OLObuild 1.4.1218
+msgid "Nessun carattere disponibile per disegnare il titolo."
+msgstr "Keine Schrift verfügbar, um den Titel zu zeichnen."
+
+#: OLObuild 1.4.1218
+msgid "Colori, dal basso"
+msgstr "Farben, von unten"
+
+#: OLObuild 1.4.1218
+msgid "Discesa"
+msgstr "Abfall"
+
+#: OLObuild 1.4.1218
+msgid "Un velo di grana fine sopra lo sfondo, come la carta o la pellicola: dà materia alle tinte piatte, ai gradienti e alle foto. Si vede sul chiaro e sullo scuro; a zero non c'è."
+msgstr "Ein Schleier aus feiner Körnung über dem Hintergrund, wie Papier oder Film: er gibt flachen Farben, Verläufen und Fotos Materie. Er wirkt auf Hell und Dunkel; bei null ist er weg."
+
+#: OLObuild 1.4.1218
+msgid "Intensità della grana"
+msgstr "Stärke der Körnung"
+
+#: OLObuild 1.4.1218
+msgid "Gradini di luce"
+msgstr "Lichtstufen"
+
+#: OLObuild 1.4.1218
+msgid "Geometrici"
+msgstr "Geometrisch"
+
+#: OLObuild 1.4.1218
+msgid "Seta"
+msgstr "Seide"
+
+#: OLObuild 1.4.1218
+msgid "Vichy"
+msgstr "Vichy-Karo"
+
+#: OLObuild 1.4.1218
+msgid "Mezzitoni"
+msgstr "Halbtöne"
+
+#: OLObuild 1.4.1218
+msgid "Si scopre da sotto"
+msgstr "Wird von unten aufgedeckt"
+
+#: OLObuild 1.4.1218
+msgid "Il piè di pagina resta fermo in fondo e la pagina, scorrendo via, lo scopre come un sipario che sale. Funziona quando il piè di pagina sta nella finestra; se è più alto, resta com’è."
+msgstr "Die Fußzeile bleibt unten stehen und die Seite deckt sie beim Wegscrollen auf wie ein Vorhang, der sich hebt. Das funktioniert, wenn die Fußzeile ins Fenster passt; ist sie höher, bleibt sie, wie sie ist."
+
+#: OLObuild 1.4.1218
+msgid "Passaggio fra le pagine"
+msgstr "Übergang zwischen den Seiten"
+
+#: OLObuild 1.4.1218
+msgid "Come si passa da una pagina all'altra del sito: la pagina nuova arriva in dissolvenza, sale come una tendina, entra con uno zoom o si apre in un cerchio dal punto in cui hai cliccato."
+msgstr "Wie man von einer Seite der Website zur nächsten kommt: die neue Seite wird eingeblendet, steigt wie ein Rollo auf, kommt mit einem Zoom oder öffnet sich in einem Kreis von der Stelle, an der du geklickt hast."
+
+#: OLObuild 1.4.1218
+msgid "Vale per tutto il sito e si salva da sola. Funziona su Chrome, Edge e Safari recenti; negli altri browser le pagine cambiano come sempre, e niente movimento per chi ha chiesto di ridurlo."
+msgstr "Gilt für die ganze Website und speichert sich selbst. Funktioniert in aktuellen Chrome-, Edge- und Safari-Versionen; in anderen Browsern wechseln die Seiten wie immer, und keine Bewegung für alle, die weniger Bewegung eingestellt haben."
+
+#: OLObuild 1.4.1218
+msgid "Durata del passaggio"
+msgstr "Dauer des Übergangs"
+
+#: OLObuild 1.4.1218
+msgid "Come sempre"
+msgstr "Wie immer"
+
+#: OLObuild 1.4.1218
+msgid "Tendina che sale"
+msgstr "Aufsteigendes Rollo"
+
+#: OLObuild 1.4.1218
+msgid "Cerchio dal clic"
+msgstr "Kreis vom Klick aus"
+
+#: OLObuild 1.4.1218
+msgid "Passaggio fra le pagine salvato per tutto il sito."
+msgstr "Übergang zwischen den Seiten für die ganze Website gespeichert."
+
+#: OLObuild 1.4.1218
+msgid "Il passaggio fra le pagine non si è salvato."
+msgstr "Der Übergang zwischen den Seiten wurde nicht gespeichert."
+
+#: OLObuild 1.4.1218
+msgid "Dati non validi."
+msgstr "Ungültige Daten."
+
+#: OLObuild 1.4.1218
+msgid "Sfondo Goo / Aurora / Sfera"
+msgstr "Hintergrund Goo / Aurora / Kugel"
+
+#: OLObuild 1.4.1218
+msgid "Sfera di luce (respira e segue il mouse)"
+msgstr "Lichtkugel (atmet und folgt der Maus)"
+
+#: OLObuild 1.4.1218
+msgid "Goo: i blob si fondono come gocce (filtro SVG) e uno insegue il cursore. Aurora: aloni morbidi sfocati che derivano, senza fusione metaball. Sfera di luce: una sola sfera luminosa che respira, coi colori della palette che girano dentro; la luce segue il puntatore e al clic dà un battito."
+msgstr "Goo: die Blobs verschmelzen wie Tropfen (SVG-Filter) und einer folgt dem Cursor. Aurora: weiche, unscharfe Lichthöfe, die treiben, ohne Metaball-Verschmelzung. Lichtkugel: eine einzige leuchtende Kugel, die atmet, mit den Farben der Palette, die darin kreisen; das Licht folgt dem Zeiger, beim Klick schlägt sie einmal."
+
+#: OLObuild 1.4.1218
+msgid "Sfera"
+msgstr "Kugel"
+
+#: OLObuild 1.4.1218
+msgid "Quanto in fretta la sfera respira e i colori girano dentro: 0 = ferma, 1 = un respiro ogni sei secondi circa."
+msgstr "Wie schnell die Kugel atmet und die Farben darin kreisen: 0 = still, 1 = etwa ein Atemzug alle sechs Sekunden."
+
+#: OLObuild 1.4.1218
+msgid "Reagisce al mouse"
+msgstr "Reagiert auf die Maus"
+
+#: OLObuild 1.4.1218
+msgid "La sfera si sporge verso il puntatore, la luce lo segue e l'alone cresce quando ti avvicini; al clic, o al tocco sul telefono, dà un battito."
+msgstr "Die Kugel neigt sich zum Zeiger, das Licht folgt ihm und der Lichthof wächst, wenn du näher kommst; beim Klick oder beim Tippen auf dem Handy schlägt sie einmal."
+
+#: OLObuild 1.4.1218
+msgid "Dimensione sfera"
+msgstr "Größe der Kugel"
+
+#: OLObuild 1.4.1218
+msgid "Sul telefono la sfera non supera i nove decimi dello schermo."
+msgstr "Auf dem Handy ist die Kugel höchstens neun Zehntel des Bildschirms groß."
+
+#: OLObuild 1.4.1218
+msgid "Riempie la larghezza"
+msgstr "Füllt die Breite"
+
+#: OLObuild 1.4.1218
+msgid "Mosaico (bento)"
+msgstr "Mosaik (Bento)"
+
+#: OLObuild 1.4.1218
+msgid "Come gira"
+msgstr "Wie er sich dreht"
+
+#: OLObuild 1.4.1218
+msgid "Sempre, da solo"
+msgstr "Immer, von selbst"
+
+#: OLObuild 1.4.1218
+msgid "Mentre scorri la pagina"
+msgstr "Während du die Seite scrollst"
+
+#: OLObuild 1.4.1218
+msgid "Sempre: un giro ogni tanti secondi, anche a pagina ferma. Mentre scorri: il timbro gira solo quando la pagina si muove, avanti scendendo e indietro salendo."
+msgstr "Immer: eine Drehung alle paar Sekunden, auch bei stehender Seite. Während du scrollst: der Stempel dreht sich nur, wenn die Seite sich bewegt, vorwärts beim Hinunter- und rückwärts beim Hinaufscrollen."
+
+#: OLObuild 1.4.1218
+msgid "Icona al centro"
+msgstr "Symbol in der Mitte"
+
+#: OLObuild 1.4.1218
+msgid "Dentro il cerchio, ferma mentre il testo gira: una freccia, una stella, il simbolo del marchio. Vuota = niente."
+msgstr "Im Kreis, still, während der Text sich dreht: ein Pfeil, ein Stern, das Zeichen der Marke. Leer = nichts."
+
+#: OLObuild 1.4.1218
+msgid "Affina per stile"
+msgstr "Nach Stil verfeinern"
+
+#: OLObuild 1.4.1218
+msgid "Giro guidato"
+msgstr "Geführte Tour"
+
+#: OLObuild 1.4.1218
+msgid "di"
+msgstr "von"
+
+#: OLObuild 1.4.1218
+msgid "Salta il giro"
+msgstr "Tour überspringen"
+
+#: OLObuild 1.4.1218
+msgid "Ho capito"
+msgstr "Verstanden"
+
+#: OLObuild 1.4.1218
+msgid "Inserisci una tile"
+msgstr "Eine Tile einfügen"
+
+#: OLObuild 1.4.1218
+msgid "Qui ci sono tutte le tile: trascinane una nella pagina, o fai clic sul + che compare passando sulla pagina. Se sai già cosa ti serve, premi Ctrl+K e scrivi il nome."
+msgstr "Hier sind alle Tiles: zieh eine in die Seite oder klick auf das +, das erscheint, wenn du über die Seite fährst. Wenn du schon weißt, was du brauchst, drück Strg+K und schreib den Namen."
+
+#: OLObuild 1.4.1218
+msgid "Cambia lo stile"
+msgstr "Ändere den Stil"
+
+#: OLObuild 1.4.1218
+msgid "Fai clic su una tile nella pagina: qui trovi cosa dice, nel Contenuto, e come appare, nello Stile: colori, caratteri, spazi, bordi e ombre."
+msgstr "Klick auf eine Tile in der Seite: hier findest du, was sie sagt, unter Inhalt, und wie sie aussieht, unter Stil: Farben, Schriften, Abstände, Rahmen und Schatten."
+
+#: OLObuild 1.4.1218
+msgid "Collega un dato"
+msgstr "Verknüpfe einen Wert"
+
+#: OLObuild 1.4.1218
+msgid "Il fulmine accanto a un campo lo collega a un dato: il titolo della pagina, la foto in evidenza, il prezzo di un prodotto, la data di uno spettacolo. Cambi il dato e la pagina si aggiorna da sola."
+msgstr "Der Blitz neben einem Feld verknüpft es mit einem Wert: dem Titel der Seite, dem Beitragsbild, dem Preis eines Produkts, dem Datum einer Vorstellung. Änderst du den Wert, aktualisiert sich die Seite von selbst."
+
+#: OLObuild 1.4.1218
+msgid "Guarda sul telefono"
+msgstr "Schau auf dem Handy"
+
+#: OLObuild 1.4.1218
+msgid "Da qui passi dal computer al tablet e al telefono e vedi la pagina com'è lì. I campi con l'icona del dispositivo accanto si regolano per ognuno: sul telefono rimpicciolisci un titolo senza toccare il computer."
+msgstr "Von hier wechselst du vom Computer zum Tablet und zum Handy und siehst die Seite so, wie sie dort ist. Felder mit dem Gerätesymbol daneben stellst du für jedes Gerät einzeln ein: auf dem Handy verkleinerst du einen Titel, ohne den Computer anzurühren."
+
+#: OLObuild 1.4.1218
+msgid "Salva e pubblica"
+msgstr "Speichern und veröffentlichen"
+
+#: OLObuild 1.4.1218
+msgid "Salva tiene il lavoro in bozza, Pubblica lo mette sul sito. Ctrl+S salva senza staccare le mani dalla tastiera, e dalle Versioni torni a una copia di prima."
+msgstr "Speichern behält die Arbeit als Entwurf, Veröffentlichen stellt sie auf die Website. Strg+S speichert, ohne die Hände von der Tastatur zu nehmen, und über die Versionen kehrst du zu einer früheren Kopie zurück."
+
+#: OLObuild 1.4.1218
+msgid "Spento"
+msgstr "Aus"
+
+#: OLObuild 1.4.1218
+msgid "Leggero"
+msgstr "Leicht"
+
+#: OLObuild 1.4.1225
+msgid "Cerchio aereo (dondola, capriola sui link)"
+msgstr "Luftring (schwingt, Überschlag auf Links)"
+
+#: OLObuild 1.4.1225
+msgid "Ipnosi (la spirale che gira)"
+msgstr "Hypnose (die drehende Spirale)"
+
+#: OLObuild 1.4.1225
+msgid "Miccia (faville, fuoco d’artificio al clic)"
+msgstr "Zündschnur (Funken, Feuerwerk beim Klick)"

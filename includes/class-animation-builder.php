@@ -353,6 +353,146 @@ class Olobuild_Animation_Builder {
      * @param array $advanced Advanced settings.
      * @return string Attribute string (leading space) or empty.
      */
+    /**
+     * La sorpresa nascosta (1.4.1218, Avanzate › Sorpresa nascosta): coriandoli, pagina capovolta o un messaggio dopo
+     * cinque clic sull'elemento o col codice Konami. Lo script si stampa una volta, solo nelle pagine che la usano.
+     *
+     * @param array $advanced Advanced settings.
+     * @return string Attributo (con lo spazio davanti) o ''.
+     */
+    public function build_sorpresa_attr( $advanced ) {
+        $fx = (string) ( $advanced['sorpresa'] ?? '' );
+        if ( ! in_array( $fx, [ 'coriandoli', 'capovolto', 'messaggio' ], true ) ) {
+            return '';
+        }
+        $via   = 'konami' === ( $advanced['sorpresa_innesco'] ?? 'clic' ) ? 'konami' : 'clic';
+        $testo = sanitize_text_field( (string) ( $advanced['sorpresa_testo'] ?? '' ) );
+        if ( ! has_action( 'wp_footer', [ __CLASS__, 'stampa_sorpresa' ] ) ) {
+            add_action( 'wp_footer', [ __CLASS__, 'stampa_sorpresa' ], 30 );
+        }
+        $cfg = [ 'fx' => $fx, 'via' => $via ];
+        if ( '' !== $testo ) {
+            $cfg['testo'] = mb_substr( $testo, 0, 160 );
+        }
+        return " data-olo-sorpresa='" . esc_attr( wp_json_encode( $cfg ) ) . "'";
+    }
+
+    /**
+     * Lo script della sorpresa nascosta. Cinque clic entro due secondi (un link che porta alla pagina stessa, come il
+     * logo in home, non la ricarica); il codice Konami da tastiera (su, su, giù, giù, sinistra, destra, sinistra,
+     * destra, B, A) e, sui telefoni, i cinque tocchi. Con meno movimento i coriandoli e il capovolgimento diventano il
+     * messaggio. Niente «&&» (WordPress lo rovina negli script in linea).
+     */
+    public static function stampa_sorpresa() {
+        $base = esc_js( __( 'Hai trovato la sorpresa!', 'olobuilder' ) );
+        ?>
+<script>
+(function(){
+  var BASE = '<?php echo $base; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_js() ?>';
+  var meno = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false;
+  var tocco = window.matchMedia ? window.matchMedia('(hover: none), (pointer: coarse)').matches : false;
+  function colori(){
+    var cs = getComputedStyle(document.documentElement), out = [];
+    ['primary', 'accent', 'secondary', 'warning', 'success'].forEach(function(r){ var v = cs.getPropertyValue('--olo-color-' + r).trim(); if(v){ out.push(v); } });
+    return out.length ? out : ['#e1474f', '#f5b700', '#2bb3a3', '#5b6cff'];
+  }
+  function messaggio(t){
+    var m = document.createElement('div');
+    m.setAttribute('role', 'status');
+    m.textContent = t || BASE;
+    m.style.cssText = 'position:fixed;left:50%;bottom:32px;z-index:2147483000;transform:translate(-50%,20px);opacity:0;max-width:min(92vw,520px);padding:14px 22px;border-radius:999px;background:var(--olo-color-dark,#111);color:var(--olo-color-light,#fff);font:600 15px/1.35 var(--olo-font-family,system-ui,sans-serif);text-align:center;box-shadow:0 18px 40px -12px rgba(0,0,0,.45);transition:opacity .35s ease,transform .35s ease';
+    document.body.appendChild(m);
+    requestAnimationFrame(function(){ m.style.opacity = '1'; m.style.transform = 'translate(-50%,0)'; });
+    setTimeout(function(){ m.style.opacity = '0'; m.style.transform = 'translate(-50%,20px)'; }, 3600);
+    setTimeout(function(){ if(m.parentNode){ m.parentNode.removeChild(m); } }, 4100);
+  }
+  function coriandoli(x, y){
+    var c = document.createElement('canvas'), W = window.innerWidth, H = window.innerHeight, dpr = Math.min(2, window.devicePixelRatio || 1);
+    c.width = W * dpr; c.height = H * dpr;
+    c.style.cssText = 'position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:2147483000';
+    document.body.appendChild(c);
+    var g = c.getContext('2d'), col = colori(), p = [], n = Math.min(220, Math.round(W / 6));
+    g.scale(dpr, dpr);
+    for(var i = 0; i < n; i++){
+      var a = -Math.PI / 2 + (Math.random() - 0.5) * 2.2, v = 7 + Math.random() * 9;
+      p.push({ x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, w: 6 + Math.random() * 6, h: 8 + Math.random() * 8, r: Math.random() * 6, vr: (Math.random() - 0.5) * 0.4, c: col[i % col.length] });
+    }
+    var t0 = performance.now();
+    (function giro(t){
+      var dt = Math.min(2, (t - (giro.u || t)) / 16.7); giro.u = t;
+      g.clearRect(0, 0, W, H);
+      var vivi = 0;
+      for(var k = 0; k < p.length; k++){
+        var q = p[k];
+        q.vy += 0.32 * dt; q.vx *= Math.pow(0.99, dt); q.x += q.vx * dt; q.y += q.vy * dt; q.r += q.vr * dt;
+        if(q.y < H + 20){ vivi++; }
+        g.save(); g.translate(q.x, q.y); g.rotate(q.r); g.fillStyle = q.c;
+        g.fillRect(-q.w / 2, -q.h / 2 * Math.abs(Math.cos(q.r * 2)), q.w, q.h * Math.abs(Math.cos(q.r * 2)) + 1);
+        g.restore();
+      }
+      if(vivi > 0){ if(t - t0 < 6000){ requestAnimationFrame(giro); return; } }
+      if(c.parentNode){ c.parentNode.removeChild(c); }
+    })(t0);
+  }
+  var capovolta = false;
+  function capovolgi(){
+    if(capovolta){ return; }
+    capovolta = true;
+    var b = document.body, prima = b.style.transition;
+    b.style.transition = 'transform 1.1s cubic-bezier(.6,-0.2,.3,1.3)';
+    b.style.transformOrigin = '50% ' + (window.scrollY + window.innerHeight / 2) + 'px';
+    b.style.transform = 'rotate(180deg)';
+    setTimeout(function(){ b.style.transform = ''; }, 3200);
+    setTimeout(function(){ b.style.transition = prima; b.style.transformOrigin = ''; capovolta = false; }, 4400);
+  }
+  function scatta(cfg, x, y){
+    if(cfg.fx === 'messaggio'){ messaggio(cfg.testo); return; }
+    if(meno){ messaggio(cfg.testo); return; }
+    if(cfg.fx === 'coriandoli'){ coriandoli(x, y); if(cfg.testo){ messaggio(cfg.testo); } return; }
+    capovolgi();
+    if(cfg.testo){ setTimeout(function(){ messaggio(cfg.testo); }, 1100); }
+  }
+  function cinqueClic(el, cfg){
+    var n = 0, primo = 0;
+    el.addEventListener('click', function(e){
+      var ora = Date.now();
+      if(ora - primo > 2000){ n = 0; primo = ora; }
+      n++;
+      var a = e.target.closest ? e.target.closest('a[href]') : null;
+      if(a){ if(a.href.split('#')[0] === location.href.split('#')[0]){ e.preventDefault(); } }
+      if(n >= 5){ n = 0; scatta(cfg, e.clientX || window.innerWidth / 2, e.clientY || window.innerHeight / 2); }
+    });
+  }
+  var KONAMI = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+  var konami = [], passo = 0;
+  document.addEventListener('keydown', function(e){
+    if(!konami.length){ return; }
+    var k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    passo = (k === KONAMI[passo]) ? passo + 1 : (k === KONAMI[0] ? 1 : 0);
+    if(passo === KONAMI.length){
+      passo = 0;
+      konami.forEach(function(v){ var r = v.el.getBoundingClientRect(); scatta(v.cfg, r.left + r.width / 2, Math.max(40, Math.min(window.innerHeight - 40, r.top + r.height / 2))); });
+    }
+  });
+  function avvia(){
+    var els = document.querySelectorAll('[data-olo-sorpresa]');
+    for(var i = 0; i < els.length; i++){
+      var el = els[i];
+      if(el.oloSorpresa){ continue; }
+      var cfg = {};
+      try { cfg = JSON.parse(el.getAttribute('data-olo-sorpresa')) || {}; } catch(err){ continue; }
+      el.oloSorpresa = cfg;
+      if(cfg.via === 'konami'){ konami.push({ el: el, cfg: cfg }); if(tocco){ cinqueClic(el, cfg); } }
+      else { cinqueClic(el, cfg); }
+    }
+  }
+  if(document.readyState !== 'loading'){ avvia(); } else { document.addEventListener('DOMContentLoaded', avvia); }
+  document.addEventListener('olo:lazy-hydrated', avvia);
+})();
+</script>
+        <?php
+    }
+
     public function build_smear_attr( $advanced ) {
         if ( empty( $advanced['cursor_smear'] ) ) {
             return '';

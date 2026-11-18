@@ -76,7 +76,32 @@ class Olobuild_Footer_Integration {
         $renderer   = new Olobuild_Frontend_Renderer();
         $inner_html = $renderer->render_shortcode( [ 'id' => $template_id ] );
 
-        return '<footer class="olo-site-footer alignfull" role="contentinfo">' . $inner_html . '</footer>';
+        // «Si scopre da sotto» (1.4.1218, impostazione del template): il piè di pagina resta fermo in fondo e la pagina,
+        // col suo fondo, scorre via scoprendolo. Lo script lo accende solo se il piè di pagina sta nella finestra.
+        $scopre = ! empty( $tpl['settings']['piede_scopre'] );
+        return '<footer class="olo-site-footer alignfull' . ( $scopre ? ' olo-piede-scopre' : '' ) . '" role="contentinfo">' . $inner_html . '</footer>'
+            . ( $scopre ? self::script_scopre() : '' );
+    }
+
+    /**
+     * Il piè di pagina che si scopre: la pagina prima di lui prende il fondo del sito e sta sopra; lui resta fermo in
+     * fondo alla finestra. Spento se è più alto della finestra (si vedrebbe prima la sua fine) e per chi ha chiesto meno
+     * movimento. Niente «&&» nello script: WordPress lo trasformerebbe in entità.
+     */
+    private static function script_scopre() {
+        return '<script>(function(){var f=document.querySelector("footer.olo-piede-scopre");if(!f){return;}var p=f.previousElementSibling;if(!p){return;}'
+            . 'var h=document.documentElement;function va(){var no=f.offsetHeight>window.innerHeight*0.92;'
+            . 'if(window.matchMedia){if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){no=true;}}'
+            . 'if(no){h.classList.remove("olo-piede-scopre-on");p.classList.remove("olo-sopra-piede");return;}'
+            . 'if(!p.style.backgroundColor){var c=getComputedStyle(document.body).backgroundColor;if(c==="rgba(0, 0, 0, 0)"){c="#ffffff";}if(c==="transparent"){c="#ffffff";}p.style.backgroundColor=c;}'
+            . 'p.classList.add("olo-sopra-piede");h.classList.add("olo-piede-scopre-on");taglia();}'
+            // La Luce di pagina (uno strato fisso grande quanto la finestra, dentro la pagina) sta sopra il piè di pagina
+            // insieme alla pagina: si ritaglia via la parte dove il piè di pagina si è scoperto. Solo lei: lightbox e
+            // popup della pagina restano interi (18 nov 2026, l'utente: «non funziona», il piè restava coperto).
+            . 'function taglia(){var L=p.querySelectorAll(".olo-pagelight");if(!L.length){return;}var giu=0;'
+            . 'if(h.classList.contains("olo-piede-scopre-on")){giu=Math.max(0,Math.round(window.innerHeight-p.getBoundingClientRect().bottom));}'
+            . 'for(var i=0;i<L.length;i++){L[i].style.clipPath=giu>0?"inset(0 0 "+giu+"px 0)":"";}}'
+            . 'va();window.addEventListener("resize",va);window.addEventListener("load",va);window.addEventListener("scroll",taglia,{passive:true});})();</script>';
     }
 
     /**

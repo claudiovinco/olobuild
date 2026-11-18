@@ -66,8 +66,16 @@ export default {
     { type: 'separator', label: t('Rotazione') },
     { key: 'spin', label: t('Ruota tutto'), type: 'toggle',
       description: t('Il testo gira in continuazione col suo tracciato, come un timbro ad anello: col Cerchio è perfetto. Chi nel sistema ha chiesto meno movimento lo vede fermo.') },
+    { key: 'spin_mode', label: t('Come gira'), type: 'select', options: [
+      { value: 'continuo', label: t('Sempre, da solo') },
+      { value: 'scorrimento', label: t('Mentre scorri la pagina') },
+    ], condition: { field: 'spin', op: 'eq', value: true },
+      description: t('Sempre: un giro ogni tanti secondi, anche a pagina ferma. Mentre scorri: il timbro gira solo quando la pagina si muove, avanti scendendo e indietro salendo.') },
     { key: 'spin_speed', label: t('Durata di un giro'), type: 'range', min: 3, max: 40, step: 1, unit: 's',
-      condition: { field: 'spin', op: 'eq', value: true } },
+      condition: [{ field: 'spin', op: 'eq', value: true }, { field: 'spin_mode', op: 'neq', value: 'scorrimento' }] },
+    { key: 'center_icon', label: t('Icona al centro'), type: 'icon',
+      condition: { field: 'path_preset', op: 'eq', value: 'circle' },
+      description: t('Dentro il cerchio, ferma mentre il testo gira: una freccia, una stella, il simbolo del marchio. Vuota = niente.') },
     { key: 'spin_direction', label: t('Direzione'), type: 'select', options: [
       { value: 'cw',  label: t('Oraria') },
       { value: 'ccw', label: t('Antioraria') },

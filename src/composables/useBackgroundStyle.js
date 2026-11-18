@@ -31,7 +31,7 @@ export const ATOMIC_TILE_TYPES = new Set(['button', 'icon', 'divider', 'spacer',
 // `solid`. Il layer separato `.olo-bg-preview` è pensato per i tipi con un asset
 // (image/gradient/gallery) e ha un proprio z-index: usarlo anche qui significava
 // che sezioni e righe con Aurora/Bagliori/Trama/CRT non disegnavano nulla.
-export const CSS_ONLY_BG_TYPES = new Set(['solid', 'pattern', 'mesh', 'glow', 'crt', 'geo']);
+export const CSS_ONLY_BG_TYPES = new Set(['solid', 'pattern', 'mesh', 'glow', 'crt', 'geo', 'gradini']);
 
 /** true se il bg del nodo va reso inline sul blocco (vedi CSS_ONLY_BG_TYPES). */
 export function isInlineBg(bgOrType) {

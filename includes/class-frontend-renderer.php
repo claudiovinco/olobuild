@@ -1170,7 +1170,7 @@ class Olobuild_Frontend_Renderer {
         $has_bg_video   = ( $tile_bg['type'] === 'video' && ! empty( $tile_bg['video_url'] ) );
         $has_bg_gallery = ( $tile_bg['type'] === 'gallery' && ! empty( $tile_bg['gallery_images'] ) && is_array( $tile_bg['gallery_images'] ) );
         $has_bg_any     = ( $tile_bg['type'] !== 'none' );
-        $has_overlay    = ( $has_bg_any && ! empty( $tile_bg['overlay_opacity'] ) && intval( $tile_bg['overlay_opacity'] ) > 0 );
+        $has_overlay    = ( $has_bg_any && ! empty( $tile_bg['overlay_opacity'] ) && intval( $tile_bg['overlay_opacity'] ) > 0 ) || Olobuild_CSS_Builder::ha_grana( $tile_bg );
 
         // Build inline styles (custom values that UIkit can't handle)
         $inline_styles = [];
@@ -1381,7 +1381,7 @@ class Olobuild_Frontend_Renderer {
         }
 
         // Spotlight cursore e pennellata — riusabili su section/column/row/element (vedi Olobuild_Animation_Builder::build_spotlight_attr / build_smear_attr)
-        $elem_spotlight_attr = $this->anim->build_spotlight_attr( $advanced ) . $this->anim->build_smear_attr( $advanced );
+        $elem_spotlight_attr = $this->anim->build_spotlight_attr( $advanced ) . $this->anim->build_smear_attr( $advanced ) . $this->anim->build_sorpresa_attr( $advanced );
 
         // Bezier path scroll animation
         $elem_bezier_attr = '';
@@ -1526,7 +1526,8 @@ class Olobuild_Frontend_Renderer {
                 $ov_color   = esc_attr( $tile_bg['overlay_color'] ?? '#000000' );
                 $ov_opacity = intval( $tile_bg['overlay_opacity'] ) / 100;
             ?>
-                <div class="uk-position-cover" style="background: <?php echo esc_attr( Olobuild_CSS_Builder::velo_fondo( $tile_bg, $ov_color ) ); ?>; opacity: <?php echo $ov_opacity; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $ov_color esc_attr()'d at assignment above; $ov_opacity is intval()/100 ?>; pointer-events: none" aria-hidden="true"></div>
+                <?php if ( $ov_opacity > 0 ) : ?><div class="uk-position-cover" style="background: <?php echo esc_attr( Olobuild_CSS_Builder::velo_fondo( $tile_bg, $ov_color ) ); ?>; opacity: <?php echo $ov_opacity; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $ov_color esc_attr()'d at assignment above; $ov_opacity is intval()/100 ?>; pointer-events: none" aria-hidden="true"></div><?php endif; ?>
+                <?php echo Olobuild_CSS_Builder::grana_markup( $tile_bg ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup fisso, intensità numerica ?>
             <?php endif; ?>
 
             <?php if ( $this->builder_mode ) $settings['_builder_mode'] = true; Olobuild_Tile_Base::$nodo_in_resa = (string) ( $node['id'] ?? '' ); // sulla stessa riga: una riga in più finirebbe come spazi nell'HTML di ogni tile ?>

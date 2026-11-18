@@ -151,6 +151,12 @@
           :defaultValue="100" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Saturazione')"
           @update:modelValue="setvC('backdrop_saturate', $event, 0, 200, 100)" />
       </div>
+      <!-- Vetro liquido (1.4.1218): il vetro deforma anche quello che c'è dietro, come una lastra spessa -->
+      <div class="olo-es-sliderrow">
+        <span class="olo-es-lab" :title="t('Vetro liquido')">{{ t('Vetro liquido') }}</span>
+        <FieldSelect ui="dropdown" class="olo-es-selwrap" :model-value="String(sv('backdrop_liquido', 0) || 0)" :options="VETRO_LIQUIDO_OPTIONS"
+          :aria-label="t('Vetro liquido')" @update:model-value="setv('backdrop_liquido', parseInt($event, 10) || 0)" />
+      </div>
     </div>
 
     <!-- MASCHERA (non hoverable: solo stato normale). «Immagine personalizzata» = la propria
@@ -219,6 +225,13 @@ import FieldBoxShadow from '../fields/FieldBoxShadow.vue';
 import FieldSelect from '../fields/FieldSelect.vue';
 import NumberScrubber from '../fields/NumberScrubber.vue';
 
+// Vetro liquido (1.4.1218): la distorsione del filtro sfondo. Chrome ed Edge la disegnano, gli altri tengono la sfocatura.
+const VETRO_LIQUIDO_OPTIONS = [
+  { value: '0', label: 'Spento' },
+  { value: '1', label: 'Leggero' },
+  { value: '2', label: 'Medio' },
+  { value: '3', label: 'Forte' },
+];
 // Label RAW: FieldSelect applica t() internamente. Value INVARIATI.
 const ORIGIN_OPTIONS = [
   { value: 'center', label: 'Centro' },

@@ -443,6 +443,49 @@
       </div>
 
       <!-- Geometrie (anelli concentrici + trama che sfuma) -->
+      <!-- Gradini di luce (1.4.1218) -->
+      <div v-else-if="bg.type === 'gradini'" class="type-body">
+        <div class="pv" :style="[tokenStyle, gradiniPreviewStyle]"><span class="pv-tag">{{ t('anteprima live') }}</span></div>
+        <div class="field">
+          <span class="cl">{{ t('Colori, dal basso') }}</span>
+          <div v-for="(c, idx) in gradiniColors" :key="idx" class="mesh-color-row">
+            <div class="mesh-color-field"><FieldColor :modelValue="c" @update:modelValue="setGradiniColor(idx, $event)" /></div>
+            <button v-if="gradiniColors.length > 1" type="button" class="mini-x" :title="t('Rimuovi colore')" @click="removeGradiniColor(idx)">&times;</button>
+          </div>
+          <button v-if="gradiniColors.length < 5" type="button" class="btn-soft btn-soft--sm" @click="addGradiniColor">+ {{ t('Aggiungi colore') }}</button>
+        </div>
+        <div class="field">
+          <span class="cl">{{ t('Colore base') }}</span>
+          <FieldColor :modelValue="bg.gradini_base || GRADINI_DEFAULTS.gradini_base" @update:modelValue="updateField('gradini_base', $event)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Barre') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="bg.gradini_n ?? GRADINI_DEFAULTS.gradini_n" :min="3" :max="16" :step="1" :defaultValue="GRADINI_DEFAULTS.gradini_n" emitAs="number" :sliderOnFocus="false" :ariaLabel="t('Barre')" @update:modelValue="commitInt('gradini_n', $event, GRADINI_DEFAULTS.gradini_n)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Picco') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="bg.gradini_picco ?? GRADINI_DEFAULTS.gradini_picco" :min="0" :max="100" :step="1" :defaultValue="GRADINI_DEFAULTS.gradini_picco" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Picco')" @update:modelValue="commitInt('gradini_picco', $event, GRADINI_DEFAULTS.gradini_picco)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Altezza') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="bg.gradini_altezza ?? GRADINI_DEFAULTS.gradini_altezza" :min="10" :max="100" :step="1" :defaultValue="GRADINI_DEFAULTS.gradini_altezza" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Altezza')" @update:modelValue="commitInt('gradini_altezza', $event, GRADINI_DEFAULTS.gradini_altezza)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Discesa') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="bg.gradini_curva ?? GRADINI_DEFAULTS.gradini_curva" :min="0" :max="100" :step="1" :defaultValue="GRADINI_DEFAULTS.gradini_curva" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Discesa')" @update:modelValue="commitInt('gradini_curva', $event, GRADINI_DEFAULTS.gradini_curva)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Alone') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="bg.gradini_alone ?? GRADINI_DEFAULTS.gradini_alone" :min="0" :max="100" :step="1" :defaultValue="GRADINI_DEFAULTS.gradini_alone" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Alone')" @update:modelValue="commitInt('gradini_alone', $event, GRADINI_DEFAULTS.gradini_alone)" />
+        </div>
+        <div class="row tgl-inline">
+          <div class="tgl-row">
+            <button type="button" class="tgl" :class="{ on: !!bg.gradini_alto }" :aria-pressed="!!bg.gradini_alto" @click="updateField('gradini_alto', !bg.gradini_alto)"><b></b></button>
+            <span class="tl">{{ t('Dall’alto') }}</span>
+          </div>
+        </div>
+      </div>
+
       <div v-else-if="bg.type === 'geo'" class="type-body">
         <div class="pv" :style="[tokenStyle, geoPreviewStyle]"><span class="pv-tag">{{ t('anteprima live') }}</span></div>
         <div class="grid2">
@@ -609,17 +652,31 @@
           <NumberScrubber class="ns-grow" :modelValue="bg.overlay_fade_reach ?? 70" :min="20" :max="100" :step="5" :defaultValue="70" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Estensione della sfumatura')" @update:modelValue="commitInt('overlay_fade_reach', $event, 70)" />
         </div>
       </div>
+
+      <!-- ───────── GRANA (1.4.1218) — sopra ogni tipo di sfondo, sotto il contenuto ───────── -->
+      <div class="subhead">
+        <span class="t2">{{ t('Grana') }}</span>
+        <InfoTip :titolo="t('Grana')" :testo="t('Un velo di grana fine sopra lo sfondo, come la carta o la pellicola: dà materia alle tinte piatte, ai gradienti e alle foto. Si vede sul chiaro e sullo scuro; a zero non c\'è.')" />
+      </div>
+      <div class="type-body">
+        <div class="row">
+          <span class="rowlab">{{ t('Intensità') }}</span>
+          <NumberScrubber class="ns-grow" :modelValue="bg.grana ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Intensità della grana')" @update:modelValue="commitInt('grana', $event, 0)" />
+        </div>
+      </div>
     </template>
   </div>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue';
+import InfoTip from './InfoTip.vue';
 import { t } from '@/i18n';
 import { useStylesStore } from '@/stores/styles';
 import { useMediaPicker } from '@/composables/useMediaPicker';
 import { patternList, getPatternCSS } from '@/utils/patternCSS';
 import { getGlowCSS, getGlowColors, glowPresets } from '@/utils/glowCSS';
+import { getGradiniCSS, getGradiniColors, GRADINI_DEFAULTS } from '@/utils/gradiniCSS';
 import { getMeshCSS, getMeshColors, meshPresets } from '@/utils/meshCSS';
 import { getCrtCSS, crtModels } from '@/utils/crtCSS';
 import { getGeoCSS, GEO_DEFAULTS, geoTextures } from '@/utils/geoCSS';
@@ -829,6 +886,7 @@ const typeGroups = [
     { value: 'pattern', label: 'Pattern' },
     { value: 'crt',     label: 'CRT scanline' },
     { value: 'geo',     label: 'Geometrie' },
+    { value: 'gradini', label: 'Gradini di luce' },
   ] },
   { cat: 'Media', items: [
     { value: 'image',   label: 'Immagine',      prev: 'p-img' },
@@ -875,6 +933,7 @@ const typeTileStyle = {
   pattern: getPatternCSS('dots', '#000000', '#ffffff', 20, 0.5),
   crt:     getCrtCSS({}),
   geo:     getGeoCSS({}),
+  gradini: getGradiniCSS({}),
 };
 
 /** Sceglie il tipo di sfondo. Ri-cliccare il tipo già attivo non riscrive nulla. */
@@ -907,8 +966,8 @@ function selectType(value) {
 // Pattern groups for FieldSelect (formato gruppi { group, options })
 const patternGroups = [
   { label: 'Linee', items: patternList.filter(p => ['horizontal-lines','vertical-lines','diagonal-lines','diagonal-lines-reverse','crosshatch','diagonal-crosshatch'].includes(p.value)) },
-  { label: 'Punti', items: patternList.filter(p => ['dots','dots-large','dots-grid','polka-dots'].includes(p.value)) },
-  { label: 'Geometrici', items: patternList.filter(p => ['checkerboard','triangles','diamonds','hexagons','zigzag','chevrons','herringbone'].includes(p.value)) },
+  { label: 'Punti', items: patternList.filter(p => ['dots','dots-large','dots-grid','polka-dots','halftone'].includes(p.value)) },
+  { label: 'Geometrici', items: patternList.filter(p => ['checkerboard','gingham','triangles','diamonds','hexagons','zigzag','chevrons','herringbone'].includes(p.value)) },
   { label: 'Onde & Organici', items: patternList.filter(p => ['waves','wavy-lines','scales','circles','concentric-circles'].includes(p.value)) },
   { label: 'Texture', items: patternList.filter(p => ['carbon-fiber','graph-paper','lined-paper','blueprint','noise','brick','wood-grain'].includes(p.value)) },
   { label: 'Decorativi', items: patternList.filter(p => ['stars','crosses','plus-signs','hearts'].includes(p.value)) },
@@ -917,6 +976,23 @@ const patternGroupOpts = patternGroups.map((g) => ({
   group: g.label,
   options: g.items.map((p) => ({ value: p.value, label: p.label })),
 }));
+
+// Gradini di luce: anteprima e colori (stesso util della resa PHP)
+const gradiniPreviewStyle = computed(() => bg.value.type === 'gradini' ? getGradiniCSS(bg.value) : {});
+const gradiniColors = computed(() => getGradiniColors(bg.value));
+function setGradiniColor(idx, val) {
+  const l = [...gradiniColors.value];
+  l[idx] = val;
+  updateField('gradini_colori', l);
+}
+function addGradiniColor() {
+  updateField('gradini_colori', [...gradiniColors.value, 'var(--olo-color-light, #ffffff)']);
+}
+function removeGradiniColor(idx) {
+  const l = [...gradiniColors.value];
+  l.splice(idx, 1);
+  updateField('gradini_colori', l);
+}
 
 // Mesh/aurora preview: stesso util getMeshCSS della resa canvas/PHP (WYSIWYG).
 const meshPreviewStyle = computed(() => bg.value.type === 'mesh' ? getMeshCSS(bg.value) : {});

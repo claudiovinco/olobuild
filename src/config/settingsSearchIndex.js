@@ -322,32 +322,9 @@ export const SETTINGS_FIELD_INDEX = {
 		},
 		{
 			"kind": "field",
-			"label": "Twitter handle",
-			"hint": "Username Twitter del sito (con @).",
+			"label": "Immagine disegnata",
+			"hint": "Per ogni contenuto senza un'immagine sua: il titolo, il nome del sito e la foto in evidenza, nel colore e nel carattere del sito.",
 			"section": "Open Graph & Twitter Card"
-		},
-		{
-			"kind": "field",
-			"label": "Card type",
-			"hint": "Formato della preview su Twitter.",
-			"section": "Open Graph & Twitter Card"
-		},
-		{
-			"kind": "section",
-			"label": "Sitemap & schema.org",
-			"hint": ""
-		},
-		{
-			"kind": "field",
-			"label": "Sitemap XML",
-			"hint": "La sitemap di WordPress, senza le pagine in noindex.",
-			"section": "Sitemap & schema.org"
-		},
-		{
-			"kind": "field",
-			"label": "Tipo organizzazione",
-			"hint": "Schema.org markup iniettato in ogni pagina.",
-			"section": "Sitemap & schema.org"
 		}
 	],
 	"redirects": [

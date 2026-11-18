@@ -343,37 +343,122 @@ def incudine():
 
 # ───────────────────────── CRIC (meccanico) ─────────────────────────
 def cric():
-    def quadrante(cx, cy, r, numeri, rosso_da, ago_cls):
-        t = ''
-        for k in range(len(numeri)):
-            a = math.radians(135 + k * 270 / (len(numeri) - 1))
-            t += '<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="4"/>' % (
-                cx + math.cos(a) * (r - 24), cy + math.sin(a) * (r - 24), cx + math.cos(a) * (r - 6), cy + math.sin(a) * (r - 6),
-                '#FF4A3D' if k >= rosso_da else '#EAF2F8')
-            t += '<text x="%.1f" y="%.1f" font-family="Arial" font-size="18" fill="#CFE3EE" text-anchor="middle" dominant-baseline="middle">%s</text>' % (
-                cx + math.cos(a) * (r - 42), cy + math.sin(a) * (r - 42), numeri[k])
-            if k < len(numeri) - 1:
+    # Il cruscotto 3 (18 nov 2026, utente: «il cruscotto dovrebbe rimanere più basso (e anche più piccolo) per fare spazio
+    # alla strada che scorre… più reale e definito»). Una plancia larga quanto lo schermo (2200 × 640) con la palpebra del
+    # quadro al centro; dentro due quadranti con la ghiera cromata, i numeri retroilluminati, la zona rossa, l'ago affusolato
+    # col perno e il riflesso del vetro, i piccoli display (orologio, contachilometri) e lo schermo centrale dove lo Slider
+    # Pro scrive le spie. Il livello va a tutta larghezza e poggia sul fondo: il quadro sta nella metà bassa.
+    def arco(cx, cy, r, a0, a1):
+        x0, y0 = cx + math.cos(math.radians(a0)) * r, cy + math.sin(math.radians(a0)) * r
+        x1, y1 = cx + math.cos(math.radians(a1)) * r, cy + math.sin(math.radians(a1)) * r
+        return 'M%.1f %.1f A%d %d 0 %d 1 %.1f %.1f' % (x0, y0, r, r, 1 if a1 - a0 > 180 else 0, x1, y1)
+
+    def quadrante(cx, cy, r, numeri, rosso_da, ago_cls, unita, lcd):
+        n = len(numeri) - 1
+        ang = lambda v: 135 + v * 270 / n
+        t = ('<circle cx="%d" cy="%d" r="%d" fill="#000" opacity=".55" filter="url(#sf)"/>' % (cx, cy + 10, r + 22)
+             + '<circle cx="%d" cy="%d" r="%d" fill="url(#cr)"/>' % (cx, cy, r + 13)
+             + '<circle cx="%d" cy="%d" r="%d" fill="#030405"/>' % (cx, cy, r + 4)
+             + '<circle cx="%d" cy="%d" r="%d" fill="url(#fa)"/>' % (cx, cy, r)
+             + '<circle cx="%d" cy="%d" r="%d" fill="none" stroke="#2EC4B6" stroke-opacity=".28" stroke-width="2" filter="url(#lu)"/>' % (cx, cy, r - 3))
+        # la zona rossa, sul bordo
+        t += '<path d="%s" stroke="#FF3B2F" stroke-width="9" fill="none" opacity=".9" filter="url(#lu)"/>' % arco(cx, cy, r - 9, ang(rosso_da), ang(n))
+        tacche, nm = '', ''
+        for k in range(n + 1):
+            a = math.radians(ang(k))
+            tacche += '<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="4.5" stroke-linecap="round"/>' % (
+                cx + math.cos(a) * (r - 30), cy + math.sin(a) * (r - 30), cx + math.cos(a) * (r - 8), cy + math.sin(a) * (r - 8),
+                '#FF5A4A' if k >= rosso_da else '#F4F7FA')
+            nm += ('<text x="%.1f" y="%.1f" font-family="Helvetica, Arial, sans-serif" font-size="%d" font-weight="700" fill="#F4F7FA" '
+                   'text-anchor="middle" dominant-baseline="central">%s</text>') % (
+                cx + math.cos(a) * (r - (54 if len(numeri[k]) < 3 else 58)), cy + math.sin(a) * (r - (54 if len(numeri[k]) < 3 else 58)), 21 if len(numeri[k]) < 3 else 16, numeri[k])
+            if k < n:
                 for j in range(1, 5):
-                    b = math.radians(135 + (k + j / 5) * 270 / (len(numeri) - 1))
-                    t += '<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="#7FA3B8" stroke-width="2"/>' % (
-                        cx + math.cos(b) * (r - 14), cy + math.sin(b) * (r - 14), cx + math.cos(b) * (r - 6), cy + math.sin(b) * (r - 6))
-        return ('<circle cx="%d" cy="%d" r="%d" fill="#0B1015" stroke="#2EC4B6" stroke-opacity=".55" stroke-width="3"/>' % (cx, cy, r) + t
-                + '<g class="%s"><path d="M%d %d L%d %d" stroke="#FF6B2C" stroke-width="6" stroke-linecap="round"/></g>' % (ago_cls, cx, cy, cx - r + 34, cy)
-                + '<circle cx="%d" cy="%d" r="14" fill="#1B232B" stroke="#2EC4B6" stroke-width="2"/>' % (cx, cy))
-    corpo = ('<defs><linearGradient id="p" y1="0" y2="1"><stop offset="0" stop-color="#1A2027"/><stop offset="1" stop-color="#07090C"/></linearGradient>'
-             '<linearGradient id="d" y1="0" y2="1"><stop offset="0" stop-color="#0E1C24"/><stop offset="1" stop-color="#08131A"/></linearGradient></defs>'
-             '<path d="M0 180 Q800 40 1600 180 V700 H0 Z" fill="url(#p)"/>'
-             '<path d="M0 180 Q800 40 1600 180" stroke="#2EC4B6" stroke-opacity=".35" stroke-width="3" fill="none"/>'
-             # quadranti raccolti (14 nov 2026, utente: «il cruscotto è immenso… specialmente il contagiri e il tachimetro»)
-             + quadrante(410, 345, 165, ['0', '1', '2', '3', '4', '5', '6', '7', '8'], 7, 'giri')
-             + quadrante(1190, 345, 165, ['0', '20', '40', '60', '80', '100', '120', '140', '160', '180', '200'], 11, 'vel')
-             + '<rect x="610" y="200" width="380" height="250" rx="22" fill="url(#d)" stroke="#2EC4B6" stroke-opacity=".5" stroke-width="2"/>'
-             '<text x="410" y="460" font-family="Arial" font-size="17" fill="#7FA3B8" text-anchor="middle">giri × 1000</text>'
-             '<text x="1190" y="460" font-family="Arial" font-size="17" fill="#7FA3B8" text-anchor="middle">km/h</text>')
-    salva('cric-cruscotto-2.svg', svg('0 0 1600 700', corpo,
-                                    stile='@keyframes g{0%,100%{transform:rotate(38deg)}50%{transform:rotate(46deg)}}'
-                                          '.giri{transform-origin:410px 345px;transform-box:view-box;animation:g 1.4s ease-in-out infinite}'
-                                          '.vel{transform-origin:1190px 345px;transform-box:view-box;transform:rotate(0deg)}'))
+                    b = math.radians(ang(k + j / 5))
+                    lung = 18 if j == 2 or j == 3 else 14
+                    tacche += '<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="2" stroke-linecap="round"/>' % (
+                        cx + math.cos(b) * (r - 8 - lung + (4 if j != 2.5 else 0)), cy + math.sin(b) * (r - 8 - lung + 4),
+                        cx + math.cos(b) * (r - 8), cy + math.sin(b) * (r - 8), '#FF8A80' if k >= rosso_da else '#B7C6D1')
+        t += '<g filter="url(#lu)">' + tacche + nm + '</g>'
+        t += ('<text x="%d" y="%d" font-family="Helvetica, Arial, sans-serif" font-size="15" letter-spacing="1.5" fill="#8FA4B3" '
+              'text-anchor="middle">%s</text>') % (cx, cy + 46, unita)
+        # il piccolo display in basso nel quadrante
+        t += ('<rect x="%d" y="%d" width="124" height="34" rx="6" fill="#06100F" stroke="#1D2A2C" stroke-width="2"/>'
+              '<text x="%d" y="%d" font-family="Consolas, Menlo, monospace" font-size="17" fill="#7FF0E2" text-anchor="middle" '
+              'dominant-baseline="central" filter="url(#lu)">%s</text>') % (cx - 62, cy + 78, cx, cy + 95, lcd)
+        # l'ago affusolato (disegnato verso sinistra, a 180°: lo ruota la classe) col contrappeso, e il perno
+        t += ('<g class="%s"><polygon points="%d,%d %d,%d %d,%d %d,%d %d,%d" fill="url(#ag)" filter="url(#la)"/>'
+              '<polygon points="%d,%d %d,%d %d,%d" fill="#FFD1B8" opacity=".55"/></g>') % (
+            ago_cls, cx - r + 22, cy, cx + 4, cy - 6, cx + 30, cy - 4, cx + 30, cy + 4, cx + 4, cy + 6,
+            cx - r + 22, cy, cx + 4, cy - 2, cx + 4, cy)
+        t += ('<circle cx="%d" cy="%d" r="19" fill="url(#mo)" stroke="#06080A" stroke-width="2"/>'
+              '<circle cx="%d" cy="%d" r="6" fill="#0B0E11"/><circle cx="%d" cy="%d" r="3" fill="#C8D0D7" opacity=".7"/>') % (
+            cx, cy, cx, cy, cx - 6, cy - 6)
+        # il riflesso del vetro, in alto a sinistra
+        t += ('<path d="M%.1f %.1f A%d %d 0 0 1 %.1f %.1f Q%.1f %.1f %.1f %.1f Z" fill="url(#ve)"/>') % (
+            cx - r * .93, cy - r * .1, r, r, cx + r * .45, cy - r * .88, cx - r * .2, cy - r * .55, cx - r * .93, cy - r * .1)
+        return t
+
+    SIL = ('M0 342 C260 320 360 302 410 294 C470 150 700 64 1100 58 C1500 64 1730 150 1790 294 '
+           'C1840 302 1940 320 2200 342 V640 H0 Z')
+    POZZO = ('M478 332 C520 196 740 124 1100 120 C1460 124 1680 196 1722 332 L1722 528 C1722 560 1700 578 1668 578 '
+             'L532 578 C500 578 478 560 478 528 Z')
+    defs = ('<defs>'
+            '<linearGradient id="pl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1D2127"/><stop offset=".35" stop-color="#121519"/>'
+            '<stop offset="1" stop-color="#07080A"/></linearGradient>'
+            '<linearGradient id="po" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#020203"/><stop offset=".55" stop-color="#07090B"/>'
+            '<stop offset="1" stop-color="#0C0F12"/></linearGradient>'
+            '<linearGradient id="om" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".85"/>'
+            '<stop offset=".32" stop-color="#000" stop-opacity="0"/></linearGradient>'
+            '<linearGradient id="cr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E6EAEE"/><stop offset=".28" stop-color="#7B848D"/>'
+            '<stop offset=".52" stop-color="#2B3036"/><stop offset=".78" stop-color="#8D959D"/><stop offset="1" stop-color="#3A4046"/></linearGradient>'
+            '<radialGradient id="fa" cx=".5" cy=".42" r=".62"><stop offset="0" stop-color="#151B21"/><stop offset=".75" stop-color="#0A0D10"/>'
+            '<stop offset="1" stop-color="#040506"/></radialGradient>'
+            '<linearGradient id="ag" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FF3B1F"/><stop offset=".7" stop-color="#FF7A2E"/>'
+            '<stop offset="1" stop-color="#B8261A"/></linearGradient>'
+            '<radialGradient id="mo" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#9AA3AC"/><stop offset=".45" stop-color="#3B434B"/>'
+            '<stop offset="1" stop-color="#11151A"/></radialGradient>'
+            '<linearGradient id="ve" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".13"/>'
+            '<stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>'
+            '<linearGradient id="tf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0D1C24"/><stop offset="1" stop-color="#050B0F"/></linearGradient>'
+            '<linearGradient id="tv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".07"/>'
+            '<stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient>'
+            '<filter id="lu" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.4" result="b"/>'
+            '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'
+            '<filter id="la" x="-20%" y="-60%" width="140%" height="220%"><feGaussianBlur stdDeviation="4" result="b"/>'
+            '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'
+            '<filter id="sf" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="14"/></filter>'
+            '<filter id="gr" filterUnits="userSpaceOnUse" x="0" y="0" width="2200" height="640">'
+            '<feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7" stitchTiles="stitch"/>'
+            '<feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .06 0"/></filter>'
+            '<clipPath id="cs"><path d="' + SIL + '"/></clipPath>'
+            '</defs>')
+    corpo = (defs
+             # la plancia, la grana della plastica, lo spigolo illuminato e la cucitura della palpebra
+             + '<path d="' + SIL + '" fill="url(#pl)"/>'
+             + '<rect width="2200" height="640" filter="url(#gr)" clip-path="url(#cs)"/>'
+             + '<path d="M0 342 C260 320 360 302 410 294 C470 150 700 64 1100 58 C1500 64 1730 150 1790 294 C1840 302 1940 320 2200 342" '
+               'stroke="#4A535C" stroke-width="2.5" fill="none" opacity=".85"/>'
+             + '<path d="M432 300 C492 166 714 84 1100 78 C1486 84 1708 166 1768 300" stroke="#2C333A" stroke-width="2.5" '
+               'stroke-dasharray="9 7" fill="none"/>'
+             # il pozzo del quadro, con l'ombra della palpebra sopra
+             + '<path d="' + POZZO + '" fill="url(#po)" stroke="#252B32" stroke-width="3"/>'
+             + '<path d="' + POZZO + '" fill="url(#om)"/>'
+             + '<path d="M532 578 L1668 578" stroke="#3A424B" stroke-width="2" opacity=".7"/>'
+             + quadrante(660, 365, 150, ['0', '1', '2', '3', '4', '5', '6', '7', '8'], 6.5, 'giri', '× 1000 giri/min', '12:40')
+             + quadrante(1540, 365, 150, ['0', '20', '40', '60', '80', '100', '120', '140', '160', '180', '200'], 10, 'vel', 'km/h',
+                         '048312 km')
+             # lo schermo centrale: la cornice cromata sottile, il vetro, il riflesso
+             + '<rect x="838" y="193" width="524" height="324" rx="22" fill="#020304" stroke="url(#cr)" stroke-width="2.5"/>'
+             + '<rect x="850" y="205" width="500" height="300" rx="14" fill="url(#tf)" stroke="#16242B" stroke-width="2"/>'
+             + '<rect x="850" y="205" width="500" height="300" rx="14" fill="url(#tv)"/>'
+             + '<path d="M870 486 H1330" stroke="#2EC4B6" stroke-opacity=".18" stroke-width="2"/>')
+    salva('cric-cruscotto-3.svg', svg('0 0 2200 640', corpo,
+                                    stile='@keyframes g{0%,100%{transform:rotate(36deg)}50%{transform:rotate(44deg)}}'
+                                          '@keyframes v{0%,100%{transform:rotate(16deg)}50%{transform:rotate(22deg)}}'
+                                          '.giri{transform-origin:660px 365px;transform-box:view-box;animation:g 1.6s ease-in-out infinite}'
+                                          '.vel{transform-origin:1540px 365px;transform-box:view-box;animation:v 7s ease-in-out infinite}'
+                                          '@media (prefers-reduced-motion: reduce){.giri,.vel{animation:none}.giri{transform:rotate(40deg)}.vel{transform:rotate(18deg)}}'))
     # le quattro spie: accese (lampeggiano) o spente col segno di fatto
     icone = {
         'olio': '<path d="M12 36 h12 l6 -8 h18 l4 6 l30 -10 l4 6 l-26 22 h-48 z" fill="none" stroke="C" stroke-width="6" stroke-linejoin="round"/><rect x="32" y="20" width="12" height="8" fill="C"/><path d="M88 46 q5 8 0 12 q-5 -4 0 -12z" fill="C"/>',

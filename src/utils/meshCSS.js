@@ -30,6 +30,7 @@ export const meshPresets = [
   { value: 'corners', label: 'Agli angoli' },
   { value: 'center',  label: 'Centrale' },
   { value: 'top',     label: 'Dall’alto' },
+  { value: 'seta',    label: 'Seta' },
 ];
 
 // Posizioni [x%, y%] dei blob per disposizione. Le prime 3 di "spread" coincidono
@@ -40,7 +41,11 @@ const MESH_POSITIONS = {
   corners: [ [10, 12], [90, 14], [12, 88], [88, 86], [50, 50], [50, 8] ],
   center:  [ [50, 46], [34, 56], [66, 56], [50, 30], [42, 42], [58, 42] ],
   top:     [ [20, 8], [50, 3], [80, 8], [35, 22], [66, 18], [50, 32] ],
+  // Seta: pieghe lunghe e sottili (ellissi, vedi FORMA), sfalsate come la stoffa che riflette la luce
+  seta:    [ [30, 18], [72, 40], [26, 62], [70, 84], [50, 6], [48, 96] ],
 };
+// La forma di ogni luce: cerchi, tranne la Seta che stende pieghe larghe e basse.
+const FORMA = { seta: 'ellipse 130% 20%' };
 
 /**
  * Lettura di una manopola numerica. Regola UNICA per i due generativi (Aurora e
@@ -83,7 +88,7 @@ function conRiserva(v) {
 
 /** Converte hex|rgba|var(--token) + alfa (0-1) in un colore CSS valido.
  *  Speculare a glow_color_to_css() (PHP) e glowColorToCss() (glowCSS.js). */
-function meshColorToCss(input, alpha) {
+export function meshColorToCss(input, alpha) {
   const s = (input || 'var(--olo-color-primary)').trim();
   const a = Math.max(0, Math.min(1, alpha));
   if (s.startsWith('var(') || s.startsWith('color-mix(')) {
@@ -143,7 +148,7 @@ export function getMeshCSS(bg = {}) {
     const core = meshColorToCss(col, intensity);
     const mid = meshColorToCss(col, intensity * 0.5);
     const fade = meshColorToCss(col, 0);
-    layers.push(`radial-gradient(circle at ${x}% ${y}%, ${core} 0%, ${mid} ${midpos}%, ${fade} ${stop}%)`);
+    layers.push(`radial-gradient(${FORMA[bg.mesh_preset] || 'circle'} at ${x}% ${y}%, ${core} 0%, ${mid} ${midpos}%, ${fade} ${stop}%)`);
   }
 
   // Qui i layer sono tutti e soli blob radiali: un valore unico di repeat/size vale
