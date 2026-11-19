@@ -43,6 +43,65 @@ class Olobuild_Seo_Settings {
         add_filter( 'manage_pages_columns', [ $this, 'add_seo_column' ] );
         add_action( 'manage_posts_custom_column', [ $this, 'render_seo_column' ], 10, 2 );
         add_action( 'manage_pages_custom_column', [ $this, 'render_seo_column' ], 10, 2 );
+
+        // La verifica di Google fatta col DNS (proprietà «Dominio»), che la scheda Verifica dei motori mostra
+        add_action( 'rest_api_init', [ __CLASS__, 'rotte' ] );
+    }
+
+    public static function rotte() {
+        register_rest_route( 'olobuild/v1', '/seo/verifica-dns', [
+            'methods'             => 'GET',
+            'callback'            => [ __CLASS__, 'rest_verifica_dns' ],
+            'permission_callback' => function () {
+                return current_user_can( 'manage_options' );
+            },
+        ] );
+    }
+
+    /**
+     * I codici di Google (google-site-verification=…) nei record TXT del dominio del sito.
+     * Si cerca sull'host e poi sui domini sopra (try.olotheme.com → olotheme.com), fermandosi a due nomi:
+     * la proprietà «Dominio» della Search Console vale per tutti i sottodomini e le cartelle.
+     * Risultato tenuto 10 minuti; ?aggiorna=1 rilegge subito.
+     */
+    public static function rest_verifica_dns( $req ) {
+        $host = strtolower( (string) wp_parse_url( home_url(), PHP_URL_HOST ) );
+        $vuoto = [ 'dominio' => '', 'google' => [], 'letto' => false ];
+        if ( '' === $host || ! function_exists( 'dns_get_record' ) || filter_var( $host, FILTER_VALIDATE_IP ) ) {
+            return rest_ensure_response( $vuoto );
+        }
+        $chiave = 'olo_seo_dns_' . md5( $host );
+        if ( ! $req->get_param( 'aggiorna' ) ) {
+            $tenuto = get_transient( $chiave );
+            if ( is_array( $tenuto ) ) {
+                return rest_ensure_response( $tenuto );
+            }
+        }
+        $esito = $vuoto;
+        $nomi  = explode( '.', $host );
+        while ( count( $nomi ) >= 2 ) {
+            $nome  = implode( '.', $nomi );
+            $righe = @dns_get_record( $nome, DNS_TXT ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- un dominio senza TXT dà un avviso
+            if ( is_array( $righe ) ) {
+                $esito['letto'] = true;
+                $codici = [];
+                foreach ( $righe as $riga ) {
+                    $testo = isset( $riga['txt'] ) ? trim( (string) $riga['txt'] ) : '';
+                    if ( 0 === stripos( $testo, 'google-site-verification=' ) ) {
+                        $codici[] = self::codice_verifica( 'content="' . substr( $testo, 25 ) . '"' );
+                    }
+                }
+                $codici = array_values( array_filter( array_unique( $codici ) ) );
+                if ( $codici ) {
+                    $esito['dominio'] = $nome;
+                    $esito['google']  = $codici;
+                    break;
+                }
+            }
+            array_shift( $nomi );
+        }
+        set_transient( $chiave, $esito, 10 * MINUTE_IN_SECONDS );
+        return rest_ensure_response( $esito );
     }
 
     /* ═══════════════════════════════════════════════════

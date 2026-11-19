@@ -96,14 +96,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p>La sitemap elenca le pagine del sito per i motori di ricerca. È quella di WordPress, all'indirizzo <code>/wp-sitemap.xml</code>: Olobuild ne toglie le pagine in noindex, e l'interruttore Sitemap XML della scheda SEO globale la spegne. Indicala in Google Search Console. Se usi un plugin SEO, vale la sua.</p>
 
 <h2 id="verifica">9. Search Console e Bing</h2>
-<p>Google Search Console e Bing Webmaster Tools dicono per quali ricerche esce il sito, quante volte viene cliccato e se ci sono pagine che i motori non riescono a leggere. Bing vale anche per Copilot. Per entrarci devi dimostrare che il sito è tuo, e il modo più semplice è un codice nella testata delle pagine.</p>
+<p>Google Search Console e Bing Webmaster Tools dicono per quali ricerche esce il sito, quante volte viene cliccato e se ci sono pagine che i motori non riescono a leggere. Bing vale anche per Copilot. Per entrarci devi dimostrare che il sito è tuo, e ci sono due strade.</p>
+<p><strong>Col DNS, la strada migliore.</strong> Nella <a href="https://search.google.com/search-console" target="_blank" rel="noopener">Search Console</a> scegli la proprietà «Dominio» e scrivi il dominio, per esempio <code>miosito.it</code>. Google ti dà un record TXT da aggiungere nel DNS del dominio, dal pannello di chi te lo gestisce. Una volta verificato vale per tutto il dominio, sottodomini e cartelle compresi, e in Olobuild non c'è niente da compilare. Quando Olobuild trova quel codice nel DNS, in <span class="ui">Sistema</span> › <span class="ui">Configurazione</span> › <span class="ui">SEO &amp; Privacy</span> › <span class="ui">SEO globale</span> › <span class="ui">Verifica dei motori</span> sotto il campo di Google lo scrive: «Codice di Google trovato nel DNS».</p>
+<p><strong>Col codice nella testata, se non puoi toccare il DNS.</strong></p>
 <ol class="passi">
-	<li><strong>Aggiungi il sito.</strong> Nella <a href="https://search.google.com/search-console" target="_blank" rel="noopener">Search Console</a> scegli «Prefisso URL», scrivi l'indirizzo del sito e come verifica «Tag HTML».</li>
+	<li><strong>Aggiungi il sito.</strong> Nella Search Console scegli «Prefisso URL», scrivi l'indirizzo del sito e come verifica «Tag HTML».</li>
 	<li><strong>Copia il codice.</strong> Google mostra un meta tag: copialo intero, oppure solo il codice tra le virgolette di content.</li>
-	<li><strong>Incollalo.</strong> In <span class="ui">Sistema</span> › <span class="ui">Configurazione</span> › <span class="ui">SEO &amp; Privacy</span> › <span class="ui">SEO globale</span> › <span class="ui">Verifica dei motori</span>, nel campo Google Search Console, poi Salva. Olobuild tiene il solo codice e lo scrive nella testata di ogni pagina.</li>
-	<li><strong>Verifica.</strong> Torna nella Search Console e premi Verifica. Poi aggiungi la sitemap, <code>/wp-sitemap.xml</code>.</li>
+	<li><strong>Incollalo.</strong> In <span class="ui">Verifica dei motori</span>, nel campo Google Search Console, poi Salva. Olobuild tiene il solo codice e lo scrive nella testata di ogni pagina.</li>
+	<li><strong>Verifica.</strong> Torna nella Search Console e premi Verifica.</li>
 </ol>
-<p>Per <a href="https://www.bing.com/webmasters" target="_blank" rel="noopener">Bing Webmaster Tools</a> è lo stesso, col campo Bing; in alternativa Bing importa il sito già verificato nella Search Console.</p>
+<p>In tutti e due i casi poi aggiungi la sitemap, <code>/wp-sitemap.xml</code>, nella sezione Sitemap della Search Console. Se il sito ha altri siti WordPress in cartelle, come <code>miosito.it/negozio</code>, ognuno ha la sua sitemap: aggiungile tutte.</p>
+<p>Per <a href="https://www.bing.com/webmasters" target="_blank" rel="noopener">Bing Webmaster Tools</a> la via più breve è importare il sito già verificato dalla Search Console: si porta dietro anche le sitemap. Altrimenti c'è il campo Bing, come per Google.</p>
 
 <h2 id="plugin">10. Con Yoast, Rank Math e simili</h2>
 <p>Con Yoast SEO, Rank Math, All in One SEO o SEOPress attivi, Olobuild si fa da parte: non scrive titolo, descrizione, Open Graph, canonical e dati strutturati, così la pagina non li riceve due volte. In questo caso compila i campi nel pannello del plugin SEO. Quelli di Olobuild restano salvati ma non vengono usati.</p>

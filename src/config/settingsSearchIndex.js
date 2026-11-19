@@ -459,7 +459,7 @@ export const SETTINGS_FIELD_INDEX = {
 		{
 			"kind": "field",
 			"label": "Google Search Console",
-			"hint": "Nella Search Console aggiungi il sito come «Prefisso URL» e scegli la verifica «Tag HTML»: il codice è quello del meta tag.",
+			"hint": "Il modo migliore è la proprietà «Dominio» col record TXT nel DNS: qui non serve niente. Se non puoi toccare il DNS, scegli «Prefisso URL» e la verifica «Tag HTML», e incolla qui il codice del meta tag.",
 			"section": "Verifica dei motori"
 		},
 		{

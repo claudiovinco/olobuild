@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.1264 - 2026-11-19 (La verifica col DNS si vede)
+- Sistema › Configurazione › SEO & Privacy › SEO globale › Verifica dei motori: se il dominio ha già il codice di Google nel DNS (la proprietà «Dominio» della Search Console), sotto il campo di Google lo dice: «Codice di Google trovato nel DNS», e che il campo può restare vuoto. Prima il riquadro non lo sapeva e sembrava che la verifica mancasse.
+- La spiegazione accanto al campo e la Guida SEO mettono per prima la strada del DNS, che vale per tutto il dominio, sottodomini e cartelle compresi; il codice nella testata resta per chi non può toccare il DNS. La Guida ricorda di aggiungere la sitemap di ogni sito in cartella.
+
 ## v1.4.1263 - 2026-11-19 (Il Reveal si vede)
 - Sezioni con il movimento Reveal: la sezione aspetta sotto quella prima, e quella prima scivola via e la scopre. Prima la sezione col Reveal copriva quella prima fin dall'inizio, e il passaggio non si vedeva.
 

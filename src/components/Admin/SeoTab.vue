@@ -202,7 +202,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Google Search Console') }}</label>
-          <div class="hint">{{ t('Nella Search Console aggiungi il sito come «Prefisso URL» e scegli la verifica «Tag HTML»: il codice è quello del meta tag.') }}</div>
+          <div class="hint">{{ t('Il modo migliore è la proprietà «Dominio» col record TXT nel DNS: qui non serve niente. Se non puoi toccare il DNS, scegli «Prefisso URL» e la verifica «Tag HTML», e incolla qui il codice del meta tag.') }}</div>
         </div>
         <div class="control-col">
           <div class="cfg-input mono cfg-w-md">
@@ -211,6 +211,7 @@
               @input="setW('google', $event.target.value)" @change="pulisciW('google', $event)" />
           </div>
           <div class="text-xs mt-2 verifica-stato">
+            <span v-if="dns.google.length" class="verifica-ok verifica-dns">{{ testoDns }}</span>
             <span v-if="statoVerifica('google') === 'ok'" class="verifica-ok">{{ t('Il codice è nella testata di ogni pagina.') }}</span>
             <span v-else-if="statoVerifica('google') === 'metti'" class="verifica-attesa">{{ t('Salva per metterlo nella testata.') }}</span>
             <span v-else-if="statoVerifica('google') === 'togli'" class="verifica-attesa">{{ t('Salva per toglierlo dalla testata.') }}</span>
@@ -328,6 +329,18 @@ function statoVerifica(k) {
   if (ora === salvato) return ora ? 'ok' : '';
   return ora ? 'metti' : 'togli';
 }
+// Il codice di Google nei record TXT del dominio (proprietà «Dominio»): Olobuild_Seo_Settings::rest_verifica_dns.
+// Si legge a parte: se il server non sa leggere il DNS la scheda resta com'era.
+const dns = ref({ dominio: '', google: [] });
+async function leggiDns() {
+  try {
+    const r = await fetch(`${window.oloData.restUrl}seo/verifica-dns`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    const j = r.ok ? await r.json() : null;
+    dns.value = { dominio: String(j?.dominio || ''), google: Array.isArray(j?.google) ? j.google : [] };
+  } catch (e) { /* niente riga */ }
+}
+const testoDns = computed(() => t('Codice di Google trovato nel DNS di') + ' ' + dns.value.dominio + '.'
+  + (codiceVerifica(webmaster.value.google) ? '' : ' ' + t('Questo campo può restare vuoto.')));
 
 watch(() => [social.value.og_disegnata, social.value.og_stile], aggiornaOgAnteprima);
 
@@ -416,6 +429,7 @@ const onDiscard = cfgJob(TAB_ID, reloadJob(loaded, loadSettings));
 
 onMounted(() => {
   lettura.leggi();
+  leggiDns();
   window.addEventListener('olo-cfg-save', onSave);
   window.addEventListener('olo-cfg-discard', onDiscard);
 });
@@ -439,5 +453,6 @@ onBeforeUnmount(() => {
 .verifica-stato a:hover { text-decoration: underline; }
 .verifica-stato a:focus-visible { outline: 2px solid var(--c-red); outline-offset: 2px; border-radius: 2px; }
 .verifica-ok { color: #047857; }
+.verifica-dns { flex-basis: 100%; }
 .verifica-attesa { color: #b45309; }
 </style>
