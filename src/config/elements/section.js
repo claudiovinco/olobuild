@@ -80,8 +80,11 @@ export default {
       { value: 'secondary', label: t('Secondario'),  colore: 'var(--olo-color-secondary)',  testo: 'var(--olo-color-secondary-contrast)' },
     ], description: t('Variante rapida basata sui colori globali del tema. Per uno sfondo personalizzato usa "Sfondo" nelle sezioni sotto.') },
 
-    { type: 'separator', label: t('Sticky') },
-    { key: 'sticky_effect', label: t('Effetto sticky'), type: 'select', options: [
+    // (19 nov 2026, utente) Il gruppo si chiamava «Sticky» e il campo «Effetto sticky»: nessuno ci cercava la Ruota, la
+    // Pagina, i Canali o l'Ascensore. Cambiano solo le etichette (il campo «Movimento»: «Come passa alla sezione dopo» si
+    // tagliava nell'inspector): la chiave salvata resta sticky_effect.
+    { type: 'separator', label: t('Passaggio fra le sezioni') },
+    { key: 'sticky_effect', label: t('Movimento'), type: 'select', options: [
       { value: 'none', label: t('Nessuno') },
       { value: 'cover', label: t('Cover') },
       { value: 'reveal', label: t('Reveal') },

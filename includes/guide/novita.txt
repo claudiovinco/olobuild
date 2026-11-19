@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.1256 - 2026-11-19 (Il passaggio fra le sezioni)
+- Sezione → Stile: il gruppo che si chiamava «Sticky» ora si chiama «Passaggio fra le sezioni», e il campo «Effetto sticky» si chiama «Movimento». Dentro ci sono Cover, Reveal, i gruppi orizzontali col percorso, la Ruota, la Pagina, i Canali e l'Ascensore. Le sezioni già fatte non cambiano.
+- Temi Lanterna e Torre: i testi parlano a te, non più a «voi».
+
 ## v1.4.1254 - 2026-11-19 (Altri cinque temi fuori dal comune)
 - Nella Vetrina e nel selettore cinque temi nuovi, ognuno con un passaggio fra le sezioni che non si era mai visto. Dorso (legatoria a Firenze): il sito si sfoglia, la copertina di cuoio si apre e le sezioni girano come pagine. Lanterna (escape room a Genova): il sito è al buio e si vede solo dove punti la torcia. Zapping (cineclub a Torino): il televisore si spegne come un vecchio tubo e il sito cambia canale, con la neve fra un canale e l'altro. Torre (B&B in una torre a San Gimignano): il sito è un ascensore, le porte si chiudono e si riaprono sul piano dopo. Scontrino (salumeria a Bologna): il sito esce dalla stampante come uno scontrino.
 

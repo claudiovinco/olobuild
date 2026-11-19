@@ -249,8 +249,8 @@ def build_camere():
     out.append(K.domande(t, 'Prima di salire', ['Quello che', 'ci chiedono alla porta.'], [
         ('C’è davvero un ascensore?', 'Sì, di vetro, nel vano della vecchia scala di legno. Porta fino al quinto piano; alla '
          'terrazza si sale con una rampa di dodici gradini.'),
-        ('La colazione è compresa?', 'Sì, al quinto piano dalle 8 alle 10:30. Se partite presto vi prepariamo un cestino.'),
-        ('Dove si parcheggia?', 'Dentro le mura no: al parcheggio Bagnaia, a cinque minuti a piedi. Vi diamo il permesso.'),
+        ('La colazione è compresa?', 'Sì, al quinto piano dalle 8 alle 10:30. Se parti presto ti prepariamo un cestino.'),
+        ('Dove si parcheggia?', 'Dentro le mura no: al parcheggio Bagnaia, a cinque minuti a piedi. Ti diamo il permesso.'),
         ('Accettate animali?', 'Cani piccoli sì, nella camera del Pozzo, che è al primo piano.')], 'toc'))
     return out
 
@@ -305,7 +305,7 @@ def build_prenota():
              K.campo('select', 'Piano', 'piano', True, opzioni='Primo · camera del Pozzo\nSecondo · camera dei Merli\n'
                      'Terzo · camera Rondine\nQuarto · camera del Vento\nIl più alto libero'),
              K.campo('textarea', 'Note', 'messaggio', larghezza='1-1')]
-    out.append(K.sezione_modulo(t, 'scrivi', 'Scrivici', ['Un piano', 'tutto per voi.'],
+    out.append(K.sezione_modulo(t, 'scrivi', 'Scrivici', ['Un piano', 'tutto per te.'],
                                 'Ti confermiamo la camera entro la giornata, con le indicazioni per il parcheggio.', VOCI, campi,
                                 'Torre — richiesta', 'Invia', 'Grazie! Ti scriviamo entro stasera con la camera confermata.'))
     out.append(X.zone(K, t, 'Dove siamo', ['In via San Matteo,', 'dentro le mura.'], 'La torre con la porta di quercia, a '

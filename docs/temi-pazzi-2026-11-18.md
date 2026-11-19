@@ -28,11 +28,11 @@ Media: `scripts/temi/cinque_media.py` (Pexels), disegni `cinque_disegni.py`, log
   più strette si riducono da soli: le tappe di un livello che esiste solo sul telefono vanno scritte × 2,25 (1440 / 640).
 
 **Aggiunto (1.4.1232):**
-- **«Arriva da»** (Sezione → Effetto sticky, con «Cover orizzontale»): destra, sinistra, sotto, sopra. Con direzioni
+- **«Arriva da»** (Sezione → Passaggio fra le sezioni, con «Cover orizzontale»): destra, sinistra, sotto, sopra. Con direzioni
   diverse il gruppo diventa un *percorso*: i pannelli stanno su un piano, ognuno accanto al precedente dalla parte scelta,
   e la vista ci si sposta sopra frenando a ogni pannello come su un gradino. «Sopra» fa salire la vista mentre scorri in
   giù. Pagina di prova: `olotheme.com/olobuild/prova-percorso/` (noindex, da togliere alla fine).
-- **«Ruota»** (nuovo Effetto sticky) con **«Angolo»** (6–90°): le sezioni sul bordo di una ruota enorme col perno sotto
+- **«Ruota»** (nuova voce di «Passaggio fra le sezioni», allora «Effetto sticky») con **«Angolo»** (6–90°): le sezioni sul bordo di una ruota enorme col perno sotto
   lo schermo; scorrendo la ruota gira e la sezione di turno arriva dritta in cima, le vicine si vedono inclinate ai lati.
   Destra/Sinistra di «Arriva da» scelgono il verso. Con «riduci il movimento» le sezioni restano una sotto l'altra.
 - Al telefono tutti e due restano orizzontali se ogni sezione sta in una schermata (la regola che c'era già).

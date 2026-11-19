@@ -96,13 +96,13 @@ def apertura(t):
         K.livello('la-t1', contenuto='Sessanta minuti,<br>una torcia.', tag='h1', x=6, y=61, w=60, size=84, peso='700',
                   colore=C['chiaro'], fontFamily=FONT_T, lineHeight=1.02, entra='fadeInUp', ritardo=300, durata=900,
                   scrollMove=poi(0, 1, 30, 36), responsive={'mobile': {'fontSize': m(40), 'x': 6, 'y': 54, 'width': 88}}),
-        K.livello('la-t1s', contenuto='Tre stanze al buio sotto la Lanterna di Genova. Si esce solo risolvendole.', x=6, y=86,
+        K.livello('la-t1s', contenuto='Tre stanze al buio sotto la Lanterna di Genova. Esci solo se le risolvi.', x=6, y=86,
                   w=44, size=19, peso='500', colore=mix(C['chiaro'], 90), lineHeight=1.45, ritardo=600,
                   scrollMove=poi(0, 1, 30, 36), responsive={'mobile': {'fontSize': m(16), 'x': 6, 'y': 66, 'width': 88}}),
         K.livello('la-t2', contenuto='La luce<br>ce l’hai tu.', x=6, y=61, w=60, size=84, peso='700', colore=C['acc'],
                   fontFamily=FONT_T, lineHeight=1.02, entra='fadeIn', ritardo=0, scrollMove=poi(40, 48, 66, 72),
                   responsive={'mobile': {'fontSize': m(40), 'x': 6, 'y': 54, 'width': 88}}),
-        K.livello('la-t2s', contenuto='Dove punti, si vede. Il resto resta al buio, come nelle nostre stanze.', x=6, y=86, w=44,
+        K.livello('la-t2s', contenuto='Vedi solo dove punti. Il resto resta al buio, come nelle nostre stanze.', x=6, y=86, w=44,
                   size=19, peso='500', colore=mix(C['chiaro'], 90), lineHeight=1.45, entra='fadeIn', ritardo=0,
                   scrollMove=poi(42, 50, 66, 72), responsive={'mobile': {'fontSize': m(16), 'x': 6, 'y': 66, 'width': 88}}),
         K.livello('la-t3', contenuto='Chi accende<br>ha già perso.', x=6, y=61, w=60, size=84, peso='700', colore=C['chiaro'],
@@ -149,8 +149,8 @@ def build_home():
     out.append(t.section([t.one([t.bare('glowhero', {
         'eyebrow': 'Tre stanze | da 2 a 6 giocatori | sotto la Lanterna',
         'lines': [{'text': 'Sessanta', 'mode': ''}, {'text': 'minuti', 'mode': 'accent'}, {'text': 'per uscire.', 'mode': 'outline'}],
-        'uppercase': True, 'eyebrow_dots': True, 'subhead': 'Vi chiudiamo dentro con una torcia e un orologio che conta all’indietro. '
-        'La chiave c’è: sta a voi trovarla.', 'cta1_text': 'Prenota una partita', 'cta1_url': PRENOTA, 'cta2_text': 'Le stanze',
+        'uppercase': True, 'eyebrow_dots': True, 'subhead': 'Ti chiudiamo dentro con la tua squadra, una torcia e un orologio che conta all’indietro. '
+        'La chiave c’è: sta a te trovarla.', 'cta1_text': 'Prenota una partita', 'cta1_url': PRENOTA, 'cta2_text': 'Le stanze',
         'cta2_url': STANZE, 'show_scroll': False, 'bg_color': C['nero'], 'accent': C['acc'], 'accent2': C['acc2'],
         'accent_on': C['on_acc'], 'text_color': C['chiaro'], 'sub_color': C['tenue'], 'eyebrow_color': C['tenue'],
         'glow_color': 'rgba(255,181,71,0.20)', 'glow_x': 50, 'glow_y': 30, 'h_size_min': 48, 'h_size_vw': 10, 'h_size_max': 150,
@@ -158,7 +158,7 @@ def build_home():
         width='fullbleed', padding='remove-vertical'))
     # le tre stanze
     out.append(t.section([
-        t.one([K.sechead(t, 'Le stanze', ['Tre porte,', 'tre buio diversi.'], size=60)]),
+        t.one([K.sechead(t, 'Le stanze', ['Tre porte,', 'tre stanze al buio.'], size=60)]),
         t.row([stanza(t, CANTINA, 'Stanza 1 · la più facile', 'La cripta del faro', 'Sotto la Lanterna c’era una cantina '
                       'murata. Il guardiano ci ha lasciato un messaggio, e una porta che si apre solo da dentro.',
                       '2–4 giocatori · difficoltà ●○○'),
@@ -201,10 +201,10 @@ def build_home():
                              size=17)], wm='2-5', ws='1-1'),
                t.col([t.classic('lucchetto', {
                    'enigma': '<p><strong>Quattro cifre</strong>, in quest’ordine:</p><p>le stanze di Lanterna, i giocatori che '
-                             'entrano al massimo in una stanza, e i minuti che avete per uscire.</p>',
+                             'entrano al massimo in una stanza, e i minuti che hai per uscire.</p>',
                    'indizio': 'I minuti sono scritti nell’apertura di questa pagina, in grande.', 'testo_indizio': 'Un indizio',
                    'combinazione': '3660', 'simboli': 'cifre', 'testo_pulsante': 'Apri', 'messaggio_errore': 'Non si apre. '
-                   'Riprova.', 'messaggio_successo': 'Aperto! Dite questo codice alla reception: dieci minuti in più nella '
+                   'Riprova.', 'messaggio_successo': 'Aperto! Di’ questo codice alla reception: hai dieci minuti in più nella '
                    'prima stanza.', 'codice_premio': 'BUIO3660', 'testo_copia': 'Copia il codice', 'testo_copiato': 'Copiato',
                    'tentativi_indizio': 2, 'mostra_lucchetto': True, 'stile': 'ottone', 'colore_accento': C['acc'],
                    'sfondo_pannello': mix(C['chiaro'], 5)}, style={})], wm='3-5', ws='1-1')],
@@ -218,8 +218,8 @@ def build_home():
         ('Siamo entrati in sei che non si parlavano. Siamo usciti in sei che si davano ordini.', 'Ufficio Acquisti',
          'Porto Antico')],
         'Chi è uscito', ['Tre squadre,', 'tre porte aperte.']))
-    out.append(K.pannello(t, DUE_TORCIA, 'Mercoledì — domenica, fino a mezzanotte', 'La prossima <em>siete voi.</em>',
-                          'Prenotate la stanza e l’ora: vi aspettiamo dieci minuti prima, per le regole e la torcia.',
+    out.append(K.pannello(t, DUE_TORCIA, 'Mercoledì — domenica, fino a mezzanotte', 'La prossima squadra <em>è la tua.</em>',
+                          'Prenota la stanza e l’ora: ti aspettiamo dieci minuti prima, per le regole e la torcia.',
                           'Prenota', PRENOTA, effetto=''))
     return out
 
@@ -227,10 +227,10 @@ def build_home():
 def build_stanze():
     t = Tpl(ID, 'le-stanze')
     out = [K.intro(t, 'Le stanze', ['Tre porte,', 'chiuse da dentro.'], 'Ogni stanza ha la sua storia, i suoi enigmi e la sua '
-                   'luce: poca. Si gioca da due a sei, sempre in sessanta minuti.', bg=K.video_bg(V_CORRIDOIO, overlay=26), size=96)]
+                   'luce: poca. Giochi in squadra, da due a sei persone, sempre in sessanta minuti.', bg=K.video_bg(V_CORRIDOIO, overlay=26), size=96)]
     righe = [
         (CANTINA, 'La cripta del faro', 'La più facile · 2–4 giocatori',
-         'Nel 1840 il guardiano della Lanterna murò una cantina sotto le fondamenta. Dentro, oggi, ci siete voi, una lettera '
+         'Nel 1840 il guardiano della Lanterna murò una cantina sotto le fondamenta. Dentro, oggi, ci sei tu con la tua squadra, una lettera '
          'mai spedita e una porta che si apre solo da dentro. Perfetta per la prima volta.'),
         (MAPPE, 'Il cartografo', 'Media · 3–5 giocatori',
          'Lo studio di un cartografo della Compagnia del porto: mappe, compassi, un mappamondo che non gira. Una delle mappe '
@@ -260,21 +260,21 @@ def build_stanze():
 
 def build_regole():
     t = Tpl(ID, 'le-regole')
-    out = [K.intro(t, 'Le regole', ['Poche,', 'e tutte al buio.'], 'Si entra con una torcia a testa e il telefono nell’armadietto. '
-                   'Il resto lo spieghiamo alla porta, in cinque minuti.', bg=K.video_bg(V_CANDELA, overlay=26), size=96)]
+    out = [K.intro(t, 'Le regole', ['Poche,', 'e tutte al buio.'], 'Entri con una torcia e lasci il telefono nell’armadietto. '
+                   'Il resto te lo spieghiamo alla porta, in cinque minuti.', bg=K.video_bg(V_CANDELA, overlay=26), size=96)]
     out.append(t.section([
         t.one([K.sechead(t, 'Come funziona', ['Dalla porta', 'alla chiave.'], size=56)]),
-        P.passi(K, t, [('01', 'Arrivate', 'Dieci minuti prima. Il telefono va nell’armadietto, la torcia in mano.'),
-                       ('02', 'Vi chiudiamo', 'Il guardiano vi accompagna dentro e chiude. L’orologio parte.'),
-                       ('03', 'Chiedete aiuto', 'Tre indizi per partita: basta dirlo ad alta voce, il guardiano sente.'),
-                       ('04', 'Uscite', 'Con la chiave, o allo scadere dell’ora. Comunque con una foto di squadra.')], colonne=4),
+        P.passi(K, t, [('01', 'Arrivi', 'Dieci minuti prima. Lasci il telefono nell’armadietto e prendi la torcia.'),
+                       ('02', 'Ti chiudiamo dentro', 'Il guardiano ti accompagna nella stanza e chiude la porta. L’orologio parte.'),
+                       ('03', 'Chiedi aiuto', 'Hai tre indizi per partita: chiedili ad alta voce, il guardiano ti sente.'),
+                       ('04', 'Esci', 'Con la chiave, o allo scadere dell’ora. In ogni caso con una foto della squadra.')], colonne=4),
     ], padding='large', width='large', style={'padding_top': 110, 'padding_bottom': 100}))
     out.append(K.domande(t, 'Domande', ['Quello che', 'ci chiedono alla porta.'], [
         ('Fa paura?', 'No: è buio, non è un horror. Niente attori che saltano fuori, niente urla registrate.'),
-        ('Si può uscire prima?', 'Sempre: la porta d’emergenza si apre con una maniglia, e la vedete appena entrate.'),
+        ('Posso uscire prima?', 'Sempre: la porta d’emergenza si apre con una maniglia, e la vedi appena entri.'),
         ('I bambini possono giocare?', 'Dagli 8 anni con un adulto. La Cripta del faro è la stanza giusta per loro.'),
-        ('E se non vedo bene al buio?', 'Diteci prima: alziamo un po’ le luci della stanza, la partita resta la stessa.'),
-        ('Quanto costa?', 'Dai 22 euro a testa in sei ai 35 in due. Il prezzo esatto lo vedete prenotando.')], 'lar'))
+        ('E se non vedo bene al buio?', 'Dicci prima: alziamo un po’ le luci della stanza, e la partita resta la stessa.'),
+        ('Quanto costa?', 'Dai 22 euro a testa in sei ai 35 in due. Il prezzo esatto lo vedi quando prenoti.')], 'lar'))
     out.append(t.section([t.one([P.citazione(K, t, 'Al buio si sente tutto: chi ha capito, chi bluffa, chi ha paura di '
                                                    'sbagliare.', 'Matteo, il guardiano del mercoledì')])],
                          bg=solid(C['sala']), padding='large', width='large', style={'padding_top': 110, 'padding_bottom': 110}))
@@ -283,18 +283,18 @@ def build_regole():
 
 def build_prenota():
     t = Tpl(ID, 'prenota')
-    out = [K.intro(t, 'Prenota', ['Scegliete la stanza,', 'noi spegniamo la luce.'], 'Rispondiamo entro un’ora, dalle 15 a '
-                   'mezzanotte. Per le feste e le aziende scriveteci: apriamo anche al mattino.',
+    out = [K.intro(t, 'Prenota', ['Scegli la stanza,', 'noi spegniamo la luce.'], 'Rispondiamo entro un’ora, dalle 15 a '
+                   'mezzanotte. Per le feste e le aziende scrivici: apriamo anche al mattino.',
                    bg=K.video_bg(V_TORCIA, overlay=24), size=96)]
     campi = [K.campo('text', 'Nome', 'nome', True), K.campo('email', 'Email', 'email', True), K.campo('tel', 'Telefono', 'telefono', True),
              K.campo('select', 'Stanza', 'stanza', True, opzioni='La cripta del faro\nIl cartografo\nIl meccanismo\n'
-                     'Non sappiamo, consigliateci voi'),
+                     'Non so, consigliatemi voi'),
              K.campo('select', 'Giocatori', 'giocatori', True, opzioni='2\n3\n4\n5\n6'),
              K.campo('date', 'Giorno', 'giorno', True),
              K.campo('textarea', 'Note', 'messaggio', larghezza='1-1')]
-    out.append(K.sezione_modulo(t, 'scrivi', 'Prenota', ['Una stanza,', 'un’ora, la vostra squadra.'],
-                                'Vi rispondiamo con l’orario libero più vicino a quello che chiedete.', VOCI, campi,
-                                'Lanterna — prenotazione', 'Prenota', 'Ricevuto! Vi scriviamo entro un’ora con l’orario.'))
+    out.append(K.sezione_modulo(t, 'scrivi', 'Prenota', ['Una stanza,', 'un’ora, la tua squadra.'],
+                                'Ti rispondiamo con l’orario libero più vicino a quello che chiedi.', VOCI, campi,
+                                'Lanterna — prenotazione', 'Prenota', 'Ricevuto! Ti scriviamo entro un’ora con l’orario.'))
     out.append(t.section([t.one([X.orari(K, t, [('Mercoledì — venerdì', '15 — 24', 'Ultima partita alle 22:30'),
                                                 ('Sabato e domenica', '11 — 24', 'Anche al mattino per le famiglie'),
                                                 ('Lunedì e martedì', 'chiuso', 'Le stanze riposano al buio')])])],
@@ -310,7 +310,7 @@ def build_404():
     t = Tpl(ID, '404')
     return [t.section([
         K.centered(t, [K.label(t, 'Errore 404 · stanza vuota', color=C['acc'], align='center'),
-                       K.headline(t, 'Vi siete <em>persi al buio.</em>', size=84, tag='h1', align='center', pad_bottom=20,
+                       K.headline(t, 'Qui <em>non c’è nessuno.</em>', size=84, tag='h1', align='center', pad_bottom=20,
                                   color=C['chiaro'], accento=C['acc'], maiuscolo=True),
                        K.text(t, 'Questa porta non porta da nessuna parte. Capita: anche nelle nostre stanze ce n’è una finta.',
                               size=17, align='center', color=mix(C['chiaro'], 88)),
