@@ -3,6 +3,9 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.1263 - 2026-11-19 (Il Reveal si vede)
+- Sezioni con il movimento Reveal: la sezione aspetta sotto quella prima, e quella prima scivola via e la scopre. Prima la sezione col Reveal copriva quella prima fin dall'inizio, e il passaggio non si vedeva.
+
 ## v1.4.1262 - 2026-11-19 (Search Console e Bing)
 - Sistema › Configurazione › SEO & Privacy › SEO globale: torna il riquadro Verifica dei motori, coi campi per il codice di Google Search Console e di Bing Webmaster Tools (vale anche per Copilot) e il collegamento a ognuno. Si può incollare tutto il meta tag che dà Google: Olobuild tiene il solo codice e lo scrive nella testata di ogni pagina. Il campo mancava da quando le Impostazioni hanno cambiato aspetto.
 - Guida SEO: la sezione nuova Search Console e Bing spiega come collegare il sito, passo per passo.

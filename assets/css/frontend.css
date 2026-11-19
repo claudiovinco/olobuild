@@ -1999,11 +1999,17 @@ html:has(.olo-frontend-grid) {
 
 /* Non-sticky sections need z-index:1 to scroll over/above sticky ones */
 .olo-frontend-grid:has(.olo-sticky-cover, .olo-sticky-reveal) > .uk-section:not(.olo-sticky-cover):not(.olo-sticky-reveal):not(.olo-sticky-cover-h):not(.olo-sticky-reveal-h):not(.olo-sticky-ruota),
-.olo-frontend-grid:has(.olo-sticky-cover-h, .olo-sticky-reveal-h, .olo-sticky-ruota) > .uk-section:not(.olo-sticky-cover):not(.olo-sticky-reveal):not(.olo-sticky-cover-h):not(.olo-sticky-reveal-h):not(.olo-sticky-ruota),
+.olo-frontend-grid:has(.olo-sticky-cover-h, .olo-sticky-reveal-h, .olo-sticky-ruota) > .uk-section:not(.olo-sticky-cover):not(.olo-sticky-reveal):not(.olo-sticky-cover-h):not(.olo-sticky-reveal-h):not(.olo-sticky-ruota) {
+  position: relative;
+  z-index: 1;
+}
+/* Il contenitore del Reveal sta SOTTO la sezione prima (19 nov 2026). Aveva z-index:1 come lei e, venendo dopo nella
+   pagina, si disegnava sopra: la sezione che doveva aspettare sotto copriva quella prima fin dall'inizio, e il Reveal non
+   si vedeva mai. Le sezioni dopo (z-index:1) le passano sopra quando il contenitore finisce. */
 .olo-frontend-grid:has(.olo-sticky-cover, .olo-sticky-reveal) > .olo-reveal-wrapper,
 .olo-frontend-grid:has(.olo-sticky-cover-h, .olo-sticky-reveal-h, .olo-sticky-ruota) > .olo-reveal-wrapper {
   position: relative;
-  z-index: 1;
+  z-index: 0;
 }
 
 /* Horizontal sticky: sections are hidden inside the h-group wrapper */
