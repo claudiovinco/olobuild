@@ -21,6 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<li><a href="#schema">Dati strutturati</a></li>
 		<li><a href="#redirect">Redirect e 404</a></li>
 		<li><a href="#sitemap">Sitemap</a></li>
+		<li><a href="#verifica">Search Console e Bing</a></li>
 		<li><a href="#plugin">Con Yoast, Rank Math e simili</a></li>
 	</ol>
 </nav>
@@ -39,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p><span class="ui">Meta Description</span> è il testo sotto il titolo nei risultati, con un contatore di 160 caratteri. Se manca, Olobuild usa le prime 30 parole del riassunto della pagina, poi la descrizione predefinita della scheda SEO globale e, in mancanza anche di quella, lo slogan del sito.</p>
 <p><span class="ui">Focus keyword</span> è la parola chiave principale della pagina, cioè le parole che userebbe chi la cerca. L'analisi della pagina controlla dove compare.</p>
 
-<h2 id="analisi">Analisi della pagina</h2>
+<h2 id="analisi">3. Analisi della pagina</h2>
 <p>Sotto la Focus keyword, nella scheda Base, <span class="ui">Analisi della pagina</span> legge la pagina come la vedono Google e gli assistenti IA: il testo delle tile, i titoli, le immagini e i link. Testata e piè di pagina restano fuori. Le modifiche contano subito, anche prima di salvare; il pulsante con la freccia rifà l'analisi.</p>
 <ul>
 	<li><strong>Da correggere</strong>: ciò che toglie la pagina dai risultati o la lascia senza titolo principale, come il noindex acceso, tutto il sito nascosto ai motori, nessun titolo H1.</li>
@@ -48,7 +49,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </ul>
 <p>La (i) accanto a ogni voce spiega come rimediare. L'analisi non conta quante volte ripeti la parola chiave: Google non lo guarda più, conta che la pagina parli davvero di quello. Nel riquadro <span class="ui">Olobuild SEO</span> dell'editor di WordPress c'è la stessa analisi, sulla pagina salvata.</p>
 
-<h2 id="social">3. Anteprima sui social</h2>
+<h2 id="social">4. Anteprima sui social</h2>
 <p>Quando qualcuno condivide la pagina su Facebook, LinkedIn, WhatsApp o X, l'anteprima nasce dai dati Open Graph. Li trovi nella scheda Social.</p>
 <ul>
 	<li><span class="ui">OG Title</span> e <span class="ui">OG Description</span> cambiano titolo e testo solo per i social. Vuoti, valgono quelli della scheda Base.</li>
@@ -58,11 +59,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p>Senza OG Image Olobuild usa l'immagine in evidenza della pagina, poi l'immagine predefinita della scheda SEO globale e infine il logo del sito. Il formato dell'anteprima di X si sceglie nella stessa scheda. Senza un'immagine l'anteprima è comunque compatta.</p>
 <div class="nota"><p>I social conservano l'anteprima per giorni. Dopo averla cambiata, aggiornala con lo strumento di debug della piattaforma, per esempio il Sharing Debugger di Facebook.</p></div>
 
-<h2 id="robots">4. Indicizzazione e canonical</h2>
+<h2 id="robots">5. Indicizzazione e canonical</h2>
 <p><span class="ui">Robots default</span> della scheda SEO globale vale per tutto il sito ed è la stessa scelta di Impostazioni › Lettura di WordPress. Per una pagina sola, nella scheda Robots, <span class="ui">noindex</span> chiede ai motori di ricerca di non mostrare la pagina nei risultati. I link della pagina restano seguiti, a meno di attivare anche <span class="ui">nofollow</span>. Usa noindex per pagine di servizio, come una pagina di ringraziamento dopo un form.</p>
 <p><span class="ui">Canonical URL</span> indica l'indirizzo principale di una pagina che esiste in più versioni. Vuoto, vale l'indirizzo della pagina stessa, ed è la scelta giusta quasi sempre.</p>
 
-<h2 id="schema">5. Dati strutturati</h2>
+<h2 id="schema">6. Dati strutturati</h2>
 <p>I dati strutturati descrivono la pagina ai motori di ricerca in un formato che leggono senza interpretare il testo. Olobuild li scrive da solo:</p>
 <ul>
 	<li>su tutte le pagine, chi pubblica il sito, con il logo e i profili social: il tipo (organizzazione, persona, hotel…) si sceglie nella scheda SEO globale</li>
@@ -80,7 +81,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p>L'analisi della pagina segnala i campi che mancano, come un evento senza data d'inizio.</p>
 <div class="nota"><p>Gli altri tipi, per esempio Recipe o HowTo, producono solo nome, descrizione e immagine. Per i dati che servono ai risultati arricchiti di Google, scrivili in <span class="ui">JSON-LD personalizzato</span>, che Olobuild controlla prima di pubblicarlo.</p></div>
 
-<h2 id="redirect">6. Redirect e 404</h2>
+<h2 id="redirect">7. Redirect e 404</h2>
 <p>Quando una pagina cambia indirizzo, un redirect porta chi arriva dal vecchio link alla pagina nuova. La gestione sta in <span class="ui">Sistema</span> › <span class="ui">Configurazione</span> › <span class="ui">SEO &amp; Privacy</span> › <span class="ui">Redirect &amp; 404</span>, e la bacheca segnala gli indirizzi in 404 ancora senza redirect.</p>
 <ol class="passi">
 	<li><strong>Aggiungi il redirect.</strong> <span class="ui">Aggiungi redirect</span>, poi l'indirizzo vecchio in <span class="ui">Da URL</span> e quello nuovo in <span class="ui">A URL</span>.</li>
@@ -91,9 +92,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="nota attenzione"><p>Un redirect vale anche quando l'indirizzo di partenza è una pagina che esiste. Prima di crearne uno su un indirizzo in uso, controlla che quella pagina non serva più.</p></div>
 <p>La vista IndexNow avvisa Bing e gli altri motori che aderiscono quando pubblichi o aggiorni una pagina, anche dal builder. <span class="ui">Genera</span> crea una chiave, e Olobuild pubblica da sé il file di verifica che i motori controllano: il link compare sotto la chiave dopo il salvataggio.</p>
 
-<h2 id="sitemap">7. Sitemap</h2>
+<h2 id="sitemap">8. Sitemap</h2>
 <p>La sitemap elenca le pagine del sito per i motori di ricerca. È quella di WordPress, all'indirizzo <code>/wp-sitemap.xml</code>: Olobuild ne toglie le pagine in noindex, e l'interruttore Sitemap XML della scheda SEO globale la spegne. Indicala in Google Search Console. Se usi un plugin SEO, vale la sua.</p>
 
-<h2 id="plugin">8. Con Yoast, Rank Math e simili</h2>
+<h2 id="verifica">9. Search Console e Bing</h2>
+<p>Google Search Console e Bing Webmaster Tools dicono per quali ricerche esce il sito, quante volte viene cliccato e se ci sono pagine che i motori non riescono a leggere. Bing vale anche per Copilot. Per entrarci devi dimostrare che il sito è tuo, e il modo più semplice è un codice nella testata delle pagine.</p>
+<ol class="passi">
+	<li><strong>Aggiungi il sito.</strong> Nella <a href="https://search.google.com/search-console" target="_blank" rel="noopener">Search Console</a> scegli «Prefisso URL», scrivi l'indirizzo del sito e come verifica «Tag HTML».</li>
+	<li><strong>Copia il codice.</strong> Google mostra un meta tag: copialo intero, oppure solo il codice tra le virgolette di content.</li>
+	<li><strong>Incollalo.</strong> In <span class="ui">Sistema</span> › <span class="ui">Configurazione</span> › <span class="ui">SEO &amp; Privacy</span> › <span class="ui">SEO globale</span> › <span class="ui">Verifica dei motori</span>, nel campo Google Search Console, poi Salva. Olobuild tiene il solo codice e lo scrive nella testata di ogni pagina.</li>
+	<li><strong>Verifica.</strong> Torna nella Search Console e premi Verifica. Poi aggiungi la sitemap, <code>/wp-sitemap.xml</code>.</li>
+</ol>
+<p>Per <a href="https://www.bing.com/webmasters" target="_blank" rel="noopener">Bing Webmaster Tools</a> è lo stesso, col campo Bing; in alternativa Bing importa il sito già verificato nella Search Console.</p>
+
+<h2 id="plugin">10. Con Yoast, Rank Math e simili</h2>
 <p>Con Yoast SEO, Rank Math, All in One SEO o SEOPress attivi, Olobuild si fa da parte: non scrive titolo, descrizione, Open Graph, canonical e dati strutturati, così la pagina non li riceve due volte. In questo caso compila i campi nel pannello del plugin SEO. Quelli di Olobuild restano salvati ma non vengono usati.</p>
 <p>Le versioni in altre lingue della pagina e i loro collegamenti per i motori di ricerca sono compito di OLOlang.</p>

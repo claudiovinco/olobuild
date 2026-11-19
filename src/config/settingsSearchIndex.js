@@ -15,6 +15,54 @@ export const SETTINGS_FIELD_INDEX = {
 			"kind": "section",
 			"label": "Genera palette",
 			"hint": "Parti da uno o due colori e ottieni una palette armonica con le regole della teoria del colore."
+		},
+		{
+			"kind": "section",
+			"label": "Colori del brand",
+			"hint": "Ogni colore ha un ruolo. Cambialo e ovunque sul sito si aggiorna di conseguenza."
+		},
+		{
+			"kind": "section",
+			"label": "Neutri & superfici",
+			"hint": "Testo, sfondi, sezioni muted e bordi. La base neutra di tutto il sito."
+		},
+		{
+			"kind": "section",
+			"label": "Colori globali extra",
+			"hint": "Swatch riutilizzabili oltre ai ruoli (accenti, colori secondari del brand). Disponibili come token --olo-color-{id} e nel selettore colore delle tile."
+		},
+		{
+			"kind": "section",
+			"label": "Scala neutri",
+			"hint": "Sfumature grigie utilizzate per testi, bordi, sfondi e stati disabilitati."
+		},
+		{
+			"kind": "field",
+			"label": "Tinta neutri",
+			"hint": "Scegli la sfumatura di base. I 7 livelli vengono generati automaticamente.",
+			"section": "Scala neutri"
+		},
+		{
+			"kind": "section",
+			"label": "Modalità dark",
+			"hint": "Configura come la palette si adatta automaticamente al tema scuro."
+		},
+		{
+			"kind": "field",
+			"label": "Abilita modalità dark",
+			"hint": "Mostra il selettore dark/light nell'header del sito.",
+			"section": "Modalità dark"
+		},
+		{
+			"kind": "field",
+			"label": "Strategia di inversione",
+			"hint": "Come generare i colori scuri.",
+			"section": "Modalità dark"
+		},
+		{
+			"kind": "section",
+			"label": "Versioni dello stile",
+			"hint": "Com'era lo stile del sito prima di ogni import di tema o del sito, salvataggio degli stili e ripristino dei predefiniti: colori, tipografia, set tipografici e font caricati, header, footer e pagina 404 attivi, cursore e mirino, pagina iniziale e il template delle pagine che l'import ha riusato. Non tornano i template e le pagine creati dall'import, né il testo delle pagine riusate dall'import del sito. Restano le ultime 10, e sempre quella di prima dell'ultimo import."
 		}
 	],
 	"tipografia": [
@@ -169,6 +217,54 @@ export const SETTINGS_FIELD_INDEX = {
 			"kind": "field",
 			"label": "Indirizzo",
 			"hint": "Le pagine degli spettacoli stanno qui. Vuoto: spettacoli.",
+			"section": "Redazione"
+		},
+		{
+			"kind": "field",
+			"label": "Nome",
+			"hint": "Plurale e singolare: Notizie e Notizia, Comunicati e Comunicato.",
+			"section": "Redazione"
+		},
+		{
+			"kind": "field",
+			"label": "Chiave e indirizzo",
+			"hint": "La chiave non cambia più dopo il salvataggio: i contenuti sono legati a lei. L'indirizzo è la parte dopo il dominio.",
+			"section": "Redazione"
+		},
+		{
+			"kind": "field",
+			"label": "Icona e posizione",
+			"hint": "La posizione nel menu: 5 sotto la Bacheca, 20 sotto le Pagine, 25 sotto i Commenti.",
+			"section": "Redazione"
+		},
+		{
+			"kind": "field",
+			"label": "Organizzazione",
+			"hint": "",
+			"section": "Redazione"
+		},
+		{
+			"kind": "field",
+			"label": "Nella scheda",
+			"hint": "",
+			"section": "Redazione"
+		},
+		{
+			"kind": "field",
+			"label": "Editor",
+			"hint": "",
+			"section": "Redazione"
+		},
+		{
+			"kind": "field",
+			"label": "Permessi",
+			"hint": "",
+			"section": "Redazione"
+		},
+		{
+			"kind": "field",
+			"label": "Campi",
+			"hint": "Compaiono nella scheda di ogni contenuto, nel riquadro Dettagli, e nella Sorgente dinamica come «Campi dei contenuti».",
 			"section": "Redazione"
 		}
 	],
@@ -325,6 +421,52 @@ export const SETTINGS_FIELD_INDEX = {
 			"label": "Immagine disegnata",
 			"hint": "Per ogni contenuto senza un'immagine sua: il titolo, il nome del sito e la foto in evidenza, nel colore e nel carattere del sito.",
 			"section": "Open Graph & Twitter Card"
+		},
+		{
+			"kind": "field",
+			"label": "Twitter handle",
+			"hint": "Username Twitter del sito (con @).",
+			"section": "Open Graph & Twitter Card"
+		},
+		{
+			"kind": "field",
+			"label": "Card type",
+			"hint": "Formato della preview su Twitter.",
+			"section": "Open Graph & Twitter Card"
+		},
+		{
+			"kind": "section",
+			"label": "Sitemap & schema.org",
+			"hint": ""
+		},
+		{
+			"kind": "field",
+			"label": "Sitemap XML",
+			"hint": "La sitemap di WordPress, senza le pagine in noindex.",
+			"section": "Sitemap & schema.org"
+		},
+		{
+			"kind": "field",
+			"label": "Tipo organizzazione",
+			"hint": "Schema.org markup iniettato in ogni pagina.",
+			"section": "Sitemap & schema.org"
+		},
+		{
+			"kind": "section",
+			"label": "Verifica dei motori",
+			"hint": ""
+		},
+		{
+			"kind": "field",
+			"label": "Google Search Console",
+			"hint": "Nella Search Console aggiungi il sito come «Prefisso URL» e scegli la verifica «Tag HTML»: il codice è quello del meta tag.",
+			"section": "Verifica dei motori"
+		},
+		{
+			"kind": "field",
+			"label": "Bing Webmaster Tools",
+			"hint": "Vale anche per Copilot. In Bing Webmaster Tools scegli la verifica col meta tag; puoi anche importare il sito dalla Search Console.",
+			"section": "Verifica dei motori"
 		}
 	],
 	"redirects": [
@@ -495,12 +637,6 @@ export const SETTINGS_FIELD_INDEX = {
 			"kind": "field",
 			"label": "In <head>",
 			"hint": "Meta tag, fonts, link prefetch, codice di verifica.",
-			"section": "Script custom"
-		},
-		{
-			"kind": "field",
-			"label": "In <body>",
-			"hint": "Subito dopo l'apertura del body (GTM noscript, chat widget…).",
 			"section": "Script custom"
 		}
 	],

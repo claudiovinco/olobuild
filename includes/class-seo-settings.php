@@ -185,7 +185,28 @@ class Olobuild_Seo_Settings {
                 $o['separator'] = sanitize_text_field( $o['separator'] );
             }
         }
+        if ( self::OPT_WEBMASTER === $option_key ) {
+            // Verifica dei motori (Impostazioni › SEO globale › Verifica dei motori): si tiene il solo codice, anche
+            // se è stato incollato tutto il meta tag. sanitize_text_field() su un tag intero lasciava una stringa vuota.
+            foreach ( [ 'google', 'bing', 'pinterest', 'yandex' ] as $motore ) {
+                if ( isset( $o[ $motore ] ) ) {
+                    $o[ $motore ] = self::codice_verifica( $o[ $motore ] );
+                }
+            }
+        }
         return $o;
+    }
+
+    /**
+     * Il codice di verifica di Google, Bing, Pinterest o Yandex: dal meta tag intero
+     * (<meta name="google-site-verification" content="…" />) il valore di content, poi solo lettere, cifre, - e _.
+     */
+    public static function codice_verifica( $valore ) {
+        $s = trim( (string) $valore );
+        if ( preg_match( '/content\s*=\s*["\']([^"\']*)["\']/i', $s, $m ) ) {
+            $s = $m[1];
+        }
+        return substr( (string) preg_replace( '/[^A-Za-z0-9_\-]/', '', $s ), 0, 100 );
     }
 
     /* ═══════════════════════════════════════════════════

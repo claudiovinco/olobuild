@@ -95,9 +95,11 @@ for ( const [ tabId, file ] of Object.entries( TAB_FILES ) ) {
 		continue;
 	}
 	const src = fs.readFileSync( full, 'utf8' );
-	// Solo il template: le stringhe dello <script> non sono campi visibili.
-	const tplEnd = src.indexOf( '</template>' );
-	const tpl = tplEnd > -1 ? src.slice( 0, tplEnd ) : src;
+	// Solo il template: le stringhe dello <script> non sono campi visibili. Si taglia allo <script>, non al primo
+	// </template>: quello di un <template v-if> annidato fermava la lettura a metà scheda (19 nov 2026: nella SEO
+	// globale mancavano Sitemap, Tipo organizzazione e la Verifica dei motori).
+	const scriptAt = src.search( /<script\b/ );
+	const tpl = scriptAt > -1 ? src.slice( 0, scriptAt ) : src;
 
 	const labels = collect( RE_LABEL, tpl );
 	const h3s    = collect( RE_H3, tpl );

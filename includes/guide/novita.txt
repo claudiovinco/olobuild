@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.1262 - 2026-11-19 (Search Console e Bing)
+- Sistema › Configurazione › SEO & Privacy › SEO globale: torna il riquadro Verifica dei motori, coi campi per il codice di Google Search Console e di Bing Webmaster Tools (vale anche per Copilot) e il collegamento a ognuno. Si può incollare tutto il meta tag che dà Google: Olobuild tiene il solo codice e lo scrive nella testata di ogni pagina. Il campo mancava da quando le Impostazioni hanno cambiato aspetto.
+- Guida SEO: la sezione nuova Search Console e Bing spiega come collegare il sito, passo per passo.
+
 ## v1.4.1260 - 2026-11-19 (La pagina intera per Google e le IA)
 - Ai motori di ricerca e a quelli delle IA (Google, Bing, ChatGPT, Claude, Perplexity e gli altri) la pagina arriva intera. Prima le tile dopo le prime tre arrivavano dentro un contenitore che solo il JavaScript apre, e chi non lo esegue, cioè quasi tutti i motori delle IA, leggeva poco o niente: sulla home di OLObuild 173 parole su 1.337, senza il titolo principale. Per chi visita il sito non cambia niente, il contenuto lontano si monta ancora quando ci si arriva.
 - Le tile della prima sezione nascono tutte subito, non solo le prime tre: nell'apertura dei temi il titolo grande arrivava dopo il JavaScript, ora c'è da subito e la pagina si vede prima.

@@ -183,6 +183,62 @@
       </div>
     </div>
   </div>
+
+  <!-- Verifica dei motori: il codice che Google e Bing chiedono di mettere nella testata del sito per
+       dimostrare che il sito è tuo. Olobuild lo scrive in ogni pagina (Olobuild_Seo_Head::output_verification_tags);
+       mancava il campo dalla migrazione delle Impostazioni (19 nov 2026). -->
+  <div class="cfg-card">
+    <div class="cfg-card-head">
+      <div class="head-ic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
+      </div>
+      <div>
+        <h3>{{ t('Verifica dei motori') }}</h3>
+      </div>
+    </div>
+    <!-- Righe scritte una per una (non in un v-for): l'indice della ricerca nelle Impostazioni legge dal template
+         etichette e suggerimenti scritti per esteso (scripts/build-settings-search-index.cjs). -->
+    <div class="cfg-card-body tight">
+      <div class="cfg-row">
+        <div class="label-col">
+          <label>{{ t('Google Search Console') }}</label>
+          <div class="hint">{{ t('Nella Search Console aggiungi il sito come «Prefisso URL» e scegli la verifica «Tag HTML»: il codice è quello del meta tag.') }}</div>
+        </div>
+        <div class="control-col">
+          <div class="cfg-input mono cfg-w-md">
+            <input type="text" :value="webmaster.google" :aria-label="t('Google Search Console')"
+              :placeholder="t('Incolla il codice o tutto il meta tag')"
+              @input="setW('google', $event.target.value)" @change="pulisciW('google', $event)" />
+          </div>
+          <div class="text-xs mt-2 verifica-stato">
+            <span v-if="statoVerifica('google') === 'ok'" class="verifica-ok">{{ t('Il codice è nella testata di ogni pagina.') }}</span>
+            <span v-else-if="statoVerifica('google') === 'metti'" class="verifica-attesa">{{ t('Salva per metterlo nella testata.') }}</span>
+            <span v-else-if="statoVerifica('google') === 'togli'" class="verifica-attesa">{{ t('Salva per toglierlo dalla testata.') }}</span>
+            <a href="https://search.google.com/search-console" target="_blank" rel="noopener">{{ t('Apri la Search Console →') }}</a>
+          </div>
+        </div>
+      </div>
+      <div class="cfg-row no-divider">
+        <div class="label-col">
+          <label>{{ t('Bing Webmaster Tools') }}</label>
+          <div class="hint">{{ t('Vale anche per Copilot. In Bing Webmaster Tools scegli la verifica col meta tag; puoi anche importare il sito dalla Search Console.') }}</div>
+        </div>
+        <div class="control-col">
+          <div class="cfg-input mono cfg-w-md">
+            <input type="text" :value="webmaster.bing" :aria-label="t('Bing Webmaster Tools')"
+              :placeholder="t('Incolla il codice o tutto il meta tag')"
+              @input="setW('bing', $event.target.value)" @change="pulisciW('bing', $event)" />
+          </div>
+          <div class="text-xs mt-2 verifica-stato">
+            <span v-if="statoVerifica('bing') === 'ok'" class="verifica-ok">{{ t('Il codice è nella testata di ogni pagina.') }}</span>
+            <span v-else-if="statoVerifica('bing') === 'metti'" class="verifica-attesa">{{ t('Salva per metterlo nella testata.') }}</span>
+            <span v-else-if="statoVerifica('bing') === 'togli'" class="verifica-attesa">{{ t('Salva per toglierlo dalla testata.') }}</span>
+            <a href="https://www.bing.com/webmasters" target="_blank" rel="noopener">{{ t('Apri Bing Webmaster Tools →') }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -234,6 +290,9 @@ const INIZIALE_SOCIAL = {
   og_default_image: '',
 };
 const INIZIALE_SITEMAP = { enabled: true };
+// Verifica dei motori (option olo_seo_webmaster): le chiavi che Olobuild_Seo_Head::output_verification_tags legge.
+// Pinterest e Yandex, se già salvati, restano (il server fonde sul valore di prima).
+const INIZIALE_WEBMASTER = { google: '', bing: '' };
 
 // L'immagine disegnata (1.4.1218): tre stili; senza foto in evidenza il server usa «Solo colore»
 const OG_STILI = [
@@ -260,6 +319,15 @@ async function aggiornaOgAnteprima() {
 const titles  = ref({ ...INIZIALE_TITLES });
 const social  = ref({ ...INIZIALE_SOCIAL });
 const sitemap = ref({ ...INIZIALE_SITEMAP });
+const webmaster = ref({ ...INIZIALE_WEBMASTER });
+// Quello che il server ha davvero: «è nella testata» solo per un codice salvato, non per uno appena scritto.
+const webmasterSalvato = ref({ ...INIZIALE_WEBMASTER });
+function statoVerifica(k) {
+  const ora = codiceVerifica(webmaster.value[k]);
+  const salvato = webmasterSalvato.value[k] || '';
+  if (ora === salvato) return ora ? 'ok' : '';
+  return ora ? 'metti' : 'togli';
+}
 
 watch(() => [social.value.og_disegnata, social.value.og_stile], aggiornaOgAnteprima);
 
@@ -278,6 +346,20 @@ const ogPreviewStyle = computed(() => ({
 function setT(k, v)   { titles.value[k]  = v; setDirty(true); }
 function setS(k, v)   { social.value[k]  = v; setDirty(true); }
 function setSM(k, v)  { sitemap.value[k] = v; setDirty(true); }
+function setW(k, v)   { webmaster.value[k] = v; setDirty(true); }
+
+// Dal meta tag incollato intero (<meta name="google-site-verification" content="…" />) resta il solo codice;
+// un codice già pulito resta com'è. Lo stesso fa il server (Olobuild_Seo_Settings::normalizza).
+function codiceVerifica(v) {
+  const s = String(v || '').trim();
+  const m = s.match(/content\s*=\s*["']([^"']*)["']/i);
+  return (m ? m[1] : s).replace(/[^A-Za-z0-9_\-]/g, '').slice(0, 100);
+}
+function pulisciW(k, ev) {
+  const pulito = codiceVerifica(ev.target.value);
+  ev.target.value = pulito;
+  setW(k, pulito);
+}
 
 function pickOgImage() {
   if (!window.wp || !window.wp.media) {
@@ -297,16 +379,21 @@ async function loadSettings() {
   try {
     const headers = { 'X-WP-Nonce': window.oloData.nonce };
     const base = `${window.oloData.restUrl}seo/`;
-    const [tRes, sRes, smRes] = await Promise.all([
+    const [tRes, sRes, smRes, wRes] = await Promise.all([
       lettura.fetch(base + 'titles', { headers }).then(r => r.ok ? r.json() : null).catch(() => null),
       lettura.fetch(base + 'social', { headers }).then(r => r.ok ? r.json() : null).catch(() => null),
       lettura.fetch(base + 'sitemap', { headers }).then(r => r.ok ? r.json() : null).catch(() => null),
+      lettura.fetch(base + 'webmaster', { headers }).then(r => r.ok ? r.json() : null).catch(() => null),
     ]);
     if (tRes)   titles.value  = conIniziali(INIZIALE_TITLES, tRes);
     if (sRes)   social.value  = conIniziali(INIZIALE_SOCIAL, sRes);
     if (smRes)  sitemap.value = conIniziali(INIZIALE_SITEMAP, smRes);
-    // Si salvano tutte e tre: basta una lettura mancata per spedire i default.
-    if (tRes && sRes && smRes) loaded.value = true;
+    if (wRes) {
+      webmaster.value = conIniziali(INIZIALE_WEBMASTER, wRes);
+      webmasterSalvato.value = { google: webmaster.value.google || '', bing: webmaster.value.bing || '' };
+    }
+    // Si salvano tutte e quattro: basta una lettura mancata per spedire i default.
+    if (tRes && sRes && smRes && wRes) loaded.value = true;
   } catch (e) { /* defaults */ }
 }
 
@@ -314,11 +401,14 @@ async function saveSettings() {
   assertLoaded(loaded);
   const base = `${window.oloData.restUrl}seo/`;
   const headers = { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce };
+  const codici = { google: codiceVerifica(webmaster.value.google), bing: codiceVerifica(webmaster.value.bing) };
   await Promise.all([
     okOrThrow(fetch(base + 'titles',  { method: 'POST', headers, body: JSON.stringify(titles.value) })),
     okOrThrow(fetch(base + 'social',  { method: 'POST', headers, body: JSON.stringify(social.value) })),
     okOrThrow(fetch(base + 'sitemap', { method: 'POST', headers, body: JSON.stringify(sitemap.value) })),
+    okOrThrow(fetch(base + 'webmaster', { method: 'POST', headers, body: JSON.stringify(codici) })),
   ]);
+  webmasterSalvato.value = codici;
 }
 
 const onSave = cfgJob(TAB_ID, saveSettings);
@@ -344,4 +434,10 @@ onBeforeUnmount(() => {
 .og-disegnata-vuota { font-size: 12px; color: var(--c-text-faint); padding: 0 12px; text-align: center; }
 .og-preview { box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); position: relative; overflow: hidden; }
 .og-actions { flex: 1; }
+.verifica-stato { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.verifica-stato a { color: var(--c-red); text-decoration: none; }
+.verifica-stato a:hover { text-decoration: underline; }
+.verifica-stato a:focus-visible { outline: 2px solid var(--c-red); outline-offset: 2px; border-radius: 2px; }
+.verifica-ok { color: #047857; }
+.verifica-attesa { color: #b45309; }
 </style>
