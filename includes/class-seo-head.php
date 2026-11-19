@@ -30,8 +30,9 @@ class Olobuild_Seo_Head {
         add_action( 'wp_head', [ $this, 'output_og_tags' ], 5 );
         // JSON-LD schema
         add_action( 'wp_head', [ $this, 'output_jsonld' ], 6 );
-        // REST API for heading checker
-        add_action( 'rest_api_init', [ $this, 'register_routes' ] );
+        // L'analisi della pagina, per il builder e per il riquadro di WordPress (olobuild/v1/seo/analisi).
+        require_once __DIR__ . '/class-seo-analisi.php';
+        Olobuild_Seo_Analisi::init();
         // Sitemap: quella di WordPress (wp-sitemap.xml), che comprende tutto il sito.
         // La vecchia /?olo_sitemap=1 elencava solo le pagine fatte con Olobuild.
         add_filter( 'wp_sitemaps_enabled', [ $this, 'sitemap_attiva' ] );
@@ -384,73 +385,18 @@ class Olobuild_Seo_Head {
 
         global $post;
 
-        $schemas = [];
-
-        // 1. WebSite schema (homepage)
-        if ( is_front_page() || is_home() ) {
-            $schemas[] = $this->schema_website();
+        /**
+         * Il grafo dei dati strutturati della pagina, prima di uscire: un altro plugin di OLOtheme ci aggiunge i
+         * suoi nodi (un hotel, una sala), collegandoli per @id a quelli di qui.
+         *
+         * @param array $grafo I nodi, ognuno col suo @id.
+         */
+        $grafo = apply_filters( 'olobuild_seo_grafo', $this->grafo_schema() );
+        if ( is_array( $grafo ) && $grafo ) {
+            echo '<script type="application/ld+json">' . wp_json_encode( [ '@context' => 'https://schema.org', '@graph' => array_values( array_filter( $grafo ) ) ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON-LD payload safely encoded via wp_json_encode() inside a fixed <script type="application/ld+json"> wrapper
         }
 
-        // 2. Organization or Person (from Knowledge Graph settings)
-        $kg_index  = count( $schemas );
-        $schemas[] = $this->schema_knowledge_graph();
-
-        // 3. BreadcrumbList (non homepage)
-        if ( ! is_front_page() ) {
-            $breadcrumb = $this->schema_breadcrumb();
-            if ( $breadcrumb ) {
-                $schemas[] = $breadcrumb;
-            }
-        }
-
-        // 4. Per-page schema type override
-        $custom_schema = is_singular() && $post ? get_post_meta( $post->ID, '_olo_seo_schema_type', true ) : '';
-
-        if ( $custom_schema === 'none' ) {
-            // User explicitly disabled schema for this page
-        } elseif ( $custom_schema && $custom_schema !== '' ) {
-            $schemas[] = $this->schema_custom_type( $custom_schema );
-        } else {
-            // Auto-detect
-            if ( is_singular( 'post' ) ) {
-                $schemas[] = $this->schema_article();
-            } elseif ( is_page() ) {
-                $schemas[] = $this->schema_webpage();
-            }
-
-            // WooCommerce Product
-            if ( function_exists( 'is_product' ) && is_product() ) {
-                $product_schema = $this->schema_product();
-                if ( $product_schema ) {
-                    $schemas[] = $product_schema;
-                }
-            }
-        }
-
-        // FAQ Schema (from per-page meta box)
-        if ( is_singular() && $post ) {
-            $faq_schema = $this->schema_faq( $post->ID );
-            if ( $faq_schema ) {
-                $schemas[] = $faq_schema;
-            }
-        }
-
-        // LocalBusiness (from settings)
-        $lb = $this->schema_local_business();
-        if ( $lb ) {
-            $schemas[] = $lb;
-        }
-
-        // Social profiles sameAs
-        $this->add_same_as( $schemas, $kg_index );
-
-        foreach ( $schemas as $schema ) {
-            if ( ! empty( $schema ) ) {
-                echo '<script type="application/ld+json">' . wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON-LD payload safely encoded via wp_json_encode() inside a fixed <script type="application/ld+json"> wrapper
-            }
-        }
-
-        // 5. JSON-LD custom per-page (textarea utente, validato come JSON parsabile).
+        // JSON-LD personalizzato della pagina (textarea utente, validato come JSON parsabile): un blocco a sé.
         if ( is_singular() && $post ) {
             $extra = get_post_meta( $post->ID, '_olo_seo_extra_jsonld', true );
             if ( is_string( $extra ) && trim( $extra ) !== '' ) {
@@ -459,21 +405,118 @@ class Olobuild_Seo_Head {
                 $clean = preg_replace( '#</?script[^>]*>#i', '', $clean );
                 $decoded = json_decode( $clean, true );
                 if ( is_array( $decoded ) ) {
-                    echo '<script type="application/ld+json">' . wp_json_encode( $decoded, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user JSON-LD is json_decode()-validated then re-encoded via wp_json_encode() (script tags stripped above), inside a fixed <script type="application/ld+json"> wrapper
+                    echo '<script type="application/ld+json">' . wp_json_encode( $decoded, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user JSON-LD is json_decode()-validated then re-encoded via wp_json_encode() (script tags stripped above), inside a fixed <script type="application/ld+json"> wrapper
                 }
             }
         }
     }
 
+    /**
+     * I dati strutturati come UN grafo, coi nodi collegati per @id (novembre 2026). Prima uscivano quattro
+     * blocchi separati, senza legami: chi pubblica, il sito, la pagina e l'articolo non risultavano la stessa
+     * cosa. Ora la pagina fa parte del sito, l'articolo è il contenuto principale della pagina, il sito e
+     * l'articolo sono pubblicati da chi pubblica il sito: è così che motori e IA riconoscono le entità.
+     */
+    private function grafo_schema() {
+        global $post;
+
+        $kg    = $this->schema_knowledge_graph();
+        $grafo = [ $kg, $this->schema_website( $kg['@id'] ) ];
+
+        $singolo = is_singular() && $post;
+        $url     = $singolo ? $this->url_schema( $post ) : (string) $this->get_canonical_url();
+
+        $breadcrumb = is_front_page() ? null : $this->schema_breadcrumb( $url );
+        if ( $breadcrumb ) {
+            $grafo[] = $breadcrumb;
+        }
+
+        if ( $singolo ) {
+            $tipo = (string) get_post_meta( $post->ID, '_olo_seo_schema_type', true );
+            $faq  = $this->domande_faq( $post->ID );
+
+            if ( 'none' === $tipo ) {
+                // Nessuno schema per la pagina: restano solo le domande, se ci sono.
+                if ( $faq ) {
+                    $grafo[] = [ '@type' => 'FAQPage', '@id' => $url . '#faq', 'url' => $url, 'mainEntity' => $faq ];
+                }
+            } else {
+                $pagina = $this->schema_webpage( $url, $breadcrumb ? $breadcrumb['@id'] : '', $kg['@id'] );
+                if ( 'FAQPage' === $tipo || $faq ) {
+                    $pagina['@type'] = 'FAQPage';
+                }
+                if ( $faq ) {
+                    $pagina['mainEntity'] = $faq;
+                }
+                $grafo[] = $pagina;
+
+                $principale = $this->schema_principale( $tipo, $url, $pagina['@id'], $kg['@id'] );
+                if ( $principale ) {
+                    $grafo[] = $principale;
+                }
+            }
+        }
+
+        $lb = $this->schema_local_business();
+        if ( $lb ) {
+            $grafo[] = $lb;
+        }
+
+        return $grafo;
+    }
+
+    /**
+     * L'indirizzo che fa da base agli @id della pagina: il suo, anche quando il canonical rimanda altrove (il
+     * grafo descrive QUESTA pagina). Le lingue di OLOlang hanno ognuna il suo (?lang=en).
+     */
+    private function url_schema( $post ) {
+        if ( get_post_meta( $post->ID, '_olo_seo_canonical', true ) ) {
+            return (string) get_permalink( $post );
+        }
+        $url = wp_get_canonical_url( $post );
+        return $url ? (string) $url : (string) get_permalink( $post );
+    }
+
+    /** Il contenuto principale della pagina, secondo il tipo scelto (vuoto = automatico). */
+    private function schema_principale( $tipo, $url, $pagina_id, $kg_id ) {
+        global $post;
+
+        if ( '' === $tipo ) {
+            if ( function_exists( 'is_product' ) && is_product() ) {
+                return $this->schema_product( $url, $pagina_id );
+            }
+            return is_singular( 'post' ) ? $this->schema_article( 'Article', $url, $pagina_id, $kg_id ) : null;
+        }
+        if ( in_array( $tipo, [ 'Article', 'BlogPosting', 'NewsArticle' ], true ) ) {
+            return $this->schema_article( $tipo, $url, $pagina_id, $kg_id );
+        }
+        if ( in_array( $tipo, [ 'WebPage', 'FAQPage' ], true ) ) {
+            return null; // il tipo sta già sul nodo della pagina
+        }
+        if ( 'SoftwareApplication' === $tipo ) {
+            return $this->schema_software( $url, $pagina_id, $kg_id );
+        }
+        if ( 'Event' === $tipo ) {
+            return $this->schema_evento( $url, $pagina_id, $kg_id );
+        }
+        if ( 'Product' === $tipo && function_exists( 'wc_get_product' ) && $post && wc_get_product( $post->ID ) ) {
+            return $this->schema_product( $url, $pagina_id );
+        }
+        return $this->schema_custom_type( $tipo, $url, $pagina_id );
+    }
+
     /* ─── Schema generators ─── */
 
-    private function schema_website() {
+    private function schema_website( $kg_id ) {
+        $casa = home_url( '/' );
         return [
-            '@context'        => 'https://schema.org',
             '@type'           => 'WebSite',
+            '@id'             => $casa . '#website',
+            'url'             => $casa,
             'name'            => get_bloginfo( 'name' ),
             'description'     => get_bloginfo( 'description' ),
-            'url'             => home_url( '/' ),
+            'publisher'       => [ '@id' => $kg_id ],
+            'inLanguage'      => get_bloginfo( 'language' ),
             'potentialAction' => [
                 '@type'       => 'SearchAction',
                 'target'      => home_url( '/?s={search_term_string}' ),
@@ -489,10 +532,10 @@ class Olobuild_Seo_Head {
         $logo   = $titles['kg_logo'] ?? '';
 
         $schema = [
-            '@context' => 'https://schema.org',
-            '@type'    => $type,
-            'name'     => $name,
-            'url'      => home_url( '/' ),
+            '@type' => $type,
+            '@id'   => home_url( '/' ) . ( 'Person' === $type ? '#person' : '#organization' ),
+            'name'  => $name ?: get_bloginfo( 'name' ),
+            'url'   => home_url( '/' ),
         ];
 
         if ( ! $logo ) {
@@ -510,10 +553,15 @@ class Olobuild_Seo_Head {
             }
         }
 
+        $same_as = $this->profili_social();
+        if ( $same_as ) {
+            $schema['sameAs'] = $same_as;
+        }
+
         return $schema;
     }
 
-    private function schema_breadcrumb() {
+    private function schema_breadcrumb( $url ) {
         global $post;
         $items = [];
         $pos   = 1;
@@ -583,31 +631,58 @@ class Olobuild_Seo_Head {
         }
 
         return [
-            '@context'        => 'https://schema.org',
             '@type'           => 'BreadcrumbList',
+            '@id'             => ( $url ?: home_url( '/' ) ) . '#breadcrumb',
             'itemListElement' => $items,
         ];
     }
 
-    private function schema_article() {
+    private function schema_webpage( $url, $breadcrumb_id, $kg_id ) {
         global $post;
-        if ( ! $post ) return [];
 
         $schema = [
-            '@context'      => 'https://schema.org',
-            '@type'         => 'Article',
-            'headline'      => get_the_title( $post ),
-            'url'           => get_permalink( $post ),
+            '@type'         => 'WebPage',
+            '@id'           => $url . '#webpage',
+            'url'           => $url,
+            'name'          => get_the_title( $post ),
+            'description'   => $this->get_seo_description(),
+            'isPartOf'      => [ '@id' => home_url( '/' ) . '#website' ],
+            'inLanguage'    => get_bloginfo( 'language' ),
             'datePublished' => get_the_date( 'c', $post ),
             'dateModified'  => get_the_modified_date( 'c', $post ),
-            'author'        => [
+        ];
+        if ( $breadcrumb_id ) {
+            $schema['breadcrumb'] = [ '@id' => $breadcrumb_id ];
+        }
+        if ( is_front_page() ) {
+            $schema['about'] = [ '@id' => $kg_id ];
+        }
+        $image = get_the_post_thumbnail_url( $post, 'large' );
+        if ( $image ) {
+            $schema['primaryImageOfPage'] = [ '@type' => 'ImageObject', 'url' => $image ];
+        }
+        return $schema;
+    }
+
+    private function schema_article( $tipo, $url, $pagina_id, $kg_id ) {
+        global $post;
+        if ( ! $post ) return null;
+
+        $schema = [
+            '@type'            => $tipo,
+            '@id'              => $url . '#article',
+            'isPartOf'         => [ '@id' => $pagina_id ],
+            'mainEntityOfPage' => [ '@id' => $pagina_id ],
+            'headline'         => get_the_title( $post ),
+            'url'              => $url,
+            'datePublished'    => get_the_date( 'c', $post ),
+            'dateModified'     => get_the_modified_date( 'c', $post ),
+            'author'           => [
                 '@type' => 'Person',
                 'name'  => get_the_author_meta( 'display_name', $post->post_author ),
             ],
-            'publisher'     => [
-                '@type' => 'Organization',
-                'name'  => get_bloginfo( 'name' ),
-            ],
+            'publisher'        => [ '@id' => $kg_id ],
+            'inLanguage'       => get_bloginfo( 'language' ),
         ];
 
         $image = get_the_post_thumbnail_url( $post, 'large' );
@@ -620,69 +695,169 @@ class Olobuild_Seo_Head {
             $schema['description'] = wp_strip_all_tags( $excerpt );
         }
 
-        $logo_id = get_theme_mod( 'custom_logo' );
-        if ( $logo_id ) {
-            $logo_url = wp_get_attachment_image_url( $logo_id, 'full' );
-            if ( $logo_url ) {
-                $schema['publisher']['logo'] = [
-                    '@type' => 'ImageObject',
-                    'url'   => $logo_url,
-                ];
-            }
-        }
-
         return $schema;
     }
 
-    private function schema_webpage() {
+    /**
+     * Un tipo scelto a mano senza campi suoi (HowTo, Recipe, LocalBusiness, Product senza WooCommerce): nome,
+     * descrizione e immagine. Il resto va nel JSON-LD personalizzato.
+     */
+    private function schema_custom_type( $type, $url, $pagina_id ) {
         global $post;
-        if ( ! $post ) return [];
-
-        return [
-            '@context'      => 'https://schema.org',
-            '@type'         => 'WebPage',
-            'name'          => get_the_title( $post ),
-            'url'           => get_permalink( $post ),
-            'datePublished' => get_the_date( 'c', $post ),
-            'dateModified'  => get_the_modified_date( 'c', $post ),
-            'description'   => $this->get_seo_description(),
-        ];
-    }
-
-    private function schema_custom_type( $type ) {
-        global $post;
-        if ( ! $post ) return [];
+        if ( ! $post ) return null;
 
         $schema = [
-            '@context'      => 'https://schema.org',
-            '@type'         => $type,
-            'name'          => get_the_title( $post ),
-            'url'           => get_permalink( $post ),
-            'datePublished' => get_the_date( 'c', $post ),
-            'dateModified'  => get_the_modified_date( 'c', $post ),
-            'description'   => $this->get_seo_description(),
+            '@type'            => $type,
+            '@id'              => $url . '#main',
+            'name'             => get_the_title( $post ),
+            'url'              => $url,
+            'description'      => $this->get_seo_description(),
+            'mainEntityOfPage' => [ '@id' => $pagina_id ],
         ];
+        // Le date sono delle opere (CreativeWork): su un'attività o un prodotto sarebbero proprietà sconosciute.
+        if ( in_array( $type, [ 'HowTo', 'Recipe' ], true ) ) {
+            $schema['datePublished'] = get_the_date( 'c', $post );
+            $schema['dateModified']  = get_the_modified_date( 'c', $post );
+        }
 
         $image = get_the_post_thumbnail_url( $post, 'large' );
         if ( $image ) {
             $schema['image'] = $image;
         }
 
-        if ( in_array( $type, [ 'Article', 'BlogPosting', 'NewsArticle' ], true ) ) {
-            $schema['author'] = [
-                '@type' => 'Person',
-                'name'  => get_the_author_meta( 'display_name', $post->post_author ),
+        return $schema;
+    }
+
+    /** Il software della pagina, coi campi della scheda Schema (novembre 2026). */
+    private function schema_software( $url, $pagina_id, $kg_id ) {
+        global $post;
+        $d = $this->dati_schema_pagina( $post->ID );
+
+        $schema = [
+            '@type'            => 'SoftwareApplication',
+            '@id'              => $url . '#software',
+            'name'             => get_the_title( $post ),
+            'url'              => $url,
+            'description'      => $this->get_seo_description(),
+            'mainEntityOfPage' => [ '@id' => $pagina_id ],
+            'publisher'        => [ '@id' => $kg_id ],
+        ];
+        $image = get_the_post_thumbnail_url( $post, 'large' );
+        if ( $image ) {
+            $schema['image'] = $image;
+        }
+        $mappa = [ 'app_category' => 'applicationCategory', 'app_os' => 'operatingSystem', 'app_version' => 'softwareVersion' ];
+        foreach ( $mappa as $chiave => $proprieta ) {
+            if ( isset( $d[ $chiave ] ) && '' !== $d[ $chiave ] ) {
+                $schema[ $proprieta ] = $d[ $chiave ];
+            }
+        }
+        if ( isset( $d['app_price'] ) && '' !== $d['app_price'] ) {
+            $schema['offers'] = [
+                '@type'         => 'Offer',
+                'price'         => $d['app_price'],
+                'priceCurrency' => $d['app_currency'] ?? 'EUR',
+                'url'           => $url,
             ];
-            $schema['publisher'] = [
-                '@type' => 'Organization',
-                'name'  => get_bloginfo( 'name' ),
+        }
+        return $schema;
+    }
+
+    /** L'evento della pagina, coi campi della scheda Schema (novembre 2026). */
+    private function schema_evento( $url, $pagina_id, $kg_id ) {
+        global $post;
+        $d = $this->dati_schema_pagina( $post->ID );
+
+        $schema = [
+            '@type'            => 'Event',
+            '@id'              => $url . '#event',
+            'name'             => get_the_title( $post ),
+            'url'              => $url,
+            'description'      => $this->get_seo_description(),
+            'mainEntityOfPage' => [ '@id' => $pagina_id ],
+        ];
+        $image = get_the_post_thumbnail_url( $post, 'large' );
+        if ( $image ) {
+            $schema['image'] = $image;
+        }
+
+        $inizio = self::data_iso( $d['ev_start'] ?? '' );
+        $fine   = self::data_iso( $d['ev_end'] ?? '' );
+        if ( $inizio ) {
+            $schema['startDate'] = $inizio;
+        }
+        if ( $fine ) {
+            $schema['endDate'] = $fine;
+        }
+
+        $modo  = $d['ev_mode'] ?? 'offline';
+        $modi  = [ 'offline' => 'OfflineEventAttendanceMode', 'online' => 'OnlineEventAttendanceMode', 'mixed' => 'MixedEventAttendanceMode' ];
+        $schema['eventAttendanceMode'] = 'https://schema.org/' . ( $modi[ $modo ] ?? $modi['offline'] );
+
+        $stati = [
+            'scheduled'   => 'EventScheduled',
+            'cancelled'   => 'EventCancelled',
+            'postponed'   => 'EventPostponed',
+            'rescheduled' => 'EventRescheduled',
+            'movedonline' => 'EventMovedOnline',
+        ];
+        $schema['eventStatus'] = 'https://schema.org/' . ( $stati[ $d['ev_status'] ?? 'scheduled' ] ?? $stati['scheduled'] );
+
+        $luoghi = [];
+        if ( 'online' !== $modo && ( ! empty( $d['ev_place'] ) || ! empty( $d['ev_address'] ) ) ) {
+            $luogo = [ '@type' => 'Place', 'name' => ! empty( $d['ev_place'] ) ? $d['ev_place'] : $d['ev_address'] ];
+            if ( ! empty( $d['ev_address'] ) ) {
+                $luogo['address'] = $d['ev_address'];
+            }
+            $luoghi[] = $luogo;
+        }
+        if ( 'offline' !== $modo && ! empty( $d['ev_online_url'] ) ) {
+            $luoghi[] = [ '@type' => 'VirtualLocation', 'url' => $d['ev_online_url'] ];
+        }
+        if ( $luoghi ) {
+            $schema['location'] = 1 === count( $luoghi ) ? $luoghi[0] : $luoghi;
+        }
+
+        $schema['organizer'] = ! empty( $d['ev_organizer'] )
+            ? [ '@type' => 'Organization', 'name' => $d['ev_organizer'] ]
+            : [ '@id' => $kg_id ];
+
+        $prezzo = isset( $d['ev_price'] ) && '' !== $d['ev_price'];
+        if ( $prezzo || ! empty( $d['ev_tickets_url'] ) ) {
+            $offerta = [
+                '@type'        => 'Offer',
+                'url'          => ! empty( $d['ev_tickets_url'] ) ? $d['ev_tickets_url'] : $url,
+                'availability' => 'https://schema.org/InStock',
             ];
+            if ( $prezzo ) {
+                $offerta['price']         = $d['ev_price'];
+                $offerta['priceCurrency'] = $d['ev_currency'] ?? 'EUR';
+            }
+            $schema['offers'] = $offerta;
         }
 
         return $schema;
     }
 
-    private function schema_product() {
+    /** «2026-12-05T21:00» del campo, nel fuso del sito → ISO 8601 con lo scarto (2026-12-05T21:00:00+01:00). */
+    private static function data_iso( $valore ) {
+        if ( ! is_string( $valore ) || '' === $valore ) {
+            return '';
+        }
+        try {
+            $data = new DateTime( $valore, wp_timezone() );
+            return $data->format( 'c' );
+        } catch ( Exception $e ) {
+            return '';
+        }
+    }
+
+    private function dati_schema_pagina( $post_id ) {
+        $d = get_post_meta( $post_id, '_olo_seo_schema_data', true );
+        return is_array( $d ) ? $d : [];
+    }
+
+    private function schema_product( $url, $pagina_id ) {
         global $post;
         if ( ! $post || ! function_exists( 'wc_get_product' ) ) {
             return null;
@@ -694,11 +869,12 @@ class Olobuild_Seo_Head {
         }
 
         $schema = [
-            '@context'    => 'https://schema.org',
-            '@type'       => 'Product',
-            'name'        => $product->get_name(),
-            'url'         => get_permalink( $post ),
-            'description' => wp_strip_all_tags( $product->get_short_description() ),
+            '@type'            => 'Product',
+            '@id'              => $url . '#product',
+            'name'             => $product->get_name(),
+            'url'              => $url,
+            'description'      => wp_strip_all_tags( $product->get_short_description() ),
+            'mainEntityOfPage' => [ '@id' => $pagina_id ],
         ];
 
         $image = get_the_post_thumbnail_url( $post, 'large' );
@@ -717,7 +893,7 @@ class Olobuild_Seo_Head {
             'availability'  => $product->is_in_stock()
                 ? 'https://schema.org/InStock'
                 : 'https://schema.org/OutOfStock',
-            'url'           => get_permalink( $post ),
+            'url'           => $url,
         ];
 
         $count  = $product->get_review_count();
@@ -740,8 +916,8 @@ class Olobuild_Seo_Head {
         }
 
         $schema = [
-            '@context'    => 'https://schema.org',
             '@type'       => ! empty( $biz['type'] ) ? $biz['type'] : 'LocalBusiness',
+            '@id'         => home_url( '/' ) . '#localbusiness',
             'name'        => $biz['name'],
             'url'         => home_url( '/' ),
         ];
@@ -827,10 +1003,8 @@ class Olobuild_Seo_Head {
         return $schema;
     }
 
-    /**
-     * Add sameAs social profiles to Organization/Person schema.
-     */
-    private function add_same_as( &$schemas, $kg_index ) {
+    /** I profili social della scheda Social, per il sameAs di chi pubblica il sito (qualunque tipo abbia). */
+    private function profili_social() {
         $social = $this->opt( 'olo_seo_social' );
         $urls   = [];
 
@@ -845,23 +1019,14 @@ class Olobuild_Seo_Head {
             $urls[] = 'https://x.com/' . $tw;
         }
 
-        if ( empty( $urls ) ) {
-            return;
-        }
-
-        // Al soggetto del sito, qualunque tipo abbia (anche Hotel o Restaurant).
-        if ( isset( $schemas[ $kg_index ] ) && ! empty( $schemas[ $kg_index ] ) ) {
-            $schemas[ $kg_index ]['sameAs'] = $urls;
-        }
+        return $urls;
     }
 
-    /**
-     * FAQ Schema — generates FAQPage markup from per-page FAQ data.
-     */
-    private function schema_faq( $post_id ) {
+    /** Le domande della scheda FAQ della pagina, come Question con la loro Answer. */
+    private function domande_faq( $post_id ) {
         $faq_items = get_post_meta( $post_id, '_olo_seo_faq', true );
         if ( ! is_array( $faq_items ) || empty( $faq_items ) ) {
-            return null;
+            return [];
         }
 
         $main_entity = [];
@@ -879,15 +1044,167 @@ class Olobuild_Seo_Head {
             ];
         }
 
-        if ( empty( $main_entity ) ) {
-            return null;
-        }
+        return $main_entity;
+    }
 
+    /* ═══════════════════════════════════════════════════
+     * Campi dei dati strutturati per tipo (novembre 2026)
+     * ═══════════════════════════════════════════════════
+     *
+     * Fonte UNICA dei campi della scheda Schema: il builder li riceve con la SEO della pagina (page-seo,
+     * `_schema_campi`) e il riquadro dell'editor di WordPress li disegna da qui. Si salvano tutti in un solo meta,
+     * `_olo_seo_schema_data`; le chiavi di prima non cambiano.
+     */
+
+    public static function campi_schema() {
+        $valute = [ 'EUR' => 'EUR €', 'USD' => 'USD $', 'GBP' => 'GBP £', 'CHF' => 'CHF' ];
+        $in_presenza = [ 'ev_mode' => [ '', 'offline', 'mixed' ] ];
         return [
-            '@context'   => 'https://schema.org',
-            '@type'      => 'FAQPage',
-            'mainEntity' => $main_entity,
+            'SoftwareApplication' => [
+                [ 'key' => 'app_category', 'label' => __( 'Categoria', 'olobuild' ), 'type' => 'select', 'default' => '', 'options' => [
+                    ''                       => __( '— Scegli —', 'olobuild' ),
+                    'BusinessApplication'    => __( 'Lavoro e gestione', 'olobuild' ),
+                    'DesignApplication'      => __( 'Grafica e siti', 'olobuild' ),
+                    'DeveloperApplication'   => __( 'Sviluppo', 'olobuild' ),
+                    'EducationalApplication' => __( 'Istruzione', 'olobuild' ),
+                    'MultimediaApplication'  => __( 'Foto, audio e video', 'olobuild' ),
+                    'UtilitiesApplication'   => __( 'Utilità', 'olobuild' ),
+                    'GameApplication'        => __( 'Giochi', 'olobuild' ),
+                    'LifestyleApplication'   => __( 'Tempo libero', 'olobuild' ),
+                ] ],
+                [ 'key' => 'app_os', 'label' => __( 'Funziona su', 'olobuild' ), 'type' => 'text', 'placeholder' => 'WordPress' ],
+                [ 'key' => 'app_version', 'label' => __( 'Versione', 'olobuild' ), 'type' => 'text', 'placeholder' => '1.0' ],
+                [ 'key' => 'app_price', 'label' => __( 'Prezzo', 'olobuild' ), 'type' => 'number', 'placeholder' => '0', 'aiuto' => __( 'Scrivi 0 se è gratis.', 'olobuild' ) ],
+                [ 'key' => 'app_currency', 'label' => __( 'Valuta', 'olobuild' ), 'type' => 'select', 'default' => 'EUR', 'options' => $valute ],
+            ],
+            'Event' => [
+                [ 'key' => 'ev_start', 'label' => __( 'Inizio', 'olobuild' ), 'type' => 'datetime' ],
+                [ 'key' => 'ev_end', 'label' => __( 'Fine', 'olobuild' ), 'type' => 'datetime', 'dopo' => 'ev_start' ],
+                [ 'key' => 'ev_mode', 'label' => __( 'Si segue', 'olobuild' ), 'type' => 'select', 'default' => 'offline', 'options' => [
+                    'offline' => __( 'In presenza', 'olobuild' ),
+                    'online'  => __( 'Online', 'olobuild' ),
+                    'mixed'   => __( 'In presenza e online', 'olobuild' ),
+                ] ],
+                [ 'key' => 'ev_place', 'label' => __( 'Luogo', 'olobuild' ), 'type' => 'text', 'placeholder' => __( 'Teatro Comunale', 'olobuild' ), 'mostra_se' => $in_presenza ],
+                [ 'key' => 'ev_address', 'label' => __( 'Indirizzo', 'olobuild' ), 'type' => 'text', 'placeholder' => __( 'Via Roma 1, Trento', 'olobuild' ), 'mostra_se' => $in_presenza ],
+                [ 'key' => 'ev_online_url', 'label' => __( 'Indirizzo online', 'olobuild' ), 'type' => 'url', 'placeholder' => 'https://', 'mostra_se' => [ 'ev_mode' => [ 'online', 'mixed' ] ] ],
+                [ 'key' => 'ev_status', 'label' => __( 'Stato', 'olobuild' ), 'type' => 'select', 'default' => 'scheduled', 'options' => [
+                    'scheduled'   => __( 'In programma', 'olobuild' ),
+                    'rescheduled' => __( 'Spostato a un’altra data', 'olobuild' ),
+                    'postponed'   => __( 'Rinviato, data da definire', 'olobuild' ),
+                    'movedonline' => __( 'Spostato online', 'olobuild' ),
+                    'cancelled'   => __( 'Annullato', 'olobuild' ),
+                ] ],
+                [ 'key' => 'ev_organizer', 'label' => __( 'Organizzatore', 'olobuild' ), 'type' => 'text', 'placeholder' => get_bloginfo( 'name' ) ],
+                [ 'key' => 'ev_price', 'label' => __( 'Prezzo del biglietto', 'olobuild' ), 'type' => 'number', 'placeholder' => '0', 'aiuto' => __( 'Scrivi 0 se l’ingresso è libero.', 'olobuild' ) ],
+                [ 'key' => 'ev_currency', 'label' => __( 'Valuta', 'olobuild' ), 'type' => 'select', 'default' => 'EUR', 'options' => $valute ],
+                [ 'key' => 'ev_tickets_url', 'label' => __( 'Dove si prenota', 'olobuild' ), 'type' => 'url', 'placeholder' => 'https://' ],
+            ],
         ];
+    }
+
+    /**
+     * Pulisce i dati della scheda Schema: solo le chiavi note, ognuna col suo formato. La fine di un evento prima
+     * dell'inizio si scarta (e si dice).
+     *
+     * @return array { dati: array, errori: string[] }
+     */
+    public static function sanitizza_dati_schema( $raw ) {
+        $dati   = [];
+        $errori = [];
+        if ( ! is_array( $raw ) ) {
+            return [ 'dati' => $dati, 'errori' => $errori ];
+        }
+        foreach ( self::campi_schema() as $campi ) {
+            foreach ( $campi as $c ) {
+                $k = $c['key'];
+                if ( ! isset( $raw[ $k ] ) || is_array( $raw[ $k ] ) ) {
+                    continue;
+                }
+                $v = trim( (string) $raw[ $k ] );
+                if ( '' === $v ) {
+                    continue;
+                }
+                switch ( $c['type'] ) {
+                    case 'select':
+                        if ( array_key_exists( $v, $c['options'] ) ) {
+                            $dati[ $k ] = $v;
+                        }
+                        break;
+                    case 'url':
+                        $u = esc_url_raw( $v );
+                        if ( $u ) {
+                            $dati[ $k ] = $u;
+                        }
+                        break;
+                    case 'number':
+                        $n = str_replace( ',', '.', $v );
+                        if ( is_numeric( $n ) && (float) $n >= 0 ) {
+                            $dati[ $k ] = (string) ( 0 + $n );
+                        } else {
+                            /* translators: %s: nome del campo */
+                            $errori[] = sprintf( __( '%s: serve un numero', 'olobuild' ), $c['label'] );
+                        }
+                        break;
+                    case 'datetime':
+                        if ( preg_match( '/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/', $v ) ) {
+                            $dati[ $k ] = $v;
+                        }
+                        break;
+                    default:
+                        $dati[ $k ] = sanitize_text_field( $v );
+                }
+            }
+        }
+        if ( ! empty( $dati['ev_start'] ) && ! empty( $dati['ev_end'] ) && $dati['ev_end'] < $dati['ev_start'] ) {
+            unset( $dati['ev_end'] );
+            $errori[] = __( 'La fine dell’evento non può venire prima dell’inizio', 'olobuild' );
+        }
+        return [ 'dati' => $dati, 'errori' => $errori ];
+    }
+
+    /**
+     * I controlli dei dati strutturati per l'analisi della pagina (Olobuild_Seo_Analisi).
+     *
+     * @return array[] { id, esito, testo, aiuto }
+     */
+    public static function controlla_dati_schema( $tipo, $dati ) {
+        $dati = is_array( $dati ) ? $dati : [];
+        $out  = [];
+        if ( 'Event' === $tipo ) {
+            $modo = $dati['ev_mode'] ?? 'offline';
+            if ( empty( $dati['ev_start'] ) ) {
+                $out[] = [ 'id' => 'schema-evento-data', 'esito' => 'errore', 'testo' => __( 'Evento senza data d’inizio', 'olobuild' ),
+                    'aiuto' => __( 'Senza la data Google non mostra la pagina fra gli eventi. Si scrive nella scheda Schema.', 'olobuild' ) ];
+            }
+            if ( 'online' !== $modo && empty( $dati['ev_place'] ) && empty( $dati['ev_address'] ) ) {
+                $out[] = [ 'id' => 'schema-evento-luogo', 'esito' => 'attenzione', 'testo' => __( 'Evento senza luogo', 'olobuild' ),
+                    'aiuto' => __( 'Scrivi il nome del luogo e l’indirizzo nella scheda Schema: senza, Google non sa dove si tiene.', 'olobuild' ) ];
+            }
+            if ( 'offline' !== $modo && empty( $dati['ev_online_url'] ) ) {
+                $out[] = [ 'id' => 'schema-evento-online', 'esito' => 'attenzione', 'testo' => __( 'Evento online senza indirizzo', 'olobuild' ) ];
+            }
+            if ( ! $out ) {
+                $out[] = [ 'id' => 'schema-evento', 'esito' => 'ok', 'testo' => __( 'Dati dell’evento completi', 'olobuild' ) ];
+            }
+        } elseif ( 'SoftwareApplication' === $tipo ) {
+            if ( ! isset( $dati['app_price'] ) || '' === $dati['app_price'] ) {
+                $out[] = [ 'id' => 'schema-software-prezzo', 'esito' => 'attenzione', 'testo' => __( 'Software senza prezzo', 'olobuild' ),
+                    'aiuto' => __( 'Scrivi il prezzo nella scheda Schema, 0 se è gratis: è il dato che motori e IA cercano per primo.', 'olobuild' ) ];
+            }
+            if ( empty( $dati['app_category'] ) ) {
+                $out[] = [ 'id' => 'schema-software-categoria', 'esito' => 'attenzione', 'testo' => __( 'Software senza categoria', 'olobuild' ) ];
+            }
+            if ( ! $out ) {
+                $out[] = [ 'id' => 'schema-software', 'esito' => 'ok', 'testo' => __( 'Dati del software completi', 'olobuild' ) ];
+            }
+        } elseif ( in_array( $tipo, [ 'HowTo', 'Recipe', 'Product', 'LocalBusiness' ], true ) ) {
+            $out[] = [ 'id' => 'schema-generico', 'esito' => 'info',
+                /* translators: %s: tipo di dati strutturati (Recipe, HowTo…) */
+                'testo' => sprintf( __( 'Dati strutturati %s con solo nome e descrizione', 'olobuild' ), $tipo ),
+                'aiuto' => __( 'Per questo tipo Olobuild scrive nome, descrizione e immagine. Gli altri dati (ingredienti, passi, prezzo) vanno nel JSON-LD personalizzato della scheda Schema.', 'olobuild' ) ];
+        }
+        return $out;
     }
 
     /* ═══════════════════════════════════════════════════
@@ -1155,185 +1472,6 @@ class Olobuild_Seo_Head {
         }
 
         return $output;
-    }
-
-    /* ═══════════════════════════════════════════════════
-     * REST API — Heading Structure Checker
-     * ═══════════════════════════════════════════════════ */
-
-    public function register_routes() {
-        register_rest_route( 'olobuild/v1', '/heading-check/(?P<id>\d+)', [
-            'methods'             => 'GET',
-            'callback'            => [ $this, 'check_heading_structure' ],
-            'permission_callback' => function () {
-                return current_user_can( 'edit_posts' );
-            },
-        ] );
-    }
-
-    public function check_heading_structure( $request ) {
-        $template_id = intval( $request['id'] );
-        $db          = new Olobuild_Database();
-        $template    = $db->get_template( $template_id );
-
-        if ( ! $template ) {
-            return new WP_Error( 'not_found', 'Template non trovato', [ 'status' => 404 ] );
-        }
-
-        $data = json_decode( $template->data, true );
-        if ( ! is_array( $data ) ) {
-            return rest_ensure_response( [ 'issues' => [], 'headings' => [] ] );
-        }
-
-        $headings = [];
-        $this->collect_headings( $data, $headings );
-
-        $issues = $this->analyze_heading_hierarchy( $headings );
-
-        return rest_ensure_response( [
-            'headings' => $headings,
-            'issues'   => $issues,
-            'score'    => empty( $issues ) ? 100 : max( 0, 100 - count( $issues ) * 15 ),
-        ] );
-    }
-
-    private function collect_headings( $nodes, &$headings ) {
-        if ( ! is_array( $nodes ) ) return;
-
-        foreach ( $nodes as $node ) {
-            if ( ! is_array( $node ) ) continue;
-
-            $type     = $node['type'] ?? '';
-            $settings = $node['settings'] ?? [];
-
-            if ( $type === 'headline' ) {
-                $tag   = $settings['tag'] ?? 'h2';
-                $text  = $settings['text'] ?? '';
-                $level = $this->heading_level( $tag );
-                if ( $level > 0 ) {
-                    $headings[] = [
-                        'tag'   => strtoupper( $tag ),
-                        'level' => $level,
-                        'text'  => wp_strip_all_tags( $text ) ?: '(vuoto)',
-                        'id'    => $node['id'] ?? '',
-                    ];
-                }
-            }
-
-            if ( $type === 'content' ) {
-                $content = $settings['content'] ?? '';
-                if ( preg_match_all( '/<(h[1-6])[^>]*>(.*?)<\/\1>/is', $content, $m ) ) {
-                    foreach ( $m[1] as $idx => $tag ) {
-                        $headings[] = [
-                            'tag'   => strtoupper( $tag ),
-                            'level' => $this->heading_level( $tag ),
-                            'text'  => wp_strip_all_tags( $m[2][ $idx ] ) ?: '(vuoto)',
-                            'id'    => $node['id'] ?? '',
-                        ];
-                    }
-                }
-            }
-
-            if ( $type === 'hero' ) {
-                $tag  = $settings['title_tag'] ?? 'h1';
-                $text = $settings['title'] ?? '';
-                $level = $this->heading_level( $tag );
-                if ( $level > 0 ) {
-                    $headings[] = [
-                        'tag'   => strtoupper( $tag ),
-                        'level' => $level,
-                        'text'  => wp_strip_all_tags( $text ) ?: '(vuoto)',
-                        'id'    => $node['id'] ?? '',
-                    ];
-                }
-            }
-
-            if ( ! empty( $node['children'] ) ) {
-                $this->collect_headings( $node['children'], $headings );
-            }
-        }
-    }
-
-    private function heading_level( $tag ) {
-        $tag = strtolower( trim( $tag ) );
-        if ( preg_match( '/^h([1-6])$/', $tag, $m ) ) {
-            return intval( $m[1] );
-        }
-        return 0;
-    }
-
-    private function analyze_heading_hierarchy( $headings ) {
-        $issues = [];
-
-        if ( empty( $headings ) ) {
-            $issues[] = [
-                'type'    => 'warning',
-                'message' => 'Nessun heading trovato nel template. Aggiungi almeno un H1.',
-                'id'      => '',
-            ];
-            return $issues;
-        }
-
-        $h1_count = 0;
-        foreach ( $headings as $h ) {
-            if ( $h['level'] === 1 ) $h1_count++;
-        }
-
-        if ( $h1_count === 0 ) {
-            $issues[] = [
-                'type'    => 'error',
-                'message' => 'Manca un tag H1. Ogni pagina dovrebbe avere esattamente un H1.',
-                'id'      => '',
-            ];
-        } elseif ( $h1_count > 1 ) {
-            $issues[] = [
-                'type'    => 'warning',
-                'message' => "Trovati {$h1_count} tag H1. Si consiglia un solo H1 per pagina.",
-                'id'      => '',
-            ];
-        }
-
-        $prev_level = 0;
-        foreach ( $headings as $h ) {
-            $level = $h['level'];
-            if ( $prev_level > 0 ) {
-                $gap = $level - $prev_level;
-                if ( $gap > 1 ) {
-                    $prev_tag = 'H' . $prev_level;
-                    $curr_tag = 'H' . $level;
-                    $missing  = 'H' . ( $prev_level + 1 );
-                    $issues[] = [
-                        'type'    => 'warning',
-                        'message' => "Salto nella gerarchia: {$prev_tag} → {$curr_tag}. Manca {$missing}.",
-                        'id'      => $h['id'],
-                    ];
-                }
-            }
-            $prev_level = $level;
-        }
-
-        foreach ( $headings as $h ) {
-            if ( $h['text'] === '(vuoto)' ) {
-                $issues[] = [
-                    'type'    => 'warning',
-                    'message' => "Heading {$h['tag']} vuoto. Aggiungi del testo.",
-                    'id'      => $h['id'],
-                ];
-            }
-        }
-
-        if ( ! empty( $headings ) ) {
-            $first = $headings[0];
-            if ( $first['level'] !== 1 ) {
-                $issues[] = [
-                    'type'    => 'info',
-                    'message' => "Il primo heading è {$first['tag']}. Si consiglia di iniziare con H1.",
-                    'id'      => $first['id'],
-                ];
-            }
-        }
-
-        return $issues;
     }
 
     /* ═══════════════════════════════════════════════════

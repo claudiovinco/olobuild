@@ -834,6 +834,8 @@ class Olobuild_Rest_Api {
             'schema_type'     => [ 'meta' => '_olo_seo_schema_type',    'type' => 'text' ],
             'extra_jsonld'    => [ 'meta' => '_olo_seo_extra_jsonld',   'type' => 'jsonld' ],
             'faq'             => [ 'meta' => '_olo_seo_faq',            'type' => 'faq' ],
+            // I campi del tipo scelto in schema_type (SoftwareApplication, Event): Olobuild_Seo_Head::campi_schema().
+            'schema_data'     => [ 'meta' => '_olo_seo_schema_data',    'type' => 'schema_data' ],
         ];
     }
 
@@ -849,6 +851,8 @@ class Olobuild_Rest_Api {
             switch ( $def['type'] ) {
                 case 'bool': $out[ $key ] = (bool) $val; break;
                 case 'faq':  $out[ $key ] = is_array( $val ) ? array_values( $val ) : []; break;
+                // Un oggetto anche vuoto: [] in JSON sarebbe un array per il builder.
+                case 'schema_data': $out[ $key ] = ( is_array( $val ) && $val ) ? $val : new stdClass(); break;
                 default:     $out[ $key ] = is_string( $val ) ? $val : ''; break;
             }
         }
@@ -859,6 +863,8 @@ class Olobuild_Rest_Api {
             'post_url'    => get_permalink( $post_id ),
             'site_host'   => wp_parse_url( home_url(), PHP_URL_HOST ),
         ];
+        // I campi della scheda Schema per tipo, dalla loro fonte unica (lo stesso elenco del riquadro di WordPress).
+        $out['_schema_campi'] = class_exists( 'Olobuild_Seo_Head' ) ? Olobuild_Seo_Head::campi_schema() : new stdClass();
         return rest_ensure_response( $out );
     }
 
@@ -926,6 +932,13 @@ class Olobuild_Rest_Api {
                             update_post_meta( $post_id, $def['meta'], wp_kses_post( $s_clean ) );
                         }
                     }
+                    break;
+                case 'schema_data':
+                    if ( ! class_exists( 'Olobuild_Seo_Head' ) ) break;
+                    $pulito = Olobuild_Seo_Head::sanitizza_dati_schema( is_array( $raw ) ? $raw : [] );
+                    if ( $pulito['dati'] ) update_post_meta( $post_id, $def['meta'], $pulito['dati'] );
+                    else                   delete_post_meta( $post_id, $def['meta'] );
+                    if ( $pulito['errori'] ) $errors[ $key ] = implode( ' · ', $pulito['errori'] );
                     break;
             }
         }

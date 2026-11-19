@@ -374,6 +374,8 @@
               :placeholder="t('Es. page builder wordpress')"
               class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900" />
           </div>
+
+          <SeoAnalisi :postId="seoPostId" :seo="seo.data.value" />
         </div>
 
         <!-- TAB: Social (OG + Twitter) -->
@@ -469,6 +471,28 @@
               @update:modelValue="seoUpdate('schema_type', $event)"
             />
           </div>
+          <!-- I campi del tipo scelto (SoftwareApplication, Event): dal PHP, gli stessi del riquadro di WordPress -->
+          <div v-for="c in seoCampiTipo" :key="c.key" class="psp-field">
+            <label v-if="c.type !== 'select'" :for="'psp-sd-' + c.key" class="psp-label">{{ c.label }}<InfoTip v-if="c.aiuto" class="psp-info" :testo="c.aiuto" :titolo="c.label" /></label>
+            <span v-else class="psp-label">{{ c.label }}<InfoTip v-if="c.aiuto" class="psp-info" :testo="c.aiuto" :titolo="c.label" /></span>
+            <FieldSelect
+              v-if="c.type === 'select'"
+              ui="dropdown"
+              :aria-label="c.label"
+              :modelValue="seoSchemaValore(c)"
+              :options="seoOpzioni(c)"
+              @update:modelValue="seoSchemaSet(c.key, $event)"
+            />
+            <input v-else :id="'psp-sd-' + c.key"
+              :type="SEO_TIPI_INPUT[c.type] || 'text'"
+              :value="seoSchemaValore(c)"
+              :placeholder="c.placeholder || ''"
+              :min="seoSchemaMin(c)"
+              :step="c.type === 'number' ? 'any' : undefined"
+              @input="seoSchemaSet(c.key, $event.target.value)"
+              class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900" />
+          </div>
+          <p v-if="seo.validationErrors.value.schema_data" class="psp-help psp-err">{{ seo.validationErrors.value.schema_data }}</p>
           <div class="psp-field">
             <label for="psp-jsonld" class="psp-label psp-label--split">
               <span>{{ t('JSON-LD personalizzato') }}<InfoTip class="psp-info" :testo="t('Iniettato come <script type=&quot;application/ld+json&quot;> nel <head>. Tag <script> facoltativi, vengono ripuliti server-side. JSON deve essere parsabile.')" :titolo="t('JSON-LD personalizzato')" /></span>
@@ -487,7 +511,7 @@
 
         <!-- TAB: FAQ schema -->
         <div v-else-if="seoTab === 'faq'" class="psp-stack">
-          <p class="psp-help">{{ t('Coppie domanda/risposta — genera markup FAQPage (rich results Google).') }}</p>
+          <span class="psp-label">{{ t('Domande e risposte') }}<InfoTip class="psp-info" :titolo="t('Domande e risposte')" :testo="t('Diventano dati strutturati di tipo FAQ, che motori e assistenti IA leggono. Google mostra le FAQ arricchite nei risultati solo per siti governativi e sanitari.')" /></span>
           <div v-for="(item, idx) in seo.data.value.faq" :key="idx" class="psp-card">
             <div class="psp-card-head">
               <span class="psp-label">{{ t('Domanda') }} {{ idx + 1 }}</span>
@@ -555,6 +579,7 @@ import CollapseSection from './CollapseSection.vue';
 import InfoTip from './InfoTip.vue';
 import { useMediaPicker } from '@/composables/useMediaPicker';
 import { usePageSeo } from '@/composables/usePageSeo';
+import SeoAnalisi from './SeoAnalisi.vue';
 import { useToast } from '@/composables/useToast';
 import { interoNelRange, risincronizzaNumero } from '@/utils/numeroIntero';
 import FieldSelect from './fields/FieldSelect.vue';
@@ -599,6 +624,7 @@ const schemaTypeOptions = [
   { value: 'FAQPage', label: 'FAQPage' },
   { value: 'HowTo', label: 'HowTo' },
   { value: 'Product', label: 'Product' },
+  { value: 'SoftwareApplication', label: 'SoftwareApplication' },
   { value: 'Event', label: 'Event' },
   { value: 'Recipe', label: 'Recipe' },
   { value: 'LocalBusiness', label: 'LocalBusiness' },
@@ -823,7 +849,7 @@ const seo = usePageSeo(seoPostId);
 // voci FAQ senza domanda o risposta: risposta 200 con errors) lo dice anche a gruppo
 // chiuso, dove l'errore sotto il campo non si vede. «Non salvato» è il POST fallito,
 // «Non caricato» il GET iniziale.
-const NOMI_CAMPI_SEO = { extra_jsonld: 'JSON-LD', faq: 'FAQ' };
+const NOMI_CAMPI_SEO = { extra_jsonld: 'JSON-LD', faq: 'FAQ', schema_data: 'Schema' };
 const seoScartati = computed(() =>
   Object.keys(seo.validationErrors.value || {}).map((k) => NOMI_CAMPI_SEO[k] || k)
 );
@@ -856,6 +882,37 @@ function seoRemoveFaq(idx) {
   const list = Array.isArray(seo.data.value.faq) ? [...seo.data.value.faq] : [];
   list.splice(idx, 1);
   seoUpdate('faq', list);
+}
+// ── Campi del tipo di dati strutturati (Olobuild_Seo_Head::campi_schema(), arrivano con la SEO della pagina) ──
+const SEO_TIPI_INPUT = { datetime: 'datetime-local', number: 'number', url: 'url' };
+function seoSchemaValore(c) {
+  const d = seo.data.value.schema_data || {};
+  const v = d[c.key];
+  return (v === undefined || v === null || v === '') ? (c.default ?? '') : String(v);
+}
+// «Si vede se»: { ev_mode: ['', 'offline', 'mixed'] } = il campo vale solo in quei casi ('' = il predefinito).
+function seoCampoVisibile(c) {
+  if (!c.mostra_se) return true;
+  return Object.keys(c.mostra_se).every((k) => {
+    const d = seo.data.value.schema_data || {};
+    return (c.mostra_se[k] || []).includes(d[k] === undefined ? '' : String(d[k]));
+  });
+}
+const seoCampiTipo = computed(() => {
+  const campi = (seo.campiSchema.value || {})[seo.data.value.schema_type] || [];
+  return campi.filter(seoCampoVisibile);
+});
+function seoOpzioni(c) {
+  return Object.entries(c.options || {}).map(([value, label]) => ({ value, label }));
+}
+// La fine non prima dell'inizio; i prezzi non sotto zero.
+function seoSchemaMin(c) {
+  if (c.type === 'number') return 0;
+  if (c.dopo) return seoSchemaValore({ key: c.dopo }) || undefined;
+  return undefined;
+}
+function seoSchemaSet(key, value) {
+  seoUpdate('schema_data', { ...(seo.data.value.schema_data || {}), [key]: value });
 }
 function seoPickOgImage() {
   openSingleImage(({ url }) => seoUpdate('og_image', url));

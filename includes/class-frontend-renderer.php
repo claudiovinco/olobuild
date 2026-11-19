@@ -56,6 +56,45 @@ class Olobuild_Frontend_Renderer {
      */
     private $lazy_contatore = 0;
 
+    /**
+     * Vero mentre si rende la PRIMA sezione del template (render_shortcode()): le sue tile nascono tutte subito,
+     * non solo le prime 3. Nell'apertura di un tema le prime 3 erano bollino, pulsante e occhiello, e l'H1 restava
+     * in un <template> fino al JavaScript: pagina senza titolo per chi non lo esegue, e titolo in ritardo per tutti.
+     *
+     * @var bool
+     */
+    private $sezione_in_cima = false;
+
+    /**
+     * Chi visita è un motore di ricerca o delle IA (Googlebot, Bingbot, GPTBot, ClaudeBot, PerplexityBot…, e gli
+     * assistenti che aprono una pagina per chi chiede: ChatGPT-User, Claude-User, Perplexity-User). Gli si dà la
+     * pagina intera, senza tile pigre: lo stesso HTML, già aperto. Le IA non eseguono JavaScript, e dentro un
+     * <template> non leggevano niente (19 nov 2026: sulla home del sottosito 173 parole su 1.337).
+     * ⚠️ Gemello in includes/cache/advanced-cache.php (la cache tiene per loro una copia a parte): stessa regex.
+     */
+    const MOTORI = '/bot|crawl|spider|slurp|facebookexternalhit|-User\b|anthropic-ai|cohere-ai|Google-InspectionTool|GoogleOther|meta-externalagent|Diffbot/i';
+
+    /**
+     * La visita è di un motore (MOTORI)? Il filtro «olobuild_pagina_intera» decide in ultimo.
+     *
+     * @return bool
+     */
+    public static function pagina_intera() {
+        static $esito = null;
+        if ( null === $esito ) {
+            $ua    = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
+            $esito = (bool) apply_filters( 'olobuild_pagina_intera', '' !== $ua && (bool) preg_match( self::MOTORI, $ua ), $ua );
+        }
+        return $esito;
+    }
+
+    /** Segna l'inizio e la fine della prima sezione del template (render_shortcode()). */
+    public function sezione_in_cima( $si ) {
+        $prima                 = $this->sezione_in_cima;
+        $this->sezione_in_cima = (bool) $si;
+        return $prima;
+    }
+
     /** @var Olobuild_CSS_Builder */
     private $css;
 
@@ -733,6 +772,9 @@ class Olobuild_Frontend_Renderer {
         // Builder mode: no lazy loading (iframe needs all tiles visible)
         if ( $this->builder_mode ) return $html;
 
+        // Motori di ricerca e delle IA: la pagina intera, senza <template> (pagina_intera()).
+        if ( self::pagina_intera() ) return $html;
+
         // Types that must NOT be lazy-loaded (interactive, form-based, map, or relying
         // on inline scripts that won't re-run when cloned from <template>).
         static $no_lazy = [
@@ -815,9 +857,9 @@ class Olobuild_Frontend_Renderer {
             return $html;
         }
 
-        // Le prime 3 tile del template nascono subito (sopra la piega).
+        // Le tile della prima sezione e comunque le prime 3 del template nascono subito (sopra la piega).
         $this->lazy_contatore++;
-        if ( $this->lazy_contatore <= 3 ) {
+        if ( $this->sezione_in_cima || $this->lazy_contatore <= 3 ) {
             return $html;
         }
 

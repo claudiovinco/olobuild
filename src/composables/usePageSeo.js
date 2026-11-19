@@ -23,11 +23,15 @@ const DEFAULT_DATA = {
   schema_type: '',
   extra_jsonld: '',
   faq: [],
+  // I campi del tipo scelto in schema_type (SoftwareApplication, Event): un oggetto { chiave: valore }.
+  schema_data: {},
 };
 
 export function usePageSeo(postIdRef) {
   const data = ref({ ...DEFAULT_DATA });
   const defaults = ref({ site_name: '', post_title: '', post_url: '', site_host: '' });
+  // I campi della scheda Schema per tipo, dal PHP (Olobuild_Seo_Head::campi_schema(), fonte unica).
+  const campiSchema = ref({});
   const loading = ref(false);
   const saving = ref(false);
   // Vero per qualche secondo dopo un salvataggio andato a buon fine PER INTERO: la SEO
@@ -75,6 +79,7 @@ export function usePageSeo(postIdRef) {
       suppressWatch = true;
       data.value = mergeWithDefaults(j);
       defaults.value = j._defaults || defaults.value;
+      campiSchema.value = (j._schema_campi && typeof j._schema_campi === 'object') ? j._schema_campi : {};
       // Allow new state to settle before re-enabling auto-save.
       setTimeout(() => { suppressWatch = false; }, 50);
     } catch (e) {
@@ -91,6 +96,7 @@ export function usePageSeo(postIdRef) {
       if (srv && Object.prototype.hasOwnProperty.call(srv, k)) out[k] = srv[k];
     });
     if (!Array.isArray(out.faq)) out.faq = [];
+    if (!out.schema_data || typeof out.schema_data !== 'object' || Array.isArray(out.schema_data)) out.schema_data = {};
     return out;
   }
 
@@ -156,6 +162,7 @@ export function usePageSeo(postIdRef) {
   return {
     data,
     defaults,
+    campiSchema,
     loading,
     saving,
     saved,

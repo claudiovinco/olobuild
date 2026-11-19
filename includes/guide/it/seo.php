@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<ol>
 		<li><a href="#dove">Dove si imposta</a></li>
 		<li><a href="#titolo">Titolo e descrizione</a></li>
+		<li><a href="#analisi">Analisi della pagina</a></li>
 		<li><a href="#social">Anteprima sui social</a></li>
 		<li><a href="#robots">Indicizzazione e canonical</a></li>
 		<li><a href="#schema">Dati strutturati</a></li>
@@ -36,7 +37,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 <h2 id="titolo">2. Titolo e descrizione</h2>
 <p><span class="ui">SEO Title</span> è il titolo che compare nella scheda del browser e nei risultati di ricerca. Il contatore indica 60 caratteri, la lunghezza che Google mostra per intero. Se lo lasci vuoto vale lo schema della scheda SEO globale: di serie il titolo della pagina, il separatore e il nome del sito.</p>
 <p><span class="ui">Meta Description</span> è il testo sotto il titolo nei risultati, con un contatore di 160 caratteri. Se manca, Olobuild usa le prime 30 parole del riassunto della pagina, poi la descrizione predefinita della scheda SEO globale e, in mancanza anche di quella, lo slogan del sito.</p>
-<p><span class="ui">Focus keyword</span> è la parola chiave principale della pagina. Nel riquadro dell'editor di WordPress Olobuild controlla se compare nel titolo SEO, nella descrizione, nell'indirizzo e nel primo paragrafo.</p>
+<p><span class="ui">Focus keyword</span> è la parola chiave principale della pagina, cioè le parole che userebbe chi la cerca. L'analisi della pagina controlla dove compare.</p>
+
+<h2 id="analisi">Analisi della pagina</h2>
+<p>Sotto la Focus keyword, nella scheda Base, <span class="ui">Analisi della pagina</span> legge la pagina come la vedono Google e gli assistenti IA: il testo delle tile, i titoli, le immagini e i link. Testata e piè di pagina restano fuori. Le modifiche contano subito, anche prima di salvare; il pulsante con la freccia rifà l'analisi.</p>
+<ul>
+	<li><strong>Da correggere</strong>: ciò che toglie la pagina dai risultati o la lascia senza titolo principale, come il noindex acceso, tutto il sito nascosto ai motori, nessun titolo H1.</li>
+	<li><strong>Da migliorare</strong>: titolo o descrizione troppo lunghi o corti, più di un H1, titoli che saltano un livello (da H2 a H4), poco testo, immagini senza testo alternativo, nessun link verso le altre pagine del sito, la parola chiave assente dai punti che contano o già usata da un'altra pagina.</li>
+	<li><strong>Superati</strong> e <strong>Titoli della pagina</strong> si aprono con un clic: il secondo è l'indice dei titoli H1–H6, con quelli da sistemare segnati.</li>
+</ul>
+<p>La (i) accanto a ogni voce spiega come rimediare. L'analisi non conta quante volte ripeti la parola chiave: Google non lo guarda più, conta che la pagina parli davvero di quello. Nel riquadro <span class="ui">Olobuild SEO</span> dell'editor di WordPress c'è la stessa analisi, sulla pagina salvata.</p>
 
 <h2 id="social">3. Anteprima sui social</h2>
 <p>Quando qualcuno condivide la pagina su Facebook, LinkedIn, WhatsApp o X, l'anteprima nasce dai dati Open Graph. Li trovi nella scheda Social.</p>
@@ -60,8 +70,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<li>sulle altre pagine il percorso di navigazione (breadcrumb)</li>
 	<li>sugli articoli il tipo Articolo, sulle pagine il tipo Pagina, sui prodotti WooCommerce il tipo Prodotto</li>
 </ul>
-<p>Nella scheda FAQ, <span class="ui">Aggiungi FAQ</span> raccoglie domande e risposte che diventano dati di tipo FAQ. La tile Accordion ha lo stesso interruttore, <span class="ui">Schema FAQ (SEO)</span>, e la tile Mappa può descrivere il luogo con <span class="ui">Schema.org JSON-LD (SEO)</span>.</p>
-<div class="nota"><p>Scegliere un tipo in <span class="ui">Schema.org type</span>, per esempio Event o Recipe, produce solo nome, indirizzo, date e descrizione. Per i risultati arricchiti di Google servono più dati: scrivili in <span class="ui">JSON-LD personalizzato</span>, che Olobuild controlla prima di pubblicarlo.</p></div>
+<p>Tutti questi dati escono come un solo grafo, collegati fra loro: la pagina fa parte del sito, l'articolo è il contenuto della pagina, sito e articolo sono pubblicati da chi pubblica il sito. È così che motori e IA riconoscono chi sei.</p>
+<p>Nella scheda FAQ, <span class="ui">Aggiungi FAQ</span> raccoglie domande e risposte che diventano dati di tipo FAQ, letti da motori e assistenti IA. Google mostra le FAQ arricchite nei risultati solo per siti governativi e sanitari. La tile Accordion ha lo stesso interruttore, <span class="ui">Schema FAQ (SEO)</span>, e la tile Mappa può descrivere il luogo con <span class="ui">Schema.org JSON-LD (SEO)</span>.</p>
+<p>In <span class="ui">Schema.org type</span> due tipi hanno i loro campi, che compaiono sotto la scelta:</p>
+<ul>
+	<li><strong>Event</strong>, per un concerto, uno spettacolo o un corso: inizio e fine, in presenza o online, luogo e indirizzo, stato (in programma, spostato, annullato), organizzatore, prezzo del biglietto e dove si prenota.</li>
+	<li><strong>SoftwareApplication</strong>, per un programma o un'app: categoria, su cosa funziona, versione e prezzo, 0 se è gratis.</li>
+</ul>
+<p>L'analisi della pagina segnala i campi che mancano, come un evento senza data d'inizio.</p>
+<div class="nota"><p>Gli altri tipi, per esempio Recipe o HowTo, producono solo nome, descrizione e immagine. Per i dati che servono ai risultati arricchiti di Google, scrivili in <span class="ui">JSON-LD personalizzato</span>, che Olobuild controlla prima di pubblicarlo.</p></div>
 
 <h2 id="redirect">6. Redirect e 404</h2>
 <p>Quando una pagina cambia indirizzo, un redirect porta chi arriva dal vecchio link alla pagina nuova. La gestione sta in <span class="ui">Sistema</span> › <span class="ui">Configurazione</span> › <span class="ui">SEO &amp; Privacy</span> › <span class="ui">Redirect &amp; 404</span>, e la bacheca segnala gli indirizzi in 404 ancora senza redirect.</p>

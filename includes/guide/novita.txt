@@ -3,6 +3,21 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.1260 - 2026-11-19 (La pagina intera per Google e le IA)
+- Ai motori di ricerca e a quelli delle IA (Google, Bing, ChatGPT, Claude, Perplexity e gli altri) la pagina arriva intera. Prima le tile dopo le prime tre arrivavano dentro un contenitore che solo il JavaScript apre, e chi non lo esegue, cioè quasi tutti i motori delle IA, leggeva poco o niente: sulla home di OLObuild 173 parole su 1.337, senza il titolo principale. Per chi visita il sito non cambia niente, il contenuto lontano si monta ancora quando ci si arriva.
+- Le tile della prima sezione nascono tutte subito, non solo le prime tre: nell'apertura dei temi il titolo grande arrivava dopo il JavaScript, ora c'è da subito e la pagina si vede prima.
+- La cache di pagina tiene una copia a parte per i motori, così le persone ricevono sempre la loro.
+- Sezioni con il movimento Canali: il numero e il nome del canale non finiscono più sotto una testata sticky o fissa.
+
+## v1.4.1259 - 2026-11-19 (L'analisi SEO legge le tile)
+- Impostazioni pagina › SEO › Base: sotto la Focus keyword c'è l'Analisi della pagina. Legge la pagina come la vedono Google e gli assistenti IA, cioè il testo delle tile, i titoli H1–H6, le immagini e i link, e dice cosa è da correggere e cosa da migliorare, con la (i) che spiega come rimediare. Conta anche ciò che non hai ancora salvato. Si aprono l'elenco dei controlli superati e l'indice dei titoli della pagina, con quelli che saltano un livello segnati.
+- Controlli nuovi al posto della densità della parola chiave e delle 300 parole, che Google non usa: noindex acceso o tutto il sito nascosto ai motori, un solo H1, titoli senza salti, immagini senza testo alternativo, link verso le altre pagine del sito, la parola chiave nel titolo, nella descrizione, nell'indirizzo, nell'H1 e all'inizio del testo, la stessa parola chiave o lo stesso titolo già usati da un'altra pagina.
+- Il riquadro Olobuild SEO dell'editor di WordPress fa la stessa analisi sulla pagina salvata. Prima leggeva il testo dell'editor classico, vuoto nelle pagine fatte col builder e nell'editor a blocchi.
+- Scheda Schema: Event ha i suoi campi (inizio e fine, in presenza o online, luogo, stato, organizzatore, biglietto) e c'è il tipo nuovo SoftwareApplication (categoria, su cosa funziona, versione, prezzo). L'analisi segnala quelli che mancano.
+- I dati strutturati escono come un solo grafo collegato: la pagina fa parte del sito, l'articolo è il contenuto della pagina, sito e articolo sono pubblicati da chi pubblica il sito.
+- Salvare una pagina dall'editor di WordPress non cancella più il JSON-LD personalizzato scritto nel builder.
+- La scheda FAQ non promette più le FAQ arricchite di Google, che Google mostra solo per siti governativi e sanitari.
+
 ## v1.4.1256 - 2026-11-19 (Il passaggio fra le sezioni)
 - Sezione → Stile: il gruppo che si chiamava «Sticky» ora si chiama «Passaggio fra le sezioni», e il campo «Effetto sticky» si chiama «Movimento». Dentro ci sono Cover, Reveal, i gruppi orizzontali col percorso, la Ruota, la Pagina, i Canali e l'Ascensore. Le sezioni già fatte non cambiano.
 - Temi Lanterna e Torre: i testi parlano a te, non più a «voi».

@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <ul>
 	<li><strong>Solo il necessario.</strong> Fogli di stile e script di Olobuild si caricano solo nelle pagine fatte con Olobuild, e gli script di una tile, per esempio quelli della mappa, solo se la tile è nella pagina.</li>
 	<li><strong>Caratteri dal tuo server.</strong> I Google Fonts usati dal sito vengono scaricati una volta e serviti dal sito, senza chiamate a Google a ogni visita. Se lo scaricamento non riesce, la pagina usa i caratteri di sistema.</li>
-	<li><strong>Contenuto a richiesta.</strong> Dalla quarta tile in poi il contenuto viene montato quando sta per entrare nello schermo. Le prime 3 tile, i form, le mappe e i menu sono sempre pronti.</li>
+	<li><strong>Contenuto a richiesta.</strong> Dopo la prima sezione il contenuto viene montato quando sta per entrare nello schermo. Le tile della prima sezione, comunque le prime 3, i form, le mappe e i menu sono sempre pronti. Ai motori di ricerca e a quelli delle IA la pagina arriva intera: molti non eseguono JavaScript e il contenuto a richiesta non lo vedrebbero.</li>
 	<li><strong>Immagini pigre.</strong> Le immagini si caricano quando stanno per diventare visibili.</li>
 	<li><strong>Video leggeri.</strong> La tile Video, con <span class="ui">Lazy Load (Facade)</span> attivo come di serie, mostra la copertina e carica il lettore di YouTube o Vimeo solo al clic.</li>
 	<li><strong>Animazioni senza peso.</strong> Le animazioni d'ingresso partono quando l'elemento entra nello schermo. Chi ha chiesto al sistema operativo di ridurre il movimento vede gli elementi subito, senza animazione.</li>

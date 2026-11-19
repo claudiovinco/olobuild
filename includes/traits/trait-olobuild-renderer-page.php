@@ -667,12 +667,18 @@ trait Olobuild_Renderer_Page_Trait {
                 // dopo (un Template Embed è un template annidato dentro un altro).
                 $lazy_prima = $this->lazy_contatore;
                 $this->lazy_contatore = 0;
+                // Le tile della prima sezione di una pagina nascono tutte subito (maybe_lazy_wrap()): è l'apertura,
+                // col titolo H1. Non in testata, piè di pagina, popup e widget, che hanno le loro regole.
+                $in_cima_prima = $this->sezione_in_cima( false );
+                $apertura      = empty( $is_widget ) && ! in_array( $template['type'] ?? 'page', [ 'header', 'footer', 'popup', 'widget', 'megapanel' ], true );
                 foreach ( $tiles as $section ) {
                     Olobuild_Tile_Utils::arma_lcp( $lcp && $prima_sezione );
+                    $this->sezione_in_cima( $apertura && $prima_sezione );
                     echo $this->render_node( $section, $manager, $id, $hover_css_rules, $tile_counter ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- section/row/tile HTML assembled by render_node(); escaping is performed by the node renderers and each tile's render()
                     Olobuild_Tile_Utils::arma_lcp( false );
                     $prima_sezione = false;
                 }
+                $this->sezione_in_cima( $in_cima_prima );
                 $this->lazy_contatore = $lazy_prima;
                 ?>
             </div>
@@ -941,8 +947,17 @@ trait Olobuild_Renderer_Page_Trait {
                             function figlio(padre,tag,classe){var e=document.createElement(tag);e.className=classe;padre.appendChild(e);return e;}
                             if(impilati){
                                 group.classList.add('olo-h-'+passo);
-                                var hdrO=document.querySelector('.olo-site-header.olo-header-overlay');
-                                group.style.setProperty('--olo-h-testata',(hdrO?hdrO.offsetHeight:0)+'px');
+                                /* Quanto della cima della finestra copre la testata (per l'etichetta dei Canali): quella sopra il
+                                   contenuto (overlay), ma anche quella sticky o fissa, che resta lì mentre il gruppo scorre. Prima
+                                   contava solo l'overlay: con una testata sticky il numero e il nome del canale finivano sotto (19 nov 2026). */
+                                var hdrO=document.querySelector('.olo-site-header'),copre=0;
+                                if(hdrO){
+                                    var csH=getComputedStyle(hdrO);
+                                    if(hdrO.classList.contains('olo-header-overlay')){copre=hdrO.offsetHeight;}
+                                    else if(csH.position==='fixed'){copre=Math.max(0,hdrO.getBoundingClientRect().bottom);}
+                                    else if(csH.position==='sticky'){copre=(parseFloat(csH.top)||0)+hdrO.offsetHeight;}
+                                }
+                                group.style.setProperty('--olo-h-testata',Math.round(copre)+'px');
                                 var coloreP=sections[0].marker.dataset.hColore;
                                 if(coloreP){group.style.setProperty('--olo-h-colore',coloreP);}
                                 if(canali){

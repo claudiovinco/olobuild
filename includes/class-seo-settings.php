@@ -1120,6 +1120,17 @@ class Olobuild_Seo_Settings {
             .olo-seo-checks .pass .dashicons { color: #00a32a; }
             .olo-seo-checks .warn .dashicons { color: #dba617; }
             .olo-seo-checks .fail .dashicons { color: #d63638; }
+            .olo-seo-checks .info .dashicons { color: #2271b1; }
+            .olo-seo-checks .olo-seo-riga { flex: 1 1 auto; min-width: 0; }
+            .olo-seo-aiuto { display: block; color: #646970; font-size: 12px; margin-top: 2px; }
+            .olo-seo-titoli { margin-top: 12px; font-size: 13px; }
+            .olo-seo-titoli summary { cursor: pointer; font-weight: 600; }
+            .olo-seo-titoli ul { margin: 8px 0 0; }
+            .olo-seo-titoli li { margin: 0 0 4px; }
+            .olo-seo-titoli code { font-size: 11px; margin-right: 6px; }
+            .olo-seo-titoli .problema { color: #b45309; font-size: 12px; margin-left: 6px; }
+            .olo-seo-schema-campi { border-left: 3px solid #e1474f; padding-left: 12px; margin: 0 0 16px; }
+            .olo-seo-schema-campi input, .olo-seo-schema-campi select { width: 100%; max-width: 420px; }
 
             .olo-seo-social-preview { background: #f0f2f5; border-radius: 8px; overflow: hidden; max-width: 500px; margin-bottom: 16px; border: 1px solid #ddd; }
             .olo-seo-social-preview-img { width: 100%; height: 200px; background: #e4e6eb; display: flex; align-items: center; justify-content: center; color: #999; font-size: 13px; background-size: cover; background-position: center; }
@@ -1256,7 +1267,7 @@ class Olobuild_Seo_Settings {
 
                 <div class="olo-seo-field">
                     <label>Schema Type</label>
-                    <select name="olo_seo_schema_type">
+                    <select name="olo_seo_schema_type" id="olo-seo-schema-type">
                         <option value="" <?php selected( $seo_schema, '' ); ?>>Automatico (predefinito)</option>
                         <option value="Article" <?php selected( $seo_schema, 'Article' ); ?>>Article</option>
                         <option value="BlogPosting" <?php selected( $seo_schema, 'BlogPosting' ); ?>>BlogPosting</option>
@@ -1265,6 +1276,7 @@ class Olobuild_Seo_Settings {
                         <option value="FAQPage" <?php selected( $seo_schema, 'FAQPage' ); ?>>FAQPage</option>
                         <option value="HowTo" <?php selected( $seo_schema, 'HowTo' ); ?>>HowTo</option>
                         <option value="Product" <?php selected( $seo_schema, 'Product' ); ?>>Product</option>
+                        <option value="SoftwareApplication" <?php selected( $seo_schema, 'SoftwareApplication' ); ?>>SoftwareApplication</option>
                         <option value="Event" <?php selected( $seo_schema, 'Event' ); ?>>Event</option>
                         <option value="Recipe" <?php selected( $seo_schema, 'Recipe' ); ?>>Recipe</option>
                         <option value="LocalBusiness" <?php selected( $seo_schema, 'LocalBusiness' ); ?>>LocalBusiness</option>
@@ -1272,10 +1284,45 @@ class Olobuild_Seo_Settings {
                     </select>
                 </div>
 
+                <?php
+                // I campi del tipo scelto (SoftwareApplication, Event), dalla fonte unica Olobuild_Seo_Head::campi_schema():
+                // gli stessi della scheda Schema del builder. Si inviano solo quelli del tipo scelto.
+                $campi_schema = class_exists( 'Olobuild_Seo_Head' ) ? Olobuild_Seo_Head::campi_schema() : [];
+                $dati_schema  = get_post_meta( $post->ID, '_olo_seo_schema_data', true );
+                $dati_schema  = is_array( $dati_schema ) ? $dati_schema : [];
+                $tipi_input   = [ 'datetime' => 'datetime-local', 'number' => 'number', 'url' => 'url' ];
+                foreach ( $campi_schema as $tipo_schema => $campi ) :
+                    $attivo = ( $seo_schema === $tipo_schema );
+                    ?>
+                    <div class="olo-seo-schema-campi" data-tipo="<?php echo esc_attr( $tipo_schema ); ?>"<?php echo $attivo ? '' : ' hidden'; ?>>
+                        <?php foreach ( $campi as $c ) :
+                            $id_campo = 'olo-seo-sd-' . $c['key'];
+                            $valore   = (string) ( $dati_schema[ $c['key'] ] ?? ( $c['default'] ?? '' ) );
+                            $nome     = 'olo_seo_schema_data[' . $c['key'] . ']';
+                            ?>
+                            <div class="olo-seo-field"<?php if ( ! empty( $c['mostra_se'] ) ) : ?> data-mostra-se="<?php echo esc_attr( wp_json_encode( $c['mostra_se'] ) ); ?>"<?php endif; ?>>
+                                <label for="<?php echo esc_attr( $id_campo ); ?>"><?php echo esc_html( $c['label'] ); ?></label>
+                                <?php if ( 'select' === $c['type'] ) : ?>
+                                    <select id="<?php echo esc_attr( $id_campo ); ?>" name="<?php echo esc_attr( $nome ); ?>" data-chiave="<?php echo esc_attr( $c['key'] ); ?>"<?php disabled( ! $attivo ); ?>>
+                                        <?php foreach ( $c['options'] as $v => $l ) : ?>
+                                            <option value="<?php echo esc_attr( $v ); ?>" <?php selected( $valore, (string) $v ); ?>><?php echo esc_html( $l ); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                <?php else : ?>
+                                    <input type="<?php echo esc_attr( $tipi_input[ $c['type'] ] ?? 'text' ); ?>" id="<?php echo esc_attr( $id_campo ); ?>" name="<?php echo esc_attr( $nome ); ?>" value="<?php echo esc_attr( $valore ); ?>" placeholder="<?php echo esc_attr( $c['placeholder'] ?? '' ); ?>" data-chiave="<?php echo esc_attr( $c['key'] ); ?>"<?php if ( 'number' === $c['type'] ) : ?> min="0" step="any"<?php endif; ?><?php if ( ! empty( $c['dopo'] ) ) : ?> data-dopo="<?php echo esc_attr( $c['dopo'] ); ?>"<?php endif; ?><?php disabled( ! $attivo ); ?>>
+                                <?php endif; ?>
+                                <?php if ( ! empty( $c['aiuto'] ) ) : ?>
+                                    <p class="description"><?php echo esc_html( $c['aiuto'] ); ?></p>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endforeach; ?>
+
                 <!-- FAQ Schema Builder -->
                 <div class="olo-seo-field">
                     <label>FAQ Schema (domande e risposte)</label>
-                    <p class="description" style="margin-top:0;">Aggiungi coppie domanda/risposta per generare markup FAQPage. Ottiene rich results su Google.</p>
+                    <p class="description" style="margin-top:0;">Domande e risposte che diventano dati strutturati di tipo FAQ, letti da motori e assistenti IA. Google mostra le FAQ arricchite nei risultati solo per siti governativi e sanitari.</p>
                     <div id="olo-seo-faq-list">
                         <?php
                         $faq_items = get_post_meta( $post->ID, '_olo_seo_faq', true );
@@ -1376,147 +1423,148 @@ class Olobuild_Seo_Settings {
                 runAnalysis();
             }
 
+            /* Analisi della pagina: la fa il server sulla pagina resa dal PHP (Olobuild_Seo_Analisi), la stessa del
+               builder. Prima si leggeva il contenuto dell'editor classico, vuoto nelle pagine fatte col builder e
+               nell'editor a blocchi. Si mandano i campi SEO di questo riquadro anche se non ancora salvati. */
+            var oloAnalisi = {
+                url: <?php echo wp_json_encode( rest_url( 'olobuild/v1/seo/analisi' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON for inline script generated by wp_json_encode() ?>,
+                nonce: <?php echo wp_json_encode( wp_create_nonce( 'wp_rest' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON for inline script generated by wp_json_encode() ?>,
+                postId: <?php echo (int) $post->ID; ?>,
+                testi: <?php echo wp_json_encode( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON for inline script generated by wp_json_encode()
+                    'correggere' => __( 'da correggere', 'olobuild' ),
+                    'migliorare' => __( 'da migliorare', 'olobuild' ),
+                    'posto'      => __( 'Tutto a posto', 'olobuild' ),
+                    'superati'   => __( 'superati', 'olobuild' ),
+                    'analisi'    => __( 'Analisi della pagina…', 'olobuild' ),
+                    'fallita'    => __( 'Analisi non riuscita', 'olobuild' ),
+                    'salvata'    => __( 'Si analizza la pagina salvata: dopo aver cambiato il contenuto, aggiorna la pagina.', 'olobuild' ),
+                    'titoli'     => __( 'Titoli della pagina', 'olobuild' ),
+                    'salto'      => __( 'salta un livello', 'olobuild' ),
+                    'vuoto'      => __( 'vuoto', 'olobuild' ),
+                    'nessuno'    => __( 'Nessun titolo nella pagina.', 'olobuild' ),
+                ] ); ?>,
+                timer: null,
+                richiesta: 0
+            };
+            function oloSeoEsc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+            function oloSeoCampo(nome) {
+                var el = document.querySelector('.olo-seo-metabox [name="' + nome + '"]');
+                if (!el) return '';
+                return el.type === 'checkbox' ? el.checked : el.value;
+            }
+            function oloSeoDatiSchema() {
+                var out = {};
+                document.querySelectorAll('.olo-seo-metabox [name^="olo_seo_schema_data["]').forEach(function (el) {
+                    if (!el.disabled) out[el.name.slice(20, -1)] = el.value;
+                });
+                return out;
+            }
+
             function runAnalysis() {
-                var kw = (keywordInput.value || '').trim().toLowerCase();
-                var container = document.getElementById('olo-seo-checklist');
-                if (!kw) {
-                    container.innerHTML = '';
-                    document.getElementById('olo-seo-keyword-analysis').innerHTML = '';
-                    return;
-                }
-
-                var title = (titleInput.value || defaultTitle).toLowerCase();
-                var desc  = (descInput.value || defaultDesc).toLowerCase();
-                var url   = <?php echo wp_json_encode( strtolower( $display_url ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON for inline script generated by wp_json_encode() ?>;
-
-                var checks = [];
-                // Focus keyword in title
-                checks.push({
-                    pass: title.indexOf(kw) !== -1,
-                    msg: title.indexOf(kw) !== -1
-                        ? 'Focus keyword presente nel titolo SEO'
-                        : 'Focus keyword non trovata nel titolo SEO'
-                });
-                // Focus keyword in description
-                checks.push({
-                    pass: desc.indexOf(kw) !== -1,
-                    msg: desc.indexOf(kw) !== -1
-                        ? 'Focus keyword presente nella meta description'
-                        : 'Focus keyword non trovata nella meta description'
-                });
-                // Focus keyword in URL
-                var kwSlug = kw.replace(/\s+/g, '-');
-                checks.push({
-                    pass: url.indexOf(kw) !== -1 || url.indexOf(kwSlug) !== -1,
-                    msg: url.indexOf(kw) !== -1 || url.indexOf(kwSlug) !== -1
-                        ? 'Focus keyword presente nell\'URL'
-                        : 'Focus keyword non trovata nell\'URL'
-                });
-                // Title length
-                var tl = (titleInput.value || defaultTitle).length;
-                checks.push({
-                    pass: tl >= 30 && tl <= 60,
-                    warn: tl > 0 && (tl < 30 || tl > 60),
-                    msg: tl >= 30 && tl <= 60
-                        ? 'Lunghezza titolo ottimale (' + tl + ' caratteri)'
-                        : 'Lunghezza titolo: ' + tl + ' caratteri (ideale: 30-60)'
-                });
-                // Description length
-                var dl = (descInput.value || '').length;
-                checks.push({
-                    pass: dl >= 120 && dl <= 160,
-                    warn: dl > 0 && (dl < 120 || dl > 160),
-                    msg: dl >= 120 && dl <= 160
-                        ? 'Lunghezza description ottimale (' + dl + ' caratteri)'
-                        : dl === 0 ? 'Meta description mancante' : 'Lunghezza description: ' + dl + ' caratteri (ideale: 120-160)'
-                });
-
-                // Content analysis — grab from WP editor
-                var contentEl = document.getElementById('content');
-                var contentText = '';
-                if (contentEl) {
-                    contentText = contentEl.value || '';
-                }
-                // Also try TinyMCE
-                if (typeof tinymce !== 'undefined') {
-                    var editor = tinymce.get('content');
-                    if (editor) {
-                        contentText = editor.getContent({format: 'text'}) || contentText;
+                clearTimeout(oloAnalisi.timer);
+                oloAnalisi.timer = setTimeout(eseguiAnalisi, 700);
+            }
+            function eseguiAnalisi() {
+                var n = ++oloAnalisi.richiesta;
+                var lista = document.getElementById('olo-seo-checklist');
+                if (!lista.innerHTML) lista.innerHTML = '<p class="description">' + oloSeoEsc(oloAnalisi.testi.analisi) + '</p>';
+                var corpo = {
+                    post_id: oloAnalisi.postId,
+                    seo: {
+                        title: titleInput.value,
+                        description: descInput.value,
+                        focus_keyword: keywordInput.value,
+                        noindex: !!oloSeoCampo('olo_seo_noindex'),
+                        canonical: oloSeoCampo('olo_seo_canonical'),
+                        og_image: oloSeoCampo('olo_seo_og_image'),
+                        schema_type: oloSeoCampo('olo_seo_schema_type'),
+                        schema_data: oloSeoDatiSchema()
                     }
-                }
-
-                if (contentText.length > 0) {
-                    var wordCount = contentText.trim().split(/\s+/).filter(function(w){ return w.length > 0; }).length;
-
-                    // Word count check
-                    checks.push({
-                        pass: wordCount >= 300,
-                        warn: wordCount >= 100 && wordCount < 300,
-                        msg: wordCount >= 300
-                            ? 'Lunghezza contenuto buona (' + wordCount + ' parole)'
-                            : 'Contenuto breve: ' + wordCount + ' parole (consigliato: 300+)'
-                    });
-
-                    // Keyword density
-                    var kwLower = kw.toLowerCase();
-                    var contentLower = contentText.toLowerCase();
-                    var kwCount = 0;
-                    var idx = 0;
-                    while ((idx = contentLower.indexOf(kwLower, idx)) !== -1) {
-                        kwCount++;
-                        idx += kwLower.length;
-                    }
-                    var density = wordCount > 0 ? ((kwCount / wordCount) * 100).toFixed(1) : 0;
-                    checks.push({
-                        pass: density >= 0.5 && density <= 2.5,
-                        warn: (density > 0 && density < 0.5) || density > 2.5,
-                        msg: kwCount > 0
-                            ? 'Keyword density: ' + density + '% (' + kwCount + ' occorrenze)'
-                            : 'Focus keyword non trovata nel contenuto'
-                    });
-
-                    // Keyword in first paragraph
-                    var firstPara = contentText.substring(0, 200).toLowerCase();
-                    checks.push({
-                        pass: firstPara.indexOf(kwLower) !== -1,
-                        msg: firstPara.indexOf(kwLower) !== -1
-                            ? 'Focus keyword presente nel primo paragrafo'
-                            : 'Focus keyword assente dal primo paragrafo'
-                    });
-
-                    // Readability: average sentence length
-                    var sentences = contentText.split(/[.!?]+/).filter(function(s){ return s.trim().length > 10; });
-                    if (sentences.length > 0) {
-                        var avgWords = wordCount / sentences.length;
-                        checks.push({
-                            pass: avgWords <= 20,
-                            warn: avgWords > 20 && avgWords <= 25,
-                            msg: avgWords <= 20
-                                ? 'Leggibilita buona (media ' + Math.round(avgWords) + ' parole/frase)'
-                                : 'Frasi lunghe: media ' + Math.round(avgWords) + ' parole/frase (ideale: max 20)'
-                        });
-                    }
-                }
-
-                var passCount = checks.filter(function(c){ return c.pass; }).length;
-                var total = checks.length;
-                var scoreClass = passCount >= 4 ? 'good' : (passCount >= 2 ? 'ok' : 'bad');
-                var scoreLabel = passCount >= 4 ? 'Buono' : (passCount >= 2 ? 'Migliorabile' : 'Da migliorare');
-
+                };
+                fetch(oloAnalisi.url, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': oloAnalisi.nonce },
+                    body: JSON.stringify(corpo)
+                }).then(function (r) {
+                    return r.json().then(function (j) { return { ok: r.ok, j: j }; });
+                }).then(function (res) {
+                    if (n !== oloAnalisi.richiesta) return;
+                    if (!res.ok) throw new Error((res.j && res.j.message) || 'HTTP');
+                    disegnaAnalisi(res.j);
+                }).catch(function (e) {
+                    if (n !== oloAnalisi.richiesta) return;
+                    lista.innerHTML = '<p class="description">' + oloSeoEsc(oloAnalisi.testi.fallita + ': ' + (e && e.message ? e.message : e)) + '</p>';
+                });
+            }
+            function disegnaAnalisi(a) {
+                var T = oloAnalisi.testi;
+                var r = a.riepilogo || {};
+                var pezzi = [];
+                if (r.errore) pezzi.push(r.errore + ' ' + T.correggere);
+                if (r.attenzione) pezzi.push(r.attenzione + ' ' + T.migliorare);
+                if (!pezzi.length) pezzi.push(T.posto);
+                var cls = r.errore ? 'bad' : (r.attenzione ? 'ok' : 'good');
                 document.getElementById('olo-seo-keyword-analysis').innerHTML =
-                    '<span class="olo-seo-keyword-score ' + scoreClass + '">' +
-                    '<strong>' + passCount + '/' + total + '</strong> ' + scoreLabel +
-                    '</span>';
+                    '<span class="olo-seo-keyword-score ' + cls + '">' + oloSeoEsc(pezzi.join(' · ')) + '</span>' +
+                    ' <span class="description">' + oloSeoEsc((r.ok || 0) + ' ' + T.superati) + '</span>';
 
-                var html = '<ul class="olo-seo-checks">';
-                checks.forEach(function(c){
-                    var cls = c.pass ? 'pass' : (c.warn ? 'warn' : 'fail');
-                    var icon = c.pass ? 'yes-alt' : (c.warn ? 'warning' : 'dismiss');
-                    html += '<li class="' + cls + '"><span class="dashicons dashicons-' + icon + '"></span>' + c.msg + '</li>';
+                var ordine = { errore: 0, attenzione: 1, info: 2, ok: 3 };
+                var classi = { errore: 'fail', attenzione: 'warn', info: 'info', ok: 'pass' };
+                var icone = { errore: 'dismiss', attenzione: 'warning', info: 'info-outline', ok: 'yes-alt' };
+                var controlli = (a.controlli || []).slice().sort(function (x, y) { return ordine[x.esito] - ordine[y.esito]; });
+                var html = '<p class="description">' + oloSeoEsc(T.salvata) + '</p><ul class="olo-seo-checks">';
+                controlli.forEach(function (c) {
+                    html += '<li class="' + classi[c.esito] + '"><span class="dashicons dashicons-' + icone[c.esito] + '"></span><span class="olo-seo-riga">' + oloSeoEsc(c.testo) +
+                        (c.aiuto && c.esito !== 'ok' ? '<span class="olo-seo-aiuto">' + oloSeoEsc(c.aiuto) + '</span>' : '') + '</span></li>';
                 });
                 html += '</ul>';
-                container.innerHTML = html;
+
+                var titoli = a.titoli || [];
+                html += '<details class="olo-seo-titoli"><summary>' + oloSeoEsc(T.titoli + ' (' + titoli.length + ')') + '</summary>';
+                if (!titoli.length) {
+                    html += '<p class="description">' + oloSeoEsc(T.nessuno) + '</p>';
+                } else {
+                    html += '<ul>';
+                    titoli.forEach(function (t) {
+                        html += '<li style="padding-left:' + ((t.livello - 1) * 14) + 'px"><code>H' + t.livello + '</code>' + oloSeoEsc(t.testo || '—') +
+                            (t.problema ? '<span class="problema">' + oloSeoEsc(T[t.problema] || t.problema) + '</span>' : '') + '</li>';
+                    });
+                    html += '</ul>';
+                }
+                html += '</details>';
+                document.getElementById('olo-seo-checklist').innerHTML = html;
             }
+
+            /* Campi del tipo di dati strutturati: si vedono e si inviano solo quelli del tipo scelto. */
+            var tipoSchema = document.getElementById('olo-seo-schema-type');
+            function aggiornaCampiSchema() {
+                var tipo = tipoSchema ? tipoSchema.value : '';
+                document.querySelectorAll('.olo-seo-schema-campi').forEach(function (g) {
+                    var attivo = g.dataset.tipo === tipo;
+                    g.hidden = !attivo;
+                    g.querySelectorAll('input, select').forEach(function (el) { el.disabled = !attivo; });
+                    g.querySelectorAll('[data-mostra-se]').forEach(function (f) {
+                        var cond = {};
+                        try { cond = JSON.parse(f.dataset.mostraSe) || {}; } catch (e) {}
+                        var visibile = Object.keys(cond).every(function (k) {
+                            var el = g.querySelector('[data-chiave="' + k + '"]');
+                            return cond[k].indexOf(el ? el.value : '') !== -1;
+                        });
+                        f.style.display = visibile ? '' : 'none';
+                    });
+                    // La fine non prima dell'inizio.
+                    g.querySelectorAll('[data-dopo]').forEach(function (el) {
+                        var da = g.querySelector('[data-chiave="' + el.dataset.dopo + '"]');
+                        el.min = da ? da.value : '';
+                    });
+                });
+            }
+            if (tipoSchema) tipoSchema.addEventListener('change', function () { aggiornaCampiSchema(); runAnalysis(); });
+            document.querySelectorAll('.olo-seo-schema-campi input, .olo-seo-schema-campi select, .olo-seo-metabox [name="olo_seo_noindex"], .olo-seo-metabox [name="olo_seo_canonical"], .olo-seo-metabox [name="olo_seo_og_image"]').forEach(function (el) {
+                el.addEventListener('change', function () { aggiornaCampiSchema(); runAnalysis(); });
+            });
+            aggiornaCampiSchema();
 
             titleInput.addEventListener('input', updatePreview);
             descInput.addEventListener('input', updatePreview);
@@ -1608,13 +1656,36 @@ class Olobuild_Seo_Settings {
             }
         }
 
-        // JSON-LD custom — textarea, sanitizzato preservando struttura JSON.
-        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- valore unslashato qui e sanitizzato sotto con wp_kses_post() (preserva la struttura JSON-LD) prima di update_post_meta; nonce verificato sopra.
-        $extra = isset( $_POST['olo_seo_extra_jsonld'] ) ? wp_unslash( $_POST['olo_seo_extra_jsonld'] ) : '';
-        if ( is_string( $extra ) && trim( $extra ) !== '' ) {
-            update_post_meta( $post_id, '_olo_seo_extra_jsonld', wp_kses_post( $extra ) );
-        } else {
-            delete_post_meta( $post_id, '_olo_seo_extra_jsonld' );
+        // JSON-LD personalizzato: il riquadro non ha il campo (sta nella scheda Schema del builder). Si tocca solo
+        // se arriva: prima salvare la pagina dall'editor di WordPress cancellava quello scritto nel builder.
+        if ( isset( $_POST['olo_seo_extra_jsonld'] ) ) {
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- valore unslashato qui e sanitizzato sotto con wp_kses_post() (preserva la struttura JSON-LD) prima di update_post_meta; nonce verificato sopra.
+            $extra = wp_unslash( $_POST['olo_seo_extra_jsonld'] );
+            if ( is_string( $extra ) && trim( $extra ) !== '' ) {
+                update_post_meta( $post_id, '_olo_seo_extra_jsonld', wp_kses_post( $extra ) );
+            } else {
+                delete_post_meta( $post_id, '_olo_seo_extra_jsonld' );
+            }
+        }
+
+        // I campi del tipo di dati strutturati scelto (Olobuild_Seo_Head::campi_schema()): arrivano solo quelli del
+        // tipo scelto e si cambiano solo quelli; i campi degli altri tipi restano com'erano.
+        $tipo_schema  = sanitize_text_field( wp_unslash( $_POST['olo_seo_schema_type'] ?? '' ) );
+        $campi_schema = class_exists( 'Olobuild_Seo_Head' ) ? Olobuild_Seo_Head::campi_schema() : [];
+        if ( isset( $campi_schema[ $tipo_schema ] ) ) {
+            $dati = get_post_meta( $post_id, '_olo_seo_schema_data', true );
+            $dati = is_array( $dati ) ? $dati : [];
+            foreach ( $campi_schema[ $tipo_schema ] as $c ) {
+                unset( $dati[ $c['key'] ] );
+            }
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- array grezzo: ogni chiave nota è sanitizzata col suo formato in Olobuild_Seo_Head::sanitizza_dati_schema(); nonce verificato sopra.
+            $inviati = ( isset( $_POST['olo_seo_schema_data'] ) && is_array( $_POST['olo_seo_schema_data'] ) ) ? wp_unslash( $_POST['olo_seo_schema_data'] ) : [];
+            $pulito  = Olobuild_Seo_Head::sanitizza_dati_schema( array_merge( $dati, $inviati ) );
+            if ( $pulito['dati'] ) {
+                update_post_meta( $post_id, '_olo_seo_schema_data', $pulito['dati'] );
+            } else {
+                delete_post_meta( $post_id, '_olo_seo_schema_data' );
+            }
         }
 
         // FAQ Schema data — nonce verificato sopra ('olo_seo_meta_box') + current_user_can edit_post.

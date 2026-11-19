@@ -157,7 +157,13 @@ if ( ! defined( 'WP_CONTENT_DIR' ) ) {
     $ultimo = $valori ? strtolower( trim( rawurldecode( (string) end( $valori ) ) ) ) : '';
     $lang   = preg_match( '/^[a-z]{2}$/', $ultimo ) ? $ultimo : '';
 
-    $key  = md5( $cfg['salt'] . '|' . $scheme . '://' . $host . $path_only . '|' . $device . '|' . $lang );
+    // Variante per i motori di ricerca e delle IA: a loro OLObuild dà la pagina intera, senza tile pigre in
+    // <template> (Olobuild_Frontend_Renderer::pagina_intera(), stessa regex di MOTORI: tenerle uguali). Una copia a
+    // parte, così le persone non ricevono quella dei motori e i motori non ricevono quella delle persone. Le chiavi
+    // delle persone restano quelle di prima.
+    $motore = preg_match( '/bot|crawl|spider|slurp|facebookexternalhit|-User\b|anthropic-ai|cohere-ai|Google-InspectionTool|GoogleOther|meta-externalagent|Diffbot/i', $srv( 'HTTP_USER_AGENT' ) ) ? '|motore' : '';
+
+    $key  = md5( $cfg['salt'] . '|' . $scheme . '://' . $host . $path_only . '|' . $device . '|' . $lang . $motore );
     $file = $dir . $key . '.html';
 
     // --- HIT: file presente e non scaduto => servi ed esci, niente WordPress. ---
