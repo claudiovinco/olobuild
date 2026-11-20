@@ -46,6 +46,10 @@ class Olobuild_Seo_Redirects {
         add_action( 'wp_after_insert_post', [ $this, 'indexnow_dopo_salvataggio' ], 20, 2 );
         add_action( 'olo_template_saved', [ $this, 'indexnow_template' ], 20, 2 );
 
+        // Un contenuto pubblicato che cambia indirizzo lascia un redirect 301 dal vecchio (1.4.1265). WordPress lo fa
+        // da sé solo per gli articoli (_wp_old_slug), non per le pagine né per chi cambia la pagina madre.
+        add_action( 'post_updated', [ $this, 'redirect_se_cambia_indirizzo' ], 20, 3 );
+
         // Admin styles
         add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_assets' ] );
     }
@@ -285,6 +289,65 @@ class Olobuild_Seo_Redirects {
     /* ═══════════════════════════════════════════════════
      * IndexNow
      * ═══════════════════════════════════════════════════ */
+
+    /** Acceso in Impostazioni › SEO (di serie sì). */
+    public static function redirect_automatico() {
+        $adv = get_option( 'olobuild_seo_advanced', [] );
+        return ! is_array( $adv ) || ! array_key_exists( 'redirect_auto', $adv ) || ! empty( $adv['redirect_auto'] );
+    }
+
+    /** Il percorso di un indirizzo del sito, senza la cartella del sito: come lo salva la tabella dei redirect. */
+    private function percorso_di( $url ) {
+        $path = (string) wp_parse_url( $url, PHP_URL_PATH );
+        $home = (string) wp_parse_url( home_url(), PHP_URL_PATH );
+        if ( $home && 0 === strpos( $path, $home ) ) {
+            $path = substr( $path, strlen( $home ) );
+        }
+        return '/' . ltrim( $path, '/' );
+    }
+
+    /**
+     * Prima e dopo il salvataggio: se il contenuto era e resta pubblicato e il suo indirizzo è cambiato, il vecchio
+     * porta al nuovo. I redirect che portavano al vecchio indirizzo ora portano al nuovo (niente catene), e quelli
+     * che partono dal nuovo indirizzo spariscono (niente giri a vuoto se torni al nome di prima).
+     */
+    public function redirect_se_cambia_indirizzo( $post_id, $dopo, $prima ) {
+        if ( ! self::redirect_automatico() || wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) {
+            return;
+        }
+        if ( 'publish' !== $prima->post_status || 'publish' !== $dopo->post_status || ! is_post_type_viewable( $dopo->post_type ) || 'attachment' === $dopo->post_type ) {
+            return;
+        }
+        if ( $prima->post_name === $dopo->post_name && (int) $prima->post_parent === (int) $dopo->post_parent ) {
+            return;
+        }
+        if ( (int) get_option( 'page_on_front' ) === (int) $post_id ) {
+            return; // la home sta sempre all'indirizzo del sito
+        }
+        $vecchio = $this->percorso_di( get_permalink( $prima ) );
+        $nuovo   = $this->percorso_di( get_permalink( $dopo ) );
+        if ( '/' === $vecchio || $vecchio === $nuovo ) {
+            return;
+        }
+        $this->maybe_create_tables();
+        global $wpdb;
+        $t = $this->table_redirects();
+        $varianti = function ( $p ) {
+            $senza = rtrim( $p, '/' );
+            return [ $senza, $senza . '/' ];
+        };
+        list( $n1, $n2 ) = $varianti( $nuovo );
+        list( $v1, $v2 ) = $varianti( $vecchio );
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella del plugin; solo il nome tabella (da $wpdb->prefix) è interpolato, i valori passano da prepare
+        $wpdb->query( $wpdb->prepare( "DELETE FROM $t WHERE from_url IN (%s, %s)", $n1, $n2 ) );
+        $wpdb->query( $wpdb->prepare( "UPDATE $t SET to_url = %s WHERE to_url IN (%s, %s)", $nuovo, $v1, $v2 ) );
+        $wpdb->query( "DELETE FROM $t WHERE from_url = to_url" );
+        $esiste = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $t WHERE from_url IN (%s, %s)", $v1, $v2 ) );
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+        if ( ! $esiste ) {
+            $wpdb->insert( $t, [ 'from_url' => $vecchio, 'to_url' => $nuovo, 'type' => 301, 'hits' => 0, 'created_at' => current_time( 'mysql' ) ] ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- tabella del plugin
+        }
+    }
 
     /** La chiave salvata, se valida (8-128 caratteri: lettere, cifre, trattini). */
     public static function chiave_indexnow() {

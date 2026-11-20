@@ -380,7 +380,8 @@ export default {
     { key: 'search_tile_id', label: t('Tile ricerca (opzionale)'), type: 'select', optionsSource: 'searchTiles' },
 
     { type: 'separator', label: t('Lingua') },
-    { key: 'lang_tile_id', label: t('Tile selettore lingua (opzionale)'), type: 'select', optionsSource: 'langTiles' },
+    { key: 'lang_tile_id', label: t('Selettore nella barra'), type: 'select', optionsSource: 'langTiles',
+      description: t('Metti nella testata una tile Selettore lingua e sceglila qui: compare nella barra del menu e nel menu del telefono, e sparisce dal punto in cui l’hai messa.') },
 
     { type: 'separator', label: t('Social — Account') },
     { key: 'social_facebook', label: t('Facebook URL'), type: 'link' },

@@ -1980,6 +1980,11 @@ class Olobuild_Frontend_Renderer {
 
         $tiles = $this->maybe_migrate_content( $tiles );
 
+        // Le tile richiamate da un'altra (il Selettore lingua o la Ricerca nella barra del Mega Menu) si trovano solo
+        // se il registro le conosce: render_shortcode() lo riempie, l'anteprima del builder passa da qui e non lo
+        // faceva, così il selettore restava sotto la testata invece di entrare nella barra (1.4.1271).
+        self::index_tiles( $tiles );
+
         $content_max_width = intval( $page_settings['content_max_width'] ?? 1200 );
 
         $this->breakpoints = wp_parse_args( $page_settings['breakpoints'] ?? [], self::SOGLIE_DISPOSITIVI );

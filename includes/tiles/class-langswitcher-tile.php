@@ -85,6 +85,14 @@ class Olobuild_LangSwitcher_Tile extends Olobuild_Tile_Base {
             if ( count( $languages ) < 2 ) {
                 return '';
             }
+            // Ogni lingua col suo nome («English», «Deutsch»): chi non legge l'italiano deve riconoscere la sua
+            // (1.4.1271, con OLOlang 3.27.18; prima «Inglese», «Tedesco»).
+            if ( method_exists( 'Olo_Lang_Language', 'native_name' ) ) {
+                foreach ( $languages as &$l ) {
+                    $l['name'] = Olo_Lang_Language::native_name( $l );
+                }
+                unset( $l );
+            }
             $current = Olo_Lang_Language::detect_current_lang();
         }
         $style   = sanitize_key( $s['style'] );

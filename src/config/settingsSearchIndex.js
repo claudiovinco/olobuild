@@ -378,83 +378,193 @@ export const SETTINGS_FIELD_INDEX = {
 	"seo": [
 		{
 			"kind": "section",
-			"label": "Default site-wide",
-			"hint": "Usati quando una pagina non ha meta-tag specifici."
+			"label": "La SEO in dieci passi",
+			"hint": ""
+		},
+		{
+			"kind": "section",
+			"label": "Il sito si vede sui motori",
+			"hint": "Mentre costruisci il sito puoi tenerlo nascosto. Quando è pronto, aprilo."
 		},
 		{
 			"kind": "field",
-			"label": "Title pattern",
-			"hint": "Schema del title delle pagine. Variabili: {page}, {sep}, {site}.",
-			"section": "Default site-wide"
+			"label": "Visibile ai motori",
+			"hint": "Spento, il sito chiede a Google e agli altri motori di non mostrarlo. È la stessa scelta di Impostazioni › Lettura di WordPress.",
+			"section": "Il sito si vede sui motori"
+		},
+		{
+			"kind": "section",
+			"label": "Chi pubblica il sito",
+			"hint": "Chi sei, dove sei e come ti si trova. Google e le intelligenze artificiali lo leggono in ogni pagina e collegano il sito a te."
+		},
+		{
+			"kind": "field",
+			"label": "Chi sei",
+			"hint": "",
+			"section": "Chi pubblica il sito"
+		},
+		{
+			"kind": "field",
+			"label": "Nome",
+			"hint": "Come ti chiamano le persone. Se resta vuoto, il nome del sito.",
+			"section": "Chi pubblica il sito"
+		},
+		{
+			"kind": "field",
+			"label": "Logo",
+			"hint": "Quadrato o orizzontale, largo almeno 112 px, su fondo chiaro.",
+			"section": "Chi pubblica il sito"
+		},
+		{
+			"kind": "field",
+			"label": "Telefono ed email",
+			"hint": "I contatti che vuoi mostrare. Il telefono col prefisso internazionale: +39 …",
+			"section": "Chi pubblica il sito"
+		},
+		{
+			"kind": "field",
+			"label": "Indirizzo",
+			"hint": "Comincia a scrivere la via: scegli l'indirizzo giusto fra quelli proposti e CAP, città e posizione sulla mappa si compilano da soli.",
+			"section": "Chi pubblica il sito"
+		},
+		{
+			"kind": "field",
+			"label": "Orari",
+			"hint": "Quando la sede è aperta. Lascia vuoti i giorni di chiusura.",
+			"section": "Chi pubblica il sito"
+		},
+		{
+			"kind": "field",
+			"label": "Posizione sulla mappa",
+			"hint": "Si compila da sola quando scegli l'indirizzo. Se il punto non è giusto, su Google Maps fai clic destro sul punto e incolla qui i due numeri.",
+			"section": "Chi pubblica il sito"
+		},
+		{
+			"kind": "field",
+			"label": "Fascia di prezzo",
+			"hint": "Quanto si spende, da € a €€€€.",
+			"section": "Chi pubblica il sito"
+		},
+		{
+			"kind": "field",
+			"label": "Profili",
+			"hint": "L'indirizzo intero di ogni profilo. Servono a dire che il sito e i profili sono della stessa persona o attività.",
+			"section": "Chi pubblica il sito"
+		},
+		{
+			"kind": "field",
+			"label": "Altri profili",
+			"hint": "Uno per riga: la pagina di Wikipedia, Wikidata, un albo professionale, una guida. Più legami, più i motori sono sicuri di chi sei.",
+			"section": "Chi pubblica il sito"
+		},
+		{
+			"kind": "field",
+			"label": "Come ti vedono",
+			"hint": "Quello che Google e le intelligenze artificiali leggono di te in ogni pagina del sito.",
+			"section": "Chi pubblica il sito"
+		},
+		{
+			"kind": "section",
+			"label": "Come appare su Google",
+			"hint": "Il titolo e la descrizione che compaiono nei risultati della ricerca, quando una pagina non ne ha di suoi."
+		},
+		{
+			"kind": "field",
+			"label": "Schema del titolo",
+			"hint": "{page} è il titolo della pagina, {sep} il separatore, {site} il nome del sito. La home usa il nome del sito e il motto.",
+			"section": "Come appare su Google"
 		},
 		{
 			"kind": "field",
 			"label": "Separatore",
-			"hint": "Carattere che separa i blocchi nel title.",
-			"section": "Default site-wide"
+			"hint": "Il segno fra il titolo della pagina e il nome del sito.",
+			"section": "Come appare su Google"
 		},
 		{
 			"kind": "field",
-			"label": "Meta description default",
-			"hint": "Massimo 160 caratteri. Usato come fallback quando la pagina non ne ha una propria.",
-			"section": "Default site-wide"
+			"label": "Descrizione del sito",
+			"hint": "Due frasi su chi sei e cosa offri, fino a 160 caratteri. Vale per la home e per le pagine senza una descrizione loro.",
+			"section": "Come appare su Google"
 		},
 		{
 			"kind": "field",
-			"label": "Robots default",
-			"hint": "È la stessa scelta di Impostazioni › Lettura di WordPress. Le pagine si escludono una per una dall'editor.",
-			"section": "Default site-wide"
+			"label": "Anteprima della home",
+			"hint": "Così la home compare fra i risultati di Google.",
+			"section": "Come appare su Google"
 		},
 		{
 			"kind": "section",
-			"label": "Open Graph & Twitter Card",
-			"hint": "Come appare il sito quando viene condiviso su social e messaggistica."
-		},
-		{
-			"kind": "field",
-			"label": "Immagine OG default",
-			"hint": "1200×630 consigliato. Usata quando la pagina non ne ha una propria.",
-			"section": "Open Graph & Twitter Card"
+			"label": "Come appare quando lo condividi",
+			"hint": "L'immagine e il titolo che compaiono quando qualcuno manda un link del sito su WhatsApp, Facebook, LinkedIn o X."
 		},
 		{
 			"kind": "field",
 			"label": "Immagine disegnata",
-			"hint": "Per ogni contenuto senza un'immagine sua: il titolo, il nome del sito e la foto in evidenza, nel colore e nel carattere del sito.",
-			"section": "Open Graph & Twitter Card"
+			"hint": "Per ogni pagina senza un'immagine sua: il titolo, il nome del sito e la foto in evidenza, nel colore e nel carattere del sito.",
+			"section": "Come appare quando lo condividi"
 		},
 		{
 			"kind": "field",
-			"label": "Twitter handle",
-			"hint": "Username Twitter del sito (con @).",
-			"section": "Open Graph & Twitter Card"
+			"label": "Immagine di riserva",
+			"hint": "1200 × 630 px. Esce quando una pagina non ha un'immagine sua e l'immagine disegnata è spenta.",
+			"section": "Come appare quando lo condividi"
 		},
 		{
 			"kind": "field",
-			"label": "Card type",
-			"hint": "Formato della preview su Twitter.",
-			"section": "Open Graph & Twitter Card"
+			"label": "Formato su X",
+			"hint": "Grande: l'immagine occupa tutta la larghezza. Piccola: un quadratino accanto al titolo.",
+			"section": "Come appare quando lo condividi"
 		},
 		{
 			"kind": "section",
-			"label": "Sitemap & schema.org",
-			"hint": ""
+			"label": "Cosa leggono i motori",
+			"hint": "La mappa del sito che i motori leggono, e le parti che non vale la pena mostrare."
 		},
 		{
 			"kind": "field",
-			"label": "Sitemap XML",
-			"hint": "La sitemap di WordPress, senza le pagine in noindex.",
-			"section": "Sitemap & schema.org"
+			"label": "Sitemap",
+			"hint": "L'elenco di tutte le pagine da mostrare, aggiornato da solo. Le pagine escluse non ci sono.",
+			"section": "Cosa leggono i motori"
 		},
 		{
 			"kind": "field",
-			"label": "Tipo organizzazione",
-			"hint": "Schema.org markup iniettato in ogni pagina.",
-			"section": "Sitemap & schema.org"
+			"label": "Tipi di contenuto",
+			"hint": "Spegni un tipo per toglierlo dai motori con tutte le sue schede, per esempio un tipo che serve solo dentro altre pagine.",
+			"section": "Cosa leggono i motori"
+		},
+		{
+			"kind": "field",
+			"label": "Archivi",
+			"hint": "Le pagine che WordPress crea da sé per raccogliere i contenuti. Accese, i motori le mostrano.",
+			"section": "Cosa leggono i motori"
+		},
+		{
+			"kind": "field",
+			"label": "Righe in più nel robots.txt",
+			"hint": "Solo se sai cosa scrivere: le righe vanno in cima al file che dice ai robot cosa leggere.",
+			"section": "Cosa leggono i motori"
+		},
+		{
+			"kind": "section",
+			"label": "Le intelligenze artificiali",
+			"hint": "ChatGPT, Claude, Perplexity e gli altri leggono i siti per rispondere a chi chiede. Qui scegli chi può farlo e gli prepari un riassunto."
+		},
+		{
+			"kind": "field",
+			"label": "Chi può leggere il sito",
+			"hint": "«Solo per rispondere» lascia entrare le IA quando cercano una risposta e tiene fuori chi copia i siti per addestrare i modelli.",
+			"section": "Le intelligenze artificiali"
+		},
+		{
+			"kind": "field",
+			"label": "Riassunto per le IA",
+			"hint": "Il file llms.txt: chi sei, i contatti e le pagine del sito con la loro descrizione, scritti in modo che un'IA li legga in un colpo.",
+			"section": "Le intelligenze artificiali"
 		},
 		{
 			"kind": "section",
 			"label": "Verifica dei motori",
-			"hint": ""
+			"hint": "Dimostri a Google e a Bing che il sito è tuo. Da lì vedi con quali ricerche arrivano le persone e cosa non va."
 		},
 		{
 			"kind": "field",
@@ -467,6 +577,45 @@ export const SETTINGS_FIELD_INDEX = {
 			"label": "Bing Webmaster Tools",
 			"hint": "Vale anche per Copilot. In Bing Webmaster Tools scegli la verifica col meta tag; puoi anche importare il sito dalla Search Console.",
 			"section": "Verifica dei motori"
+		},
+		{
+			"kind": "section",
+			"label": "Avvisa i motori quando cambi qualcosa",
+			"hint": "Con IndexNow, ogni volta che pubblichi o aggiorni una pagina, Bing, Yandex e gli altri motori aderenti lo sanno subito. Google legge la sitemap."
+		},
+		{
+			"kind": "field",
+			"label": "Chiave IndexNow",
+			"hint": "Premi «Genera»: la chiave è solo tua e non va registrata da nessuna parte.",
+			"section": "Avvisa i motori quando cambi qualcosa"
+		},
+		{
+			"kind": "field",
+			"label": "File della chiave",
+			"hint": "OLObuild lo pubblica da sé. Dopo aver salvato, aprilo: deve mostrare la chiave.",
+			"section": "Avvisa i motori quando cambi qualcosa"
+		},
+		{
+			"kind": "section",
+			"label": "Pagina per pagina",
+			"hint": "Ogni pagina del sito col titolo e la descrizione che escono su Google. Apri una riga per scriverli; per l'analisi del testo apri la pagina nel builder."
+		},
+		{
+			"kind": "section",
+			"label": "Indirizzi cambiati e pagine non trovate",
+			"hint": "Quando una pagina cambia indirizzo, chi arriva dal vecchio deve trovarla lo stesso: le persone e i motori."
+		},
+		{
+			"kind": "field",
+			"label": "Redirect automatico",
+			"hint": "Se cambi l'indirizzo di una pagina pubblicata, il vecchio porta al nuovo da solo.",
+			"section": "Indirizzi cambiati e pagine non trovate"
+		},
+		{
+			"kind": "field",
+			"label": "Redirect e pagine non trovate",
+			"hint": "I redirect scritti a mano e gli indirizzi che qualcuno ha cercato senza trovare niente.",
+			"section": "Indirizzi cambiati e pagine non trovate"
 		}
 	],
 	"redirects": [
@@ -479,18 +628,6 @@ export const SETTINGS_FIELD_INDEX = {
 			"kind": "section",
 			"label": "Pagine non trovate",
 			"hint": "URL richieste che hanno restituito 404. Promuovi a redirect quelle ricorrenti."
-		},
-		{
-			"kind": "field",
-			"label": "API Key IndexNow",
-			"hint": "Da 8 a 128 caratteri: lettere, cifre e trattini.",
-			"section": "Pagine non trovate"
-		},
-		{
-			"kind": "field",
-			"label": "File di verifica",
-			"hint": "Olobuild lo serve da sé. Dopo aver salvato, aprilo: deve mostrare la chiave.",
-			"section": "Pagine non trovate"
 		}
 	],
 	"cookie": [

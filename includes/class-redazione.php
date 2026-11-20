@@ -352,7 +352,7 @@ class Olobuild_Redazione {
                 return html_entity_decode( $n, ENT_QUOTES, 'UTF-8' );
             }, $termini ) : [],
             'bloccato'   => $blocco ? self::nome_utente( $blocco ) : '',
-            'link'       => 'publish' === $post->post_status ? (string) get_permalink( $post ) : '',
+            'link'       => 'publish' === $post->post_status ? Olobuild_Redazione_Lingue::nella_lingua( (string) get_permalink( $post ), $post->ID ) : '',
             // Le traduzioni: [ codice, nome, id, stato ] per ogni lingua (vuoto senza OLOlang).
             'lingue'     => Olobuild_Redazione_Lingue::traducibile( $post->post_type ) ? Olobuild_Redazione_Lingue::traduzioni( $post->ID ) : [],
         ];
@@ -477,8 +477,8 @@ class Olobuild_Redazione {
             'modificatoLeggibile' => self::quando( $mod ),
             'autore'              => self::nome_utente( $post->post_author ),
             'bloccato'            => $blocco ? self::nome_utente( $blocco ) : '',
-            'link'                => (string) get_permalink( $post ),
-            'anteprima'           => 'publish' === $post->post_status ? (string) get_permalink( $post ) : (string) get_preview_post_link( $post ),
+            'link'                => Olobuild_Redazione_Lingue::nella_lingua( (string) get_permalink( $post ), $post->ID ),
+            'anteprima'           => Olobuild_Redazione_Lingue::nella_lingua( 'publish' === $post->post_status ? (string) get_permalink( $post ) : (string) get_preview_post_link( $post ), $post->ID ),
             'wpModifica'          => add_query_arg( 'olo_wp', 1, (string) get_edit_post_link( $post->ID, 'raw' ) ),
             'puoCestinare'        => current_user_can( 'delete_post', $post->ID ),
             'copia'               => self::copia_da_riprendere( $post, $motivo, $modulo ),

@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Professional holonic page builder for WordPress with a drag & drop tile grid system.
- * Version:     1.4.1264
+ * Version:     1.4.1272
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
  * Text Domain: olobuild
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLOBUILD_VERSION', '1.4.1264' );
+define( 'OLOBUILD_VERSION', '1.4.1272' );
 define( 'OLOBUILD_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLOBUILD_URL', plugin_dir_url( __FILE__ ) );
 
@@ -561,6 +561,7 @@ require_once OLOBUILD_PATH . 'includes/class-ai-assistant.php';
 require_once OLOBUILD_PATH . 'includes/class-seo-head.php';
 require_once OLOBUILD_PATH . 'includes/class-og-disegnata.php';
 require_once OLOBUILD_PATH . 'includes/class-seo-settings.php';
+require_once OLOBUILD_PATH . 'includes/class-seo-centro.php';
 require_once OLOBUILD_PATH . 'includes/class-seo-redirects.php';
 require_once OLOBUILD_PATH . 'includes/class-global-popups.php';
 require_once OLOBUILD_PATH . 'includes/class-template-conditions.php';
@@ -902,6 +903,8 @@ add_action( 'plugins_loaded', function () {
 
     // SEO Settings — admin page, meta box, colonna SEO
     Olobuild_Seo_Settings::instance()->init();
+    // Il punto unico della SEO: riepilogo e pagine per Impostazioni › SEO (1.4.1265)
+    Olobuild_Seo_Centro::init();
 
     // SEO Redirects — redirect 301/302, monitor 404, IndexNow
     Olobuild_Seo_Redirects::instance()->init();

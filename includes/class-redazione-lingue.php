@@ -26,6 +26,7 @@ class Olobuild_Redazione_Lingue {
     public static function avvia() {
         add_filter( 'olo_lang_enabled_post_types', [ __CLASS__, 'tipi_da_tradurre' ] );
         add_action( 'wp_after_insert_post', [ __CLASS__, 'dopo_il_salvataggio' ], 30, 2 );
+        add_filter( 'wp_insert_post_data', [ __CLASS__, 'indirizzo_tradotto' ], 20, 2 );
         add_action( 'wp_trash_post', [ __CLASS__, 'cestina_copie' ] );
         add_action( 'untrashed_post', [ __CLASS__, 'ripristina_copie' ] );
     }
@@ -99,6 +100,19 @@ class Olobuild_Redazione_Lingue {
         return self::originale_di( $post_id ) ? (string) get_post_meta( (int) $post_id, '_olo_lang_lang', true ) : '';
     }
 
+    /**
+     * L'indirizzo di un contenuto con la sua lingua: per una traduzione «/en/eventi/the-mistress-of-the-inn/», non
+     * l'indirizzo nudo che nell'amministrazione dà get_permalink() (20 nov 2026: «Vedi la pagina» apriva la copia inglese
+     * senza /en/, cioè col sito intorno in italiano). Gli originali restano come sono.
+     */
+    public static function nella_lingua( $url, $post_id ) {
+        $lingua = self::lingua_di( $post_id );
+        if ( '' === $url || '' === $lingua || ! method_exists( 'Olo_Lang_Language', 'get_language_url' ) ) {
+            return $url;
+        }
+        return Olo_Lang_Language::get_language_url( $lingua, $url );
+    }
+
     /** Le copie di un originale che esistono ancora (fuori dal cestino): lingua => id. */
     public static function copie( $post_id ) {
         $out = [];
@@ -162,6 +176,39 @@ class Olobuild_Redazione_Lingue {
         }
         delete_post_meta( $id, '_edit_lock' );
         return (int) $id;
+    }
+
+    /**
+     * Alla prima pubblicazione una traduzione prende l'indirizzo dal suo titolo tradotto («/en/eventi/the-mistress-of-the-inn/»)
+     * se ha ancora quello provvisorio della bozza («la-locandiera-en»). Un titolo rimasto uguale all'originale («Medea»)
+     * tiene l'indirizzo con la lingua; dopo la prima pubblicazione l'indirizzo non cambia più da solo (20 nov 2026: le
+     * copie inglesi uscivano tutte in «-en»).
+     */
+    public static function indirizzo_tradotto( $data, $postarr ) {
+        $id = (int) ( $postarr['ID'] ?? 0 );
+        if ( ! $id || 'publish' !== ( $data['post_status'] ?? '' ) || 'publish' === get_post_status( $id ) ) {
+            return $data;
+        }
+        $orig = self::originale_di( $id );
+        $o    = $orig ? get_post( $orig ) : null;
+        if ( ! $o ) {
+            return $data;
+        }
+        $lingua = (string) array_search( $id, self::copie( $orig ), true );
+        if ( '' === $lingua ) {
+            return $data;
+        }
+        $provvisorio = ( $o->post_name ? $o->post_name : sanitize_title( $o->post_title ) ) . '-' . $lingua;
+        $attuale     = (string) ( $data['post_name'] ?? '' );
+        if ( '' !== $attuale && $attuale !== $provvisorio && ! preg_match( '/^' . preg_quote( $provvisorio, '/' ) . '-\d+$/', $attuale ) ) {
+            return $data; // un indirizzo scelto a mano resta
+        }
+        $titolo = sanitize_title( wp_unslash( (string) ( $data['post_title'] ?? '' ) ) );
+        if ( '' === $titolo || sanitize_title( $o->post_title ) === $titolo ) {
+            return $data;
+        }
+        $data['post_name'] = wp_unique_post_slug( $titolo, $id, 'publish', $data['post_type'], (int) ( $data['post_parent'] ?? 0 ) );
+        return $data;
     }
 
     /* ─────────────────────────────────────────────

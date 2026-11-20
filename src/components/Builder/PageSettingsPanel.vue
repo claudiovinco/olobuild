@@ -339,12 +339,12 @@
           <div class="psp-serp mb-rounded-md mb-bg-white mb-text-gray-900 mb-px-3 mb-py-2 mb-text-[12px] mb-leading-snug">
             <div class="mb-text-[14px]" style="color:#1a0dab;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ seoTitleDisplay }}</div>
             <div style="color:#006621;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ seoUrlDisplay }}</div>
-            <div style="color:#545454;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ seoDescDisplay || t('(Nessuna descrizione: imposta la Meta Description qui sotto.)') }}</div>
+            <div style="color:#545454;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ seoDescDisplay || t('(Nessuna descrizione: scrivila qui sotto.)') }}</div>
           </div>
 
           <div class="psp-field">
             <label for="psp-seo-title" class="psp-label psp-label--split">
-              <span>{{ t('SEO Title') }}</span>
+              <span>{{ t('Titolo su Google') }}</span>
               <span :class="seoTitleCls">{{ seoTitleLen }}/60</span>
             </label>
             <input id="psp-seo-title" type="text"
@@ -356,7 +356,7 @@
 
           <div class="psp-field">
             <label for="psp-seo-desc" class="psp-label psp-label--split">
-              <span>{{ t('Meta Description') }}</span>
+              <span>{{ t('Descrizione') }}</span>
               <span :class="seoDescCls">{{ seoDescLen }}/160</span>
             </label>
             <textarea id="psp-seo-desc" rows="3"
@@ -367,11 +367,11 @@
           </div>
 
           <div class="psp-field">
-            <label for="psp-seo-kw" class="psp-label">{{ t('Focus keyword') }}</label>
+            <label for="psp-seo-kw" class="psp-label">{{ t('Parola chiave principale') }}</label>
             <input id="psp-seo-kw" type="text"
               :value="seo.data.value.focus_keyword"
               @input="seoUpdate('focus_keyword', $event.target.value)"
-              :placeholder="t('Es. page builder wordpress')"
+              :placeholder="t('Le parole che le persone cercano')"
               class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900" />
           </div>
 
@@ -381,23 +381,23 @@
         <!-- TAB: Social (OG + Twitter) -->
         <div v-else-if="seoTab === 'social'" class="psp-stack">
           <div class="psp-field">
-            <label for="psp-og-title" class="psp-label">{{ t('OG Title (Facebook/LinkedIn)') }}</label>
+            <label for="psp-og-title" class="psp-label">{{ t('Titolo quando la condividi') }}</label>
             <input id="psp-og-title" type="text"
               :value="seo.data.value.og_title"
               @input="seoUpdate('og_title', $event.target.value)"
-              :placeholder="t('Usa SEO Title se vuoto')"
+              :placeholder="t('Se vuoto, il titolo su Google')"
               class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900" />
           </div>
           <div class="psp-field">
-            <label for="psp-og-desc" class="psp-label">{{ t('OG Description') }}</label>
+            <label for="psp-og-desc" class="psp-label">{{ t('Descrizione quando la condividi') }}</label>
             <textarea id="psp-og-desc" rows="2"
               :value="seo.data.value.og_description"
               @input="seoUpdate('og_description', $event.target.value)"
-              :placeholder="t('Usa Meta Description se vuoto')"
+              :placeholder="t('Se vuota, la descrizione')"
               class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"></textarea>
           </div>
           <div class="psp-field">
-            <label for="psp-og-image" class="psp-label">{{ t('OG Image (1200×630)') }}</label>
+            <label for="psp-og-image" class="psp-label">{{ t('Immagine quando la condividi (1200 × 630)') }}</label>
             <div class="mb-flex mb-gap-2 mb-items-center">
               <input id="psp-og-image" type="text"
                 :value="seo.data.value.og_image"
@@ -409,18 +409,18 @@
             <img v-if="seo.data.value.og_image" :src="seo.data.value.og_image" alt="" class="psp-thumb mb-mt-2 mb-max-h-24" />
           </div>
           <div class="psp-sep psp-stack">
-            <p class="psp-help">{{ t('Twitter / X (fallback OG se vuoto)') }}</p>
+            <p class="psp-help">{{ t('Su X (se vuoti, come sopra)') }}</p>
             <input type="text"
               :value="seo.data.value.tw_title"
               @input="seoUpdate('tw_title', $event.target.value)"
-              :placeholder="t('Twitter Title')"
-              :aria-label="t('Twitter Title')"
+              :placeholder="t('Titolo su X')"
+              :aria-label="t('Titolo su X')"
               class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900" />
             <textarea rows="2"
               :value="seo.data.value.tw_description"
               @input="seoUpdate('tw_description', $event.target.value)"
-              :placeholder="t('Twitter Description')"
-              :aria-label="t('Twitter Description')"
+              :placeholder="t('Descrizione su X')"
+              :aria-label="t('Descrizione su X')"
               class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"></textarea>
           </div>
         </div>
@@ -428,7 +428,7 @@
         <!-- TAB: Robots (canonical + noindex + nofollow) -->
         <div v-else-if="seoTab === 'advanced'" class="psp-stack">
           <div class="psp-field">
-            <label for="psp-canonical" class="psp-label">{{ t('Canonical URL') }}<InfoTip class="psp-info" :testo="t('Lascia vuoto per usare l\'URL della pagina.')" :titolo="t('Canonical URL')" /></label>
+            <label for="psp-canonical" class="psp-label">{{ t('Indirizzo principale (canonical)') }}<InfoTip class="psp-info" :testo="t('Lascia vuoto per usare l\'URL della pagina.')" :titolo="t('Indirizzo principale (canonical)')" /></label>
             <input id="psp-canonical" type="text"
               :value="seo.data.value.canonical"
               @input="seoUpdate('canonical', $event.target.value)"
@@ -462,10 +462,10 @@
         <!-- TAB: Schema (schema_type + extra_jsonld) -->
         <div v-else-if="seoTab === 'schema'" class="psp-stack">
           <div class="psp-field">
-            <span class="psp-label">{{ t('Schema.org type (auto se vuoto)') }}</span>
+            <span class="psp-label">{{ t('Tipo di dati strutturati (automatico se vuoto)') }}</span>
             <FieldSelect
               ui="dropdown"
-              :aria-label="t('Schema.org type (auto se vuoto)')"
+              :aria-label="t('Tipo di dati strutturati (automatico se vuoto)')"
               :modelValue="seo.data.value.schema_type"
               :options="schemaTypeOptions"
               @update:modelValue="seoUpdate('schema_type', $event)"
@@ -631,11 +631,11 @@ const schemaTypeOptions = [
   { value: 'none', label: 'Nessuno' },
 ];
 const seoTabOptions = [
-  { value: 'seo', label: 'Base' },
-  { value: 'social', label: 'Social' },
-  { value: 'advanced', label: 'Robots' },
-  { value: 'schema', label: 'Schema' },
-  { value: 'faq', label: 'FAQ' },
+  { value: 'seo', label: t('Base') },
+  { value: 'social', label: t('Social') },
+  { value: 'advanced', label: t('Motori') },
+  { value: 'schema', label: t('Schema') },
+  { value: 'faq', label: t('FAQ') },
 ];
 
 // ── Campi numerici degli effetti di pagina ──

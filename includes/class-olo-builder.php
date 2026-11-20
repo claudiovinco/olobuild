@@ -1019,6 +1019,9 @@ class Olobuild_Builder {
 
         // Configurazione page — admin Vue app
         if ( 'olobuild_page_olobuilder-settings' === $hook ) {
+            // La libreria media di WordPress: la usano il logo e le immagini per i social della scheda SEO e le altre
+            // schede con «Scegli…». Senza, window.wp.media mancava e i pulsanti non aprivano niente (19 nov 2026).
+            wp_enqueue_media();
             // CSS is injected inline by Vite IIFE build + render_configurazione_page inline styles
             wp_enqueue_script(
                 'olo-admin-settings-js',

@@ -38,7 +38,12 @@ class Olobuild_Seo_Head {
         add_filter( 'wp_sitemaps_enabled', [ $this, 'sitemap_attiva' ] );
         add_filter( 'wp_sitemaps_posts_query_args', [ $this, 'sitemap_senza_noindex' ], 10, 2 );
         add_filter( 'wp_sitemaps_post_types', [ $this, 'sitemap_tipi' ] );
+        // Gli archivi esclusi dai motori escono anche dalla sitemap (autori, categorie, tag: 1.4.1265)
+        add_filter( 'wp_sitemaps_add_provider', [ $this, 'sitemap_senza_autori' ], 10, 2 );
+        add_filter( 'wp_sitemaps_taxonomies', [ $this, 'sitemap_tassonomie' ] );
         add_action( 'template_redirect', [ $this, 'vecchia_sitemap' ], 0 );
+        // llms.txt: il riassunto del sito per le intelligenze artificiali (Impostazioni › SEO, 1.4.1265)
+        add_action( 'parse_request', [ $this, 'servi_llms_txt' ], 0 );
         // Separatore del titolo, robots e canonical passano dai filtri di WordPress:
         // prima il separatore finiva in coda al titolo («Pagina – Sito – –») e
         // canonical e meta robots uscivano due volte.
@@ -239,17 +244,24 @@ class Olobuild_Seo_Head {
         if ( is_author() && ! empty( $adv['noindex_author'] ) ) {
             $directives[] = 'noindex';
         }
-        if ( is_date() && ! empty( $adv['noindex_date'] ) ) {
+        // Gli archivi per data sono esclusi di serie (1.4.1265): ripetono gli articoli e non li cerca nessuno.
+        if ( is_date() && ( ! is_array( $adv ) || ! array_key_exists( 'noindex_date', $adv ) || ! empty( $adv['noindex_date'] ) ) ) {
             $directives[] = 'noindex';
         }
         if ( is_search() && ! empty( $adv['noindex_search'] ) ) {
             $directives[] = 'noindex';
         }
 
-        // Post type noindex
+        // Post type noindex: le schede e l'archivio del tipo
         if ( is_singular() && $post ) {
             $pt = get_post_type( $post );
             if ( ! empty( $adv['noindex_pt'][ $pt ] ) ) {
+                $directives[] = 'noindex';
+            }
+        } elseif ( is_post_type_archive() ) {
+            $pt = get_query_var( 'post_type' );
+            $pt = is_array( $pt ) ? reset( $pt ) : $pt;
+            if ( $pt && ! empty( $adv['noindex_pt'][ $pt ] ) ) {
                 $directives[] = 'noindex';
             }
         }
@@ -525,18 +537,55 @@ class Olobuild_Seo_Head {
         ];
     }
 
+    /**
+     * Chi pubblica il sito: UNA entità (1.4.1265). Il tipo scelto in Impostazioni › SEO › «Chi pubblica il sito», col
+     * nome, il logo, i profili, e per chi ha una sede l'indirizzo, gli orari, le coordinate e la fascia di prezzo. Prima
+     * l'attività locale usciva come un secondo nodo staccato (#localbusiness), con lo stesso nome ma senza legami.
+     */
     private function schema_knowledge_graph() {
         $titles = $this->opt( 'olo_seo_titles' );
         $type   = $titles['kg_type'] ?? 'Organization';
         $name   = $titles['kg_name'] ?? get_bloginfo( 'name' );
         $logo   = $titles['kg_logo'] ?? '';
+        $info   = class_exists( 'Olobuild_Seo_Settings' ) ? Olobuild_Seo_Settings::tipo_chi( $type ) : null;
+        $sede   = $info && $info['sede'];
+        $tipi   = ( $info && $info['luogo'] ) ? [ 'Organization', $type ] : $type;
 
         $schema = [
-            '@type' => $type,
+            '@type' => $tipi,
             '@id'   => home_url( '/' ) . ( 'Person' === $type ? '#person' : '#organization' ),
             'name'  => $name ?: get_bloginfo( 'name' ),
             'url'   => home_url( '/' ),
         ];
+        if ( ! empty( $titles['description'] ) ) {
+            $schema['description'] = $titles['description'];
+        }
+
+        // Contatti e indirizzo valgono per ogni tipo; orari, coordinate e prezzi solo per chi ha una sede.
+        $biz = $this->opt( 'olo_seo_local_business' );
+        $biz = is_array( $biz ) ? $biz : [];
+        $ind = $this->indirizzo_schema( $biz );
+        if ( $ind ) {
+            $schema['address'] = $ind;
+        }
+        if ( ! empty( $biz['phone'] ) ) {
+            $schema['telephone'] = $biz['phone'];
+        }
+        if ( ! empty( $biz['email'] ) ) {
+            $schema['email'] = $biz['email'];
+        }
+        if ( $sede ) {
+            if ( ! empty( $biz['price_range'] ) ) {
+                $schema['priceRange'] = $biz['price_range'];
+            }
+            if ( '' !== (string) ( $biz['geo_lat'] ?? '' ) && '' !== (string) ( $biz['geo_lng'] ?? '' ) ) {
+                $schema['geo'] = [ '@type' => 'GeoCoordinates', 'latitude' => (float) $biz['geo_lat'], 'longitude' => (float) $biz['geo_lng'] ];
+            }
+            $orari = $this->orari_schema( $biz );
+            if ( $orari ) {
+                $schema['openingHoursSpecification'] = $orari;
+            }
+        }
 
         if ( ! $logo ) {
             $logo_id = get_theme_mod( 'custom_logo' );
@@ -549,7 +598,11 @@ class Olobuild_Seo_Head {
             if ( $type === 'Person' ) {
                 $schema['image'] = $logo;
             } else {
-                $schema['logo'] = $logo;
+                $schema['logo']  = $logo;
+                // Un'attività con una sede deve avere anche un'immagine (Google la chiede per LocalBusiness)
+                if ( $sede ) {
+                    $schema['image'] = ! empty( $biz['image'] ) ? $biz['image'] : $logo;
+                }
             }
         }
 
@@ -569,7 +622,7 @@ class Olobuild_Seo_Head {
         $items[] = [
             '@type'    => 'ListItem',
             'position' => $pos++,
-            'name'     => 'Home',
+            'name'     => __( 'Home', 'olobuild' ),
             'item'     => home_url( '/' ),
         ];
 
@@ -622,7 +675,7 @@ class Olobuild_Seo_Head {
             $items[] = [
                 '@type'    => 'ListItem',
                 'position' => $pos,
-                'name'     => 'Risultati ricerca',
+                'name'     => __( 'Risultati della ricerca', 'olobuild' ),
             ];
         }
 
@@ -909,9 +962,47 @@ class Olobuild_Seo_Head {
         return $schema;
     }
 
+    /** L'indirizzo della sede come PostalAddress, o null se mancano via e città. */
+    private function indirizzo_schema( $biz ) {
+        $a = isset( $biz['address'] ) && is_array( $biz['address'] ) ? $biz['address'] : [];
+        if ( empty( $a['street'] ) && empty( $a['city'] ) ) {
+            return null;
+        }
+        $addr = [ '@type' => 'PostalAddress' ];
+        foreach ( [ 'street' => 'streetAddress', 'city' => 'addressLocality', 'state' => 'addressRegion', 'zip' => 'postalCode' ] as $k => $p ) {
+            if ( ! empty( $a[ $k ] ) ) {
+                $addr[ $p ] = $a[ $k ];
+            }
+        }
+        $addr['addressCountry'] = ! empty( $a['country'] ) ? $a['country'] : 'IT';
+        return $addr;
+    }
+
+    /** Gli orari della sede, un OpeningHoursSpecification per giorno con apertura e chiusura. */
+    private function orari_schema( $biz ) {
+        $giorni = [ 'monday' => 'Monday', 'tuesday' => 'Tuesday', 'wednesday' => 'Wednesday', 'thursday' => 'Thursday', 'friday' => 'Friday', 'saturday' => 'Saturday', 'sunday' => 'Sunday' ];
+        $out    = [];
+        foreach ( (array) ( $biz['hours'] ?? [] ) as $g => $o ) {
+            if ( isset( $giorni[ $g ] ) && ! empty( $o['open'] ) && ! empty( $o['close'] ) ) {
+                $out[] = [ '@type' => 'OpeningHoursSpecification', 'dayOfWeek' => $giorni[ $g ], 'opens' => $o['open'], 'closes' => $o['close'] ];
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * Il vecchio nodo #localbusiness, solo per i siti che l'avevano compilato con un nome suo quando chi pubblica il
+     * sito non è un'attività con una sede (per esempio un'azienda con un negozio). Negli altri casi l'indirizzo e
+     * gli orari stanno già nell'entità di chi pubblica (schema_knowledge_graph).
+     */
     private function schema_local_business() {
         $biz = $this->opt( 'olo_seo_local_business' );
         if ( empty( $biz ) || empty( $biz['name'] ) ) {
+            return null;
+        }
+        $titles = $this->opt( 'olo_seo_titles' );
+        $info   = class_exists( 'Olobuild_Seo_Settings' ) ? Olobuild_Seo_Settings::tipo_chi( $titles['kg_type'] ?? 'Organization' ) : null;
+        if ( ( $info && $info['sede'] ) || $biz['name'] === ( $titles['kg_name'] ?? get_bloginfo( 'name' ) ) ) {
             return null;
         }
 
@@ -926,17 +1017,8 @@ class Olobuild_Seo_Head {
             $schema['description'] = $biz['description'];
         }
 
-        if ( ! empty( $biz['address'] ) ) {
-            $addr = [
-                '@type'           => 'PostalAddress',
-                'streetAddress'   => $biz['address']['street'] ?? '',
-                'addressLocality' => $biz['address']['city'] ?? '',
-                'postalCode'      => $biz['address']['zip'] ?? '',
-                'addressCountry'  => $biz['address']['country'] ?? 'IT',
-            ];
-            if ( ! empty( $biz['address']['state'] ) ) {
-                $addr['addressRegion'] = $biz['address']['state'];
-            }
+        $addr = $this->indirizzo_schema( $biz );
+        if ( $addr ) {
             $schema['address'] = $addr;
         }
 
@@ -1008,7 +1090,7 @@ class Olobuild_Seo_Head {
         $social = $this->opt( 'olo_seo_social' );
         $urls   = [];
 
-        $keys = [ 'facebook_url', 'instagram_url', 'linkedin_url', 'youtube_url', 'pinterest_url', 'tiktok_url' ];
+        $keys = [ 'facebook_url', 'instagram_url', 'linkedin_url', 'youtube_url', 'pinterest_url', 'tiktok_url', 'threads_url' ];
         foreach ( $keys as $key ) {
             if ( ! empty( $social[ $key ] ) ) {
                 $urls[] = $social[ $key ];
@@ -1018,8 +1100,16 @@ class Olobuild_Seo_Head {
             $tw = ltrim( $social['twitter_user'], '@' );
             $urls[] = 'https://x.com/' . $tw;
         }
+        // Gli altri profili (Wikipedia, Wikidata, un albo, una guida…): uno per riga. Sono i legami che fanno
+        // riconoscere l'entità ai motori e alle IA.
+        foreach ( preg_split( '/[\r\n]+/', (string) ( $social['altri_profili'] ?? '' ) ) as $r ) {
+            $r = trim( $r );
+            if ( '' !== $r ) {
+                $urls[] = $r;
+            }
+        }
 
-        return $urls;
+        return array_values( array_unique( $urls ) );
     }
 
     /** Le domande della scheda FAQ della pagina, come Question con la loro Answer. */
@@ -1463,6 +1553,20 @@ class Olobuild_Seo_Head {
      * Robots.txt
      * ═══════════════════════════════════════════════════ */
 
+    /** I robot che leggono i siti per ADDESTRARE i modelli delle IA (non portano visite). */
+    const BOT_ADDESTRAMENTO = [ 'GPTBot', 'ClaudeBot', 'Google-Extended', 'Applebot-Extended', 'CCBot', 'meta-externalagent', 'Bytespider' ];
+
+    /** I robot con cui le IA cercano e aprono le pagine per RISPONDERE a chi chiede (portano visite e citazioni). */
+    const BOT_RISPOSTE = [ 'OAI-SearchBot', 'ChatGPT-User', 'Claude-SearchBot', 'Claude-User', 'PerplexityBot', 'Perplexity-User', 'MistralAI-User' ];
+
+    /** I robot delle IA che la scelta di Impostazioni › SEO tiene fuori (vuoto = tutti dentro). */
+    public static function bot_ia_esclusi( $scelta ) {
+        if ( 'nessuno' === $scelta ) {
+            return array_merge( self::BOT_ADDESTRAMENTO, self::BOT_RISPOSTE );
+        }
+        return 'senza-addestramento' === $scelta ? self::BOT_ADDESTRAMENTO : [];
+    }
+
     public function custom_robots_txt( $output ) {
         $adv = $this->opt( 'olobuild_seo_advanced' );
         $custom = $adv['robots_txt'] ?? '';
@@ -1471,7 +1575,171 @@ class Olobuild_Seo_Head {
             $output = $custom . "\n\n" . $output;
         }
 
+        // I robot delle IA (1.4.1265): un gruppo per robot, che non può leggere niente.
+        $fuori = self::bot_ia_esclusi( $adv['ia_bot'] ?? 'tutti' );
+        if ( $fuori ) {
+            $output = rtrim( $output ) . "\n\n# " . __( 'Intelligenze artificiali tenute fuori (Impostazioni › SEO)', 'olobuild' ) . "\n";
+            foreach ( $fuori as $bot ) {
+                $output .= 'User-agent: ' . $bot . "\nDisallow: /\n\n";
+            }
+        }
+
         return $output;
+    }
+
+    /* ═══════════════════════════════════════════════════
+     * llms.txt (1.4.1265)
+     * ═══════════════════════════════════════════════════ */
+
+    /** Acceso in Impostazioni › SEO › «Le intelligenze artificiali». */
+    public static function llms_attivo() {
+        $adv = get_option( 'olobuild_seo_advanced', [] );
+        return is_array( $adv ) && ! empty( $adv['llms'] );
+    }
+
+    /** L'indirizzo del file, nella cartella del sito (anche se il sito sta in una sottocartella). */
+    public static function url_llms() {
+        return home_url( '/llms.txt' );
+    }
+
+    public function servi_llms_txt() {
+        if ( ! self::llms_attivo() || $this->seo_plugin_active() ) {
+            return;
+        }
+        $path = (string) wp_parse_url( esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ?? '' ) ), PHP_URL_PATH );
+        if ( $path !== (string) wp_parse_url( self::url_llms(), PHP_URL_PATH ) ) {
+            return;
+        }
+        status_header( 200 );
+        header( 'Content-Type: text/plain; charset=utf-8' );
+        header( 'X-Robots-Tag: noindex' );
+        echo self::llms_testo(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- testo semplice (Markdown), Content-Type text/plain
+        exit;
+    }
+
+    /**
+     * Il riassunto del sito in Markdown (llmstxt.org): chi pubblica, cosa fa, come contattarlo, e le pagine che i
+     * motori possono vedere, con la loro descrizione. Le pagine escluse dai motori non ci sono.
+     */
+    public static function llms_testo() {
+        $titles = Olobuild_Seo_Settings::get( 'olo_seo_titles' );
+        $biz    = Olobuild_Seo_Settings::get( 'olo_seo_local_business' );
+        $adv    = Olobuild_Seo_Settings::get( 'olobuild_seo_advanced' );
+        $nome   = ! empty( $titles['kg_name'] ) ? $titles['kg_name'] : get_bloginfo( 'name' );
+        $desc   = ! empty( $titles['description'] ) ? $titles['description'] : get_bloginfo( 'description' );
+        $pulisci = function ( $s ) {
+            return trim( preg_replace( '/\s+/u', ' ', wp_strip_all_tags( html_entity_decode( (string) $s, ENT_QUOTES, 'UTF-8' ) ) ) );
+        };
+
+        $out = '# ' . $pulisci( $nome ) . "\n\n";
+        if ( $desc ) {
+            $out .= '> ' . $pulisci( $desc ) . "\n\n";
+        }
+        $info = Olobuild_Seo_Settings::tipo_chi( $titles['kg_type'] ?? 'Organization' );
+        $righe = [];
+        if ( $info ) {
+            $righe[] = '- ' . __( 'Chi è', 'olobuild' ) . ': ' . $info['label'];
+        }
+        $a = isset( $biz['address'] ) && is_array( $biz['address'] ) ? $biz['address'] : [];
+        $ind = implode( ', ', array_filter( [ $a['street'] ?? '', trim( ( $a['zip'] ?? '' ) . ' ' . ( $a['city'] ?? '' ) ), $a['state'] ?? '' ] ) );
+        if ( $ind ) {
+            $righe[] = '- ' . __( 'Indirizzo', 'olobuild' ) . ': ' . $ind;
+        }
+        if ( ! empty( $biz['phone'] ) ) {
+            $righe[] = '- ' . __( 'Telefono', 'olobuild' ) . ': ' . $biz['phone'];
+        }
+        if ( ! empty( $biz['email'] ) ) {
+            $righe[] = '- Email: ' . $biz['email'];
+        }
+        $righe[] = '- ' . __( 'Sito', 'olobuild' ) . ': ' . home_url( '/' );
+        $out .= implode( "\n", $righe ) . "\n";
+
+        foreach ( Olobuild_Seo_Centro::tipi_contenuto() as $pt => $etichetta ) {
+            if ( ! empty( $adv['noindex_pt'][ $pt ] ) ) {
+                continue;
+            }
+            $q = get_posts( [
+                'post_type'      => $pt,
+                'post_status'    => 'publish',
+                'posts_per_page' => 100,
+                'orderby'        => 'page' === $pt ? 'menu_order title' : 'date',
+                'order'          => 'page' === $pt ? 'ASC' : 'DESC',
+                'no_found_rows'  => true,
+                'meta_query'     => [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- file letto di rado, al massimo 100 righe per tipo
+                    'relation' => 'OR',
+                    [ 'key' => '_olo_seo_noindex', 'compare' => 'NOT EXISTS' ],
+                    [ 'key' => '_olo_seo_noindex', 'value' => '1', 'compare' => '!=' ],
+                ],
+            ] );
+            if ( ! $q ) {
+                continue;
+            }
+            $out .= "\n## " . $pulisci( $etichetta ) . "\n\n";
+            foreach ( $q as $p ) {
+                $d = self::descrizione_per( $p );
+                // La home senza una descrizione sua esce su Google con quella del sito (get_seo_description): qui uguale
+                if ( '' === $d && (int) get_option( 'page_on_front' ) === (int) $p->ID ) {
+                    $d = (string) $desc;
+                }
+                $out .= '- [' . $pulisci( get_the_title( $p ) ) . '](' . get_permalink( $p ) . ')' . ( $d ? ': ' . $pulisci( $d ) : '' ) . "\n";
+            }
+        }
+        return $out;
+    }
+
+    /* ═══════════════════════════════════════════════════
+     * Titolo e descrizione di un contenuto qualsiasi (1.4.1265)
+     * ═══════════════════════════════════════════════════
+     *
+     * Per l'elenco delle pagine di Impostazioni › SEO e per llms.txt: gli stessi passi di filter_title_parts() e
+     * get_seo_description(), senza bisogno che la pagina sia quella aperta.
+     */
+
+    /** [ titolo che esce su Google, true se scritto da te ]. */
+    public static function titolo_per( $post ) {
+        $suo = trim( (string) get_post_meta( $post->ID, '_olo_seo_title', true ) );
+        if ( '' !== $suo ) {
+            return [ $suo, true ];
+        }
+        $titles = Olobuild_Seo_Settings::get( 'olo_seo_titles' );
+        $sep    = ( isset( $titles['separator'] ) && '' !== trim( (string) $titles['separator'] ) ) ? $titles['separator'] : '–';
+        $sito   = html_entity_decode( get_bloginfo( 'name' ), ENT_QUOTES, 'UTF-8' );
+        $titolo = html_entity_decode( get_the_title( $post ), ENT_QUOTES, 'UTF-8' );
+        if ( (int) get_option( 'page_on_front' ) === (int) $post->ID ) {
+            $motto = html_entity_decode( get_bloginfo( 'description' ), ENT_QUOTES, 'UTF-8' );
+            return [ $motto ? $sito . ' ' . $sep . ' ' . $motto : $sito, false ];
+        }
+        $pattern = trim( (string) ( $titles['pattern'] ?? '' ) );
+        if ( false !== strpos( $pattern, '{page}' ) ) {
+            return [ trim( strtr( $pattern, [ '{page}' => $titolo, '{sep}' => $sep, '{site}' => $sito ] ) ), false ];
+        }
+        return [ $titolo . ' ' . $sep . ' ' . $sito, false ];
+    }
+
+    /** La descrizione che esce su Google: la tua, o quella presa dal riassunto o dal testo, o quella del sito. */
+    public static function descrizione_per( $post, &$sua = null ) {
+        $d = trim( (string) get_post_meta( $post->ID, '_olo_seo_description', true ) );
+        $sua = '' !== $d;
+        if ( $sua ) {
+            return $d;
+        }
+        return self::descrizione_automatica( $post );
+    }
+
+    /** Dal riassunto, se c'è; se no dalle prime parole del testo (senza far girare il contenuto della pagina). */
+    public static function descrizione_automatica( $post ) {
+        if ( '' !== trim( (string) $post->post_excerpt ) ) {
+            $c = wp_trim_words( wp_strip_all_tags( get_the_excerpt( $post ) ), 30 );
+        } else {
+            $c = (string) $post->post_content;
+            if ( function_exists( 'excerpt_remove_blocks' ) ) {
+                $c = excerpt_remove_blocks( $c );
+            }
+            $c = trim( preg_replace( '/\s+/u', ' ', wp_strip_all_tags( strip_shortcodes( $c ) ) ) );
+            $c = '' === $c ? '' : wp_trim_words( $c, 30 );
+        }
+        // Testo semplice: «&hellip;» di wp_trim_words diventa «…»
+        return html_entity_decode( $c, ENT_QUOTES, 'UTF-8' );
     }
 
     /* ═══════════════════════════════════════════════════
@@ -1506,6 +1774,29 @@ class Olobuild_Seo_Head {
             }
         }
         return $tipi;
+    }
+
+    /** Gli archivi degli autori esclusi dai motori: niente sitemap degli utenti. */
+    public function sitemap_senza_autori( $provider, $nome ) {
+        if ( 'users' === $nome && ! $this->seo_plugin_active() ) {
+            $a = $this->opt( 'olobuild_seo_advanced' );
+            if ( ! empty( $a['noindex_author'] ) ) {
+                return false;
+            }
+        }
+        return $provider;
+    }
+
+    /** Categorie e tag esclusi dai motori escono dalla sitemap. */
+    public function sitemap_tassonomie( $tax ) {
+        $a = $this->opt( 'olobuild_seo_advanced' );
+        if ( ! empty( $a['noindex_categories'] ) ) {
+            unset( $tax['category'] );
+        }
+        if ( ! empty( $a['noindex_tags'] ) ) {
+            unset( $tax['post_tag'] );
+        }
+        return $tax;
     }
 
     /** Chi aveva inviato la vecchia /?olo_sitemap=1 arriva alla sitemap di WordPress. */

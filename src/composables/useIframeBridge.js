@@ -175,6 +175,9 @@ export function useIframeBridge(iframeRef) {
     if (s.widget_template_id || s.tile_template_id) return false; // espande template esterno
     if (s.loop_enabled)                              return false; // ripete tile N volte
     if (node.advanced?.html_id)                      return false; // ID custom: full render aggiorna tutti i selettori CSS
+    // Richiama un'altra tile (il Selettore lingua o la Ricerca nella barra del menu): solo il render completo la toglie
+    // dal suo posto e la mette nella barra; la patch del menu lasciava il selettore sotto la testata (1.4.1271).
+    if (s.lang_tile_id || s.search_tile_id)          return false;
     // Colonna di una riga a griglia: render-tile la renderebbe da colonna Flex
     // (niente grid-column, uk-width-* dei width_* vecchi) e il CSS della sua
     // «Larghezza responsive» sta nella RIGA, che una patch non rigenera.

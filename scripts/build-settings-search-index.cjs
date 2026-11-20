@@ -27,7 +27,7 @@ const TAB_META = {
 	// Le tre schede traslocate nelle aree (restyling Fase 3) dichiarano la
 	// nuova casa come gruppo: la palette globale mostra dove si arriva davvero.
 	popups:        { label: 'Popup globali',           group: 'Area Costruisci' },
-	seo:           { label: 'SEO globale',             group: 'SEO & Privacy' },
+	seo:           { label: 'SEO',                     group: 'SEO & Privacy' },
 	redirects:     { label: 'Redirect & 404',          group: 'SEO & Privacy' },
 	cookie:        { label: 'Cookie Consent & GDPR',   group: 'SEO & Privacy' },
 	analytics:     { label: 'Tracking & Analytics',    group: 'Area Raccolta' },

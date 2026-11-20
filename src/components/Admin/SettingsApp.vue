@@ -287,7 +287,7 @@ const IA_GROUPS = [
   },
   {
     id: 'seoprivacy', title: 'SEO & Privacy', items: [
-      { id: 'seo',       label: 'SEO globale',           icon: 'search',     component: SeoTab },
+      { id: 'seo',       label: 'SEO',                   icon: 'search',     component: SeoTab },
       { id: 'redirects', label: 'Redirect & 404',        icon: 'redirect',   component: RedirectsTab },
       { id: 'cookie',    label: 'Cookie Consent & GDPR', icon: 'key',        component: CookieTab },
       // Traslocata nell'area Raccolta (restyling Fase 3), vedi sopra.
@@ -760,6 +760,8 @@ function showToast(message, type = 'success', ms = 2500) {
 
 // Provide il setter di toast ai tab figli (mantiene compat con codice esistente).
 provide('showToast', showToast);
+// Una scheda che porta a un'altra (la SEO apre Redirect & 404): la apre come un clic nella barra.
+provide('apriScheda', (id) => { const it = ALL_ITEMS.find((i) => i.id === id); if (it) onPick(it); });
 // Setter di dirty per i tab: (v, id) — l'id lega la modifica alla scheda che
 // la fa anche se arriva dopo un await, quando l'utente può già essere altrove.
 provide('setDirty', (v, id) => { markDirty(!!v, id); });

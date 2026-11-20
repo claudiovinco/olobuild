@@ -175,8 +175,69 @@ class Olobuild_Seo_Settings {
 
     /* ─── Helpers per opzioni ─── */
 
-    /** Tipi di chi pubblica il sito offerti dalla scheda SEO globale. */
+    /** I primi tipi di chi pubblica il sito (fino alla 1.4.1264): restano validi. L'elenco intero è tipi_chi(). */
     const KG_TYPES = [ 'Organization', 'Person', 'LocalBusiness', 'Hotel', 'Restaurant', 'Store', 'ProfessionalService' ];
+
+    /**
+     * Chi pubblica il sito (Impostazioni › SEO › «Chi pubblica il sito», 1.4.1265): i tipi di schema.org con un nome che
+     * si capisce. `sede` = un posto dove la gente viene (indirizzo, orari, coordinate e fascia di prezzo entrano nella
+     * stessa entità); `luogo` = un tipo che per schema.org è un luogo e non un'organizzazione (teatro, museo): esce
+     * insieme a Organization, così può pubblicare il sito.
+     */
+    public static function tipi_chi() {
+        $t = function ( $value, $label, $gruppo, $sede = false, $luogo = false ) {
+            return [ 'value' => $value, 'label' => $label, 'gruppo' => $gruppo, 'sede' => $sede, 'luogo' => $luogo ];
+        };
+        $p = __( 'Una persona o un gruppo', 'olobuild' );
+        $o = __( 'Un\'organizzazione senza una sede aperta al pubblico', 'olobuild' );
+        $s = __( 'Un\'attività con una sede dove la gente viene', 'olobuild' );
+        return [
+            $t( 'Person', __( 'Una persona', 'olobuild' ), $p ),
+            $t( 'MusicGroup', __( 'Un gruppo musicale o un coro', 'olobuild' ), $p ),
+            $t( 'PerformingGroup', __( 'Una compagnia di spettacolo', 'olobuild' ), $p ),
+            $t( 'Organization', __( 'Un\'organizzazione', 'olobuild' ), $o ),
+            $t( 'Corporation', __( 'Un\'azienda', 'olobuild' ), $o ),
+            $t( 'NGO', __( 'Un\'associazione', 'olobuild' ), $o ),
+            $t( 'EducationalOrganization', __( 'Una scuola o un ente di formazione', 'olobuild' ), $o ),
+            $t( 'LocalBusiness', __( 'Un\'attività locale', 'olobuild' ), $s, true ),
+            $t( 'Restaurant', __( 'Un ristorante', 'olobuild' ), $s, true ),
+            $t( 'CafeOrCoffeeShop', __( 'Un bar o un caffè', 'olobuild' ), $s, true ),
+            $t( 'Bakery', __( 'Un forno o una pasticceria', 'olobuild' ), $s, true ),
+            $t( 'Winery', __( 'Una cantina', 'olobuild' ), $s, true ),
+            $t( 'Hotel', __( 'Un hotel', 'olobuild' ), $s, true ),
+            $t( 'BedAndBreakfast', __( 'Un B&B', 'olobuild' ), $s, true ),
+            $t( 'Store', __( 'Un negozio', 'olobuild' ), $s, true ),
+            $t( 'ProfessionalService', __( 'Uno studio professionale', 'olobuild' ), $s, true ),
+            $t( 'MedicalClinic', __( 'Uno studio medico', 'olobuild' ), $s, true ),
+            $t( 'HealthAndBeautyBusiness', __( 'Un centro estetico o un parrucchiere', 'olobuild' ), $s, true ),
+            $t( 'SportsActivityLocation', __( 'Una palestra o un centro sportivo', 'olobuild' ), $s, true ),
+            $t( 'AutoRepair', __( 'Un\'officina', 'olobuild' ), $s, true ),
+            $t( 'RealEstateAgent', __( 'Un\'agenzia immobiliare', 'olobuild' ), $s, true ),
+            $t( 'TravelAgency', __( 'Un\'agenzia di viaggi', 'olobuild' ), $s, true ),
+            $t( 'EntertainmentBusiness', __( 'Un locale di svago', 'olobuild' ), $s, true ),
+            $t( 'PerformingArtsTheater', __( 'Un teatro', 'olobuild' ), $s, true, true ),
+            $t( 'Museum', __( 'Un museo', 'olobuild' ), $s, true, true ),
+        ];
+    }
+
+    /** Il tipo scelto come lo descrive tipi_chi(), o null. */
+    public static function tipo_chi( $value ) {
+        foreach ( self::tipi_chi() as $t ) {
+            if ( $t['value'] === $value ) {
+                return $t;
+            }
+        }
+        return null;
+    }
+
+    /** I giorni della settimana degli orari, con le chiavi salvate da sempre (monday…). */
+    const GIORNI = [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ];
+
+    /** I profili social che la scheda chiede uno per uno (chiavi salvate da sempre in olo_seo_social). */
+    const PROFILI = [ 'facebook_url', 'instagram_url', 'youtube_url', 'linkedin_url', 'tiktok_url', 'pinterest_url', 'threads_url' ];
+
+    /** Le scelte per i robot delle intelligenze artificiali (Olobuild_Seo_Head::custom_robots_txt). */
+    const IA_BOT = [ 'tutti', 'senza-addestramento', 'nessuno' ];
 
     public static function get( $option_key, $field = null, $default = '' ) {
         $opts = get_option( $option_key, [] );
@@ -220,6 +281,80 @@ class Olobuild_Seo_Settings {
             if ( isset( $o['og_stile'] ) && ! in_array( $o['og_stile'], [ 'foto', 'meta', 'colore' ], true ) ) {
                 $o['og_stile'] = 'foto';
             }
+            // I profili di chi pubblica il sito (sameAs del grafo): indirizzi interi, uno per campo; gli altri
+            // (Wikipedia, Wikidata, un albo…) uno per riga.
+            foreach ( self::PROFILI as $k ) {
+                if ( isset( $o[ $k ] ) ) {
+                    $o[ $k ] = esc_url_raw( trim( (string) $o[ $k ] ) );
+                }
+            }
+            if ( isset( $o['altri_profili'] ) ) {
+                $righe = preg_split( '/[\r\n]+/', (string) $o['altri_profili'] );
+                $o['altri_profili'] = implode( "\n", array_values( array_filter( array_map( function ( $r ) {
+                    return esc_url_raw( trim( $r ) );
+                }, (array) $righe ) ) ) );
+            }
+        }
+        if ( self::OPT_LOCAL === $option_key ) {
+            // La sede (Impostazioni › SEO › «Chi pubblica il sito»): le chiavi di sempre, ripulite.
+            $ind = isset( $o['address'] ) && is_array( $o['address'] ) ? $o['address'] : [];
+            $o['address'] = [];
+            foreach ( [ 'street', 'city', 'state', 'zip', 'country' ] as $k ) {
+                $o['address'][ $k ] = sanitize_text_field( (string) ( $ind[ $k ] ?? '' ) );
+            }
+            foreach ( [ 'phone', 'price_range', 'name', 'type', 'description' ] as $k ) {
+                if ( isset( $o[ $k ] ) ) {
+                    $o[ $k ] = sanitize_text_field( (string) $o[ $k ] );
+                }
+            }
+            if ( isset( $o['email'] ) ) {
+                $o['email'] = sanitize_email( (string) $o['email'] );
+            }
+            foreach ( [ 'geo_lat', 'geo_lng' ] as $k ) {
+                if ( isset( $o[ $k ] ) ) {
+                    $v = str_replace( ',', '.', trim( (string) $o[ $k ] ) );
+                    $o[ $k ] = is_numeric( $v ) ? (string) round( (float) $v, 6 ) : '';
+                }
+            }
+            $ore = isset( $o['hours'] ) && is_array( $o['hours'] ) ? $o['hours'] : [];
+            $o['hours'] = [];
+            $ora = function ( $v ) {
+                $v = trim( (string) $v );
+                return preg_match( '/^([01]?\d|2[0-3])[:.]([0-5]\d)$/', $v, $m ) ? sprintf( '%02d:%02d', $m[1], $m[2] ) : '';
+            };
+            foreach ( self::GIORNI as $g ) {
+                $a = $ora( $ore[ $g ]['open'] ?? '' );
+                $c = $ora( $ore[ $g ]['close'] ?? '' );
+                if ( $a && $c ) {
+                    $o['hours'][ $g ] = [ 'open' => $a, 'close' => $c ];
+                }
+            }
+        }
+        if ( self::OPT_ADVANCED === $option_key ) {
+            foreach ( [ 'noindex_categories', 'noindex_tags', 'noindex_author', 'noindex_date', 'noindex_search', 'llms', 'redirect_auto' ] as $k ) {
+                if ( isset( $o[ $k ] ) ) {
+                    $o[ $k ] = ! empty( $o[ $k ] );
+                }
+            }
+            if ( isset( $o['noindex_pt'] ) ) {
+                $pt = [];
+                foreach ( (array) $o['noindex_pt'] as $k => $v ) {
+                    if ( $v ) {
+                        $pt[ sanitize_key( $k ) ] = true;
+                    }
+                }
+                $o['noindex_pt'] = $pt;
+            }
+            if ( isset( $o['robots_txt'] ) ) {
+                $o['robots_txt'] = sanitize_textarea_field( (string) $o['robots_txt'] );
+            }
+            if ( isset( $o['ia_bot'] ) && ! in_array( $o['ia_bot'], self::IA_BOT, true ) ) {
+                $o['ia_bot'] = 'tutti';
+            }
+            if ( isset( $o['indexnow_key'] ) ) {
+                $k = trim( (string) $o['indexnow_key'] );
+                $o['indexnow_key'] = ( '' === $k || preg_match( '/^[A-Za-z0-9-]{8,128}$/', $k ) ) ? $k : '';
+            }
         }
         if ( self::OPT_TITLES === $option_key ) {
             // «Lingua sito» (la lingua è quella di WordPress e di OLOlang) e «Robots
@@ -231,8 +366,14 @@ class Olobuild_Seo_Settings {
                     $o['kg_type'] = $adv['schema']['type'];
                 }
             }
-            if ( isset( $o['kg_type'] ) && ! in_array( $o['kg_type'], self::KG_TYPES, true ) ) {
+            if ( isset( $o['kg_type'] ) && ! self::tipo_chi( $o['kg_type'] ) ) {
                 $o['kg_type'] = 'Organization';
+            }
+            if ( isset( $o['kg_name'] ) ) {
+                $o['kg_name'] = sanitize_text_field( $o['kg_name'] );
+            }
+            if ( isset( $o['kg_logo'] ) ) {
+                $o['kg_logo'] = esc_url_raw( $o['kg_logo'] );
             }
             if ( isset( $o['description'] ) ) {
                 $o['description'] = mb_substr( sanitize_textarea_field( $o['description'] ), 0, 160 );

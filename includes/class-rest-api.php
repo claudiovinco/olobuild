@@ -944,6 +944,24 @@ class Olobuild_Rest_Api {
         }
 
         $resp = [ 'saved' => true ];
+
+        // L'indirizzo della pagina (Impostazioni › SEO › Pagina per pagina, 1.4.1265). WordPress lo rende unico; il
+        // vecchio indirizzo porta al nuovo da solo (Olobuild_Seo_Redirects::redirect_se_cambia_indirizzo). La home no:
+        // sta sempre all'indirizzo del sito.
+        if ( array_key_exists( 'slug', $body ) ) {
+            $p     = get_post( $post_id );
+            $nuovo = sanitize_title( (string) $body['slug'] );
+            if ( '' === $nuovo ) {
+                $errors['slug'] = __( 'L\'indirizzo non può restare vuoto.', 'olobuild' );
+            } elseif ( $p && $nuovo !== $p->post_name && (int) get_option( 'page_on_front' ) !== $post_id ) {
+                $fatto = wp_update_post( [ 'ID' => $post_id, 'post_name' => $nuovo ], true );
+                if ( is_wp_error( $fatto ) ) {
+                    $errors['slug'] = $fatto->get_error_message();
+                }
+            }
+            $resp['url'] = get_permalink( $post_id );
+        }
+
         if ( $errors ) $resp['errors'] = $errors;
         return rest_ensure_response( $resp );
     }

@@ -1004,17 +1004,18 @@ const resolvedOptions = computed(() => {
     if (props.field.optionsSource === 'langTiles') {
       // Tile langswitcher del template, referenziabili dal megamenu (lang_tile_id).
       const tilesStore = useTilesStore();
-      const results = [{ value: '', label: t('— Nessun selettore —') }];
+      // 1.4.1271: «Selettore lingua», numerati solo se sono più d'uno (prima «Selettore lingua — d5b7ccac»)
+      const trovati = [];
       const walk = (nodes) => {
         for (const node of nodes) {
-          if (node.type === 'langswitcher') {
-            results.push({ value: node.id, label: t('Selettore lingua') + ' — ' + String(node.id).slice(0, 8) });
-          }
+          if (node.type === 'langswitcher') trovati.push(node.id);
           if (Array.isArray(node.children)) walk(node.children);
         }
       };
       walk(tilesStore.canvasTiles || []);
-      return results;
+      return [{ value: '', label: t('Nessuno') }].concat(trovati.map((id, k) => ({
+        value: id, label: t('Selettore lingua') + (trovati.length > 1 ? ' ' + (k + 1) : ''),
+      })));
     }
     if (props.field.optionsSource === 'metaKeys') {
       // Lista meta_key disponibili per il post_type corrente, dipendente da optionsDependOn (default: 'post_type')
