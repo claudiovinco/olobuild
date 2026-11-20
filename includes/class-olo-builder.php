@@ -1325,6 +1325,12 @@ class Olobuild_Builder {
             'megapanelTemplates' => $this->get_megapanel_templates(),
             'widgetTemplates'    => $this->get_widget_templates(),
             'postTypes'      => $this->get_public_post_types(),
+            // I tipi con argomenti e sottoargomenti (i manuali) e le Pagine, per «Indice argomenti».
+            'tipiArgomenti'  => array_values( array_map( function ( $pt ) {
+                return [ 'value' => $pt->name, 'label' => $pt->label ];
+            }, array_filter( get_post_types( [ 'public' => true, 'hierarchical' => true ], 'objects' ), function ( $pt ) {
+                return 'attachment' !== $pt->name;
+            } ) ) ),
             'taxonomies'     => $this->get_public_taxonomies(),
             'termini'        => $this->get_terms_map(),
             'campiAllegati'  => class_exists( 'Olobuild_Tipi_Contenuto' ) ? Olobuild_Tipi_Contenuto::scelte_allegati() : [],

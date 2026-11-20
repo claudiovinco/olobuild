@@ -29,7 +29,7 @@
     <p v-if="errore" class="orz-avviso orz-avviso--errore" role="alert">{{ errore }}</p>
 
     <ul v-if="voci.length" class="orz-righe">
-      <li v-for="v in voci" :key="v.id" class="orz-riga">
+      <li v-for="v in voci" :key="v.id" class="orz-riga" :class="{ 'orz-riga--sotto': v.livello }" :style="v.livello ? { '--orz-livello': Math.min(v.livello, 6) } : null">
         <button type="button" class="orz-riga-apri" @click="emit('apri', v.id)">
           <span class="orz-riga-mini">
             <img v-if="v.miniatura" :src="v.miniatura" alt="" loading="lazy" />

@@ -200,6 +200,24 @@
           </a>
         </div>
 
+        <div v-if="tipo.argomenti && !traduzione" class="orz-riquadro">
+          <div class="orz-etichetta">
+            <h2 class="orz-sezione">{{ t('Posizione') }}</h2>
+            <InfoTip :titolo="t('Posizione')" :testo="t('Sotto quale argomento sta, come un capitolo dentro il suo volume. Fra gli argomenti allo stesso livello vengono prima i numeri d\'ordine più bassi; a parità di numero, l\'ordine alfabetico.')" />
+          </div>
+          <label class="orz-campo-lato">
+            <span>{{ t('Sta sotto') }}</span>
+            <select v-model.number="f.genitore" :disabled="spento">
+              <option :value="0">{{ t('Nessuno: in cima') }}</option>
+              <option v-for="x in genitoriPossibili" :key="x.id" :value="x.id">{{ '— '.repeat(x.livello) + x.titolo }}</option>
+            </select>
+          </label>
+          <label class="orz-campo-lato orz-campo-lato--corto">
+            <span>{{ t('Ordine') }}</span>
+            <input v-model.number="f.ordine" type="number" step="1" :disabled="spento" />
+          </label>
+        </div>
+
         <div v-if="tipo.tassonomie.length && !traduzione" class="orz-riquadro">
           <h2 class="orz-sezione">{{ t('Organizzazione') }}</h2>
           <Termini
@@ -295,7 +313,7 @@ const lingue = (window.oloData && window.oloData.redazione && window.oloData.red
 const TRADUCIBILI = ['testo', 'testo_lungo', 'formattato'];
 
 const s = ref(null);
-const f = reactive({ titolo: '', testo: '', riassunto: '', quando: 'subito', data: '', termini: {}, immagine: 0, campi: {}, social: null });
+const f = reactive({ titolo: '', testo: '', riassunto: '', genitore: 0, ordine: 0, quando: 'subito', data: '', termini: {}, immagine: 0, campi: {}, social: null });
 const media = reactive({});
 const immagineInfo = computed(() => (f.immagine ? media[f.immagine] : null));
 const originale = ref('');
@@ -335,6 +353,30 @@ const nomeLingua = computed(() => {
 });
 // Il contenuto appena creato (anche dal salvataggio automatico) prima che l'indirizzo della pagina lo dica.
 const idCorrente = computed(() => (s.value ? s.value.id : props.id));
+
+// Argomenti e sottoargomenti: l'albero del tipo per «Sta sotto», senza il contenuto stesso e i suoi sottoargomenti.
+const argomenti = ref([]);
+async function caricaArgomenti() {
+  if (!props.tipo.argomenti) {
+    argomenti.value = [];
+    return;
+  }
+  try {
+    argomenti.value = await chiama('redazione/argomenti', { parametri: { tipo: props.tipo.chiave } });
+  } catch (e) {
+    argomenti.value = [];
+  }
+}
+watch(() => props.tipo.chiave, caricaArgomenti, { immediate: true });
+const genitoriPossibili = computed(() => {
+  const io = idCorrente.value;
+  if (!io) return argomenti.value;
+  const fuori = new Set([io]);
+  argomenti.value.forEach((x) => {
+    if (fuori.has(x.genitore)) fuori.add(x.id);
+  });
+  return argomenti.value.filter((x) => !fuori.has(x.id));
+});
 // Già sul sito o in uscita: il salvataggio automatico va nella copia di sicurezza, non nel contenuto.
 const daCopiare = computed(() => !!s.value && (uscito.value || s.value.stato === 'future'));
 const copiaDaScegliere = computed(() => !!(s.value && s.value.copia) && !copiaScelta.value);
@@ -431,6 +473,8 @@ function applica(r) {
   f.titolo = r.titolo || '';
   f.testo = r.testo || '';
   f.riassunto = r.riassunto || '';
+  f.genitore = r.genitore || 0;
+  f.ordine = r.ordine || 0;
   f.quando = r.stato === 'future' || (r.dataFissata && !['publish', 'private'].includes(r.stato)) ? 'data' : 'subito';
   f.data = r.data || '';
   const termini = {};
@@ -516,7 +560,7 @@ function riprendiVersione(d) {
 
 function vuota() {
   s.value = null;
-  Object.assign(f, { titolo: '', testo: '', riassunto: '', quando: 'subito', data: '', immagine: 0 });
+  Object.assign(f, { titolo: '', testo: '', riassunto: '', genitore: 0, ordine: 0, quando: 'subito', data: '', immagine: 0 });
   const termini = {};
   props.tipo.tassonomie.forEach((x) => {
     termini[x.nome] = [];
@@ -573,6 +617,10 @@ function corpo(azione, forza) {
     forza: !!forza,
   };
   if (!s.value || !s.value.solaLettura) c.testo = f.testo;
+  if (props.tipo.argomenti) {
+    c.genitore = f.genitore || 0;
+    c.ordine = Number.isFinite(f.ordine) ? f.ordine : 0;
+  }
   // Una traduzione manda solo i suoi testi: il resto viene dall'originale.
   if (traduzione.value) {
     delete c.termini;
@@ -646,6 +694,7 @@ async function salva(azione, forza = false, automatico = false) {
     erroreAuto.value = '';
     if (!automatico) avvisa(r.avviso || (r.stato === 'future' && azione !== 'bozza' ? t('Programmato.') : MESSAGGI[azione]()));
     emit('salvato', { id: r.id, nuovo, automatico });
+    if (props.tipo.argomenti && !automatico) caricaArgomenti();
   } catch (e) {
     if (e.codice === 'olo_redazione_conflitto' || e.codice === 'olo_redazione_bloccato') {
       conflitto.value = { messaggio: e.message, azione };

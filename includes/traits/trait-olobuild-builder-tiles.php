@@ -189,6 +189,7 @@ trait Olobuild_Builder_Tiles_Trait {
         require_once OLOBUILD_PATH . 'includes/tiles/class-iconlist-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-animatedheading-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-toc-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-argomenti-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-lottie-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-sharebuttons-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-scrollprogress-tile.php';
@@ -480,6 +481,7 @@ trait Olobuild_Builder_Tiles_Trait {
         $manager->register_tile( new Olobuild_Iconlist_Tile() );
         $manager->register_tile( new Olobuild_Animatedheading_Tile() );
         $manager->register_tile( new Olobuild_Toc_Tile() );
+        $manager->register_tile( new Olobuild_Argomenti_Tile() );
         $manager->register_tile( new Olobuild_Lottie_Tile() );
         $manager->register_tile( new Olobuild_Sharebuttons_Tile() );
         $manager->register_tile( new Olobuild_Scrollprogress_Tile() );

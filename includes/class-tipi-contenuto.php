@@ -215,6 +215,9 @@ class Olobuild_Tipi_Contenuto {
                 'icona'      => in_array( $icona, self::ICONE, true ) ? $icona : 'dashicons-admin-post',
                 'posizione'  => max( 5, min( 100, absint( $t['posizione'] ?? 21 ) ?: 21 ) ),
                 'archivio'   => ! isset( $t['archivio'] ) || ! empty( $t['archivio'] ),
+                // Argomenti e sottoargomenti: un contenuto sta sotto un altro (tipo gerarchico, con l'ordine scelto a
+                // mano), come i capitoli di un manuale. Lo leggono la Redazione, «Indice argomenti» e la navigazione.
+                'argomenti'  => ! empty( $t['argomenti'] ),
                 'categorie'  => ! empty( $t['categorie'] ),
                 'tag'        => ! empty( $t['tag'] ),
                 'editor'     => 'blocchi' === ( $t['editor'] ?? '' ) ? 'blocchi' : 'semplice',
@@ -321,6 +324,9 @@ class Olobuild_Tipi_Contenuto {
                 $tassonomie[] = self::tassonomia( $t, 'tag' );
             }
             $supporti = [ 'title', 'editor', 'revisions' ];
+            if ( ! empty( $t['argomenti'] ) ) {
+                $supporti[] = 'page-attributes';
+            }
             foreach ( [ 'estratto' => 'excerpt', 'immagine' => 'thumbnail', 'autore' => 'author', 'commenti' => 'comments' ] as $chiave => $wp ) {
                 if ( $t[ $chiave ] ) {
                     $supporti[] = $wp;
@@ -338,6 +344,7 @@ class Olobuild_Tipi_Contenuto {
                 'menu_icon'     => $t['icona'],
                 'supports'      => $supporti,
                 'has_archive'   => $t['archivio'] ? $t['indirizzo'] : false,
+                'hierarchical'  => ! empty( $t['argomenti'] ),
                 'rewrite'       => [ 'slug' => $t['indirizzo'], 'with_front' => false ],
                 'taxonomies'    => $tassonomie,
             ] ) );
@@ -447,7 +454,7 @@ class Olobuild_Tipi_Contenuto {
      */
     public static function regole() {
         $impronta = md5( wp_json_encode( array_map( function ( $t ) {
-            return [ $t['chiave'], $t['indirizzo'], $t['archivio'], $t['categorie'], $t['tag'] ];
+            return [ $t['chiave'], $t['indirizzo'], $t['archivio'], $t['categorie'], $t['tag'], ! empty( $t['argomenti'] ) ];
         }, self::tipi() ) ) );
         if ( get_option( self::OPZIONE_REGOLE ) !== $impronta ) {
             update_option( self::OPZIONE_REGOLE, $impronta, false );

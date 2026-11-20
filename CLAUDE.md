@@ -44,6 +44,11 @@ database/                   → schema.sql
   modifiche al picker buildare ANCHE: `node node_modules/vite/bin/vite.js build --config vite.picker.config.js`
 - Altri bundle: le Impostazioni (`src/components/Admin/`) → `--config vite.config.admin.js`; la **Redazione**
   (`src/redazione/`, menu «Redazione» di WordPress, `includes/class-redazione.php`) → `--config vite.config.redazione.js`.
+- **Argomenti e sottoargomenti** (i manuali, 1.4.1273): opzione dei Tipi di contenuto → tipo gerarchico. L'ordine di
+  lettura sta in `includes/class-argomenti.php` (Redazione, tile «Indice argomenti», «Navigazione articoli», Guida della
+  bacheca, rotta pubblica `olobuild/v1/argomenti`). L'editor della Redazione tiene riquadri, tabelle e foto con
+  didascalia (`src/redazione/nodi.js`): un tag nuovo nell'editor va anche in `Olobuild_Redazione::TAG_TESTO`, se no il
+  testo salvato torna in sola lettura.
 - Version bump obbligatorio dopo modifiche JS/CSS: `OLOBUILD_VERSION` in olobuild.php
 
 ## 🧭 Uniformità dei controlli (inspector)

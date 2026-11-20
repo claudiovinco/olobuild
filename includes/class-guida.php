@@ -109,6 +109,192 @@ class Olobuild_Guida {
 		return add_query_arg( $args, admin_url( 'admin.php' ) );
 	}
 
+	/* ─────────────────────────────────────────────
+	 * Il manuale: gli argomenti del tipo «manuale» del sito di OLObuild (olotheme.com/olobuild), letti dalla rotta
+	 * pubblica olobuild/v1/argomenti (Olobuild_Argomenti). Si scrive nella Redazione di quel sito: una correzione lì si
+	 * vede qui entro un'ora. Senza rete restano le guide brevi del plugin.
+	 * ───────────────────────────────────────────── */
+
+	const MANUALE = 'https://olotheme.com/olobuild/wp-json/olobuild/v1/argomenti/manuale';
+
+	/** Il manuale si vede, salvo la documentazione dell'agenzia (White Label) che prende il posto delle guide di OLObuild. */
+	public static function manuale_attivo() {
+		return ! self::aiuto_esterno();
+	}
+
+	private static function manuale_fonte() {
+		return untrailingslashit( (string) apply_filters( 'olobuild_manuale_fonte', self::MANUALE ) );
+	}
+
+	/** Il sito che scrive il manuale lo legge da sé: anche gli argomenti privati, per chi li può leggere (per rivederli). */
+	private static function manuale_locale() {
+		$sito = preg_replace( '#/wp-json/.*$#', '', self::manuale_fonte() );
+		return class_exists( 'Olobuild_Argomenti' ) && post_type_exists( 'manuale' ) && untrailingslashit( home_url() ) === $sito;
+	}
+
+	/**
+	 * L'indice ($id = 0) o un argomento del manuale; null se il sito non risponde o l'argomento non c'è. Le risposte del
+	 * sito restano un'ora in memoria.
+	 */
+	public static function manuale_leggi( $id = 0 ) {
+		static $memo = [];
+		$id = absint( $id );
+		if ( array_key_exists( $id, $memo ) ) {
+			return $memo[ $id ];
+		}
+		if ( self::manuale_locale() ) {
+			if ( ! $id ) {
+				return $memo[ $id ] = Olobuild_Argomenti::indice_dati( 'manuale' );
+			}
+			$p = get_post( $id );
+			$ok = $p && 'manuale' === $p->post_type && ( 'publish' === $p->post_status || current_user_can( 'read_post', $id ) );
+			return $memo[ $id ] = $ok ? Olobuild_Argomenti::argomento_dati( $p ) : null;
+		}
+		$url    = self::manuale_fonte() . ( $id ? '/' . $id : '' );
+		$chiave = 'olo_manuale_' . md5( $url );
+		$c      = get_transient( $chiave );
+		if ( is_array( $c ) ) {
+			return $memo[ $id ] = $c;
+		}
+		$r = wp_remote_get( $url, [ 'timeout' => 8, 'headers' => [ 'Accept' => 'application/json' ] ] );
+		if ( is_wp_error( $r ) || 200 !== (int) wp_remote_retrieve_response_code( $r ) ) {
+			return $memo[ $id ] = null;
+		}
+		$d = json_decode( (string) wp_remote_retrieve_body( $r ), true );
+		if ( ! is_array( $d ) ) {
+			return $memo[ $id ] = null;
+		}
+		set_transient( $chiave, $d, HOUR_IN_SECONDS );
+		return $memo[ $id ] = $d;
+	}
+
+	public static function url_manuale( $id = 0 ) {
+		$u = self::url( 'manuale' );
+		return $id ? add_query_arg( 'a', absint( $id ), $u ) : $u;
+	}
+
+	private static function youtube_id( $url ) {
+		return preg_match( '~(?:youtu\.be/|youtube\.com/(?:watch\?(?:.*&)?v=|embed/|shorts/))([A-Za-z0-9_-]{11})~', (string) $url, $m ) ? $m[1] : '';
+	}
+
+	/** L'argomento aperto nella Guida (?a=), 0 = il sommario. */
+	private static function argomento_aperto() {
+		return isset( $_GET['a'] ) ? absint( wp_unslash( $_GET['a'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- sola lettura: sceglie quale argomento mostrare.
+	}
+
+	/** L'indice del manuale nella colonna di sinistra, al posto delle guide. */
+	private static function render_nav_manuale() {
+		$ind  = self::manuale_leggi( 0 );
+		$voci = is_array( $ind['voci'] ?? null ) ? $ind['voci'] : [];
+		$id   = self::argomento_aperto();
+		$arg  = $id ? self::manuale_leggi( $id ) : null;
+		$ramo = array_flip( array_map( function ( $x ) {
+			return (int) $x['id'];
+		}, is_array( $arg['antenati'] ?? null ) ? $arg['antenati'] : [] ) );
+		?>
+		<a href="<?php echo esc_url( self::url() ); ?>">
+			<span class="ic"><?php echo self::icona( 'indietro', 16 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di icona(). ?></span><?php esc_html_e( 'Tutte le guide', 'olobuild' ); ?>
+		</a>
+		<div class="sep"></div>
+		<p class="lbl"><?php esc_html_e( 'Manuale', 'olobuild' ); ?></p>
+		<a href="<?php echo esc_url( self::url_manuale() ); ?>" class="<?php echo $id ? '' : 'on'; ?>"<?php echo $id ? '' : ' aria-current="page"'; ?>>
+			<span class="ic"><?php echo self::icona( 'libro', 16 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di icona(). ?></span><?php esc_html_e( 'Sommario', 'olobuild' ); ?>
+		</a>
+		<?php foreach ( $voci as $v ) : ?>
+			<?php
+			$vid = (int) $v['id'];
+			$cls = 'olo-man-g-voce l' . min( 5, (int) $v['livello'] ) . ( $vid === $id ? ' on' : '' ) . ( isset( $ramo[ $vid ] ) ? ' ramo' : '' );
+			?>
+		<a class="<?php echo esc_attr( $cls ); ?>" href="<?php echo esc_url( self::url_manuale( $vid ) ); ?>"<?php echo $vid === $id ? ' aria-current="page"' : ''; ?>><?php echo esc_html( $v['titolo'] ); ?></a>
+		<?php endforeach; ?>
+		<?php
+	}
+
+	/** Il sommario del manuale o un suo argomento. */
+	private static function render_manuale() {
+		$ind  = self::manuale_leggi( 0 );
+		$voci = is_array( $ind['voci'] ?? null ) ? $ind['voci'] : [];
+		$id   = self::argomento_aperto();
+		$arg  = $id ? self::manuale_leggi( $id ) : null;
+		// La porta d'ingresso del manuale sul sito (la pagina /guida/ del sito di OLObuild).
+		$sito = is_string( $ind['casa'] ?? null ) ? $ind['casa'] : ( is_string( $ind['sito'] ?? null ) ? $ind['sito'] : '' );
+		if ( null === $ind || ! $voci ) {
+			?>
+			<header class="olo-guida-head">
+				<p class="kick"><?php esc_html_e( 'Manuale', 'olobuild' ); ?></p>
+				<h1><?php esc_html_e( 'Manuale di OLObuild', 'olobuild' ); ?></h1>
+				<p class="lead"><?php echo null === $ind
+					? esc_html__( 'Il manuale si legge dal sito di OLObuild, che ora non risponde. Riprova tra poco: intanto le guide brevi del plugin funzionano anche senza rete.', 'olobuild' )
+					: esc_html__( 'Il manuale è in preparazione. Intanto le guide brevi del plugin spiegano le cose principali.', 'olobuild' ); ?></p>
+			</header>
+			<a class="olo-btn olo-btn-sec" href="<?php echo esc_url( self::url() ); ?>"><?php esc_html_e( 'Vai alle guide', 'olobuild' ); ?></a>
+			<?php
+			return;
+		}
+		if ( ! $arg ) {
+			?>
+			<article class="olo-guida-art olo-man-g">
+				<header class="olo-guida-head">
+					<p class="kick"><?php esc_html_e( 'Manuale', 'olobuild' ); ?></p>
+					<h1><?php esc_html_e( 'Manuale di OLObuild', 'olobuild' ); ?></h1>
+					<p class="lead"><?php esc_html_e( 'Tutto quello che serve sapere, un argomento alla volta, coi video del canale. È lo stesso manuale del sito di OLObuild e si aggiorna da solo.', 'olobuild' ); ?></p>
+					<?php if ( $sito ) : ?>
+					<p class="meta"><a href="<?php echo esc_url( $sito ); ?>" target="_blank" rel="noopener"><?php echo self::icona( 'freccia', 13 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di icona(). ?> <?php esc_html_e( 'Apri il manuale sul sito', 'olobuild' ); ?></a></p>
+					<?php endif; ?>
+				</header>
+				<ul class="olo-man-g-sommario">
+					<?php foreach ( $voci as $v ) : ?>
+					<li class="l<?php echo (int) min( 5, (int) $v['livello'] ); ?>"><a href="<?php echo esc_url( self::url_manuale( (int) $v['id'] ) ); ?>"><?php echo esc_html( $v['titolo'] ); ?></a></li>
+					<?php endforeach; ?>
+				</ul>
+			</article>
+			<?php
+			return;
+		}
+		$yt = self::youtube_id( $arg['video'] ?? '' );
+		?>
+		<article class="olo-guida-art olo-man-g">
+			<header class="olo-guida-head">
+				<p class="kick olo-man-g-briciole">
+					<a href="<?php echo esc_url( self::url_manuale() ); ?>"><?php esc_html_e( 'Manuale', 'olobuild' ); ?></a>
+					<?php foreach ( (array) ( $arg['antenati'] ?? [] ) as $a ) : ?>
+					<span aria-hidden="true">›</span> <a href="<?php echo esc_url( self::url_manuale( (int) $a['id'] ) ); ?>"><?php echo esc_html( $a['titolo'] ); ?></a>
+					<?php endforeach; ?>
+				</p>
+				<h1><?php echo esc_html( $arg['titolo'] ?? '' ); ?></h1>
+				<?php if ( ! empty( $arg['sottotitolo'] ) ) : ?>
+				<p class="lead"><?php echo esc_html( $arg['sottotitolo'] ); ?></p>
+				<?php endif; ?>
+				<?php if ( ! empty( $arg['link'] ) ) : ?>
+				<p class="meta"><a href="<?php echo esc_url( $arg['link'] ); ?>" target="_blank" rel="noopener"><?php echo self::icona( 'freccia', 13 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di icona(). ?> <?php esc_html_e( 'Apri sul sito', 'olobuild' ); ?></a></p>
+				<?php endif; ?>
+			</header>
+			<?php if ( $yt ) : ?>
+			<div class="olo-man-g-video"><iframe src="<?php echo esc_url( 'https://www.youtube-nocookie.com/embed/' . $yt ); ?>" title="<?php echo esc_attr( sprintf( __( 'Video: %s', 'olobuild' ), $arg['titolo'] ?? '' ) ); ?>" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>
+			<?php endif; ?>
+			<div class="olo-testo-redazione"><?php echo wp_kses_post( (string) ( $arg['html'] ?? '' ) ); ?></div>
+			<?php if ( ! empty( $arg['figli'] ) ) : ?>
+			<div class="olo-man-g-figli">
+				<strong><?php esc_html_e( 'In questa sezione', 'olobuild' ); ?></strong>
+				<ul>
+					<?php foreach ( $arg['figli'] as $f ) : ?>
+					<li><a href="<?php echo esc_url( self::url_manuale( (int) $f['id'] ) ); ?>"><?php echo esc_html( $f['titolo'] ); ?></a></li>
+					<?php endforeach; ?>
+				</ul>
+			</div>
+			<?php endif; ?>
+			<nav class="olo-guida-piede" aria-label="<?php esc_attr_e( 'Altri argomenti', 'olobuild' ); ?>">
+				<?php if ( ! empty( $arg['prima'] ) ) : ?>
+				<a href="<?php echo esc_url( self::url_manuale( (int) $arg['prima']['id'] ) ); ?>"><span><?php esc_html_e( 'Precedente', 'olobuild' ); ?></span><strong><?php echo esc_html( $arg['prima']['titolo'] ); ?></strong></a>
+				<?php endif; ?>
+				<?php if ( ! empty( $arg['dopo'] ) ) : ?>
+				<a class="succ" href="<?php echo esc_url( self::url_manuale( (int) $arg['dopo']['id'] ) ); ?>"><span><?php esc_html_e( 'Successivo', 'olobuild' ); ?></span><strong><?php echo esc_html( $arg['dopo']['titolo'] ); ?></strong></a>
+				<?php endif; ?>
+			</nav>
+		</article>
+		<?php
+	}
+
 	/**
 	 * Il file della guida nella lingua del sito, altrimenti in italiano.
 	 */
@@ -191,12 +377,30 @@ class Olobuild_Guida {
 	public static function render_contenuto() {
 		$guide = self::guide();
 		$g     = isset( $_GET['g'] ) ? sanitize_key( wp_unslash( $_GET['g'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- sola lettura: sceglie quale guida mostrare.
-		if ( ! isset( $guide[ $g ] ) && ! ( 'novita' === $g && self::novita_visibili() ) ) {
+		if ( ! isset( $guide[ $g ] ) && ! ( 'novita' === $g && self::novita_visibili() ) && ! ( 'manuale' === $g && self::manuale_attivo() ) ) {
 			$g = '';
+		}
+		if ( 'manuale' === $g ) {
+			?>
+			<div class="olo-guida">
+				<nav class="olo-guida-nav olo-man-g-nav" aria-label="<?php esc_attr_e( 'Manuale', 'olobuild' ); ?>">
+					<?php self::render_nav_manuale(); ?>
+				</nav>
+				<div class="olo-guida-main"><?php self::render_manuale(); ?></div>
+			</div>
+			<?php
+			return;
 		}
 		?>
 		<div class="olo-guida">
 			<nav class="olo-guida-nav" aria-label="<?php esc_attr_e( 'Guide', 'olobuild' ); ?>">
+				<?php if ( self::manuale_attivo() ) : ?>
+				<p class="lbl"><?php esc_html_e( 'Manuale', 'olobuild' ); ?></p>
+				<a href="<?php echo esc_url( self::url_manuale() ); ?>">
+					<span class="ic"><?php echo self::icona( 'libro', 16 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di icona(). ?></span><?php esc_html_e( 'Manuale di OLObuild', 'olobuild' ); ?>
+				</a>
+				<div class="sep"></div>
+				<?php endif; ?>
 				<p class="lbl"><?php esc_html_e( 'Guide', 'olobuild' ); ?></p>
 				<a href="<?php echo esc_url( self::url() ); ?>" class="<?php echo '' === $g ? 'on' : ''; ?>"<?php echo '' === $g ? ' aria-current="page"' : ''; ?>>
 					<span class="ic"><?php echo self::icona( 'libro', 16 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di icona(). ?></span><?php esc_html_e( 'Tutte le guide', 'olobuild' ); ?>
@@ -239,6 +443,14 @@ class Olobuild_Guida {
 			<p class="lead"><?php echo esc_html( sprintf( __( 'Le guide di %s, scritte per la versione installata. Ognuna si legge in pochi minuti e rimanda alle schermate che descrive.', 'olobuild' ), self::marchio() ) ); ?></p>
 		</header>
 		<div class="olo-guida-cards">
+			<?php if ( self::manuale_attivo() ) : ?>
+			<a class="olo-guida-card olo-guida-card--manuale" href="<?php echo esc_url( self::url_manuale() ); ?>">
+				<span class="ic"><?php echo self::icona( 'libro', 18 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di icona(). ?></span>
+				<span class="t"><?php esc_html_e( 'Manuale di OLObuild', 'olobuild' ); ?></span>
+				<span class="d"><?php esc_html_e( 'Tutto quello che serve sapere, un argomento alla volta, coi video del canale. Si legge dal sito di OLObuild e si aggiorna da solo.', 'olobuild' ); ?></span>
+				<span class="m"><?php esc_html_e( 'Argomenti e sottoargomenti', 'olobuild' ); ?></span>
+			</a>
+			<?php endif; ?>
 			<?php foreach ( self::guide() as $slug => $info ) : ?>
 			<a class="olo-guida-card" href="<?php echo esc_url( self::url( $slug ) ); ?>">
 				<span class="ic"><?php echo self::icona( $info['icona'], 18 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di icona(). ?></span>

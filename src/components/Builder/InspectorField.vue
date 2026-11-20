@@ -939,6 +939,10 @@ const resolvedOptions = computed(() => {
       if (props.modelValue === 'custom') tipi.push({ value: 'custom', label: t('Custom Post Type') });
       return tipi;
     }
+    if (props.field.optionsSource === 'tipiArgomenti') {
+      // «Indice argomenti»: i tipi con argomenti e sottoargomenti (e le Pagine); vuoto = quello del contenuto aperto.
+      return [{ value: '', label: t('Quello del contenuto aperto') }, ...(md.tipiArgomenti || [])];
+    }
     if (props.field.optionsSource === 'campiAllegati') {
       // I campi Allegati dei tipi di contenuto (Impostazioni › Tipi di contenuto); il primo è «Elenco qui sotto».
       return md.campiAllegati?.length ? md.campiAllegati : [{ value: '', label: t('Elenco qui sotto') }];

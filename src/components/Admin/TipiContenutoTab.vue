@@ -184,6 +184,8 @@ const lettura = useCfgLettura(TAB_ID, loaded, () => carica());
 
 const ORGANIZZAZIONE = [
   { key: 'archivio', label: 'Pagina con tutti i contenuti' },
+  // Un contenuto sotto l'altro, come i capitoli di un manuale (tipo gerarchico, ordine scelto a mano).
+  { key: 'argomenti', label: 'Argomenti e sottoargomenti' },
   { key: 'categorie', label: 'Categorie e sottocategorie' },
   { key: 'tag', label: 'Tag' },
 ];
@@ -220,7 +222,7 @@ function slug(testo, sep) {
 function aggiungiTipo() {
   tipi.value.push({
     _id: nuovoId(), _nuovo: true, chiave: '', nome: '', singolare: '', indirizzo: '', icona: 'dashicons-megaphone',
-    posizione: 21, archivio: true, categorie: true, tag: false, editor: 'semplice', estratto: true, immagine: true,
+    posizione: 21, archivio: true, argomenti: false, categorie: true, tag: false, editor: 'semplice', estratto: true, immagine: true,
     autore: false, commenti: false, permessi: 'articoli', campi: [],
   });
 }

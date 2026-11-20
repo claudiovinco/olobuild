@@ -3581,3 +3581,105 @@ html:has(.olo-frontend-grid) {
   -webkit-backdrop-filter: var(--olo-vl) var(--olo-bd) !important;
   backdrop-filter: var(--olo-vl) var(--olo-bd) !important;
 }
+
+/* ─────────────────────────────────────────────
+ * Testi della Redazione (1.4.1273): riquadri, foto con didascalia e tabelle, come li scrive l'editor (nodi.js).
+ * Si vedono dove c'è il testo di un contenuto (fonte dinamica «Testo») e nella Guida della bacheca. Colori dal tema.
+ * ───────────────────────────────────────────── */
+.olo-riquadro {
+  --olo-riq-c: var(--olo-color-primary, #e1474f);
+  margin: 1.4em 0;
+  padding: 14px 18px 4px;
+  border-left: 4px solid var(--olo-riq-c);
+  border-radius: 0 10px 10px 0;
+  background: color-mix(in srgb, var(--olo-riq-c) 7%, var(--olo-color-background, #fff));
+  color: var(--olo-color-text, inherit);
+}
+.olo-riquadro > * { margin-top: 0; margin-bottom: 10px; }
+.olo-riquadro .olo-riquadro-t {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--olo-riq-c) 78%, var(--olo-color-text, #1d1d1f));
+}
+.olo-riquadro ul, .olo-riquadro ol { padding-left: 1.3em; }
+.olo-riquadro--attenzione { --olo-riq-c: var(--olo-color-warning, #b26a00); }
+.olo-riquadro--obiettivi, .olo-riquadro--serve { --olo-riq-c: var(--olo-color-text, #1d1d1f); }
+.olo-riquadro--obiettivi, .olo-riquadro--serve { background: color-mix(in srgb, var(--olo-color-text, #1d1d1f) 4%, var(--olo-color-background, #fff)); }
+.olo-figura { margin: 1.4em 0; }
+.olo-figura img { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--olo-color-border, #e2e2e7); }
+.olo-figura figcaption { margin-top: 8px; font-size: .875em; line-height: 1.45; color: var(--olo-color-text-muted, #6e6e73); }
+.olo-figura figcaption:empty { display: none; }
+.olo-text-block table, .olo-ct-text-body table, .olo-testo-redazione table {
+  width: 100%;
+  margin: 1.2em 0;
+  border-collapse: collapse;
+  font-size: .95em;
+}
+.olo-text-block th, .olo-text-block td, .olo-ct-text-body th, .olo-ct-text-body td, .olo-testo-redazione th, .olo-testo-redazione td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--olo-color-border, #e6e6eb);
+  text-align: left;
+  vertical-align: top;
+}
+.olo-text-block th, .olo-ct-text-body th, .olo-testo-redazione th {
+  font-size: .8em;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--olo-color-text-muted, #6e6e73);
+}
+.olo-text-block td > p, .olo-text-block th > p, .olo-ct-text-body td > p, .olo-ct-text-body th > p, .olo-testo-redazione td > p, .olo-testo-redazione th > p { margin: 0; }
+
+/* ─────────────────────────────────────────────
+ * Indice argomenti (1.4.1273): l'elenco a lato di un manuale. Colori e misure nella <style> della tile.
+ * ───────────────────────────────────────────── */
+.olo-argomenti { --olo-arg-attivo: var(--olo-color-primary, #e1474f); --olo-arg-linea: var(--olo-color-border, #e5e5ea); }
+.olo-arg-riga { display: flex; align-items: flex-start; gap: 2px; }
+.olo-arg-riga a { flex: 1; min-width: 0; display: block; color: inherit; text-decoration: none; overflow-wrap: anywhere; transition: background-color .15s, color .15s; }
+.olo-arg-riga a:hover { background: color-mix(in srgb, currentColor 6%, transparent); }
+.olo-arg-riga a:focus-visible, .olo-arg-freccia:focus-visible, .olo-arg-apri:focus-visible, .olo-arg-cerca input:focus-visible {
+  outline: 2px solid var(--olo-arg-attivo); outline-offset: 2px;
+}
+.olo-arg-freccia {
+  flex: none; display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; margin: 0;
+  padding: 0; border: 0; border-radius: 6px; background: none; color: inherit; opacity: .6; cursor: pointer;
+}
+.olo-arg-freccia:hover { opacity: 1; background: color-mix(in srgb, currentColor 6%, transparent); }
+.olo-arg-freccia svg { transition: transform .2s; }
+.olo-arg-voce.is-aperta > .olo-arg-riga .olo-arg-freccia svg { transform: rotate(90deg); }
+.olo-arg-voce.has-figli:not(.is-aperta) > .olo-arg-sotto { display: none; }
+.olo-arg-cerca { position: relative; display: flex; align-items: center; margin: 0 0 12px; }
+.olo-arg-cerca svg { position: absolute; left: 10px; opacity: .55; pointer-events: none; }
+.olo-arg-cerca input {
+  width: 100%; min-height: 38px; margin: 0; padding: 6px 10px 6px 32px; border: 1px solid var(--olo-arg-linea);
+  border-radius: 8px; background: color-mix(in srgb, currentColor 5%, transparent); color: inherit; font: inherit; font-size: .93em;
+}
+.olo-arg-cerca input::placeholder { color: inherit; opacity: .6; }
+.olo-arg-nessuno { margin: 4px 0 8px; font-size: .9em; opacity: .7; }
+.olo-arg-voce.is-nascosta { display: none; }
+.olo-arg-apri { display: none; }
+.olo-argomenti-vuoto { padding: 16px; border: 1px dashed var(--olo-color-border, #d0d0d6); border-radius: 8px; font-size: 14px; opacity: .8; }
+/* Nella colonna con «Scroll fisso» (lo sticky lo fa la colonna, che conosce la testata): se è più alto della finestra,
+   l'indice scorre da sé. Sotto i 960 px la colonna va sopra il testo: lì niente sticky, l'indice segue la pagina. */
+@media (min-width: 960px) {
+  [style*="position: sticky"] .olo-argomenti {
+    max-height: calc(100vh - var(--olo-sticky-top-offset, 0px) - 72px); overflow: auto; overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+}
+@media (max-width: 959px) {
+  [style*="position: sticky"]:has(.olo-argomenti) { position: static !important; }
+  .olo-argomenti--telefono-chiuso .olo-arg-apri {
+    display: flex; align-items: center; gap: 10px; width: 100%; min-height: 46px; margin: 0; padding: 10px 14px;
+    border: 1px solid var(--olo-arg-linea); border-radius: 10px; background: color-mix(in srgb, currentColor 5%, transparent);
+    color: inherit; font: inherit; font-weight: 600; text-align: left; cursor: pointer;
+  }
+  .olo-arg-apri-qui { flex: 1; min-width: 0; font-weight: 400; opacity: .7; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .olo-arg-apri-qui::before { content: '·'; margin-right: 10px; }
+  .olo-argomenti--telefono-chiuso .olo-arg-corpo { display: none; padding-top: 12px; }
+  .olo-argomenti--telefono-chiuso.is-aperto .olo-arg-corpo { display: block; }
+  .olo-argomenti--telefono-chiuso .olo-arg-corpo > .olo-arg-titolo { display: none; }
+}

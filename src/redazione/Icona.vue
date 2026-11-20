@@ -49,6 +49,7 @@ const SET = {
   ripristina: ['M15 14l5-5l-5-5', 'M20 9H9a5 5 0 0 0 0 10h3'],
   ritaglio: ['M6 2v14a2 2 0 0 0 2 2h14', 'M18 22V8a2 2 0 0 0-2-2H2'],
   documento: ['M6 3h9l4 4v14H6z', 'M9 12h7', 'M9 16h7'],
+  tabella: ['M4 5h16v14H4z', 'M4 10h16', 'M4 15h16', 'M10 5v14'],
   orologio: ['M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18z', 'M12 7v5l3 2'],
   menu: ['M5 12h.01', 'M12 12h.01', 'M19 12h.01'],
   telefono: ['M8 3h8a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z', 'M11 18h2'],

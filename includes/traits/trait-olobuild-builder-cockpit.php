@@ -1201,6 +1201,12 @@ trait Olobuild_Builder_Cockpit_Trait {
                         <div class="olo-rail-section" data-olo-rail-sec="guide">
                             <h3><?php esc_html_e( 'Impara Olobuild', 'olobuild' ); ?></h3>
                             <?php /* Guide scritte del pacchetto (pagina Guida), con i minuti di lettura veri. Niente emoji né video che non esistono. */ ?>
+                            <?php if ( Olobuild_Guida::manuale_attivo() ) : /* Il manuale del sito di OLObuild, letto nella Guida (1.4.1280). */ ?>
+                            <a class="olo-learn-card" href="<?php echo esc_url( Olobuild_Guida::url_manuale() ); ?>">
+                                <div class="th"><?php echo Olobuild_Guida::icona( 'libro', 18 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?></div>
+                                <div class="info"><span class="t"><?php esc_html_e( 'Manuale di OLObuild', 'olobuild' ); ?></span><span class="d"><?php echo Olobuild_Guida::icona( 'documento', 11 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?> <?php esc_html_e( 'Argomenti e video', 'olobuild' ); ?></span></div>
+                            </a>
+                            <?php endif; ?>
                             <?php foreach ( Olobuild_Guida::guide() as $slug => $g ) : ?>
                             <a class="olo-learn-card" href="<?php echo esc_url( Olobuild_Guida::url( $slug ) ); ?>">
                                 <div class="th"><?php echo Olobuild_Guida::icona( $g['icona'], 18 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG statico di Olobuild_Guida::icona(). ?></div>

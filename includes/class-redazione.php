@@ -24,8 +24,12 @@ class Olobuild_Redazione {
     const SLUG = 'olo-redazione';
     const NS   = 'olobuild/v1';
 
-    /** I tag che l'editor della Redazione sa tenere: con altri tag, commenti o stili in linea il testo resta in sola lettura. */
-    const TAG_TESTO = [ 'p', 'br', 'h2', 'h3', 'h4', 'strong', 'b', 'em', 'i', 'a', 'ul', 'ol', 'li', 'blockquote', 'img', 'hr' ];
+    /**
+     * I tag che l'editor della Redazione sa tenere: con altri tag, commenti o stili in linea il testo resta in sola lettura.
+     * Dalla 1.4.1273 anche tabelle, foto con didascalia (figure) e riquadri (aside.olo-riquadro), per scrivere i manuali.
+     */
+    const TAG_TESTO = [ 'p', 'br', 'h2', 'h3', 'h4', 'strong', 'b', 'em', 'i', 'a', 'ul', 'ol', 'li', 'blockquote', 'img', 'hr',
+        'table', 'thead', 'tbody', 'tr', 'th', 'td', 'figure', 'figcaption', 'aside' ];
 
     const STATI = [ 'publish', 'future', 'draft', 'pending', 'private' ];
 
@@ -243,6 +247,8 @@ class Olobuild_Redazione {
             'tassonomiaCategorie' => $tax_cat,
             'estratto'   => post_type_supports( $k, 'excerpt' ),
             'immagine'   => post_type_supports( $k, 'thumbnail' ),
+            // Argomenti e sottoargomenti: la scheda chiede sotto quale contenuto sta e in che ordine, l'elenco è un albero.
+            'argomenti'  => Olobuild_Argomenti::ha_argomenti( $k ),
             'tassonomie' => $tax,
             'crea'       => current_user_can( $pto->cap->create_posts ),
             'pubblica'   => current_user_can( $pto->cap->publish_posts ),
@@ -342,7 +348,9 @@ class Olobuild_Redazione {
         $blocco  = wp_check_post_lock( $post->ID );
         return [
             'id'         => $post->ID,
-            'titolo'     => html_entity_decode( get_the_title( $post ), ENT_QUOTES, 'UTF-8' ),
+            // Senza «Privato:» / «Protetto:» davanti: lo stato ha già la sua etichetta nella riga.
+            'titolo'     => html_entity_decode( apply_filters( 'the_title', $post->post_title, $post->ID ), ENT_QUOTES, 'UTF-8' ),
+            'genitore'   => (int) $post->post_parent,
             'stato'      => $post->post_status,
             'data'       => self::quando( get_post_timestamp( $post ) ),
             'modificato' => self::quando( get_post_timestamp( $post, 'modified' ) ),
@@ -464,6 +472,8 @@ class Olobuild_Redazione {
             'solaLettura'         => $motivo,
             'anteprimaTesto'      => '' !== $motivo ? wp_trim_words( wp_strip_all_tags( strip_shortcodes( $post->post_content ) ), 60 ) : '',
             'riassunto'           => $post->post_excerpt,
+            'genitore'            => (int) $post->post_parent,
+            'ordine'              => (int) $post->menu_order,
             'stato'               => $post->post_status,
             // Una bozza senza data fissata esce quando la si pubblica (post_date_gmt vuota).
             'dataFissata'         => '0000-00-00 00:00:00' !== $post->post_date_gmt,
@@ -585,6 +595,11 @@ class Olobuild_Redazione {
                 'callback'            => [ __CLASS__, 'rest_crea' ],
                 'permission_callback' => [ __CLASS__, 'puo_tipo' ],
             ],
+        ] );
+        register_rest_route( self::NS, '/redazione/argomenti', [
+            'methods'             => 'GET',
+            'callback'            => [ __CLASS__, 'rest_argomenti' ],
+            'permission_callback' => [ __CLASS__, 'puo_tipo' ],
         ] );
         register_rest_route( self::NS, '/redazione/(?P<id>\d+)', [
             [
@@ -741,7 +756,21 @@ class Olobuild_Redazione {
         if ( $termine && $tassonomia && is_object_in_taxonomy( $tipo, $tassonomia ) ) {
             $args['tax_query'] = [ [ 'taxonomy' => $tassonomia, 'terms' => $termine ] ]; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- il filtro per categoria dell'elenco
         }
-        $q        = new WP_Query( $args );
+        // Argomenti e sottoargomenti: tutto l'albero in ordine di lettura, ogni voce col suo livello (senza ricerca né
+        // filtro per categoria: lì resta l'elenco piatto, coi più recenti in cima).
+        if ( Olobuild_Argomenti::ha_argomenti( $tipo ) && '' === $cerca && ! $termine ) {
+            $albero = Olobuild_Argomenti::albero( $tipo, array_diff_key( $args, array_flip( [ 'post_type', 'posts_per_page', 'paged', 'orderby', 'order' ] ) ) );
+            $voci   = array_map( function ( $v ) {
+                return array_merge( self::voce( $v['post'] ), [ 'livello' => $v['livello'] ] );
+            }, $albero );
+            $totale = count( $voci );
+            $pagine = 1;
+        } else {
+            $q      = new WP_Query( $args );
+            $voci   = array_map( [ __CLASS__, 'voce' ], $q->posts );
+            $totale = (int) $q->found_posts;
+            $pagine = (int) $q->max_num_pages;
+        }
         $conteggi = [];
         foreach ( self::STATI as $s ) {
             $c = [ 'post_type' => $tipo, 'post_status' => $s, 'perm' => 'readable', 'posts_per_page' => 1, 'fields' => 'ids' ];
@@ -756,9 +785,9 @@ class Olobuild_Redazione {
             $conteggi[ $s ] = (int) ( new WP_Query( $c ) )->found_posts;
         }
         return rest_ensure_response( [
-            'voci'     => array_map( [ __CLASS__, 'voce' ], $q->posts ),
-            'totale'   => (int) $q->found_posts,
-            'pagine'   => (int) $q->max_num_pages,
+            'voci'     => $voci,
+            'totale'   => $totale,
+            'pagine'   => $pagine,
             'conteggi' => $conteggi,
         ] );
     }
@@ -853,6 +882,11 @@ class Olobuild_Redazione {
             'post_title'  => (string) $r['titolo'],
             'post_status' => $stato,
         ];
+        // Argomenti e sottoargomenti: sotto quale contenuto sta e in che ordine. Una traduzione segue il suo originale.
+        if ( Olobuild_Argomenti::ha_argomenti( $tipo ) && null !== $r['genitore'] && ! ( $post && Olobuild_Redazione_Lingue::originale_di( $post->ID ) ) ) {
+            $dati['post_parent'] = self::genitore_argomento( $tipo, absint( $r['genitore'] ), $post );
+            $dati['menu_order']  = (int) $r['ordine'];
+        }
         // Il testo che l'editor della Redazione non sa tenere resta com'è.
         if ( ! $post || '' === self::motivo_sola_lettura( $post->post_content ) ) {
             $dati['post_content'] = (string) $r['testo'];
@@ -924,6 +958,44 @@ class Olobuild_Redazione {
             $scheda['avviso'] = __( 'Inviato in revisione: lo pubblica chi può farlo.', 'olobuild' );
         }
         return rest_ensure_response( $scheda );
+    }
+
+    /**
+     * Il genitore scelto per un argomento, se si può: dello stesso tipo, e mai il contenuto stesso o uno dei suoi
+     * sottoargomenti (l'albero girerebbe in tondo). Altrimenti resta quello di prima.
+     */
+    private static function genitore_argomento( $tipo, $genitore, $post ) {
+        $prima = $post ? (int) $post->post_parent : 0;
+        if ( ! $genitore ) {
+            return 0;
+        }
+        $g = get_post( $genitore );
+        if ( ! $g || $g->post_type !== $tipo ) {
+            return $prima;
+        }
+        if ( $post && ( (int) $post->ID === $genitore || in_array( (int) $post->ID, array_map( 'intval', get_post_ancestors( $g ) ), true ) ) ) {
+            return $prima;
+        }
+        return $genitore;
+    }
+
+    /** L'albero degli argomenti di un tipo, per «Sta sotto» della scheda: tutti gli stati, solo gli originali. */
+    public static function rest_argomenti( WP_REST_Request $r ) {
+        $tipo = sanitize_key( (string) $r['tipo'] );
+        $args = [ 'post_status' => self::STATI, 'perm' => 'readable' ];
+        if ( Olobuild_Redazione_Lingue::traducibile( $tipo ) ) {
+            $args['meta_query']       = [ [ 'key' => '_olo_lang_source', 'compare' => 'NOT EXISTS' ] ]; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+            $args['olo_lang_tutte']   = true;
+            $args['suppress_filters'] = true;
+        }
+        return rest_ensure_response( array_map( function ( $v ) {
+            return [
+                'id'       => $v['id'],
+                'titolo'   => '' !== $v['titolo'] ? $v['titolo'] : __( '(senza titolo)', 'olobuild' ),
+                'genitore' => $v['genitore'],
+                'livello'  => $v['livello'],
+            ];
+        }, Olobuild_Argomenti::albero( $tipo, $args ) ) );
     }
 
     /** Categorie e tag, foto in evidenza e campi del tipo che arrivano dalla scheda. */

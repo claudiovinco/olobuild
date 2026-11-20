@@ -67,8 +67,14 @@ class Olobuild_Postnavigation_Tile extends Olobuild_Tile_Base {
         $same_tax = filter_var( $s['same_taxonomy'], FILTER_VALIDATE_BOOLEAN );
         $taxonomy = sanitize_text_field( $s['taxonomy'] ?: 'category' );
 
-        $prev_post = get_previous_post( $same_tax, '', $taxonomy );
-        $next_post = get_next_post( $same_tax, '', $taxonomy );
+        // Argomenti e sottoargomenti (i manuali): precedente e successivo nell'ordine dell'indice, non per data.
+        $qui = get_post();
+        if ( $qui && class_exists( 'Olobuild_Argomenti' ) && 'page' !== $qui->post_type && Olobuild_Argomenti::ha_argomenti( $qui->post_type ) ) {
+            list( $prev_post, $next_post ) = Olobuild_Argomenti::vicini( $qui );
+        } else {
+            $prev_post = get_previous_post( $same_tax, '', $taxonomy );
+            $next_post = get_next_post( $same_tax, '', $taxonomy );
+        }
 
         // Nulla da mostrare
         if ( ! $prev_post && ! $next_post ) {
