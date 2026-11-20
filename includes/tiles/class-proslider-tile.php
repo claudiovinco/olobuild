@@ -222,12 +222,12 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         foreach ( $slides as $sl ) {
             foreach ( ( $sl['layers'] ?? [] ) as $lay ) {
                 $ff = sanitize_text_field( $lay['fontFamily'] ?? '' );
-                if ( $ff ) { $google_fonts[ $ff ] = true; }
+                if ( $ff && false === strpos( $ff, 'var(' ) ) { $google_fonts[ $ff ] = true; }
             }
         }
         foreach ( $global_layers_arr as $lay ) {
             $ff = sanitize_text_field( $lay['fontFamily'] ?? '' );
-            if ( $ff ) { $google_fonts[ $ff ] = true; }
+            if ( $ff && false === strpos( $ff, 'var(' ) ) { $google_fonts[ $ff ] = true; }
         }
         // I livelli che muovono gli assi del carattere con lo scorrimento: la versione variabile, sotto un nome proprio
         $vf_css = [];
@@ -1122,7 +1122,11 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         if ( $font_style !== 'normal' ) {
             $base_style .= 'font-style:' . $font_style . ';';
         }
-        if ( $font_family ) {
+        if ( $font_family && preg_match( '/^var\(--[A-Za-z0-9_-]+\)$/', trim( $font_family ) ) ) {
+            // Un ruolo del tema (var(--olo-font-family-heading), …-mono): fra apici il browser lo scartava e il livello
+            // restava nel carattere di sistema (20 nov 2026, i testi mono delle aperture dei temi).
+            $base_style .= 'font-family:' . trim( $font_family ) . ',sans-serif;';
+        } elseif ( $font_family ) {
             $vf_alias = $this->carattere_variabile( $layer )[0];
             $base_style .= 'font-family:' . ( '' !== $vf_alias ? "'" . $vf_alias . "'," : '' ) . "'" . $font_family . "',sans-serif;";
         }

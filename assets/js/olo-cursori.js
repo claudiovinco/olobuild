@@ -4253,6 +4253,208 @@
     };
   };
 
+  // Colla (per Affisso, 20 nov 2026): la pennellessa dell'attacchino; muovendosi stende una striscia di colla lucida che
+  // asciuga in un secondo e mezzo; sui link le setole premono; al clic una pennellata più carica.
+  STILI.colla = function () {
+    var T = tela({ mondo: true }), st = {}, scie = [], ux = null, uy = null, premi = 0;
+    var legno = risolvi(CFG.ringColor || '#c8a165'), setole = risolvi(CFG.dotColor || '#2b2520');
+    window.addEventListener('pointerdown', function (e) {
+      if (meno || e.pointerType === 'touch') return;
+      scie.push({ x0: mx - 26, y0: my + 4, x1: mx + 26, y1: my + 10, t: performance.now(), w: 26 }); chiedi();
+    });
+    return {
+      frame: function (t) {
+        var s = passo(st, t);
+        if (ux !== null) {
+          if (!meno) {
+            if (Math.hypot(mx - ux, my - uy) > 2) scie.push({ x0: ux, y0: uy, x1: mx, y1: my, t: t, w: 16 + premi * 6 });
+          }
+        }
+        ux = mx; uy = my;
+        premi += ((hot ? 1 : 0) - premi) * 0.2 * s;
+        while (scie.length > 160) scie.shift();
+        scie = scie.filter(function (q) { return t - q.t < 1500; });
+        var g = pulisci(T);
+        g.lineCap = 'round';
+        scie.forEach(function (q) {
+          var e = 1 - (t - q.t) / 1500;
+          g.strokeStyle = 'rgba(250,246,232,' + (0.34 * e).toFixed(3) + ')'; g.lineWidth = q.w;
+          g.beginPath(); g.moveTo(q.x0, q.y0); g.lineTo(q.x1, q.y1); g.stroke();
+          g.strokeStyle = 'rgba(255,255,255,' + (0.45 * e * e).toFixed(3) + ')'; g.lineWidth = 2;
+          g.beginPath(); g.moveTo(q.x0, q.y0 - q.w * 0.25); g.lineTo(q.x1, q.y1 - q.w * 0.25); g.stroke();
+        });
+        g.save(); T.glifo(g, mx, my); g.rotate(-0.5);
+        g.fillStyle = legno; g.fillRect(-3, -34, 6, 20);
+        g.fillStyle = '#9aa0a6'; g.fillRect(-11, -15, 22, 6);
+        g.fillStyle = setole; g.beginPath(); g.moveTo(-11, -9); g.lineTo(11, -9); g.lineTo(11 + premi * 2, 2); g.lineTo(-11 - premi * 2, 2); g.closePath(); g.fill();
+        g.restore();
+        return scie.length > 0 || Math.abs((hot ? 1 : 0) - premi) > 0.01;
+      }
+    };
+  };
+
+  // Ciak (per Diaframma, 20 nov 2026): la claquette accanto alla freccia, con l'asta aperta; sui link si apre di più,
+  // pronta; al clic batte e il numero della ripresa sale (SC 1 · TK 2, 3…), con un lampo breve.
+  STILI.ciak = function () {
+    var T = tela(), st = {}, apre = 0, batti = -1, ripresa = 1;
+    var lavagna = risolvi(CFG.ringColor || '#1b1b1d'), segno = risolvi(CFG.dotColor || '#f5f1e8');
+    window.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'touch') return;
+      batti = performance.now(); ripresa = ripresa % 99 + 1; chiedi();
+    });
+    return {
+      frame: function (t) {
+        var s = passo(st, t);
+        apre += ((hot ? 1 : 0) - apre) * 0.18 * s;
+        var colpo = batti > 0 ? (t - batti) / 260 : 2, ang;
+        if (colpo < 1) ang = 0.62 * (1 - Math.min(1, colpo * 3)); else ang = 0.28 + apre * 0.34;
+        var g = pulisci(T), x = mx + 26, y = my + 24;
+        g.save(); g.translate(x, y);
+        g.fillStyle = lavagna; g.fillRect(-16, -2, 32, 22);
+        g.fillStyle = segno; g.font = '700 6.5px ui-monospace, monospace'; g.textAlign = 'center';
+        g.fillText('SC 1 · TK ' + ripresa, 0, 9); g.fillRect(-12, 13, 24, 0.8);
+        g.save(); g.translate(-16, -2); g.rotate(-ang);
+        for (var k = 0; k < 6; k++) { g.fillStyle = k % 2 ? segno : lavagna; g.beginPath(); g.moveTo(k * 32 / 6, 0); g.lineTo((k + 1) * 32 / 6, 0); g.lineTo((k + 1) * 32 / 6 + 3, -6); g.lineTo(k * 32 / 6 + 3, -6); g.closePath(); g.fill(); }
+        g.restore();
+        if (colpo < 1) {
+          g.strokeStyle = segno; g.globalAlpha = 1 - colpo; g.lineWidth = 1.2;
+          for (var r = 0; r < 3; r++) { g.beginPath(); g.moveTo(18 + r * 2, -6 - r * 4); g.lineTo(24 + r * 3, -9 - r * 6); g.stroke(); }
+          g.globalAlpha = 1;
+        }
+        g.restore();
+        return colpo < 1 || Math.abs((hot ? 1 : 0) - apre) > 0.01;
+      }
+    };
+  };
+
+  // Cuore (per Pollice, 20 nov 2026): un cuore piccolo accanto alla freccia che sui link si riempie; al clic ne salgono
+  // altri ondeggiando, come i «mi piace» di una diretta.
+  STILI.cuore = function () {
+    var T = tela({ mondo: true }), st = {}, pieno = 0, salgono = [];
+    var rosa = risolvi(CFG.dotColor || '#ff3d6e'), bordo = risolvi(CFG.ringColor || '#ffffff');
+    function disegna(g, r, riempi, linea) {
+      g.beginPath(); g.moveTo(0, r * 0.9);
+      g.bezierCurveTo(-r * 1.6, -r * 0.2, -r * 0.7, -r * 1.4, 0, -r * 0.5);
+      g.bezierCurveTo(r * 0.7, -r * 1.4, r * 1.6, -r * 0.2, 0, r * 0.9); g.closePath();
+      if (riempi) { g.fillStyle = riempi; g.fill(); }
+      if (linea) { g.strokeStyle = linea; g.lineWidth = 1.6; g.stroke(); }
+    }
+    window.addEventListener('pointerdown', function (e) {
+      if (meno || e.pointerType === 'touch') return;
+      for (var k = 0; k < 8; k++) salgono.push({ x: mx, y: my, t: performance.now() + k * 70, f: Math.random() * 6.28, r: 5 + Math.random() * 5, d: (Math.random() - 0.5) * 50 });
+      chiedi();
+    });
+    return {
+      frame: function (t) {
+        var s = passo(st, t);
+        pieno += ((hot ? 1 : 0) - pieno) * 0.2 * s;
+        var g = pulisci(T);
+        salgono = salgono.filter(function (q) { return t - q.t < 1500; });
+        salgono.forEach(function (q) {
+          var e = (t - q.t) / 1500; if (e < 0) return;
+          g.save(); g.globalAlpha = e < 0.75 ? 1 : 1 - (e - 0.75) / 0.25;
+          g.translate(q.x + Math.sin(q.f + e * 9) * 10 + q.d * e, q.y - e * 150); g.scale(0.6 + e * 0.6, 0.6 + e * 0.6);
+          disegna(g, q.r, rosa, null); g.restore();
+        });
+        g.globalAlpha = 1;
+        g.save(); T.glifo(g, mx + 22, my + 22); g.scale(1 + pieno * 0.15, 1 + pieno * 0.15);
+        disegna(g, 9, pieno > 0.05 ? 'rgba(' + rosa.replace(/[^\d,]/g, '').split(',').slice(0, 3).join(',') + ',' + pieno.toFixed(2) + ')' : null, pieno > 0.5 ? rosa : bordo);
+        g.restore();
+        return salgono.length > 0 || Math.abs((hot ? 1 : 0) - pieno) > 0.01;
+      }
+    };
+  };
+
+  // Taglierino (per Strappo, 20 nov 2026): la lama accanto alla freccia; tenendo premuto si taglia la pagina, un taglio
+  // sottile col bordo chiaro che si richiude in due secondi; sui link la lama esce di più.
+  STILI.taglierino = function () {
+    var T = tela({ mondo: true }), st = {}, tagli = [], giu = false, ux = null, uy = null, lama = 0;
+    var manico = risolvi(CFG.dotColor || '#f2c230'), acciaio = '#c9ced4';
+    // Mentre si taglia il browser non deve selezionare il testo sotto la lama (20 nov 2026: tenendo premuto si
+    // evidenziava il titolo). Fuori da campi, pulsanti e link: lì la pressione resta quella di sempre.
+    if (!document.getElementById('olo-taglia-css')) {
+      var cssT = document.createElement('style');
+      cssT.id = 'olo-taglia-css';
+      cssT.textContent = 'html.olo-taglia,html.olo-taglia *{-webkit-user-select:none!important;user-select:none!important}';
+      document.head.appendChild(cssT);
+    }
+    var smetti = function () { giu = false; document.documentElement.classList.remove('olo-taglia'); };
+    window.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'touch') return;
+      giu = true; ux = mx; uy = my;
+      if (!(e.target && e.target.closest && e.target.closest('a,button,input,textarea,select,label,[contenteditable],[role="slider"]'))) {
+        document.documentElement.classList.add('olo-taglia');
+        var sel = window.getSelection && window.getSelection();
+        if (sel && sel.removeAllRanges) sel.removeAllRanges();
+      }
+    });
+    window.addEventListener('pointerup', smetti);
+    window.addEventListener('pointercancel', smetti);
+    return {
+      frame: function (t) {
+        var s = passo(st, t);
+        lama += ((hot ? 1 : 0) - lama) * 0.2 * s;
+        if (giu) { if (!meno) { if (Math.hypot(mx - ux, my - uy) > 1.5) { tagli.push({ x0: ux, y0: uy, x1: mx, y1: my, t: t }); ux = mx; uy = my; } } }
+        while (tagli.length > 400) tagli.shift();
+        tagli = tagli.filter(function (q) { return t - q.t < 2000; });
+        var g = pulisci(T);
+        g.lineCap = 'round';
+        tagli.forEach(function (q) {
+          var e = 1 - (t - q.t) / 2000;
+          g.strokeStyle = 'rgba(255,255,255,' + (0.7 * e).toFixed(3) + ')'; g.lineWidth = 2.4 * e + 0.4;
+          g.beginPath(); g.moveTo(q.x0 + 0.8, q.y0 + 1); g.lineTo(q.x1 + 0.8, q.y1 + 1); g.stroke();
+          g.strokeStyle = 'rgba(10,10,10,' + (0.85 * e).toFixed(3) + ')'; g.lineWidth = 1.2 * e + 0.3;
+          g.beginPath(); g.moveTo(q.x0, q.y0); g.lineTo(q.x1, q.y1); g.stroke();
+        });
+        g.save(); T.glifo(g, mx, my); g.translate(20, 20); g.rotate(0.78);
+        g.fillStyle = acciaio; g.beginPath(); g.moveTo(0, -3); g.lineTo(-10 - lama * 5, -3); g.lineTo(-14 - lama * 5, 3); g.lineTo(0, 3); g.closePath(); g.fill();
+        g.fillStyle = manico; g.fillRect(0, -5, 26, 10);
+        g.fillStyle = 'rgba(0,0,0,.35)'; for (var k = 0; k < 4; k++) g.fillRect(6 + k * 5, -5, 1.5, 10);
+        g.restore();
+        return tagli.length > 0 || giu || Math.abs((hot ? 1 : 0) - lama) > 0.01;
+      }
+    };
+  };
+
+  // Timbro (per Torchio, 20 nov 2026): un carattere da stampa in piombo accanto alla freccia; sui link scende come per
+  // premere; al clic lascia sulla pagina la sua lettera inchiostrata, un po' storta, che sbiadisce.
+  STILI.timbro = function () {
+    var T = tela({ mondo: true }), st = {}, impronte = [], preme = 0, lettere = 'AEGKMQRSTWÆ&';
+    var inchiostro = risolvi(CFG.dotColor || '#c0262d'), piombo = '#8c9096';
+    window.addEventListener('pointerdown', function (e) {
+      if (meno || e.pointerType === 'touch') return;
+      impronte.push({ x: mx, y: my, t: performance.now(), c: lettere.charAt(Math.floor(Math.random() * lettere.length)), r: (Math.random() - 0.5) * 0.25 });
+      if (impronte.length > 12) impronte.shift(); chiedi();
+    });
+    return {
+      frame: function (t) {
+        var s = passo(st, t);
+        preme += ((hot ? 1 : 0) - preme) * 0.2 * s;
+        var g = pulisci(T);
+        impronte = impronte.filter(function (q) { return t - q.t < 2600; });
+        impronte.forEach(function (q) {
+          var e = (t - q.t) / 2600;
+          g.save(); g.globalAlpha = e < 0.6 ? 0.9 : 0.9 * (1 - (e - 0.6) / 0.4);
+          g.translate(q.x, q.y); g.rotate(q.r);
+          g.fillStyle = inchiostro; g.font = '700 46px Georgia, \'Times New Roman\', serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+          g.fillText(q.c, 0, 0);
+          g.globalCompositeOperation = 'destination-out';
+          for (var k = 0; k < 18; k++) { g.fillRect((rumoreC(k + q.t) - 0.5) * 40, (rumoreC(k * 3 + q.t) - 0.5) * 44, 2, 1.5); }
+          g.restore();
+        });
+        g.globalAlpha = 1;
+        g.save(); T.glifo(g, mx + 20, my + 18 + preme * 4);
+        g.fillStyle = piombo; g.fillRect(-7, -12, 14, 24);
+        g.fillStyle = 'rgba(0,0,0,.28)'; g.fillRect(-7, 6, 14, 2.5);
+        g.fillStyle = inchiostro; g.fillRect(-7, 10, 14, 2);
+        g.fillStyle = '#2a2d31'; g.font = '700 10px Georgia, serif'; g.textAlign = 'center'; g.fillText('A', 0, 2);
+        g.restore();
+        return impronte.length > 0 || Math.abs((hot ? 1 : 0) - preme) > 0.01;
+      }
+    };
+  };
+  function rumoreC(k) { var x = Math.sin(k * 12.9898) * 43758.5453; return x - Math.floor(x); }
+
   /* ── cursore della sezione (2 nov 2026) ──
      Una sezione con data-olo-cursore ha un cursore suo: entrandoci il cursore cambia, uscendo torna quello della
      pagina. Ogni stile si crea la prima volta che serve e poi resta, coi suoi nodi nascosti quando non è attivo; i suoi

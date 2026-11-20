@@ -48,6 +48,11 @@ export const CURSORI = [
   ['telecomando', 'Telecomando (il led sui link, il numero del canale al clic)'],
   ['pulsante', 'Pulsante dell’ascensore (si accende sui link, «din» al clic)'],
   ['bilancia', 'Bilancia (la lancetta pesa quanto ti muovi, lo scontrino al clic)'],
+  ['colla', 'Colla (la pennellessa stende una striscia che asciuga)'],
+  ['ciak', 'Ciak (batte al clic e conta le riprese)'],
+  ['cuore', 'Cuore (si riempie sui link, al clic salgono i cuori)'],
+  ['taglierino', 'Taglierino (tenendo premuto taglia la pagina)'],
+  ['timbro', 'Timbro (al clic lascia una lettera inchiostrata)'],
 ];
 
 // Gli stili che mostrano una parola (la «Parola del cursore», label_text).

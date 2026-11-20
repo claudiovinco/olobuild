@@ -41,7 +41,8 @@ trait Olobuild_Renderer_Structure_Trait {
         $is_sticky_v = in_array( $sticky_effect, [ 'cover', 'reveal' ], true );
         // «ruota» (18 nov 2026): le sezioni sul bordo di una ruota che gira scorrendo; si raggruppa come le orizzontali.
         // «pagina», «canali», «ascensore» (18 nov, sera): pannelli impilati con un passaggio diverso fra l'uno e l'altro.
-        $is_sticky_h = in_array( $sticky_effect, [ 'cover-h', 'reveal-h', 'ruota', 'pagina', 'canali', 'ascensore' ], true );
+        // «prismi», «diaframma», «mazzo», «strappo», «rullo» (20 nov 2026): altri cinque passaggi fra pannelli impilati.
+        $is_sticky_h = in_array( $sticky_effect, [ 'cover-h', 'reveal-h', 'ruota', 'pagina', 'canali', 'ascensore', 'prismi', 'diaframma', 'mazzo', 'strappo', 'rullo' ], true );
         $is_sticky = $is_sticky_v || $is_sticky_h;
         $sticky_top = intval( $s['sticky_top'] ?? 0 );
 
@@ -422,7 +423,8 @@ trait Olobuild_Renderer_Structure_Trait {
             }
             // Canali e Ascensore: il nome del canale o del piano di questa sezione, e il colore del numero del canale
             // o delle porte (della prima sezione del gruppo).
-            if ( in_array( $sticky_effect, [ 'canali', 'ascensore' ], true ) ) {
+            // Diaframma, Strappo e Rullo prendono il «Colore» per le lamelle, il retro della carta e il rullo.
+            if ( in_array( $sticky_effect, [ 'canali', 'ascensore', 'diaframma', 'strappo', 'rullo' ], true ) ) {
                 $etichetta = trim( wp_strip_all_tags( (string) ( $s['sticky_etichetta'] ?? '' ) ) );
                 if ( '' !== $etichetta ) {
                     $h_extra .= ' data-h-etichetta="' . esc_attr( $etichetta ) . '"';

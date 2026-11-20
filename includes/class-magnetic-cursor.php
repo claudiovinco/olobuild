@@ -57,7 +57,8 @@ class Olobuild_Magnetic_Cursor {
                     'ventaglio', 'molla', 'arco', 'gocciolio', 'rullo', 'livella', 'trucioli', 'martello', 'bullone',
                     'scovolo', 'irrigatore', 'diamante', 'atomo', 'cerchio', 'ipnosi', 'miccia',
                     'tornante', 'persiana', 'raggi', 'oculare', 'doppione',
-                    'segnalibro', 'torcia', 'telecomando', 'pulsante', 'bilancia' ];
+                    'segnalibro', 'torcia', 'telecomando', 'pulsante', 'bilancia',
+                    'colla', 'ciak', 'cuore', 'taglierino', 'timbro' ];
 
     /**
      * Il cursore scelto per la pagina che si sta disegnando (Effetti di pagina → Cursore): uno degli STILI, «nessuno»,

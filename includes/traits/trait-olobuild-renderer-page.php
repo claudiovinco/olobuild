@@ -755,7 +755,7 @@ trait Olobuild_Renderer_Page_Trait {
             foreach ( $tiles as $sec ) {
                 $eff = $sec['settings']['sticky_effect'] ?? 'none';
                 if ( $eff === 'cover' || $eff === 'reveal' ) $has_any_sticky_v = true;
-                if ( in_array( $eff, [ 'cover-h', 'reveal-h', 'ruota', 'pagina', 'canali', 'ascensore' ], true ) ) $has_any_sticky_h = true;
+                if ( in_array( $eff, [ 'cover-h', 'reveal-h', 'ruota', 'pagina', 'canali', 'ascensore', 'prismi', 'diaframma', 'mazzo', 'strappo', 'rullo' ], true ) ) $has_any_sticky_h = true;
             }
             if ( $has_any_sticky_v || $has_any_sticky_h ) : ?>
                 <script>
@@ -867,7 +867,16 @@ trait Olobuild_Renderer_Page_Trait {
                                sotto l'altra. */
                             var passo=sections[0].marker.dataset.stickyH;
                             var sfoglia=(passo==='pagina'),canali=(passo==='canali'),ascensore=(passo==='ascensore');
-                            var impilati=(sfoglia||canali||ascensore);
+                            /* Prismi, Diaframma, Mazzo, Strappo, Rullo (20 nov 2026): altri cinque passaggi fra pannelli impilati.
+                               Prismi: il pannello si divide in strisce verticali che girano una dopo l'altra come i prismi di
+                               un cartellone pubblicitario e mostrano il successivo. Diaframma: le lamelle di un obiettivo si
+                               chiudono sulla scena e si riaprono sulla successiva. Mazzo: il pannello vola via come una carta
+                               scartata col pollice (Sotto: verso l'alto, come le storie) e quello sotto cresce. Strappo: il
+                               pannello si strappa come un manifesto e il lembo si ripiega mostrando il retro della carta.
+                               Rullo: un rullo inchiostrato passa sulla pagina e la successiva compare solo dove è passato. */
+                            var prismi=(passo==='prismi'),diaframma=(passo==='diaframma'),mazzo=(passo==='mazzo'),strappo=(passo==='strappo'),rullo=(passo==='rullo');
+                            var nuovi=(prismi||diaframma||mazzo||strappo||rullo);
+                            var impilati=(sfoglia||canali||ascensore||nuovi);
                             if(impilati){if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){return;}}
                             sections.forEach(function(item){item.etichetta=item.marker.dataset.hEtichetta||'';});
                             var percorso=false;
@@ -886,7 +895,7 @@ trait Olobuild_Renderer_Page_Trait {
                             group.style.height=(viewH*n)+'px';
                             /* i passaggi impilati tengono fermo ogni pannello più a lungo: il cambio prende solo una parte
                                della corsa, il resto è per leggere */
-                            if(impilati){group.style.height=Math.round(viewH*(1+(n-1)*(ascensore?1.7:(canali?1.35:1.4))))+'px';}
+                            if(impilati){group.style.height=Math.round(viewH*(1+(n-1)*(ascensore?1.7:(canali?1.35:(nuovi?1.5:1.4)))))+'px';}
                             var viewport=document.createElement('div');
                             viewport.className='olo-h-viewport';
                             viewport.style.top=stickyTop+'px';
@@ -945,6 +954,12 @@ trait Olobuild_Renderer_Page_Trait {
                             var neve=null,nctx=null,neveDist=0,neveGiro=false,osd=null,osdNum=null,osdNome=null,osdTimer=0;
                             var portaSx=null,portaDx=null,fila=null,freccia=null,piani=[];
                             function figlio(padre,tag,classe){var e=document.createElement(tag);e.className=classe;padre.appendChild(e);return e;}
+                            var ombraP=null,irideSvg=null,iridePath=null,irideBordi=null,strSvg=null,strCarta=null,rulloEl=null;
+                            function svgFiglio(padre,tag,classe){var e=document.createElementNS('http://www.w3.org/2000/svg',tag);e.setAttribute('class',classe);if(tag==='svg'){e.setAttribute('aria-hidden','true');e.setAttribute('preserveAspectRatio','none');}padre.appendChild(e);return e;}
+                            function liscio(x){x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);}
+                            /* un numero fra 0 e 1 sempre uguale per lo stesso k: i denti dello strappo e del bordo d'inchiostro non tremano */
+                            function rumore(k){var x=Math.sin(k*127.1+311.7)*43758.5453;return x-Math.floor(x);}
+                            function pt(x,y){return x.toFixed(1)+'px '+y.toFixed(1)+'px';}
                             if(impilati){
                                 group.classList.add('olo-h-'+passo);
                                 /* Quanto della cima della finestra copre la testata (per l'etichetta dei Canali): quella sopra il
@@ -973,6 +988,14 @@ trait Olobuild_Renderer_Page_Trait {
                                     freccia=figlio(fila,'span','olo-h-freccia');
                                     sections.forEach(function(item,i){var pz=figlio(fila,'span','olo-h-piano');pz.textContent=item.etichetta||String(i);piani.push(pz);});
                                 }
+                                if(prismi){ombraP=figlio(viewport,'div','olo-h-prismi-ombra');ombraP.setAttribute('aria-hidden','true');}
+                                if(diaframma){
+                                    irideSvg=svgFiglio(viewport,'svg','olo-h-iride');
+                                    iridePath=svgFiglio(irideSvg,'path','olo-h-iride-lame');iridePath.setAttribute('fill-rule','evenodd');
+                                    irideBordi=svgFiglio(irideSvg,'path','olo-h-iride-bordi');
+                                }
+                                if(strappo){strSvg=svgFiglio(viewport,'svg','olo-h-lembo');strCarta=svgFiglio(strSvg,'path','olo-h-strappo-carta');}
+                                if(rullo){rulloEl=figlio(viewport,'div','olo-h-cilindro');rulloEl.setAttribute('aria-hidden','true');}
                             }
                             /* la neve del televisore: pixel grigi a caso su una tela piccola, ingrandita; gira solo finché si vede */
                             function disegnaNeve(){
@@ -1087,6 +1110,137 @@ trait Olobuild_Renderer_Page_Trait {
                                             var sale=(sections[j0+1].dir!=='sotto');
                                             freccia.textContent=(pc>0.5)?((sale===giu)?'▲':'▼'):'';
                                             piani.forEach(function(pz,i){pz.classList.toggle('olo-h-piano-on',i===pi);});
+                                        }else if(nuovi){
+                                            var W=viewport.clientWidth,H=viewH,A=sections[j0],B=sections[j0+1],dn=B.dir;
+                                            sections.forEach(function(item,i){
+                                                var su=(i===j0)||(i===j0+1);
+                                                item.sec.style.visibility=su?'':'hidden';
+                                                item.sec.style.transform='';item.sec.style.filter='';item.sec.style.clipPath='';item.sec.style.webkitClipPath='';
+                                                item.sec.style.borderRadius='';item.sec.style.boxShadow='';
+                                            });
+                                            if(prismi){
+                                                /* i prismi del cartellone: ogni striscia gira dopo quella prima; della faccia che se ne va
+                                                   resta una parte sempre più stretta, la faccia nuova si allarga; l'ombra sulle facce di
+                                                   taglio e un filo di luce sullo spigolo */
+                                                var tp=liscio((g-0.1)/0.8),NP=Math.max(6,Math.min(12,Math.round(W/150))),wS=W/NP;
+                                                var stag=0.06,durP=1-(NP-1)*stag,verso=(dn==='sinistra')?-1:1;
+                                                if(durP<0.3){stag=0.7/(NP-1);durP=0.3;}
+                                                A.sec.style.zIndex='2';B.sec.style.zIndex='1';
+                                                if(tp<=0){ombraP.style.opacity='0';}
+                                                else if(tp>=1){A.sec.style.visibility='hidden';ombraP.style.opacity='0';}
+                                                else{
+                                                    var pts=[],seg=[],aL0=0;
+                                                    for(var kp=0;kp<NP;kp++){
+                                                        var ord=(verso>0)?kp:(NP-1-kp),tk=liscio((tp-ord*stag)/durP);
+                                                        var x0=kp*wS,x1=x0+wS,wa=wS*(1-tk),aL=(verso>0)?x0:(x1-wa),aR=aL+wa;
+                                                        if(kp===0){aL0=aL;}else{pts.push(pt(aL,H));}
+                                                        pts.push(pt(aL,0),pt(aR,0),pt(aR,H));
+                                                        var ombraA='rgba(0,0,0,'+(tk*0.55).toFixed(3)+')',ombraB='rgba(0,0,0,'+((1-tk)*0.55).toFixed(3)+')';
+                                                        var luce='rgba(255,255,255,'+(0.28*Math.sin(tk*Math.PI)).toFixed(3)+')',spigolo=(verso>0)?aR:aL;
+                                                        seg.push(['rgba(0,0,0,.35)',x0,x0+1]);
+                                                        if(verso>0){seg.push([ombraA,x0+1,spigolo-1],[luce,spigolo-1,spigolo+1],[ombraB,spigolo+1,x1]);}
+                                                        else{seg.push([ombraB,x0+1,spigolo-1],[luce,spigolo-1,spigolo+1],[ombraA,spigolo+1,x1]);}
+                                                    }
+                                                    pts.push(pt(aL0,H));
+                                                    var cp='polygon('+pts.join(',')+')';
+                                                    A.sec.style.clipPath=cp;A.sec.style.webkitClipPath=cp;
+                                                    ombraP.style.background='linear-gradient(90deg,'+seg.map(function(s){return s[0]+' '+Math.max(0,s[1]).toFixed(1)+'px,'+s[0]+' '+Math.max(0,s[2]).toFixed(1)+'px';}).join(',')+')';
+                                                    ombraP.style.opacity='1';
+                                                }
+                                            }else if(diaframma){
+                                                /* le lamelle si chiudono girando sulla scena, chiuse si cambia pannello, poi si riaprono */
+                                                var chiusa=(g<0.5),ap=chiusa?(1-liscio((g-0.08)/0.4)):liscio((g-0.52)/0.4);
+                                                A.sec.style.visibility=chiusa?'':'hidden';B.sec.style.visibility=chiusa?'hidden':'';
+                                                var scena=chiusa?A:B;
+                                                if(ap<1){scena.sec.style.transform='scale('+(1+(1-ap)*0.06).toFixed(4)+')';scena.sec.style.filter='brightness('+(0.7+0.3*ap).toFixed(3)+')';}
+                                                if(ap>=0.999){irideSvg.style.opacity='0';}
+                                                else{
+                                                    var nL=7,Rm=Math.hypot(W,H)/2/Math.cos(Math.PI/nL)*1.04,ri=ap*Rm,rot=(1-ap)*58+j0*17,cx=W/2,cy=H/2,poli='',bordi='';
+                                                    for(var q=0;q<nL;q++){
+                                                        var an=(rot+q*360/nL)*Math.PI/180,vx=cx+Math.cos(an)*ri,vy=cy+Math.sin(an)*ri,an2=an+Math.PI/2+0.42;
+                                                        poli+=(q?'L':'M')+vx.toFixed(1)+' '+vy.toFixed(1);
+                                                        bordi+='M'+vx.toFixed(1)+' '+vy.toFixed(1)+'L'+(vx+Math.cos(an2)*Rm*1.7).toFixed(1)+' '+(vy+Math.sin(an2)*Rm*1.7).toFixed(1);
+                                                    }
+                                                    irideSvg.setAttribute('viewBox','0 0 '+W+' '+H);
+                                                    iridePath.setAttribute('d','M-4 -4H'+(W+4)+'V'+(H+4)+'H-4Z'+((ri>0.5)?(poli+'Z'):''));
+                                                    irideBordi.setAttribute('d',bordi);
+                                                    irideSvg.style.opacity='1';
+                                                }
+                                            }else if(mazzo){
+                                                /* la carta di sopra vola via ruotando sul pollice, quella sotto cresce e perde gli angoli tondi */
+                                                var tm=liscio((g-0.1)/0.8),mx=0,my=0,rz=0;
+                                                if(dn==='sinistra'){mx=1;rz=1;}else if(dn==='sotto'){my=-1;}else if(dn==='sopra'){my=1;}else{mx=-1;rz=-1;}
+                                                A.sec.style.zIndex='2';B.sec.style.zIndex='1';
+                                                if(tm>=1){A.sec.style.visibility='hidden';}
+                                                else if(tm>0){
+                                                    A.sec.style.transformOrigin='50% 118%';
+                                                    A.sec.style.transform='translate3d('+(mx*tm*120).toFixed(2)+'%,'+(my*tm*115-(mx?tm*4:0)).toFixed(2)+'%,0) rotate('+(rz*tm*17).toFixed(2)+'deg) scale('+(1-tm*0.05).toFixed(4)+')';
+                                                    A.sec.style.borderRadius=Math.round(Math.min(1,tm*5)*28)+'px';
+                                                    A.sec.style.boxShadow='0 30px 80px color-mix(in srgb, var(--olo-color-dark) 45%, transparent)';
+                                                }
+                                                if(tm<1){
+                                                    B.sec.style.transformOrigin='50% 50%';
+                                                    B.sec.style.transform='scale('+(0.9+0.1*tm).toFixed(4)+')';
+                                                    B.sec.style.borderRadius=Math.round((1-tm)*28)+'px';
+                                                    B.sec.style.filter='brightness('+(0.6+0.4*tm).toFixed(3)+')';
+                                                }
+                                            }else if(strappo){
+                                                /* il manifesto si strappa: il bordo a denti avanza, il lembo si ripiega e mostra il retro */
+                                                var ts=liscio((g-0.06)/0.86),ux=1,uy=0.32;
+                                                if(dn==='sinistra'){ux=-1;}else if(dn==='sotto'){ux=0.28;uy=1;}else if(dn==='sopra'){ux=0.28;uy=-1;}
+                                                var ul=Math.hypot(ux,uy);ux/=ul;uy/=ul;
+                                                var vx2=-uy,vy2=ux,proj=[0,W*ux,H*uy,W*ux+H*uy],pmin=Math.min.apply(null,proj),pmax=Math.max.apply(null,proj);
+                                                var amp=Math.max(10,Math.min(W,H)*0.03),flap=Math.max(70,Math.min(W,H)*0.2)*(0.35+0.65*Math.sin(ts*Math.PI)),Ld=Math.hypot(W,H);
+                                                A.sec.style.zIndex='2';B.sec.style.zIndex='1';
+                                                if(ts<=0){strSvg.style.opacity='0';}
+                                                else if(ts>=1){A.sec.style.visibility='hidden';strSvg.style.opacity='0';}
+                                                else{
+                                                    var sp=pmin-amp-2+ts*(pmax-pmin+2*amp+flap+4),M=28,E=[],F=[];
+                                                    for(var ie=0;ie<=M;ie++){
+                                                        var lv=-Ld+2*Ld*ie/M,jag=(rumore(ie+j0*31)-0.5)*2*amp+((ie%2)?amp*0.4:-amp*0.4);
+                                                        E.push([ux*(sp+jag)+vx2*lv,uy*(sp+jag)+vy2*lv]);
+                                                        var fl=flap*(0.8+0.35*rumore(ie+j0*31+9));
+                                                        F.push([ux*(sp+jag+fl)+vx2*lv,uy*(sp+jag+fl)+vy2*lv]);
+                                                    }
+                                                    var lontano=2*Ld+Math.abs(pmax),pa=E.map(function(p){return pt(p[0],p[1]);});
+                                                    pa.push(pt(E[M][0]+ux*lontano,E[M][1]+uy*lontano),pt(E[0][0]+ux*lontano,E[0][1]+uy*lontano));
+                                                    var cs='polygon('+pa.join(',')+')';
+                                                    A.sec.style.clipPath=cs;A.sec.style.webkitClipPath=cs;
+                                                    var dpa='M'+E.map(function(p){return p[0].toFixed(1)+' '+p[1].toFixed(1);}).join('L');
+                                                    for(var jf=M;jf>=0;jf--){dpa+='L'+F[jf][0].toFixed(1)+' '+F[jf][1].toFixed(1);}
+                                                    strSvg.setAttribute('viewBox','0 0 '+W+' '+H);
+                                                    strCarta.setAttribute('d',dpa+'Z');
+                                                    strSvg.style.opacity='1';
+                                                }
+                                            }else if(rullo){
+                                                /* il rullo passa e la pagina dopo compare solo dove è passato, col bordo d'inchiostro irregolare */
+                                                var tr2=liscio((g-0.08)/0.84),orizz=(dn==='destra')||(dn==='sinistra'),Dd=orizz?W:H,ed=tr2*Dd;
+                                                var rt=Math.max(40,Math.min(96,Dd*0.07)),passi=24,pr=[];
+                                                B.sec.style.zIndex='2';A.sec.style.zIndex='1';
+                                                if(tr2<=0){B.sec.style.visibility='hidden';rulloEl.style.opacity='0';}
+                                                else if(tr2>=1){A.sec.style.visibility='hidden';rulloEl.style.opacity='0';}
+                                                else{
+                                                    for(var ir=0;ir<=passi;ir++){
+                                                        var lr=ir/passi*(orizz?H:W),jr=(rumore(ir+j0*17)-0.5)*7;
+                                                        if(dn==='destra'){pr.push(pt(W-ed+jr,lr));}
+                                                        else if(dn==='sinistra'){pr.push(pt(ed+jr,lr));}
+                                                        else if(dn==='sotto'){pr.push(pt(lr,H-ed+jr));}
+                                                        else{pr.push(pt(lr,ed+jr));}
+                                                    }
+                                                    if(dn==='destra'){pr.push(pt(W+4,H+4),pt(W+4,-4));}
+                                                    else if(dn==='sinistra'){pr.push(pt(-4,H+4),pt(-4,-4));}
+                                                    else if(dn==='sotto'){pr.push(pt(W+4,H+4),pt(-4,H+4));}
+                                                    else{pr.push(pt(W+4,-4),pt(-4,-4));}
+                                                    var cr='polygon('+pr.join(',')+')';
+                                                    B.sec.style.clipPath=cr;B.sec.style.webkitClipPath=cr;
+                                                    rulloEl.classList.toggle('olo-h-cilindro-v',orizz);rulloEl.classList.toggle('olo-h-cilindro-o',!orizz);
+                                                    rulloEl.style.setProperty('--olo-rullo',rt.toFixed(0)+'px');
+                                                    var bordoR=(dn==='destra')?(W-ed):((dn==='sinistra')?ed:((dn==='sotto')?(H-ed):ed));
+                                                    if(orizz){rulloEl.style.left=(bordoR-rt/2).toFixed(1)+'px';rulloEl.style.top='';}
+                                                    else{rulloEl.style.top=(bordoR-rt/2).toFixed(1)+'px';rulloEl.style.left='';}
+                                                    rulloEl.style.opacity='1';
+                                                }
+                                            }
                                         }
                                     }else if(percorso){
                                         var Wp=viewport.clientWidth,i0=Math.min(n-2,Math.floor(pos)),f=pos-i0;

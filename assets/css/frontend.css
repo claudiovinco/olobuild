@@ -3683,3 +3683,92 @@ html:has(.olo-frontend-grid) {
   .olo-argomenti--telefono-chiuso.is-aperto .olo-arg-corpo { display: block; }
   .olo-argomenti--telefono-chiuso .olo-arg-corpo > .olo-arg-titolo { display: none; }
 }
+
+/* ─────────────────────────────────────────────
+ * Prismi, Diaframma, Mazzo di carte, Strappo, Rullo (1.4.1284): altri passaggi fra pannelli impilati. Il movimento lo
+ * fa lo script del gruppo (trait-olobuild-renderer-page.php); qui la cornice e i pezzi disegnati sopra.
+ * ───────────────────────────────────────────── */
+.olo-sticky-prismi > .uk-container,
+.olo-sticky-diaframma > .uk-container,
+.olo-sticky-mazzo > .uk-container,
+.olo-sticky-strappo > .uk-container,
+.olo-sticky-rullo > .uk-container {
+  width: 100%;
+  box-sizing: border-box;
+}
+.olo-h-prismi .olo-h-track,
+.olo-h-diaframma .olo-h-track,
+.olo-h-mazzo .olo-h-track,
+.olo-h-strappo .olo-h-track,
+.olo-h-rullo .olo-h-track {
+  display: block;
+  position: relative;
+  will-change: auto;
+}
+.olo-h-mazzo .olo-h-viewport { overflow: hidden; }
+.olo-h-mazzo .olo-h-track > .uk-section,
+.olo-h-strappo .olo-h-track > .uk-section,
+.olo-h-prismi .olo-h-track > .uk-section,
+.olo-h-rullo .olo-h-track > .uk-section { will-change: transform, clip-path; }
+/* Prismi: l'ombra delle facce che girano e il filo di luce sugli spigoli, sopra i pannelli */
+.olo-h-prismi-ombra {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0;
+}
+/* Diaframma: le lamelle (la tela meno l'apertura) e i loro bordi */
+.olo-h-iride,
+.olo-h-lembo {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  overflow: visible;
+}
+.olo-h-iride-lame {
+  fill: color-mix(in srgb, var(--olo-h-colore, var(--olo-color-dark)) 92%, #000);
+  stroke: color-mix(in srgb, var(--olo-color-light) 22%, transparent);
+  stroke-width: 1.5;
+}
+.olo-h-iride-bordi {
+  fill: none;
+  stroke: color-mix(in srgb, var(--olo-color-light) 15%, transparent);
+  stroke-width: 1.2;
+}
+/* Strappo: il lembo ripiegato mostra il retro della carta, con l'ombra sul manifesto sotto */
+.olo-h-lembo { filter: drop-shadow(-8px 10px 12px rgba(0, 0, 0, .38)); }
+.olo-h-strappo-carta {
+  fill: var(--olo-h-colore, #ede5d3);
+  stroke: rgba(255, 255, 255, .75);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+/* Rullo: un cilindro inchiostrato, in piedi se passa di lato, coricato se passa dall'alto o dal basso */
+.olo-h-cilindro {
+  position: absolute;
+  z-index: 61;
+  pointer-events: none;
+  opacity: 0;
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .3), 0 18px 40px rgba(0, 0, 0, .4);
+  --olo-rullo-c: var(--olo-h-colore, var(--olo-color-dark));
+}
+.olo-h-cilindro-v {
+  top: -3%;
+  height: 106%;
+  width: var(--olo-rullo, 64px);
+  background: linear-gradient(90deg, #0b0b0b 0%, var(--olo-rullo-c) 18%,
+    color-mix(in srgb, var(--olo-rullo-c) 55%, #fff) 42%, var(--olo-rullo-c) 62%, #050505 100%);
+}
+.olo-h-cilindro-o {
+  left: -3%;
+  width: 106%;
+  height: var(--olo-rullo, 64px);
+  background: linear-gradient(180deg, #0b0b0b 0%, var(--olo-rullo-c) 18%,
+    color-mix(in srgb, var(--olo-rullo-c) 55%, #fff) 42%, var(--olo-rullo-c) 62%, #050505 100%);
+}
