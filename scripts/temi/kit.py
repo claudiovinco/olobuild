@@ -560,6 +560,14 @@ class Kit:
             opz['globalBackground'] = dict(gb, color=c['nero'])
 
     def proslider(self, t, slides, globali=None, altezza=None, transizione='fade', durata_trans=900, **opz):
+        # Due livelli con lo stesso nome nello stesso slider prendono anche le stesse regole per tablet e telefono
+        # (classe mps-layer-<nome>): in Affisso i pulsanti «af-b1/af-b2» spostavano al telefono due strisce dei prismi.
+        visti = set()
+        for l in [l for s in slides for l in (s.get('layers') or [])] + list(globali or []):
+            n = str(l.get('id', ''))
+            if n and n in visti:
+                raise SystemExit('Slider Pro: due livelli si chiamano «%s»' % n)
+            visti.add(n)
         self.chiaro_su_scuro(slides, globali, opz)
         for s in slides:
             self.veli_dal_testo(s)
