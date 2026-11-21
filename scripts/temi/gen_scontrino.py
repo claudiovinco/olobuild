@@ -93,20 +93,30 @@ def build_footer():
 # che parte tutto sopra la tela (y -118: il bordo strappato appena sotto la fessura) e scende di 900 px. Le righe e i
 # pulsanti stampati sono livelli con lo stesso movimento, sopra la carta; la stampante sta sopra a tutto e copre quello che
 # non è ancora uscito. Telefono (tela 640 × 1400): stessa idea con livelli solo per il telefono (movimenti × 2,25).
-RIGHE = ('SALUMERIA SCONTRINO<br>via Pescherie Vecchie 3 · Bologna<br>dal 1958<br>- - - - - - - - - - - - - - - -<br>'
-         '1 x MORTADELLA IGP 100 g ...... 2,40<br>1 x PARMIGIANO 30 MESI ........ 7,80<br>1 x TORTELLINI 500 g ......... 14,00<br>'
-         '1 x CRESCENTINE CALDE ......... 3,00<br>1 x DUE CHIACCHIERE COL BANCO .. 0,00<br>- - - - - - - - - - - - - - - -<br>'
-         'TOTALE ....................... 27,20<br><br>GRAZIE E TORNI PRESTO')
+# Le righe dello scontrino (20 nov 2026, utente: «anche il tema scontrino ha problemi»). Lo Slider Pro non scende mai
+# sotto 14 px per i paragrafi e 11 per le scritte in maiuscolo: con righe da 36 caratteri e minuscole il testo andava a
+# capo dai 1280 px in giù, si allungava oltre la carta e finiva sotto i pulsanti. Ora tutto in maiuscolo (come la carta
+# termica), 32 caratteri al computer e 22 al telefono e sul tablet, con caratteri che riempiono la carta e scalano con lei.
+RIGHE = ('SALUMERIA SCONTRINO · DAL 1958<br>PESCHERIE VECCHIE 3 · BOLOGNA<br>- - - - - - - - - - - - - - - -<br>'
+         '1 x MORTADELLA IGP 100 g .. 2,40<br>1 x PARMIGIANO 30 MESI .... 7,80<br>1 x TORTELLINI 500 g ..... 14,00<br>'
+         '1 x CRESCENTINE CALDE ..... 3,00<br>1 x DUE CHIACCHIERE ....... 0,00<br>- - - - - - - - - - - - - - - -<br>'
+         'TOTALE ................... 27,20<br><br>GRAZIE E TORNI PRESTO')
+RIGHE_T = ('SALUMERIA SCONTRINO<br>BOLOGNA · DAL 1958<br>- - - - - - - - - - -<br>MORTADELLA IGP .. 2,40<br>'
+           'PARMIGIANO ...... 7,80<br>TORTELLINI ..... 14,00<br>CRESCENTINE ..... 3,00<br>DUE CHIACCHIERE . 0,00<br>'
+           '- - - - - - - - - - -<br>TOTALE ......... 27,20<br>GRAZIE E TORNI PRESTO')
 
 
 def apertura(t):
     m = K.mob
     esce = lambda dy: {'inizio': 0, 'fine': 100, 'tappe': [{'p': 0, 'y': 0}, {'p': 6, 'y': 0}, {'p': 88, 'y': dy},
                                                           {'p': 100, 'y': dy}]}
-    poi = lambda da, a, via_da=None, via_a=None: {'inizio': 0, 'fine': 100, 'tappe': (
-        [{'p': 0, 'o': 0, 'y': 14}, {'p': da, 'o': 0, 'y': 14}, {'p': a, 'o': 100, 'y': 0}]
-        + ([{'p': via_da, 'o': 100, 'y': 0}, {'p': via_a, 'o': 0, 'y': -14}, {'p': 100, 'o': 0, 'y': -14}] if via_da
-           else [{'p': 100, 'o': 100, 'y': 0}]))}
+    def poi(da, a, via_da=None, via_a=None):
+        # Un testo che c'è già all'apertura (da = 0) parte visibile: con la tappa «0 → invisibile» il titolo
+        # compariva solo dopo aver cominciato a scorrere (20 nov 2026, come in Zapping).
+        entra = [{'p': 0, 'o': 100, 'y': 0}] if da <= 0 else [{'p': 0, 'o': 0, 'y': 14}, {'p': da, 'o': 0, 'y': 14}, {'p': a, 'o': 100, 'y': 0}]
+        esce = ([{'p': via_da, 'o': 100, 'y': 0}, {'p': via_a, 'o': 0, 'y': -14}, {'p': 100, 'o': 0, 'y': -14}] if via_da
+                else [{'p': 100, 'o': 100, 'y': 0}])
+        return {'inizio': 0, 'fine': 100, 'tappe': entra + esce}
     carta = 'filter:drop-shadow(0 18px 30px rgba(0,0,0,.35));'
     D, T = -900 * 1.0, -900 * 2.25  # (il segno lo gira esce(): qui sotto è positivo)
     L = K.veli('sc-velo', 'basso', 30, 64, colore=C['nero'], forza=86, mobile_da=58)
@@ -114,51 +124,72 @@ def apertura(t):
         # computer
         K.livello('sc-carta', tipo='image', imageSrc=K.img('scontrino-rotolo.svg'), imageAlt='', objectFit='fill', x=37, y=-118,
                   w=26, h=130, entra='fadeIn', ritardo=0, durata=400, customCSS=carta, scrollMove=esce(-D),
-                  responsive={'mobile': {'visible': False}}),
+                  responsive={'tablet': {'visible': False}, 'mobile': {'visible': False}}),
         K.livello('sc-righe', contenuto=RIGHE, x=38.5, y=-104, w=23, size=14, peso='700', colore=C['testo'], align='left',
-                  fontFamily=MONO, lineHeight=1.75, letterSpacing=0, entra='fadeIn', ritardo=0, durata=400,
-                  scrollMove=esce(-D), responsive={'mobile': {'visible': False}}),
+                  fontFamily=MONO, lineHeight=1.75, letterSpacing=0, textTransform='uppercase', entra='fadeIn', ritardo=0,
+                  durata=400, scrollMove=esce(-D), responsive={'tablet': {'visible': False}, 'mobile': {'visible': False}}),
         K.livello('sc-b1', tipo='button', contenuto='Il banco', x=40, y=-58, w='auto', size=13, peso='700', colore=C['on_acc'],
                   bgColor=C['acc'], padding=14, borderRadius=0, buttonUrl=BANCO, entra='fadeIn', ritardo=0,
                   textTransform='uppercase', letterSpacing=2, scrollMove=esce(-D), hover={'bgColor': C['nero'], 'duration': 250},
-                  responsive={'mobile': {'visible': False}}),
+                  responsive={'tablet': {'visible': False}, 'mobile': {'visible': False}}),
         K.livello('sc-b2', tipo='button', contenuto='Ordina', x=51, y=-58, w='auto', size=13, peso='700', colore=C['testo'],
                   bgColor='transparent', padding=14, borderRadius=0, borderWidth=1, borderColor=C['testo'], buttonUrl=ORDINA,
                   entra='fadeIn', ritardo=0, textTransform='uppercase', letterSpacing=2, scrollMove=esce(-D),
-                  hover={'bgColor': mix(C['testo'], 10), 'duration': 250}, responsive={'mobile': {'visible': False}}),
+                  hover={'bgColor': mix(C['testo'], 10), 'duration': 250}, responsive={'tablet': {'visible': False}, 'mobile': {'visible': False}}),
         # telefono
         K.livello('sc-carta-t', tipo='image', imageSrc=K.img('scontrino-rotolo.svg'), imageAlt='', objectFit='fill', x=12, y=-50,
                   w=76, h=56, visible=False, entra='fadeIn', ritardo=0, durata=400, customCSS=carta, scrollMove=esce(-T),
                   responsive={'mobile': {'visible': True, 'x': 12, 'y': -50, 'width': 76, 'height': 56}}),
-        K.livello('sc-righe-t', contenuto=RIGHE, x=14, y=-45, w=72, size=14, peso='700', colore=C['testo'], align='left',
-                  fontFamily=MONO, lineHeight=1.7, visible=False, entra='fadeIn', ritardo=0, durata=400, scrollMove=esce(-T),
-                  responsive={'mobile': {'visible': True, 'x': 14, 'y': -45, 'width': 72, 'fontSize': m(9.5)}}),
+        K.livello('sc-righe-t', contenuto=RIGHE_T, x=14, y=-45, w=72, size=14, peso='700', colore=C['testo'], align='left',
+                  fontFamily=MONO, lineHeight=1.5, textTransform='uppercase', visible=False, entra='fadeIn', ritardo=0, durata=400, scrollMove=esce(-T),
+                  responsive={'mobile': {'visible': True, 'x': 14, 'y': -45, 'width': 72, 'fontSize': m(18)}}),
         K.livello('sc-b1-t', tipo='button', contenuto='Il banco', x=16, y=-14, w='auto', size=13, peso='700', colore=C['on_acc'],
                   bgColor=C['acc'], padding=14, borderRadius=0, buttonUrl=BANCO, visible=False, entra='fadeIn', ritardo=0,
                   textTransform='uppercase', letterSpacing=2, scrollMove=esce(-T),
-                  responsive={'mobile': {'visible': True, 'x': 16, 'y': -14, 'fontSize': m(12)}}),
+                  responsive={'mobile': {'visible': True, 'x': 16, 'y': -7, 'fontSize': m(12)}}),
         K.livello('sc-b2-t', tipo='button', contenuto='Ordina', x=52, y=-14, w='auto', size=13, peso='700', colore=C['testo'],
                   bgColor='transparent', padding=14, borderRadius=0, borderWidth=1, borderColor=C['testo'], buttonUrl=ORDINA,
                   visible=False, entra='fadeIn', ritardo=0, textTransform='uppercase', letterSpacing=2, scrollMove=esce(-T),
-                  responsive={'mobile': {'visible': True, 'x': 52, 'y': -14, 'fontSize': m(12)}}),
+                  responsive={'mobile': {'visible': True, 'x': 52, 'y': -7, 'fontSize': m(12)}}),
+        # tablet (tela 1024 × 576): carta più larga, righe corte, stessa corsa del computer
+        K.livello('sc-carta-tab', tipo='image', imageSrc=K.img('scontrino-rotolo.svg'), imageAlt='', objectFit='fill', x=32,
+                  y=-118, w=36, h=130, visible=False, entra='fadeIn', ritardo=0, durata=400, customCSS=carta,
+                  scrollMove=esce(-D), responsive={'tablet': {'visible': True}, 'mobile': {'visible': False}}),
+        K.livello('sc-righe-tab', contenuto=RIGHE_T, x=34, y=-104, w=32, size=21, peso='700', colore=C['testo'],
+                  align='left', fontFamily=MONO, lineHeight=1.5, textTransform='uppercase', visible=False, entra='fadeIn',
+                  ritardo=0, durata=400, scrollMove=esce(-D),
+                  responsive={'tablet': {'visible': True, 'width': 32, 'fontSize': 21}, 'mobile': {'visible': False}}),
+        K.livello('sc-b1-tab', tipo='button', contenuto='Il banco', x=34, y=-41, w='auto', size=13, peso='700',
+                  colore=C['on_acc'], bgColor=C['acc'], padding=14, borderRadius=0, buttonUrl=BANCO, visible=False,
+                  entra='fadeIn', ritardo=0, textTransform='uppercase', letterSpacing=2, scrollMove=esce(-D),
+                  hover={'bgColor': C['nero'], 'duration': 250},
+                  responsive={'tablet': {'visible': True, 'x': 34}, 'mobile': {'visible': False}}),
+        K.livello('sc-b2-tab', tipo='button', contenuto='Ordina', x=51, y=-41, w='auto', size=13, peso='700',
+                  colore=C['testo'], bgColor='transparent', padding=14, borderRadius=0, borderWidth=1,
+                  borderColor=C['testo'], buttonUrl=ORDINA, visible=False, entra='fadeIn', ritardo=0,
+                  textTransform='uppercase', letterSpacing=2, scrollMove=esce(-D),
+                  hover={'bgColor': mix(C['testo'], 10), 'duration': 250},
+                  responsive={'tablet': {'visible': True, 'x': 51}, 'mobile': {'visible': False}}),
         # la stampante, sopra a tutto
         K.livello('sc-stampante', tipo='image', imageSrc=K.img('scontrino-stampante.svg'), imageAlt='La stampante dello scontrino',
                   objectFit='fill', x=34, y=-1, w=32, h=13, entra='fadeIn', ritardo=0, durata=400,
-                  responsive={'mobile': {'x': 6, 'y': -0.5, 'width': 88, 'height': 5.4}}),
+                  responsive={'tablet': {'x': 28, 'y': -1, 'width': 44, 'height': 17.8},
+                              'mobile': {'x': 6, 'y': -0.5, 'width': 88, 'height': 5.4}}),
         # il titolo, diviso ai due lati dello scontrino
         K.livello('sc-t1', contenuto='Questo sito', tag='h1', x=3, y=40, w=31, size=60, peso='700', colore=C['chiaro'],
                   align='right', fontFamily=FONT_T, lineHeight=1.05, entra='fadeInLeft', ritardo=300, durata=900,
-                  responsive={'mobile': {'visible': False}}),
+                  responsive={'tablet': {'x': 1, 'width': 29}, 'mobile': {'visible': False}}),
         K.livello('sc-t2', contenuto='si stampa.', x=66, y=40, w=31, size=60, peso='700', colore=C['acc2'], align='left',
                   fontFamily=FONT_T, lineHeight=1.05, fontStyle='italic', entra='fadeInRight', ritardo=450, durata=900,
-                  responsive={'mobile': {'visible': False}}),
+                  responsive={'tablet': {'x': 70, 'width': 29}, 'mobile': {'visible': False}}),
         K.livello('sc-t1t', contenuto='Questo sito <em>si stampa.</em>', x=6, y=78, w=88, size=60, peso='700',
                   colore=C['chiaro'], align='center', fontFamily=FONT_T, lineHeight=1.05, visible=False, entra='fadeInUp',
                   ritardo=300, durata=900, responsive={'mobile': {'visible': True, 'x': 6, 'y': 80, 'width': 88, 'fontSize': m(36)}}),
         K.livello('sc-sub', contenuto='Una salumeria di Bologna dal 1958. Il conto si fa ancora a voce, ma lo scontrino esce '
                   'sempre.', x=3, y=58, w=31, size=18, peso='500', colore=mix(C['chiaro'], 90), align='right', lineHeight=1.5,
                   ritardo=600, scrollMove=poi(0, 1, 50, 56),
-                  responsive={'mobile': {'x': 8, 'y': 88, 'width': 84, 'fontSize': m(15), 'textAlign': 'center'}}),
+                  responsive={'tablet': {'x': 1, 'width': 29},
+                              'mobile': {'x': 8, 'y': 88, 'width': 84, 'fontSize': m(15), 'textAlign': 'center'}}),
     ]
     sl = [K.diapositiva('sc-1', K.sfondo_video(V_AFFETTATRICE, overlay=0.42, colore=C['nero']), L, durata=600000)]
     return K.proslider(t, sl, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='fade', showArrows=False, showDots=False,

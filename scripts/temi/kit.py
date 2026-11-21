@@ -436,6 +436,13 @@ class Kit:
                     ov['visible'] = False
                 if not ov:
                     del r[chiave]
+            # Il telefono eredita la visibilità dal tablet: un testo nascosto sul tablet ma con un posto suo sul telefono
+            # (x o y propri) lì va acceso, se no resta spento anche al telefono (20 nov 2026: 38 livelli in 23 temi, fra cui
+            # il sottotitolo dell'apertura di Lanterna).
+            mob = r.get('mobile')
+            if (r.get('tablet') or {}).get('visible') is False and isinstance(mob, dict) and 'visible' not in mob \
+                    and ('x' in mob or 'y' in mob):
+                mob['visible'] = True
         # Pulsanti e bollini affiancati a un pulsante: sul notebook e sul tablet la tela è più stretta ma caratteri e
         # padding restano in pixel, quindi il primo pulsante occupa una fetta più larga della tela e quello accanto gli
         # finiva sopra. Prima si spostava solo sul tablet, di 4,5 punti fissi, e sul notebook per niente (Fuori Registro

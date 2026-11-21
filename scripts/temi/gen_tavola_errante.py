@@ -136,7 +136,7 @@ def apertura(t):
                   responsive={'mobile': {'y': 64, 'height': 36}}),
         K.livello('te-o', contenuto='Elia Mancuso · cuoco senza ristorante', x=6, y=9, w=50, size=12, peso='500', colore=CANDELA,
                   letterSpacing=3, textTransform='uppercase', fontFamily=MONO, ritardo=200, scrollMove=via,
-                  responsive={'mobile': {'fontSize': m(11), 'y': 9, 'x': 7, 'width': 86}, 'tablet': {'visible': False}}),
+                  responsive={'mobile': {'fontSize': m(11), 'y': 6.5, 'x': 7, 'width': 86}, 'tablet': {'visible': False}}),  # a 320 px va su due righe
         K.livello('te-t', contenuto='Diciotto posti,<br><em>una tavola sola.</em>', tag='h1', x=6, y=12.5, w=60, size=72,
                   peso='500', colore=C['chiaro'], fontFamily=TITOLI, lineHeight=1.02, letterSpacing=-1, entra='maskFromBottom',
                   ritardo=300, durata=1200, scrollMove=via,

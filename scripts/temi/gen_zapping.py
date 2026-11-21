@@ -50,7 +50,7 @@ PHOTOS = [TV_PILA, TV_VECCHIA, TV_GRANDE, TV_MOBILE, TV_PARETE, TV_GIALLA, TV_NE
           DUE_POPCORN, SALA_BLU, PROIETTORI, PROIETTORE, BOBINE, VHS_TV, VHS, VHS_LEGNO, STANZA_TV, SALOTTO, POLTRONA,
           POPCORN_BOBINA, POPCORN, MOLE, TORINO_NOTTE, BOBINA, PELLICOLA, TELECOMANDO, TELECOMANDO_TASTI, MONITOR,
           MONITOR_FILA, POLTRONE_ROSSE, FILE_ROSSE]
-DISEGNI = ['zapping-tv.svg']
+DISEGNI = ['zapping-tv-2.svg']
 LOGHI = ['zapping-logo-chiaro.png', 'zapping-logo-scuro.png']
 MEDIA = set(PHOTOS) | set(DISEGNI) | set(LOGHI) | {v + '.mp4' for v in VIDEOS} | {v + '.jpg' for v in VIDEOS}
 
@@ -116,10 +116,14 @@ def apertura(t):
                          customCSS='text-shadow:0 0 8px currentColor;',
                          responsive={'mobile': {'x': 17, 'y': 50.2, 'width': 40, 'fontSize': m(16)}})
 
-    poi = lambda da, a, via_da=None, via_a=None: {'inizio': 0, 'fine': 100, 'tappe': (
-        [{'p': 0, 'o': 0, 'y': 16}, {'p': da, 'o': 0, 'y': 16}, {'p': a, 'o': 100, 'y': 0}]
-        + ([{'p': via_da, 'o': 100, 'y': 0}, {'p': via_a, 'o': 0, 'y': -16}, {'p': 100, 'o': 0, 'y': -16}] if via_da
-           else [{'p': 100, 'o': 100, 'y': 0}]))}
+    def poi(da, a, via_da=None, via_a=None):
+        # Un testo che c'è già all'apertura (da = 0) parte visibile: con la tappa «0 → invisibile» il titolo
+        # «Questo sito cambia canale.» compariva solo dopo aver cominciato a scorrere (20 nov 2026).
+        entra = [{'p': 0, 'o': 100, 'y': 0}] if da <= 0 else \
+            [{'p': 0, 'o': 0, 'y': 16}, {'p': da, 'o': 0, 'y': 16}, {'p': a, 'o': 100, 'y': 0}]
+        esce = ([{'p': via_da, 'o': 100, 'y': 0}, {'p': via_a, 'o': 0, 'y': -16}, {'p': 100, 'o': 0, 'y': -16}] if via_da
+                else [{'p': 100, 'o': 100, 'y': 0}])
+        return {'inizio': 0, 'fine': 100, 'tappe': entra + esce}
     video = lambda lid, v, sm: K.livello(lid, tipo='video', videoSrc=K.img(v + '.mp4'), videoAutoplay=True, videoMuted=True,
                                          videoLoop=True, entra='fadeIn', ritardo=0, durata=400, scrollMove=sm,
                                          customCSS='transform-origin:50% 50%;', responsive={'mobile': dict(schermo_tel)},
@@ -131,26 +135,26 @@ def apertura(t):
         osd('za-osd1', 'CH 01', 0, 30),
         osd('za-osd2', 'CH 02', 42, 64),
         osd('za-osd3', 'CH 03', 76, 100),
-        K.livello('za-tv', tipo='image', imageSrc=K.img('zapping-tv.svg'), imageAlt='Un televisore arancione degli anni Settanta',
+        K.livello('za-tv', tipo='image', imageSrc=K.img('zapping-tv-2.svg'), imageAlt='Un televisore arancione degli anni Settanta',
                   objectFit='fill', x=44, y=18, w=50, h=67.5, entra='fadeIn', ritardo=0, durata=600,
                   responsive={'mobile': {'x': 6, 'y': 44, 'width': 88, 'height': 30.6}}),
         K.livello('za-o', contenuto='Cineclub · via Nizza · Torino', x=6, y=24, w=34, size=13, peso='700', colore=VERDE,
                   letterSpacing=3, textTransform='uppercase', fontFamily=MONO, ritardo=150,
                   responsive={'mobile': {'fontSize': m(10), 'x': 6, 'y': 12.5, 'width': 88}}),
-        K.livello('za-t1', contenuto='Questo sito<br>cambia canale.', tag='h1', x=6, y=29, w=38, size=62, peso='400',
+        K.livello('za-t1', contenuto='Questo sito<br>cambia canale.', tag='h1', x=6, y=29, w=38, size=56, peso='400',
                   colore=C['chiaro'], fontFamily=FONT_T, lineHeight=1.04, entra='fadeInUp', ritardo=300, durata=900,
                   scrollMove=poi(0, 1, 28, 33), responsive={'mobile': {'fontSize': m(34), 'x': 6, 'y': 15, 'width': 88}}),
         K.livello('za-t1s', contenuto='Un cineclub di quartiere: pellicole il giovedì, rassegne, VHS in prestito e una sala da '
                   'centoventi posti.', x=6, y=52, w=34, size=18, peso='500', colore=mix(C['chiaro'], 88), lineHeight=1.5,
                   ritardo=600, scrollMove=poi(0, 1, 28, 33), responsive={'mobile': {'fontSize': m(15), 'x': 6, 'y': 27, 'width': 88}}),
-        K.livello('za-t2', contenuto='Il giovedì,<br>la pellicola.', x=6, y=29, w=38, size=62, peso='400', colore=C['chiaro'],
+        K.livello('za-t2', contenuto='Il giovedì,<br>la pellicola.', x=6, y=29, w=38, size=56, peso='400', colore=C['chiaro'],
                   fontFamily=FONT_T, lineHeight=1.04, entra='fadeIn', ritardo=0, scrollMove=poi(38, 45, 62, 67),
                   responsive={'mobile': {'fontSize': m(34), 'x': 6, 'y': 15, 'width': 88}}),
         K.livello('za-t2s', contenuto='Trentacinque millimetri, il proiettore che ronza e il cambio bobina a metà film. Come '
                   'una volta, perché una volta era meglio così.', x=6, y=52, w=34, size=18, peso='500',
                   colore=mix(C['chiaro'], 88), lineHeight=1.5, entra='fadeIn', ritardo=0, scrollMove=poi(40, 47, 62, 67),
                   responsive={'mobile': {'fontSize': m(15), 'x': 6, 'y': 27, 'width': 88}}),
-        K.livello('za-t3', contenuto='Il telecomando<br>è tuo.', x=6, y=29, w=38, size=62, peso='400', colore=C['acc'],
+        K.livello('za-t3', contenuto='Il telecomando<br>è tuo.', x=6, y=29, w=38, size=56, peso='400', colore=C['acc'],
                   fontFamily=FONT_T, lineHeight=1.04, entra='fadeIn', ritardo=0, scrollMove=poi(72, 80),
                   responsive={'mobile': {'fontSize': m(34), 'x': 6, 'y': 15, 'width': 88}}),
         K.livello('za-b1', tipo='button', contenuto='Il programma', x=6, y=54, w='auto', size=14, peso='700',

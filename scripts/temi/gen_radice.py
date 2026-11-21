@@ -118,7 +118,7 @@ def apertura(t):
                       lineHeight=1.6, ritardo=800, responsive={'mobile': {'fontSize': m(14), 'y': 63, 'x': 7, 'width': 86}}),
             K.livello('ra-i%d' % n, contenuto=ingr, x=6, y=88, w=50, size=12, peso='500', colore=mix(C['chiaro'], 76),
                       letterSpacing=1, fontFamily=MONO, ritardo=1000,
-                      responsive={'mobile': {'fontSize': m(10), 'y': 74, 'x': 7, 'width': 86}}),
+                      responsive={'mobile': {'fontSize': m(10), 'y': 87.5, 'x': 7, 'width': 86}}),  # sotto il pulsante, come al computer
             K.livello('ra-b%d' % n, tipo='button', contenuto='Una cena a casa vostra', x=66, y=84, w='auto', size=14,
                       peso='600', colore=C['nero'], bgColor=TUORLO, padding=16, borderRadius=999, ritardo=1150,
                       buttonUrl=DOMICILIO, hover={'bgColor': C['chiaro'], 'duration': 250},

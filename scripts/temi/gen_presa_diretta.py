@@ -146,10 +146,11 @@ def apertura(t):
                   boxShadow={'x': 0, 'y': 0, 'blur': 12, 'spread': 2, 'color': mix(REC, 70)},
                   timeline=K.tl(60.5, 88.2, [(0, {'opacity': 100}), (600, {'opacity': 100}), (700, {'opacity': 15}),
                                              (1200, {'opacity': 15}), (1300, {'opacity': 100})], 1300),
-                  responsive={'mobile': {'x': 8, 'y': 40, 'width': 1.9, 'height': 0.86}}),
+                  responsive={'mobile': {'x': 8, 'y': 78.4, 'width': 1.9, 'height': 0.86}}),
         K.livello('pd-tc', contenuto='REC · 00:03:27:14 · 24 bit / 96 kHz · nastro 2″', x=62, y=87.6, w=34, size=11, peso='500',
                   colore=mix(C['chiaro'], 62), fontFamily=MONO, letterSpacing=2, entra='fadeIn', ritardo=1500,
-                  responsive={'mobile': {'x': 11, 'y': 39.6, 'width': 80, 'fontSize': m(9)}}),
+                  # al telefono va su due righe: sotto il pulsante, come al computer (fra i VU e l'occhiello non ci stava)
+                  responsive={'mobile': {'x': 11, 'y': 78, 'width': 82, 'fontSize': m(9)}}),
     ]
     return K.proslider(t, sl, globali=globali, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='fadeThroughDark',
                        durata_trans=1000, showArrows=False, showDots=False, showTabs=True, tabPosition='bottom',

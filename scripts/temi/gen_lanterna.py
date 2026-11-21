@@ -81,10 +81,13 @@ def build_footer():
 def apertura(t):
     m = K.mob
     gira = {'inizio': 0, 'fine': 100, 'andamento': 'costante', 'tappe': [{'p': 0, 'r': -28}, {'p': 100, 'r': 400}]}
-    poi = lambda da, a, via_da=None, via_a=None: {'inizio': 0, 'fine': 100, 'tappe': (
-        [{'p': 0, 'o': 0, 'y': 16}, {'p': da, 'o': 0, 'y': 16}, {'p': a, 'o': 100, 'y': 0}]
-        + ([{'p': via_da, 'o': 100, 'y': 0}, {'p': via_a, 'o': 0, 'y': -16}, {'p': 100, 'o': 0, 'y': -16}] if via_da
-           else [{'p': 100, 'o': 100, 'y': 0}]))}
+    def poi(da, a, via_da=None, via_a=None):
+        # Un testo che c'è già all'apertura (da = 0) parte visibile: con la tappa «0 → invisibile» il titolo
+        # compariva solo dopo aver cominciato a scorrere (20 nov 2026, come in Zapping).
+        entra = [{'p': 0, 'o': 100, 'y': 0}] if da <= 0 else [{'p': 0, 'o': 0, 'y': 16}, {'p': da, 'o': 0, 'y': 16}, {'p': a, 'o': 100, 'y': 0}]
+        esce = ([{'p': via_da, 'o': 100, 'y': 0}, {'p': via_a, 'o': 0, 'y': -16}, {'p': 100, 'o': 0, 'y': -16}] if via_da
+                else [{'p': 100, 'o': 100, 'y': 0}])
+        return {'inizio': 0, 'fine': 100, 'tappe': entra + esce}
     L = K.veli('la-velo', 'basso', 44, 76, colore=C['nero'], forza=90, mobile_da=46)
     L += [
         K.livello('la-fascio', tipo='image', imageSrc=K.img('lanterna-fascio.svg'), imageAlt='', objectFit='fill', x=50, y=29,
@@ -98,7 +101,7 @@ def apertura(t):
                   scrollMove=poi(0, 1, 30, 36), responsive={'mobile': {'fontSize': m(40), 'x': 6, 'y': 54, 'width': 88}}),
         K.livello('la-t1s', contenuto='Tre stanze al buio sotto la Lanterna di Genova. Esci solo se le risolvi.', x=6, y=86,
                   w=44, size=19, peso='500', colore=mix(C['chiaro'], 90), lineHeight=1.45, ritardo=600,
-                  scrollMove=poi(0, 1, 30, 36), responsive={'mobile': {'fontSize': m(16), 'x': 6, 'y': 66, 'width': 88}}),
+                  scrollMove=poi(0, 1, 30, 36), responsive={'mobile': {'fontSize': m(16), 'x': 6, 'y': 71.5, 'width': 88}}),  # sotto il titolo, che al telefono va su tre righe
         K.livello('la-t2', contenuto='La luce<br>ce l’hai tu.', x=6, y=61, w=60, size=84, peso='700', colore=C['acc'],
                   fontFamily=FONT_T, lineHeight=1.02, entra='fadeIn', ritardo=0, scrollMove=poi(40, 48, 66, 72),
                   responsive={'mobile': {'fontSize': m(40), 'x': 6, 'y': 54, 'width': 88}}),

@@ -277,6 +277,10 @@ function initSlider(container) {
     var bordo = function (t, h) {
       if (t <= 0.02 && t + h >= 0.98) return 'pieno';
       if (h > 0.06) return '';
+      // Un livello che parte fuori dalla tela (sopra o sotto) non è un filo sul bordo: è un pezzo che entra con lo
+      // scorrimento e resta con la composizione. I pulsanti sullo scontrino ancora dentro la stampante (Scontrino) si
+      // staccavano dalla carta e finivano sulle righe, a 320 e 360 px dove lo schermo è più alto dello slider (20 nov 2026).
+      if (t < -0.03 || t > 1.02) return '';
       if (t <= 0.02) return 'su';
       return t + h >= 0.98 ? 'giu' : '';
     };

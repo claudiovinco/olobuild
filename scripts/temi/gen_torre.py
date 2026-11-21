@@ -104,10 +104,13 @@ def apertura(t):
                          scrollMove={'inizio': 0, 'fine': 100, 'tappe': tappe},
                          responsive={'mobile': {'x': 52, 'y': 15, 'width': 30, 'fontSize': m(70)}})
 
-    poi = lambda da, a, via_da=None, via_a=None: {'inizio': 0, 'fine': 100, 'tappe': (
-        [{'p': 0, 'o': 0, 'y': 16}, {'p': da, 'o': 0, 'y': 16}, {'p': a, 'o': 100, 'y': 0}]
-        + ([{'p': via_da, 'o': 100, 'y': 0}, {'p': via_a, 'o': 0, 'y': -16}, {'p': 100, 'o': 0, 'y': -16}] if via_da
-           else [{'p': 100, 'o': 100, 'y': 0}]))}
+    def poi(da, a, via_da=None, via_a=None):
+        # Un testo che c'è già all'apertura (da = 0) parte visibile: con la tappa «0 → invisibile» il titolo
+        # compariva solo dopo aver cominciato a scorrere (20 nov 2026, come in Zapping).
+        entra = [{'p': 0, 'o': 100, 'y': 0}] if da <= 0 else [{'p': 0, 'o': 0, 'y': 16}, {'p': da, 'o': 0, 'y': 16}, {'p': a, 'o': 100, 'y': 0}]
+        esce = ([{'p': via_da, 'o': 100, 'y': 0}, {'p': via_a, 'o': 0, 'y': -16}, {'p': 100, 'o': 0, 'y': -16}] if via_da
+                else [{'p': 100, 'o': 100, 'y': 0}])
+        return {'inizio': 0, 'fine': 100, 'tappe': entra + esce}
     L = K.veli('to-velo', 'sinistra', 34, 66, colore=C['nero'], forza=84, mobile_alto=46)
     L += [
         K.livello('to-vano', tipo='image', imageSrc=K.img('torre-vano.svg'), imageAlt='', objectFit='fill', x=86, y=6, w=5,
