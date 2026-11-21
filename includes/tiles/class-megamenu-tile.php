@@ -4180,6 +4180,23 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                 });
             });
 
+            /* I pannelli a template prendono subito la loro larghezza, non solo al primo passaggio del mouse: chiusi
+               restavano larghi 0, il contenuto si impilava parola per parola e il pannello nascosto, alto migliaia di
+               pixel, allungava le pagine corte con un grande bianco sotto il piè di pagina. */
+            function misuraPannelliTpl() {
+                navItems.forEach(function(li) {
+                    if (li.classList.contains("olo-mm-open")) return;
+                    if (li.querySelector(":scope > .olo-mm-panel-tpl")) posPanel(li);
+                });
+            }
+            misuraPannelliTpl();
+            window.addEventListener("load", misuraPannelliTpl);
+            var tMisuraTpl = null;
+            window.addEventListener("resize", function() {
+                clearTimeout(tMisuraTpl);
+                tMisuraTpl = setTimeout(misuraPannelliTpl, 150);
+            });
+
             /* ── Keyboard: Escape ── */
             document.addEventListener("keydown", function(e) {
                 if (e.key === "Escape") {
