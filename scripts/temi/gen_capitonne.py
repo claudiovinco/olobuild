@@ -5,10 +5,10 @@ capitonné a mano, le tende su misura, le testiere, la scelta dei tessuti in bot
 Tema scuro e caldo, il velluto: bordeaux profondo, oro, beige e avorio. Titoli in Cinzel, testo in Raleway, dati in
 Victor Mono.
 
-Apertura: «la tenda che si raccoglie» (dal 15 nov 2026; prima dieci teli che giravano come una veneziana). Lo slider
+Apertura: «la tenda che se ne va a destra» (dal 15 nov 2026; prima dieci teli che giravano come una veneziana). Lo slider
 resta fermo in cima mentre si scorre: tutta la tela è coperta da una tenda di velluto a pieghe, col titolo sopra.
 Scorrendo la tenda si tira verso destra come una tenda vera: il bordo libero parte per primo, le pieghe si stringono
-una dopo l'altra e si ammucchiano contro il muro, poi il cordone con la nappa la lega; dietro, il tappezziere al banco.
+una dopo l'altra e il mucchio esce tutto dallo schermo a destra; dietro, il tappezziere al banco.
 Cursore: la nappa.
 """
 import math
@@ -51,11 +51,10 @@ PHOTOS = [
 VIDEOS = [V_BANCO, V_CUCITRICE, V_CUCITRICE2, V_TENDA, V_TENDA2, V_VELLUTO, V_ORO, V_MANI, V_TAGLIO]
 # il velluto capitonné da accarezzare: la foto ricolorata sul bordeaux del tema e la stessa col pelo piegato, più chiara
 VELLUTO, VELLUTO_CHIARO = 'capitonne-velluto.jpg', 'capitonne-velluto-chiaro.jpg'
-# la tenda dell'apertura (disegni_capitonne_tenda.py, 21 nov 2026): il velluto intero, la tenda legata, il cordone, la nappa
-TELO, LEGATA = 'capitonne-tenda-velluto.webp', 'capitonne-tenda-legata.webp'
-CORDONE, NAPPA = 'capitonne-cordone.svg', 'capitonne-nappa-2.svg'
+# la tenda dell'apertura (disegni_capitonne_tenda.py, 21 nov 2026): il velluto intero che le pieghe si dividono
+TELO = 'capitonne-tenda-velluto.webp'
 MEDIA = (set(PHOTOS) | {v + '.mp4' for v in VIDEOS} | {v + '.jpg' for v in VIDEOS} |
-         {VELLUTO, VELLUTO_CHIARO, TELO, LEGATA, CORDONE, NAPPA})
+         {VELLUTO, VELLUTO_CHIARO, TELO})
 
 K = Kit(ID, MEDIA, raggio=2, peso_titoli='500', corsivo=False, maiuscole_pulsanti=True)
 C = K.c
@@ -79,22 +78,20 @@ def build_footer():
                    marchio_size=140)
 
 
-# ── L'apertura: la tenda che si raccoglie ──
+# ── L'apertura: la tenda che se ne va a destra ──
 # Una tenda di velluto a pieghe copre tutta la tela. Scorrendo la si tira verso destra come una tenda vera: il bordo
-# libero parte per primo e spinge le pieghe, che si stringono una dopo l'altra e si ammucchiano contro il muro; il fondo
-# delle pieghe resta indietro mentre la tenda corre (si inclina appena) e all'arrivo oscilla e si ferma. Poi la tenda
-# raccolta si stringe a clessidra, il cordone ritorto la avvolge dal muro in avanti e la nappa cade dal nodo, dondola e
-# resta lì a dondolare piano. Il bastone d'ottone resta: è il binario. Dietro, la bottega.
-# (21 nov 2026, utente: «rendi la tenda più realistica e morbida, lavora anche sull'aggancio giallo finale»: prima erano
-# 14 strisce di sfumature CSS uguali e una barra d'oro dritta. Disegni in disegni_capitonne_tenda.py.)
+# libero parte per primo e spinge le pieghe, che si stringono una dopo l'altra mentre il fondo resta un po' indietro (si
+# inclina appena), e il mucchio esce tutto dallo schermo a destra. Il bastone d'ottone resta: è il binario. Dietro, la
+# bottega.
+# (21 nov 2026, utente: «rendi la tenda più realistica e morbida»: prima erano 14 strisce di sfumature CSS uguali.
+# Disegni in disegni_capitonne_tenda.py. Poi, lo stesso giorno: «anzichè chiudere la tenda, falla sparire a destra» e
+# «ho chiesto che la tenda di capitonne se ne vada tutta a destra...senza il drappo che chiude»: via la tenda legata a
+# clessidra, il cordone e la nappa, a ogni formato.)
 # Il velluto è UN'immagine sola che le 14 pieghe si dividono (background-position): chiusa la tenda è un telo intero.
-# Le pieghe e la tenda legata toccano i due bordi e lo Slider Pro le allunga a tutta la scena; cordone e nappa restano
-# nella composizione 16:9: per questo la legatura sta a metà altezza (LEGA), l'unico punto in cui coincidono a ogni
-# formato di finestra. Al telefono la tenda non si lega: le sue pieghe escono dallo schermo a destra.
 PIEGHE = 14
-RACCOLTA = 85.0      # dove comincia il mucchio delle pieghe raccolte (% della larghezza)
+RACCOLTA = 85.0      # dove comincia il mucchio delle pieghe raccolte (% della larghezza), prima di uscire
 STRETTA = 0.3        # quanto si stringe in media ogni piega nel mucchio
-LEGA = 50.0
+FUORI = 18.0         # di quanto il mucchio va oltre: a fine corsa la piega più a sinistra sta al 103 % della tela
 
 
 def tp(p, **v):
@@ -144,53 +141,19 @@ def apertura(t):
     fondi = ['background:url(%s?v=1) %.4f%% 0 / %.4f%% 100%% no-repeat;' % (K.img(TELO), 100 * k * w / (100 - wl), 100 * 100 / wl)
              for k in range(PIEGHE)]
     for k in range(PIEGHE):
-        dx = round((sinistre[k] - k * w) * 14.4, 1)          # px della tela del computer (1440)
+        dx = round((sinistre[k] + FUORI - k * w) * 14.4, 1)  # px della tela del computer (1440): fuori dallo schermo
         ombra = 'box-shadow:-16px 0 30px rgba(8,2,4,.55);' if k == 0 else ''
-        # computer: le pieghe si raccolgono contro il muro, oscillano e lasciano il posto alla tenda legata
         livelli.append(K.livello('ca-piega%d' % k, tipo='shape', x=round(k * w, 3), y=0, w=round(wl, 3), h=100,
                                  bgColor=BORDEAUX, entra='fadeIn', ritardo=0, durata=500,
                                  customCSS=fondi[k] + ombra + 'transform-origin:0 0;',
-                                 scrollMove=corsa(k, dx, strette[k], 68, oscilla=10, spegni=(79, 85)),
-                                 responsive={'mobile': {'visible': False}}))
-        # telefono: la tenda raccolta copriva il paragrafo (utente, 21 nov 2026: «anzichè chiudere la tenda, falla sparire
-        # a destra»): le pieghe corrono a destra raccogliendosi e il mucchio esce dallo schermo, senza legatura
-        livelli.append(K.livello('ca-piegat%d' % k, tipo='shape', x=round(k * w, 3), y=0, w=round(wl, 3), h=100,
-                                 bgColor=BORDEAUX, visible=False, entra='fadeIn', ritardo=0, durata=500,
-                                 customCSS=fondi[k] + ombra + 'transform-origin:0 0;',
-                                 scrollMove=corsa(k, round(dx + 18 * 14.4, 1), strette[k], 78, spegni=(78, 79)),
-                                 responsive={'mobile': {'visible': True, 'x': round(k * w, 3), 'y': 0, 'width': round(wl, 3),
-                                                        'height': 100}}))
-
-    def appare(da, a):
-        return {'inizio': 0, 'fine': 100, 'tappe': [tp(0, o=0), tp(da, o=0), tp(a, o=100), tp(100, o=100)]}
-    # la tenda raccolta e legata, a clessidra: compare mentre le strisce si spengono (solo al computer)
-    livelli += [
-        K.livello('ca-legata', tipo='image', imageSrc=K.img(LEGATA), imageAlt='', objectFit='fill', x=80, y=0, w=20, h=100,
-                  entra='fadeIn', ritardo=0, durata=300, scrollMove=appare(73, 80),
-                  customCSS='filter:drop-shadow(-12px 0 18px rgba(8,2,4,.55));', responsive={'mobile': {'visible': False}}),
-    ]
+                                 scrollMove=corsa(k, dx, strette[k], 78, spegni=(78, 79)),
+                                 responsive={'mobile': {'x': round(k * w, 3), 'y': 0, 'width': round(wl, 3), 'height': 100}}))
     # il bastone d'ottone in alto: il binario della tenda, resta
     livelli.append(K.livello('ca-bastone', tipo='shape', x=0, y=0, w=100, h=1.6, bgColor='#8E6E2A', entra='fadeIn',
                              ritardo=0, durata=600,
                              customCSS='background:linear-gradient(180deg,#3E2C0C 0,#F6E3A1 26%,#D7B35E 50%,#8E6E2A 76%,'
                                        '#2E2008 100%);box-shadow:0 5px 10px rgba(0,0,0,.55);',
                              responsive={'mobile': {'height': 0.8}}))
-    # il cordone avvolge la tenda dal muro in avanti (la maschera si apre da destra), poi la nappa cade dal nodo e dondola
-    avvolge = {'inizio': 0, 'fine': 100, 'tappe': [tp(0, o=0, ml=100), tp(76, o=0, ml=100), tp(77, o=100, ml=100),
-                                                    tp(84, o=100, ml=0), tp(100, o=100, ml=0)]}
-    dondola = {'inizio': 0, 'fine': 100, 'tappe': [tp(0, o=0, y=-30, r=0), tp(82, o=0, y=-30, r=0), tp(85, o=100, y=0, r=6),
-                                                    tp(88, o=100, y=0, r=-3.2), tp(91, o=100, y=0, r=1.4),
-                                                    tp(94, o=100, y=0, r=-0.5), tp(97, o=100, y=0, r=0),
-                                                    tp(100, o=100, y=0, r=0)]}
-    livelli += [
-        K.livello('ca-cordone', tipo='image', imageSrc=K.img(CORDONE), imageAlt='', objectFit='contain',
-                  objectPosition='left center', x=88.5, y=LEGA - 3, w=11.5, h=6, entra='fadeIn', ritardo=0, durata=300,
-                  scrollMove=avvolge, responsive={'mobile': {'visible': False}}),
-        K.livello('ca-nappa', tipo='image', imageSrc=K.img(NAPPA), imageAlt='', objectFit='contain',
-                  objectPosition='center top', x=88.5, y=LEGA - 0.4, w=3.0, h=15.7, entra='fadeIn', ritardo=0, durata=300,
-                  scrollMove=dondola, customCSS='transform-origin:50% 0;filter:drop-shadow(0 6px 8px rgba(0,0,0,.5));',
-                  responsive={'mobile': {'visible': False}}),
-    ]
     # Al telefono i testi piccoli non scendono sotto il carattere leggibile: a 320 px l'occhiello va su due righe e il
     # paragrafo su quattro, da 360 in su una e tre. Occhiello e paragrafo stanno in un riquadro alto quanto a 320 (l'occhiello
     # in fondo al suo, il paragrafo al centro del suo): lo spazio in più dei telefoni larghi va attorno ai testi, non tutto
@@ -451,8 +414,8 @@ THEME = tema(
     ID, NAME, 'Casa e design', 'Il sipario di velluto',
     ['tappezzeria', 'tende su misura', 'capitonné', 'artigianato', 'vicenza', 'scuro', 'slider pro'],
     'Una bottega di tappezzeria, velluto bordeaux e oro: in apertura una tenda di velluto a pieghe copre tutto, e '
-    'scorrendo si raccoglie di lato come una tenda vera, piega dopo piega, finché il cordone ritorto la lega e la nappa '
-    'dondola; dietro, il tappezziere al banco. I lavori passano come una pezza di velluto srotolata, il velluto si '
+    'scorrendo si tira verso destra come una tenda vera, piega dopo piega, fino a uscire dallo schermo; dietro, il '
+    'tappezziere al banco. I lavori passano come una pezza di velluto srotolata, il velluto si '
     'accarezza, le tre settimane di una poltrona si sfogliano come un mazzo di carte; poi il listino e il preventivo.',
     [('I lavori', LAVORI), ('La bottega', BOTTEGA), ('Contatti', CONTATTI)],
     [('home', 'Home', None), ('lavori', 'I lavori', 'lavori'), ('la-bottega', 'La bottega', 'la-bottega'),
