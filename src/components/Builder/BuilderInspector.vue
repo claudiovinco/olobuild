@@ -3122,6 +3122,37 @@ function applyTilePresetTheme(tile, presetId) {
     const targetKey = KEY_MAP[k] || k;
     mapped[targetKey] = presetValues[k];
   }
+  // Le chiavi che lo stile di prima aveva messo e il nuovo non tocca tornano al valore di partenza (utente, 21 nov
+  // 2026: lo sfondo scuro di «Neon Glow» restava passando a «Compact Inline», col testo scuro sopra; così anche la
+  // fusione «screen» di «Retro Terminal» e il gradiente di «Gradient Aurora»). Solo se valgono ancora quello che lo stile
+  // aveva scritto: una scelta fatta a mano dopo resta.
+  const prevId = tile.settings?.preset;
+  const prev = prevId && prevId !== presetId ? tilePresets[prevId] : null;
+  const azzerate = new Set();
+  if (prev && typeof prev === 'object' && !(prev.settings && typeof prev.settings === 'object')
+      && !(prev.style && typeof prev.style === 'object')) {
+    const partenza = getElementDefaults(tile.type);
+    for (const k in prev) {
+      const targetKey = KEY_MAP[k] || k;
+      if (targetKey in mapped) continue;
+      if (JSON.stringify(tile.settings?.[targetKey]) !== JSON.stringify(prev[k])) continue;
+      mapped[targetKey] = targetKey in partenza ? partenza[targetKey] : '';
+      azzerate.add(targetKey);
+    }
+  }
+  // Lo sfondo rimasto da uno stile scelto prima di questa correzione (il menu dice già lo stile nuovo): se è proprio lo
+  // sfondo di uno degli stili di questa tile e il nuovo non ne ha, si toglie anche quello.
+  let vecchioSfondo = prev ? (prev.background_color ?? prev.bg_color) : undefined;
+  if (!('bg_color' in mapped) && tile.settings?.bg_color) {
+    const sfondiDegliStili = Object.values(tilePresets)
+      .map((p) => (p && typeof p === 'object' ? (p.background_color ?? p.bg_color) : null)).filter(Boolean);
+    if (sfondiDegliStili.includes(tile.settings.bg_color)) {
+      const partenza = getElementDefaults(tile.type);
+      vecchioSfondo = tile.settings.bg_color;
+      mapped.bg_color = 'bg_color' in partenza ? partenza.bg_color : '';
+      azzerate.add('bg_color');
+    }
+  }
   // Tutti i tile non-hero leggono le proprietà visive da tile.settings (i renderer PHP
   // chiamano wp_parse_args sulle settings, le chiavi sconosciute vengono scartate).
   // Quindi il preset DEVE atterrare in settings — altrimenti chiavi come font_weight,
@@ -3167,9 +3198,17 @@ function applyTilePresetTheme(tile, presetId) {
     // renderer prende quello e il contenitore restava trasparente («Retro Terminal» verde su
     // crema, «Underline Dark» illeggibile). Le tile già salvate non cambiano.
     if ('bg_color' in wrapperPatch) {
-      wrapperPatch.bg = sfondoDaPreset(wrapperPatch.bg_color);
+      // Lo sfondo dello stile di prima si toglie solo se il contenitore ha ancora quello: uno sfondo scelto a mano resta.
+      const ancoraDelPreset = !azzerate.has('bg_color')
+        || JSON.stringify(tile.style?.bg) === JSON.stringify(sfondoDaPreset(vecchioSfondo));
+      if (ancoraDelPreset) {
+        wrapperPatch.bg = sfondoDaPreset(wrapperPatch.bg_color);
+      }
       wrapperPatch.bg_color = '';
     }
+    ['border_radius', 'shadow'].forEach((k) => {
+      if (azzerate.has(k) && JSON.stringify(tile.style?.[k]) !== JSON.stringify(prev?.[k])) delete wrapperPatch[k];
+    });
     if (Object.keys(wrapperPatch).length) {
       tilesStore.applyStylePreset(tile.id, wrapperPatch);
     }
