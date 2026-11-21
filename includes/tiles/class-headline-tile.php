@@ -266,8 +266,19 @@ class Olobuild_Headline_Tile extends Olobuild_Tile_Base {
         <?php endif; ?>
         <div class="olo-headline <?php echo esc_attr( $uid ); ?> <?php echo $align_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- literal prefix + esc_attr()'d alignment, assembled above ?>" style="display:block;width:100%;">
             <?php if ( $s['decoration'] === 'line' ) : ?>
-                <<?php echo tag_escape( $tag ); ?> class="<?php echo esc_attr( $heading_class ); ?> uk-heading-line<?php echo $heading_extra; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal class ternary; tfx_attrs() fragments escaped internally; $heading_style built above from sanitized values (safe_color_css/absint/esc_attr/whitelisted font stack) ?><?php echo $h_tfx_cls; ?>" style="<?php echo $heading_style; ?>"<?php echo $h_tfx_data; ?> data-olo-wave>
-                    <span><?php echo $heading_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- parts esc_html()'d above (nl2br only adds <br /> tags; accent span color via safe_color_css() whitelist) ?></span>
+                <?php
+                // Con le linee ai lati, gli effetti che rendono il testo inline-block (sottolineatura, evidenziatore,
+                // sfumatura animata) vanno sullo span del testo: sul titolo lo stringevano alla sua larghezza, e la
+                // larghezza massima dello span (in % del titolo) ricalcolata su quella lo mandava a capo senza motivo
+                // (21 nov 2026, «Modern Clean» + «Sottolineatura che cresce»). Il glitch usa ::before/::after come le
+                // linee: resta sul titolo, che però torna a tutta larghezza (regola qui sotto).
+                $fx_sullo_span = in_array( (string) ( $s['text_effect'] ?? '' ), [ 'underline-grow', 'highlight-grow', 'gradient-anim' ], true ) && '' !== trim( (string) $h_tfx_cls );
+                $h_cls_titolo  = $fx_sullo_span ? '' : $h_tfx_cls;
+                $h_data_titolo = $fx_sullo_span ? '' : $h_tfx_data;
+                ?>
+                <?php if ( '' !== trim( (string) $h_tfx_cls ) && ! $fx_sullo_span ) : ?><style>.<?php echo esc_attr( $uid ); ?> .uk-heading-line.olo-tfx{display:block;}</style><?php endif; ?>
+                <<?php echo tag_escape( $tag ); ?> class="<?php echo esc_attr( $heading_class ); ?> uk-heading-line<?php echo $heading_extra; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal class ternary; tfx_attrs() fragments escaped internally; $heading_style built above from sanitized values (safe_color_css/absint/esc_attr/whitelisted font stack) ?><?php echo $h_cls_titolo; ?>" style="<?php echo $heading_style; ?>"<?php echo $h_data_titolo; ?> data-olo-wave>
+                    <span<?php if ( $fx_sullo_span ) : ?> class="<?php echo esc_attr( trim( (string) $h_tfx_cls ) ); ?>"<?php echo $h_tfx_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments escaped internally ?><?php endif; ?>><?php echo $heading_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- parts esc_html()'d above (nl2br only adds <br /> tags; accent span color via safe_color_css() whitelist) ?></span>
                 </<?php echo tag_escape( $tag ); ?>>
 
             <?php elseif ( $s['decoration'] === 'divider' ) : ?>

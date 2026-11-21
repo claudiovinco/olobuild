@@ -69,8 +69,9 @@ PHOTOS = [MURO_NERO, COLONNA_STRAPPI, STRAPPI_BLU, STRAPPI_CREMA, STRAPPI_GIALLO
 META = {1: ((0, 52.22), (44.58, 55.42), (0, 59.22), (41.41, 58.59)),
         2: ((0, 50.90), (43.26, 56.74), (0, 58.59), (42.50, 57.50)),
         3: ((0, 51.32), (43.06, 56.94), (0, 60.16), (44.22, 55.78))}
-DISEGNI = (['strappo-%d%s-%s.png' % (n, t, l) for n in (1, 2, 3) for t in ('', '-t') for l in 'sd']
-           + ['strappo-%d%s.jpg' % (n, t) for n in (1, 2, 3) for t in ('', '-t')])
+DISEGNI = (['strappo-%d-t-%s.png' % (n, l) for n in (1, 2, 3) for l in 'sd'] + ['strappo-%d-t.jpg' % n for n in (1, 2, 3)]
+           # computer e tablet: i manifesti a tutta tela, seconda versione (strappo_manifesti_2.py)
+           + ['strappo2-%d%s%s.webp' % (n, f, l) for n in (1, 2, 3) for f in ('', '-q') for l in ('', '-s', '-d')])
 LOGHI = ['strappo-logo-chiaro.png', 'strappo-logo-scuro.png']
 MEDIA = set(PHOTOS) | set(DISEGNI) | set(LOGHI) | {v + '.mp4' for v in VIDEOS} | {v + '.jpg' for v in VIDEOS}
 
@@ -106,47 +107,59 @@ def build_footer():
 STRAPPI = {1: 5.0, 2: 30.0, 3: 55.0}
 
 
-def meta(n, lato, tel):
+def tappe_meta(n, lato):
     T = STRAPPI[n]
     k = -1 if lato == 's' else 1
-    tp = [(0, {'x': 0, 'y': 0, 'r': 0, 'o': 100}), (T, {'x': 0, 'y': 0, 'r': 0, 'o': 100}),
-          (T + 2.5, {'x': 26 * k, 'y': 6, 'r': 1.5 * k, 'o': 100}),
-          (T + 9, {'x': 260 * k, 'y': 40 if k < 0 else -30, 'r': 7 * k, 'o': 100}),
-          (T + 16, {'x': 980 * k, 'y': 160 if k < 0 else -110, 'r': 16 * k, 'o': 100}),
-          (T + 16.01, {'x': 980 * k, 'o': 0}), (100, {'x': 980 * k, 'o': 0})]
-    dx, dw, mx, mw = (*META[n][0 if lato == 's' else 1], *META[n][2 if lato == 's' else 3])
-    nome = 'strappo-%d%s-%s.png' % (n, '-t' if tel else '', lato)
-    alt = {1: 'Manifesto: Strappo, art direction a Milano', 2: 'Manifesto: prima si imparano,',
-           3: 'Manifesto: poi si strappano.'}[n] if lato == 's' else ''
-    if tel:
-        return K.livello('st-%d%s-t' % (n, lato), tipo='image', imageSrc=K.img(nome), imageAlt=alt, objectFit='fill',
-                         x=mx, y=0, w=mw, h=100, visible=False, entra='fadeIn', ritardo=0, durata=300, scrollMove=A.scorri(tp),
-                         responsive={'mobile': {'visible': True, 'x': mx, 'y': 0, 'width': mw, 'height': 100}})
-    return K.livello('st-%d%s' % (n, lato), tipo='image', imageSrc=K.img(nome), imageAlt=alt, objectFit='fill', x=dx, y=0,
-                     w=dw, h=100, entra='fadeIn', ritardo=0, durata=300, scrollMove=A.scorri(tp),
-                     responsive={'mobile': {'visible': False}})
+    return [(0, {'x': 0, 'y': 0, 'r': 0, 'o': 100}), (T, {'x': 0, 'y': 0, 'r': 0, 'o': 100}),
+            (T + 2.5, {'x': 26 * k, 'y': 6, 'r': 1.5 * k, 'o': 100}),
+            (T + 9, {'x': 260 * k, 'y': 40 if k < 0 else -30, 'r': 7 * k, 'o': 100}),
+            (T + 16, {'x': 980 * k, 'y': 160 if k < 0 else -110, 'r': 16 * k, 'o': 100}),
+            (T + 16.01, {'x': 980 * k, 'o': 0}), (100, {'x': 980 * k, 'o': 0})]
 
 
-def intero(n, tel):
-    """Il manifesto intero sopra le sue due metà: a riposo non si vede la linea dello strappo; sparisce quando si strappa."""
+def tappe_intero(n):
     T = STRAPPI[n]
-    tp = [(0, {'o': 100}), (T, {'o': 100}), (T + 0.3, {'o': 0}), (100, {'o': 0})]
-    nome = 'strappo-%d%s.jpg' % (n, '-t' if tel else '')
-    if tel:
-        return K.livello('st-%di-t' % n, tipo='image', imageSrc=K.img(nome), imageAlt='', objectFit='fill', x=0, y=0, w=100,
-                         h=100, visible=False, entra='fadeIn', ritardo=0, durata=300, scrollMove=A.scorri(tp),
-                         responsive={'mobile': {'visible': True, 'x': 0, 'y': 0, 'width': 100, 'height': 100}})
-    return K.livello('st-%di' % n, tipo='image', imageSrc=K.img(nome), imageAlt='', objectFit='fill', x=0, y=0, w=100, h=100,
-                     entra='fadeIn', ritardo=0, durata=300, scrollMove=A.scorri(tp), responsive={'mobile': {'visible': False}})
+    return [(0, {'o': 100}), (T, {'o': 100}), (T + 0.3, {'o': 0}), (100, {'o': 0})]
+
+
+ALT = {1: 'Manifesto: Strappo, art direction a Milano', 2: 'Manifesto: prima si imparano,', 3: 'Manifesto: poi si strappano.'}
+
+
+def pezzo(n, cosa, formato):
+    """Un pezzo del manifesto n: cosa 's' / 'd' (le metà) o 'i' (intero, sopra le metà: a riposo non si vede la linea dello
+    strappo, sparisce quando si strappa); formato 'pc' (computer e notebook), 'q' (tablet) o 't' (telefono).
+    Computer e tablet (21 nov 2026, «il carattere sembra allungato in verticale»): lì la tela è alta quanto lo schermo, e i
+    manifesti 16:9 stesi con «fill» si deformavano. Ora ogni pezzo è grande quanto la tela (le metà trasparenti fuori dalla
+    loro parte), tutti a x 0 larghi 100 con «cover»: si ritagliano allo stesso modo e lo strappo resta allineato; le scritte
+    stanno nella zona sicura dei disegni. Il telefono ha la tela nelle proporzioni del disegno e resta com'era."""
+    tp = tappe_intero(n) if cosa == 'i' else tappe_meta(n, cosa)
+    alt = ALT[n] if cosa == 's' else ''
+    if formato == 't':
+        if cosa == 'i':
+            return K.livello('st-%di-t' % n, tipo='image', imageSrc=K.img('strappo-%d-t.jpg' % n), imageAlt='', objectFit='fill',
+                             x=0, y=0, w=100, h=100, visible=False, entra='fadeIn', ritardo=0, durata=300,
+                             scrollMove=A.scorri(tp), responsive={'mobile': {'visible': True, 'x': 0, 'y': 0, 'width': 100, 'height': 100}})
+        mx, mw = META[n][2 if cosa == 's' else 3]
+        return K.livello('st-%d%s-t' % (n, cosa), tipo='image', imageSrc=K.img('strappo-%d-t-%s.png' % (n, cosa)), imageAlt=alt,
+                         objectFit='fill', x=mx, y=0, w=mw, h=100, visible=False, entra='fadeIn', ritardo=0, durata=300,
+                         scrollMove=A.scorri(tp), responsive={'mobile': {'visible': True, 'x': mx, 'y': 0, 'width': mw, 'height': 100}})
+    nome = 'strappo2-%d%s%s.webp' % (n, '-q' if formato == 'q' else '', '' if cosa == 'i' else '-' + cosa)
+    lid = 'st-%d%s%s' % (n, cosa, '-q' if formato == 'q' else '')
+    comune = dict(tipo='image', imageSrc=K.img(nome), imageAlt=alt, objectFit='cover', objectPosition='center center', x=0, y=0,
+                  w=100, h=100, entra='fadeIn', ritardo=0, durata=300, scrollMove=A.scorri(tp))
+    if formato == 'q':
+        return K.livello(lid, visible=False, responsive={'tablet': {'visible': True, 'x': 0, 'y': 0, 'width': 100, 'height': 100},
+                                                         'mobile': {'visible': False}}, **comune)
+    return K.livello(lid, responsive={'tablet': {'visible': False}, 'mobile': {'visible': False}}, **comune)
 
 
 def apertura(t):
     m = K.mob
     L = K.veli('st-velo', 'sinistra', 30, 60, colore=C['nero'], forza=82)
     for n in (3, 2, 1):
-        for tel in (False, True):
+        for formato in ('pc', 'q', 't'):
             # la metà destra sotto la sinistra: l'anima bianca della sinistra resta in vista sul bordo
-            L += [meta(n, 'd', tel), meta(n, 's', tel), intero(n, tel)]
+            L += [pezzo(n, 'd', formato), pezzo(n, 's', formato), pezzo(n, 'i', formato)]
     L += [
         K.livello('st-o', contenuto='Art direction · Milano · dal 2011', x=5, y=30, w=40, size=13, peso='700',
                   colore=mix(C['chiaro'], 88), letterSpacing=3, textTransform='uppercase', fontFamily=MONO, entra='fadeIn',

@@ -17,7 +17,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from base import Tpl, write_theme, mix, solid  # noqa: E402
+from base import Tpl, write_theme, mix, solid, radius  # noqa: E402
 from kit import Kit, tema  # noqa: E402
 import mestieri as X  # noqa: E402
 import pezzi_nov as P  # noqa: E402
@@ -83,6 +83,8 @@ def build_footer():
 # le scritte sulla copertina girano con lei: hanno lo stesso perno, scritto in percentuale del loro riquadro
 # (x 20, larghezza 60 → il bordo della tela sta a -33,33 % del riquadro), e la stessa x sul telefono, così il perno vale
 # su ogni tela. Poi, sul video delle pagine che si sfogliano, tre frasi una dopo l'altra.
+# 21 nov 2026: la prima frase arriva mentre la copertina passa i 90° e le altre si danno il cambio senza vuoti (prima
+# due o tre schermate restavano scure e vuote); corsa 2000 invece di 2400, velo sul video 0,45 (era 0,5).
 def apertura(t):
     m = K.mob
     apri = {'inizio': 0, 'fine': 100, 'tappe': [{'p': 0, 'ry': 0}, {'p': 6, 'ry': 0}, {'p': 38, 'ry': 170}]}
@@ -108,32 +110,32 @@ def apertura(t):
         # prima frase
         K.livello('do-t1', contenuto='Ogni libro ha un dorso.', tag='h1', x=6, y=28, w=88, size=96, peso='600',
                   colore=C['chiaro'], align='center', fontFamily=FONT_T, lineHeight=1.0, entra='fadeIn', ritardo=0,
-                  scrollMove=poi(36, 44, 58, 64), responsive={'mobile': {'fontSize': m(44), 'x': 5, 'y': 30, 'width': 90}}),
+                  scrollMove=poi(26, 34, 54, 60), responsive={'mobile': {'fontSize': m(44), 'x': 5, 'y': 30, 'width': 90}}),
         K.livello('do-t1s', contenuto='Il nostro lo cuciamo a mano, una segnatura alla volta, in via Maggio dal 1962.', x=22,
                   y=50, w=56, size=21, peso='400', colore=mix(C['chiaro'], 92), align='center', lineHeight=1.45,
-                  entra='fadeIn', ritardo=0, scrollMove=poi(38, 46, 58, 64),
+                  entra='fadeIn', ritardo=0, scrollMove=poi(28, 36, 54, 60),
                   responsive={'mobile': {'fontSize': m(16), 'x': 8, 'y': 44, 'width': 84}}),
         # seconda frase
         K.livello('do-t2', contenuto='Questo sito si sfoglia.', x=6, y=28, w=88, size=96, peso='600', colore=C['chiaro'],
-                  align='center', fontFamily=FONT_T, lineHeight=1.0, entra='fadeIn', ritardo=0, scrollMove=poi(66, 74),
+                  align='center', fontFamily=FONT_T, lineHeight=1.0, entra='fadeIn', ritardo=0, scrollMove=poi(58, 66),
                   responsive={'mobile': {'fontSize': m(44), 'x': 5, 'y': 30, 'width': 90}}),
         K.livello('do-t2s', contenuto='Ogni sezione è una pagina: quando arrivi in fondo, gira da sola.', x=22, y=50, w=56,
                   size=21, peso='400', colore=mix(C['chiaro'], 92), align='center', lineHeight=1.45, entra='fadeIn', ritardo=0,
-                  scrollMove=poi(68, 76), responsive={'mobile': {'fontSize': m(16), 'x': 8, 'y': 44, 'width': 84}}),
+                  scrollMove=poi(60, 68), responsive={'mobile': {'fontSize': m(16), 'x': 8, 'y': 44, 'width': 84}}),
         K.livello('do-b1', tipo='button', contenuto='I lavori', x=38, y=64, w='auto', size=15, peso='600',
                   colore=C['on_acc'], bgColor=C['acc'], padding=18, borderRadius=4, buttonUrl=LAVORI, entra='fadeIn',
-                  ritardo=0, scrollMove=poi(78, 86), hover={'bgColor': C['nero'], 'duration': 250},
+                  ritardo=0, scrollMove=poi(68, 76), hover={'bgColor': C['nero'], 'duration': 250},
                   responsive={'mobile': {'x': 14, 'y': 56, 'fontSize': m(13)}}),
         K.livello('do-b2', tipo='button', contenuto='I corsi', x=52, y=64, w='auto', size=15, peso='600',
                   colore=C['chiaro'], bgColor='transparent', padding=18, borderRadius=4, borderWidth=1,
-                  borderColor=mix(C['chiaro'], 60), buttonUrl=CORSI, entra='fadeIn', ritardo=0, scrollMove=poi(78, 86),
+                  borderColor=mix(C['chiaro'], 60), buttonUrl=CORSI, entra='fadeIn', ritardo=0, scrollMove=poi(68, 76),
                   hover={'bgColor': mix(C['chiaro'], 14), 'duration': 250},
                   responsive={'mobile': {'x': 54, 'y': 56, 'fontSize': m(13)}}),
     ]
-    sl = [K.diapositiva('do-1', K.sfondo_video(V_PAGINE, overlay=0.5, colore=C['nero']), L, durata=600000)]
+    sl = [K.diapositiva('do-1', K.sfondo_video(V_PAGINE, overlay=0.45, colore=C['nero']), L, durata=600000)]
     return K.proslider(t, sl, altezza={'mode': 'ratio', 'value': '16:9'}, transizione='fade', showArrows=False, showDots=False,
                        showTabs=False, showProgressBar=False, autoplay=False, parallax=False, scrollTimeline=True,
-                       scrollTimelineDistance=2400, scrollStep=False, heightMobile={'mode': 'px', 'value': 1400})
+                       scrollTimelineDistance=2000, scrollStep=False, heightMobile={'mode': 'px', 'value': 1400})
 
 
 # ── le pagine del libro (Effetto sticky «Pagina») ──
@@ -162,12 +164,43 @@ def pagina(t, num, occhiello, titolo, testo, foto, alt, dir='destra', link=None,
               layout='custom', custom='52,48', gap=72, valign='center', anim=None),
         t.one([K.label(t, '— %d —' % num, color=C['tenue'], align='center', pad_top=28, pad_bottom=0)], anim=None),
     ], bg=carta(), padding='large', width='large', sticky_effect='pagina', sticky_h_dir=dir, sticky_h_align='center',
+        sticky_colore=C['fondo'],
         style={'padding_top': 60, 'padding_bottom': 40})
+
+
+def brevi(t):
+    """Le brevi della Gazzetta: tre colonne col filo fra l'una e l'altra, sotto l'articolo d'apertura (21 nov 2026: da
+    solo l'articolo sembrava un giornale a metà)."""
+    voci = [('Corsi · dicembre', 'Il quaderno cucito, <em>sabato 6</em>', 'Quattro ore al banco, sei posti: si esce col '
+             'proprio quaderno, cucito a punto copto.'),
+            ('Carta', 'È arrivata la carta <em>di Amalfi</em>', 'Trecento fogli fatti a mano, con le barbe: i taccuini di '
+             'primavera nascono da qui.'),
+            ('Orari · feste', 'Aperti anche <em>la vigilia</em>', 'Il 24 dicembre la bottega resta aperta fino alle 13, per i '
+             'regali dell’ultimo minuto.')]
+    cols = []
+    for k, (occ, tit, txt) in enumerate(voci):
+        filo = {'border': {'top': 0, 'right': 0, 'bottom': 0, 'left': 1, 'style': 'solid', 'color': C['filo']},
+                'padding_left': 28} if k else {}
+        cols.append(t.col([K.label(t, occ, color=C['acc']), K.headline(t, tit, size=28, tag='h3', pad_bottom=10, sizes=(26, 24)),
+                           K.text(t, txt, size=15)], wm='1-3', ws='1-1', style=filo))
+    return t.row(cols, layout='33-33-33', gap=28, valign='start', style={'padding_top': 34, 'border': {
+        'top': 1, 'right': 0, 'bottom': 0, 'left': 0, 'style': 'solid', 'color': C['filo']}, 'margin_top': 8})
 
 
 def diamanti(t):
     return t.bare('divider', {'style': 'diamonds', 'width': 30, 'thickness': 2, 'color': C['acc2'], 'alignment': 'center',
                               'spacing': 8, 'text': '', 'icon_emoji': ''})
+
+
+def recensioni(t, voci, titolo, righe):
+    """Le voci di chi ci ha portato un libro, ognuna su una scheda di carta avorio sul fondo della sala (21 nov 2026: prima
+    erano tre righe di testo nudo)."""
+    carta_s = {'bg': solid(C['fondo']), 'padding_top': 34, 'padding_right': 32, 'padding_bottom': 30, 'padding_left': 32,
+               'border_radius': radius(4), 'shadow': 'custom', 'shadow_h': 0, 'shadow_v': 10, 'shadow_blur': 28, 'shadow_spread': -12,
+               'shadow_color': 'color-mix(in srgb, var(--olo-color-dark) 30%, transparent)', 'shadow_inset': False}
+    cols = [t.col([P.testimonianza(K, t, tx, nome, dove, size=24)], wm='1-3', ws='1-1', style=dict(carta_s)) for tx, nome, dove in voci]
+    return t.section([t.one([K.sechead(t, titolo, righe, size=56)]), t.row(cols, layout='33-33-33', gap=28, valign='stretch')],
+                     bg=solid(C['sala']), padding='large', width='large', style={'padding_top': 120, 'padding_bottom': 110})
 
 
 def build_home():
@@ -179,7 +212,7 @@ def build_home():
                t.col([K.text(t, 'Le pagine si piegano in segnature, le segnature si cuciono sui nervi, il dorso si arrotonda '
                                 'col martello e la copertina si veste di cuoio. Lo facciamo come lo faceva nonno Piero, nella '
                                 'stessa bottega, con gli stessi torchi.', size=17),
-                      K.button(t, 'La bottega', BOTTEGA, pad_top=18)], wm='2-5', ws='1-1')],
+                      K.button(t, 'La bottega', BOTTEGA, kind='pieno', pad_top=18)], wm='2-5', ws='1-1')],
               layout='custom', custom='60,40', gap=72, valign='end'),
         t.one([diamanti(t)], anim=None),
     ], padding='large', width='large', style={'padding_top': 120, 'padding_bottom': 70}))
@@ -215,7 +248,7 @@ def build_home():
         'copertina di tela. Le macchie, quelle, sono rimaste: sono le ricette.',
         'byline_text': 'Di Marta Ricci · 4 minuti', 'bg_color': C['fondo'], 'ink_color': C['testo'], 'ink_soft_color': C['testo'],
         'ink_faint_color': C['tenue'], 'accent': C['acc'], 'rule_color': C['filo'], 'nameplate_size': 60, 'headline_size': 50})],
-        anim=None)], padding='large', width='large', style={'padding_top': 100, 'padding_bottom': 100}))
+        anim=None), brevi(t)], padding='large', width='large', style={'padding_top': 100, 'padding_bottom': 100}))
     # i lavori (Lightbox)
     lavoro = lambda n, foto, tit: {'id': 'do-lb-%d' % n, 'title': tit, 'type': 'image', 'url': K.img(foto), 'thumb': K.img(foto),
                                    'caption': tit}
@@ -239,7 +272,7 @@ def build_home():
         'aspect_ratio': '21/9', 'min_height': 520, 'overlay_top': 0.15, 'overlay_bottom': 0.8, 'media_bg': C['nero'],
         'kicker_color': '#E7C877', 'headline_color': C['chiaro'], 'meta_color': C['chiaro']})], anim=None)],
         width='fullbleed', padding='remove-vertical'))
-    out.append(X.recensioni(K, t, [
+    out.append(recensioni(t, [
         ('Ho portato il messale di mio nonno a pezzi. Me l’hanno ridato che si apre come un libro nuovo, ma con le sue '
          'macchie.', 'Giovanna', 'Firenze'),
         ('Il corso del sabato: sono uscita con un quaderno cucito da me. Adesso ne ho fatti undici.', 'Elisa', 'Prato'),
@@ -276,9 +309,9 @@ def build_bottega():
                       (MARTA, 'Marta', 'Restauro', 'La nipote di Piero. Ha studiato restauro a Spoleto e lavora sui libri che '
                        'nessuno vuole più toccare.', 'center 25%'),
                       (LUCA_TORCHIO, 'Luca', 'Rilegature e corsi', 'Ha cominciato come allievo del sabato. Adesso i corsi li '
-                       'tiene lui.', 'center 30%')], ratio='4/5', size='300'),
+                       'tiene lui.', 'center 30%')], ratio='4/5', size='384'),
     ], bg=solid(C['sala']), padding='large', width='large', style={'padding_top': 110, 'padding_bottom': 110}))
-    out.append(t.section([t.one([X.orari(K, t, [('Martedì — venerdì', '9:30 — 13 · 15:30 — 19', 'Bottega aperta'),
+    out.append(t.section([t.one([X.orari(K, t, [('Martedì — venerdì', '9:30 — 19', 'Pausa dalle 13 alle 15:30'),
                                                 ('Sabato', '9:30 — 13', 'Bottega e corsi'),
                                                 ('Domenica e lunedì', 'chiuso', 'Il torchio riposa')])])],
                          padding='large', width='large', style={'padding_top': 100, 'padding_bottom': 60}))

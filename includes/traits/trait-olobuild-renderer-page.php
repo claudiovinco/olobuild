@@ -974,7 +974,7 @@ trait Olobuild_Renderer_Page_Trait {
                             var neve=null,nctx=null,neveDist=0,neveGiro=false,osd=null,osdNum=null,osdNome=null,osdTimer=0;
                             var portaSx=null,portaDx=null,fila=null,freccia=null,piani=[];
                             function figlio(padre,tag,classe){var e=document.createElement(tag);e.className=classe;padre.appendChild(e);return e;}
-                            var ombraP=null,irideSvg=null,iridePath=null,irideBordi=null,strSvg=null,strCarta=null,rulloEl=null;
+                            var ombraP=null,irideSvg=null,iridePath=null,irideBordi=null,strSvg=null,strCarta=null,rulloEl=null,fgSvg=null,fgOmbra=null,fgLembo=null,fgG1=null,fgG2=null;
                             function svgFiglio(padre,tag,classe){var e=document.createElementNS('http://www.w3.org/2000/svg',tag);e.setAttribute('class',classe);if(tag==='svg'){e.setAttribute('aria-hidden','true');e.setAttribute('preserveAspectRatio','none');}padre.appendChild(e);return e;}
                             function liscio(x){x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);}
                             /* un numero fra 0 e 1 sempre uguale per lo stesso k: i denti dello strappo e del bordo d'inchiostro non tremano */
@@ -1015,6 +1015,21 @@ trait Olobuild_Renderer_Page_Trait {
                                     irideBordi=svgFiglio(irideSvg,'path','olo-h-iride-bordi');
                                 }
                                 if(strappo){strSvg=svgFiglio(viewport,'svg','olo-h-lembo');strCarta=svgFiglio(strSvg,'path','olo-h-strappo-carta');}
+                                if(sfoglia){
+                                    /* la pagina che si sfoglia: l'ombra sulla pagina sotto, vicino alla piega, e il lembo ribaltato col
+                                       retro della carta (gradienti per gruppo: gli id non si ripetono se i gruppi sono più d'uno) */
+                                    var fgId='olo-fg-'+Math.random().toString(36).slice(2,8);
+                                    fgSvg=svgFiglio(viewport,'svg','olo-h-foglio');
+                                    var fgDefs=svgFiglio(fgSvg,'defs','');
+                                    fgG1=svgFiglio(fgDefs,'linearGradient','');fgG1.setAttribute('id',fgId+'-o');fgG1.setAttribute('gradientUnits','userSpaceOnUse');
+                                    [['0','olo-h-foglio-om0'],['1','olo-h-foglio-om1']].forEach(function(st){var e=svgFiglio(fgG1,'stop',st[1]);e.setAttribute('offset',st[0]);});
+                                    fgG2=svgFiglio(fgDefs,'linearGradient','');fgG2.setAttribute('id',fgId+'-r');fgG2.setAttribute('gradientUnits','userSpaceOnUse');
+                                    [['0','olo-h-foglio-r0'],['0.16','olo-h-foglio-r1'],['0.55','olo-h-foglio-r2'],['1','olo-h-foglio-r3']].forEach(function(st){var e=svgFiglio(fgG2,'stop',st[1]);e.setAttribute('offset',st[0]);});
+                                    var fgF=svgFiglio(fgDefs,'filter','');fgF.setAttribute('id',fgId+'-f');fgF.setAttribute('x','-20%');fgF.setAttribute('y','-20%');fgF.setAttribute('width','140%');fgF.setAttribute('height','140%');
+                                    var fgDs=svgFiglio(fgF,'feDropShadow','');fgDs.setAttribute('dx','0');fgDs.setAttribute('dy','0');fgDs.setAttribute('stdDeviation','14');fgDs.setAttribute('flood-color','#000');fgDs.setAttribute('flood-opacity','0.38');
+                                    fgOmbra=svgFiglio(fgSvg,'path','olo-h-foglio-ombra');fgOmbra.setAttribute('fill','url(#'+fgId+'-o)');
+                                    fgLembo=svgFiglio(fgSvg,'path','olo-h-foglio-retro');fgLembo.setAttribute('fill','url(#'+fgId+'-r)');fgLembo.setAttribute('filter','url(#'+fgId+'-f)');
+                                }
                                 if(rullo){rulloEl=figlio(viewport,'div','olo-h-cilindro');rulloEl.setAttribute('aria-hidden','true');}
                             }
                             /* la neve del televisore: pixel grigi a caso su una tela piccola, ingrandita; gira solo finché si vede */
@@ -1083,25 +1098,59 @@ trait Olobuild_Renderer_Page_Trait {
                                     }else if(impilati){
                                         var j0=Math.min(n-2,Math.floor(pos)),g=pos-j0;
                                         if(sfoglia){
-                                            /* fermo all'inizio e alla fine del tratto, la pagina gira nel mezzo */
-                                            var fp=Math.max(0,Math.min(1,(g-0.1)/0.8));fp=fp*fp*(3-2*fp);
+                                            /* 21 nov 2026 (utente: «troppo rigido… a simulare lo sfogliare di un libro, come nei PDF»): la pagina
+                                               non gira più tutta d'un pezzo. L'angolo libero si solleva e attraversa la pagina verso il dorso; la
+                                               piega è l'asse fra dov'era l'angolo e dov'è adesso. Di qua la pagina resta piatta (clip-path), di là
+                                               si scopre quella sotto, in ombra vicino alla piega, e la parte piegata torna sopra ribaltata, col
+                                               retro della carta sfumato come carta che si curva. Destra: il dorso a sinistra (come un libro);
+                                               Sinistra: a destra; Sotto: in alto (un calendario); Sopra: in basso. Fermo all'inizio e alla fine. */
+                                            var W=viewport.clientWidth,H=viewH,A=sections[j0],B=sections[j0+1],dn=B.dir;
+                                            var fp=liscio((g-0.08)/0.84);
                                             sections.forEach(function(item,i){
-                                                var tr='',luce='',om='',vis='hidden';
-                                                if(i===j0){
-                                                    vis='';
-                                                    if(fp>0){
-                                                        var a=(fp*100).toFixed(2),dn=sections[i+1].dir;
-                                                        tr=(dn==='sinistra')?'rotateY(-'+a+'deg)':((dn==='sotto')?'rotateX(-'+a+'deg)':((dn==='sopra')?'rotateX('+a+'deg)':'rotateY('+a+'deg)'));
-                                                        luce='brightness('+(1-0.4*Math.min(1,fp*1.5)).toFixed(3)+')';
-                                                        om='0 0 90px color-mix(in srgb, var(--olo-color-dark) 55%, transparent)';
-                                                    }
-                                                }else if(i===j0+1){
-                                                    vis='';
-                                                    if(fp<1){luce='brightness('+(0.5+0.5*fp).toFixed(3)+')';}
-                                                }
-                                                item.sec.style.visibility=vis;item.sec.style.transform=tr;
-                                                item.sec.style.filter=luce;item.sec.style.boxShadow=om;
+                                                item.sec.style.transform='';item.sec.style.boxShadow='';
+                                                if(i!==j0&&i!==j0+1){item.sec.style.visibility='hidden';item.sec.style.clipPath='';item.sec.style.webkitClipPath='';item.sec.style.filter='';}
                                             });
+                                            A.sec.style.zIndex='2';B.sec.style.zIndex='1';
+                                            B.sec.style.visibility='';B.sec.style.clipPath='';B.sec.style.webkitClipPath='';
+                                            B.sec.style.filter=(fp>0&&fp<1)?'brightness('+(0.72+0.28*fp).toFixed(3)+')':'';
+                                            if(fp<=0){A.sec.style.visibility='';A.sec.style.clipPath='';A.sec.style.webkitClipPath='';A.sec.style.filter='';fgSvg.style.opacity='0';}
+                                            else if(fp>=1){A.sec.style.visibility='hidden';A.sec.style.clipPath='';A.sec.style.webkitClipPath='';fgSvg.style.opacity='0';}
+                                            else{
+                                                /* i conti col dorso a sinistra: u dal dorso verso il bordo libero (Lw), v lungo il dorso (Lh) */
+                                                var vert=(dn==='sotto'||dn==='sopra'),Lw=vert?H:W,Lh=vert?W:H;
+                                                var scr=function(u,v){if(dn==='sinistra'){return [W-u,v];}if(dn==='sotto'){return [v,u];}if(dn==='sopra'){return [v,H-u];}return [u,v];};
+                                                /* l'angolo in basso del bordo libero: si alza subito (si piega prima l'angolo), poi passa sopra il dorso */
+                                                var cu=Lw*(1-2*fp),cv=Lh-Lh*0.46*Math.pow(Math.sin(Math.PI*fp),0.7);
+                                                var mu=(Lw+cu)/2,mv=(Lh+cv)/2,nu=Lw-cu,nv=Lh-cv,nl=Math.hypot(nu,nv)||1;nu/=nl;nv/=nl;
+                                                var lato=function(q){return (q[0]-mu)*nu+(q[1]-mv)*nv;};
+                                                var taglia=function(poly,tenere){
+                                                    var out=[];
+                                                    for(var q=0;q<poly.length;q++){
+                                                        var a1=poly[q],b1=poly[(q+1)%poly.length],da=lato(a1),db=lato(b1),ia=tenere?da<=0:da>0,ib=tenere?db<=0:db>0;
+                                                        if(ia){out.push(a1);}
+                                                        if(ia!==ib){var tt=da/(da-db);out.push([a1[0]+(b1[0]-a1[0])*tt,a1[1]+(b1[1]-a1[1])*tt]);}
+                                                    }
+                                                    return out;
+                                                };
+                                                var foglioP=[[0,0],[Lw,0],[Lw,Lh],[0,Lh]],piatta=taglia(foglioP,true),piega=taglia(foglioP,false);
+                                                var lembo=piega.map(function(q){var d=lato(q);return [q[0]-2*d*nu,q[1]-2*d*nv];});
+                                                var aSchermo=function(poly){return poly.map(function(q){return scr(q[0],q[1]);});};
+                                                var cs=piatta.length>2?'polygon('+aSchermo(piatta).map(function(q){return pt(q[0],q[1]);}).join(',')+')':'polygon(0px 0px,0px 0px,0px 0px)';
+                                                A.sec.style.visibility='';A.sec.style.clipPath=cs;A.sec.style.webkitClipPath=cs;A.sec.style.filter='';
+                                                var tracciato=function(poly){return poly.length>2?'M'+aSchermo(poly).map(function(q){return q[0].toFixed(1)+' '+q[1].toFixed(1);}).join('L')+'Z':'M0 0Z';};
+                                                /* la piega sullo schermo: un suo punto e la normale verso la parte che si piega */
+                                                var m0=scr(mu,mv),m1=scr(mu+nu,mv+nv),sx=m1[0]-m0[0],sy=m1[1]-m0[1];
+                                                var largo=Math.max(30,Math.min(Lw,Lh)*0.22),lw=1;
+                                                lembo.forEach(function(q){lw=Math.max(lw,-lato(q));});
+                                                fgSvg.setAttribute('viewBox','0 0 '+W+' '+H);
+                                                fgOmbra.setAttribute('d',tracciato(piega));
+                                                fgG1.setAttribute('x1',m0[0].toFixed(1));fgG1.setAttribute('y1',m0[1].toFixed(1));
+                                                fgG1.setAttribute('x2',(m0[0]+sx*largo).toFixed(1));fgG1.setAttribute('y2',(m0[1]+sy*largo).toFixed(1));
+                                                fgLembo.setAttribute('d',tracciato(lembo));
+                                                fgG2.setAttribute('x1',m0[0].toFixed(1));fgG2.setAttribute('y1',m0[1].toFixed(1));
+                                                fgG2.setAttribute('x2',(m0[0]-sx*lw).toFixed(1));fgG2.setAttribute('y2',(m0[1]-sy*lw).toFixed(1));
+                                                fgSvg.style.opacity='1';
+                                            }
                                         }else if(canali){
                                             var dist=Math.max(0,1-Math.abs(g-0.5)/0.1),ch=(g<0.5)?j0:(j0+1);
                                             sections.forEach(function(item,i){

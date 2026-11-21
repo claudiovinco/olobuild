@@ -2025,8 +2025,26 @@ trait Olobuild_Renderer_Structure_Trait {
         if ( $has_col_bg_image || $has_col_bg_video || $has_col_overlay ) {
             $html .= '<div style="position: relative; z-index: 1">';
         }
-        foreach ( $node['children'] ?? [] as $child ) {
-            $html .= $this->render_node( $child, $manager, $template_id, $hover_css_rules, $tile_counter );
+        // Le tile «in linea» (Avanzate → Larghezza) sono inline-block: si allineavano solo col testo della colonna, che
+        // nessun controllo imposta, e «Allineamento» al centro o a destra non le spostava (21 nov 2026, il pulsante della
+        // pagina della sandbox). Quelle consecutive vanno in una fila allineata come la prima che ha un allineamento: un
+        // pulsante da solo va al centro, due affiancati restano affiancati e si centrano insieme. Non nelle colonne che
+        // sono già un contenitore flessibile (Gruppo), dove la fila romperebbe la disposizione.
+        $flessibile = ! empty( $this->css->build_flex_container_css( $s ) );
+        $figli      = $node['children'] ?? [];
+        $nf         = count( $figli );
+        for ( $fi = 0; $fi < $nf; $fi++ ) {
+            $fila = $flessibile ? [] : $this->fila_in_linea( $figli, $fi );
+            if ( $fila ) {
+                $html .= '<div class="olo-fila-in-linea' . esc_attr( $fila['classi'] ) . '">';
+                for ( $fj = $fi; $fj <= $fila['fine']; $fj++ ) {
+                    $html .= $this->render_node( $figli[ $fj ], $manager, $template_id, $hover_css_rules, $tile_counter );
+                }
+                $html .= '</div>';
+                $fi = $fila['fine'];
+                continue;
+            }
+            $html .= $this->render_node( $figli[ $fi ], $manager, $template_id, $hover_css_rules, $tile_counter );
         }
         if ( $has_col_bg_image || $has_col_bg_video || $has_col_overlay ) {
             $html .= '</div>';
@@ -2034,6 +2052,47 @@ trait Olobuild_Renderer_Structure_Trait {
 
         $html .= '</div>';
         return $html;
+    }
+
+    /**
+     * La fila delle tile «in linea» che parte da $da: [ 'fine' => indice dell'ultima, 'classi' => ' olo-fila-…' ], o []
+     * se la tile non è in linea o se nessuna della fila chiede un allineamento diverso da sinistra (così le pagine che
+     * non lo usano restano identiche). L'allineamento è quello della prima tile della fila che ne ha uno, per
+     * computer, tablet e telefono (alignment, alignment_tablet, alignment_mobile).
+     */
+    private function fila_in_linea( $figli, $da ) {
+        $in_linea = static function ( $n ) {
+            return is_array( $n ) && ! in_array( $n['type'] ?? '', [ 'row', 'column', 'section', 'inner-columns' ], true )
+                && 'inline' === ( $n['advanced']['tile_width'] ?? 'full' );
+        };
+        if ( ! $in_linea( $figli[ $da ] ?? null ) ) {
+            return [];
+        }
+        $fine = $da;
+        while ( isset( $figli[ $fine + 1 ] ) && $in_linea( $figli[ $fine + 1 ] ) ) {
+            $fine++;
+        }
+        $ok  = [ 'left', 'center', 'right' ];
+        $all = [ '' => '', 'tablet' => '', 'mobile' => '' ];
+        for ( $k = $da; $k <= $fine; $k++ ) {
+            $st = $figli[ $k ]['settings'] ?? [];
+            foreach ( $all as $bp => $v ) {
+                $chiave = '' === $bp ? 'alignment' : 'alignment_' . $bp;
+                if ( '' === $v && in_array( $st[ $chiave ] ?? '', $ok, true ) ) {
+                    $all[ $bp ] = $st[ $chiave ];
+                }
+            }
+        }
+        if ( ! array_filter( $all, static function ( $v ) { return '' !== $v && 'left' !== $v; } ) ) {
+            return [];
+        }
+        $classi = '';
+        foreach ( $all as $bp => $v ) {
+            if ( '' !== $v ) {
+                $classi .= ' olo-fila-' . ( '' === $bp ? '' : $bp . '-' ) . $v;
+            }
+        }
+        return [ 'fine' => $fine, 'classi' => $classi ];
     }
 
     /**

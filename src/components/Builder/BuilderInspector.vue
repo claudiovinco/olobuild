@@ -415,7 +415,7 @@
 
           <!-- Custom CSS -->
           <div>
-            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-1">{{ t('CSS personalizzato') }}</label>
+            <label class="mb-flex mb-items-center mb-gap-1 mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-1">{{ t('CSS personalizzato') }}<InfoTip :titolo="t('CSS personalizzato')" :testo="t('Proprietà CSS applicate direttamente al riquadro della tile, per esempio color: red; oppure transform: rotate(2deg);')" /></label>
             <textarea
               :value="tileAdvanced.custom_css || ''"
               @input="updateAdvanced('custom_css', $event.target.value)"
@@ -423,7 +423,6 @@
               placeholder="color: red;&#10;transform: rotate(2deg);"
               class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-xs mb-text-gray-900 mb-font-mono mb-resize-y"
             />
-            <p class="mb-text-[10px] mb-text-gray-400 mb-mt-1">{{ t('Proprietà CSS applicate direttamente al wrapper della tile') }}</p>
           </div>
             </div>
           </CollapseSection>
@@ -1325,7 +1324,7 @@
           <CollapseSection id="v2i-sec-adv-dev" :title="t('Sviluppatore')" :macro="true">
             <div class="mb-space-y-3">
           <!-- Note editor (solo builder, non renderizzate nel frontend) -->
-          <CollapseSection :title="t('Note editor')">
+          <CollapseSection :title="t('Note editor')" :info="t('Queste note sono visibili solo nel builder e non vengono pubblicate.')">
             <textarea
               :value="tileAdvanced.editor_note || ''"
               @input="updateAdvanced('editor_note', $event.target.value)"
@@ -1333,11 +1332,10 @@
               :placeholder="t('Note visibili solo nel builder...')"
               class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-xs mb-text-gray-900 mb-resize-none"
             ></textarea>
-            <p class="mb-text-[9px] mb-text-gray-500 mb-mt-1">{{ t('Queste note sono visibili solo nel builder e non vengono pubblicate.') }}</p>
           </CollapseSection>
 
           <!-- Custom JavaScript -->
-          <CollapseSection :title="t('JavaScript personalizzato')">
+          <CollapseSection :title="t('JavaScript personalizzato')" :info="t('JavaScript eseguito sul sito, non nel builder. La variabile «el» contiene l\'elemento della tile.')">
             <textarea
               :value="tileAdvanced.custom_js || ''"
               @input="updateAdvanced('custom_js', $event.target.value)"
@@ -1346,7 +1344,6 @@
               class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-xs mb-text-gray-900 mb-font-mono mb-resize-y"
               spellcheck="false"
             ></textarea>
-            <p class="mb-text-[9px] mb-text-gray-500 mb-mt-1">{{ t('JS eseguito nel frontend. La variabile') }} <code style="background:#E5E7EB;padding:1px 4px;border-radius:3px">el</code> {{ t("contiene l'elemento DOM.") }}</p>
           </CollapseSection>
 
             </div>
@@ -1355,9 +1352,10 @@
           <CollapseSection id="v2i-sec-adv-position" :title="t('Posizionamento')" :macro="true">
             <div class="mb-space-y-3">
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Larghezza elemento') }}</label>
+                <!-- 21 nov 2026: l'opzione si chiamava «Contenuto» (come la scheda dell'inspector) mentre la spiegazione diceva
+                     «Adattata», e la spiegazione stava in linea: ora il nome è uno solo e il testo sta nella (i). -->
+                <label class="mb-flex mb-items-center mb-gap-1 mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Larghezza elemento') }}<InfoTip :titolo="t('Larghezza elemento')" :testo="[t('Piena: la tile occupa tutta la riga della colonna, e il suo Allineamento la sposta a sinistra, al centro o a destra.'), t('Adattata: la tile è larga quanto il suo contenuto, e più tile adattate una dopo l\'altra si affiancano sulla stessa riga (per esempio due pulsanti vicini). L\'Allineamento della prima allinea tutta la fila.')]" /></label>
                 <FieldSelect ui="segmented" :model-value="tileAdvanced.tile_width || 'full'" :options="TILE_WIDTH_OPTIONS" @update:model-value="updateAdvanced('tile_width', $event)" />
-                <p class="mb-text-[10px] mb-text-gray-500 mb-leading-snug mb-mt-1">{{ t('Adattata: la tile è larga quanto il suo contenuto; più tile adattate consecutive si affiancano sulla stessa riga (es. pulsanti vicini).') }}</p>
               </div>
               <div>
                 <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Modalità') }}</label>
@@ -1722,7 +1720,7 @@ const TILT_TARGET_OPTIONS = [
 
 const TILE_WIDTH_OPTIONS = [
   { value: 'full', label: 'Piena' },
-  { value: 'inline', label: 'Contenuto' },
+  { value: 'inline', label: 'Adattata' },
 ];
 
 // ── Cursore del sito (impostazione GLOBALE, option olo_magnetic_cursor) e della pagina (page_cursor) ──

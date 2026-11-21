@@ -3772,3 +3772,39 @@ html:has(.olo-frontend-grid) {
   background: linear-gradient(180deg, #0b0b0b 0%, var(--olo-rullo-c) 18%,
     color-mix(in srgb, var(--olo-rullo-c) 55%, #fff) 42%, var(--olo-rullo-c) 62%, #050505 100%);
 }
+/* Pagina (21 nov 2026): la pagina si sfoglia come un libro. Il lembo ribaltato mostra il retro della carta, più scuro
+   sulla piega e chiaro a metà; sulla pagina sotto l'ombra parte dalla piega e sfuma. Il colore della carta è «Colore»
+   del passaggio (--olo-h-colore), se no un avorio. */
+.olo-h-foglio {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  overflow: visible;
+}
+.olo-h-foglio-om0 { stop-color: #000; stop-opacity: .42; }
+.olo-h-foglio-om1 { stop-color: #000; stop-opacity: 0; }
+.olo-h-foglio-r0 { stop-color: color-mix(in srgb, var(--olo-h-colore, #EFE8DA) 74%, #000); }
+.olo-h-foglio-r1 { stop-color: color-mix(in srgb, var(--olo-h-colore, #EFE8DA) 92%, #000); }
+.olo-h-foglio-r2 { stop-color: color-mix(in srgb, var(--olo-h-colore, #EFE8DA) 88%, #fff); }
+.olo-h-foglio-r3 { stop-color: color-mix(in srgb, var(--olo-h-colore, #EFE8DA) 94%, #000); }
+.olo-h-foglio-retro { stroke: rgba(255, 255, 255, .55); stroke-width: 1.2; stroke-linejoin: round; }
+/* Le tile «in linea» consecutive in una fila allineata come loro (render_column_node, 21 nov 2026). Le soglie sono
+   quelle degli allineamenti per dispositivo delle tile: tablet fino a 1024 px, telefono fino a 640. */
+.olo-fila-in-linea { display: block; }
+.olo-fila-left { text-align: left; }
+.olo-fila-center { text-align: center; }
+.olo-fila-right { text-align: right; }
+@media (max-width: 1024px) {
+  .olo-fila-tablet-left { text-align: left; }
+  .olo-fila-tablet-center { text-align: center; }
+  .olo-fila-tablet-right { text-align: right; }
+}
+@media (max-width: 640px) {
+  .olo-fila-mobile-left { text-align: left; }
+  .olo-fila-mobile-center { text-align: center; }
+  .olo-fila-mobile-right { text-align: right; }
+}

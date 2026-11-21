@@ -45,7 +45,8 @@ PHOTOS = [
     'pexels-11368556.jpg', 'pexels-20992128.jpg', 'pexels-16116476.jpg', 'pexels-12066670.jpg', 'pexels-34529440.jpg',
 ]
 VIDEOS = [V_PERSIANE, V_FINESTRE, V_PASSANTI, V_TASCHINO, V_QUADRANTE]
-MEDIA = set(PHOTOS) | {v + '.mp4' for v in VIDEOS} | {v + '.jpg' for v in VIDEOS}
+DISEGNI = ['meridiana-quadrante.svg', 'meridiana-ombra.svg']      # meridiana_quadrante.py
+MEDIA = set(PHOTOS) | set(DISEGNI) | {v + '.mp4' for v in VIDEOS} | {v + '.jpg' for v in VIDEOS}
 
 K = Kit(ID, MEDIA, raggio=2, peso_titoli='400', corsivo=True, maiuscole_pulsanti=True)
 C = K.c
@@ -74,20 +75,30 @@ def apertura(t):
     ore = [
         ('Ore 9 · costruire', 'Il mattino\nsi semina.', 'A trent’anni il tempo è il capitale più grande. Vi aiutiamo a '
          'metterlo a frutto: un fondo di sicurezza, un piano d’accumulo, niente prodotti che non capite.',
-         K.sfondo_video(V_FINESTRE, overlay=0.64), 'IX'),
+         K.sfondo_video(V_FINESTRE, overlay=0.64), 'IX', 9),
         ('Ore 12 · proteggere', 'A mezzogiorno,\nl’ombra è corta.', 'La casa, i figli, l’azienda. È il momento di '
          'proteggere quello che avete costruito, senza smettere di farlo crescere.',
-         K.sfondo_foto('pexels-17327727.jpg', overlay=0.55, scala=1.08), 'XII'),
+         K.sfondo_foto('pexels-17327727.jpg', overlay=0.55, scala=1.08), 'XII', 12),
         ('Ore 16 · godersi', 'Il pomeriggio\nè vostro.', 'La pensione non è un salto nel vuoto: la prepariamo dieci anni '
          'prima, con una rendita che vi lasci fare quello che avete rimandato.', K.sfondo_video(V_PERSIANE, overlay=0.45),
-         'IV'),
+         'IV', 16),
         ('Ore 19 · passare il testimone', 'Prima del tramonto,\nil testimone.', 'Successioni, donazioni, il patrimonio di '
          'famiglia. Con il notaio e il commercialista, perché passi intero a chi verrà dopo.',
-         K.sfondo_video(V_PASSANTI, overlay=0.55), 'VII'),
+         K.sfondo_video(V_PASSANTI, overlay=0.55), 'VII', 19),
     ]
     sl = []
-    for i, (occ, tit, testo, sfondo, ora) in enumerate(ore):
+    # il quadrante (21 nov 2026, utente: «non capisco cosa fa questa grafica statica»): una meridiana vista dall'alto, col
+    # perno al centro del disegno (meridiana_quadrante.py), e in ogni diapositiva l'ombra che parte dall'ora di prima e
+    # scorre fino alla sua, a 15° per ora come al sole. Prima un cerchio-forma (al tablet una capsula) e una lancetta che
+    # girava una volta al minuto e non indicava niente.
+    QX, QY, QW, QH = 67, 24, 20, 36
+    angolo = lambda h: (h - 12) * 15
+    for i, (occ, tit, testo, sfondo, ora, h) in enumerate(ore):
         n = i + 1
+        da = angolo(ore[i - 1][5]) if i else angolo(6)      # la prima parte dall'alba
+        kf = lambda tempo, r, easing=None: dict({'time': tempo, 'props': {'x': QX, 'y': QY, 'rotation': r, 'originX': 50,
+                                                                          'originY': 50, 'opacity': 100}},
+                                                **({'easing': easing} if easing else {}))
         sl.append(K.diapositiva('me-%d' % n, sfondo, [
             K.livello('me-o%d' % n, contenuto=occ, x=6, y=24, w=44, size=12, peso='500', colore=C['acc'], ritardo=200,
                       letterSpacing=3, textTransform='uppercase', fontFamily='Fragment Mono',
@@ -103,20 +114,19 @@ def apertura(t):
                       colore=C['on_acc'], bgColor=C['acc'], padding=16, letterSpacing=2, textTransform='uppercase',
                       borderRadius=2, ritardo=1500, buttonUrl=CONTATTI + '#scrivici',
                       hover={'bgColor': C['acc2'], 'duration': 250}, responsive={'mobile': {'y': 48, 'fontSize': m(12)}}),
-            K.livello('me-h%d' % n, contenuto=ora, x=67, y=21, w=20, size=22, peso='400', colore=C['acc'], align='center',
-                      entra='fadeIn', ritardo=900, durata=1200, fontFamily='Newsreader', letterSpacing=4,
+            K.livello('me-h%d' % n, contenuto=ora, x=QX, y=QY - 6, w=QW, size=22, peso='400', colore=C['acc'], align='center',
+                      entra='fadeIn', ritardo=1800, durata=1200, fontFamily='Newsreader', letterSpacing=4,
+                      responsive={'mobile': {'visible': False}}),
+            K.livello('me-ombra%d' % n, tipo='image', imageSrc=K.img('meridiana-ombra.svg'), imageAlt='', objectFit='contain',
+                      x=QX, y=QY, w=QW, h=QH, entra='none', ritardo=0, durata=0,
+                      timeline={'duration': 2600, 'keyframes': [kf(0, da, 'power2.inOut'), kf(2600, angolo(h))]},
                       responsive={'mobile': {'visible': False}}),
         ], durata=7500))
     quadrante = [
-        K.livello('me-cerchio', tipo='shape', x=67, y=26, w=20, h=32, bgColor='transparent', borderWidth=1,
-                  borderColor=mix(C['acc'], 55), borderRadius=999, entra='fadeIn', ritardo=300, durata=1600,
-                  responsive={'mobile': {'visible': False}}),
-        K.livello('me-gnomone', tipo='shape', x=76.9, y=29, w=0.2, h=26, bgColor=C['acc'], entra='fadeIn', ritardo=600,
-                  durata=1600, animLoop='spin', animLoopDuration=60000, animLoopEasing='linear', opacity=85,
-                  responsive={'mobile': {'visible': False}}),
-        K.livello('me-perno', tipo='shape', x=76.6, y=41, w=0.8, h=1.3, bgColor=C['acc'], borderRadius=999, entra='fadeIn',
-                  ritardo=700, responsive={'mobile': {'visible': False}}),
-        K.livello('me-motto', contenuto='Horas non numero nisi serenas', x=62, y=61, w=30, size=13, peso='400',
+        K.livello('me-quadrante', tipo='image', imageSrc=K.img('meridiana-quadrante.svg'),
+                  imageAlt='Il quadrante di una meridiana con le ore da V a VIII', objectFit='contain', x=QX, y=QY, w=QW, h=QH,
+                  entra='fadeIn', ritardo=300, durata=1600, responsive={'mobile': {'visible': False}}),
+        K.livello('me-motto', contenuto='Horas non numero nisi serenas', x=62, y=QY + QH + 2, w=30, size=13, peso='400',
                   colore=mix(C['chiaro'], 70), align='center', entra='fadeIn', ritardo=1000, fontStyle='italic',
                   fontFamily='Newsreader', letterSpacing=1, responsive={'mobile': {'visible': False}}),
     ]

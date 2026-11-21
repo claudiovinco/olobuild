@@ -326,6 +326,9 @@ class Olobuild_Demo_Temi {
      * [ tema, chiave della pagina ] se l'indirizzo è /demo/<tema>/… di un tema acceso, altrimenti null.
      * Una pagina che il tema non ha mostra la sua 404; senza 404 del tema decide WordPress.
      */
+    /** I temi che hanno cambiato nome: id vecchio → id nuovo (la demo vecchia porta alla nuova). */
+    const RINOMINATI = [ 'scontrino' => 'fetta' ];
+
     private static function leggi_richiesta() {
         if ( is_admin() || wp_doing_ajax() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
             return null;
@@ -342,6 +345,16 @@ class Olobuild_Demo_Temi {
             return null;
         }
         $id = $m[1];
+        // Un tema che ha cambiato nome: la demo vecchia porta alla nuova, con la stessa pagina (21 nov 2026: Scontrino è
+        // diventato Fetta e i link già girati davano 404).
+        if ( isset( self::RINOMINATI[ $id ] ) ) {
+            $nuovo = $casa . self::BASE . '/' . self::RINOMINATI[ $id ] . '/' . ( isset( $m[2] ) && '' !== $m[2] ? $m[2] . '/' : '' ) . ( isset( $m[3] ) && '' !== $m[3] ? $m[3] . '/' : '' );
+            add_action( 'init', static function () use ( $nuovo ) {
+                wp_safe_redirect( $nuovo, 301 );
+                exit;
+            }, 0 );
+            return null;
+        }
         if ( ! self::acceso( $id ) ) {
             return null;
         }
