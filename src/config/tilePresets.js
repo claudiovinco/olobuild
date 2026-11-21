@@ -98,30 +98,35 @@ export const TILE_PRESETS = {
     'tilt-3d':         { hover_opacity: '90',  max_height: '60', alignment: 'center', transition_duration: '0.4', show_tagline: false },
   },
   headline: {
+    // 21 nov 2026: gli stili scrivevano font_weight, text_transform e letter_spacing, che il Titolo non legge
+    // (legge heading_weight, heading_uppercase e heading_letter_spacing in px): peso, maiuscolo e spaziatura non agivano.
     // Pulito, no effetti. Decorazione "linea sotto il titolo" classica.
-    'modern-clean':      { font_weight: '700', text_transform: 'none',      letter_spacing: '0',   heading_color: '#0f172a', decoration: 'line',    text_shadow: '', gradient_text: false, text_stroke: '0' },
+    'modern-clean':      { heading_weight: '700', heading_uppercase: false, heading_letter_spacing: '0',   heading_color: '#0f172a', decoration: 'line',    text_shadow: '', gradient_text: false, text_stroke: '0' },
     // Tipografia mono ultra-pulita, no decorazione, allineato sinistra.
-    'minimal-mono':      { font_weight: '500', text_transform: 'none',      letter_spacing: '-1',  heading_color: '#1f2937', alignment: 'left',     decoration: 'none', text_shadow: '', gradient_text: false, text_stroke: '0' },
+    'minimal-mono':      { heading_weight: '500', heading_uppercase: false, heading_letter_spacing: '-1',  heading_color: '#1f2937', alignment: 'left',     decoration: 'none', text_shadow: '', gradient_text: false, text_stroke: '0' },
     // Display tipografico forte. Italic + nero pieno.
-    'magazine-editorial':{ font_weight: '900', text_transform: 'none',      letter_spacing: '-2',  heading_color: '#000',    heading_italic: true,  decoration: 'divider', text_shadow: '', gradient_text: false, text_stroke: '0' },
+    'magazine-editorial':{ heading_weight: '900', heading_uppercase: false, heading_letter_spacing: '-2',  heading_color: '#000',    heading_italic: true,  decoration: 'divider', text_shadow: '', gradient_text: false, text_stroke: '0' },
     // Serif elegante, italic, decorazione punto.
-    'editorial-serif':   { font_weight: '700', text_transform: 'none',      letter_spacing: '0',   heading_color: '#111',    heading_italic: true,  decoration: 'dot', text_shadow: '', gradient_text: false, text_stroke: '0' },
+    'editorial-serif':   { heading_weight: '700', heading_uppercase: false, heading_letter_spacing: '0',   heading_color: '#111',    heading_italic: true,  decoration: 'dot', text_shadow: '', gradient_text: false, text_stroke: '0' },
     // Uppercase compatto, decorazione divider.
-    'compact-inline':    { font_weight: '600', text_transform: 'uppercase', letter_spacing: '2',   heading_color: '#374151', decoration: 'divider', text_shadow: '', gradient_text: false, text_stroke: '0' },
+    'compact-inline':    { heading_weight: '600', heading_uppercase: true, heading_letter_spacing: '2',   heading_color: '#374151', decoration: 'divider', text_shadow: '', gradient_text: false, text_stroke: '0' },
     // Vetro: bg semi-trasparente scuro + heading bianco. v1.0.58: aggiunto bg_color (era invisibile su sfondo bianco).
-    'glass-overlay':     { font_weight: '700', text_transform: 'none',      letter_spacing: '0',   heading_color: '#fff',    bg_color: 'rgba(15,23,42,0.85)', text_shadow: '2px 2px 4px rgba(0,0,0,0.3)',  decoration: 'none', gradient_text: false, text_stroke: '0' },
+    'glass-overlay':     { heading_weight: '700', heading_uppercase: false, heading_letter_spacing: '0',   heading_color: '#fff',    bg_color: 'rgba(15,23,42,0.85)', text_shadow: '2px 2px 4px rgba(0,0,0,0.3)',  decoration: 'none', gradient_text: false, text_stroke: '0' },
     // Cyan + bagliore neon forte su nero. v1.0.58: aggiunto bg_color nero (era cyan invisibile su bianco).
-    'neon-glow':         { font_weight: '700', text_transform: 'uppercase', letter_spacing: '4',   heading_color: '#00ffff', bg_color: '#0a0a0a', text_shadow: '0 0 20px rgba(99,102,241,0.8)', decoration: 'none', gradient_text: false, text_stroke: '0' },
+    'neon-glow':         { heading_weight: '700', heading_uppercase: true, heading_letter_spacing: '4',   heading_color: '#00ffff', bg_color: '#0a0a0a', text_shadow: '0 0 20px rgba(99,102,241,0.8)', decoration: 'none', gradient_text: false, text_stroke: '0' },
     // Stroke nero pieno + uppercase aggressivo (brutalismo grafico).
-    'brutalist-mega':    { font_weight: '900', text_transform: 'uppercase', letter_spacing: '-3',  heading_color: '#000',    text_stroke: '3', text_stroke_color: '#000', decoration: 'none', text_shadow: '', gradient_text: false },
+    'brutalist-mega':    { heading_weight: '900', heading_uppercase: true, heading_letter_spacing: '-3',  heading_color: '#000',    text_stroke: '3', text_stroke_color: '#000', decoration: 'none', text_shadow: '', gradient_text: false },
     // Testo riempito con gradiente colorato. v1.0.58: aggiunto bg_color gradiente (era invisibile se gradient_text non rendering).
-    'gradient-aurora':   { font_weight: '800', text_transform: 'none',      letter_spacing: '0',   heading_color: '#fff',    bg_color: 'linear-gradient(135deg,#a855f7,#ec4899)', gradient_text: true, gradient_from: '#a855f7', gradient_to: '#ec4899', gradient_angle: '90', decoration: 'none', text_shadow: '', text_stroke: '0' },
+    // 21 nov 2026: col testo riempito dallo STESSO gradiente dello sfondo il titolo spariva (ora il riempimento si vede):
+    // sfondo viola notte, così il gradiente del testo risalta; l'accento rosa chiaro, non il rosso del sito.
+    'gradient-aurora':   { heading_weight: '800', heading_uppercase: false, heading_letter_spacing: '0',   heading_color: '#fff',    bg_color: '#160F2E', gradient_text: true, gradient_from: '#C084FC', gradient_to: '#F472B6', gradient_angle: '90', accent_color: '#FBCFE8', decoration: 'none', text_shadow: '', text_stroke: '0' },
     // Stile "sticker", giallo sole + bordo arrotondato implicito.
-    'sticker-fun':       { font_weight: '800', text_transform: 'none',      letter_spacing: '0',   heading_color: '#78350f', text_shadow: '3px 3px 6px rgba(0,0,0,0.4)', decoration: 'star', text_stroke: '0', gradient_text: false },
+    'sticker-fun':       { heading_weight: '800', heading_uppercase: false, heading_letter_spacing: '0',   heading_color: '#78350f', text_shadow: '3px 3px 6px rgba(0,0,0,0.4)', decoration: 'star', text_stroke: '0', gradient_text: false },
     // Verde fosforescente + uppercase, blend tipo terminale. v1.0.58: aggiunto bg_color nero.
-    'retro-terminal':    { font_weight: '700', text_transform: 'uppercase', letter_spacing: '2',   heading_color: '#22c55e', bg_color: '#0a0a0a', text_shadow: '0 0 10px var(--olo-color-primary)', decoration: 'none', blend_mode: 'screen', text_stroke: '0', gradient_text: false },
+    'retro-terminal':    { heading_weight: '700', heading_uppercase: true, heading_letter_spacing: '2',   heading_color: '#22c55e', bg_color: '#0a0a0a', text_shadow: '0 0 10px var(--olo-color-primary)', decoration: 'none', blend_mode: 'screen', text_stroke: '0', gradient_text: false },
     // 3D depth: bg indigo scuro + heading bianco. v1.0.58: aggiunto bg_color (era invisibile su bianco).
-    'tilt-3d':           { font_weight: '800', text_transform: 'none',      letter_spacing: '0',   heading_color: '#fff',    bg_color: 'var(--olo-color-primary)', text_shadow: '4px 4px 10px rgba(0,0,0,0.5)', decoration: 'none', text_stroke: '0', gradient_text: false },
+    // 21 nov 2026: l'accento (il primario) finiva sul fondo primario e non si leggeva: accento scuro.
+    'tilt-3d':           { heading_weight: '800', heading_uppercase: false, heading_letter_spacing: '0',   heading_color: '#fff',    bg_color: 'var(--olo-color-primary)', accent_color: '#111827', text_shadow: '4px 4px 10px rgba(0,0,0,0.5)', decoration: 'none', text_stroke: '0', gradient_text: false },
   },
   animatedheading: {
     // 17 nov 2026 (episodio 47) — stili onesti coi colori del sito: prima i dodici generici, che scrivevano sfondo e
