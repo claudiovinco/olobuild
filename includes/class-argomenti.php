@@ -78,19 +78,91 @@ class Olobuild_Argomenti {
         return '' !== (string) $tipo && post_type_exists( $tipo ) && is_post_type_hierarchical( $tipo );
     }
 
+    /* ─────────────────────────────────────────────
+     * Le lingue (OLOlang): ogni argomento ha una copia per lingua (_olo_lang_source sulla copia); l'albero, i vicini,
+     * gli antenati e la rotta pubblica danno le copie nella lingua di chi legge, gli originali dove manca la copia.
+     * ───────────────────────────────────────────── */
+
+    /**
+     * La lingua in cui leggere: quella chiesta (o quella di chi guarda, per OLOlang) se il sito la ha; per una lingua che
+     * il sito non ha, l'inglese se c'è, che per chi non legge l'italiano serve più dell'originale. Senza OLOlang ''.
+     *
+     * @param string|null $chiesta Codice («en») o locale («de_DE»); null = la lingua di chi guarda.
+     */
+    public static function lingua( $chiesta = null ) {
+        if ( ! class_exists( 'Olo_Lang_Language' ) ) {
+            return '';
+        }
+        $principale = Olo_Lang_Language::get_default_lang();
+        $attive     = array_map( 'strval', array_column( Olo_Lang_Language::get_active_languages(), 'code' ) );
+        if ( null === $chiesta ) {
+            $chiesta = Olo_Lang_Language::detect_current_lang();
+        }
+        $chiesta = strtolower( (string) $chiesta );
+        if ( in_array( $chiesta, $attive, true ) ) {
+            return $chiesta;
+        }
+        $corta = substr( str_replace( '-', '_', $chiesta ), 0, 2 );
+        if ( in_array( $corta, $attive, true ) ) {
+            return $corta;
+        }
+        return ( '' !== $corta && $corta !== $principale && in_array( 'en', $attive, true ) ) ? 'en' : $principale;
+    }
+
+    /** L'originale di un contenuto (lui stesso se non è una traduzione). */
+    public static function originale( $id ) {
+        $o = (int) get_post_meta( (int) $id, '_olo_lang_source', true );
+        return $o ? $o : (int) $id;
+    }
+
+    /** Una copia si legge se è pubblicata, o privata per chi la può leggere (come gli originali nell'albero). */
+    private static function leggibile( $p ) {
+        return $p && ( 'publish' === $p->post_status || ( 'private' === $p->post_status && current_user_can( 'read_post', $p->ID ) ) );
+    }
+
+    /**
+     * Il contenuto nella lingua: la sua copia se c'è e si legge, se no l'originale.
+     *
+     * @param int    $id     Un originale o una sua copia.
+     * @param string $lingua Codice della lingua ('' o la principale = l'originale).
+     * @return int
+     */
+    public static function versione( $id, $lingua ) {
+        $orig = self::originale( $id );
+        if ( '' === (string) $lingua || ! class_exists( 'Olo_Lang_Language' ) || Olo_Lang_Language::get_default_lang() === $lingua ) {
+            return $orig;
+        }
+        $copie = (array) ( get_post_meta( $orig, '_olo_lang_translations', true ) ?: [] );
+        $c     = ! empty( $copie[ $lingua ] ) ? get_post( (int) $copie[ $lingua ] ) : null;
+        return ( $c && self::originale( $c->ID ) === $orig && self::leggibile( $c ) ) ? (int) $c->ID : $orig;
+    }
+
+    /** Il link di un contenuto nella sua lingua (una traduzione con ?lang= o /en/, anche dall'amministrazione). */
+    public static function link( $p ) {
+        $url = (string) get_permalink( $p );
+        return class_exists( 'Olobuild_Redazione_Lingue' ) ? Olobuild_Redazione_Lingue::nella_lingua( $url, is_object( $p ) ? $p->ID : (int) $p ) : $url;
+    }
+
     /**
      * I contenuti di un tipo in ordine di lettura: [ [ 'id', 'genitore', 'titolo', 'livello', 'figli', 'post' ], … ].
-     * Un contenuto il cui genitore non è fra quelli letti (in bozza, nel cestino) sale in cima.
+     * Un contenuto il cui genitore non è fra quelli letti (in bozza, nel cestino) sale in cima. Con le lingue di OLOlang
+     * ogni voce è la copia nella lingua (sotto la versione nella lingua del genitore dell'originale), o l'originale se la
+     * copia manca; le copie delle altre lingue restano fuori.
      *
-     * @param string $tipo Tipo di contenuto.
-     * @param array  $args Argomenti in più per WP_Query (stati, lingue…).
+     * @param string      $tipo   Tipo di contenuto.
+     * @param array       $args   Argomenti in più per WP_Query (stati…).
+     * @param string|null $lingua Codice della lingua; null = quella di chi guarda.
      */
-    public static function albero( $tipo, $args = [] ) {
+    public static function albero( $tipo, $args = [], $lingua = null ) {
         if ( ! self::ha_argomenti( $tipo ) ) {
             return [];
         }
+        $lingua     = null === $lingua ? self::lingua() : (string) $lingua;
+        $principale = class_exists( 'Olo_Lang_Language' ) ? Olo_Lang_Language::get_default_lang() : '';
         // Senza stati scelti vale la regola di WordPress: i pubblicati, più i privati per chi può leggerli (così chi
         // prepara un manuale lo vede intero sul sito prima di pubblicarlo; visitatori e rotta pubblica, solo i pubblicati).
+        // olo_lang_tutte: originali e copie come sono, la scelta della lingua si fa qui sotto (OLOlang la farebbe con la
+        // lingua del visitatore, anche quando se ne chiede un'altra, e lascerebbe le copie sotto i genitori sbagliati).
         $q = new WP_Query( array_merge( [
             'post_type'              => $tipo,
             'posts_per_page'         => self::MASSIMO,
@@ -98,15 +170,30 @@ class Olobuild_Argomenti {
             'no_found_rows'          => true,
             'ignore_sticky_posts'    => true,
             'update_post_term_cache' => false,
+            'olo_lang_tutte'         => true,
         ], $args ) );
-        $presenti = [];
+        // Una voce per originale: la sua copia nella lingua se c'è, se no lui (chiave = id dell'originale).
+        $scelti = [];
         foreach ( $q->posts as $p ) {
-            $presenti[ $p->ID ] = true;
+            $orig = (int) get_post_meta( $p->ID, '_olo_lang_source', true );
+            if ( ! $orig ) {
+                if ( ! isset( $scelti[ $p->ID ] ) ) {
+                    $scelti[ $p->ID ] = $p;
+                }
+            } elseif ( '' !== $lingua && $lingua !== $principale && (string) get_post_meta( $p->ID, '_olo_lang_lang', true ) === $lingua ) {
+                $scelti[ $orig ] = $p;
+            }
+        }
+        // Il genitore di ogni voce: la versione scelta del genitore dell'originale.
+        $padre = [];
+        foreach ( $scelti as $orig => $p ) {
+            $o              = (int) $p->ID === (int) $orig ? $p : get_post( $orig );
+            $g              = $o ? (int) $o->post_parent : 0;
+            $padre[ $p->ID ] = ( $g && isset( $scelti[ $g ] ) ) ? (int) $scelti[ $g ]->ID : 0;
         }
         $figli = [];
-        foreach ( $q->posts as $p ) {
-            $g             = isset( $presenti[ $p->post_parent ] ) ? (int) $p->post_parent : 0;
-            $figli[ $g ][] = $p;
+        foreach ( $scelti as $p ) {
+            $figli[ $padre[ $p->ID ] ][] = $p;
         }
         $out  = [];
         $giu  = function ( $g, $livello ) use ( &$giu, &$out, $figli ) {
@@ -138,20 +225,43 @@ class Olobuild_Argomenti {
         return array_keys( $dentro );
     }
 
-    /** Gli antenati di un contenuto, dal più alto al genitore (id). */
-    public static function antenati( $post ) {
-        return array_reverse( array_map( 'intval', get_post_ancestors( $post ) ) );
+    /**
+     * Gli antenati di un contenuto, dal più alto al genitore (id), nella lingua: quelli dell'originale, ognuno nella sua
+     * versione (la copia di una traduzione può stare ancora sotto il genitore italiano).
+     *
+     * @param WP_Post|int $post   Il contenuto (originale o copia).
+     * @param string|null $lingua Codice della lingua; null = quella del contenuto, se è una copia, o di chi guarda.
+     */
+    public static function antenati( $post, $lingua = null ) {
+        $post = get_post( $post );
+        if ( ! $post ) {
+            return [];
+        }
+        if ( null === $lingua ) {
+            $sua    = (string) get_post_meta( $post->ID, '_olo_lang_lang', true );
+            $lingua = '' !== $sua ? $sua : self::lingua();
+        }
+        $su = array_reverse( array_map( 'intval', get_post_ancestors( self::originale( $post->ID ) ) ) );
+        return array_map( function ( $id ) use ( $lingua ) {
+            return self::versione( $id, $lingua );
+        }, $su );
     }
 
     /**
      * Il contenuto prima e quello dopo nell'ordine dell'indice: [ WP_Post|null, WP_Post|null ].
      *
-     * @param WP_Post $post Il contenuto aperto.
+     * @param WP_Post     $post   Il contenuto aperto.
+     * @param string|null $lingua Codice della lingua; null = quella del contenuto, se è una copia, o di chi guarda.
      */
-    public static function vicini( $post ) {
-        $albero = self::albero( $post->post_type );
+    public static function vicini( $post, $lingua = null ) {
+        if ( null === $lingua ) {
+            $sua    = (string) get_post_meta( $post->ID, '_olo_lang_lang', true );
+            $lingua = '' !== $sua ? $sua : self::lingua();
+        }
+        $albero = self::albero( $post->post_type, [], $lingua );
+        $qui    = self::versione( $post->ID, $lingua );
         foreach ( $albero as $i => $v ) {
-            if ( $v['id'] === (int) $post->ID ) {
+            if ( $v['id'] === $qui ) {
                 return [
                     $i > 0 ? $albero[ $i - 1 ]['post'] : null,
                     isset( $albero[ $i + 1 ] ) ? $albero[ $i + 1 ]['post'] : null,
@@ -195,31 +305,42 @@ class Olobuild_Argomenti {
      * L'indice di un tipo: [ tipo, nome, sito, voci: [ id, genitore, titolo, livello, figli, link ] ]. Lo leggono la rotta
      * pubblica (solo i pubblicati) e la Guida del sito che scrive il manuale (anche i privati, per chi li può leggere).
      */
-    public static function indice_dati( $tipo ) {
-        $pto = get_post_type_object( $tipo );
+    public static function indice_dati( $tipo, $lingua = null ) {
+        $pto    = get_post_type_object( $tipo );
+        $lingua = null === $lingua ? self::lingua() : self::lingua( $lingua );
+        $casa   = self::casa( $tipo );
+        if ( '' !== $lingua && class_exists( 'Olo_Lang_Language' ) && Olo_Lang_Language::get_default_lang() !== $lingua ) {
+            $casa = Olo_Lang_Language::get_language_url( $lingua, $casa );
+        }
         return [
-            'tipo' => $tipo,
-            'nome' => $pto ? $pto->labels->name : '',
-            'sito' => home_url( '/' ),
-            'casa' => self::casa( $tipo ),
-            'voci' => array_map( function ( $v ) {
+            'tipo'   => $tipo,
+            'nome'   => $pto ? $pto->labels->name : '',
+            'sito'   => home_url( '/' ),
+            'casa'   => $casa,
+            'lingua' => $lingua,
+            'voci'   => array_map( function ( $v ) {
                 return [
                     'id'       => $v['id'],
                     'genitore' => $v['genitore'],
                     'titolo'   => $v['titolo'],
                     'livello'  => $v['livello'],
                     'figli'    => $v['figli'],
-                    'link'     => (string) get_permalink( $v['post'] ),
+                    'link'     => self::link( $v['post'] ),
                 ];
-            }, self::albero( $tipo ) ),
+            }, self::albero( $tipo, [], $lingua ) ),
         ];
     }
 
-    /** Un argomento: titolo, sottotitolo, testo, video, link, antenati, sottoargomenti, precedente e successivo. */
-    public static function argomento_dati( $post ) {
+    /**
+     * Un argomento: titolo, sottotitolo, testo, video, link, antenati, sottoargomenti, precedente e successivo, nella
+     * lingua chiesta (la copia di quella lingua al posto dell'argomento dato, se c'è).
+     */
+    public static function argomento_dati( $post, $lingua = null ) {
+        $lingua = null === $lingua ? self::lingua() : self::lingua( $lingua );
+        $post   = get_post( self::versione( $post->ID, $lingua ) );
         $tipo   = $post->post_type;
-        $albero = self::albero( $tipo );
-        list( $prima, $dopo ) = self::vicini( $post );
+        $albero = self::albero( $tipo, [], $lingua );
+        list( $prima, $dopo ) = self::vicini( $post, $lingua );
         $breve = function ( $p ) {
             return $p ? [ 'id' => (int) $p->ID, 'titolo' => self::titolo( $p ) ] : null;
         };
@@ -237,10 +358,11 @@ class Olobuild_Argomenti {
             'sottotitolo' => $post->post_excerpt,
             'html'        => wpautop( $post->post_content ),
             'video'       => $video,
-            'link'        => (string) get_permalink( $post ),
+            'link'        => self::link( $post ),
+            'lingua'      => $lingua,
             'antenati'    => array_map( function ( $id ) {
                 return [ 'id' => $id, 'titolo' => self::titolo( $id ) ];
-            }, self::antenati( $post ) ),
+            }, self::antenati( $post, $lingua ) ),
             'figli'       => array_values( array_map( function ( $v ) {
                 return [ 'id' => $v['id'], 'titolo' => $v['titolo'] ];
             }, array_filter( $albero, function ( $v ) use ( $post ) {
@@ -252,8 +374,14 @@ class Olobuild_Argomenti {
         ];
     }
 
+    /** La lingua chiesta alla rotta pubblica (?lang=de, o il locale della bacheca che chiede: ?lang=de_DE). */
+    private static function lingua_chiesta( WP_REST_Request $r ) {
+        $l = sanitize_text_field( (string) $r->get_param( 'lang' ) );
+        return self::lingua( '' !== $l ? $l : null );
+    }
+
     public static function rest_indice( WP_REST_Request $r ) {
-        $risposta = rest_ensure_response( self::indice_dati( sanitize_key( (string) $r['tipo'] ) ) );
+        $risposta = rest_ensure_response( self::indice_dati( sanitize_key( (string) $r['tipo'] ), self::lingua_chiesta( $r ) ) );
         $risposta->header( 'Cache-Control', 'public, max-age=600' );
         return $risposta;
     }
@@ -264,7 +392,7 @@ class Olobuild_Argomenti {
         if ( ! $post || $post->post_type !== $tipo || 'publish' !== $post->post_status || post_password_required( $post ) ) {
             return new WP_Error( 'olo_argomento', __( 'Argomento non trovato.', 'olobuild' ), [ 'status' => 404 ] );
         }
-        $risposta = rest_ensure_response( self::argomento_dati( $post ) );
+        $risposta = rest_ensure_response( self::argomento_dati( $post, self::lingua_chiesta( $r ) ) );
         $risposta->header( 'Cache-Control', 'public, max-age=600' );
         return $risposta;
     }

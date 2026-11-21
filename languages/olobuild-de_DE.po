@@ -54966,3 +54966,181 @@ msgstr "Hypnose (die drehende Spirale)"
 #: OLObuild 1.4.1225
 msgid "Miccia (faville, fuoco d’artificio al clic)"
 msgstr "Zündschnur (Funken, Feuerwerk beim Klick)"
+
+#: multilingua-guida
+msgid "Argomenti"
+msgstr "Themen"
+
+#: multilingua-guida
+msgid "Cerca negli argomenti"
+msgstr "In den Themen suchen"
+
+#: multilingua-guida
+msgid "Nessun argomento con queste parole."
+msgstr "Kein Thema mit diesen Wörtern."
+
+#: multilingua-guida
+msgid "Sottoargomenti di «%s»"
+msgstr "Unterthemen von „%s“"
+
+#: multilingua-guida
+msgid "Ancora nessun argomento: scrivili nella Redazione."
+msgstr "Noch keine Themen: Schreib sie in der Redaktion."
+
+#: multilingua-guida
+msgid "Argomento non trovato."
+msgstr "Thema nicht gefunden."
+
+#: multilingua-guida
+msgid "Navigazione articoli"
+msgstr "Beitragsnavigation"
+
+#: multilingua-guida
+msgid "Lunghezza titolo"
+msgstr "Titellänge"
+
+#: multilingua-guida
+msgid "Colore hover"
+msgstr "Hover-Farbe"
+
+#: multilingua-guida
+msgid "Arrotondamento"
+msgstr "Abrundung"
+
+#: multilingua-guida
+msgid "Primi passi"
+msgstr "Erste Schritte"
+
+#: multilingua-guida
+msgid "Dalla bacheca alla prima pagina pubblicata: crea, componi con le tile, salva e pubblica."
+msgstr "Vom Dashboard zur ersten veröffentlichten Seite: anlegen, mit Tiles gestalten, speichern und veröffentlichen."
+
+#: multilingua-guida
+msgid "Pagine, header, footer e blocchi: dove si trovano, a cosa si applicano, revisioni e import."
+msgstr "Seiten, Header, Footer und Blöcke: wo sie sind, wofür sie gelten, Revisionen und Import."
+
+#: multilingua-guida
+msgid "Titolo e descrizione per i motori di ricerca, anteprime social, dati strutturati, redirect e 404."
+msgstr "Titel und Beschreibung für Suchmaschinen, Social-Vorschauen, strukturierte Daten, Weiterleitungen und 404."
+
+#: multilingua-guida
+msgid "Cosa fa Olobuild da solo per pagine leggere, e cosa conviene fare a te."
+msgstr "Was Olobuild von selbst für leichte Seiten tut, und was du besser selbst machst."
+
+#: multilingua-guida
+msgid "Tutte le guide"
+msgstr "Alle Anleitungen"
+
+#: multilingua-guida
+msgid "Manuale di OLObuild"
+msgstr "Handbuch von OLObuild"
+
+#: multilingua-guida
+msgid "Il manuale si legge dal sito di OLObuild, che ora non risponde. Riprova tra poco: intanto le guide brevi del plugin funzionano anche senza rete."
+msgstr "Das Handbuch kommt von der Website von OLObuild, die gerade nicht antwortet. Versuch es gleich noch einmal: Die kurzen Anleitungen des Plugins funktionieren auch ohne Netz."
+
+#: multilingua-guida
+msgid "Il manuale è in preparazione. Intanto le guide brevi del plugin spiegano le cose principali."
+msgstr "Das Handbuch ist in Vorbereitung. Bis dahin erklären die kurzen Anleitungen des Plugins das Wichtigste."
+
+#: multilingua-guida
+msgid "Vai alle guide"
+msgstr "Zu den Anleitungen"
+
+#: multilingua-guida
+msgid "Tutto quello che serve sapere, un argomento alla volta, coi video del canale. È lo stesso manuale del sito di OLObuild e si aggiorna da solo."
+msgstr "Alles, was man wissen muss, ein Thema nach dem anderen, mit den Videos des Kanals. Es ist dasselbe Handbuch wie auf der Website von OLObuild und aktualisiert sich von selbst."
+
+#: multilingua-guida
+msgid "Apri il manuale sul sito"
+msgstr "Handbuch auf der Website öffnen"
+
+#: multilingua-guida
+msgid "Apri sul sito"
+msgstr "Auf der Website öffnen"
+
+#: multilingua-guida
+msgid "Video: %s"
+msgstr "Video: %s"
+
+#: multilingua-guida
+msgid "In questa sezione"
+msgstr "In diesem Abschnitt"
+
+#: multilingua-guida
+msgid "Altri argomenti"
+msgstr "Weitere Themen"
+
+#: multilingua-guida
+msgid "Descrivi il problema: cosa hai fatto, cosa ti aspettavi, cosa è successo."
+msgstr "Beschreib das Problem: was du gemacht hast, was du erwartet hast, was passiert ist."
+
+#: multilingua-guida
+msgid "Tema:"
+msgstr "Theme:"
+
+#: multilingua-guida
+msgid "Supporto %1$s %2$s"
+msgstr "Support %1$s %2$s"
+
+#: multilingua-guida
+msgid "Guide"
+msgstr "Anleitungen"
+
+#: multilingua-guida
+msgid "Scrivi al supporto"
+msgstr "An den Support schreiben"
+
+#: multilingua-guida
+msgid "Le guide di %s, scritte per la versione installata. Ognuna si legge in pochi minuti e rimanda alle schermate che descrive."
+msgstr "Die Anleitungen von %s, geschrieben für die installierte Version. Jede ist in wenigen Minuten gelesen und führt zu den Bildschirmen, die sie beschreibt."
+
+#: multilingua-guida
+msgid "Tutto quello che serve sapere, un argomento alla volta, coi video del canale. Si legge dal sito di OLObuild e si aggiorna da solo."
+msgstr "Alles, was man wissen muss, ein Thema nach dem anderen, mit den Videos des Kanals. Es kommt von der Website von OLObuild und aktualisiert sich von selbst."
+
+#: multilingua-guida
+msgid "Argomenti e sottoargomenti"
+msgstr "Themen und Unterthemen"
+
+#: multilingua-guida
+msgid "Non trovi la risposta?"
+msgstr "Keine Antwort gefunden?"
+
+#: multilingua-guida
+msgid "Scritta per %1$s %2$s"
+msgstr "Geschrieben für %1$s %2$s"
+
+#: multilingua-guida
+msgid "Altre guide"
+msgstr "Weitere Anleitungen"
+
+#: multilingua-guida
+msgid "Guida precedente"
+msgstr "Vorherige Anleitung"
+
+#: multilingua-guida
+msgid "Guida successiva"
+msgstr "Nächste Anleitung"
+
+#: multilingua-guida
+msgid "Installata: %s"
+msgstr "Installiert: %s"
+
+#: multilingua-guida
+msgid "Cosa cambia in ogni versione, dalla più recente."
+msgstr "Was sich in jeder Version ändert, von der neuesten an."
+
+#: multilingua-guida
+msgid "Il registro delle novità non è incluso in questa installazione."
+msgstr "Das Änderungsprotokoll ist in dieser Installation nicht enthalten."
+
+#: multilingua-guida
+msgid "Scrivi al supporto. L'email parte già con la versione di %s, WordPress e PHP, così possiamo rispondere senza chiedertele."
+msgstr "Schreib an den Support. Die E-Mail enthält schon die Version von %s, WordPress und PHP, damit wir antworten können, ohne danach zu fragen."
+
+#: multilingua-guida
+msgid "%d minuto di lettura"
+msgid_plural "%d minuti di lettura"
+msgstr[0] "%d Minute Lesezeit"
+msgstr[1] "%d Minuten Lesezeit"

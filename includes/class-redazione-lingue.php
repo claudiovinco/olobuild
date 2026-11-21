@@ -169,7 +169,10 @@ class Olobuild_Redazione_Lingue {
             'post_date_gmt' => $post->post_date_gmt,
             'edit_date'     => true,
             'menu_order'    => $post->menu_order,
+            'post_parent'   => self::genitore_della_copia( $post, $lingua ),
         ] );
+        // Argomenti e sottoargomenti: le traduzioni dei sottoargomenti già fatte passano sotto questa.
+        self::sotto_la_copia( $post->ID, $lingua, (int) $id );
         // Una traduzione non va sui social da sola: ci va l'originale (il riquadro di OLOsocial vuoto = niente).
         if ( class_exists( 'Olo_Social_Riquadro' ) ) {
             update_post_meta( $id, Olo_Social_Riquadro::META, [] );
@@ -209,6 +212,40 @@ class Olobuild_Redazione_Lingue {
         }
         $data['post_name'] = wp_unique_post_slug( $titolo, $id, 'publish', $data['post_type'], (int) ( $data['post_parent'] ?? 0 ) );
         return $data;
+    }
+
+    /**
+     * Sotto quale contenuto sta la traduzione di un argomento (tipi con argomenti e sottoargomenti): sotto la traduzione,
+     * nella stessa lingua, del genitore dell'originale; se il genitore non è ancora tradotto, sotto il genitore stesso.
+     * Così il manuale inglese ha i suoi indirizzi (/guida/olobuild-en/getting-started/…) e le sue briciole.
+     */
+    public static function genitore_della_copia( $orig, $lingua ) {
+        $orig = get_post( $orig );
+        if ( ! $orig || ! $orig->post_parent || ! is_post_type_hierarchical( $orig->post_type ) ) {
+            return 0;
+        }
+        $copie = self::copie( (int) $orig->post_parent );
+        return ! empty( $copie[ $lingua ] ) ? (int) $copie[ $lingua ] : (int) $orig->post_parent;
+    }
+
+    /** Le traduzioni nella lingua dei figli di un originale vanno sotto la sua traduzione $copia. */
+    private static function sotto_la_copia( $orig_id, $lingua, $copia ) {
+        if ( ! is_post_type_hierarchical( (string) get_post_type( $orig_id ) ) ) {
+            return;
+        }
+        $figli = get_posts( [ 'post_type' => get_post_type( $orig_id ), 'post_parent' => (int) $orig_id, 'post_status' => 'any',
+            'numberposts' => -1, 'fields' => 'ids', 'olo_lang_tutte' => true, 'suppress_filters' => true ] );
+        foreach ( $figli as $f ) {
+            if ( self::originale_di( $f ) ) {
+                continue;
+            }
+            $c = self::copie( $f )[ $lingua ] ?? 0;
+            if ( $c && (int) wp_get_post_parent_id( $c ) !== $copia ) {
+                global $wpdb;
+                $wpdb->update( $wpdb->posts, [ 'post_parent' => $copia ], [ 'ID' => (int) $c ] ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- solo il posto nell'albero, senza versioni né hook di salvataggio
+                clean_post_cache( (int) $c );
+            }
+        }
     }
 
     /* ─────────────────────────────────────────────
@@ -270,14 +307,17 @@ class Olobuild_Redazione_Lingue {
                     wp_set_object_terms( $cid, array_map( 'intval', $ids ), $x );
                 }
             }
-            $c = get_post( $cid );
-            if ( $c && ( $c->post_date !== $post->post_date || (int) $c->menu_order !== (int) $post->menu_order ) ) {
+            $c      = get_post( $cid );
+            $lingua = (string) array_search( $cid, $copie, true );
+            $sopra  = self::genitore_della_copia( $post, $lingua );
+            if ( $c && ( $c->post_date !== $post->post_date || (int) $c->menu_order !== (int) $post->menu_order || (int) $c->post_parent !== $sopra ) ) {
                 global $wpdb;
                 // Senza wp_update_post: niente versioni, niente hook di salvataggio, la data della copia non è un'uscita.
                 $wpdb->update( $wpdb->posts, [
                     'post_date'     => $post->post_date,
                     'post_date_gmt' => $post->post_date_gmt,
                     'menu_order'    => (int) $post->menu_order,
+                    'post_parent'   => $sopra,
                 ], [ 'ID' => $cid ] ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 clean_post_cache( $cid );
             }

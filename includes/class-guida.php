@@ -142,15 +142,17 @@ class Olobuild_Guida {
 		if ( array_key_exists( $id, $memo ) ) {
 			return $memo[ $id ];
 		}
+		// Nella lingua della bacheca: il sito del manuale dà la traduzione di quella lingua, o l'inglese se non ce l'ha.
+		$lingua = substr( determine_locale(), 0, 2 );
 		if ( self::manuale_locale() ) {
 			if ( ! $id ) {
-				return $memo[ $id ] = Olobuild_Argomenti::indice_dati( 'manuale' );
+				return $memo[ $id ] = Olobuild_Argomenti::indice_dati( 'manuale', $lingua );
 			}
 			$p = get_post( $id );
 			$ok = $p && 'manuale' === $p->post_type && ( 'publish' === $p->post_status || current_user_can( 'read_post', $id ) );
-			return $memo[ $id ] = $ok ? Olobuild_Argomenti::argomento_dati( $p ) : null;
+			return $memo[ $id ] = $ok ? Olobuild_Argomenti::argomento_dati( $p, $lingua ) : null;
 		}
-		$url    = self::manuale_fonte() . ( $id ? '/' . $id : '' );
+		$url    = add_query_arg( 'lang', $lingua, self::manuale_fonte() . ( $id ? '/' . $id : '' ) );
 		$chiave = 'olo_manuale_' . md5( $url );
 		$c      = get_transient( $chiave );
 		if ( is_array( $c ) ) {
@@ -188,6 +190,10 @@ class Olobuild_Guida {
 		$voci = is_array( $ind['voci'] ?? null ) ? $ind['voci'] : [];
 		$id   = self::argomento_aperto();
 		$arg  = $id ? self::manuale_leggi( $id ) : null;
+		// L'argomento aperto nella lingua della bacheca (?a= può essere l'originale o una traduzione di un'altra lingua).
+		if ( ! empty( $arg['id'] ) ) {
+			$id = (int) $arg['id'];
+		}
 		$ramo = array_flip( array_map( function ( $x ) {
 			return (int) $x['id'];
 		}, is_array( $arg['antenati'] ?? null ) ? $arg['antenati'] : [] ) );
@@ -296,11 +302,12 @@ class Olobuild_Guida {
 	}
 
 	/**
-	 * Il file della guida nella lingua del sito, altrimenti in italiano.
+	 * Il file della guida nella lingua della bacheca; per una lingua che le guide non hanno, l'inglese (per chi non
+	 * legge l'italiano serve di più), e infine l'italiano. Ci sono it, en, fr, de, es (20 nov 2026).
 	 */
 	private static function file( $slug ) {
 		$lingua = substr( determine_locale(), 0, 2 );
-		foreach ( array_unique( [ $lingua, 'it' ] ) as $l ) {
+		foreach ( array_unique( array_filter( [ $lingua, 'it' !== $lingua ? 'en' : '', 'it' ] ) ) as $l ) {
 			$f = OLOBUILD_PATH . 'includes/guide/' . $l . '/' . $slug . '.php';
 			if ( file_exists( $f ) ) {
 				return $f;

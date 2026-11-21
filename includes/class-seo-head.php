@@ -405,6 +405,7 @@ class Olobuild_Seo_Head {
          */
         $grafo = apply_filters( 'olobuild_seo_grafo', $this->grafo_schema() );
         if ( is_array( $grafo ) && $grafo ) {
+            $grafo = $this->grafo_nella_lingua( $grafo );
             echo '<script type="application/ld+json">' . wp_json_encode( [ '@context' => 'https://schema.org', '@graph' => array_values( array_filter( $grafo ) ) ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON-LD payload safely encoded via wp_json_encode() inside a fixed <script type="application/ld+json"> wrapper
         }
 
@@ -429,6 +430,94 @@ class Olobuild_Seo_Head {
      * cosa. Ora la pagina fa parte del sito, l'articolo è il contenuto principale della pagina, il sito e
      * l'articolo sono pubblicati da chi pubblica il sito: è così che motori e IA riconoscono le entità.
      */
+    /**
+     * I testi del grafo nella lingua di chi guarda, con OLOlang (21 nov 2026): nomi, titoli e descrizioni prendono la
+     * traduzione salvata di quel testo, fra le stringhe globali (titoli e descrizioni delle pagine, descrizione del sito)
+     * e le traduzioni del template della pagina (le FAQ di un Accordion). Prima i dati strutturati restavano in italiano
+     * in ogni lingua: OLOlang traduce la pagina finita, ma salta gli script, e il JSON-LD è uno script. Senza OLOlang, o
+     * nella lingua principale, non cambia niente.
+     */
+    private function grafo_nella_lingua( $grafo ) {
+        if ( ! class_exists( 'Olo_Lang_Language' ) || ! class_exists( 'Olo_Lang_Database' )
+            || Olo_Lang_Language::detect_current_lang() === Olo_Lang_Language::get_default_lang() ) {
+            return $grafo;
+        }
+        $chiavi = array_flip( [ 'name', 'headline', 'alternativeHeadline', 'description', 'alternateName', 'slogan', 'text', 'caption', 'disambiguatingDescription' ] );
+        $giu    = function ( $nodo ) use ( &$giu, $chiavi ) {
+            foreach ( $nodo as $k => $v ) {
+                if ( is_string( $v ) && is_string( $k ) && isset( $chiavi[ $k ] ) && '' !== trim( $v ) ) {
+                    $nodo[ $k ] = self::testo_nella_lingua( $v );
+                } elseif ( is_array( $v ) ) {
+                    $nodo[ $k ] = $giu( $v );
+                }
+            }
+            return $nodo;
+        };
+        return $giu( $grafo );
+    }
+
+    /**
+     * Un testo del grafo tradotto: intero, poi senza entità e con l'apostrofo dritto (i titoli escono da wptexturize(),
+     * le traduzioni sono salvate col testo scritto), poi pezzo per pezzo fra « – », « | », « · », come OLOlang fa coi
+     * titoli delle pagine. Se non c'è una traduzione resta com'è.
+     */
+    private static function testo_nella_lingua( $s ) {
+        $mappa = self::mappa_della_lingua();
+        $norma = function ( $x ) {
+            return trim( preg_replace( '/\s+/u', ' ', $x ) );
+        };
+        $piano = str_replace( [ '’', '‘' ], "'", html_entity_decode( $s, ENT_QUOTES, 'UTF-8' ) );
+        foreach ( array_unique( [ $s, html_entity_decode( $s, ENT_QUOTES, 'UTF-8' ), $piano ] ) as $prova ) {
+            if ( isset( $mappa[ $norma( $prova ) ] ) ) {
+                return $mappa[ $norma( $prova ) ];
+            }
+        }
+        $pezzi = preg_split( '/(\s[–|·]\s)/u', $piano, -1, PREG_SPLIT_DELIM_CAPTURE );
+        if ( is_array( $pezzi ) && count( $pezzi ) > 1 ) {
+            $cambiato = false;
+            foreach ( $pezzi as $i => $p ) {
+                if ( 0 === $i % 2 && isset( $mappa[ $norma( $p ) ] ) ) {
+                    $pezzi[ $i ] = $mappa[ $norma( $p ) ];
+                    $cambiato    = true;
+                }
+            }
+            if ( $cambiato ) {
+                return implode( '', $pezzi );
+            }
+        }
+        return $s;
+    }
+
+    /**
+     * Testo italiano → traduzione nella lingua di chi guarda: le stringhe globali di OLOlang e le traduzioni del
+     * template della pagina aperta. Due letture per richiesta (per indice), poi tutto in memoria: il filtro
+     * `olo_lang_translate` cerca per testo su tutta la tabella e costava ~36 ms a testo.
+     */
+    private static function mappa_della_lingua() {
+        static $mappa = null;
+        if ( null !== $mappa ) {
+            return $mappa;
+        }
+        $mappa = [];
+        $lang  = Olo_Lang_Language::detect_current_lang();
+        $db    = Olo_Lang_Database::instance();
+        $righe = (array) $db->get_template_translations( 0, $lang );
+        $tpl   = is_singular() ? (int) get_post_meta( (int) get_queried_object_id(), '_olo_template_id', true ) : 0;
+        if ( $tpl ) {
+            $righe = array_merge( $righe, (array) $db->get_template_translations( $tpl, $lang ) );
+        }
+        foreach ( $righe as $r ) {
+            $o = trim( preg_replace( '/\s+/u', ' ', (string) ( $r['original'] ?? '' ) ) );
+            $t = trim( (string) ( $r['translation'] ?? '' ) );
+            // Come la pagina di OLOlang: vale ogni traduzione che non sia una bozza.
+            if ( '' === $o || '' === $t || $o === $t || 'bozza' === ( $r['status'] ?? '' ) || isset( $mappa[ $o ] ) ) {
+                continue;
+            }
+            $mappa[ $o ] = $t;
+        }
+        return $mappa;
+    }
+
     private function grafo_schema() {
         global $post;
 
@@ -614,6 +703,14 @@ class Olobuild_Seo_Head {
         return $schema;
     }
 
+    /**
+     * Il titolo di un contenuto come testo semplice, per i dati strutturati: get_the_title() lo dà già trasformato per
+     * l'HTML (l'apostrofo di «Los geht's» o «L'inspector» diventa &#8217;), e nel JSON-LD l'entità restava scritta così.
+     */
+    private static function titolo_semplice( $id ) {
+        return trim( html_entity_decode( wp_strip_all_tags( get_the_title( $id ) ), ENT_QUOTES, 'UTF-8' ) );
+    }
+
     private function schema_breadcrumb( $url ) {
         global $post;
         $items = [];
@@ -640,13 +737,17 @@ class Olobuild_Seo_Head {
                 }
             }
 
-            if ( is_page() ) {
+            // Tutti i livelli in mezzo, come la tile Briciole: per le Pagine e per ogni tipo con argomenti e
+            // sottoargomenti (il manuale: Home › OLObuild › Si parte › Le colonne). Prima solo per le Pagine, e un
+            // capitolo del manuale usciva come Home › capitolo (21 nov 2026). Una traduzione sta sotto le traduzioni
+            // dei suoi genitori, quindi nomi e indirizzi escono nella sua lingua.
+            if ( is_page() || is_post_type_hierarchical( $post->post_type ) ) {
                 $ancestors = array_reverse( get_post_ancestors( $post ) );
                 foreach ( $ancestors as $anc_id ) {
                     $items[] = [
                         '@type'    => 'ListItem',
                         'position' => $pos++,
-                        'name'     => get_the_title( $anc_id ),
+                        'name'     => self::titolo_semplice( $anc_id ),
                         'item'     => get_permalink( $anc_id ),
                     ];
                 }
@@ -655,7 +756,7 @@ class Olobuild_Seo_Head {
             $items[] = [
                 '@type'    => 'ListItem',
                 'position' => $pos,
-                'name'     => get_the_title( $post->ID ),
+                'name'     => self::titolo_semplice( $post->ID ),
                 'item'     => get_permalink( $post->ID ),
             ];
         } elseif ( is_category() ) {
