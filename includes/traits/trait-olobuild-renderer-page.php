@@ -768,10 +768,30 @@ trait Olobuild_Renderer_Page_Trait {
                             var top=parseInt(wrap.dataset.stickyTop)||0;
                             wrap.style.height='';wrap.style.marginTop='';wrap.style.marginBottom='';
                             var h=sec.offsetHeight;
+                            /* (21 nov 2026) Una sezione più bassa dello schermo si ferma in FONDO allo schermo, non in
+                               cima: la sezione prima si alza e la scopre dal basso, e quando è scoperta tutta riprende a
+                               scorrere con la pagina. Ferma in cima, lo spazio fra il suo fondo e il bordo della sezione
+                               prima restava vuoto (la fascia della sandbox nella home di olotheme.com: una striscia rossa
+                               e poi bianco). Una sezione alta almeno quanto lo schermo resta in cima, come prima. */
+                            var vh=window.innerHeight;
+                            sec.style.top=((h<vh-top)?(vh-h):top)+'px';
                             wrap.style.height=(h*2+top)+'px';
                             wrap.style.marginTop='-'+h+'px';
                             if(top)wrap.style.marginBottom='-'+top+'px';
+                            /* L'altezza cambia dopo il caricamento (tile pigre che arrivano scorrendo, immagini,
+                               caratteri): si rimisura. Misurata troppo presto, il contenitore restava della misura
+                               vecchia (418 px invece di 451) e la sezione non si scopriva tutta. */
+                            if(!wrap.oloRevealRO){
+                                wrap.oloRevealRO=true;
+                                if(window.ResizeObserver){
+                                    new ResizeObserver(function(){requestAnimationFrame(initReveal);}).observe(sec);
+                                }
+                            }
                         });
+                        if(!window.oloRevealResize){
+                            window.oloRevealResize=true;
+                            window.addEventListener('resize',function(){requestAnimationFrame(initReveal);});
+                        }
                     }
                     <?php endif; ?>
                     <?php if ( $has_any_sticky_h ) : ?>
