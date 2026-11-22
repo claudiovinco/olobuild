@@ -353,6 +353,10 @@ class Olobuild_FullPage_Cache {
                 $n++;
             }
         }
+        // le copie compresse in gzip accanto alle pagine (drop-in, dalla 1.4.1340)
+        foreach ( (array) glob( $dir . '*.html.gz' ) as $f ) {
+            wp_delete_file( $f );
+        }
         update_option( 'olo_fpc_last_purge', time(), false );
         return $n;
     }

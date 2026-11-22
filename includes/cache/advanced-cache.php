@@ -31,6 +31,71 @@ if ( ! defined( 'WP_CONTENT_DIR' ) ) {
     return; // contesto inatteso: non interferire.
 }
 
+if ( ! function_exists( 'olobuild_fpc_accetta_gzip' ) ) {
+    /**
+     * Se l'intestazione Accept-Encoding accetta gzip (e non lo esclude con q=0).
+     *
+     * @param string $ae Accept-Encoding della richiesta.
+     * @return bool
+     */
+    function olobuild_fpc_accetta_gzip( $ae ) {
+        foreach ( explode( ',', strtolower( (string) $ae ) ) as $voce ) {
+            $parti = explode( ';', $voce );
+            if ( trim( $parti[0] ) !== 'gzip' ) {
+                continue;
+            }
+            foreach ( array_slice( $parti, 1 ) as $p ) {
+                if ( preg_match( '/^\s*q\s*=\s*([0-9.]+)\s*$/', $p, $m ) && (float) $m[1] <= 0 ) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+}
+
+if ( ! function_exists( 'olobuild_fpc_gz' ) ) {
+    /**
+     * La copia compressa in gzip (livello 9) di una pagina in cache, accanto all'HTML: <chiave>.html.gz.
+     * Con $html la scrive (MISS appena salvato); senza, la riusa se è aggiornata rispetto all'HTML e
+     * altrimenti la rifà dal file (pagine salvate prima della 1.4.1340). Scrittura atomica come l'HTML.
+     *
+     * @param string      $file Percorso dell'HTML in cache.
+     * @param string|null $html Contenuto appena salvato, o null per leggerlo dal file.
+     * @return string Percorso della copia compressa, o '' se non c'è (si serve l'HTML com'è).
+     */
+    function olobuild_fpc_gz( $file, $html = null ) {
+        if ( ! function_exists( 'gzencode' ) ) {
+            return '';
+        }
+        $gz = $file . '.gz';
+        if ( $html === null ) {
+            if ( is_file( $gz ) && (int) @filemtime( $gz ) >= (int) @filemtime( $file ) ) {
+                return $gz;
+            }
+            $html = @file_get_contents( $file );
+            if ( ! is_string( $html ) || $html === '' ) {
+                return '';
+            }
+        }
+        $z = gzencode( $html . "\n<!-- Olobuild full-page cache: HIT (gzip) -->", 9 );
+        if ( ! is_string( $z ) || $z === '' ) {
+            return '';
+        }
+        $tmp = $gz . '.' . getmypid() . '.tmp';
+        if ( false === @file_put_contents( $tmp, $z, LOCK_EX ) ) {
+            return '';
+        }
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.rename_rename -- atomic cache write in the drop-in (pre-bootstrap); WP_Filesystem unavailable
+        if ( ! @rename( $tmp, $gz ) ) {
+            @unlink( $tmp ); // phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink -- drop-in pre-bootstrap: wp_delete_file() non esiste ancora
+            return '';
+        }
+        return $gz;
+    }
+}
+
 /**
  * Esegue il tentativo di cache. Tutta la logica è incapsulata per non sporcare
  * lo scope globale; ritorna senza fare nulla quando la richiesta non è cachabile.
@@ -170,10 +235,30 @@ if ( ! defined( 'WP_CONTENT_DIR' ) ) {
     if ( is_file( $file ) ) {
         $age = time() - (int) @filemtime( $file );
         if ( $age >= 0 && $age < (int) $cfg['ttl'] ) {
+            // Copia compressa: a chi accetta gzip la pagina va già compressa al massimo (olobuild_fpc_gz()).
+            // La compressione al volo del server, quando il browser chiede brotli, può pesare molto di più:
+            // su Hostinger (LiteSpeed) la home di olotheme.com arrivava in brotli a 215 KB, in gzip a 131,
+            // compressa qui a 115 (22 nov 2026). Una risposta che ha già Content-Encoding il server non la
+            // ricomprime. Mai con zlib.output_compression accesa: PHP comprimerebbe una seconda volta.
+            $gz = '';
+            $zl = strtolower( (string) ini_get( 'zlib.output_compression' ) );
+            if ( ( $zl === '' || $zl === '0' || $zl === 'off' ) && function_exists( 'olobuild_fpc_accetta_gzip' ) && olobuild_fpc_accetta_gzip( $srv( 'HTTP_ACCEPT_ENCODING' ) ) ) {
+                $gz = olobuild_fpc_gz( $file );
+            }
             header( 'Content-Type: text/html; charset=UTF-8' );
+            header( 'Vary: Accept-Encoding' );
             header( 'X-Olo-Cache: HIT' );
             header( 'X-Olo-Cache-Age: ' . $age );
+            if ( $gz !== '' ) {
+                header( 'Content-Encoding: gzip' );
+                header( 'Content-Length: ' . (int) @filesize( $gz ) );
+            }
             if ( $method === 'HEAD' ) {
+                exit;
+            }
+            if ( $gz !== '' ) {
+                // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile -- full-page cache drop-in: runs before WordPress is loaded (WP_CACHE fast path), WP_Filesystem unavailable; direct I/O required for TTFB
+                readfile( $gz );
                 exit;
             }
             // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile -- full-page cache drop-in: runs before WordPress is loaded (WP_CACHE fast path), WP_Filesystem unavailable; direct I/O required for TTFB
@@ -229,7 +314,9 @@ if ( ! defined( 'WP_CONTENT_DIR' ) ) {
             $tmp = $ctx['file'] . '.' . getmypid() . '.tmp';
             if ( false !== @file_put_contents( $tmp, $html, LOCK_EX ) ) {
                 // phpcs:ignore WordPress.WP.AlternativeFunctions.rename_rename -- atomic cache write in the drop-in (pre-bootstrap); WP_Filesystem unavailable
-                @rename( $tmp, $ctx['file'] );
+                if ( @rename( $tmp, $ctx['file'] ) && function_exists( 'olobuild_fpc_gz' ) ) {
+                    olobuild_fpc_gz( $ctx['file'], $html ); // la copia compressa, pronta per il primo HIT
+                }
             }
         }
 
