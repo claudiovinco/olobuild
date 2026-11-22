@@ -398,10 +398,11 @@ class Olobuild_Rest_Api {
             'callback'            => [ $this, 'get_themes' ],
             'permission_callback' => [ $this, 'check_permission' ],
         ] );
+        // Importare un tema chiede la chiave di OLObuild (1.4.1345)
         register_rest_route( $this->namespace, '/themes/(?P<theme_id>[a-zA-Z0-9_-]+)/import', [
             'methods'             => 'POST',
             'callback'            => [ $this, 'import_theme' ],
-            'permission_callback' => [ $this, 'check_permission' ],
+            'permission_callback' => [ $this, 'check_permission_licenza' ],
         ] );
         // Il plugin che il tema richiede (WooCommerce), installato e attivato prima dell'import.
         register_rest_route( $this->namespace, '/themes/(?P<theme_id>[a-zA-Z0-9_-]+)/plugin-richiesto', [
@@ -452,7 +453,7 @@ class Olobuild_Rest_Api {
         register_rest_route( $this->namespace, '/template-library/(?P<id>[a-zA-Z0-9_-]+)/import', [
             'methods'             => 'POST',
             'callback'            => [ $this, 'import_library_template' ],
-            'permission_callback' => [ $this, 'check_permission' ],
+            'permission_callback' => [ $this, 'check_permission_licenza' ],
         ] );
         register_rest_route( $this->namespace, '/template-library/save', [
             'methods'             => 'POST',
@@ -616,7 +617,7 @@ class Olobuild_Rest_Api {
         register_rest_route( $this->namespace, '/site/import', [
             'methods'             => 'POST',
             'callback'            => [ $this, 'site_import' ],
-            'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            'permission_callback' => function () { return current_user_can( 'manage_options' ) ? Olobuild_Licenza::permesso() : false; },
         ] );
 
         // Lottie animation search (LottieFiles proxy)
@@ -1002,6 +1003,12 @@ class Olobuild_Rest_Api {
             }
         }
         return true;
+    }
+
+    /** Come check_permission, e in più la chiave di OLObuild (importazione di temi e blocchi, 1.4.1345). */
+    public function check_permission_licenza( $request = null ) {
+        $ok = $this->check_permission( $request );
+        return true === $ok ? Olobuild_Licenza::permesso() : $ok;
     }
 
     public function check_permission( $request = null ) {

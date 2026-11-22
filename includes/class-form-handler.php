@@ -263,6 +263,15 @@ class Olobuild_Form_Handler {
             }
         }
 
+        // Il consenso (1.4.1344): la casella del modulo era controllata solo nel browser. Chi la salta riceve il
+        // messaggio d'errore del modulo (dal browser non succede: la casella è obbligatoria).
+        if ( ! empty( $config['privacy_checkbox'] ) && empty( $request->get_param( '_olo_privacy_consent' ) ) ) {
+            return new WP_REST_Response( [
+                'success' => false,
+                'data'    => [ 'message' => (string) ( $config['error_message'] ?? '' ) !== '' ? (string) $config['error_message'] : olobuild_t( 'Configurazione form non valida.' ) ],
+            ], 400 );
+        }
+
         // Secondary honeypot field (hidden field named olo_hp_field)
         $hp_field_value = $request->get_param( 'olo_hp_field' );
         if ( ! empty( $hp_field_value ) ) {
@@ -1098,8 +1107,38 @@ class Olobuild_Form_Handler {
     /**
      * Send form data to external webhook.
      */
+    /** Gli indirizzi dei webhook dei moduli, per riferimento (1.4.1344): nella pagina non compaiono più. */
+    const OPT_WEBHOOKS = 'olobuild_form_webhooks';
+
+    /**
+     * Il riferimento di un indirizzo webhook: l'indirizzo resta nel database (può contenere una chiave segreta), la
+     * configurazione del modulo nella pagina porta solo questo. Scritto quando la tile si disegna, se è nuovo.
+     */
+    public static function webhook_ref( $url ) {
+        $url = esc_url_raw( (string) $url );
+        if ( '' === $url ) return '';
+        $ref = substr( hash_hmac( 'sha256', $url, wp_salt( 'auth' ) ), 0, 24 );
+        $all = get_option( self::OPT_WEBHOOKS, [] );
+        $all = is_array( $all ) ? $all : [];
+        if ( ( $all[ $ref ] ?? '' ) !== $url ) {
+            $all[ $ref ] = $url;
+            update_option( self::OPT_WEBHOOKS, $all, false );
+        }
+        return $ref;
+    }
+
+    /** L'indirizzo del webhook di una configurazione: dal riferimento; da webhook_url solo per le pagine firmate prima. */
+    private static function webhook_url_for( array $config ) {
+        $ref = (string) ( $config['webhook_ref'] ?? '' );
+        if ( '' !== $ref ) {
+            $all = get_option( self::OPT_WEBHOOKS, [] );
+            return is_array( $all ) ? esc_url_raw( (string) ( $all[ $ref ] ?? '' ) ) : '';
+        }
+        return esc_url_raw( (string) ( $config['webhook_url'] ?? '' ) );
+    }
+
     private function send_webhook( $form_data, $config ) {
-        $url    = esc_url_raw( $config['webhook_url'] ?? '' );
+        $url    = self::webhook_url_for( (array) $config );
         $method = in_array( $config['webhook_method'] ?? 'POST', [ 'POST', 'PUT' ], true ) ? ( $config['webhook_method'] ?? 'POST' ) : 'POST';
 
         if ( empty( $url ) ) {
@@ -1117,6 +1156,8 @@ class Olobuild_Form_Handler {
                 'site'       => get_bloginfo( 'name' ),
                 'page'       => wp_get_referer(),
                 'ip'         => $this->get_client_ip(),
+                // con la casella del consenso accesa l'invio passa solo col consenso (controllato in handle_submit)
+                'privacy_consent' => ! empty( $config['privacy_checkbox'] ),
             ] ),
             'timeout' => 10,
         ] );

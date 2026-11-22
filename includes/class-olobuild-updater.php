@@ -25,8 +25,9 @@ class Olobuild_Updater {
         add_filter( 'plugins_api', [ __CLASS__, 'details' ], 20, 3 );
         add_action( 'in_plugin_update_message-' . self::basename(), [ __CLASS__, 'row_message' ], 10, 2 );
         add_action( 'upgrader_process_complete', [ __CLASS__, 'flush' ], 10, 0 );
-        // La chiave di OLObooking cambia: la risposta ricordata non vale più.
-        foreach ( [ 'add_option_olo_license_key', 'update_option_olo_license_key', 'delete_option_olo_license_key' ] as $hook ) {
+        // La chiave di OLObuild o di OLObooking cambia: la risposta ricordata non vale più.
+        foreach ( [ 'add_option_olo_license_key', 'update_option_olo_license_key', 'delete_option_olo_license_key',
+            'add_option_olobuild_licenza', 'update_option_olobuild_licenza', 'delete_option_olobuild_licenza' ] as $hook ) {
             add_action( $hook, [ __CLASS__, 'flush' ], 10, 0 );
         }
     }
@@ -40,9 +41,10 @@ class Olobuild_Updater {
         delete_transient( self::CACHE );
     }
 
-    /** La chiave con cui chiedere il pacchetto: quella di OLObooking, se c'è. */
+    /** La chiave con cui chiedere il pacchetto: quella di OLObuild (1.4.1345), se no quella di OLObooking. */
     private static function license_key() {
-        $key = class_exists( 'Olo_License_Manager' ) && method_exists( 'Olo_License_Manager', 'get_license_key' ) ? (string) Olo_License_Manager::get_license_key() : '';
+        $key = class_exists( 'Olobuild_Licenza' ) ? Olobuild_Licenza::chiave() : '';
+        if ( '' === $key && class_exists( 'Olo_License_Manager' ) && method_exists( 'Olo_License_Manager', 'get_license_key' ) ) $key = (string) Olo_License_Manager::get_license_key();
         return (string) apply_filters( 'olobuild_update_license_key', $key );
     }
 

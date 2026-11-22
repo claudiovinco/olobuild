@@ -108,6 +108,9 @@ for root, dirs, files in os.walk(PROJECT_ROOT):
     for filename in files:
         if filename in EXCLUDE_FILES:
             continue
+        # ogni configurazione di Vite (vite.config.redazione.js e le prossime), non solo quelle elencate
+        if filename.startswith("vite.") and filename.endswith(".js"):
+            continue
         if any(filename.startswith(p) for p in EXCLUDE_PATTERN_PREFIXES):
             continue
         if Path(filename).suffix in EXCLUDE_EXT:

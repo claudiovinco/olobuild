@@ -160,9 +160,9 @@ class Olobuild_Setup_Wizard {
     }
 
     /**
-     * I software della rete OLOtheme che la procedura propone (passo «Rete OLOtheme»), con lo stato sul sito.
-     * Per ora la scelta si ricorda soltanto (option olobuild_rete_richiesti): la zona comune da cui scaricarli
-     * arriverà dopo. OLOsocial e OLOlottie non ci sono: senza pagina pubblica, il secondo ancora nascosto.
+     * I software della rete OLOtheme che la procedura propone (passo «Rete OLOtheme»), con lo stato sul sito. La
+     * scelta si ricorda (option olobuild_rete_richiesti); quelli che la licenza comprende si installano subito dal
+     * nostro server (1.4.1345, vedi installa_da_olotheme). OLOsocial e OLOlottie non ci sono: senza pagina pubblica.
      */
     public static function rete() {
         $voci = [
@@ -358,7 +358,7 @@ class Olobuild_Setup_Wizard {
                     </div>
                     <p class="ws-note">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
-                        <span><?php esc_html_e( 'Per ora la tua scelta resta segnata qui: quando i software della rete si potranno scaricare da Olobuild, li troverai pronti da installare.', 'olobuild' ); ?></span>
+                        <span><?php esc_html_e( 'OLOsecurity e, con la Pro, OLOlang si installano subito quando premi Continua. Per gli altri la scelta resta segnata e trovi il link alla loro pagina.', 'olobuild' ); ?></span>
                     </p>
                     <div class="ws-actions">
                         <button class="btn btn-primary" id="btn-rete" onclick="salvaRete()"><?php esc_html_e( 'Continua', 'olobuild' ); ?><?php echo $freccia; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG fisso. ?></button>
@@ -435,7 +435,7 @@ class Olobuild_Setup_Wizard {
             var SPUNTA = <?php echo wp_json_encode( $spunta ); ?>;
             var selectedThemeId = null;
             // per il riepilogo dell'ultimo passo
-            var temaWp = <?php echo $theme_active ? 'true' : 'null'; ?>, temaImportato = null, partenzaVuota = false, reteScelta = [];
+            var temaWp = <?php echo $theme_active ? 'true' : 'null'; ?>, temaImportato = null, partenzaVuota = false, reteScelta = [], reteInstallati = [], reteErrori = [];
             var oloSetupI18n = {
                 installing: <?php echo wp_json_encode( __( 'Installazione...', 'olobuild' ) ); ?>,
                 installingProgress: <?php echo wp_json_encode( __( 'Installazione in corso...', 'olobuild' ) ); ?>,
@@ -459,6 +459,7 @@ class Olobuild_Setup_Wizard {
                 sumTheme: <?php echo wp_json_encode( __( 'Il tema «%s»: pagine, menu, testata e piè di pagina', 'olobuild' ) ); ?>,
                 /* translators: %s: i software della rete scelti, separati da virgole */
                 sumNet: <?php echo wp_json_encode( __( 'Segnati per dopo: %s', 'olobuild' ) ); ?>,
+                sumInst: <?php echo wp_json_encode( __( 'Installati e attivati: %s', 'olobuild' ) ); ?>,
                 /* translators: %s: nome del plugin che il tema richiede (WooCommerce) */
                 installingPlugin: <?php echo wp_json_encode( __( 'Installo e attivo %s…', 'olobuild' ) ); ?>,
                 templatesCreated: <?php echo wp_json_encode( /* translators: %d: number of templates created */ __( '%d template creati, homepage impostata!', 'olobuild' ) ); ?>
@@ -732,7 +733,14 @@ class Olobuild_Setup_Wizard {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: 'action=olobuild_setup_rete&_nonce=' + nonce + '&rete=' + encodeURIComponent(scelti.map(function (c) { return c.value; }).join(','))
-                }).then(vai, vai);
+                }).then(function (r) { return r.json(); }).then(function (j) {
+                    // quelli installati adesso escono dai «segnati per dopo» ed entrano fra gli installati
+                    var d = (j && j.data) || {};
+                    reteInstallati = d.installati || [];
+                    reteScelta = reteScelta.filter(function (n) { return reteInstallati.indexOf(n) < 0; });
+                    reteErrori = d.errori || [];
+                    vai();
+                }, vai);
             }
 
             function riepilogo() {
@@ -742,7 +750,9 @@ class Olobuild_Setup_Wizard {
                 if (temaWp) voci.push(oloSetupI18n.sumWp);
                 if (temaImportato) voci.push(oloSetupI18n.sumTheme.replace('%s', temaImportato));
                 if (partenzaVuota) voci.push(oloSetupI18n.starterReady);
+                if (reteInstallati.length) voci.push(oloSetupI18n.sumInst.replace('%s', reteInstallati.join(', ')));
                 if (reteScelta.length) voci.push(oloSetupI18n.sumNet.replace('%s', reteScelta.join(', ')));
+                reteErrori.forEach(function (e) { voci.push(e); });
                 ul.innerHTML = '';
                 voci.forEach(function (t) {
                     var li = document.createElement('li');
@@ -822,6 +832,12 @@ class Olobuild_Setup_Wizard {
             wp_send_json_error( __( 'L\'importazione di temi è disabilitata su questo sito.', 'olobuild' ) );
         }
 
+        // importare un tema chiede la chiave di OLObuild (1.4.1345)
+        $lic = class_exists( 'Olobuild_Licenza' ) ? Olobuild_Licenza::permesso() : true;
+        if ( is_wp_error( $lic ) ) {
+            wp_send_json_error( $lic->get_error_message() );
+        }
+
         $theme_id = isset( $_POST['theme_id'] ) ? sanitize_text_field( wp_unslash( $_POST['theme_id'] ) ) : '';
         if ( empty( $theme_id ) ) {
             wp_send_json_error( __( 'Nessun tema selezionato.', 'olobuild' ) );
@@ -875,19 +891,79 @@ class Olobuild_Setup_Wizard {
     }
 
     /**
-     * AJAX: i software della rete OLOtheme che servono (passo «Rete OLOtheme»). Per ora si ricordano soltanto:
-     * la zona comune da cui scaricarli arriverà dopo e leggerà questa scelta.
+     * I software della rete che si scaricano dal nostro server (OLO Store) con la licenza di OLObuild, se la licenza
+     * ha il loro modulo: [ voce => [ prodotto di OLO Store, modulo della licenza, file del plugin ] ].
+     */
+    const DA_OLOTHEME = [
+        'olosecurity' => [ 'olosecurity', 'olosecurity', 'olosecurity/olosecurity.php' ],
+        'ololang'     => [ 'olo-lang', 'ololang', 'olo-lang/olo-lang.php' ],
+    ];
+
+    /**
+     * Installa e attiva un software della rete dal nostro server: OLO Store dà il pacchetto (link valido 24 ore) se la
+     * licenza di questo sito lo comprende. true, o WP_Error col motivo per chi usa il sito.
+     */
+    public static function installa_da_olotheme( $voce ) {
+        if ( ! isset( self::DA_OLOTHEME[ $voce ] ) || ! class_exists( 'Olobuild_Licenza' ) ) return new WP_Error( 'non_installabile', '' );
+        list( $prodotto, $modulo, $file ) = self::DA_OLOTHEME[ $voce ];
+        if ( ! in_array( $modulo, Olobuild_Licenza::moduli(), true ) ) return new WP_Error( 'non_compreso', '' );
+        require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        if ( ! file_exists( WP_PLUGIN_DIR . '/' . $file ) ) {
+            $r = wp_remote_post( 'https://olotheme.com/wp-json/olo-store/v1/check', [
+                'timeout' => 15,
+                'headers' => [ 'Content-Type' => 'application/json', 'Accept' => 'application/json' ],
+                'body'    => wp_json_encode( [ 'product' => $prodotto, 'version' => '0', 'license_key' => Olobuild_Licenza::chiave(), 'site_url' => Olobuild_Licenza::sito() ] ),
+            ] );
+            $d   = is_wp_error( $r ) ? null : json_decode( (string) wp_remote_retrieve_body( $r ), true );
+            $pkg = is_array( $d ) ? (string) ( $d['package'] ?? '' ) : '';
+            if ( '' === $pkg ) return new WP_Error( 'niente_pacchetto', __( 'Il nostro server non ha dato il pacchetto: riprova più tardi da Olobuild › Licenza.', 'olobuild' ) );
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            require_once ABSPATH . 'wp-admin/includes/misc.php';
+            require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+            if ( function_exists( 'set_time_limit' ) ) {
+                @set_time_limit( 300 ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- alcuni hosting lo vietano
+            }
+            $skin     = new WP_Ajax_Upgrader_Skin();
+            $upgrader = new Plugin_Upgrader( $skin );
+            $esito    = $upgrader->install( $pkg );
+            if ( is_wp_error( $esito ) ) return $esito;
+            if ( is_wp_error( $skin->result ) ) return $skin->result;
+            if ( ! $esito || $skin->get_errors()->has_errors() ) return new WP_Error( 'installazione', implode( ' ', $skin->get_error_messages() ) );
+            wp_clean_plugins_cache();
+        }
+        if ( ! is_plugin_active( $file ) ) {
+            $a = activate_plugin( $file );
+            if ( is_wp_error( $a ) ) return $a;
+        }
+        return true;
+    }
+
+    /**
+     * AJAX: i software della rete OLOtheme che servono (passo «Rete OLOtheme»). La scelta si ricorda; quelli che la
+     * licenza comprende (OLOsecurity sempre, OLOlang con la Pro) si installano e si attivano subito.
      */
     public function ajax_rete() {
         check_ajax_referer( 'olo_setup', '_nonce' );
-        if ( ! current_user_can( 'manage_options' ) ) {
+        if ( ! current_user_can( 'manage_options' ) || ! current_user_can( 'install_plugins' ) ) {
             wp_send_json_error( __( 'Permessi insufficienti.', 'olobuild' ) );
         }
         $grezzo = isset( $_POST['rete'] ) ? sanitize_text_field( wp_unslash( $_POST['rete'] ) ) : '';
-        $voci   = array_values( array_intersect( array_map( 'sanitize_key', explode( ',', $grezzo ) ), array_keys( self::rete() ) ) );
+        $rete   = self::rete();
+        $voci   = array_values( array_intersect( array_map( 'sanitize_key', explode( ',', $grezzo ) ), array_keys( $rete ) ) );
         update_option( 'olobuild_rete_richiesti', $voci, false );
         update_option( 'olobuild_rete_richiesti_il', time(), false );
-        wp_send_json_success( [ 'rete' => $voci ] );
+        $installati = [];
+        $errori     = [];
+        foreach ( $voci as $v ) {
+            if ( ! isset( self::DA_OLOTHEME[ $v ] ) ) continue;
+            $r = self::installa_da_olotheme( $v );
+            if ( true === $r ) {
+                $installati[] = $rete[ $v ]['nome'];
+            } elseif ( '' !== $r->get_error_message() ) {
+                $errori[] = $rete[ $v ]['nome'] . ': ' . $r->get_error_message();
+            }
+        }
+        wp_send_json_success( [ 'rete' => $voci, 'installati' => $installati, 'errori' => $errori ] );
     }
 
     /**

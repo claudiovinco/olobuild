@@ -16731,3 +16731,266 @@ msgstr "スコア"
 #: includes/tiles
 msgid "Scrivi dove inviare la scelta (indirizzo, numero o pagina): finché manca, il pulsante non compare sul sito."
 msgstr "選択内容の送信先（アドレス、番号、ページ）を入力してください。未入力の間はサイトにボタンが表示されません。"
+
+#: licenza-1.4.1345
+msgid "Questa chiave è già attiva su un altro sito: ogni chiave vale per un sito. Chiedine una nuova qui sotto, oppure disattivala sull'altro sito."
+msgstr "このライセンスキーは別のサイトですでに有効です。ライセンスキーは1サイトにつき1つです。新しいライセンスキーを以下からリクエストするか、別のサイトで無効化してください。"
+
+msgid "Questa chiave è stata revocata. Scrivici a info@olotheme.com."
+msgstr "このライセンスキーは失効しています。info@olotheme.com までご連絡ください。"
+
+msgid "Questa chiave è sospesa. Scrivici a info@olotheme.com."
+msgstr "このライセンスキーは停止されています。info@olotheme.com までご連絡ください。"
+
+msgid "Questa chiave non risulta fra le nostre licenze."
+msgstr "このライセンスキーは当社のライセンス一覧に存在しません。"
+
+msgid "La chiave non è valida: controlla di averla copiata tutta."
+msgstr "ライセンスキーが無効です。すべてコピーされているかご確認ください。"
+
+msgid "Questa chiave è di un altro software OLOtheme."
+msgstr "このライセンスキーは別のOLOthemeソフトウェア用です。"
+
+msgid "Il server delle licenze non risponde: riprova tra qualche minuto."
+msgstr "ライセンスサーバーが応答していません。数分後に再試行してください。"
+
+msgid "La chiave non è stata attivata: riprova, o scrivici a info@olotheme.com."
+msgstr "ライセンスキーが有効化されませんでした。再試行するか、info@olotheme.com までご連絡ください。"
+
+msgid "Per importare temi e blocchi serve la chiave di OLObuild: la trovi in Olobuild › Licenza."
+msgstr "テーマとブロックをインポートするにはOLObuildのライセンスキーが必要です。OLObuild › ライセンス でご確認ください。"
+
+msgid "Collega OLObuild"
+msgstr "OLObuildを連携する"
+
+msgid "Per usare il builder serve la chiave: è gratuita, una per sito."
+msgstr "ビルダーを使用するにはライセンスキーが必要です。無料で、1サイトにつき1つです。"
+
+msgid "Collega ora"
+msgstr "今すぐ連携する"
+
+msgid "Non hai i permessi."
+msgstr "権限がありません。"
+
+msgid "Licenza di OLObuild"
+msgstr "OLObuildのライセンス"
+
+msgid "Fatto: OLObuild è collegato a questo sito."
+msgstr "完了：OLObuildはこのサイトと連携されました。"
+
+msgid "Licenza verificata."
+msgstr "ライセンスを確認しました。"
+
+msgid "Chiave tolta da questo sito: ora puoi usarla su un altro."
+msgstr "ライセンスキーをこのサイトから削除しました。別のサイトでご利用いただけます。"
+
+msgid "Ti abbiamo mandato la chiave a %s: apri l'email e premi «Attiva su questo sito»."
+msgstr "ライセンスキーを %s に送信しました。メールを開いて「このサイトで有効化」を押してください。"
+
+msgid "Scrivi un indirizzo email valido."
+msgstr "有効なメールアドレスを入力してください。"
+
+msgid "Per mandarti la chiave serve il tuo consenso."
+msgstr "ライセンスキーを送信するには同意が必要です。"
+
+msgid "Non siamo riusciti a mandarti la chiave: riprova tra qualche minuto."
+msgstr "ライセンスキーを送信できませんでした。数分後に再試行してください。"
+
+msgid "Scaduta: il builder funziona, gli aggiornamenti no"
+msgstr "有効期限切れ：ビルダーは動作しますが、アップデートは利用できません"
+
+msgid "senza scadenza"
+msgstr "有効期限なし"
+
+msgid "Ultima verifica"
+msgstr "最終確認"
+
+msgid "Verifica ora"
+msgstr "今すぐ確認"
+
+msgid "Togliere la chiave da questo sito? Il builder si ferma finché non ne metti una."
+msgstr "このサイトからライセンスキーを削除しますか？新しいライセンスキーを設定するまでビルダーは停止します。"
+
+msgid "Disattiva su questo sito"
+msgstr "このサイトで無効化"
+
+msgid "Passi alla Pro?"
+msgstr "Proにアップグレードしますか？"
+
+msgid "Incolla qui la chiave nuova: prende il posto di questa e libera il suo posto."
+msgstr "新しいライセンスキーをここに貼り付けてください。現在のライセンスキーと置き換えられ、元のライセンスキーは解放されます。"
+
+msgid "OLObuild è collegato con la licenza di OLObooking"
+msgstr "OLObuildはOLObookingのライセンスと連携されています"
+
+msgid "La chiave si gestisce nel gestionale di OLObooking, in Impostazioni › Pacchetti moduli."
+msgstr "ライセンスキーはOLObookingの管理システム（設定 › モジュールパッケージ）で管理できます。"
+
+msgid "OLObuild è gratis, ma per usarlo serve una chiave: una per sito. Se l'hai scaricato da olotheme.com la chiave è già nel file e si attiva da sola; altrimenti chiedila qui sotto, ti arriva per email."
+msgstr "OLObuildは無料ですが、使用するにはライセンスキーが必要です。1サイトにつき1つです。olotheme.com からダウンロードした場合、ライセンスキーはすでにファイルに含まれており自動的に有効化されます。それ以外の場合は以下からリクエストしてください。メールでお届けします。"
+
+msgid "L'indirizzo del sito è cambiato: attiva di nuovo la chiave per questo indirizzo."
+msgstr "サイトのアドレスが変更されました。新しいアドレスでライセンスキーを再度有効化してください。"
+
+msgid "Chiedi la chiave gratuita"
+msgstr "無料ライセンスキーをリクエストする"
+
+msgid "Scrivi la tua email: ti mandiamo la chiave e un pulsante per attivarla su questo sito."
+msgstr "メールアドレスを入力してください。ライセンスキーとこのサイトで有効化するボタンをお送りします。"
+
+msgid "Mandami la chiave"
+msgstr "ライセンスキーを送る"
+
+msgid "Accetto che OLOtheme usi la mia email per mandarmi la chiave e le notizie importanti su OLObuild, secondo la %s. Posso smettere quando voglio."
+msgstr "OLOthemeが私のメールアドレスを使用して、ライセンスキーおよびOLObuildに関する重要なお知らせを送信することに同意します（%s に基づく）。いつでも退会できます。"
+
+msgid "informativa sulla privacy"
+msgstr "プライバシーポリシー"
+
+msgid "Hai già una chiave?"
+msgstr "ライセンスキーをお持ちですか？"
+
+msgid "Incollala qui: la Free, la Pro o quella di OLObooking."
+msgstr "Free、Pro、またはOLObookingのライセンスキーをここに貼り付けてください。"
+
+msgid "L'indirizzo non può restare vuoto."
+msgstr "アドレスを空欄にすることはできません。"
+
+msgid "Il tuo ruolo non ha accesso al builder."
+msgstr "あなたのロールはビルダーへのアクセス権がありません。"
+
+msgid "API key senza il datacenter finale (per esempio -us21)."
+msgstr "データセンターのサフィックスが含まれていないAPIキーです（例：-us21）。"
+
+#: licenza-1.4.1345
+msgid "Ti diamo il benvenuto in %s!"
+msgstr "%s へようこそ！"
+
+msgid "Il tuo page builder è installato e pronto. Ti accompagniamo nei primi passi: in un paio di minuti il sito prende già forma."
+msgstr "ページビルダーがインストールされ、準備が整いました。最初のステップをご案内します。数分でサイトの形が整います。"
+
+msgid "Scegli un tema"
+msgstr "テーマを選択する"
+
+msgid "Importa i contenuti demo"
+msgstr "デモコンテンツをインポートする"
+
+msgid "Personalizza e pubblica"
+msgstr "カスタマイズして公開する"
+
+msgid "Avvia la configurazione"
+msgstr "設定を開始する"
+
+msgid "Più tardi"
+msgstr "後で"
+
+msgid "OLOsecurity e, con la Pro, OLOlang si installano subito quando premi Continua. Per gli altri la scelta resta segnata e trovi il link alla loro pagina."
+msgstr "OLOsecurity と、Pro では OLOlang が、「続ける」を押すとすぐにインストールされます。その他のプラグインは選択が保存され、各ページへのリンクが表示されます。"
+
+msgid "Logo e menu già pronti — apri il builder"
+msgstr "ロゴとメニューの準備完了 — ビルダーを開く"
+
+msgid "Logo, copyright e link rapidi"
+msgstr "ロゴ、著作権表示、クイックリンク"
+
+msgid "Personalizza la home"
+msgstr "ホームをカスタマイズする"
+
+msgid "Hero starter pronto da modificare"
+msgstr "すぐに編集できるヒーロースターター"
+
+msgid "Creo header e footer base..."
+msgstr "ベースのヘッダーとフッターを作成中..."
+
+msgid "Header e footer base pronti!"
+msgstr "ベースのヘッダーとフッターの準備完了！"
+
+msgid "Ho creato un header con il logo del sito e un footer con copyright e link rapidi. Personalizzali con un click:"
+msgstr "サイトのロゴ入りヘッダーと、著作権表示・クイックリンク付きフッターを作成しました。ワンクリックでカスタマイズできます："
+
+msgid "Installati e attivati: %s"
+msgstr "インストールして有効化しました：%s"
+
+msgid "Impossibile caricare il selettore temi."
+msgstr "テーマセレクターを読み込めません。"
+
+msgid "Parti da zero, tela bianca."
+msgstr "白紙からスタートします。"
+
+msgid "L'importazione di temi è disabilitata su questo sito."
+msgstr "このサイトではテーマのインポートが無効になっています。"
+
+msgid "Il nostro server non ha dato il pacchetto: riprova più tardi da Olobuild › Licenza."
+msgstr "サーバーからパッケージを取得できませんでした。後ほど OLObuild › ライセンス から再試行してください。"
+
+msgid "Header base"
+msgstr "ベースヘッダー"
+
+msgid "Footer base"
+msgstr "ベースフッター"
+
+msgid "Menu Principale"
+msgstr "メインメニュー"
+
+msgid "Setup pronto · 4 passaggi"
+msgstr "セットアップ完了 · 4ステップ"
+
+msgid "La tua home, in quattro mosse."
+msgstr "ホームを、4つのステップで。"
+
+msgid "Hai appena installato Olobuild. Personalizza le tre aree fondamentali del sito direttamente da qui — gli inviti a fare scompariranno al primo salvataggio."
+msgstr "OLObuild をインストールしました。サイトの3つの基本エリアをここから直接カスタマイズしてください — 保存すると案内は非表示になります。"
+
+msgid "CHECKLIST DI SETUP"
+msgstr "セットアップチェックリスト"
+
+msgid "Sostituisci questo contenuto temporaneo."
+msgstr "この仮コンテンツを置き換えてください。"
+
+msgid "Apri builder"
+msgstr "ビルダーを開く"
+
+msgid "Modifica l'Header"
+msgstr "ヘッダーを編集する"
+
+msgid "Logo, menu di navigazione, selettore lingua."
+msgstr "ロゴ、ナビゲーションメニュー、言語セレクター。"
+
+msgid "Modifica il Footer"
+msgstr "フッターを編集する"
+
+msgid "Colonne, link legali, recapiti."
+msgstr "カラム、法的リンク、連絡先情報。"
+
+msgid "Imposta colori e font"
+msgstr "カラーとフォントを設定する"
+
+msgid "Palette e tipografia del sito, in Sistema › Configurazione."
+msgstr "サイトのパレットとタイポグラフィは、システム › 設定 で変更できます。"
+
+msgid "Apri Palette & Stili"
+msgstr "パレット＆スタイルを開く"
+
+msgid "Idee per le prossime sezioni"
+msgstr "次のセクションのアイデア"
+
+msgid "Racconta in poche righe la tua storia, i valori del brand e cosa rende unico ciò che offri."
+msgstr "あなたのストーリー、ブランドの価値観、そして提供するものの独自性を数行でお伝えください。"
+
+msgid "I tuoi servizi"
+msgstr "サービス紹介"
+
+msgid "3–6 card con i servizi principali, un'icona, un titolo e una breve descrizione."
+msgstr "主要サービスを3〜6枚のカードで。アイコン、タイトル、簡単な説明を添えて。"
+
+msgid "Recensioni clienti"
+msgstr "お客様の声"
+
+msgid "Testimonianze reali con foto e nome del cliente. Aumentano la fiducia di chi visita il sito."
+msgstr "写真と名前入りの実際の体験談。サイトを訪れる方の信頼を高めます。"
+
+msgid "SEZIONE SUGGERITA"
+msgstr "おすすめセクション"
+
+msgid "Tutti i diritti riservati."
+msgstr "全著作権所有。"

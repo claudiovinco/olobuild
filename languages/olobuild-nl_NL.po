@@ -16731,3 +16731,266 @@ msgstr "Score"
 #: includes/tiles
 msgid "Scrivi dove inviare la scelta (indirizzo, numero o pagina): finché manca, il pulsante non compare sul sito."
 msgstr "Geef aan waarheen de keuze gaat (adres, nummer of pagina): zolang dat ontbreekt, verschijnt de knop niet op de site."
+
+#: licenza-1.4.1345
+msgid "Questa chiave è già attiva su un altro sito: ogni chiave vale per un sito. Chiedine una nuova qui sotto, oppure disattivala sull'altro sito."
+msgstr "Deze sleutel is al actief op een andere site: elke sleutel geldt voor één site. Vraag hieronder een nieuwe aan, of deactiveer hem op de andere site."
+
+msgid "Questa chiave è stata revocata. Scrivici a info@olotheme.com."
+msgstr "Deze sleutel is ingetrokken. Schrijf ons op info@olotheme.com."
+
+msgid "Questa chiave è sospesa. Scrivici a info@olotheme.com."
+msgstr "Deze sleutel is gesuspendeerd. Schrijf ons op info@olotheme.com."
+
+msgid "Questa chiave non risulta fra le nostre licenze."
+msgstr "Deze sleutel staat niet in onze licenties."
+
+msgid "La chiave non è valida: controlla di averla copiata tutta."
+msgstr "De sleutel is ongeldig: controleer of je hem volledig hebt gekopieerd."
+
+msgid "Questa chiave è di un altro software OLOtheme."
+msgstr "Deze sleutel is van een andere OLOtheme-software."
+
+msgid "Il server delle licenze non risponde: riprova tra qualche minuto."
+msgstr "De licentieserver reageert niet: probeer het over een paar minuten opnieuw."
+
+msgid "La chiave non è stata attivata: riprova, o scrivici a info@olotheme.com."
+msgstr "De sleutel is niet geactiveerd: probeer het opnieuw, of schrijf ons op info@olotheme.com."
+
+msgid "Per importare temi e blocchi serve la chiave di OLObuild: la trovi in Olobuild › Licenza."
+msgstr "Om thema's en blokken te importeren heb je de sleutel van OLObuild nodig: je vindt hem via OLObuild › Licentie."
+
+msgid "Collega OLObuild"
+msgstr "OLObuild koppelen"
+
+msgid "Per usare il builder serve la chiave: è gratuita, una per sito."
+msgstr "Om de builder te gebruiken heb je de sleutel nodig: die is gratis, één per site."
+
+msgid "Collega ora"
+msgstr "Nu koppelen"
+
+msgid "Non hai i permessi."
+msgstr "Je hebt geen rechten."
+
+msgid "Licenza di OLObuild"
+msgstr "Licentie van OLObuild"
+
+msgid "Fatto: OLObuild è collegato a questo sito."
+msgstr "Gelukt: OLObuild is gekoppeld aan deze site."
+
+msgid "Licenza verificata."
+msgstr "Licentie geverifieerd."
+
+msgid "Chiave tolta da questo sito: ora puoi usarla su un altro."
+msgstr "Sleutel verwijderd van deze site: je kunt hem nu op een andere site gebruiken."
+
+msgid "Ti abbiamo mandato la chiave a %s: apri l'email e premi «Attiva su questo sito»."
+msgstr "We hebben de sleutel naar %s gestuurd: open de e-mail en klik op «Activeren op deze site»."
+
+msgid "Scrivi un indirizzo email valido."
+msgstr "Vul een geldig e-mailadres in."
+
+msgid "Per mandarti la chiave serve il tuo consenso."
+msgstr "Om je de sleutel te sturen hebben we je toestemming nodig."
+
+msgid "Non siamo riusciti a mandarti la chiave: riprova tra qualche minuto."
+msgstr "Het is niet gelukt om je de sleutel te sturen: probeer het over een paar minuten opnieuw."
+
+msgid "Scaduta: il builder funziona, gli aggiornamenti no"
+msgstr "Verlopen: de builder werkt, updates niet"
+
+msgid "senza scadenza"
+msgstr "zonder vervaldatum"
+
+msgid "Ultima verifica"
+msgstr "Laatste verificatie"
+
+msgid "Verifica ora"
+msgstr "Nu verifiëren"
+
+msgid "Togliere la chiave da questo sito? Il builder si ferma finché non ne metti una."
+msgstr "De sleutel van deze site verwijderen? De builder stopt totdat je een nieuwe invoert."
+
+msgid "Disattiva su questo sito"
+msgstr "Deactiveren op deze site"
+
+msgid "Passi alla Pro?"
+msgstr "Overstappen naar Pro?"
+
+msgid "Incolla qui la chiave nuova: prende il posto di questa e libera il suo posto."
+msgstr "Plak hier de nieuwe sleutel: die vervangt deze en maakt diens plek vrij."
+
+msgid "OLObuild è collegato con la licenza di OLObooking"
+msgstr "OLObuild is gekoppeld met de licentie van OLObooking"
+
+msgid "La chiave si gestisce nel gestionale di OLObooking, in Impostazioni › Pacchetti moduli."
+msgstr "De sleutel wordt beheerd in het beheersysteem van OLObooking, via Instellingen › Modulepakketten."
+
+msgid "OLObuild è gratis, ma per usarlo serve una chiave: una per sito. Se l'hai scaricato da olotheme.com la chiave è già nel file e si attiva da sola; altrimenti chiedila qui sotto, ti arriva per email."
+msgstr "OLObuild is gratis, maar om het te gebruiken heb je een sleutel nodig: één per site. Als je het hebt gedownload via olotheme.com zit de sleutel al in het bestand en wordt hij automatisch geactiveerd; vraag hem anders hieronder aan, je ontvangt hem per e-mail."
+
+msgid "L'indirizzo del sito è cambiato: attiva di nuovo la chiave per questo indirizzo."
+msgstr "Het adres van de site is gewijzigd: activeer de sleutel opnieuw voor dit adres."
+
+msgid "Chiedi la chiave gratuita"
+msgstr "Vraag de gratis sleutel aan"
+
+msgid "Scrivi la tua email: ti mandiamo la chiave e un pulsante per attivarla su questo sito."
+msgstr "Vul je e-mailadres in: we sturen je de sleutel en een knop om hem op deze site te activeren."
+
+msgid "Mandami la chiave"
+msgstr "Stuur mij de sleutel"
+
+msgid "Accetto che OLOtheme usi la mia email per mandarmi la chiave e le notizie importanti su OLObuild, secondo la %s. Posso smettere quando voglio."
+msgstr "Ik ga ermee akkoord dat OLOtheme mijn e-mailadres gebruikt om mij de sleutel en belangrijke berichten over OLObuild te sturen, conform het %s. Ik kan me op elk moment afmelden."
+
+msgid "informativa sulla privacy"
+msgstr "privacybeleid"
+
+msgid "Hai già una chiave?"
+msgstr "Heb je al een sleutel?"
+
+msgid "Incollala qui: la Free, la Pro o quella di OLObooking."
+msgstr "Plak hem hier: de Free, de Pro of die van OLObooking."
+
+msgid "L'indirizzo non può restare vuoto."
+msgstr "Het adres mag niet leeg blijven."
+
+msgid "Il tuo ruolo non ha accesso al builder."
+msgstr "Jouw rol heeft geen toegang tot de builder."
+
+msgid "API key senza il datacenter finale (per esempio -us21)."
+msgstr "API key zonder de uiteindelijke datacenter (bijvoorbeeld -us21)."
+
+#: licenza-1.4.1345
+msgid "Ti diamo il benvenuto in %s!"
+msgstr "Welkom bij %s!"
+
+msgid "Il tuo page builder è installato e pronto. Ti accompagniamo nei primi passi: in un paio di minuti il sito prende già forma."
+msgstr "Je page builder is geïnstalleerd en klaar. We begeleiden je bij de eerste stappen: binnen een paar minuten krijgt de site al vorm."
+
+msgid "Scegli un tema"
+msgstr "Kies een thema"
+
+msgid "Importa i contenuti demo"
+msgstr "Importeer de demo-inhoud"
+
+msgid "Personalizza e pubblica"
+msgstr "Aanpassen en publiceren"
+
+msgid "Avvia la configurazione"
+msgstr "Configuratie starten"
+
+msgid "Più tardi"
+msgstr "Later"
+
+msgid "OLOsecurity e, con la Pro, OLOlang si installano subito quando premi Continua. Per gli altri la scelta resta segnata e trovi il link alla loro pagina."
+msgstr "OLOsecurity en, met de Pro, OLOlang worden meteen geïnstalleerd wanneer je op Doorgaan drukt. Voor de andere blijft de keuze opgeslagen en vind je de link naar hun pagina."
+
+msgid "Logo e menu già pronti — apri il builder"
+msgstr "Logo en menu al klaar — open de builder"
+
+msgid "Logo, copyright e link rapidi"
+msgstr "Logo, copyright en snelle links"
+
+msgid "Personalizza la home"
+msgstr "Pas de homepage aan"
+
+msgid "Hero starter pronto da modificare"
+msgstr "Hero-starter klaar om te bewerken"
+
+msgid "Creo header e footer base..."
+msgstr "Ik maak een basis-header en -footer..."
+
+msgid "Header e footer base pronti!"
+msgstr "Basis-header en -footer klaar!"
+
+msgid "Ho creato un header con il logo del sito e un footer con copyright e link rapidi. Personalizzali con un click:"
+msgstr "Ik heb een header met het logo van de site en een footer met copyright en snelle links gemaakt. Pas ze aan met één klik:"
+
+msgid "Installati e attivati: %s"
+msgstr "Geïnstalleerd en geactiveerd: %s"
+
+msgid "Impossibile caricare il selettore temi."
+msgstr "Het thema-selector kon niet worden geladen."
+
+msgid "Parti da zero, tela bianca."
+msgstr "Begin vanaf nul, wit canvas."
+
+msgid "L'importazione di temi è disabilitata su questo sito."
+msgstr "Het importeren van thema's is uitgeschakeld op deze site."
+
+msgid "Il nostro server non ha dato il pacchetto: riprova più tardi da Olobuild › Licenza."
+msgstr "Onze server heeft het pakket niet geleverd: probeer het later opnieuw via Olobuild › Licentie."
+
+msgid "Header base"
+msgstr "Basis-header"
+
+msgid "Footer base"
+msgstr "Basis-footer"
+
+msgid "Menu Principale"
+msgstr "Hoofdmenu"
+
+msgid "Setup pronto · 4 passaggi"
+msgstr "Setup klaar · 4 stappen"
+
+msgid "La tua home, in quattro mosse."
+msgstr "Jouw homepage, in vier stappen."
+
+msgid "Hai appena installato Olobuild. Personalizza le tre aree fondamentali del sito direttamente da qui — gli inviti a fare scompariranno al primo salvataggio."
+msgstr "Je hebt Olobuild zojuist geïnstalleerd. Pas de drie fundamentele onderdelen van de site direct hier aan — de aanwijzingen verdwijnen bij de eerste opslag."
+
+msgid "CHECKLIST DI SETUP"
+msgstr "SETUP-CHECKLIST"
+
+msgid "Sostituisci questo contenuto temporaneo."
+msgstr "Vervang deze tijdelijke inhoud."
+
+msgid "Apri builder"
+msgstr "Builder openen"
+
+msgid "Modifica l'Header"
+msgstr "De header bewerken"
+
+msgid "Logo, menu di navigazione, selettore lingua."
+msgstr "Logo, navigatiemenu, taalkiezer."
+
+msgid "Modifica il Footer"
+msgstr "De footer bewerken"
+
+msgid "Colonne, link legali, recapiti."
+msgstr "Kolommen, juridische links, contactgegevens."
+
+msgid "Imposta colori e font"
+msgstr "Kleuren en lettertypen instellen"
+
+msgid "Palette e tipografia del sito, in Sistema › Configurazione."
+msgstr "Palet en typografie van de site, via Systeem › Configuratie."
+
+msgid "Apri Palette & Stili"
+msgstr "Palet & Stijlen openen"
+
+msgid "Idee per le prossime sezioni"
+msgstr "Ideeën voor de volgende secties"
+
+msgid "Racconta in poche righe la tua storia, i valori del brand e cosa rende unico ciò che offri."
+msgstr "Vertel in een paar regels je verhaal, de waarden van het merk en wat jouw aanbod uniek maakt."
+
+msgid "I tuoi servizi"
+msgstr "Jouw diensten"
+
+msgid "3–6 card con i servizi principali, un'icona, un titolo e una breve descrizione."
+msgstr "3–6 kaarten met de belangrijkste diensten, een pictogram, een titel en een korte beschrijving."
+
+msgid "Recensioni clienti"
+msgstr "Klantrecensies"
+
+msgid "Testimonianze reali con foto e nome del cliente. Aumentano la fiducia di chi visita il sito."
+msgstr "Echte getuigenissen met foto en naam van de klant. Ze vergroten het vertrouwen van bezoekers van de site."
+
+msgid "SEZIONE SUGGERITA"
+msgstr "AANBEVOLEN SECTIE"
+
+msgid "Tutti i diritti riservati."
+msgstr "Alle rechten voorbehouden."

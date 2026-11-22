@@ -2245,3 +2245,266 @@ msgstr "Skóre"
 #: includes/tiles
 msgid "Scrivi dove inviare la scelta (indirizzo, numero o pagina): finché manca, il pulsante non compare sul sito."
 msgstr "Zadejte, kam výběr odeslat (adresa, číslo nebo stránka): dokud chybí, tlačítko se na webu nezobrazí."
+
+#: licenza-1.4.1345
+msgid "Questa chiave è già attiva su un altro sito: ogni chiave vale per un sito. Chiedine una nuova qui sotto, oppure disattivala sull'altro sito."
+msgstr "Tento klíč je již aktivní na jiném webu: každý klíč platí pro jeden web. Požádej níže o nový, nebo ho deaktivuj na druhém webu."
+
+msgid "Questa chiave è stata revocata. Scrivici a info@olotheme.com."
+msgstr "Tento klíč byl zrušen. Napiš nám na info@olotheme.com."
+
+msgid "Questa chiave è sospesa. Scrivici a info@olotheme.com."
+msgstr "Tento klíč je pozastaven. Napiš nám na info@olotheme.com."
+
+msgid "Questa chiave non risulta fra le nostre licenze."
+msgstr "Tento klíč není mezi našimi licencemi."
+
+msgid "La chiave non è valida: controlla di averla copiata tutta."
+msgstr "Klíč není platný: zkontroluj, zda jsi ho zkopíroval celý."
+
+msgid "Questa chiave è di un altro software OLOtheme."
+msgstr "Tento klíč patří k jinému softwaru OLOtheme."
+
+msgid "Il server delle licenze non risponde: riprova tra qualche minuto."
+msgstr "Server licencí neodpovídá: zkus to znovu za několik minut."
+
+msgid "La chiave non è stata attivata: riprova, o scrivici a info@olotheme.com."
+msgstr "Klíč nebyl aktivován: zkus to znovu, nebo nám napiš na info@olotheme.com."
+
+msgid "Per importare temi e blocchi serve la chiave di OLObuild: la trovi in Olobuild › Licenza."
+msgstr "Pro import témat a bloků je potřeba klíč OLObuild: najdeš ho v OLObuild › Licence."
+
+msgid "Collega OLObuild"
+msgstr "Připojit OLObuild"
+
+msgid "Per usare il builder serve la chiave: è gratuita, una per sito."
+msgstr "Pro používání builderu je potřeba klíč: je zdarma, jeden pro každý web."
+
+msgid "Collega ora"
+msgstr "Připojit nyní"
+
+msgid "Non hai i permessi."
+msgstr "Nemáš potřebná oprávnění."
+
+msgid "Licenza di OLObuild"
+msgstr "Licence OLObuild"
+
+msgid "Fatto: OLObuild è collegato a questo sito."
+msgstr "Hotovo: OLObuild je připojen k tomuto webu."
+
+msgid "Licenza verificata."
+msgstr "Licence ověřena."
+
+msgid "Chiave tolta da questo sito: ora puoi usarla su un altro."
+msgstr "Klíč byl z tohoto webu odebrán: nyní ho můžeš použít na jiném webu."
+
+msgid "Ti abbiamo mandato la chiave a %s: apri l'email e premi «Attiva su questo sito»."
+msgstr "Poslali jsme ti klíč na %s: otevři e-mail a stiskni „Aktivovat na tomto webu\"."
+
+msgid "Scrivi un indirizzo email valido."
+msgstr "Zadej platnou e-mailovou adresu."
+
+msgid "Per mandarti la chiave serve il tuo consenso."
+msgstr "Pro zaslání klíče je potřeba tvůj souhlas."
+
+msgid "Non siamo riusciti a mandarti la chiave: riprova tra qualche minuto."
+msgstr "Nepodařilo se nám ti klíč odeslat: zkus to znovu za několik minut."
+
+msgid "Scaduta: il builder funziona, gli aggiornamenti no"
+msgstr "Vypršela platnost: builder funguje, aktualizace ne"
+
+msgid "senza scadenza"
+msgstr "bez vypršení platnosti"
+
+msgid "Ultima verifica"
+msgstr "Poslední ověření"
+
+msgid "Verifica ora"
+msgstr "Ověřit nyní"
+
+msgid "Togliere la chiave da questo sito? Il builder si ferma finché non ne metti una."
+msgstr "Odebrat klíč z tohoto webu? Builder přestane fungovat, dokud nezadáš nový."
+
+msgid "Disattiva su questo sito"
+msgstr "Deaktivovat na tomto webu"
+
+msgid "Passi alla Pro?"
+msgstr "Přecházíš na Pro?"
+
+msgid "Incolla qui la chiave nuova: prende il posto di questa e libera il suo posto."
+msgstr "Vlož sem nový klíč: nahradí tento a uvolní jeho místo."
+
+msgid "OLObuild è collegato con la licenza di OLObooking"
+msgstr "OLObuild je připojen s licencí OLObooking"
+
+msgid "La chiave si gestisce nel gestionale di OLObooking, in Impostazioni › Pacchetti moduli."
+msgstr "Klíč se spravuje ve správci OLObooking v části Nastavení › Balíčky modulů."
+
+msgid "OLObuild è gratis, ma per usarlo serve una chiave: una per sito. Se l'hai scaricato da olotheme.com la chiave è già nel file e si attiva da sola; altrimenti chiedila qui sotto, ti arriva per email."
+msgstr "OLObuild je zdarma, ale pro jeho používání je potřeba klíč: jeden pro každý web. Pokud jsi ho stáhl z olotheme.com, klíč je již v souboru a aktivuje se sám; jinak ho požádej níže, přijde ti e-mailem."
+
+msgid "L'indirizzo del sito è cambiato: attiva di nuovo la chiave per questo indirizzo."
+msgstr "Adresa webu se změnila: aktivuj znovu klíč pro tuto adresu."
+
+msgid "Chiedi la chiave gratuita"
+msgstr "Požádat o bezplatný klíč"
+
+msgid "Scrivi la tua email: ti mandiamo la chiave e un pulsante per attivarla su questo sito."
+msgstr "Zadej svůj e-mail: pošleme ti klíč a tlačítko pro jeho aktivaci na tomto webu."
+
+msgid "Mandami la chiave"
+msgstr "Pošli mi klíč"
+
+msgid "Accetto che OLOtheme usi la mia email per mandarmi la chiave e le notizie importanti su OLObuild, secondo la %s. Posso smettere quando voglio."
+msgstr "Souhlasím s tím, aby OLOtheme použil můj e-mail k zaslání klíče a důležitých novinek o OLObuild, v souladu s %s. Svůj souhlas mohu kdykoli odvolat."
+
+msgid "informativa sulla privacy"
+msgstr "zásady ochrany osobních údajů"
+
+msgid "Hai già una chiave?"
+msgstr "Už máš klíč?"
+
+msgid "Incollala qui: la Free, la Pro o quella di OLObooking."
+msgstr "Vlož ho sem: Free, Pro nebo klíč od OLObooking."
+
+msgid "L'indirizzo non può restare vuoto."
+msgstr "Adresa nesmí být prázdná."
+
+msgid "Il tuo ruolo non ha accesso al builder."
+msgstr "Tvá role nemá přístup k builderu."
+
+msgid "API key senza il datacenter finale (per esempio -us21)."
+msgstr "API key bez závěrečného datacentra (například -us21)."
+
+#: licenza-1.4.1345
+msgid "Ti diamo il benvenuto in %s!"
+msgstr "Vítejte v %s!"
+
+msgid "Il tuo page builder è installato e pronto. Ti accompagniamo nei primi passi: in un paio di minuti il sito prende già forma."
+msgstr "Váš page builder je nainstalován a připraven. Provedeme vás prvními kroky: za pár minut začne web nabývat podoby."
+
+msgid "Scegli un tema"
+msgstr "Vyberte motiv"
+
+msgid "Importa i contenuti demo"
+msgstr "Importujte ukázkový obsah"
+
+msgid "Personalizza e pubblica"
+msgstr "Přizpůsobte a publikujte"
+
+msgid "Avvia la configurazione"
+msgstr "Spustit konfiguraci"
+
+msgid "Più tardi"
+msgstr "Později"
+
+msgid "OLOsecurity e, con la Pro, OLOlang si installano subito quando premi Continua. Per gli altri la scelta resta segnata e trovi il link alla loro pagina."
+msgstr "OLOsecurity a, s verzí Pro, OLOlang se nainstalují hned po stisknutí tlačítka Pokračovat. U ostatních zůstane výběr uložen a najdete odkaz na jejich stránku."
+
+msgid "Logo e menu già pronti — apri il builder"
+msgstr "Logo a menu připraveny — otevřete builder"
+
+msgid "Logo, copyright e link rapidi"
+msgstr "Logo, copyright a rychlé odkazy"
+
+msgid "Personalizza la home"
+msgstr "Přizpůsobte domovskou stránku"
+
+msgid "Hero starter pronto da modificare"
+msgstr "Úvodní hero připraven k úpravám"
+
+msgid "Creo header e footer base..."
+msgstr "Vytvářím základní header a footer..."
+
+msgid "Header e footer base pronti!"
+msgstr "Základní header a footer jsou připraveny!"
+
+msgid "Ho creato un header con il logo del sito e un footer con copyright e link rapidi. Personalizzali con un click:"
+msgstr "Vytvořil jsem header s logem webu a footer s copyrightem a rychlými odkazy. Přizpůsobte je jedním kliknutím:"
+
+msgid "Installati e attivati: %s"
+msgstr "Nainstalovány a aktivovány: %s"
+
+msgid "Impossibile caricare il selettore temi."
+msgstr "Nelze načíst výběr motivů."
+
+msgid "Parti da zero, tela bianca."
+msgstr "Začněte od nuly, prázdné plátno."
+
+msgid "L'importazione di temi è disabilitata su questo sito."
+msgstr "Import motivů je na tomto webu zakázán."
+
+msgid "Il nostro server non ha dato il pacchetto: riprova più tardi da Olobuild › Licenza."
+msgstr "Náš server balíček neposkytl: zkuste to znovu později v OLObuild › Licence."
+
+msgid "Header base"
+msgstr "Základní header"
+
+msgid "Footer base"
+msgstr "Základní footer"
+
+msgid "Menu Principale"
+msgstr "Hlavní nabídka"
+
+msgid "Setup pronto · 4 passaggi"
+msgstr "Nastavení připraveno · 4 kroky"
+
+msgid "La tua home, in quattro mosse."
+msgstr "Vaše domovská stránka ve čtyřech krocích."
+
+msgid "Hai appena installato Olobuild. Personalizza le tre aree fondamentali del sito direttamente da qui — gli inviti a fare scompariranno al primo salvataggio."
+msgstr "Právě jste nainstalovali OLObuild. Přizpůsobte tři základní oblasti webu přímo odsud — výzvy zmizí po prvním uložení."
+
+msgid "CHECKLIST DI SETUP"
+msgstr "KONTROLNÍ SEZNAM NASTAVENÍ"
+
+msgid "Sostituisci questo contenuto temporaneo."
+msgstr "Nahraďte tento dočasný obsah."
+
+msgid "Apri builder"
+msgstr "Otevřít builder"
+
+msgid "Modifica l'Header"
+msgstr "Upravit header"
+
+msgid "Logo, menu di navigazione, selettore lingua."
+msgstr "Logo, navigační nabídka, výběr jazyka."
+
+msgid "Modifica il Footer"
+msgstr "Upravit footer"
+
+msgid "Colonne, link legali, recapiti."
+msgstr "Sloupce, právní odkazy, kontaktní údaje."
+
+msgid "Imposta colori e font"
+msgstr "Nastavte barvy a písma"
+
+msgid "Palette e tipografia del sito, in Sistema › Configurazione."
+msgstr "Paleta a typografie webu v Systém › Konfigurace."
+
+msgid "Apri Palette & Stili"
+msgstr "Otevřít paletu a styly"
+
+msgid "Idee per le prossime sezioni"
+msgstr "Nápady pro další sekce"
+
+msgid "Racconta in poche righe la tua storia, i valori del brand e cosa rende unico ciò che offri."
+msgstr "Povězte v několika řádcích svůj příběh, hodnoty značky a co dělá vaši nabídku jedinečnou."
+
+msgid "I tuoi servizi"
+msgstr "Vaše služby"
+
+msgid "3–6 card con i servizi principali, un'icona, un titolo e una breve descrizione."
+msgstr "3–6 karet s hlavními službami, ikonou, nadpisem a stručným popisem."
+
+msgid "Recensioni clienti"
+msgstr "Reference zákazníků"
+
+msgid "Testimonianze reali con foto e nome del cliente. Aumentano la fiducia di chi visita il sito."
+msgstr "Skutečná svědectví s fotografií a jménem zákazníka. Zvyšují důvěru návštěvníků webu."
+
+msgid "SEZIONE SUGGERITA"
+msgstr "DOPORUČENÁ SEKCE"
+
+msgid "Tutti i diritti riservati."
+msgstr "Všechna práva vyhrazena."

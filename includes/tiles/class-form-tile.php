@@ -466,7 +466,10 @@ JS;
             'mailchimp_email_field' => sanitize_key( $s['mailchimp_email_field'] ?? 'email' ),
             'mailchimp_merge_fields' => sanitize_textarea_field( $s['mailchimp_merge_fields'] ?? '' ),
             'webhook_enabled'   => ! empty( $s['webhook_enabled'] ),
-            'webhook_url'       => esc_url_raw( $s['webhook_url'] ?? '' ),
+            // 1.4.1344: l'indirizzo del webhook resta nel database (spesso ha una chiave segreta), nella pagina va
+            // solo il suo riferimento; il gestore lo ritrova da lì.
+            'webhook_ref'       => ! empty( $s['webhook_enabled'] ) ? Olobuild_Form_Handler::webhook_ref( $s['webhook_url'] ?? '' ) : '',
+            'privacy_checkbox'  => ! empty( $s['privacy_checkbox'] ),
             'webhook_method'    => in_array( $s['webhook_method'] ?? 'POST', [ 'POST', 'PUT' ], true ) ? ( $s['webhook_method'] ?? 'POST' ) : 'POST',
         ];
         // Nome e limite entrano nel config firmato solo se impostati: un modulo senza stampa lo stesso

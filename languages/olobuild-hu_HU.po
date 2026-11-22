@@ -2245,3 +2245,266 @@ msgstr "Pontszám"
 #: includes/tiles
 msgid "Scrivi dove inviare la scelta (indirizzo, numero o pagina): finché manca, il pulsante non compare sul sito."
 msgstr "Add meg, hová küldjük a választást (cím, szám vagy oldal): amíg hiányzik, a gomb nem jelenik meg az oldalon."
+
+#: licenza-1.4.1345
+msgid "Questa chiave è già attiva su un altro sito: ogni chiave vale per un sito. Chiedine una nuova qui sotto, oppure disattivala sull'altro sito."
+msgstr "Ez a kulcs már aktív egy másik webhelyen: minden kulcs egy webhelyhez érvényes. Kérj egy újat lent, vagy deaktiváld a másik webhelyen."
+
+msgid "Questa chiave è stata revocata. Scrivici a info@olotheme.com."
+msgstr "Ezt a kulcsot visszavonták. Írj nekünk az info@olotheme.com címre."
+
+msgid "Questa chiave è sospesa. Scrivici a info@olotheme.com."
+msgstr "Ez a kulcs fel van függesztve. Írj nekünk az info@olotheme.com címre."
+
+msgid "Questa chiave non risulta fra le nostre licenze."
+msgstr "Ez a kulcs nem szerepel a licenceink között."
+
+msgid "La chiave non è valida: controlla di averla copiata tutta."
+msgstr "A kulcs érvénytelen: ellenőrizd, hogy teljesen kimásoltad-e."
+
+msgid "Questa chiave è di un altro software OLOtheme."
+msgstr "Ez a kulcs egy másik OLOtheme szoftverhez tartozik."
+
+msgid "Il server delle licenze non risponde: riprova tra qualche minuto."
+msgstr "A licencszerver nem válaszol: próbáld újra néhány perc múlva."
+
+msgid "La chiave non è stata attivata: riprova, o scrivici a info@olotheme.com."
+msgstr "A kulcsot nem sikerült aktiválni: próbáld újra, vagy írj nekünk az info@olotheme.com címre."
+
+msgid "Per importare temi e blocchi serve la chiave di OLObuild: la trovi in Olobuild › Licenza."
+msgstr "A témák és blokkok importálásához szükséges az OLObuild kulcsa: megtalálod itt: OLObuild › Licenc."
+
+msgid "Collega OLObuild"
+msgstr "OLObuild csatlakoztatása"
+
+msgid "Per usare il builder serve la chiave: è gratuita, una per sito."
+msgstr "A builder használatához szükséges a kulcs: ingyenes, webhelyenként egy."
+
+msgid "Collega ora"
+msgstr "Csatlakoztatás most"
+
+msgid "Non hai i permessi."
+msgstr "Nincs megfelelő jogosultságod."
+
+msgid "Licenza di OLObuild"
+msgstr "OLObuild licence"
+
+msgid "Fatto: OLObuild è collegato a questo sito."
+msgstr "Kész: az OLObuild csatlakoztatva van ehhez a webhelyhez."
+
+msgid "Licenza verificata."
+msgstr "Licenc ellenőrizve."
+
+msgid "Chiave tolta da questo sito: ora puoi usarla su un altro."
+msgstr "A kulcs eltávolítva erről a webhelyről: most már használhatod egy másikon."
+
+msgid "Ti abbiamo mandato la chiave a %s: apri l'email e premi «Attiva su questo sito»."
+msgstr "Elküldtük a kulcsot a következő címre: %s – nyisd meg az e-mailt, és kattints az „Aktiválás ezen a webhelyen\" gombra."
+
+msgid "Scrivi un indirizzo email valido."
+msgstr "Írj be egy érvényes e-mail-címet."
+
+msgid "Per mandarti la chiave serve il tuo consenso."
+msgstr "A kulcs elküldéséhez szükséges a hozzájárulásod."
+
+msgid "Non siamo riusciti a mandarti la chiave: riprova tra qualche minuto."
+msgstr "Nem sikerült elküldeni a kulcsot: próbáld újra néhány perc múlva."
+
+msgid "Scaduta: il builder funziona, gli aggiornamenti no"
+msgstr "Lejárt: a builder működik, a frissítések nem"
+
+msgid "senza scadenza"
+msgstr "lejárat nélkül"
+
+msgid "Ultima verifica"
+msgstr "Utolsó ellenőrzés"
+
+msgid "Verifica ora"
+msgstr "Ellenőrzés most"
+
+msgid "Togliere la chiave da questo sito? Il builder si ferma finché non ne metti una."
+msgstr "Eltávolítod a kulcsot erről a webhelyről? A builder leáll, amíg nem adsz meg egy újat."
+
+msgid "Disattiva su questo sito"
+msgstr "Deaktiválás ezen a webhelyen"
+
+msgid "Passi alla Pro?"
+msgstr "Áttérsz a Pro verzióra?"
+
+msgid "Incolla qui la chiave nuova: prende il posto di questa e libera il suo posto."
+msgstr "Illeszd be az új kulcsot: ez a helyére lép, és felszabadítja a korábbi helyét."
+
+msgid "OLObuild è collegato con la licenza di OLObooking"
+msgstr "Az OLObuild az OLObooking licencével van csatlakoztatva"
+
+msgid "La chiave si gestisce nel gestionale di OLObooking, in Impostazioni › Pacchetti moduli."
+msgstr "A kulcs az OLObooking kezelőrendszerében kezelhető, a Beállítások › Modulcsomagok menüpontban."
+
+msgid "OLObuild è gratis, ma per usarlo serve una chiave: una per sito. Se l'hai scaricato da olotheme.com la chiave è già nel file e si attiva da sola; altrimenti chiedila qui sotto, ti arriva per email."
+msgstr "Az OLObuild ingyenes, de a használatához szükséges egy kulcs: webhelyenként egy. Ha az olotheme.com-ról töltötted le, a kulcs már a fájlban van, és magától aktiválódik; egyébként kérd lent, e-mailben küldjük el."
+
+msgid "L'indirizzo del sito è cambiato: attiva di nuovo la chiave per questo indirizzo."
+msgstr "A webhely címe megváltozott: aktiváld újra a kulcsot ehhez a címhez."
+
+msgid "Chiedi la chiave gratuita"
+msgstr "Ingyenes kulcs igénylése"
+
+msgid "Scrivi la tua email: ti mandiamo la chiave e un pulsante per attivarla su questo sito."
+msgstr "Írd be az e-mail-címed: elküldjük a kulcsot és egy gombot, amellyel aktiválhatod ezen a webhelyen."
+
+msgid "Mandami la chiave"
+msgstr "Küldd el a kulcsot"
+
+msgid "Accetto che OLOtheme usi la mia email per mandarmi la chiave e le notizie importanti su OLObuild, secondo la %s. Posso smettere quando voglio."
+msgstr "Elfogadom, hogy az OLOtheme felhasználja az e-mail-címemet a kulcs és az OLObuild fontos híreinek elküldéséhez, a(z) %s szerint. Bármikor leiratkozhatok."
+
+msgid "informativa sulla privacy"
+msgstr "adatvédelmi nyilatkozat"
+
+msgid "Hai già una chiave?"
+msgstr "Van már kulcsod?"
+
+msgid "Incollala qui: la Free, la Pro o quella di OLObooking."
+msgstr "Illeszd be ide: a Free, a Pro vagy az OLObooking kulcsát."
+
+msgid "L'indirizzo non può restare vuoto."
+msgstr "A cím nem maradhat üres."
+
+msgid "Il tuo ruolo non ha accesso al builder."
+msgstr "A szerepköröd nem fér hozzá a builderhez."
+
+msgid "API key senza il datacenter finale (per esempio -us21)."
+msgstr "API kulcs a végső adatközpont-azonosító nélkül (például -us21)."
+
+#: licenza-1.4.1345
+msgid "Ti diamo il benvenuto in %s!"
+msgstr "Üdvözlünk a(z) %s-ban!"
+
+msgid "Il tuo page builder è installato e pronto. Ti accompagniamo nei primi passi: in un paio di minuti il sito prende già forma."
+msgstr "Az oldalépítőd telepítve van és készen áll. Elkísérünk az első lépéseken: néhány perc alatt az oldal már formát ölt."
+
+msgid "Scegli un tema"
+msgstr "Válassz témát"
+
+msgid "Importa i contenuti demo"
+msgstr "Importáld a demo tartalmakat"
+
+msgid "Personalizza e pubblica"
+msgstr "Testreszabás és közzététel"
+
+msgid "Avvia la configurazione"
+msgstr "Konfiguráció indítása"
+
+msgid "Più tardi"
+msgstr "Később"
+
+msgid "OLOsecurity e, con la Pro, OLOlang si installano subito quando premi Continua. Per gli altri la scelta resta segnata e trovi il link alla loro pagina."
+msgstr "Az OLOsecurity és a Pro verzióval az OLOlang azonnal települ, amikor megnyomod a Folytatás gombot. A többi esetén a választás megmarad, és megtalálod a hivatkozást az oldalukra."
+
+msgid "Logo e menu già pronti — apri il builder"
+msgstr "Logo és menü már kész — nyisd meg a buildert"
+
+msgid "Logo, copyright e link rapidi"
+msgstr "Logo, copyright és gyorslinkek"
+
+msgid "Personalizza la home"
+msgstr "Szabd személyre a főoldalt"
+
+msgid "Hero starter pronto da modificare"
+msgstr "Szerkeszthető hero starter készen áll"
+
+msgid "Creo header e footer base..."
+msgstr "Alap fejléc és lábléc létrehozása..."
+
+msgid "Header e footer base pronti!"
+msgstr "Alap fejléc és lábléc kész!"
+
+msgid "Ho creato un header con il logo del sito e un footer con copyright e link rapidi. Personalizzali con un click:"
+msgstr "Létrehoztam egy fejlécet az oldal logójával és egy lábléct copyright-tal és gyorslinkekkel. Szabd személyre egyetlen kattintással:"
+
+msgid "Installati e attivati: %s"
+msgstr "Telepítve és aktiválva: %s"
+
+msgid "Impossibile caricare il selettore temi."
+msgstr "A témaválasztó betöltése nem sikerült."
+
+msgid "Parti da zero, tela bianca."
+msgstr "Kezdj nulláról, üres vászonnal."
+
+msgid "L'importazione di temi è disabilitata su questo sito."
+msgstr "A témák importálása le van tiltva ezen az oldalon."
+
+msgid "Il nostro server non ha dato il pacchetto: riprova più tardi da Olobuild › Licenza."
+msgstr "A szerverünk nem küldte el a csomagot: próbáld újra később az Olobuild › Licenc menüpontból."
+
+msgid "Header base"
+msgstr "Alap fejléc"
+
+msgid "Footer base"
+msgstr "Alap lábléc"
+
+msgid "Menu Principale"
+msgstr "Főmenü"
+
+msgid "Setup pronto · 4 passaggi"
+msgstr "Beállítás kész · 4 lépés"
+
+msgid "La tua home, in quattro mosse."
+msgstr "A főoldalad, négy lépésben."
+
+msgid "Hai appena installato Olobuild. Personalizza le tre aree fondamentali del sito direttamente da qui — gli inviti a fare scompariranno al primo salvataggio."
+msgstr "Épp most telepítetted az Olobuild-et. Szabd személyre a webhely három alapvető területét közvetlenül innen — a segítő üzenetek az első mentéskor eltűnnek."
+
+msgid "CHECKLIST DI SETUP"
+msgstr "BEÁLLÍTÁSI ELLENŐRZŐLISTA"
+
+msgid "Sostituisci questo contenuto temporaneo."
+msgstr "Cseréld ki ezt az ideiglenes tartalmat."
+
+msgid "Apri builder"
+msgstr "Builder megnyitása"
+
+msgid "Modifica l'Header"
+msgstr "Fejléc szerkesztése"
+
+msgid "Logo, menu di navigazione, selettore lingua."
+msgstr "Logo, navigációs menü, nyelvválasztó."
+
+msgid "Modifica il Footer"
+msgstr "Lábléc szerkesztése"
+
+msgid "Colonne, link legali, recapiti."
+msgstr "Oszlopok, jogi linkek, elérhetőségek."
+
+msgid "Imposta colori e font"
+msgstr "Színek és betűtípusok beállítása"
+
+msgid "Palette e tipografia del sito, in Sistema › Configurazione."
+msgstr "Az oldal palettája és tipográfiája a Rendszer › Konfiguráció menüben."
+
+msgid "Apri Palette & Stili"
+msgstr "Paletta és stílusok megnyitása"
+
+msgid "Idee per le prossime sezioni"
+msgstr "Ötletek a következő szekciókhoz"
+
+msgid "Racconta in poche righe la tua storia, i valori del brand e cosa rende unico ciò che offri."
+msgstr "Mesélj néhány sorban a történetedről, a márka értékeiről és arról, mi teszi egyedivé a kínálatodat."
+
+msgid "I tuoi servizi"
+msgstr "Szolgáltatásaid"
+
+msgid "3–6 card con i servizi principali, un'icona, un titolo e una breve descrizione."
+msgstr "3–6 kártya a főbb szolgáltatásokkal, egy ikon, egy cím és egy rövid leírás."
+
+msgid "Recensioni clienti"
+msgstr "Ügyfélvélemények"
+
+msgid "Testimonianze reali con foto e nome del cliente. Aumentano la fiducia di chi visita il sito."
+msgstr "Valódi ajánlások fotóval és az ügyfél nevével. Növelik az oldalt látogatók bizalmát."
+
+msgid "SEZIONE SUGGERITA"
+msgstr "JAVASOLT SZEKCIÓ"
+
+msgid "Tutti i diritti riservati."
+msgstr "Minden jog fenntartva."

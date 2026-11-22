@@ -17163,3 +17163,266 @@ msgstr "Pontuação"
 #: includes/tiles
 msgid "Scrivi dove inviare la scelta (indirizzo, numero o pagina): finché manca, il pulsante non compare sul sito."
 msgstr "Indique para onde enviar a escolha (endereço, número ou página): enquanto faltar, o botão não aparece no site."
+
+#: licenza-1.4.1345
+msgid "Questa chiave è già attiva su un altro sito: ogni chiave vale per un sito. Chiedine una nuova qui sotto, oppure disattivala sull'altro sito."
+msgstr "Esta chave já está ativa noutro site: cada chave vale para um site. Pede uma nova abaixo, ou desativa-a no outro site."
+
+msgid "Questa chiave è stata revocata. Scrivici a info@olotheme.com."
+msgstr "Esta chave foi revogada. Escreve-nos para info@olotheme.com."
+
+msgid "Questa chiave è sospesa. Scrivici a info@olotheme.com."
+msgstr "Esta chave está suspensa. Escreve-nos para info@olotheme.com."
+
+msgid "Questa chiave non risulta fra le nostre licenze."
+msgstr "Esta chave não consta das nossas licenças."
+
+msgid "La chiave non è valida: controlla di averla copiata tutta."
+msgstr "A chave não é válida: verifica se a copiaste na totalidade."
+
+msgid "Questa chiave è di un altro software OLOtheme."
+msgstr "Esta chave é de outro software OLOtheme."
+
+msgid "Il server delle licenze non risponde: riprova tra qualche minuto."
+msgstr "O servidor de licenças não responde: tenta novamente dentro de alguns minutos."
+
+msgid "La chiave non è stata attivata: riprova, o scrivici a info@olotheme.com."
+msgstr "A chave não foi ativada: tenta novamente, ou escreve-nos para info@olotheme.com."
+
+msgid "Per importare temi e blocchi serve la chiave di OLObuild: la trovi in Olobuild › Licenza."
+msgstr "Para importar temas e blocos é necessária a chave do OLObuild: encontra-a em OLObuild › Licença."
+
+msgid "Collega OLObuild"
+msgstr "Ligar OLObuild"
+
+msgid "Per usare il builder serve la chiave: è gratuita, una per sito."
+msgstr "Para usar o construtor precisas da chave: é gratuita, uma por site."
+
+msgid "Collega ora"
+msgstr "Ligar agora"
+
+msgid "Non hai i permessi."
+msgstr "Não tens permissões."
+
+msgid "Licenza di OLObuild"
+msgstr "Licença do OLObuild"
+
+msgid "Fatto: OLObuild è collegato a questo sito."
+msgstr "Feito: o OLObuild está ligado a este site."
+
+msgid "Licenza verificata."
+msgstr "Licença verificada."
+
+msgid "Chiave tolta da questo sito: ora puoi usarla su un altro."
+msgstr "Chave removida deste site: agora podes usá-la noutro."
+
+msgid "Ti abbiamo mandato la chiave a %s: apri l'email e premi «Attiva su questo sito»."
+msgstr "Enviámos-te a chave para %s: abre o email e clica em «Ativar neste site»."
+
+msgid "Scrivi un indirizzo email valido."
+msgstr "Escreve um endereço de email válido."
+
+msgid "Per mandarti la chiave serve il tuo consenso."
+msgstr "Para te enviar a chave é necessário o teu consentimento."
+
+msgid "Non siamo riusciti a mandarti la chiave: riprova tra qualche minuto."
+msgstr "Não conseguimos enviar-te a chave: tenta novamente dentro de alguns minutos."
+
+msgid "Scaduta: il builder funziona, gli aggiornamenti no"
+msgstr "Expirada: o construtor funciona, as atualizações não"
+
+msgid "senza scadenza"
+msgstr "sem expiração"
+
+msgid "Ultima verifica"
+msgstr "Última verificação"
+
+msgid "Verifica ora"
+msgstr "Verificar agora"
+
+msgid "Togliere la chiave da questo sito? Il builder si ferma finché non ne metti una."
+msgstr "Remover a chave deste site? O construtor pára até introduzires uma nova."
+
+msgid "Disattiva su questo sito"
+msgstr "Desativar neste site"
+
+msgid "Passi alla Pro?"
+msgstr "Passas para a Pro?"
+
+msgid "Incolla qui la chiave nuova: prende il posto di questa e libera il suo posto."
+msgstr "Cola aqui a chave nova: substitui esta e liberta o seu lugar."
+
+msgid "OLObuild è collegato con la licenza di OLObooking"
+msgstr "O OLObuild está ligado com a licença do OLObooking"
+
+msgid "La chiave si gestisce nel gestionale di OLObooking, in Impostazioni › Pacchetti moduli."
+msgstr "A chave é gerida na área de gestão do OLObooking, em Definições › Pacotes de módulos."
+
+msgid "OLObuild è gratis, ma per usarlo serve una chiave: una per sito. Se l'hai scaricato da olotheme.com la chiave è già nel file e si attiva da sola; altrimenti chiedila qui sotto, ti arriva per email."
+msgstr "O OLObuild é gratuito, mas para o usar precisas de uma chave: uma por site. Se o transferiste de olotheme.com a chave já está no ficheiro e ativa-se automaticamente; caso contrário pede-a abaixo, recebes-a por email."
+
+msgid "L'indirizzo del sito è cambiato: attiva di nuovo la chiave per questo indirizzo."
+msgstr "O endereço do site mudou: ativa novamente a chave para este endereço."
+
+msgid "Chiedi la chiave gratuita"
+msgstr "Pedir a chave gratuita"
+
+msgid "Scrivi la tua email: ti mandiamo la chiave e un pulsante per attivarla su questo sito."
+msgstr "Escreve o teu email: enviamos-te a chave e um botão para a ativares neste site."
+
+msgid "Mandami la chiave"
+msgstr "Envia-me a chave"
+
+msgid "Accetto che OLOtheme usi la mia email per mandarmi la chiave e le notizie importanti su OLObuild, secondo la %s. Posso smettere quando voglio."
+msgstr "Aceito que a OLOtheme utilize o meu email para me enviar a chave e as notícias importantes sobre o OLObuild, de acordo com a %s. Posso cancelar quando quiser."
+
+msgid "informativa sulla privacy"
+msgstr "política de privacidade"
+
+msgid "Hai già una chiave?"
+msgstr "Já tens uma chave?"
+
+msgid "Incollala qui: la Free, la Pro o quella di OLObooking."
+msgstr "Cola-a aqui: a Free, a Pro ou a do OLObooking."
+
+msgid "L'indirizzo non può restare vuoto."
+msgstr "O endereço não pode ficar vazio."
+
+msgid "Il tuo ruolo non ha accesso al builder."
+msgstr "O teu perfil não tem acesso ao construtor."
+
+msgid "API key senza il datacenter finale (per esempio -us21)."
+msgstr "API key sem o datacenter final (por exemplo -us21)."
+
+#: licenza-1.4.1345
+msgid "Ti diamo il benvenuto in %s!"
+msgstr "Damos-te as boas-vindas ao %s!"
+
+msgid "Il tuo page builder è installato e pronto. Ti accompagniamo nei primi passi: in un paio di minuti il sito prende già forma."
+msgstr "O teu construtor de páginas está instalado e pronto. Acompanhamos-te nos primeiros passos: em dois minutos o site já ganha forma."
+
+msgid "Scegli un tema"
+msgstr "Escolhe um tema"
+
+msgid "Importa i contenuti demo"
+msgstr "Importa os conteúdos demo"
+
+msgid "Personalizza e pubblica"
+msgstr "Personaliza e publica"
+
+msgid "Avvia la configurazione"
+msgstr "Iniciar a configuração"
+
+msgid "Più tardi"
+msgstr "Mais tarde"
+
+msgid "OLOsecurity e, con la Pro, OLOlang si installano subito quando premi Continua. Per gli altri la scelta resta segnata e trovi il link alla loro pagina."
+msgstr "O OLOsecurity e, com a Pro, o OLOlang instalam-se de imediato quando premes Continuar. Para os outros, a escolha fica registada e encontras o link na respetiva página."
+
+msgid "Logo e menu già pronti — apri il builder"
+msgstr "Logótipo e menu prontos — abre o construtor"
+
+msgid "Logo, copyright e link rapidi"
+msgstr "Logótipo, copyright e links rápidos"
+
+msgid "Personalizza la home"
+msgstr "Personaliza a página inicial"
+
+msgid "Hero starter pronto da modificare"
+msgstr "Hero starter pronto para modificar"
+
+msgid "Creo header e footer base..."
+msgstr "A criar header e footer base..."
+
+msgid "Header e footer base pronti!"
+msgstr "Header e footer base prontos!"
+
+msgid "Ho creato un header con il logo del sito e un footer con copyright e link rapidi. Personalizzali con un click:"
+msgstr "Criei um header com o logótipo do site e um footer com copyright e links rápidos. Personaliza-os com um clique:"
+
+msgid "Installati e attivati: %s"
+msgstr "Instalados e ativados: %s"
+
+msgid "Impossibile caricare il selettore temi."
+msgstr "Impossível carregar o seletor de temas."
+
+msgid "Parti da zero, tela bianca."
+msgstr "Começa do zero, tela em branco."
+
+msgid "L'importazione di temi è disabilitata su questo sito."
+msgstr "A importação de temas está desativada neste site."
+
+msgid "Il nostro server non ha dato il pacchetto: riprova più tardi da Olobuild › Licenza."
+msgstr "O nosso servidor não devolveu o pacote: tenta novamente mais tarde em Olobuild › Licença."
+
+msgid "Header base"
+msgstr "Header base"
+
+msgid "Footer base"
+msgstr "Footer base"
+
+msgid "Menu Principale"
+msgstr "Menu Principal"
+
+msgid "Setup pronto · 4 passaggi"
+msgstr "Setup pronto · 4 passos"
+
+msgid "La tua home, in quattro mosse."
+msgstr "A tua página inicial, em quatro passos."
+
+msgid "Hai appena installato Olobuild. Personalizza le tre aree fondamentali del sito direttamente da qui — gli inviti a fare scompariranno al primo salvataggio."
+msgstr "Acabaste de instalar o Olobuild. Personaliza as três áreas fundamentais do site diretamente daqui — os convites desaparecerão ao primeiro salvamento."
+
+msgid "CHECKLIST DI SETUP"
+msgstr "CHECKLIST DE SETUP"
+
+msgid "Sostituisci questo contenuto temporaneo."
+msgstr "Substitui este conteúdo temporário."
+
+msgid "Apri builder"
+msgstr "Abrir construtor"
+
+msgid "Modifica l'Header"
+msgstr "Editar o Header"
+
+msgid "Logo, menu di navigazione, selettore lingua."
+msgstr "Logótipo, menu de navegação, seletor de idioma."
+
+msgid "Modifica il Footer"
+msgstr "Editar o Footer"
+
+msgid "Colonne, link legali, recapiti."
+msgstr "Colunas, links legais, contactos."
+
+msgid "Imposta colori e font"
+msgstr "Define cores e tipos de letra"
+
+msgid "Palette e tipografia del sito, in Sistema › Configurazione."
+msgstr "Paleta e tipografia do site, em Sistema › Configuração."
+
+msgid "Apri Palette & Stili"
+msgstr "Abrir Paleta & Estilos"
+
+msgid "Idee per le prossime sezioni"
+msgstr "Ideias para as próximas secções"
+
+msgid "Racconta in poche righe la tua storia, i valori del brand e cosa rende unico ciò che offri."
+msgstr "Conta em poucas linhas a tua história, os valores da marca e o que torna único aquilo que ofereces."
+
+msgid "I tuoi servizi"
+msgstr "Os teus serviços"
+
+msgid "3–6 card con i servizi principali, un'icona, un titolo e una breve descrizione."
+msgstr "3–6 cards com os serviços principais, um ícone, um título e uma breve descrição."
+
+msgid "Recensioni clienti"
+msgstr "Avaliações de clientes"
+
+msgid "Testimonianze reali con foto e nome del cliente. Aumentano la fiducia di chi visita il sito."
+msgstr "Testemunhos reais com foto e nome do cliente. Aumentam a confiança de quem visita o site."
+
+msgid "SEZIONE SUGGERITA"
+msgstr "SECÇÃO SUGERIDA"
+
+msgid "Tutti i diritti riservati."
+msgstr "Todos os direitos reservados."
