@@ -571,7 +571,7 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
                 $has_media  = ! empty( $panel_vid ) || ! empty( $panel_img );
             ?>
             <li <?php echo $is_open ? 'class="uk-open"' : ''; ?>>
-                <a class="uk-accordion-title" href="#" role="button" aria-expanded="<?php echo $is_open ? 'true' : 'false'; ?>" aria-controls="<?php echo esc_attr( $uid . '-panel-' . $i ); ?>">
+                <a class="uk-accordion-title" id="<?php echo esc_attr( $uid . '-title-' . $i ); ?>" href="#" role="button" aria-expanded="<?php echo $is_open ? 'true' : 'false'; ?>" aria-controls="<?php echo esc_attr( $uid . '-panel-' . $i ); ?>">
                     <?php if ( ! empty( $panel_icon ) ) : ?>
                         <span class="macc-panel-icon">
                             <?php if ( preg_match( '/^[a-z][a-z0-9-]*$/', $panel_icon ) ) : ?>
@@ -587,7 +587,7 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
                         <span class="macc-icon"><?php echo $icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from the hardcoded get_icon_svg() map ?></span>
                     <?php endif; ?>
                 </a>
-                <div class="uk-accordion-content" id="<?php echo esc_attr( $uid . '-panel-' . $i ); ?>" role="region">
+                <div class="uk-accordion-content" id="<?php echo esc_attr( $uid . '-panel-' . $i ); ?>" role="region" aria-labelledby="<?php echo esc_attr( $uid . '-title-' . $i ); ?>">
                     <div class="macc-content-inner">
                         <?php $widget_html = $this->render_widget_template( $panel['widget_template_id'] ?? 0 ); ?>
                         <?php if ( $widget_html ) : ?>

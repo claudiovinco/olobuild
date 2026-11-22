@@ -294,7 +294,9 @@ trait Olobuild_Renderer_Structure_Trait {
             $inline_styles[] = 'margin-right: auto';
         }
 
-        $html = '<section role="region" class="' . esc_attr( implode( ' ', $classes ) ) . '"' . $id_attr;
+        // Niente role="region": una regione senza nome non è valida (Lighthouse, «Accessibilità per gli agenti»: la
+        // sezione della testata di olotheme.com, 22 nov 2026). Una <section> senza nome è un contenitore neutro.
+        $html = '<section class="' . esc_attr( implode( ' ', $classes ) ) . '"' . $id_attr;
         if ( $inline_styles ) {
             $html .= ' style="' . esc_attr( implode( '; ', $inline_styles ) ) . '"';
         }
