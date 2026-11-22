@@ -589,6 +589,17 @@ class Olobuild_Image_Tile extends Olobuild_Tile_Base {
             $img_opts = [];
             if ( ! empty( $s['_img_loading'] ) ) $img_opts['loading'] = $s['_img_loading'];
             if ( ! empty( $s['_fetch_priority'] ) ) $img_opts['fetchpriority'] = $s['_fetch_priority'];
+            // Un'immagine piccola (un logo, un'icona: larghezza massima in px sotto i 400) nella prima sezione si
+            // carica subito ma NON si prende la priorità alta dell'LCP, che resta per la prima immagine grande.
+            // Sulla home di olotheme.com il logo OLObuild in testa alla scheda se la prendeva e la schermata
+            // accanto, l'LCP vero, restava pigra (22 nov 2026).
+            if ( empty( $img_opts['loading'] ) && Olobuild_Tile_Utils::lcp_armato() ) {
+                $mw_raw = trim( (string) ( $s['max_width'] ?? '' ) );
+                $mw     = (float) $mw_raw;
+                if ( $mw > 0 && $mw < 400 && ! preg_match( '/%|vw|vh|em/', $mw_raw ) ) {
+                    $img_opts['loading'] = 'eager';
+                }
+            }
             // Nessuna classe di raggio sull'<img>: il raggio lo dà la cornice (sopra). Con la classe
             // UIkit `uk-border-rounded` la foto aveva 5 px di angoli tondi anche con Raggio 0, e
             // dentro un bordo squadrato si vedevano gli spicchi dello sfondo.

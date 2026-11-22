@@ -548,6 +548,11 @@ class Olobuild_Tile_Utils {
         self::$lcp_armato = $on && ! self::$lcp_usato;
     }
 
+    /** Vero mentre la prima immagine della prima sezione deve ancora prendersi la precedenza dell'LCP. */
+    public static function lcp_armato() {
+        return self::$lcp_armato;
+    }
+
     public static function img_srcset( $attachment_id, $url, $alt = '', $class = '', $size = 'full', $extra_attrs = '', $options = [] ) {
         if ( self::$lcp_armato && empty( $options['loading'] ) && empty( $options['fetchpriority'] ) ) {
             $options['loading']       = 'eager';
