@@ -18,8 +18,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2"/><path d="M9 20h6"/><path d="M12 5v15"/></svg>
       </div>
       <div>
-        <h3>{{ t('Coppia di font') }}</h3>
-        <p>{{ t('Display per titoli, body per testo corrente. Tieni 2 famiglie max per buona leggibilità.') }}</p>
+        <h3>{{ t('Coppia di font') }} <InfoTip :titolo="t('Coppia di font')" :testo="t('Display per titoli, body per testo corrente. Tieni 2 famiglie max per buona leggibilità.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body">
@@ -63,15 +62,14 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 17 9 5 9-5"/><path d="m3 12 9 5 9-5"/></svg>
       </div>
       <div>
-        <h3>{{ t('Scala tipografica') }}</h3>
-        <p>{{ t('Ratio matematico tra le grandezze. Anteprima live a destra.') }}</p>
+        <h3>{{ t('Scala tipografica') }} <InfoTip :titolo="t('Scala tipografica')" :testo="t('Ratio matematico tra le grandezze. Anteprima live a destra.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Dimensione base') }}</label>
-          <div class="hint">{{ t('Punto di partenza, di solito 16px per il corpo del testo.') }}</div>
+          <InfoTip :titolo="t('Dimensione base')" :testo="t('Punto di partenza, di solito 16px per il corpo del testo.')" />
         </div>
         <div class="control-col">
           <CfgNumber :model-value="scale.base" :min="10" :max="32" suffix="px" @update:model-value="setScale('base', $event)" />
@@ -80,7 +78,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Ratio scala') }}</label>
-          <div class="hint">{{ t('Più alto = differenza più marcata fra body e h1.') }}</div>
+          <InfoTip :titolo="t('Ratio scala')" :testo="t('Più alto = differenza più marcata fra body e h1.')" />
         </div>
         <div class="control-col">
           <CfgSelect size="md" :model-value="String(scale.ratio)" :options="RATIO_OPTIONS" @update:model-value="setScale('ratio', parseFloat($event))" />
@@ -89,7 +87,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Interlinea body') }}</label>
-          <div class="hint">{{ t('Altezza riga del testo corrente.') }}</div>
+          <InfoTip :titolo="t('Interlinea body')" :testo="t('Altezza riga del testo corrente.')" />
         </div>
         <div class="control-col">
           <div class="cfg-slider">
@@ -119,6 +117,7 @@
 <script setup>
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import InfoTip from '@/components/Builder/InfoTip.vue';
 import CfgSelect from './controls/CfgSelect.vue';
 import CfgNumber from './controls/CfgNumber.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';

@@ -13,15 +13,14 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s7 8 7 13a7 7 0 0 1-14 0c0-5 7-13 7-13z"/></svg>
       </div>
       <div>
-        <h3>{{ t('Identità del plugin') }}</h3>
-        <p>{{ t('Come appare nel menu di WordPress e nel builder.') }}</p>
+        <h3>{{ t('Identità del plugin') }} <InfoTip :titolo="t('Identità del plugin')" :testo="t('Come appare nel menu di WordPress e nel builder.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Nome plugin') }}</label>
-          <div class="hint">{{ t('Sostituisce "Olobuild" nel menu di WordPress, nell\'elenco dei plugin, nell\'editor, nella Guida e nel wizard.') }}</div>
+          <InfoTip :titolo="t('Nome plugin')" :testo="t('Sostituisce &quot;Olobuild&quot; nel menu di WordPress, nell\'elenco dei plugin, nell\'editor, nella Guida e nel wizard.')" />
         </div>
         <div class="control-col">
           <div class="cfg-input cfg-w-md"><input type="text" :value="form.plugin_name" @input="set('plugin_name', $event.target.value)" :placeholder="t('Es. Studio Builder')" /></div>
@@ -30,7 +29,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Nome agenzia') }}</label>
-          <div class="hint">{{ t('Autore del plugin nell\'elenco dei plugin di WordPress.') }}</div>
+          <InfoTip :titolo="t('Nome agenzia')" :testo="t('Autore del plugin nell\'elenco dei plugin di WordPress.')" />
         </div>
         <div class="control-col">
           <div class="cfg-input cfg-w-md"><input type="text" :value="form.author_name" @input="set('author_name', $event.target.value)" :placeholder="t('Es. Studio Conti & Associati')" /></div>
@@ -39,7 +38,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Logo (chiaro)') }}</label>
-          <div class="hint">{{ t('Icona della voce nel menu di WordPress. Quadrata, almeno 32×32 px.') }}</div>
+          <InfoTip :titolo="t('Logo (chiaro)')" :testo="t('Icona della voce nel menu di WordPress. Quadrata, almeno 32×32 px.')" />
         </div>
         <div class="control-col logo-row">
           <div class="logo-preview light" :style="logoLightStyle">
@@ -57,7 +56,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Logo (scuro)') }}</label>
-          <div class="hint">{{ t('Al posto del logo Olobuild nella barra scura della bacheca e nel wizard.') }}</div>
+          <InfoTip :titolo="t('Logo (scuro)')" :testo="t('Al posto del logo Olobuild nella barra scura della bacheca e nel wizard.')" />
         </div>
         <div class="control-col logo-row">
           <div class="logo-preview dark" :style="logoDarkStyle">
@@ -75,7 +74,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('URL sito agenzia') }}</label>
-          <div class="hint">{{ t('Link dell\'autore nell\'elenco dei plugin di WordPress.') }}</div>
+          <InfoTip :titolo="t('URL sito agenzia')" :testo="t('Link dell\'autore nell\'elenco dei plugin di WordPress.')" />
         </div>
         <div class="control-col">
           <div class="cfg-input mono"><input type="url" :value="form.author_url" @input="set('author_url', $event.target.value)" placeholder="https://miaagenzia.it" /></div>
@@ -98,28 +97,28 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Nascondi "Olobuild" nel codice del sito') }}</label>
-          <div class="hint">{{ t('Toglie i commenti HTML con il nome Olobuild dal codice personalizzato e dal banner cookie.') }}</div>
+          <InfoTip :titolo="t('Nascondi &quot;Olobuild&quot; nel codice del sito')" :testo="t('Toglie i commenti HTML con il nome Olobuild dal codice personalizzato e dal banner cookie.')" />
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.hide_credits }" @click="set('hide_credits', !form.hide_credits)" role="switch"></button></div>
       </div>
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Nascondi le novità') }}</label>
-          <div class="hint">{{ t('Toglie le note di versione dalla bacheca e dalla Guida.') }}</div>
+          <InfoTip :titolo="t('Nascondi le novità')" :testo="t('Toglie le note di versione dalla bacheca e dalla Guida.')" />
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.hide_changelog }" @click="set('hide_changelog', !form.hide_changelog)" role="switch"></button></div>
       </div>
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Nascondi a non-admin') }}</label>
-          <div class="hint">{{ t('Chi non è amministratore non vede la voce Olobuild nel menu di WordPress.') }}</div>
+          <InfoTip :titolo="t('Nascondi a non-admin')" :testo="t('Chi non è amministratore non vede la voce Olobuild nel menu di WordPress.')" />
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.hide_for_non_admins }" @click="set('hide_for_non_admins', !form.hide_for_non_admins)" role="switch"></button></div>
       </div>
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Documentazione tua') }}</label>
-          <div class="hint">{{ t('Il pulsante Guida e il pannello Centro risorse aprono il tuo indirizzo al posto delle guide di Olobuild.') }}</div>
+          <InfoTip :titolo="t('Documentazione tua')" :testo="t('Il pulsante Guida e il pannello Centro risorse aprono il tuo indirizzo al posto delle guide di Olobuild.')" />
         </div>
         <div class="control-col" style="display:flex; gap:8px; align-items:center;">
           <button class="cfg-switch" :class="{ 'is-on': form.custom_doc_enabled }" @click="set('custom_doc_enabled', !form.custom_doc_enabled)" role="switch"></button>
@@ -129,7 +128,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Email del supporto') }}</label>
-          <div class="hint">{{ t('«Scrivi al supporto» apre un\'email a questo indirizzo. Vuoto: il supporto Olobuild.') }}</div>
+          <InfoTip :titolo="t('Email del supporto')" :testo="t('«Scrivi al supporto» apre un\'email a questo indirizzo. Vuoto: il supporto Olobuild.')" />
         </div>
         <div class="control-col">
           <div class="cfg-input cfg-w-md"><input type="email" :value="form.support_email" @input="set('support_email', $event.target.value)" placeholder="supporto@miaagenzia.it" /></div>
@@ -142,6 +141,7 @@
 <script setup>
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import InfoTip from '@/components/Builder/InfoTip.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob, conIniziali } from './cfgSave';
 import { useCfgLettura } from './composables/useCfgLettura';
 

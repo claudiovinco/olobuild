@@ -24,15 +24,14 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="14" r="4"/><path d="m11 12 9-9 3 3-3 3-2-2-2 2-2-2-3 3"/></svg>
       </div>
       <div>
-        <h3>{{ t('Stato e modalità') }}</h3>
-        <p>{{ t('Il banner viene mostrato al primo accesso e ai visitatori che non hanno ancora scelto.') }}</p>
+        <h3>{{ t('Stato e modalità') }} <InfoTip :titolo="t('Stato e modalità')" :testo="t('Il banner viene mostrato al primo accesso e ai visitatori che non hanno ancora scelto.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Cookie banner') }}</label>
-          <div class="hint">{{ t('Disattiva solo se il sito non usa cookie non-essenziali.') }}</div>
+          <InfoTip :titolo="t('Cookie banner')" :testo="t('Disattiva solo se il sito non usa cookie non-essenziali.')" />
         </div>
         <div class="control-col">
           <button type="button" ref="switchEl" class="cfg-switch cookie-enabled" :class="{ 'is-on': form.enabled }" :disabled="!loaded" @click="onToggleEnabled" role="switch" :aria-checked="form.enabled ? 'true' : 'false'" :aria-label="t('Cookie banner')"></button>
@@ -56,7 +55,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Modalità') }}</label>
-          <div class="hint">{{ t('Opt-in è richiesto in UE. Opt-out solo dove ammesso.') }}</div>
+          <InfoTip :titolo="t('Modalità')" :testo="t('Opt-in è richiesto in UE. Opt-out solo dove ammesso.')" />
         </div>
         <div class="control-col">
           <div class="cfg-segment">
@@ -69,7 +68,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Blocca script fino al consenso') }}</label>
-          <div class="hint">{{ t('Google Analytics, Meta Pixel, ecc. non partono finché l\'utente non accetta.') }}</div>
+          <InfoTip :titolo="t('Blocca script fino al consenso')" :testo="t('Google Analytics, Meta Pixel, ecc. non partono finché l\'utente non accetta.')" />
         </div>
         <div class="control-col">
           <button class="cfg-switch" :class="{ 'is-on': form.block_scripts }" :disabled="!loaded" @click="set('block_scripts', !form.block_scripts)" role="switch"></button>
@@ -78,7 +77,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Re-richiedi consenso dopo') }}</label>
-          <div class="hint">{{ t('Mesi dopo i quali il banner ricompare.') }}</div>
+          <InfoTip :titolo="t('Re-richiedi consenso dopo')" :testo="t('Mesi dopo i quali il banner ricompare.')" />
         </div>
         <div class="control-col">
           <CfgNumber :model-value="form.reshow_months" :min="1" :max="36" :suffix="t('mesi')" :disabled="!loaded" @update:model-value="set('reshow_months', $event)" />
@@ -94,8 +93,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 17 9 5 9-5"/><path d="m3 12 9 5 9-5"/></svg>
       </div>
       <div>
-        <h3>{{ t('Categorie di cookie') }}</h3>
-        <p>{{ t('Le categorie mostrate nel pannello di preferenze.') }}</p>
+        <h3>{{ t('Categorie di cookie') }} <InfoTip :titolo="t('Categorie di cookie')" :testo="t('Le categorie mostrate nel pannello di preferenze.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body" style="padding: 0;">
@@ -121,15 +119,14 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2"/><path d="M9 20h6"/><path d="M12 5v15"/></svg>
       </div>
       <div>
-        <h3>{{ t('Testi del banner') }}</h3>
-        <p>{{ t('Testi mostrati al visitatore, in ogni lingua del sito.') }}</p>
+        <h3>{{ t('Testi del banner') }} <InfoTip :titolo="t('Testi del banner')" :testo="t('Testi mostrati al visitatore, in ogni lingua del sito.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div v-if="lingue.length > 1" class="cfg-row">
         <div class="label-col">
           <label>{{ t('Lingua') }}</label>
-          <div class="hint">{{ t('Nelle altre lingue, un testo vuoto resta quello della lingua principale.') }}</div>
+          <InfoTip :titolo="t('Lingua')" :testo="t('Nelle altre lingue, un testo vuoto resta quello della lingua principale.')" />
         </div>
         <div class="control-col">
           <div class="cfg-segment">
@@ -162,6 +159,7 @@
 <script setup>
 import { ref, inject, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import InfoTip from '@/components/Builder/InfoTip.vue';
 import CfgNumber from './controls/CfgNumber.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
 import { useCfgLettura } from './composables/useCfgLettura';

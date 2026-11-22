@@ -19,8 +19,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3H3M21 21H3M12 7v10M8 7l4-4 4 4M8 17l4 4 4-4"/></svg>
       </div>
       <div>
-        <h3>{{ t('Scala di spacing') }}</h3>
-        <p>{{ t('8 token globali usati ovunque (--olo-space-*). Tutti i padding e i gap del builder pescano da qui.') }}</p>
+        <h3>{{ t('Scala di spacing') }} <InfoTip :titolo="t('Scala di spacing')" :testo="t('8 token globali usati ovunque (--olo-space-*). Tutti i padding e i gap del builder pescano da qui.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body">
@@ -47,15 +46,14 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 6v12M17 6v12"/></svg>
       </div>
       <div>
-        <h3>{{ t('Larghezze container') }}</h3>
-        <p>{{ t('Tre preset di larghezza massima del contenuto. Il valore Default è il container principale del sito.') }}</p>
+        <h3>{{ t('Larghezze container') }} <InfoTip :titolo="t('Larghezze container')" :testo="t('Tre preset di larghezza massima del contenuto. Il valore Default è il container principale del sito.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Narrow') }}</label>
-          <div class="hint">{{ t('Per testi lunghi e blog, leggibilità ottimale.') }}</div>
+          <InfoTip :titolo="t('Narrow')" :testo="t('Per testi lunghi e blog, leggibilità ottimale.')" />
         </div>
         <div class="control-col">
           <div class="cfg-input mono cfg-w-sm">
@@ -66,7 +64,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Default') }}</label>
-          <div class="hint">{{ t('Larghezza standard del contenuto del sito.') }}</div>
+          <InfoTip :titolo="t('Default')" :testo="t('Larghezza standard del contenuto del sito.')" />
         </div>
         <div class="control-col">
           <div class="cfg-input mono cfg-w-sm">
@@ -77,7 +75,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Wide') }}</label>
-          <div class="hint">{{ t('Per hero, gallerie ampie, layout immersivi.') }}</div>
+          <InfoTip :titolo="t('Wide')" :testo="t('Per hero, gallerie ampie, layout immersivi.')" />
         </div>
         <div class="control-col">
           <div class="cfg-input mono cfg-w-sm">
@@ -95,15 +93,14 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="5" rx="1"/><rect x="3" y="11" width="18" height="3" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/></svg>
       </div>
       <div>
-        <h3>{{ t('Ritmo verticale sezioni') }}</h3>
-        <p>{{ t('Padding-top/bottom di default per le sezioni. I valori sono token della scala spacing — cambiando lì cambia tutto.') }}</p>
+        <h3>{{ t('Ritmo verticale sezioni') }} <InfoTip :titolo="t('Ritmo verticale sezioni')" :testo="t('Padding-top/bottom di default per le sezioni. I valori sono token della scala spacing — cambiando lì cambia tutto.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div v-for="row in sectionRows" :key="row.key" class="cfg-row" :class="row.last ? 'no-divider' : ''">
         <div class="label-col">
           <label>{{ row.label }}</label>
-          <div class="hint">{{ row.hint }}</div>
+          <InfoTip :testo="row.hint" />
         </div>
         <div class="control-col">
           <div class="cfg-segment">
@@ -126,8 +123,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6v12M21 6v12M9 6v12M15 6v12"/></svg>
       </div>
       <div>
-        <h3>{{ t('Gutter responsive') }}</h3>
-        <p>{{ t('Gap tra colonne griglia e padding laterale del container, per ciascun breakpoint.') }}</p>
+        <h3>{{ t('Gutter responsive') }} <InfoTip :titolo="t('Gutter responsive')" :testo="t('Gap tra colonne griglia e padding laterale del container, per ciascun breakpoint.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
@@ -161,8 +157,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18"/><path d="M9 6l-6 6 6 6"/><path d="M15 6l6 6-6 6"/></svg>
       </div>
       <div>
-        <h3>{{ t('Scaling fluido responsive') }}</h3>
-        <p>{{ t('Rimpicciolisce automaticamente tutti i token spacing su tablet e mobile, senza dover ritoccare ogni tile.') }}</p>
+        <h3>{{ t('Scaling fluido responsive') }} <InfoTip :titolo="t('Scaling fluido responsive')" :testo="t('Rimpicciolisce automaticamente tutti i token spacing su tablet e mobile, senza dover ritoccare ogni tile.')" /></h3>
       </div>
       <div class="head-actions">
         <button
@@ -177,7 +172,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Fattore tablet') }}</label>
-          <div class="hint">{{ t('Es. 0.85 → spacing al 85% sotto 960px.') }}</div>
+          <InfoTip :titolo="t('Fattore tablet')" :testo="t('Es. 0.85 → spacing al 85% sotto 960px.')" />
         </div>
         <div class="control-col">
           <div class="cfg-slider">
@@ -189,7 +184,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Fattore mobile') }}</label>
-          <div class="hint">{{ t('Es. 0.65 → spacing al 65% sotto 640px.') }}</div>
+          <InfoTip :titolo="t('Fattore mobile')" :testo="t('Es. 0.65 → spacing al 65% sotto 640px.')" />
         </div>
         <div class="control-col">
           <div class="cfg-slider">
@@ -208,6 +203,7 @@
 <script setup>
 import { computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import InfoTip from '@/components/Builder/InfoTip.vue';
 import { useStylesStore } from '@/stores/styles';
 import CfgNumber from './controls/CfgNumber.vue';
 import { okOrThrow, cfgJob } from './cfgSave';

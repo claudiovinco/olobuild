@@ -57,15 +57,14 @@
     <div class="cfg-card-head">
       <div class="head-ic seo-num">1</div>
       <div>
-        <h3>{{ t('Il sito si vede sui motori') }}</h3>
-        <p>{{ t('Mentre costruisci il sito puoi tenerlo nascosto. Quando è pronto, aprilo.') }}</p>
+        <h3>{{ t('Il sito si vede sui motori') }} <InfoTip :titolo="t('Il sito si vede sui motori')" :testo="t('Mentre costruisci il sito puoi tenerlo nascosto. Quando è pronto, aprilo.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Visibile ai motori') }}</label>
-          <div class="hint">{{ t('Spento, il sito chiede a Google e agli altri motori di non mostrarlo. È la stessa scelta di Impostazioni › Lettura di WordPress.') }}</div>
+          <InfoTip :titolo="t('Visibile ai motori')" :testo="t('Spento, il sito chiede a Google e agli altri motori di non mostrarlo. È la stessa scelta di Impostazioni › Lettura di WordPress.')" />
         </div>
         <div class="control-col seo-riga">
           <button class="cfg-switch" :class="{ 'is-on': titles.robots === 'index' }" role="switch" :aria-checked="titles.robots === 'index' ? 'true' : 'false'"
@@ -81,15 +80,14 @@
     <div class="cfg-card-head">
       <div class="head-ic seo-num">2</div>
       <div>
-        <h3>{{ t('Chi pubblica il sito') }}</h3>
-        <p>{{ t('Chi sei, dove sei e come ti si trova. Google e le intelligenze artificiali lo leggono in ogni pagina e collegano il sito a te.') }}</p>
+        <h3>{{ t('Chi pubblica il sito') }} <InfoTip :titolo="t('Chi pubblica il sito')" :testo="t('Chi sei, dove sei e come ti si trova. Google e le intelligenze artificiali lo leggono in ogni pagina e collegano il sito a te.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Chi sei') }}</label>
-          <div class="hint">{{ infoTipo }}</div>
+          <InfoTip :titolo="t('Chi sei')" :testo="infoTipo" />
         </div>
         <div class="control-col">
           <CfgSelect size="md" searchable :model-value="titles.kg_type" :options="opzioniTipo" @update:model-value="setT('kg_type', $event)" />
@@ -98,7 +96,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Nome') }}</label>
-          <div class="hint">{{ t('Come ti chiamano le persone. Se resta vuoto, il nome del sito.') }}</div>
+          <InfoTip :titolo="t('Nome')" :testo="t('Come ti chiamano le persone. Se resta vuoto, il nome del sito.')" />
         </div>
         <div class="control-col">
           <div class="cfg-input cfg-w-md"><input type="text" :value="titles.kg_name" :placeholder="riepilogo.nome_sito" :aria-label="t('Nome')" @input="setT('kg_name', $event.target.value)" /></div>
@@ -107,7 +105,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Logo') }}</label>
-          <div class="hint">{{ t('Quadrato o orizzontale, largo almeno 112 px, su fondo chiaro.') }}</div>
+          <InfoTip :titolo="t('Logo')" :testo="t('Quadrato o orizzontale, largo almeno 112 px, su fondo chiaro.')" />
         </div>
         <div class="control-col seo-riga">
           <span class="seo-logo" :class="{ 'is-vuoto': !logo }">
@@ -122,7 +120,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Telefono ed email') }}</label>
-          <div class="hint">{{ t('I contatti che vuoi mostrare. Il telefono col prefisso internazionale: +39 …') }}</div>
+          <InfoTip :titolo="t('Telefono ed email')" :testo="t('I contatti che vuoi mostrare. Il telefono col prefisso internazionale: +39 …')" />
         </div>
         <div class="control-col seo-griglia due">
           <div class="cfg-input"><input type="tel" :value="locale.phone" :placeholder="t('Telefono')" :aria-label="t('Telefono')" @input="setL('phone', $event.target.value)" /></div>
@@ -132,7 +130,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Indirizzo') }}</label>
-          <div class="hint">{{ t('Comincia a scrivere la via: scegli l\'indirizzo giusto fra quelli proposti e CAP, città e posizione sulla mappa si compilano da soli.') }}</div>
+          <InfoTip :titolo="t('Indirizzo')" :testo="t('Comincia a scrivere la via: scegli l\'indirizzo giusto fra quelli proposti e CAP, città e posizione sulla mappa si compilano da soli.')" />
         </div>
         <div class="control-col seo-griglia indirizzo">
           <!-- Indirizzi proposti mentre si scrive (Olobuild_Seo_Centro::rest_indirizzi, dati di OpenStreetMap) -->
@@ -164,7 +162,7 @@
         <div class="cfg-row">
           <div class="label-col">
             <label>{{ t('Orari') }}</label>
-            <div class="hint">{{ t('Quando la sede è aperta. Lascia vuoti i giorni di chiusura.') }}</div>
+            <InfoTip :titolo="t('Orari')" :testo="t('Quando la sede è aperta. Lascia vuoti i giorni di chiusura.')" />
           </div>
           <div class="control-col">
             <div class="seo-orari">
@@ -181,7 +179,7 @@
         <div class="cfg-row">
           <div class="label-col">
             <label>{{ t('Posizione sulla mappa') }}</label>
-            <div class="hint">{{ t('Si compila da sola quando scegli l\'indirizzo. Se il punto non è giusto, su Google Maps fai clic destro sul punto e incolla qui i due numeri.') }}</div>
+            <InfoTip :titolo="t('Posizione sulla mappa')" :testo="t('Si compila da sola quando scegli l\'indirizzo. Se il punto non è giusto, su Google Maps fai clic destro sul punto e incolla qui i due numeri.')" />
           </div>
           <div class="control-col seo-griglia due">
             <div class="cfg-input mono"><input type="text" inputmode="decimal" :value="locale.geo_lat" placeholder="44.4056" :aria-label="t('Latitudine')" @input="setL('geo_lat', $event.target.value)" @paste="incollaCoordinate" /></div>
@@ -196,7 +194,7 @@
         <div class="cfg-row">
           <div class="label-col">
             <label>{{ t('Fascia di prezzo') }}</label>
-            <div class="hint">{{ t('Quanto si spende, da € a €€€€.') }}</div>
+            <InfoTip :titolo="t('Fascia di prezzo')" :testo="t('Quanto si spende, da € a €€€€.')" />
           </div>
           <div class="control-col">
             <div class="cfg-segment">
@@ -208,7 +206,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Profili') }}</label>
-          <div class="hint">{{ t('L\'indirizzo intero di ogni profilo. Servono a dire che il sito e i profili sono della stessa persona o attività.') }}</div>
+          <InfoTip :titolo="t('Profili')" :testo="t('L\'indirizzo intero di ogni profilo. Servono a dire che il sito e i profili sono della stessa persona o attività.')" />
         </div>
         <div class="control-col seo-griglia due">
           <div v-for="pr in PROFILI" :key="pr.k" class="cfg-input with-prefix">
@@ -224,7 +222,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Altri profili') }}</label>
-          <div class="hint">{{ t('Uno per riga: la pagina di Wikipedia, Wikidata, un albo professionale, una guida. Più legami, più i motori sono sicuri di chi sei.') }}</div>
+          <InfoTip :titolo="t('Altri profili')" :testo="t('Uno per riga: la pagina di Wikipedia, Wikidata, un albo professionale, una guida. Più legami, più i motori sono sicuri di chi sei.')" />
         </div>
         <div class="control-col">
           <div class="cfg-textarea"><textarea rows="2" :value="social.altri_profili" placeholder="https://it.wikipedia.org/wiki/…" :aria-label="t('Altri profili')" @input="setS('altri_profili', $event.target.value)"></textarea></div>
@@ -233,7 +231,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Come ti vedono') }}</label>
-          <div class="hint">{{ t('Quello che Google e le intelligenze artificiali leggono di te in ogni pagina del sito.') }}</div>
+          <InfoTip :titolo="t('Come ti vedono')" :testo="t('Quello che Google e le intelligenze artificiali leggono di te in ogni pagina del sito.')" />
         </div>
         <div class="control-col">
           <div class="seo-scheda">
@@ -263,15 +261,14 @@
     <div class="cfg-card-head">
       <div class="head-ic seo-num">3</div>
       <div>
-        <h3>{{ t('Come appare su Google') }}</h3>
-        <p>{{ t('Il titolo e la descrizione che compaiono nei risultati della ricerca, quando una pagina non ne ha di suoi.') }}</p>
+        <h3>{{ t('Come appare su Google') }} <InfoTip :titolo="t('Come appare su Google')" :testo="t('Il titolo e la descrizione che compaiono nei risultati della ricerca, quando una pagina non ne ha di suoi.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Schema del titolo') }}</label>
-          <div class="hint">{{ t('{page} è il titolo della pagina, {sep} il separatore, {site} il nome del sito. La home usa il nome del sito e il motto.') }}</div>
+          <InfoTip :titolo="t('Schema del titolo')" :testo="t('{page} è il titolo della pagina, {sep} il separatore, {site} il nome del sito. La home usa il nome del sito e il motto.')" />
         </div>
         <div class="control-col">
           <div class="cfg-input mono cfg-w-md"><input type="text" :value="titles.pattern" placeholder="{page} {sep} {site}" :aria-label="t('Schema del titolo')" @input="setT('pattern', $event.target.value)" /></div>
@@ -280,7 +277,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Separatore') }}</label>
-          <div class="hint">{{ t('Il segno fra il titolo della pagina e il nome del sito.') }}</div>
+          <InfoTip :titolo="t('Separatore')" :testo="t('Il segno fra il titolo della pagina e il nome del sito.')" />
         </div>
         <div class="control-col">
           <div class="cfg-segment seo-separatori">
@@ -291,7 +288,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Descrizione del sito') }}</label>
-          <div class="hint">{{ t('Due frasi su chi sei e cosa offri, fino a 160 caratteri. Vale per la home e per le pagine senza una descrizione loro.') }}</div>
+          <InfoTip :titolo="t('Descrizione del sito')" :testo="t('Due frasi su chi sei e cosa offri, fino a 160 caratteri. Vale per la home e per le pagine senza una descrizione loro.')" />
         </div>
         <div class="control-col">
           <div class="cfg-textarea seo-testo"><textarea rows="3" :value="titles.description" :aria-label="t('Descrizione del sito')" @input="setT('description', $event.target.value.slice(0, 160))"></textarea></div>
@@ -301,7 +298,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Anteprima della home') }}</label>
-          <div class="hint">{{ t('Così la home compare fra i risultati di Google.') }}</div>
+          <InfoTip :titolo="t('Anteprima della home')" :testo="t('Così la home compare fra i risultati di Google.')" />
         </div>
         <div class="control-col">
           <div class="seo-serp">
@@ -319,15 +316,14 @@
     <div class="cfg-card-head">
       <div class="head-ic seo-num">4</div>
       <div>
-        <h3>{{ t('Come appare quando lo condividi') }}</h3>
-        <p>{{ t('L\'immagine e il titolo che compaiono quando qualcuno manda un link del sito su WhatsApp, Facebook, LinkedIn o X.') }}</p>
+        <h3>{{ t('Come appare quando lo condividi') }} <InfoTip :titolo="t('Come appare quando lo condividi')" :testo="t('L\'immagine e il titolo che compaiono quando qualcuno manda un link del sito su WhatsApp, Facebook, LinkedIn o X.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Immagine disegnata') }}</label>
-          <div class="hint">{{ t('Per ogni pagina senza un\'immagine sua: il titolo, il nome del sito e la foto in evidenza, nel colore e nel carattere del sito.') }}</div>
+          <InfoTip :titolo="t('Immagine disegnata')" :testo="t('Per ogni pagina senza un\'immagine sua: il titolo, il nome del sito e la foto in evidenza, nel colore e nel carattere del sito.')" />
         </div>
         <div class="control-col">
           <button class="cfg-switch" :class="{ 'is-on': social.og_disegnata }" role="switch" :aria-checked="social.og_disegnata ? 'true' : 'false'"
@@ -347,7 +343,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Immagine di riserva') }}</label>
-          <div class="hint">{{ t('1200 × 630 px. Esce quando una pagina non ha un\'immagine sua e l\'immagine disegnata è spenta.') }}</div>
+          <InfoTip :titolo="t('Immagine di riserva')" :testo="t('1200 × 630 px. Esce quando una pagina non ha un\'immagine sua e l\'immagine disegnata è spenta.')" />
         </div>
         <div class="control-col">
           <div class="og-preview-wrap">
@@ -366,7 +362,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Formato su X') }}</label>
-          <div class="hint">{{ t('Grande: l\'immagine occupa tutta la larghezza. Piccola: un quadratino accanto al titolo.') }}</div>
+          <InfoTip :titolo="t('Formato su X')" :testo="t('Grande: l\'immagine occupa tutta la larghezza. Piccola: un quadratino accanto al titolo.')" />
         </div>
         <div class="control-col">
           <div class="cfg-segment">
@@ -383,15 +379,14 @@
     <div class="cfg-card-head">
       <div class="head-ic seo-num">5</div>
       <div>
-        <h3>{{ t('Cosa leggono i motori') }}</h3>
-        <p>{{ t('La mappa del sito che i motori leggono, e le parti che non vale la pena mostrare.') }}</p>
+        <h3>{{ t('Cosa leggono i motori') }} <InfoTip :titolo="t('Cosa leggono i motori')" :testo="t('La mappa del sito che i motori leggono, e le parti che non vale la pena mostrare.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Sitemap') }}</label>
-          <div class="hint">{{ t('L\'elenco di tutte le pagine da mostrare, aggiornato da solo. Le pagine escluse non ci sono.') }}</div>
+          <InfoTip :titolo="t('Sitemap')" :testo="t('L\'elenco di tutte le pagine da mostrare, aggiornato da solo. Le pagine escluse non ci sono.')" />
         </div>
         <div class="control-col seo-riga">
           <button class="cfg-switch" :class="{ 'is-on': sitemap.enabled }" role="switch" :aria-checked="sitemap.enabled ? 'true' : 'false'" :aria-label="t('Sitemap')" @click="setSM('enabled', !sitemap.enabled)"></button>
@@ -401,7 +396,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Tipi di contenuto') }}</label>
-          <div class="hint">{{ t('Spegni un tipo per toglierlo dai motori con tutte le sue schede, per esempio un tipo che serve solo dentro altre pagine.') }}</div>
+          <InfoTip :titolo="t('Tipi di contenuto')" :testo="t('Spegni un tipo per toglierlo dai motori con tutte le sue schede, per esempio un tipo che serve solo dentro altre pagine.')" />
         </div>
         <div class="control-col">
           <div class="seo-scelte">
@@ -415,7 +410,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Archivi') }}</label>
-          <div class="hint">{{ t('Le pagine che WordPress crea da sé per raccogliere i contenuti. Accese, i motori le mostrano.') }}</div>
+          <InfoTip :titolo="t('Archivi')" :testo="t('Le pagine che WordPress crea da sé per raccogliere i contenuti. Accese, i motori le mostrano.')" />
         </div>
         <div class="control-col">
           <div class="seo-scelte">
@@ -429,7 +424,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Righe in più nel robots.txt') }}</label>
-          <div class="hint">{{ t('Solo se sai cosa scrivere: le righe vanno in cima al file che dice ai robot cosa leggere.') }}</div>
+          <InfoTip :titolo="t('Righe in più nel robots.txt')" :testo="t('Solo se sai cosa scrivere: le righe vanno in cima al file che dice ai robot cosa leggere.')" />
         </div>
         <div class="control-col">
           <div class="cfg-textarea mono"><textarea rows="3" :value="advanced.robots_txt" placeholder="Disallow: /area-riservata/" :aria-label="t('Righe in più nel robots.txt')" @input="setA('robots_txt', $event.target.value)"></textarea></div>
@@ -447,15 +442,14 @@
     <div class="cfg-card-head">
       <div class="head-ic seo-num">6</div>
       <div>
-        <h3>{{ t('Le intelligenze artificiali') }}</h3>
-        <p>{{ t('ChatGPT, Claude, Perplexity e gli altri leggono i siti per rispondere a chi chiede. Qui scegli chi può farlo e gli prepari un riassunto.') }}</p>
+        <h3>{{ t('Le intelligenze artificiali') }} <InfoTip :titolo="t('Le intelligenze artificiali')" :testo="t('ChatGPT, Claude, Perplexity e gli altri leggono i siti per rispondere a chi chiede. Qui scegli chi può farlo e gli prepari un riassunto.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Chi può leggere il sito') }}</label>
-          <div class="hint">{{ t('«Solo per rispondere» lascia entrare le IA quando cercano una risposta e tiene fuori chi copia i siti per addestrare i modelli.') }}</div>
+          <InfoTip :titolo="t('Chi può leggere il sito')" :testo="t('«Solo per rispondere» lascia entrare le IA quando cercano una risposta e tiene fuori chi copia i siti per addestrare i modelli.')" />
         </div>
         <div class="control-col">
           <div class="cfg-segment">
@@ -473,7 +467,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Riassunto per le IA') }}</label>
-          <div class="hint">{{ t('Il file llms.txt: chi sei, i contatti e le pagine del sito con la loro descrizione, scritti in modo che un\'IA li legga in un colpo.') }}</div>
+          <InfoTip :titolo="t('Riassunto per le IA')" :testo="t('Il file llms.txt: chi sei, i contatti e le pagine del sito con la loro descrizione, scritti in modo che un\'IA li legga in un colpo.')" />
         </div>
         <div class="control-col seo-riga">
           <button class="cfg-switch" :class="{ 'is-on': advanced.llms }" role="switch" :aria-checked="advanced.llms ? 'true' : 'false'" :aria-label="t('Riassunto per le IA')" @click="setA('llms', !advanced.llms)"></button>
@@ -489,15 +483,14 @@
     <div class="cfg-card-head">
       <div class="head-ic seo-num">7</div>
       <div>
-        <h3>{{ t('Verifica dei motori') }}</h3>
-        <p>{{ t('Dimostri a Google e a Bing che il sito è tuo. Da lì vedi con quali ricerche arrivano le persone e cosa non va.') }}</p>
+        <h3>{{ t('Verifica dei motori') }} <InfoTip :titolo="t('Verifica dei motori')" :testo="t('Dimostri a Google e a Bing che il sito è tuo. Da lì vedi con quali ricerche arrivano le persone e cosa non va.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Google Search Console') }}</label>
-          <div class="hint">{{ t('Il modo migliore è la proprietà «Dominio» col record TXT nel DNS: qui non serve niente. Se non puoi toccare il DNS, scegli «Prefisso URL» e la verifica «Tag HTML», e incolla qui il codice del meta tag.') }}</div>
+          <InfoTip :titolo="t('Google Search Console')" :testo="t('Il modo migliore è la proprietà «Dominio» col record TXT nel DNS: qui non serve niente. Se non puoi toccare il DNS, scegli «Prefisso URL» e la verifica «Tag HTML», e incolla qui il codice del meta tag.')" />
         </div>
         <div class="control-col">
           <div class="cfg-input mono cfg-w-md">
@@ -517,7 +510,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Bing Webmaster Tools') }}</label>
-          <div class="hint">{{ t('Vale anche per Copilot. In Bing Webmaster Tools scegli la verifica col meta tag; puoi anche importare il sito dalla Search Console.') }}</div>
+          <InfoTip :titolo="t('Bing Webmaster Tools')" :testo="t('Vale anche per Copilot. In Bing Webmaster Tools scegli la verifica col meta tag; puoi anche importare il sito dalla Search Console.')" />
         </div>
         <div class="control-col">
           <div class="cfg-input mono cfg-w-md">
@@ -541,15 +534,14 @@
     <div class="cfg-card-head">
       <div class="head-ic seo-num">8</div>
       <div>
-        <h3>{{ t('Avvisa i motori quando cambi qualcosa') }}</h3>
-        <p>{{ t('Con IndexNow, ogni volta che pubblichi o aggiorni una pagina, Bing, Yandex e gli altri motori aderenti lo sanno subito. Google legge la sitemap.') }}</p>
+        <h3>{{ t('Avvisa i motori quando cambi qualcosa') }} <InfoTip :titolo="t('Avvisa i motori quando cambi qualcosa')" :testo="t('Con IndexNow, ogni volta che pubblichi o aggiorni una pagina, Bing, Yandex e gli altri motori aderenti lo sanno subito. Google legge la sitemap.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row" :class="{ 'no-divider': !chiaveValida }">
         <div class="label-col">
           <label>{{ t('Chiave IndexNow') }}</label>
-          <div class="hint">{{ t('Premi «Genera»: la chiave è solo tua e non va registrata da nessuna parte.') }}</div>
+          <InfoTip :titolo="t('Chiave IndexNow')" :testo="t('Premi «Genera»: la chiave è solo tua e non va registrata da nessuna parte.')" />
         </div>
         <div class="control-col seo-riga">
           <div class="cfg-input mono cfg-w-md" :class="{ 'is-error': advanced.indexnow_key && !chiaveValida }">
@@ -561,7 +553,7 @@
       <div v-if="chiaveValida" class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('File della chiave') }}</label>
-          <div class="hint">{{ t('OLObuild lo pubblica da sé. Dopo aver salvato, aprilo: deve mostrare la chiave.') }}</div>
+          <InfoTip :titolo="t('File della chiave')" :testo="t('OLObuild lo pubblica da sé. Dopo aver salvato, aprilo: deve mostrare la chiave.')" />
         </div>
         <div class="control-col">
           <a class="seo-link mono" :href="fileChiave" target="_blank" rel="noopener">{{ fileChiave }}</a>
@@ -575,8 +567,7 @@
     <div class="cfg-card-head">
       <div class="head-ic seo-num">9</div>
       <div>
-        <h3>{{ t('Pagina per pagina') }}</h3>
-        <p>{{ t('Ogni pagina del sito col titolo e la descrizione che escono su Google. Apri una riga per scriverli; per l\'analisi del testo apri la pagina nel builder.') }}</p>
+        <h3>{{ t('Pagina per pagina') }} <InfoTip :titolo="t('Pagina per pagina')" :testo="t('Ogni pagina del sito col titolo e la descrizione che escono su Google. Apri una riga per scriverli; per l\'analisi del testo apri la pagina nel builder.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
@@ -654,15 +645,14 @@
     <div class="cfg-card-head">
       <div class="head-ic seo-num">10</div>
       <div>
-        <h3>{{ t('Indirizzi cambiati e pagine non trovate') }}</h3>
-        <p>{{ t('Quando una pagina cambia indirizzo, chi arriva dal vecchio deve trovarla lo stesso: le persone e i motori.') }}</p>
+        <h3>{{ t('Indirizzi cambiati e pagine non trovate') }} <InfoTip :titolo="t('Indirizzi cambiati e pagine non trovate')" :testo="t('Quando una pagina cambia indirizzo, chi arriva dal vecchio deve trovarla lo stesso: le persone e i motori.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Redirect automatico') }}</label>
-          <div class="hint">{{ t('Se cambi l\'indirizzo di una pagina pubblicata, il vecchio porta al nuovo da solo.') }}</div>
+          <InfoTip :titolo="t('Redirect automatico')" :testo="t('Se cambi l\'indirizzo di una pagina pubblicata, il vecchio porta al nuovo da solo.')" />
         </div>
         <div class="control-col">
           <button class="cfg-switch" :class="{ 'is-on': advanced.redirect_auto }" role="switch" :aria-checked="advanced.redirect_auto ? 'true' : 'false'" :aria-label="t('Redirect automatico')" @click="setA('redirect_auto', !advanced.redirect_auto)"></button>
@@ -671,7 +661,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Redirect e pagine non trovate') }}</label>
-          <div class="hint">{{ t('I redirect scritti a mano e gli indirizzi che qualcuno ha cercato senza trovare niente.') }}</div>
+          <InfoTip :titolo="t('Redirect e pagine non trovate')" :testo="t('I redirect scritti a mano e gli indirizzi che qualcuno ha cercato senza trovare niente.')" />
         </div>
         <div class="control-col seo-riga">
           <span class="seo-numeri"><b>{{ riepilogo.redirect.attivi }}</b> {{ t('redirect') }}</span>
@@ -686,6 +676,7 @@
 <script setup>
 import { ref, computed, inject, watch, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import InfoTip from '@/components/Builder/InfoTip.vue';
 import CfgSelect from './controls/CfgSelect.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob, conIniziali } from './cfgSave';
 import { useCfgLettura } from './composables/useCfgLettura';

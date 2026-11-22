@@ -14,8 +14,7 @@
     <div class="cfg-card-head">
       <div class="head-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="19" cy="20" r="1.5"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg></div>
       <div>
-        <h3>{{ t('Mappa template') }}</h3>
-        <p>{{ t('Lascia "Default WooCommerce" per usare il rendering nativo di Woo.') }}</p>
+        <h3>{{ t('Mappa template') }} <InfoTip :titolo="t('Mappa template')" :testo="t('Lascia &quot;Default WooCommerce&quot; per usare il rendering nativo di Woo.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body">
@@ -23,7 +22,7 @@
       <div v-for="pt in pageTypes" :key="pt.key" class="cfg-row">
         <div class="label-col">
           <label>{{ t(pt.label) }}</label>
-          <div class="hint">{{ t(pt.hint) }}</div>
+          <InfoTip :titolo="t(pt.label)" :testo="t(pt.hint)" />
         </div>
         <div class="control-col">
           <CfgSelect searchable :model-value="form[pt.optionKey]" :options="optionsFor({ selected: form[pt.optionKey], emptyLabel: t('Default WooCommerce') })" @update:model-value="set(pt.optionKey, parseInt($event) || 0)" />
@@ -34,7 +33,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Prodotti senza prezzo') }}</label>
-          <div class="hint">{{ t('Al posto del prezzo, quando un prodotto non ne ha: «Prezzo su richiesta», «Prezzo riservato». Vuoto: non compare niente.') }}</div>
+          <InfoTip :titolo="t('Prodotti senza prezzo')" :testo="t('Al posto del prezzo, quando un prodotto non ne ha: «Prezzo su richiesta», «Prezzo riservato». Vuoto: non compare niente.')" />
         </div>
         <div class="control-col"><div class="cfg-input cfg-w-md"><input type="text" :value="testoSenzaPrezzo" maxlength="80" :placeholder="t('Prezzo su richiesta')" @input="setTesto($event.target.value)" /></div></div>
       </div>
@@ -45,6 +44,7 @@
 <script setup>
 import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import InfoTip from '@/components/Builder/InfoTip.vue';
 import CfgSelect from './controls/CfgSelect.vue';
 import TemplateListError from './controls/TemplateListError.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob, conIniziali, salvaERileggi } from './cfgSave';

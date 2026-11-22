@@ -62,22 +62,21 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
       </div>
       <div>
-        <h3>{{ t('Critical CSS') }}</h3>
-        <p>{{ t('Inietta inline il CSS above-the-fold per ogni pagina, defera il resto. Boost diretto su FCP e LCP.') }}</p>
+        <h3>{{ t('Critical CSS') }} <InfoTip :titolo="t('Critical CSS')" :testo="t('Inietta inline il CSS above-the-fold per ogni pagina, defera il resto. Boost diretto su FCP e LCP.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Abilita Critical CSS') }}</label>
-          <div class="hint">{{ t('Genera e inietta il CSS critico per ogni pagina visitata.') }}</div>
+          <InfoTip :titolo="t('Abilita Critical CSS')" :testo="t('Genera e inietta il CSS critico per ogni pagina visitata.')" />
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.critical_css_enabled }" @click="set('critical_css_enabled', !form.critical_css_enabled)" role="switch"></button></div>
       </div>
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Durata cache (giorni)') }}</label>
-          <div class="hint">{{ t('Dopo quanti giorni il critical CSS viene rigenerato. Invalidato comunque al save di un template.') }}</div>
+          <InfoTip :titolo="t('Durata cache (giorni)')" :testo="t('Dopo quanti giorni il critical CSS viene rigenerato. Invalidato comunque al save di un template.')" />
         </div>
         <div class="control-col">
           <CfgNumber :min="1" :max="30" :suffix="t('giorni')" :model-value="form.critical_css_ttl" @update:model-value="set('critical_css_ttl', $event)" />
@@ -86,7 +85,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Sezioni above-the-fold') }}</label>
-          <div class="hint">{{ t('Quante sezioni iniziali analizzare per estrarre il CSS critico.') }}</div>
+          <InfoTip :titolo="t('Sezioni above-the-fold')" :testo="t('Quante sezioni iniziali analizzare per estrarre il CSS critico.')" />
         </div>
         <div class="control-col">
           <CfgNumber :min="1" :max="5" :suffix="t('sezioni')" :model-value="form.critical_css_sections" @update:model-value="set('critical_css_sections', $event)" />
@@ -102,15 +101,14 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>
       </div>
       <div>
-        <h3>{{ t('Asset optimizer') }}</h3>
-        <p>{{ t('Defer JS, cache file CSS, minify del CSS generato dai template.') }}</p>
+        <h3>{{ t('Asset optimizer') }} <InfoTip :titolo="t('Asset optimizer')" :testo="t('Defer JS, cache file CSS, minify del CSS generato dai template.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Full-page cache') }}</label>
-          <div class="hint">{{ t('Salva l\'HTML generato e lo serve prima di WordPress: abbatte il tempo di risposta (TTFB). Esclude automaticamente utenti loggati, carrello/checkout WooCommerce e richieste POST. Installa il drop-in advanced-cache.php e attiva WP_CACHE; si svuota a ogni modifica di contenuto.') }}</div>
+          <InfoTip :titolo="t('Full-page cache')" :testo="t('Salva l\'HTML generato e lo serve prima di WordPress: abbatte il tempo di risposta (TTFB). Esclude automaticamente utenti loggati, carrello/checkout WooCommerce e richieste POST. Installa il drop-in advanced-cache.php e attiva WP_CACHE; si svuota a ogni modifica di contenuto.')" />
         </div>
         <div class="control-col">
           <span v-if="form.full_page_cache && motivoCache" class="cfg-pill warn"><span class="dot"></span> {{ motivoCache }}</span>
@@ -120,42 +118,42 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Defer JavaScript') }}</label>
-          <div class="hint">{{ t('Aggiunge defer agli script frontend di Olobuild. Non blocca il rendering della pagina.') }}</div>
+          <InfoTip :titolo="t('Defer JavaScript')" :testo="t('Aggiunge defer agli script frontend di Olobuild. Non blocca il rendering della pagina.')" />
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.defer_js }" @click="set('defer_js', !form.defer_js)" role="switch"></button></div>
       </div>
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Cache CSS su file statici') }}</label>
-          <div class="hint">{{ t('Salva il CSS dei template come file invece di iniettarlo inline. Migliora il caching del browser.') }}</div>
+          <InfoTip :titolo="t('Cache CSS su file statici')" :testo="t('Salva il CSS dei template come file invece di iniettarlo inline. Migliora il caching del browser.')" />
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.css_cache_files }" @click="set('css_cache_files', !form.css_cache_files)" role="switch"></button></div>
       </div>
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Minifica CSS') }}</label>
-          <div class="hint">{{ t('Rimuove commenti, spazi e newline dal CSS generato dai template e dal CSS frontend del plugin.') }}</div>
+          <InfoTip :titolo="t('Minifica CSS')" :testo="t('Rimuove commenti, spazi e newline dal CSS generato dai template e dal CSS frontend del plugin.')" />
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.minify_css }" @click="set('minify_css', !form.minify_css)" role="switch"></button></div>
       </div>
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('CSS per-tile') }}</label>
-          <div class="hint">{{ t('Serve solo le porzioni di CSS dei tile presenti in pagina (mappa, gallery, hero, postgrid…) invece dell\'intero foglio. Riduce il CSS inutilizzato; fallback automatico al CSS completo in caso di dubbio.') }}</div>
+          <InfoTip :titolo="t('CSS per-tile')" :testo="t('Serve solo le porzioni di CSS dei tile presenti in pagina (mappa, gallery, hero, postgrid…) invece dell\'intero foglio. Riduce il CSS inutilizzato; fallback automatico al CSS completo in caso di dubbio.')" />
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.css_per_tile }" @click="set('css_per_tile', !form.css_per_tile)" role="switch"></button></div>
       </div>
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('UIkit subset') }}</label>
-          <div class="hint">{{ t('Serve solo i componenti UIkit usati dal sito, appresi automaticamente dalle pagine. Prima visita col CSS completo, poi subset; si ri-apprende al salvataggio dei template.') }}</div>
+          <InfoTip :titolo="t('UIkit subset')" :testo="t('Serve solo i componenti UIkit usati dal sito, appresi automaticamente dalle pagine. Prima visita col CSS completo, poi subset; si ri-apprende al salvataggio dei template.')" />
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.uikit_subset }" @click="set('uikit_subset', !form.uikit_subset)" role="switch"></button></div>
       </div>
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Cache browser per i media (.htaccess)') }}</label>
-          <div class="hint">{{ t('Scrive header Expires/Cache-Control per immagini, video e font (6 mesi) e CSS/JS (1 mese). Solo server Apache/LiteSpeed.') }}</div>
+          <InfoTip :titolo="t('Cache browser per i media (.htaccess)')" :testo="t('Scrive header Expires/Cache-Control per immagini, video e font (6 mesi) e CSS/JS (1 mese). Solo server Apache/LiteSpeed.')" />
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.browser_cache_headers }" @click="set('browser_cache_headers', !form.browser_cache_headers)" role="switch"></button></div>
       </div>
@@ -169,36 +167,35 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       </div>
       <div>
-        <h3>{{ t('Resource hints & loading') }}</h3>
-        <p>{{ t('Suggerimenti al browser per precaricare risorse e ottimizzare il caricamento immagini.') }}</p>
+        <h3>{{ t('Resource hints & loading') }} <InfoTip :titolo="t('Resource hints & loading')" :testo="t('Suggerimenti al browser per precaricare risorse e ottimizzare il caricamento immagini.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('DNS prefetch & preconnect automatici') }}</label>
-          <div class="hint">{{ t('dns-prefetch verso YouTube e Vimeo nelle pagine che li contengono. I domini scritti più sotto escono sempre.') }}</div>
+          <InfoTip :titolo="t('DNS prefetch & preconnect automatici')" :testo="t('dns-prefetch verso YouTube e Vimeo nelle pagine che li contengono. I domini scritti più sotto escono sempre.')" />
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.resource_hints }" @click="set('resource_hints', !form.resource_hints)" role="switch"></button></div>
       </div>
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Preload font custom') }}</label>
-          <div class="hint">{{ t('Precarica i file dei caratteri di testo e titoli, al peso usato: il testo compare subito con il suo carattere.') }}</div>
+          <InfoTip :titolo="t('Preload font custom')" :testo="t('Precarica i file dei caratteri di testo e titoli, al peso usato: il testo compare subito con il suo carattere.')" />
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.font_preload }" @click="set('font_preload', !form.font_preload)" role="switch"></button></div>
       </div>
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Lazy load video self-hosted') }}</label>
-          <div class="hint">{{ t('I video autoplay (sfondi, filmreel, decorativi) si scaricano e partono solo quando entrano nel viewport. Risparmia decine di MB su pagine ricche di video.') }}</div>
+          <InfoTip :titolo="t('Lazy load video self-hosted')" :testo="t('I video autoplay (sfondi, filmreel, decorativi) si scaricano e partono solo quando entrano nel viewport. Risparmia decine di MB su pagine ricche di video.')" />
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.lazy_videos }" @click="set('lazy_videos', !form.lazy_videos)" role="switch"></button></div>
       </div>
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('fetchpriority hero image') }}</label>
-          <div class="hint">{{ t('La prima immagine della prima sezione parte subito e con priorità alta. Le altre restano pigre.') }}</div>
+          <InfoTip :titolo="t('fetchpriority hero image')" :testo="t('La prima immagine della prima sezione parte subito e con priorità alta. Le altre restano pigre.')" />
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.fetchpriority }" @click="set('fetchpriority', !form.fetchpriority)" role="switch"></button></div>
       </div>
@@ -212,15 +209,14 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
       </div>
       <div>
-        <h3>{{ t('Domini custom') }}</h3>
-        <p>{{ t('Aggiungi domini per dns-prefetch e preconnect personalizzati (uno per riga).') }}</p>
+        <h3>{{ t('Domini custom') }} <InfoTip :titolo="t('Domini custom')" :testo="t('Aggiungi domini per dns-prefetch e preconnect personalizzati (uno per riga).')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('DNS prefetch') }}</label>
-          <div class="hint">{{ t('Risolve il DNS in anticipo. Utile per CDN e servizi esterni.') }}</div>
+          <InfoTip :titolo="t('DNS prefetch')" :testo="t('Risolve il DNS in anticipo. Utile per CDN e servizi esterni.')" />
         </div>
         <div class="control-col">
           <div class="cfg-textarea">
@@ -231,7 +227,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Preconnect') }}</label>
-          <div class="hint">{{ t('Apre connessione completa (DNS + TCP + TLS). Usare solo per risorse critiche.') }}</div>
+          <InfoTip :titolo="t('Preconnect')" :testo="t('Apre connessione completa (DNS + TCP + TLS). Usare solo per risorse critiche.')" />
         </div>
         <div class="control-col">
           <div class="cfg-textarea">
@@ -249,36 +245,35 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>
       </div>
       <div>
-        <h3>{{ t('Pulizia head') }}</h3>
-        <p>{{ t('Rimuovi script e CSS non necessari dal <head> per ridurre richieste e peso.') }}</p>
+        <h3>{{ t('Pulizia head') }} <InfoTip :titolo="t('Pulizia head')" :testo="t('Rimuovi script e CSS non necessari dal <head> per ridurre richieste e peso.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Rimuovi jQuery Migrate') }}</label>
-          <div class="hint">{{ t('jquery-migrate.js (~10 KB). Necessario solo per plugin molto vecchi.') }}</div>
+          <InfoTip :titolo="t('Rimuovi jQuery Migrate')" :testo="t('jquery-migrate.js (~10 KB). Necessario solo per plugin molto vecchi.')" />
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.remove_jquery_migrate }" @click="set('remove_jquery_migrate', !form.remove_jquery_migrate)" role="switch"></button></div>
       </div>
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Rimuovi emoji scripts') }}</label>
-          <div class="hint">{{ t('wp-emoji-release.min.js — i browser moderni gestiscono emoji nativamente.') }}</div>
+          <InfoTip :titolo="t('Rimuovi emoji scripts')" :testo="t('wp-emoji-release.min.js — i browser moderni gestiscono emoji nativamente.')" />
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.remove_emoji_scripts }" @click="set('remove_emoji_scripts', !form.remove_emoji_scripts)" role="switch"></button></div>
       </div>
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Rimuovi Block CSS') }}</label>
-          <div class="hint">{{ t('wp-block-library-css (~30 KB). Solo se non usi blocchi Gutenberg nel frontend.') }}</div>
+          <InfoTip :titolo="t('Rimuovi Block CSS')" :testo="t('wp-block-library-css (~30 KB). Solo se non usi blocchi Gutenberg nel frontend.')" />
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.remove_block_css }" @click="set('remove_block_css', !form.remove_block_css)" role="switch"></button></div>
       </div>
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Rimuovi Classic Theme CSS') }}</label>
-          <div class="hint">{{ t('classic-theme-styles-css. Inutile se non usi un tema classico WordPress.') }}</div>
+          <InfoTip :titolo="t('Rimuovi Classic Theme CSS')" :testo="t('classic-theme-styles-css. Inutile se non usi un tema classico WordPress.')" />
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.remove_classic_theme }" @click="set('remove_classic_theme', !form.remove_classic_theme)" role="switch"></button></div>
       </div>
@@ -289,6 +284,7 @@
 <script setup>
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import InfoTip from '@/components/Builder/InfoTip.vue';
 import CfgNumber from './controls/CfgNumber.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob, conIniziali } from './cfgSave';
 import { useCfgLettura } from './composables/useCfgLettura';
@@ -432,11 +428,11 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.usage-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-@media (max-width: 900px) { .usage-grid { grid-template-columns: 1fr 1fr; } }
-.usage-card { background: var(--c-bg); border-radius: 10px; padding: 14px; }
+/* i quattro riquadri in fila finché ci stanno (si misura lo spazio della scheda, non la finestra) */
+.usage-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.usage-card { background: var(--c-bg); border-radius: 10px; padding: 10px 12px; }
 .usage-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--c-text-mute); }
-.usage-value { font-family: var(--c-display); font-size: 32px; line-height: 1; margin-top: 6px; color: var(--c-navy); }
+.usage-value { font-family: var(--c-display); font-size: 26px; line-height: 1; margin-top: 4px; color: var(--c-navy); }
 .usage-value .of-total { font-size: 16px; color: var(--c-text-faint); margin-left: 2px; }
 .usage-trend { font-size: 11px; color: var(--c-text-faint); margin-top: 4px; }
 </style>

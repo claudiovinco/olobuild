@@ -43,7 +43,7 @@
         <div class="control-col"><div class="cfg-input cfg-w-md"><input type="text" :value="rule.name" @input="setField(idx, 'name', $event.target.value)" :placeholder="t('Es. Header WooCommerce')" /></div></div>
       </div>
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Contesto') }}</label><div class="hint">{{ t('Dove si applica la regola.') }}</div></div>
+        <div class="label-col"><label>{{ t('Contesto') }}</label><InfoTip :titolo="t('Contesto')" :testo="t('Dove si applica la regola.')" /></div>
         <div class="control-col">
           <div class="cfg-segment">
             <button :class="{ 'is-on': rule.context === 'header' }" @click="setField(idx, 'context', 'header')">Header</button>
@@ -61,7 +61,7 @@
         </div>
       </div>
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Priorità') }}</label><div class="hint">{{ t('1-999. Più basso = vince. Default 10.') }}</div></div>
+        <div class="label-col"><label>{{ t('Priorità') }}</label><InfoTip :titolo="t('Priorità')" :testo="t('1-999. Più basso = vince. Default 10.')" /></div>
         <div class="control-col"><CfgNumber :model-value="rule.priority" :min="1" :max="999" @update:model-value="setField(idx, 'priority', $event)" /></div>
       </div>
       <div class="cfg-row">
@@ -74,7 +74,7 @@
         </div>
       </div>
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Condizioni di match') }}</label><div class="hint">{{ t('Aggiungi condizioni per cui la regola si applica.') }}</div></div>
+        <div class="label-col"><label>{{ t('Condizioni di match') }}</label><InfoTip :titolo="t('Condizioni di match')" :testo="t('Aggiungi condizioni per cui la regola si applica.')" /></div>
         <div class="control-col">
           <div v-for="(cond, ci) in (rule.conditions || [])" :key="ci" class="cfg-cond-row">
             <div class="cfg-segment cond-mode" role="group" :aria-label="t('Includi o escludi')">
@@ -113,6 +113,7 @@
 <script setup>
 import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import InfoTip from '@/components/Builder/InfoTip.vue';
 import CfgSelect from './controls/CfgSelect.vue';
 import CfgNumber from './controls/CfgNumber.vue';
 import TemplateListError from './controls/TemplateListError.vue';

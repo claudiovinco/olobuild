@@ -16,8 +16,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
       </div>
       <div>
-        <h3>{{ t('reCAPTCHA v3') }}</h3>
-        <p>{{ t('Anti-spam di Google, senza caselle da spuntare. Nel form si accende da Anti-spam; servono entrambe le chiavi.') }}</p>
+        <h3>{{ t('reCAPTCHA v3') }} <InfoTip :titolo="t('reCAPTCHA v3')" :testo="t('Anti-spam di Google, senza caselle da spuntare. Nel form si accende da Anti-spam; servono entrambe le chiavi.')" /></h3>
       </div>
       <div class="head-actions">
         <span class="cfg-pill" :class="stato.recaptcha ? 'ok' : 'off'"><span class="dot"></span> {{ stato.recaptcha ? t('Pronto') : t('Chiave mancante') }}</span>
@@ -27,7 +26,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Site key') }}</label>
-          <div class="hint">{{ t('Pubblica: viene stampata nella pagina del form.') }}</div>
+          <InfoTip :titolo="t('Site key')" :testo="t('Pubblica: viene stampata nella pagina del form.')" />
         </div>
         <div class="control-col">
           <CfgSecret v-model="form.olobuild_recaptcha_site_key" :secret="false" name="olo-int-recaptcha-site" :label="t('Site key')" @update:model-value="setDirty(true)" />
@@ -36,7 +35,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Secret key') }}</label>
-          <div class="hint">{{ t('Resta sul server: verifica ogni invio.') }}</div>
+          <InfoTip :titolo="t('Secret key')" :testo="t('Resta sul server: verifica ogni invio.')" />
         </div>
         <div class="control-col">
           <CfgSecret v-model="form.olobuild_recaptcha_secret_key" name="olo-int-recaptcha-secret" :label="t('Secret key')" @update:model-value="setDirty(true)" />
@@ -52,15 +51,14 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
       </div>
       <div>
-        <h3>{{ t('Liste e CRM') }}</h3>
-        <p>{{ t('Chi compila il form viene aggiunto alla lista del servizio. Senza la chiave il servizio non riceve niente, anche se nel form è acceso.') }}</p>
+        <h3>{{ t('Liste e CRM') }} <InfoTip :titolo="t('Liste e CRM')" :testo="t('Chi compila il form viene aggiunto alla lista del servizio. Senza la chiave il servizio non riceve niente, anche se nel form è acceso.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Mailchimp — API key') }}</label>
-          <div class="hint">{{ t('Profilo → Extras → API keys. Finisce con il datacenter, per esempio -us21.') }}</div>
+          <InfoTip :titolo="t('Mailchimp — API key')" :testo="t('Profilo → Extras → API keys. Finisce con il datacenter, per esempio -us21.')" />
         </div>
         <div class="control-col integ-control">
           <CfgSecret v-model="form.olobuild_mailchimp_api_key" name="olo-int-mailchimp" :label="t('Mailchimp — API key')" placeholder="xxxxxxxxxxxxxxxx-us21" @update:model-value="setDirty(true)" />
@@ -71,7 +69,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('ActiveCampaign — URL dell\'account') }}</label>
-          <div class="hint">{{ t('Impostazioni → Sviluppatore. Senza https:// lo aggiunge Olobuild.') }}</div>
+          <InfoTip :titolo="t('ActiveCampaign — URL dell\'account')" :testo="t('Impostazioni → Sviluppatore. Senza https:// lo aggiunge Olobuild.')" />
         </div>
         <div class="control-col">
           <CfgSecret v-model="form.olobuild_activecampaign_url" :secret="false" name="olo-int-ac-url" :label="t('ActiveCampaign — URL dell\'account')" placeholder="https://account.api-us1.com" @update:model-value="setDirty(true)" />
@@ -80,7 +78,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('ActiveCampaign — API key') }}</label>
-          <div class="hint">{{ t('Nella stessa pagina dell\'URL. Servono tutti e due.') }}</div>
+          <InfoTip :titolo="t('ActiveCampaign — API key')" :testo="t('Nella stessa pagina dell\'URL. Servono tutti e due.')" />
         </div>
         <div class="control-col integ-control">
           <CfgSecret v-model="form.olobuild_activecampaign_key" name="olo-int-ac-key" :label="t('ActiveCampaign — API key')" @update:model-value="setDirty(true)" />
@@ -91,7 +89,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('ConvertKit (Kit) — API key v3') }}</label>
-          <div class="hint">{{ t('Impostazioni → Sviluppatore: la API key v3, non la API secret.') }}</div>
+          <InfoTip :titolo="t('ConvertKit (Kit) — API key v3')" :testo="t('Impostazioni → Sviluppatore: la API key v3, non la API secret.')" />
         </div>
         <div class="control-col integ-control">
           <CfgSecret v-model="form.olobuild_convertkit_key" name="olo-int-convertkit" :label="t('ConvertKit (Kit) — API key v3')" @update:model-value="setDirty(true)" />
@@ -102,7 +100,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Brevo — API key') }}</label>
-          <div class="hint">{{ t('SMTP e API → Chiavi API: una chiave v3 (inizia con xkeysib-).') }}</div>
+          <InfoTip :titolo="t('Brevo — API key')" :testo="t('SMTP e API → Chiavi API: una chiave v3 (inizia con xkeysib-).')" />
         </div>
         <div class="control-col integ-control">
           <CfgSecret v-model="form.olobuild_brevo_key" name="olo-int-brevo" :label="t('Brevo — API key')" placeholder="xkeysib-…" @update:model-value="setDirty(true)" />
@@ -113,7 +111,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('HubSpot e webhook') }}</label>
-          <div class="hint">{{ t('Nessuna chiave: si impostano nel form. Per HubSpot Portal ID, Form GUID e quali campi mandare, con il nome della proprietà HubSpot: un campo che il modulo HubSpot non ha fa scartare l\'intero invio.') }}</div>
+          <InfoTip :titolo="t('HubSpot e webhook')" :testo="t('Nessuna chiave: si impostano nel form. Per HubSpot Portal ID, Form GUID e quali campi mandare, con il nome della proprietà HubSpot: un campo che il modulo HubSpot non ha fa scartare l\'intero invio.')" />
         </div>
         <div class="control-col integ-control">
           <span v-if="errori.hubspot" class="cfg-pill warn"><span class="dot"></span> {{ t('HubSpot') }}: {{ pillola('hubspot').testo }}</span>
@@ -130,6 +128,7 @@
 <script setup>
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import InfoTip from '@/components/Builder/InfoTip.vue';
 import CfgSecret from './controls/CfgSecret.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob, conIniziali } from './cfgSave';
 import { useCfgLettura } from './composables/useCfgLettura';

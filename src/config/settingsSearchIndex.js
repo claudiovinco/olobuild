@@ -1045,7 +1045,7 @@ export const SETTINGS_FIELD_INDEX = {
 		{
 			"kind": "section",
 			"label": "Comportamento default",
-			"hint": ""
+			"hint": "Quello che si apre per primo dalla ricerca media nell'editor."
 		},
 		{
 			"kind": "field",
@@ -1165,7 +1165,7 @@ export const SETTINGS_FIELD_INDEX = {
 		{
 			"kind": "section",
 			"label": "Visibilità",
-			"hint": ""
+			"hint": "Toglie i commenti HTML con il nome Olobuild dal codice personalizzato e dal banner cookie."
 		},
 		{
 			"kind": "field",

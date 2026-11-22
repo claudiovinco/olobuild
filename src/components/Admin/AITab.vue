@@ -16,15 +16,14 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/><path d="M19 14l.7 2.3L22 17l-2.3.7L19 20l-.7-2.3L16 17l2.3-.7L19 14z"/></svg>
       </div>
       <div>
-        <h3>{{ t('Provider') }}</h3>
-        <p>{{ t('Scegli il modello che muove le funzioni AI dentro l\'editor.') }}</p>
+        <h3>{{ t('Provider') }} <InfoTip :titolo="t('Provider')" :testo="t('Scegli il modello che muove le funzioni AI dentro l\'editor.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Provider AI') }}</label>
-          <div class="hint">{{ t('Puoi cambiarlo in qualsiasi momento — la chiave API è salvata per provider.') }}</div>
+          <InfoTip :titolo="t('Provider AI')" :testo="t('Puoi cambiarlo in qualsiasi momento — la chiave API è salvata per provider.')" />
         </div>
         <div class="control-col">
           <div class="cfg-segment">
@@ -37,7 +36,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('API key') }} <span class="req">*</span></label>
-          <div class="hint">{{ t('Salvata nel sito e mai mostrata per intero. Inseriscila una sola volta.') }}</div>
+          <InfoTip :titolo="t('API key')" :testo="t('Salvata nel sito e mai mostrata per intero. Inseriscila una sola volta.')" />
         </div>
         <div class="control-col">
           <div class="cfg-input mono">
@@ -65,7 +64,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Modello') }}</label>
-          <div class="hint">{{ t('Modelli più potenti = risposte migliori ma costo maggiore per chiamata.') }}</div>
+          <InfoTip :titolo="t('Modello')" :testo="t('Modelli più potenti = risposte migliori ma costo maggiore per chiamata.')" />
         </div>
         <div class="control-col">
           <CfgSelect :model-value="form.model" :options="availableModels" @update:model-value="setField('model', $event)" />
@@ -74,7 +73,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Modello immagini') }}</label>
-          <div class="hint">{{ t('Le immagini si generano con OpenAI: serve la sua chiave (scegli OpenAI qui sopra per inserirla).') }}</div>
+          <InfoTip :titolo="t('Modello immagini')" :testo="t('Le immagini si generano con OpenAI: serve la sua chiave (scegli OpenAI qui sopra per inserirla).')" />
         </div>
         <div class="control-col">
           <CfgSelect :model-value="form.image_model" :options="modelliImmagine" @update:model-value="setField('image_model', $event)" />
@@ -83,7 +82,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Budget mensile') }}</label>
-          <div class="hint">{{ t('Spesa stimata dal 1° del mese oltre la quale le funzioni AI si fermano fino al mese dopo. 0 = nessun limite.') }}</div>
+          <InfoTip :titolo="t('Budget mensile')" :testo="t('Spesa stimata dal 1° del mese oltre la quale le funzioni AI si fermano fino al mese dopo. 0 = nessun limite.')" />
         </div>
         <div class="control-col">
           <CfgNumber size="sm" :model-value="form.budget" :min="0" :step="5" :suffix="'€ / ' + t('mese')" @update:model-value="setField('budget', $event)" />
@@ -100,15 +99,14 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L2 19l3 3 7.3-7.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4 2.6-2.6z"/></svg>
       </div>
       <div>
-        <h3>{{ t('Comportamento') }}</h3>
-        <p>{{ t('Tono, lingua e creatività del modello.') }}</p>
+        <h3>{{ t('Comportamento') }} <InfoTip :titolo="t('Comportamento')" :testo="t('Tono, lingua e creatività del modello.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Lingua di default') }}</label>
-          <div class="hint">{{ t('Il modello risponderà in questa lingua se non specifichi altrimenti.') }}</div>
+          <InfoTip :titolo="t('Lingua di default')" :testo="t('Il modello risponderà in questa lingua se non specifichi altrimenti.')" />
         </div>
         <div class="control-col">
           <CfgSelect size="md" :model-value="form.language" :options="LANGUAGE_OPTIONS" @update:model-value="setField('language', $event)" />
@@ -119,7 +117,7 @@
       <div v-if="temperaturaAgisce" class="cfg-row">
         <div class="label-col">
           <label>{{ t('Temperatura') }}</label>
-          <div class="hint">{{ t('0 = preciso e ripetibile · 1 = creativo e variabile.') }}</div>
+          <InfoTip :titolo="t('Temperatura')" :testo="t('0 = preciso e ripetibile · 1 = creativo e variabile.')" />
         </div>
         <div class="control-col">
           <div class="cfg-slider">
@@ -131,7 +129,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Tono di voce') }}</label>
-          <div class="hint">{{ t('Personalità di base che il modello adotta in tutti i task.') }}</div>
+          <InfoTip :titolo="t('Tono di voce')" :testo="t('Personalità di base che il modello adotta in tutti i task.')" />
         </div>
         <div class="control-col">
           <div class="cfg-segment">
@@ -145,7 +143,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Istruzioni di sistema') }}</label>
-          <div class="hint">{{ t('Contesto del brand che viene incluso in ogni chiamata. Max 500 caratteri.') }}</div>
+          <InfoTip :titolo="t('Istruzioni di sistema')" :testo="t('Contesto del brand che viene incluso in ogni chiamata. Max 500 caratteri.')" />
         </div>
         <div class="control-col">
           <div class="cfg-textarea">
@@ -164,8 +162,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M7 17V8M12 17V4M17 17v-6"/></svg>
       </div>
       <div>
-        <h3>{{ t('Utilizzo questo mese') }}</h3>
-        <p>{{ t('Statistiche delle chiamate API dal 1° del mese (lo stesso periodo del budget).') }}</p>
+        <h3>{{ t('Utilizzo questo mese') }} <InfoTip :titolo="t('Utilizzo questo mese')" :testo="t('Statistiche delle chiamate API dal 1° del mese (lo stesso periodo del budget).')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body">
@@ -183,6 +180,7 @@
 <script setup>
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import InfoTip from '@/components/Builder/InfoTip.vue';
 import CfgSelect from './controls/CfgSelect.vue';
 import CfgNumber from './controls/CfgNumber.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob, conIniziali } from './cfgSave';
@@ -314,10 +312,11 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.usage-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-@media (max-width: 900px) { .usage-grid { grid-template-columns: 1fr 1fr; } }
-.usage-card { background: var(--c-bg); border-radius: 10px; padding: 14px; }
+/* i quattro riquadri in fila finché ci stanno (si misura lo spazio della scheda, non la finestra) */
+.usage-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+
+.usage-card { background: var(--c-bg); border-radius: 10px; padding: 10px 12px; }
 .usage-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--c-text-mute); }
-.usage-value { font-family: var(--c-display); font-size: 32px; line-height: 1; margin-top: 6px; color: var(--c-navy); }
+.usage-value { font-family: var(--c-display); font-size: 26px; line-height: 1; margin-top: 4px; color: var(--c-navy); }
 .usage-trend { font-size: 11px; color: var(--c-text-faint); margin-top: 4px; }
 </style>

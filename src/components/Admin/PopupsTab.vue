@@ -46,7 +46,7 @@
         <div class="control-col"><div class="cfg-input cfg-w-md"><input type="text" :value="popup.name" @input="setField(idx, 'name', $event.target.value)" :placeholder="t('Es. Newsletter signup')" /></div></div>
       </div>
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Template') }}</label><div class="hint">{{ t('Quale template Olobuild usare come contenuto del popup.') }}</div></div>
+        <div class="label-col"><label>{{ t('Template') }}</label><InfoTip :titolo="t('Template')" :testo="t('Quale template Olobuild usare come contenuto del popup.')" /></div>
         <div class="control-col">
           <CfgSelect searchable :model-value="popup.template_id" :options="optionsFor({ showType: true, selected: popup.template_id })" @update:model-value="setField(idx, 'template_id', parseInt($event) || 0)" />
           <TemplateListError />
@@ -96,6 +96,7 @@
 <script setup>
 import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import InfoTip from '@/components/Builder/InfoTip.vue';
 import CfgSelect from './controls/CfgSelect.vue';
 import CfgNumber from './controls/CfgNumber.vue';
 import TemplateListError from './controls/TemplateListError.vue';

@@ -32,7 +32,7 @@
       </div>
 
       <div class="cfg-row" v-show="form.mode === 'coming_soon'">
-        <div class="label-col"><label>{{ t('Template Coming Soon') }}</label><div class="hint">{{ t('Quale template Olobuild mostrare come "Coming Soon".') }}</div></div>
+        <div class="label-col"><label>{{ t('Template Coming Soon') }}</label><InfoTip :titolo="t('Template Coming Soon')" :testo="t('Quale template Olobuild mostrare come &quot;Coming Soon&quot;.')" /></div>
         <div class="control-col template-select-row">
           <CfgSelect searchable :model-value="form.coming_soon_template_id" :options="comingSoonOptions" @update:model-value="set('coming_soon_template_id', parseInt($event) || 0)" />
           <button class="cfg-btn cfg-btn-secondary" :disabled="generating === 'coming_soon'" @click="generateTemplate('coming_soon')" :title="t('Crea un template Coming Soon precaricato (headline + countdown +30gg + CTA) e selezionalo')">
@@ -45,7 +45,7 @@
       </div>
 
       <div class="cfg-row" v-show="form.mode === 'maintenance'">
-        <div class="label-col"><label>{{ t('Template Manutenzione') }}</label><div class="hint">{{ t('Quale template Olobuild mostrare durante la manutenzione (HTTP 503).') }}</div></div>
+        <div class="label-col"><label>{{ t('Template Manutenzione') }}</label><InfoTip :titolo="t('Template Manutenzione')" :testo="t('Quale template Olobuild mostrare durante la manutenzione (HTTP 503).')" /></div>
         <div class="control-col template-select-row">
           <CfgSelect searchable :model-value="form.template_id" :options="maintenanceOptions" @update:model-value="set('template_id', parseInt($event) || 0)" />
           <button class="cfg-btn cfg-btn-secondary" :disabled="generating === 'maintenance'" @click="generateTemplate('maintenance')" :title="t('Crea un template Manutenzione precaricato e selezionalo')">
@@ -63,13 +63,12 @@
     <div class="cfg-card-head">
       <div class="head-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></div>
       <div>
-        <h3>{{ t('Chi può accedere comunque') }}</h3>
-        <p>{{ t('Anche con il sito offline, alcuni ruoli e un URL segreto possono bypassare la pagina di manutenzione.') }}</p>
+        <h3>{{ t('Chi può accedere comunque') }} <InfoTip :titolo="t('Chi può accedere comunque')" :testo="t('Anche con il sito offline, alcuni ruoli e un URL segreto possono bypassare la pagina di manutenzione.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body">
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Ruoli che bypassano') }}</label><div class="hint">{{ t('Possono navigare il sito normalmente.') }}</div></div>
+        <div class="label-col"><label>{{ t('Ruoli che bypassano') }}</label><InfoTip :titolo="t('Ruoli che bypassano')" :testo="t('Possono navigare il sito normalmente.')" /></div>
         <div class="control-col">
           <div class="cfg-roles-checkboxes">
             <label v-for="role in availableRoles" :key="role.slug" class="cfg-role-check">
@@ -80,7 +79,7 @@
         </div>
       </div>
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('URL segreta di bypass') }}</label><div class="hint">{{ t('Aggiungi ?bypass=SECRET all\'URL del sito per accedere. Lascia vuoto per disabilitare.') }}</div></div>
+        <div class="label-col"><label>{{ t('URL segreta di bypass') }}</label><InfoTip :titolo="t('URL segreta di bypass')" :testo="t('Aggiungi ?bypass=SECRET all\'URL del sito per accedere. Lascia vuoto per disabilitare.')" /></div>
         <div class="control-col"><div class="cfg-input mono cfg-w-md"><input type="text" :value="form.bypass_secret" @input="set('bypass_secret', $event.target.value)" placeholder="cambia-questo-secret" /></div></div>
       </div>
     </div>
@@ -90,6 +89,7 @@
 <script setup>
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import InfoTip from '@/components/Builder/InfoTip.vue';
 import CfgSelect from './controls/CfgSelect.vue';
 import TemplateListError from './controls/TemplateListError.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';

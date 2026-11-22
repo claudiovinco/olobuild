@@ -66,11 +66,16 @@ const TAB_FILES = {
 const T_STR = "t\\(\\s*'((?:[^'\\\\]|\\\\.)*)'\\s*\\)";
 const RE_LABEL   = new RegExp( '<label>\\{\\{\\s*' + T_STR + '\\s*\\}\\}</label>', 'g' );
 const RE_H3      = new RegExp( '<h3>\\{\\{\\s*' + T_STR + '\\s*\\}\\}', 'g' );
-const RE_HINT    = new RegExp( 'class="hint">\\{\\{\\s*' + T_STR, 'g' );
-const RE_CARD_P  = new RegExp( '<p>\\{\\{\\s*' + T_STR, 'g' );
+// Dal 1.4.1341 le spiegazioni dei campi e delle schede stanno nella (i) accanto al nome
+// (<InfoTip :testo="t('…')" />): si leggono anche da lì, oltre che dal vecchio .hint e dal <p>.
+// (gli attributi fra virgolette si saltano interi: il titolo può contenere un «>», come t('In <head>'))
+const INFOTIP_TESTO = '<InfoTip\\b(?:[^>"]|"[^"]*")*?\\s:testo="\\s*\\[?\\s*';
+const RE_HINT    = new RegExp( '(?:class="hint">\\{\\{\\s*|' + INFOTIP_TESTO + ')' + T_STR, 'g' );
+const RE_CARD_P  = new RegExp( '(?:<p>\\{\\{\\s*|' + INFOTIP_TESTO + ')' + T_STR, 'g' );
 
 function unesc( s ) {
-	return s.replace( /\\(.)/g, '$1' );
+	// &quot; è la virgoletta doppia scritta dentro un attributo (:testo="t('… &quot;x&quot; …')")
+	return s.replace( /\\(.)/g, '$1' ).replace( /&quot;/g, '"' );
 }
 
 function collect( re, src ) {

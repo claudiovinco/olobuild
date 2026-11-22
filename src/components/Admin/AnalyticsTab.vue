@@ -17,13 +17,12 @@
     <div class="cfg-card-head">
       <div class="head-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg></div>
       <div>
-        <h3>{{ t('ID dei tracker') }}</h3>
-        <p>{{ t('Lascia vuoto per disattivare un tracker.') }}</p>
+        <h3>{{ t('ID dei tracker') }} <InfoTip :titolo="t('ID dei tracker')" :testo="t('Lascia vuoto per disattivare un tracker.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body">
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Google Analytics 4') }}</label><div class="hint">{{ t('Measurement ID (es. G-XXXXXXXX).') }}</div></div>
+        <div class="label-col"><label>{{ t('Google Analytics 4') }}</label><InfoTip :titolo="t('Google Analytics 4')" :testo="t('Measurement ID (es. G-XXXXXXXX).')" /></div>
         <div class="control-col"><div class="cfg-input mono cfg-w-md"><input type="text" :value="form.ga_id" @input="set('ga_id', $event.target.value)" placeholder="G-XXXXXXXX" /></div></div>
       </div>
       <div class="cfg-row">
@@ -50,19 +49,18 @@
     <div class="cfg-card-head">
       <div class="head-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/></svg></div>
       <div>
-        <h3>{{ t('Eventi automatici') }}</h3>
-        <p>{{ t('Olobuild emette eventi GA4 / FB Pixel quando un utente interagisce con i tile.') }}</p>
+        <h3>{{ t('Eventi automatici') }} <InfoTip :titolo="t('Eventi automatici')" :testo="t('Olobuild emette eventi GA4 / FB Pixel quando un utente interagisce con i tile.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body">
       <div v-for="ev in events" :key="ev.key" class="cfg-row">
-        <div class="label-col"><label>{{ t(ev.label) }}</label><div class="hint">{{ t(ev.hint) }}</div></div>
+        <div class="label-col"><label>{{ t(ev.label) }}</label><InfoTip :titolo="t(ev.label)" :testo="t(ev.hint)" /></div>
         <div class="control-col">
           <button class="cfg-switch" :class="{ 'is-on': form[ev.key] }" @click="set(ev.key, !form[ev.key])" role="switch"></button>
         </div>
       </div>
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Percentuali scroll (CSV)') }}</label><div class="hint">{{ t('Quando tracciare scroll depth, es. 25,50,75,100.') }}</div></div>
+        <div class="label-col"><label>{{ t('Percentuali scroll (CSV)') }}</label><InfoTip :titolo="t('Percentuali scroll (CSV)')" :testo="t('Quando tracciare scroll depth, es. 25,50,75,100.')" /></div>
         <div class="control-col"><div class="cfg-input mono cfg-w-md"><input type="text" :value="form.scroll_milestones" @input="set('scroll_milestones', $event.target.value)" /></div></div>
       </div>
       <div class="cfg-row">
@@ -90,11 +88,11 @@
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.respect_dnt }" @click="set('respect_dnt', !form.respect_dnt)" role="switch"></button></div>
       </div>
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Escludi amministratori') }}</label><div class="hint">{{ t('Non tracciare le visite degli utenti loggati come admin.') }}</div></div>
+        <div class="label-col"><label>{{ t('Escludi amministratori') }}</label><InfoTip :titolo="t('Escludi amministratori')" :testo="t('Non tracciare le visite degli utenti loggati come admin.')" /></div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.exclude_admins }" @click="set('exclude_admins', !form.exclude_admins)" role="switch"></button></div>
       </div>
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Richiedi consenso cookie') }}</label><div class="hint">{{ t('Carica i tracker solo dopo il consenso del banner.') }}</div></div>
+        <div class="label-col"><label>{{ t('Richiedi consenso cookie') }}</label><InfoTip :titolo="t('Richiedi consenso cookie')" :testo="t('Carica i tracker solo dopo il consenso del banner.')" /></div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.consent_required }" @click="set('consent_required', !form.consent_required)" role="switch"></button></div>
       </div>
     </div>
@@ -105,17 +103,16 @@
     <div class="cfg-card-head">
       <div class="head-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg></div>
       <div>
-        <h3>{{ t('Script custom') }}</h3>
-        <p>{{ t('Codice arbitrario da iniettare nel sito. Usa con attenzione — possono rompere la pagina o esporre dati sensibili.') }}</p>
+        <h3>{{ t('Script custom') }} <InfoTip :titolo="t('Script custom')" :testo="t('Codice arbitrario da iniettare nel sito. Usa con attenzione — possono rompere la pagina o esporre dati sensibili.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body">
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('In <head>') }}</label><div class="hint">{{ t('Meta tag, fonts, link prefetch, codice di verifica.') }}</div></div>
+        <div class="label-col"><label>{{ t('In <head>') }}</label><InfoTip :titolo="t('In <head>')" :testo="t('Meta tag, fonts, link prefetch, codice di verifica.')" /></div>
         <div class="control-col"><div class="cfg-textarea"><textarea rows="5" :value="form.head_scripts" @input="set('head_scripts', $event.target.value)" placeholder="<meta ...> <script>...</script>"></textarea></div></div>
       </div>
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('In <body>') }}</label><div class="hint">{{ t('Subito dopo l\'apertura del body (GTM noscript, chat widget…).') }}</div></div>
+        <div class="label-col"><label>{{ t('In <body>') }}</label><InfoTip :titolo="t('In <body>')" :testo="t('Subito dopo l\'apertura del body (GTM noscript, chat widget…).')" /></div>
         <div class="control-col"><div class="cfg-textarea"><textarea rows="5" :value="form.body_scripts" @input="set('body_scripts', $event.target.value)"></textarea></div></div>
       </div>
     </div>
@@ -125,6 +122,7 @@
 <script setup>
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import InfoTip from '@/components/Builder/InfoTip.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob, conIniziali } from './cfgSave';
 import { useCfgLettura } from './composables/useCfgLettura';
 

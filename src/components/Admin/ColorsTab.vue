@@ -23,8 +23,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 17 9 5 9-5"/><path d="m3 12 9 5 9-5"/></svg>
       </div>
       <div>
-        <h3>{{ t('Preset di stile') }}</h3>
-        <p>{{ t('Un punto di partenza con un click. Applica la palette completa del preset ai ruoli qui sotto.') }}</p>
+        <h3>{{ t('Preset di stile') }} <InfoTip :titolo="t('Preset di stile')" :testo="t('Un punto di partenza con un click. Applica la palette completa del preset ai ruoli qui sotto.')" /></h3>
       </div>
       <div class="head-actions">
         <span class="cfg-pill">{{ presetList.length }} {{ t('preset') }}</span>
@@ -63,8 +62,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/><path d="M19 14l.8 2.4L22 17l-2.2.6L19 20l-.8-2.4L16 17l2.2-.6L19 14z"/></svg>
       </div>
       <div>
-        <h3>{{ t('Genera palette') }}</h3>
-        <p>{{ t('Parti da uno o due colori e ottieni una palette armonica con le regole della teoria del colore.') }}</p>
+        <h3>{{ t('Genera palette') }} <InfoTip :titolo="t('Genera palette')" :testo="t('Parti da uno o due colori e ottieni una palette armonica con le regole della teoria del colore.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
@@ -132,12 +130,11 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.5-.5 1.5-1.5 0-.4-.2-.8-.5-1.2a1.5 1.5 0 0 1 1.2-2.3h2C18.5 17 20.5 15 20.5 12.4 20.5 6.5 16.7 2 12 2z"/></svg>
       </div>
       <div>
-        <h3>{{ t('Colori del brand') }}</h3>
-        <p>{{ t('Ogni colore ha un ruolo. Cambialo e ovunque sul sito si aggiorna di conseguenza.') }}</p>
+        <h3>{{ t('Colori del brand') }} <InfoTip :titolo="t('Colori del brand')" :testo="t('Ogni colore ha un ruolo. Cambialo e ovunque sul sito si aggiorna di conseguenza.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body">
-      <div class="brand-list">
+      <div class="brand-list colonne">
         <div v-for="r in BRAND_ROLES" :key="r.key" class="brand-row">
           <label class="brand-swatch" :style="{ background: colors[r.key] || '#000' }" :title="t('Modifica colore ') + r.name">
             <input type="color" class="swatch-native" :value="hexInput(colors[r.key])" @input="onPickRole(r.key, $event.target.value)" :aria-label="t('Modifica colore ') + r.name" />
@@ -163,12 +160,11 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
       </div>
       <div>
-        <h3>{{ t('Neutri & superfici') }}</h3>
-        <p>{{ t('Testo, sfondi, sezioni muted e bordi. La base neutra di tutto il sito.') }}</p>
+        <h3>{{ t('Neutri & superfici') }} <InfoTip :titolo="t('Neutri & superfici')" :testo="t('Testo, sfondi, sezioni muted e bordi. La base neutra di tutto il sito.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body">
-      <div class="brand-list">
+      <div class="brand-list colonne">
         <div v-for="r in NEUTRAL_ROLES" :key="r.key" class="brand-row">
           <label class="brand-swatch" :style="{ background: colors[r.key] || '#fff' }" :title="t('Modifica colore ') + r.name">
             <input type="color" class="swatch-native" :value="hexInput(colors[r.key])" @input="onPickRole(r.key, $event.target.value)" :aria-label="t('Modifica colore ') + r.name" />
@@ -194,8 +190,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.5-.5 1.5-1.5 0-.4-.2-.8-.5-1.2a1.5 1.5 0 0 1 1.2-2.3h2C18.5 17 20.5 15 20.5 12.4 20.5 6.5 16.7 2 12 2z"/></svg>
       </div>
       <div>
-        <h3>{{ t('Colori globali extra') }}</h3>
-        <p>{{ t('Swatch riutilizzabili oltre ai ruoli (accenti, colori secondari del brand). Disponibili come token --olo-color-{id} e nel selettore colore delle tile.') }}</p>
+        <h3>{{ t('Colori globali extra') }} <InfoTip :titolo="t('Colori globali extra')" :testo="t('Swatch riutilizzabili oltre ai ruoli (accenti, colori secondari del brand). Disponibili come token --olo-color-{id} e nel selettore colore delle tile.')" /></h3>
       </div>
       <div class="head-actions">
         <button class="cfg-btn cfg-btn-secondary" @click="addExtraGlobal">
@@ -205,7 +200,7 @@
       </div>
     </div>
     <div class="cfg-card-body">
-      <div v-if="extraGlobals.length" class="brand-list">
+      <div v-if="extraGlobals.length" class="brand-list colonne">
         <div v-for="g in extraGlobals" :key="g.id" class="brand-row">
           <label class="brand-swatch" :style="{ background: g.value }" :title="t('Modifica colore')">
             <input type="color" class="swatch-native" :value="hexInput(g.value)" @change="setExtraGlobalHex(g.id, $event.target.value)" :aria-label="t('Modifica colore')" />
@@ -256,8 +251,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 17 9 5 9-5"/><path d="m3 12 9 5 9-5"/></svg>
       </div>
       <div>
-        <h3>{{ t('Scala neutri') }}</h3>
-        <p>{{ t('Sfumature grigie utilizzate per testi, bordi, sfondi e stati disabilitati.') }}</p>
+        <h3>{{ t('Scala neutri') }} <InfoTip :titolo="t('Scala neutri')" :testo="t('Sfumature grigie utilizzate per testi, bordi, sfondi e stati disabilitati.')" /></h3>
       </div>
       <div class="head-actions">
         <div class="cfg-segment">
@@ -270,7 +264,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Tinta neutri') }}</label>
-          <div class="hint">{{ t('Scegli la sfumatura di base. I 7 livelli vengono generati automaticamente.') }}</div>
+          <InfoTip :titolo="t('Tinta neutri')" :testo="t('Scegli la sfumatura di base. I 7 livelli vengono generati automaticamente.')" />
         </div>
         <div class="control-col">
           <div class="tint-chips">
@@ -312,15 +306,14 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
       </div>
       <div>
-        <h3>{{ t('Modalità dark') }}</h3>
-        <p>{{ t('Configura come la palette si adatta automaticamente al tema scuro.') }}</p>
+        <h3>{{ t('Modalità dark') }} <InfoTip :titolo="t('Modalità dark')" :testo="t('Configura come la palette si adatta automaticamente al tema scuro.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Abilita modalità dark') }}</label>
-          <div class="hint">{{ t('Mostra il selettore dark/light nell\'header del sito.') }}</div>
+          <InfoTip :titolo="t('Abilita modalità dark')" :testo="t('Mostra il selettore dark/light nell\'header del sito.')" />
         </div>
         <div class="control-col">
           <button class="cfg-switch" :class="{ 'is-on': darkMode.enabled }" @click="setDark('enabled', !darkMode.enabled)" role="switch"></button>
@@ -329,7 +322,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Strategia di inversione') }}</label>
-          <div class="hint">{{ t('Come generare i colori scuri.') }}</div>
+          <InfoTip :titolo="t('Strategia di inversione')" :testo="t('Come generare i colori scuri.')" />
         </div>
         <div class="control-col">
           <CfgSelect :model-value="darkMode.strategy" :options="DARK_STRATEGY_OPTS" size="md" @update:model-value="setDark('strategy', $event)" />
@@ -345,8 +338,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>
       </div>
       <div>
-        <h3>{{ t('Versioni dello stile') }}</h3>
-        <p>{{ t('Com\'era lo stile del sito prima di ogni import di tema o del sito, salvataggio degli stili e ripristino dei predefiniti: colori, tipografia, set tipografici e font caricati, header, footer e pagina 404 attivi, cursore e mirino, pagina iniziale e il template delle pagine che l\'import ha riusato. Non tornano i template e le pagine creati dall\'import, né il testo delle pagine riusate dall\'import del sito. Restano le ultime 10, e sempre quella di prima dell\'ultimo import.') }}</p>
+        <h3>{{ t('Versioni dello stile') }} <InfoTip :titolo="t('Versioni dello stile')" :testo="t('Com\'era lo stile del sito prima di ogni import di tema o del sito, salvataggio degli stili e ripristino dei predefiniti: colori, tipografia, set tipografici e font caricati, header, footer e pagina 404 attivi, cursore e mirino, pagina iniziale e il template delle pagine che l\'import ha riusato. Non tornano i template e le pagine creati dall\'import, né il testo delle pagine riusate dall\'import del sito. Restano le ultime 10, e sempre quella di prima dell\'ultimo import.')" /></h3>
       </div>
       <div class="head-actions">
         <span class="cfg-pill">{{ versioni.length }}</span>
@@ -371,6 +363,7 @@
 <script setup>
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import InfoTip from '@/components/Builder/InfoTip.vue';
 import { HARMONY_RULES, harmonize, paletteToRoles, neutralsFromSeed, readableText, contrastRatio, isValidHex } from '@/utils/colorHarmony';
 import CfgSelect from './controls/CfgSelect.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
@@ -965,6 +958,13 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .brand-list { display: grid; gap: 10px; }
+/* Ruoli del brand e neutri: due colonne (tre se c'è spazio) di righe compatte invece di una colonna di righe larghe
+   col vuoto in mezzo (utente, 22 nov 2026: «meglio due colonne»). */
+.brand-list.colonne { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 8px; }
+.brand-list.colonne .brand-row { grid-template-columns: 40px minmax(0, 1fr) 112px 44px; gap: 10px; padding: 7px 10px; }
+.brand-list.colonne .brand-swatch { width: 40px; height: 40px; }
+.brand-list.colonne .brand-name { font-size: 13.5px; }
+.brand-list.colonne .brand-role { font-size: 11.5px; margin-top: 1px; }
 .brand-row {
   display: grid;
   grid-template-columns: 56px 1fr 200px 56px;
@@ -1003,6 +1003,9 @@ onBeforeUnmount(() => {
 .xg-label:focus { border-bottom-color: var(--c-line); }
 .xg-empty { font-size: 13px; color: var(--c-text-mute); padding: 10px 4px; }
 .xg-act:focus-visible { outline: 2px solid var(--c-red); outline-offset: 2px; }
+.brand-list.colonne .xg-act { width: 32px; height: 32px; justify-self: center; }
+.brand-list.colonne .xg-act svg { width: 14px; height: 14px; }
+.brand-list.colonne .xg-label { font-size: 13.5px; }
 .xg-hidden { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--c-line-soft); }
 .xg-hidden-head { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--c-navy); }
 .xg-hidden-hint { font-size: 12px; color: var(--c-text-mute); margin: 4px 0 10px; }
@@ -1055,10 +1058,12 @@ onBeforeUnmount(() => {
 .gen-neutral { display: flex; align-items: center; gap: 10px; font: 500 12.5px var(--c-sans); color: var(--c-text-mute); cursor: pointer; }
 .gen-sw.is-neutral { box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
 .gen-preview { display: flex; align-items: center; gap: 16px; margin-top: 14px; flex-wrap: wrap; }
-.gen-swatches { display: flex; gap: 8px; flex: 1; min-width: 240px; }
+.gen-swatches { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; min-width: 240px; }
+/* tasselli bassi col ruolo e il codice in fila (prima blocchi alti 64px larghi mezza pagina: utente, 22 nov 2026,
+   «primario e secondario servono giganti?») */
 .gen-sw {
-  flex: 1; height: 64px; border-radius: 10px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
-  display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 6px;
+  flex: 0 1 190px; min-width: 150px; height: 34px; border-radius: 8px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+  display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 6px; padding: 0 6px;
 }
 .gen-sw-role { font: 700 9px var(--c-sans); text-transform: uppercase; letter-spacing: .03em; background: rgba(255,255,255,.9); color: #111; padding: 2px 6px; border-radius: 4px; }
 .gen-sw-hex { font: 600 10px var(--c-mono); background: rgba(255,255,255,.85); color: #111; padding: 2px 5px; border-radius: 4px; }

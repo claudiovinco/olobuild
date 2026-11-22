@@ -17,13 +17,12 @@
     <div class="cfg-card-head">
       <div class="head-ic"><span class="dashicons dashicons-edit-page" aria-hidden="true"></span></div>
       <div>
-        <h3>{{ t('Redazione') }}</h3>
-        <p>{{ t('Chi aggiorna il sito scrive, traduce e mette in ordine le categorie da un posto solo.') }}</p>
+        <h3>{{ t('Redazione') }} <InfoTip :titolo="t('Redazione')" :testo="t('Chi aggiorna il sito scrive, traduce e mette in ordine le categorie da un posto solo.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body">
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Aggiungi e Modifica') }}</label><div class="hint">{{ t('Nei menu di WordPress aprono la Redazione. I testi scritti a blocchi si aprono ancora nella scheda di WordPress.') }}</div><div class="hint">{{ t('Il ruolo «Redattore» vede solo Redazione e Media: lo assegni in Utenti.') }}</div></div>
+        <div class="label-col"><label>{{ t('Aggiungi e Modifica') }}</label><InfoTip :titolo="t('Aggiungi e Modifica')" :testo="[t('Nei menu di WordPress aprono la Redazione. I testi scritti a blocchi si aprono ancora nella scheda di WordPress.'), t('Il ruolo «Redattore» vede solo Redazione e Media: lo assegni in Utenti.')]" /></div>
         <div class="control-col">
           <div class="tc-interruttori">
             <label><button type="button" class="cfg-switch" role="switch" :aria-checked="redazione.apre ? 'true' : 'false'" :class="{ 'is-on': redazione.apre }" @click="redazione.apre = !redazione.apre"></button><span>{{ t('Aprono la Redazione') }}</span></label>
@@ -44,14 +43,14 @@
     </div>
     <div class="cfg-card-body">
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Nome nel menu') }}</label><div class="hint">{{ t('Vuoto: Articoli. Per esempio Notizie e Notizia.') }}</div></div>
+        <div class="label-col"><label>{{ t('Nome nel menu') }}</label><InfoTip :titolo="t('Nome nel menu')" :testo="t('Vuoto: Articoli. Per esempio Notizie e Notizia.')" /></div>
         <div class="control-col tc-due">
           <div class="cfg-input"><input type="text" v-model="articoli.nome" maxlength="40" :placeholder="t('Articoli')" :aria-label="t('Nome plurale')" /></div>
           <div class="cfg-input"><input type="text" v-model="articoli.singolare" maxlength="40" :placeholder="t('Articolo')" :aria-label="t('Nome singolare')" /></div>
         </div>
       </div>
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Editor') }}</label><div class="hint">{{ t('Semplice: titoli, grassetto, corsivo, link, elenchi e citazioni, come in un programma di scrittura.') }}</div></div>
+        <div class="label-col"><label>{{ t('Editor') }}</label><InfoTip :titolo="t('Editor')" :testo="t('Semplice: titoli, grassetto, corsivo, link, elenchi e citazioni, come in un programma di scrittura.')" /></div>
         <div class="control-col">
           <div class="cfg-segment">
             <button :class="{ 'is-on': articoli.editor === 'semplice' }" @click="articoli.editor = 'semplice'">{{ t('Semplice') }}</button>
@@ -60,7 +59,7 @@
         </div>
       </div>
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Campi') }}</label><div class="hint">{{ t('Compaiono nella scheda di ogni articolo, nel riquadro Dettagli.') }}</div><div v-if="(categorie.post || []).length" class="hint">{{ t('Un campo può valere solo in alcune categorie, sottocategorie comprese.') }}</div></div>
+        <div class="label-col"><label>{{ t('Campi') }}</label><InfoTip :titolo="t('Campi')" :testo="[t('Compaiono nella scheda di ogni articolo, nel riquadro Dettagli.'), ((categorie.post || []).length) ? t('Un campo può valere solo in alcune categorie, sottocategorie comprese.') : '']" /></div>
         <div class="control-col"><CfgCampi :campi="articoli.campi" :formati="formati" :reti="reti" :categorie="categorie.post || []" /></div>
       </div>
     </div>
@@ -77,14 +76,14 @@
     </div>
     <div class="cfg-card-body">
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Nome nel menu') }}</label><div class="hint">{{ t('Vuoto: Spettacoli. Per esempio Concerti e Concerto.') }}</div></div>
+        <div class="label-col"><label>{{ t('Nome nel menu') }}</label><InfoTip :titolo="t('Nome nel menu')" :testo="t('Vuoto: Spettacoli. Per esempio Concerti e Concerto.')" /></div>
         <div class="control-col tc-due">
           <div class="cfg-input"><input type="text" v-model="spettacoli.nome" maxlength="40" :placeholder="t('Spettacoli')" :aria-label="t('Nome plurale')" /></div>
           <div class="cfg-input"><input type="text" v-model="spettacoli.singolare" maxlength="40" :placeholder="t('Spettacolo')" :aria-label="t('Nome singolare')" /></div>
         </div>
       </div>
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Indirizzo') }}</label><div class="hint">{{ t('Le pagine degli spettacoli stanno qui. Vuoto: spettacoli.') }}</div></div>
+        <div class="label-col"><label>{{ t('Indirizzo') }}</label><InfoTip :titolo="t('Indirizzo')" :testo="t('Le pagine degli spettacoli stanno qui. Vuoto: spettacoli.')" /></div>
         <div class="control-col">
           <div class="cfg-input tc-indirizzo"><span>/</span><input type="text" :value="spettacoli.indirizzo" maxlength="40" spellcheck="false" placeholder="spettacoli" :aria-label="t('Indirizzo')" @input="spettacoli.indirizzo = slug($event.target.value, '-').slice(0, 40)" /><span>/</span></div>
         </div>
@@ -107,14 +106,14 @@
     </div>
     <div class="cfg-card-body">
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Nome') }}</label><div class="hint">{{ t('Plurale e singolare: Notizie e Notizia, Comunicati e Comunicato.') }}</div></div>
+        <div class="label-col"><label>{{ t('Nome') }}</label><InfoTip :titolo="t('Nome')" :testo="t('Plurale e singolare: Notizie e Notizia, Comunicati e Comunicato.')" /></div>
         <div class="control-col tc-due">
           <div class="cfg-input"><input type="text" :value="tipo.nome" maxlength="40" :placeholder="t('Notizie')" :aria-label="t('Nome plurale')" @input="setNome(tipo, $event.target.value)" /></div>
           <div class="cfg-input"><input type="text" v-model="tipo.singolare" maxlength="40" :placeholder="t('Notizia')" :aria-label="t('Nome singolare')" /></div>
         </div>
       </div>
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Chiave e indirizzo') }}</label><div class="hint">{{ t('La chiave non cambia più dopo il salvataggio: i contenuti sono legati a lei. L\'indirizzo è la parte dopo il dominio.') }}</div></div>
+        <div class="label-col"><label>{{ t('Chiave e indirizzo') }}</label><InfoTip :titolo="t('Chiave e indirizzo')" :testo="t('La chiave non cambia più dopo il salvataggio: i contenuti sono legati a lei. L\'indirizzo è la parte dopo il dominio.')" /></div>
         <div class="control-col tc-due">
           <div class="cfg-input"><input type="text" :value="tipo.chiave" maxlength="20" spellcheck="false" :disabled="!tipo._nuovo" :aria-label="t('Chiave')" @input="setChiave(tipo, $event.target.value)" /></div>
           <div class="cfg-input tc-indirizzo"><span>/</span><input type="text" :value="tipo.indirizzo" maxlength="40" spellcheck="false" :aria-label="t('Indirizzo')" @input="setIndirizzo(tipo, $event.target.value)" /><span>/</span></div>
@@ -122,7 +121,7 @@
       </div>
       <p v-if="chiaveOccupata(tipo)" class="tc-avviso">{{ t('Questa chiave è già usata da WordPress o da un altro plugin: scegline un\'altra.') }}</p>
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Icona e posizione') }}</label><div class="hint">{{ t('La posizione nel menu: 5 sotto la Bacheca, 20 sotto le Pagine, 25 sotto i Commenti.') }}</div></div>
+        <div class="label-col"><label>{{ t('Icona e posizione') }}</label><InfoTip :titolo="t('Icona e posizione')" :testo="t('La posizione nel menu: 5 sotto la Bacheca, 20 sotto le Pagine, 25 sotto i Commenti.')" /></div>
         <div class="control-col">
           <div class="tc-icone" role="radiogroup" :aria-label="t('Icona')">
             <button v-for="ic in icone" :key="ic" type="button" role="radio" :aria-checked="tipo.icona === ic ? 'true' : 'false'" :class="{ 'is-on': tipo.icona === ic }" :title="ic.replace('dashicons-', '')" @click="tipo.icona = ic"><span class="dashicons" :class="ic" aria-hidden="true"></span></button>
@@ -152,7 +151,7 @@
         </div>
       </div>
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Permessi') }}</label><div class="hint">{{ permessiHint(tipo) }}</div></div>
+        <div class="label-col"><label>{{ t('Permessi') }}</label><InfoTip :titolo="t('Permessi')" :testo="permessiHint(tipo)" /></div>
         <div class="control-col">
           <div class="cfg-segment">
             <button :class="{ 'is-on': tipo.permessi !== 'propri' }" @click="tipo.permessi = 'articoli'">{{ t('Come gli articoli') }}</button>
@@ -161,7 +160,7 @@
         </div>
       </div>
       <div class="cfg-row">
-        <div class="label-col"><label>{{ t('Campi') }}</label><div class="hint">{{ t('Compaiono nella scheda di ogni contenuto, nel riquadro Dettagli, e nella Sorgente dinamica come «Campi dei contenuti».') }}</div><div v-if="(categorie[tipo.chiave] || []).length" class="hint">{{ t('Un campo può valere solo in alcune categorie, sottocategorie comprese.') }}</div></div>
+        <div class="label-col"><label>{{ t('Campi') }}</label><InfoTip :titolo="t('Campi')" :testo="[t('Compaiono nella scheda di ogni contenuto, nel riquadro Dettagli, e nella Sorgente dinamica come «Campi dei contenuti».'), ((categorie[tipo.chiave] || []).length) ? t('Un campo può valere solo in alcune categorie, sottocategorie comprese.') : '']" /></div>
         <div class="control-col"><CfgCampi :campi="tipo.campi" :formati="formati" :reti="reti" :categorie="categorie[tipo.chiave] || []" /></div>
       </div>
     </div>
@@ -171,6 +170,7 @@
 <script setup>
 import { ref, watch, nextTick, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import InfoTip from '@/components/Builder/InfoTip.vue';
 import CfgNumber from './controls/CfgNumber.vue';
 import CfgCampi from './controls/CfgCampi.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';

@@ -26,8 +26,7 @@
     <div class="cfg-card-head">
       <div class="head-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h13M13 6l6 6-6 6"/></svg></div>
       <div>
-        <h3>{{ t('Redirect configurate') }}</h3>
-        <p>{{ t('Prefisso "~" su "Da URL" attiva il match regex.') }}</p>
+        <h3>{{ t('Redirect configurate') }} <InfoTip :titolo="t('Redirect configurate')" :testo="t('Prefisso &quot;~&quot; su &quot;Da URL&quot; attiva il match regex.')" /></h3>
       </div>
     </div>
     <div class="cfg-card-body" style="padding: 0;">
@@ -79,8 +78,7 @@
     <div class="cfg-card-head">
       <div class="head-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 7v5l3 3"/></svg></div>
       <div>
-        <h3>{{ t('Pagine non trovate') }}</h3>
-        <p>{{ t('URL richieste che hanno restituito 404. Promuovi a redirect quelle ricorrenti.') }}</p>
+        <h3>{{ t('Pagine non trovate') }} <InfoTip :titolo="t('Pagine non trovate')" :testo="t('URL richieste che hanno restituito 404. Promuovi a redirect quelle ricorrenti.')" /></h3>
       </div>
       <div class="head-actions">
         <button v-if="log404.length" class="cfg-btn cfg-btn-ghost" @click="clearLog404">{{ t('Svuota log') }}</button>
@@ -116,6 +114,7 @@
 <script setup>
 import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import InfoTip from '@/components/Builder/InfoTip.vue';
 import CfgSelect from './controls/CfgSelect.vue';
 import { okOrThrow, cfgJob, assertLoaded, reloadJob } from './cfgSave';
 import { useCfgLettura } from './composables/useCfgLettura';

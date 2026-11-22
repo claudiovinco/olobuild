@@ -68,7 +68,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Provider preferito') }}</label>
-          <div class="hint">{{ t('Quello che si apre per primo dalla ricerca media nell\'editor.') }}</div>
+          <InfoTip :titolo="t('Provider preferito')" :testo="t('Quello che si apre per primo dalla ricerca media nell\'editor.')" />
         </div>
         <div class="control-col">
           <CfgSelect size="md" :model-value="behavior.preferred" :options="providerOptions" @update:model-value="setBehavior('preferred', $event)" />
@@ -77,7 +77,7 @@
       <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Scarica in locale') }}</label>
-          <div class="hint">{{ t('Quando inserisci un\'immagine, viene scaricata nella Libreria media di WordPress. Disattivato = hotlink al provider.') }}</div>
+          <InfoTip :titolo="t('Scarica in locale')" :testo="t('Quando inserisci un\'immagine, viene scaricata nella Libreria media di WordPress. Disattivato = hotlink al provider.')" />
         </div>
         <div class="control-col">
           <button class="cfg-switch" :class="{ 'is-on': behavior.download_local }" @click="setBehavior('download_local', !behavior.download_local)" role="switch"></button>
@@ -86,7 +86,7 @@
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Ottimizza al download') }}</label>
-          <div class="hint">{{ t('Comprime e converte in WebP automaticamente. Richiede modulo Performance attivo.') }}</div>
+          <InfoTip :titolo="t('Ottimizza al download')" :testo="t('Comprime e converte in WebP automaticamente. Richiede modulo Performance attivo.')" />
         </div>
         <div class="control-col">
           <button class="cfg-switch" :class="{ 'is-on': behavior.optimize_on_download }" @click="setBehavior('optimize_on_download', !behavior.optimize_on_download)" role="switch"></button>

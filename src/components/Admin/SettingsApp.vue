@@ -834,7 +834,8 @@ onMounted(() => {
 
 /* Token condivisi: .cfg-root (shell) + .cfg-layer (popup/dropdown teleportati
    su body, che altrimenti non erediterebbero le variabili). */
-.cfg-root, .cfg-layer {
+.cfg-root, .cfg-layer, .olo-info-pop {
+  --olo-ui-accent: var(--c-red); /* la (i) e il suo riquadro (InfoTip) nel rosso delle Impostazioni */
   --c-red:        #e1474f;
   --c-red-dark:   #c8323a;
   --c-red-soft:   #fef2f3;
@@ -1145,60 +1146,107 @@ onMounted(() => {
   flex-shrink: 0;
 }
 
+/* Spazio (utente, 22 nov 2026: «ottimizza meglio lo spazio di quei controlli, e di tutti»): le spiegazioni
+   sotto i nomi dei campi e sotto i titoli delle schede sono passate nella (i) accanto al nome (InfoTip), le
+   righe tengono nome e controllo sulla stessa linea e le schede hanno margini più stretti. */
 .cfg-card {
   background: #fff;
   border: 1px solid var(--c-line);
-  border-radius: 14px;
-  margin-bottom: 16px;
+  border-radius: 12px;
+  margin-bottom: 12px;
   overflow: hidden;
 }
 .cfg-card-head {
-  display: flex; align-items: center; gap: 14px;
-  padding: 18px 22px;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 18px;
   border-bottom: 1px solid var(--c-line-soft);
 }
 .cfg-card-head h3 {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
   font-size: 15px; font-weight: 600;
   margin: 0; color: var(--c-navy);
   letter-spacing: -.005em;
 }
-.cfg-card-head p { font-size: 13px; color: var(--c-text-mute); margin: 2px 0 0; }
+.cfg-card-head p { font-size: 12.5px; color: var(--c-text-mute); margin: 2px 0 0; }
 .cfg-card-head .head-ic {
-  width: 36px; height: 36px;
-  border-radius: 9px;
+  width: 30px; height: 30px;
+  border-radius: 8px;
   background: var(--c-bg);
   color: var(--c-navy);
   display: grid; place-items: center;
   border: 1px solid var(--c-line);
   flex-shrink: 0;
 }
-.cfg-card-head .head-ic svg { width: 18px; height: 18px; }
+.cfg-card-head .head-ic svg { width: 16px; height: 16px; }
 .cfg-card-head .head-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
-.cfg-card-body { padding: 22px; }
-.cfg-card-body.tight { padding: 16px 22px; }
+.cfg-card-body { padding: 16px 18px; }
+.cfg-card-body.tight { padding: 4px 18px; }
 
-/* Form row generico */
+/* Form row generico: nome (con la sua (i)) a sinistra, controllo a destra, sulla stessa linea.
+   La colonna del nome tiene l'altezza di un campo (36px), così nome, campo e interruttore stanno in fila
+   anche quando il controllo è più alto (aree di testo, elenchi). */
 .cfg-row {
   display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 32px;
-  padding: 14px 0;
+  grid-template-columns: minmax(150px, 240px) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  padding: 7px 0;
   border-bottom: 1px solid var(--c-line-soft);
 }
 .cfg-row:last-child { border-bottom: 0; }
 .cfg-row.no-divider { border-bottom: 0; }
+/* Il nome scorre come testo e la (i) resta attaccata all'ultima parola anche quando il nome va a capo;
+   il padding in alto mette la prima riga del nome all'altezza del testo di un campo (38px). */
+.cfg-row .label-col { display: block; padding-top: 9px; min-width: 0; }
 .cfg-row .label-col label {
-  display: block; font-size: 13px; font-weight: 600;
-  color: var(--c-navy); margin-bottom: 4px;
+  display: inline; font-size: 13px; font-weight: 600; line-height: 1.45;
+  color: var(--c-navy); margin: 0;
 }
+.cfg-row .label-col .olo-info { margin-left: 4px; vertical-align: -2px; }
+/* niente display qui: alcune schede danno alla colonna il loro (griglie e righe della SEO) */
+.cfg-row .control-col { min-width: 0; }
+/* righe con un interruttore (anche seguito da una nota, come nella SEO): nome e interruttore centrati fra loro */
+.cfg-row:has(> .control-col > .cfg-switch:first-child) { align-items: center; }
+.cfg-row:has(> .control-col > .cfg-switch:first-child) > .label-col { padding-top: 0; }
+.cfg-row .control-col > .cfg-segment:first-child { margin-top: 1px; }
+/* in linea restano solo gli stati brevi (la soglia in pixel dei Dispositivi) */
 .cfg-row .label-col .hint {
-  font-size: 12px; color: var(--c-text-mute); line-height: 1.5;
+  display: block; margin-top: 2px;
+  font-size: 12px; color: var(--c-text-mute); line-height: 1.4;
 }
+/* Le righe con un controllo PICCOLO (un interruttore, un numero) stanno affiancate, due o tre per riga finché ci
+   stanno (si misura la scheda): il Critical CSS (interruttore + due numeri) sta in una riga sola. Tutto il resto
+   della scheda (campi di testo, menu, aree di testo, elenchi, note) occupa la riga intera. */
+.cfg-card-body:has(> .cfg-row) {
+  padding-top: 6px; padding-bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  column-gap: 32px;
+  overflow: hidden;
+}
+.cfg-card-body:has(> .cfg-row) > * { grid-column: 1 / -1; }
+/* ogni riga ha la sua linea sotto; quella dell'ultima fila esce di 1px dal corpo della scheda e sparisce (prima,
+   con più controlli affiancati, nell'ultima fila alcuni avevano la linea e altri no) */
+.cfg-card-body:has(> .cfg-row) > .cfg-row { border-bottom: 1px solid var(--c-line-soft); margin-bottom: -1px; }
+/* solo quando ce ne sono almeno due di fila: un controllo piccolo da solo resta in colonna con gli altri controlli */
+.cfg-card-body:has(> .cfg-row) > .cfg-row:has(> .control-col > :is(.cfg-switch, .cfg-number):only-child):is(
+  :has(+ .cfg-row > .control-col > :is(.cfg-switch, .cfg-number):only-child),
+  .cfg-row:has(> .control-col > :is(.cfg-switch, .cfg-number):only-child) + .cfg-row
+) {
+  grid-column: auto;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+.cfg-card-body:has(> .cfg-row) > .cfg-row:has(> .control-col > :is(.cfg-switch, .cfg-number):only-child):is(
+  :has(+ .cfg-row > .control-col > :is(.cfg-switch, .cfg-number):only-child),
+  .cfg-row:has(> .control-col > :is(.cfg-switch, .cfg-number):only-child) + .cfg-row
+) > .label-col { padding-top: 0; }
 .cfg-row .label-col .req { color: var(--c-red); margin-left: 2px; }
 
 /* Form controls — base */
 .cfg-input, .cfg-select, .cfg-textarea {
   display: flex; align-items: center; gap: 8px;
+  box-sizing: border-box; /* larghi al 100% senza uscire dalla scheda col loro padding */
   width: 100%;
   background: #fff;
   border: 1px solid var(--c-line);
@@ -1253,6 +1301,9 @@ onMounted(() => {
   font-family: inherit; font-size: inherit; color: inherit;
   padding: 0; min-width: 0; width: 100%;
 }
+/* WordPress dà ai campi un'altezza minima di 40px: dentro il nostro contenitore (che ha già il suo padding) il
+   campo arrivava a 58px, più alto dei menu a tendina (38px). Qui il campo è solo il testo. */
+.cfg-root .cfg-input input, .cfg-layer .cfg-input input { min-height: 0; height: auto; line-height: 1.45; box-shadow: none; }
 .cfg-textarea textarea { line-height: inherit; resize: vertical; }
 .cfg-select { padding-right: 8px; }
 .cfg-select select {
@@ -1473,8 +1524,13 @@ onMounted(() => {
   .cfg-subbar { padding: 0 12px; }
   .cfg-macrobar .macro-version { display: none; }
   .cfg-content { padding: 20px; }
-  .cfg-row { grid-template-columns: 1fr; gap: 8px; }
+  /* nome e controllo restano affiancati: senza le spiegazioni in linea il nome sta in una colonna stretta */
+  .cfg-row { grid-template-columns: minmax(120px, 190px) minmax(0, 1fr); gap: 14px; }
   .cfg-savebar { padding: 0 16px; }
+}
+@media (max-width: 600px) {
+  .cfg-row { grid-template-columns: 1fr; gap: 4px; }
+  .cfg-row .label-col { padding-top: 0; }
 }
 
 /* ═══ Stato modifiche per scheda ═══ */
