@@ -2105,6 +2105,11 @@ html:has(.olo-frontend-grid) {
   color: var(--olo-h-colore, var(--olo-color-accent));
   text-shadow: 0 0 8px color-mix(in srgb, var(--olo-h-colore, var(--olo-color-accent)) 70%, transparent),
     2px 2px 0 color-mix(in srgb, var(--olo-color-dark) 85%, transparent);
+  /* 22 nov 2026: una targhetta scura, come l'OSD di un televisore: sulle sezioni chiare il verde del canale si
+     leggeva appena (sulle scure la targhetta quasi non si vede) */
+  padding: 8px 12px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--olo-color-dark) 70%, transparent);
 }
 .olo-h-osd.olo-h-osd-on {
   opacity: 1;
@@ -2146,6 +2151,45 @@ html:has(.olo-frontend-grid) {
   right: 0;
   transform: translate3d(100%, 0, 0);
   box-shadow: inset 3px 0 0 color-mix(in srgb, var(--olo-color-light) 14%, transparent);
+}
+/* Sipario (sticky_ante foto/video): l'immagine è larga quanto le due ante insieme, ogni anta ne porta la sua metà
+   e quando si chiudono torna intera; una riga sottile e un'ombra segnano dove si toccano. */
+.olo-h-porte-media .olo-h-porta {
+  overflow: hidden;
+  background: var(--olo-color-dark);
+  box-shadow: none;
+}
+.olo-h-porta-media {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: calc(100% / 0.502);
+  max-width: none;
+  display: block;
+  object-fit: cover;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.olo-h-porta-media-sx { left: 0; }
+.olo-h-porta-media-dx { right: 0; }
+.olo-h-porte-media .olo-h-porta::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: clamp(10px, 1.6vw, 22px);
+  pointer-events: none;
+}
+.olo-h-porte-media .olo-h-porta-sx::after {
+  right: 0;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--olo-color-dark) 38%, transparent));
+  border-right: 1px solid color-mix(in srgb, var(--olo-color-dark) 60%, transparent);
+}
+.olo-h-porte-media .olo-h-porta-dx::after {
+  left: 0;
+  background: linear-gradient(270deg, transparent, color-mix(in srgb, var(--olo-color-dark) 30%, transparent));
+  border-left: 1px solid color-mix(in srgb, var(--olo-color-light) 22%, transparent);
 }
 .olo-h-piani {
   position: absolute;

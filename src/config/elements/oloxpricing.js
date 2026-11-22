@@ -30,8 +30,8 @@ export default {
     free_cta: 'Scarica Free',
     free_url: './',
     pro_kicker: 'OLObuild · Pro',
-    pro_price: '€29<em>*</em>',
-    pro_per: '*prezzo lancio · poi €59/anno',
+    pro_price: '€39<em>*</em>',
+    pro_per: '*all’anno al lancio · poi €69/anno',
     pro_items: [
       { text_html: 'L’intera libreria: <strong>187 tile</strong>' },
     ],

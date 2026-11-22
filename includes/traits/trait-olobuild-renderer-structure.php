@@ -434,6 +434,28 @@ trait Olobuild_Renderer_Structure_Trait {
                     $h_extra .= ' data-h-colore="' . esc_attr( $colore ) . '"';
                 }
             }
+            // Ascensore come un sipario (21 nov 2026): le ante con una foto o un video divisi a metà (sticky_ante).
+            if ( 'ascensore' === $sticky_effect ) {
+                $ante   = (string) ( $s['sticky_ante'] ?? '' );
+                $url_di = static function ( $v ) {
+                    if ( is_array( $v ) ) {
+                        $v = $v['url'] ?? '';
+                    }
+                    return esc_url( trim( (string) $v ) );
+                };
+                if ( in_array( $ante, [ 'foto', 'video' ], true ) ) {
+                    $foto = $url_di( $s['sticky_ante_foto'] ?? '' );
+                    if ( '' !== $foto ) {
+                        $h_extra .= ' data-h-ante-foto="' . $foto . '"';
+                    }
+                }
+                if ( 'video' === $ante ) {
+                    $video = $url_di( $s['sticky_ante_video'] ?? '' );
+                    if ( '' !== $video ) {
+                        $h_extra .= ' data-h-ante-video="' . $video . '"';
+                    }
+                }
+            }
             $html = '<div class="olo-h-marker" data-sticky-h="' . esc_attr( $sticky_effect ) . '" data-sticky-top="' . $sticky_top . '" data-h-align="' . esc_attr( $h_align ) . '"' . $h_extra . ' style="display:contents">' . $html . '</div>';
         }
 

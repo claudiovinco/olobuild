@@ -855,11 +855,23 @@ trait Olobuild_Renderer_Page_Trait {
                             var n=sections.length;
                             if(n<2)return;
                             var viewH=window.innerHeight-stickyTop;
-                            if(stretto){
-                                var alto=false;
-                                sections.forEach(function(item){if(item.sec.offsetHeight>viewH+2){alto=true;}});
-                                if(alto)return;
-                            }
+                            /* 21 nov 2026: il controllo vale a ogni larghezza, non solo sotto i 960 px: nei pannelli (alti
+                               uno schermo, il resto nascosto) una sezione più alta verrebbe tagliata, e nessun passaggio vale
+                               un pulsante che sparisce. Si misura il contenuto senza l'altezza minima (una sezione a tutto
+                               schermo sotto una testata fissa non è «alta»); del padding resta quello che serve: tutto quello
+                               di sopra se il contenuto sta in alto, un poco se sta al centro o in basso. */
+                            if(window.oloIdrata){sections.forEach(function(item){window.oloIdrata(item.sec);});}
+                            var alto=false;
+                            sections.forEach(function(item){
+                                var sec=item.sec,mh=sec.style.getPropertyValue('min-height'),mhp=sec.style.getPropertyPriority('min-height');
+                                sec.style.setProperty('min-height','0px','important');
+                                var csA=getComputedStyle(sec),pt=parseFloat(csA.paddingTop)||0,pb=parseFloat(csA.paddingBottom)||0;
+                                var dentro=sec.offsetHeight-pt-pb,al=item.marker.dataset.hAlign;
+                                var serve=(al==='center'||al==='bottom')?(dentro+Math.min(pt+pb,48)):(dentro+pt+Math.min(pb,24));
+                                if(mh){sec.style.setProperty('min-height',mh,mhp);}else{sec.style.removeProperty('min-height');}
+                                if(serve>viewH+2){alto=true;}
+                            });
+                            if(alto)return;
                             /* «Reveal orizzontale»: la sezione non arriva spinta da destra, si
                                scopre sopra la precedente (clip-path che si apre da destra, il
                                contenuto che scivola un poco, un filo di luce sul bordo), mentre
@@ -924,10 +936,19 @@ trait Olobuild_Renderer_Page_Trait {
                             track.className='olo-h-track';
                             track.style.height='100%';
                             var panelCSS='flex:0 0 100%;width:100%;min-height:'+viewH+'px;box-sizing:border-box;position:relative;overflow:hidden';
+                            /* 21 nov 2026: un pannello senza sfondo proprio prende il colore della pagina, altrimenti nei
+                               passaggi impilati (e nel Reveal) si vedrebbe attraverso quello che gli sta sotto. */
+                            function opaco(c){c=String(c||'');if(!c||c==='transparent'){return false;}var m=/^rgba\(([^)]*)\)$/.exec(c);if(m){var q=m[1].split(/[\s,\/]+/).filter(Boolean);return q.length<4||parseFloat(q[3])>=0.99;}m=/\/\s*([\d.]+)\s*\)$/.exec(c);if(m){return parseFloat(m[1])>=0.99;}return true;}
+                            function vuoto(c){c=String(c||'');if(!c||c==='transparent'){return true;}var m=/^rgba\(([^)]*)\)$/.exec(c);if(m){var q=m[1].split(/[\s,\/]+/).filter(Boolean);return q.length>=4&&parseFloat(q[3])===0;}m=/\/\s*([\d.]+)\s*\)$/.exec(c);return !!m&&parseFloat(m[1])===0;}
+                            var fondoPag='';
+                            for(var anc=sections[0].sec.parentElement;anc&&anc.nodeType===1;anc=anc.parentElement){var cA=getComputedStyle(anc).backgroundColor;if(opaco(cA)){fondoPag=cA;break;}}
+                            if(!fondoPag){fondoPag='var(--olo-color-background, #fff)';}
                             /* Move (not clone) the real nodes: JS listeners, form state and
                                media playback inside the panels survive the grouping. */
                             sections.forEach(function(item,i){
+                                item.cssOrig=item.sec.style.cssText;
                                 item.sec.style.cssText+=';'+panelCSS;
+                                if(vuoto(getComputedStyle(item.sec).backgroundColor)){item.sec.style.backgroundColor=fondoPag;}
                                 var allinea=item.marker.dataset.hAlign;
                                 if(allinea==='center'||allinea==='bottom'){
                                     item.sec.style.display='flex';
@@ -972,7 +993,7 @@ trait Olobuild_Renderer_Page_Trait {
                             if(percorso){group.classList.add('olo-h-percorso');}
                             if(ruota){group.classList.add('olo-h-ruota');}
                             var neve=null,nctx=null,neveDist=0,neveGiro=false,osd=null,osdNum=null,osdNome=null,osdTimer=0;
-                            var portaSx=null,portaDx=null,fila=null,freccia=null,piani=[];
+                            var portaSx=null,portaDx=null,fila=null,freccia=null,piani=[],anteVid=[],antePc=-1;
                             function figlio(padre,tag,classe){var e=document.createElement(tag);e.className=classe;padre.appendChild(e);return e;}
                             var ombraP=null,irideSvg=null,iridePath=null,irideBordi=null,strSvg=null,strCarta=null,rulloEl=null,fgSvg=null,fgOmbra=null,fgLembo=null,fgG1=null,fgG2=null;
                             function svgFiglio(padre,tag,classe){var e=document.createElementNS('http://www.w3.org/2000/svg',tag);e.setAttribute('class',classe);if(tag==='svg'){e.setAttribute('aria-hidden','true');e.setAttribute('preserveAspectRatio','none');}padre.appendChild(e);return e;}
@@ -1004,6 +1025,22 @@ trait Olobuild_Renderer_Page_Trait {
                                 if(ascensore){
                                     var porte=figlio(viewport,'div','olo-h-porte');porte.setAttribute('aria-hidden','true');
                                     portaSx=figlio(porte,'span','olo-h-porta olo-h-porta-sx');portaDx=figlio(porte,'span','olo-h-porta olo-h-porta-dx');
+                                    /* il sipario (21 nov 2026): una foto o un video diviso a metà fra le due ante, intero quando si chiudono */
+                                    var anteFoto=sections[0].marker.dataset.hAnteFoto||'',anteVideo=sections[0].marker.dataset.hAnteVideo||'';
+                                    if(anteFoto||anteVideo){
+                                        porte.classList.add('olo-h-porte-media');
+                                        [[portaSx,'sx'],[portaDx,'dx']].forEach(function(c){
+                                            var m;
+                                            if(anteVideo){
+                                                m=figlio(c[0],'video','olo-h-porta-media olo-h-porta-media-'+c[1]);
+                                                m.muted=true;m.loop=true;m.playsInline=true;m.setAttribute('muted','');m.setAttribute('playsinline','');
+                                                m.preload='none';if(anteFoto){m.poster=anteFoto;}m.src=anteVideo;anteVid.push(m);
+                                            }else{
+                                                m=figlio(c[0],'span','olo-h-porta-media olo-h-porta-media-'+c[1]);
+                                                m.style.backgroundImage='url("'+anteFoto.replace(/"/g,'%22')+'")';
+                                            }
+                                        });
+                                    }
                                     fila=figlio(viewport,'div','olo-h-piani');fila.setAttribute('aria-hidden','true');
                                     freccia=figlio(fila,'span','olo-h-freccia');
                                     sections.forEach(function(item,i){var pz=figlio(fila,'span','olo-h-piano');pz.textContent=item.etichetta||String(i);piani.push(pz);});
@@ -1051,6 +1088,39 @@ trait Olobuild_Renderer_Page_Trait {
                                 m.dataset.oloHDone='1';
                                 m.style.display='none';
                             });
+                            /* 21 nov 2026: se dopo il raggruppamento un pannello cresce oltre lo schermo (caratteri, immagini,
+                               tile che si disegnano tardi), il gruppo si smonta e le sezioni tornano una sotto l'altra, com'erano:
+                               tagliate mai. */
+                            var rossa=null;
+                            function contenutoDi(sec){var h=0;Array.prototype.forEach.call(sec.children,function(ch){var pp=getComputedStyle(ch).position;if(pp!=='absolute'){if(pp!=='fixed'){h+=ch.offsetHeight;}}});return h;}
+                            function smonta(){
+                                if(group._oloSmontato){return;}
+                                group._oloSmontato=true;
+                                if(rossa){rossa.disconnect();}
+                                anteVid.forEach(function(v){try{v.pause();}catch(_){}});
+                                sections.forEach(function(item){
+                                    item.sec.style.cssText=item.cssOrig||'';
+                                    if(item.dentro){item.dentro.style.transform='';item.dentro.style.opacity='';}
+                                    item.marker.appendChild(item.sec);
+                                    item.marker.style.display='contents';
+                                });
+                                if(group.parentNode){group.parentNode.removeChild(group);}
+                            }
+                            function controlla(){
+                                if(group._oloSmontato){return;}
+                                var troppo=false;
+                                sections.forEach(function(item){
+                                    var csC=getComputedStyle(item.sec),ptC=parseFloat(csC.paddingTop)||0,pbC=parseFloat(csC.paddingBottom)||0,alC=item.marker.dataset.hAlign;
+                                    var serveC=contenutoDi(item.sec)+((alC==='center'||alC==='bottom')?Math.min(ptC+pbC,48):(ptC+Math.min(pbC,24)));
+                                    if(serveC>viewH+2){troppo=true;}
+                                });
+                                if(troppo){smonta();}
+                            }
+                            if(window.ResizeObserver){
+                                rossa=new ResizeObserver(function(){requestAnimationFrame(controlla);});
+                                sections.forEach(function(item){Array.prototype.forEach.call(item.sec.children,function(ch){rossa.observe(ch);});});
+                            }
+                            window.addEventListener('load',controlla);
                             /* Scroll-linked translateX: travel across (n-1) panels.
                                Stato esposto per altre tile (pallini, glow, testi):
                                --olo-hp sul gruppo (progresso 0..1), --olo-pp per
@@ -1061,6 +1131,7 @@ trait Olobuild_Renderer_Page_Trait {
                             var ticking=false;
                             var maxShift=(n-1)*100;
                             function onScroll(){
+                                if(group._oloSmontato){return;}
                                 if(!ticking){ticking=true;requestAnimationFrame(function(){
                                     var rect=group.getBoundingClientRect();
                                     var scrolled=-rect.top;
@@ -1175,6 +1246,13 @@ trait Olobuild_Renderer_Page_Trait {
                                             var scossa=(pc>0.98)?Math.sin(g*140)*1.4:0;
                                             portaSx.style.transform='translate3d('+((pc-1)*100).toFixed(2)+'%,'+scossa.toFixed(2)+'px,0)';
                                             portaDx.style.transform='translate3d('+((1-pc)*100).toFixed(2)+'%,'+scossa.toFixed(2)+'px,0)';
+                                            if(anteVid.length&&((pc>0.01)!==(antePc>0.01))){
+                                                anteVid.forEach(function(v,k){
+                                                    if(pc>0.01){if(k===1&&Math.abs(v.currentTime-anteVid[0].currentTime)>0.08){try{v.currentTime=anteVid[0].currentTime;}catch(_){}}var pr=v.play();if(pr&&pr.catch){pr.catch(function(){});}}
+                                                    else{v.pause();}
+                                                });
+                                            }
+                                            antePc=pc;
                                             var giu=(pos>=(group._oloPos||0));group._oloPos=pos;
                                             var sale=(sections[j0+1].dir!=='sotto');
                                             freccia.textContent=(pc>0.5)?((sale===giu)?'▲':'▼'):'';
@@ -1632,6 +1710,19 @@ trait Olobuild_Renderer_Page_Trait {
                 });
               }, {rootMargin: '200px'});
               lazys.forEach(function(el){ obs.observe(el); });
+              /* I passaggi fra le sezioni (21 nov 2026) misurano le loro sezioni prima di raggrupparle: chiedono di
+                 disegnare subito le tile pigre che ci stanno dentro, altrimenti misurerebbero i segnaposto da 50px e
+                 poi, cresciute, le tile verrebbero tagliate dal pannello. */
+              window.oloIdrata = function(root){
+                if(!root) return;
+                for(var giro = 0; giro < 4; giro++){
+                  var fatte = 0;
+                  root.querySelectorAll('[data-olo-lazy]').forEach(function(el){
+                    if(el.querySelector(':scope > template')){ hydrate(el); obs.unobserve(el); fatte++; }
+                  });
+                  if(!fatte) break;
+                }
+              };
               /* Salti a un'ancora della stessa pagina (#sezione). Il browser calcola il
                  punto d'arrivo coi segnaposto da 50px ancora al posto delle tile: appena
                  arrivati, quelle rimaste sopra si idratano, crescono e spingono giu' il
