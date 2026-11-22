@@ -17016,3 +17016,7 @@ msgstr "Thema van OLObuild Pro"
 
 msgid "Passa al Pro"
 msgstr "Overstappen naar Pro"
+
+#: licenza-1.4.1345
+msgid "Free e Pro"
+msgstr "Free en Pro"

@@ -2530,3 +2530,7 @@ msgstr "Šablona OLObuild Pro"
 
 msgid "Passa al Pro"
 msgstr "Přejít na Pro"
+
+#: licenza-1.4.1345
+msgid "Free e Pro"
+msgstr "Free a Pro"

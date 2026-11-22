@@ -2530,3 +2530,7 @@ msgstr "OLObuild Pro téma"
 
 msgid "Passa al Pro"
 msgstr "Váltás Pro-ra"
+
+#: licenza-1.4.1345
+msgid "Free e Pro"
+msgstr "Free és Pro"

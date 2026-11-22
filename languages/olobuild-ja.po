@@ -17016,3 +17016,7 @@ msgstr "OLObuild Pro のテーマ"
 
 msgid "Passa al Pro"
 msgstr "Pro にアップグレード"
+
+#: licenza-1.4.1345
+msgid "Free e Pro"
+msgstr "Free と Pro"

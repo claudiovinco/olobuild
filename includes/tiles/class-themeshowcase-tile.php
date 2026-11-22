@@ -144,6 +144,8 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 'req_logo_scuro' => $req ? (string) ( $req['logo_light'] ?? '' ) : '',
                 // Il pulsante del visore porta alla pagina del plugin richiesto: i prezzi di Olobuild non bastano.
                 'req_url'   => $req ? esc_url_raw( (string) ( $req['purchase_url'] ?? '' ) ) : '',
+                // OLObuild Free o Pro (1.4.1349): bollino sull'anteprima e filtro «Edizione»; '' per i temi dei plugin fratelli.
+                'edizione'  => in_array( (string) ( $t['edizione'] ?? '' ), [ 'free', 'pro' ], true ) ? (string) $t['edizione'] : '',
             ];
         }
         // L'ordine è quello del catalogo: per data di creazione, dal più recente (Olobuild_Theme_Importer::get_themes).
@@ -337,6 +339,10 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ovt-anteprima.ovt-gioca .ovt-video.pronto{opacity:1;}
             .<?php echo $uid; ?> .ovt-effetto{position:absolute;left:var(--olo-space-sm);bottom:var(--olo-space-sm);max-width:calc(100% - 2 * var(--olo-space-sm));display:inline-flex;align-items:center;gap:var(--olo-space-xs);padding:var(--olo-space-xs) var(--olo-space-sm);border-radius:var(--olo-btn-border-radius);font-size:12px;font-weight:600;line-height:1.3;background:color-mix(in srgb,var(--olo-color-dark) 74%,transparent);color:var(--olo-color-light);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
             .<?php echo $uid; ?> .ovt-effetto i{flex:none;width:7px;height:7px;border-radius:50%;background:var(--ovt-tema, var(--ovt-acc));}
+            /* L'edizione (1.4.1349): Free chiaro, Pro nel primario, in alto a destra dell'anteprima. */
+            .<?php echo $uid; ?> .ovt-edizione{position:absolute;right:var(--olo-space-sm);top:var(--olo-space-sm);z-index:2;padding:var(--olo-space-xs) var(--olo-space-sm);border-radius:var(--olo-btn-border-radius);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;line-height:1.3;}
+            .<?php echo $uid; ?> .ovt-edizione.is-free{background:var(--olo-color-light);color:var(--olo-color-dark);box-shadow:0 0 0 1px color-mix(in srgb,var(--olo-color-dark) 16%,transparent);}
+            .<?php echo $uid; ?> .ovt-edizione.is-pro{background:var(--olo-color-primary);color:var(--olo-color-primary-contrast, var(--olo-color-light));}
             .<?php echo $uid; ?> .ovt-tel{position:absolute;right:var(--olo-space-sm);bottom:var(--olo-space-sm);width:24%;aspect-ratio:390/844;overflow:hidden;border:3px solid var(--olo-color-dark);border-radius:13%/6%;background:var(--olo-color-light);box-shadow:0 0 0 1px color-mix(in srgb,var(--olo-color-light) 35%,transparent),0 10px 26px color-mix(in srgb,var(--olo-color-dark) 38%,transparent);}
             .<?php echo $uid; ?> .ovt-anteprima.con-tel .ovt-effetto{max-width:calc(76% - 3 * var(--olo-space-sm));}
             .<?php echo $uid; ?> .ovt-corpo{flex:1;display:flex;flex-direction:column;gap:var(--olo-space-xs);padding:var(--olo-space-md);}
@@ -429,12 +435,13 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             <?php if ( ! empty( $s['refine_bar'] ) ) :
                 // «Affina» (1.4.1218): gesto, fondo, carattere e colore, come i filtri delle gallerie di siti (Land-book).
                 $assi = [
+                    'edizione'  => [ olobuild_t( 'Edizione' ), olobuild_t( 'Free e Pro' ), [ 'free' => 'OLObuild Free', 'pro' => 'OLObuild Pro' ] ],
                     'gesto'     => [ olobuild_t( 'Effetto' ), olobuild_t( 'Tutti gli effetti' ), [ 'scorri' => olobuild_t( 'Si muove scorrendo' ), 'mouse' => olobuild_t( 'Segue il mouse' ), 'clic' => olobuild_t( 'Cambia al clic' ), 'fermo' => olobuild_t( 'Si muove da solo' ) ] ],
                     'fondo'     => [ olobuild_t( 'Fondo' ), olobuild_t( 'Chiaro e scuro' ), [ 'scuro' => olobuild_t( 'Scuro' ), 'chiaro' => olobuild_t( 'Chiaro' ) ] ],
                     'carattere' => [ olobuild_t( 'Carattere' ), olobuild_t( 'Tutti i caratteri' ), [ 'grazie' => olobuild_t( 'Con le grazie' ), 'senza' => olobuild_t( 'Senza grazie' ), 'decorativo' => olobuild_t( 'Decorativo' ) ] ],
                     'colore'    => [ olobuild_t( 'Colore' ), olobuild_t( 'Tutti i colori' ), [ 'rosso' => olobuild_t( 'Rosso' ), 'arancio' => olobuild_t( 'Arancio' ), 'giallo' => olobuild_t( 'Giallo' ), 'verde' => olobuild_t( 'Verde' ), 'azzurro' => olobuild_t( 'Azzurro' ), 'blu' => olobuild_t( 'Blu' ), 'viola' => olobuild_t( 'Viola' ), 'rosa' => olobuild_t( 'Rosa' ), 'neutro' => olobuild_t( 'Neutro' ) ] ],
                 ];
-                $chiave_tema = [ 'gesto' => 'gesto', 'fondo' => null, 'carattere' => 'carattere', 'colore' => 'famiglia' ];
+                $chiave_tema = [ 'edizione' => 'edizione', 'gesto' => 'gesto', 'fondo' => null, 'carattere' => 'carattere', 'colore' => 'famiglia' ];
                 ?>
             <div class="ovt-affina" role="group" aria-label="<?php echo esc_attr( olobuild_t( 'Affina la ricerca' ) ); ?>" data-olo-interactive>
                 <?php foreach ( $assi as $asse => $a ) :
@@ -476,13 +483,14 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
             <ul class="ovt-griglia" role="list">
                 <?php foreach ( $temi as $t ) : ?>
-                <li class="ovt-voce" data-cat="<?php echo esc_attr( $t['categoria'] ); ?>" data-req="<?php echo esc_attr( $t['req'] ); ?>" data-cerca="<?php echo esc_attr( $t['cerca'] ); ?>" data-gesto="<?php echo esc_attr( $t['gesto'] ); ?>" data-fondo="<?php echo $t['scuro'] ? 'scuro' : 'chiaro'; ?>" data-carattere="<?php echo esc_attr( $t['carattere'] ); ?>" data-colore="<?php echo esc_attr( $t['famiglia'] ); ?>">
-                    <a class="ovt-card" href="<?php echo esc_url( $t['demo'] ); ?>" data-tema="<?php echo esc_attr( $t['id'] ); ?>" data-nome="<?php echo esc_attr( $t['nome'] ); ?>" data-categoria="<?php echo esc_attr( $t['etichetta'] ); ?>"<?php echo $t['scuro'] ? ' data-scuro="1"' : ''; ?><?php echo '' !== $t['propri'] ? ' data-colori="' . esc_attr( $t['propri'] ) . '"' : ''; ?><?php echo '' !== $t['colore'] ? ' style="--ovt-tema:' . esc_attr( $t['colore'] ) . '"' : ''; ?><?php echo '' !== $t['req_url'] ? ' data-cta-url="' . esc_url( $t['req_url'] ) . '" data-cta-testo="' . esc_attr( sprintf( olobuild_t( 'Scopri %s' ), $t['req_nome'] ) ) . '"' : ''; ?>>
+                <li class="ovt-voce" data-cat="<?php echo esc_attr( $t['categoria'] ); ?>" data-req="<?php echo esc_attr( $t['req'] ); ?>" data-cerca="<?php echo esc_attr( $t['cerca'] ); ?>" data-gesto="<?php echo esc_attr( $t['gesto'] ); ?>" data-fondo="<?php echo $t['scuro'] ? 'scuro' : 'chiaro'; ?>" data-carattere="<?php echo esc_attr( $t['carattere'] ); ?>" data-colore="<?php echo esc_attr( $t['famiglia'] ); ?>" data-edizione="<?php echo esc_attr( $t['edizione'] ); ?>">
+                    <a class="ovt-card" href="<?php echo esc_url( $t['demo'] ); ?>" data-tema="<?php echo esc_attr( $t['id'] ); ?>" data-nome="<?php echo esc_attr( $t['nome'] ); ?>" data-categoria="<?php echo esc_attr( trim( $t['etichetta'] . ( '' !== $t['edizione'] ? ' · OLObuild ' . ( 'pro' === $t['edizione'] ? 'Pro' : 'Free' ) : '' ), ' ·' ) ); ?>"<?php echo $t['scuro'] ? ' data-scuro="1"' : ''; ?><?php echo '' !== $t['propri'] ? ' data-colori="' . esc_attr( $t['propri'] ) . '"' : ''; ?><?php echo '' !== $t['colore'] ? ' style="--ovt-tema:' . esc_attr( $t['colore'] ) . '"' : ''; ?><?php echo '' !== $t['req_url'] ? ' data-cta-url="' . esc_url( $t['req_url'] ) . '" data-cta-testo="' . esc_attr( sprintf( olobuild_t( 'Scopri %s' ), $t['req_nome'] ) ) . '"' : ''; ?>>
                         <?php $tel = ! empty( $s['show_phone'] ) && '' !== $t['telefono'] && '' !== $t['anteprima']; ?>
                         <?php $video = ! empty( $s['show_video'] ) && '' !== $t['video'] && '' !== $t['anteprima']; ?>
                         <span class="ovt-anteprima<?php echo $tel ? ' con-tel' : ''; ?><?php echo $video ? ' con-video' : ''; ?>">
                             <?php if ( '' !== $t['anteprima'] ) : ?><img src="<?php echo esc_url( $t['anteprima'] ); ?>" alt="" loading="lazy" decoding="async" /><?php endif; ?>
                             <?php if ( $video ) : ?><video class="ovt-video" muted playsinline preload="none" aria-hidden="true" tabindex="-1" data-src="<?php echo esc_url( $t['video'] ); ?>"></video><?php endif; ?>
+                            <?php if ( '' !== $t['edizione'] ) : ?><span class="ovt-edizione is-<?php echo esc_attr( $t['edizione'] ); ?>" title="<?php echo esc_attr( 'pro' === $t['edizione'] ? 'OLObuild Pro' : 'OLObuild Free' ); ?>"><?php echo 'pro' === $t['edizione'] ? 'Pro' : 'Free'; ?></span><?php endif; ?>
                             <?php if ( ! empty( $s['show_zone'] ) && '' !== $t['effetto'] ) : ?><span class="ovt-effetto"><i></i><?php echo esc_html( $t['effetto'] ); ?></span><?php endif; ?>
                             <?php if ( $tel ) : // la stessa home sul telefono: scorre col mouse insieme a quella del computer (stesse regole di .ovt-anteprima img) ?><span class="ovt-tel"><img src="<?php echo esc_url( $t['telefono'] ); ?>" alt="" loading="lazy" decoding="async" /></span><?php endif; ?>
                         </span>

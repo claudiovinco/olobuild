@@ -17016,3 +17016,7 @@ msgstr "Motyw OLObuild Pro"
 
 msgid "Passa al Pro"
 msgstr "Przejdź na Pro"
+
+#: licenza-1.4.1345
+msgid "Free e Pro"
+msgstr "Free i Pro"

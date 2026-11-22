@@ -55429,3 +55429,7 @@ msgstr "Theme von OLObuild Pro"
 
 msgid "Passa al Pro"
 msgstr "Zu Pro wechseln"
+
+#: licenza-1.4.1345
+msgid "Free e Pro"
+msgstr "Free und Pro"
