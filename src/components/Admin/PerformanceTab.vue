@@ -345,6 +345,7 @@ const stats = ref({
 const MOTIVI_CACHE = {
   foreign_dropin: 'Un altro plugin di cache usa già advanced-cache.php: disattivalo',
   wp_cache_off: 'wp-config.php non è scrivibile: aggiungi define(\'WP_CACHE\', true)',
+  wp_cache_missing: 'In wp-config.php manca define(\'WP_CACHE\', true): spegni e riaccendi l\'interruttore',
   dropin_missing: 'Il file advanced-cache.php non è stato installato',
 };
 const motivoCache = computed(() => {

@@ -374,7 +374,17 @@ class Olobuild_FullPage_Cache {
             } elseif ( '' === $head ) {
                 $mot = 'dropin_missing';
             } elseif ( ! ( defined( 'WP_CACHE' ) && WP_CACHE ) ) {
-                $mot = 'wp_cache_off';
+                // WP_CACHE si legge all'avvio della richiesta: appena acceso l'interruttore la riga è
+                // già in wp-config.php ma vale dalla richiesta dopo. Prima la risposta dell'interruttore
+                // diceva «wp-config.php non è scrivibile» proprio mentre l'aveva appena scritto (22 nov
+                // 2026, olotheme.com). Avvisa solo se nel file la riga non c'è davvero.
+                $cfg = self::wp_config_path();
+                $src = '' !== $cfg ? (string) @file_get_contents( $cfg ) : '';
+                // senza i commenti: la nostra riga ha «/* OLOBUILD_FPC */» davanti, una riga «// define(…)» non vale
+                $src = (string) preg_replace( [ '#/\*.*?\*/#s', '#(^|\s)(//|\#)[^\n]*#' ], ' ', $src );
+                if ( ! preg_match( '/define\(\s*[\'"]WP_CACHE[\'"]\s*,\s*true\s*\)/i', $src ) ) {
+                    $mot = ( '' !== $cfg && wp_is_writable( $cfg ) ) ? 'wp_cache_missing' : 'wp_cache_off';
+                }
             }
         }
         $o   = get_option( self::OPT, [] );

@@ -157,6 +157,20 @@ class Olobuild_Performance_Hints {
             [ $t['font_family'] ?? '', (int) ( $t['font_weight_body'] ?? 400 ) ],
             [ $t['font_family_heading'] ?? '', (int) ( $t['font_weight_heading'] ?? 700 ) ],
         ];
+        // Tipografia di base vuota (il sito usa solo le tipografie globali, come olotheme.com: Fraunces nei
+        // titoli, Inter nel testo): prima non si precaricava niente e il carattere del titolo, l'LCP, partiva
+        // solo dopo aver letto il CSS (22 nov 2026). Allora le globali al peso 400, il mono per ultimo
+        // (di solito sta negli occhielli piccoli).
+        if ( '' === trim( (string) $coppie[0][0] ) && '' === trim( (string) $coppie[1][0] ) && $set ) {
+            $globali = array_values( $set );
+            usort( $globali, function ( $a, $b ) {
+                return (int) ( false !== stripos( $a, 'mono' ) ) - (int) ( false !== stripos( $b, 'mono' ) );
+            } );
+            $coppie = [];
+            foreach ( array_slice( $globali, 0, 2 ) as $fam ) {
+                $coppie[] = [ $fam, 400 ];
+            }
+        }
         foreach ( $coppie as $c ) {
             $valore = (string) $c[0];
             $peso   = $c[1] ?: 400;

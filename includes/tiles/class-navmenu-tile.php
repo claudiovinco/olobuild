@@ -717,7 +717,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                                 <?php elseif ( $is_mega && ! empty( $subs ) ) : ?>
                                     <?php $this->render_mega_dropdown( $subs, $grandchildren, $s, $drop_id ); ?>
                                 <?php elseif ( ! empty( $subs ) ) : ?>
-                                    <div id="<?php echo esc_attr( $drop_id ); ?>" uk-drop="mode: hover; delay-show: 0; delay-hide: 200; pos: bottom-left; offset: 0; animation: uk-animation-slide-top-small; duration: 150">
+                                    <div id="<?php echo esc_attr( $drop_id ); ?>" class="uk-drop" uk-drop="mode: hover; delay-show: 0; delay-hide: 200; pos: bottom-left; offset: 0; animation: uk-animation-slide-top-small; duration: 150">
                                         <div class="uk-card uk-card-body uk-card-default uk-card-small olo-nav-dropdown">
                                             <ul class="uk-nav uk-nav-default">
                                                 <?php foreach ( $subs as $sub ) : ?>
@@ -851,7 +851,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
                     </div>
                 <?php else : ?>
                     <?php // Niente `uk-hidden` qui: è display:none !important, e con uk-open il menu restava 0×0. Il drop chiuso lo nasconde già UIkit (.uk-drop). ?>
-                    <div id="<?php echo esc_attr( $nav_id ); ?>" uk-drop="mode: click; toggle: #<?php echo esc_attr( $nav_id ); ?>-btn; pos: bottom-left; offset: 0">
+                    <div id="<?php echo esc_attr( $nav_id ); ?>" class="uk-drop" uk-drop="mode: click; toggle: #<?php echo esc_attr( $nav_id ); ?>-btn; pos: bottom-left; offset: 0">
                         <div class="uk-card uk-card-body uk-card-default uk-card-small">
                             <ul class="uk-nav uk-nav-default uk-nav-parent-icon" uk-nav>
                                 <?php $this->render_mobile_items( $tree, $children, $grandchildren ); ?>
@@ -950,7 +950,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
      */
     private function render_template_panel( $tpl_id, $drop_id ) {
         ?>
-        <div id="<?php echo esc_attr( $drop_id ); ?>" class="olo-nav-tpl-drop" uk-drop="mode: hover; delay-show: 0; delay-hide: 250; pos: bottom-left; target: !.olo-template; boundary: !.olo-template; stretch: x; flip: false; shift: false; animation: uk-animation-slide-top-small; duration: 180">
+        <div id="<?php echo esc_attr( $drop_id ); ?>" class="olo-nav-tpl-drop uk-drop" uk-drop="mode: hover; delay-show: 0; delay-hide: 250; pos: bottom-left; target: !.olo-template; boundary: !.olo-template; stretch: x; flip: false; shift: false; animation: uk-animation-slide-top-small; duration: 180">
             <div class="olo-nav-tpl-panel">
                 <?php echo do_shortcode( '[olo_template id="' . absint( $tpl_id ) . '"]' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML del template reso dallo shortcode [olo_template]; i renderer delle tile fanno il loro escape ?>
             </div>
@@ -1033,7 +1033,7 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
             }
         }
         ?>
-        <div class="olo-mega-drop"<?php echo $drop_id ? ' id="' . esc_attr( $drop_id ) . '"' : ''; ?> uk-drop="mode: hover; delay-show: 0; delay-hide: 200; pos: bottom-left; offset: 0; animation: uk-animation-slide-top-small; duration: 150">
+        <div class="olo-mega-drop uk-drop"<?php echo $drop_id ? ' id="' . esc_attr( $drop_id ) . '"' : ''; ?> uk-drop="mode: hover; delay-show: 0; delay-hide: 200; pos: bottom-left; offset: 0; animation: uk-animation-slide-top-small; duration: 150">
             <div class="uk-card uk-card-body uk-card-default olo-mega-panel">
                 <?php if ( $has_grandchildren ) : ?>
                     <?php // Subs become column headers, grandchildren become items ?>

@@ -287,6 +287,11 @@ class Olobuild_Critical_CSS {
     /**
      * Base critical CSS (layout reset, section, row essentials).
      */
+    /**
+     * Regole di base del CSS critico. `.olo-template` taglia con `clip`, come frontend.css: con `hidden` il template
+     * diventava un'area che scorre per conto suo e position:sticky smetteva di funzionare (il Mazzo degli specialisti
+     * e la sezione che si scopre di olotheme.com restavano un buco bianco di 3.000 px, 22 nov 2026).
+     */
     private static function get_base_critical_css() {
         return '
             *,*::before,*::after{box-sizing:border-box}
@@ -302,7 +307,7 @@ class Olobuild_Critical_CSS {
             .uk-width-1-4{width:25%}
             .uk-width-3-4{width:75%}
             .uk-position-relative{position:relative}
-            .olo-template{overflow-x:hidden}
+            .olo-template{overflow-x:clip}
             img{max-width:100%;height:auto}
         ';
     }

@@ -149,7 +149,7 @@ class Olobuild_Popover_Tile extends Olobuild_Tile_Base {
                 $drop_id    = $uid . '-drop-' . $i;
             ?>
                 <a class="uk-position-absolute olo-popover-marker" href="#" style="left:<?php echo esc_attr( $x ); ?>%;top:<?php echo esc_attr( $y ); ?>%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;background:<?php echo $color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- safe_color_css()-whitelisted colour; may legitimately be a var() value with fallback that esc_attr() could alter ?>;display:block;box-shadow:0 0 0 3px rgba(255,255,255,0.4);" aria-label="<?php echo esc_attr( $marker['title'] ?? '' ); ?>" aria-haspopup="dialog" aria-expanded="false" aria-controls="<?php echo esc_attr( $drop_id ); ?>"></a>
-                <div id="<?php echo esc_attr( $drop_id ); ?>" uk-drop="mode: click; pos: top-center">
+                <div id="<?php echo esc_attr( $drop_id ); ?>" class="uk-drop" uk-drop="mode: click; pos: top-center">
                     <div class="olo-popover-drop">
                         <?php if ( ! empty( $marker_img ) ) : ?>
                         <div class="olo-popover-drop__media">

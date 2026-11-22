@@ -664,6 +664,12 @@ trait Olobuild_Renderer_Structure_Trait {
             $grid_opts[] = 'margin: uk-margin-small-top';
         }
         $uk_grid = 'uk-grid';
+        // La classe uk-grid già dal server: UIkit la mette col suo JS, che arriva in fondo alla pagina,
+        // e fino ad allora le colonne stavano una sotto l'altra; al suo arrivo si affiancavano spostando
+        // tutto (CLS 0,8 sulla home di olotheme.com, GTmetrix 22 nov 2026). Con la classe il primo
+        // disegno è già quello finale.
+        $classes[]                = 'uk-grid';
+        $pre_class_attr_classes[] = 'uk-grid';
 
         $html = '';
 

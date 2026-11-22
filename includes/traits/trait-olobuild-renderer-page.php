@@ -1509,6 +1509,187 @@ trait Olobuild_Renderer_Page_Trait {
                 })();
                 </script>
             <?php endif; ?>
+            <?php self::accoda_script_runtime(); ?>
+            <?php if ( $has_any_snap ) : ?>
+            <script>
+            (function(){
+              var sections = document.querySelectorAll('[data-olo-snap-section]');
+              if (!sections.length) return;
+
+              /* Apply scroll-snap-type to the scroll container (html element) */
+              var html = document.documentElement;
+              html.style.scrollSnapType = 'y proximity';
+              html.style.overflowY = 'scroll';
+              html.style.height = '100vh';
+
+              /* Make header/footer reachable — give snap-align to non-snap siblings */
+              var header = document.querySelector('.olo-header-wrap');
+              if (header) { header.style.scrollSnapAlign = 'start'; }
+              var footer = document.querySelector('.olo-footer-wrap');
+              if (footer) { footer.style.scrollSnapAlign = 'end'; }
+
+              /* Build dots navigation */
+              var dotColor = sections[0].dataset.snapDotColor || '#ffffff';
+              var dotActive = sections[0].dataset.snapDotActive || '';
+              var dotPos = sections[0].dataset.snapDotPos || 'right';
+
+              var nav = document.createElement('div');
+              nav.className = 'olo-snap-dots';
+              nav.setAttribute('aria-label', 'Navigazione sezioni');
+              nav.style.cssText = 'position:fixed;top:50%;transform:translateY(-50%);z-index:9990;display:flex;flex-direction:column;gap:12px;padding:8px;' + dotPos + ':16px';
+
+              var dots = [];
+              sections.forEach(function(sec, i) {
+                var dot = document.createElement('button');
+                dot.type = 'button';
+                dot.setAttribute('aria-label', 'Vai alla sezione ' + (i + 1));
+                dot.style.cssText = 'width:12px;height:12px;border-radius:50%;border:2px solid ' + dotColor + ';background:transparent;cursor:pointer;padding:0;transition:background 0.3s,transform 0.3s;outline:none';
+                dot.addEventListener('click', function() {
+                  sec.scrollIntoView({ behavior: 'smooth' });
+                });
+                nav.appendChild(dot);
+                dots.push(dot);
+              });
+
+              document.body.appendChild(nav);
+
+              /* IntersectionObserver to highlight active dot */
+              var activeIdx = 0;
+              function setActive(idx) {
+                if (idx === activeIdx) {
+                  if (dots[idx]) {
+                    /* ensure first load paints correctly */
+                  }
+                }
+                activeIdx = idx;
+                dots.forEach(function(d, j) {
+                  if (j === idx) {
+                    d.style.background = dotActive || dotColor;
+                    d.style.borderColor = dotActive || dotColor;
+                    d.style.transform = 'scale(1.3)';
+                  } else {
+                    d.style.background = 'transparent';
+                    d.style.borderColor = dotColor;
+                    d.style.transform = 'scale(1)';
+                  }
+                });
+              }
+              setActive(0);
+
+              var obs = new IntersectionObserver(function(entries) {
+                entries.forEach(function(e) {
+                  if (e.isIntersecting) {
+                    if (e.intersectionRatio >= 0.5) {
+                      var idx = Array.prototype.indexOf.call(sections, e.target);
+                      if (idx >= 0) setActive(idx);
+                    }
+                  }
+                });
+              }, { threshold: 0.5 });
+
+              sections.forEach(function(sec) { obs.observe(sec); });
+            })();
+            </script>
+            <?php endif; ?>
+        </div>
+        <?php
+
+        // Signal that Olobuild frontend content was rendered (used by a11y scripts)
+        do_action( 'olobuild_frontend_rendered', $id );
+
+        $html = ob_get_clean();
+
+        // Post-process: add srcset to images missing it
+        $html = $this->add_srcset_to_images( $html );
+
+        return $html;
+    }
+
+    /**
+     * Post-process HTML: find <img> tags without srcset and add it
+     * by resolving the attachment ID from the src URL.
+     */
+    private function add_srcset_to_images( $html ) {
+        if ( ! str_contains( $html, '<img' ) ) {
+            return $html;
+        }
+
+        return preg_replace_callback( '/<img\b([^>]*?)\/?\s*>/i', function ( $match ) {
+            $tag = $match[0];
+
+            // Skip if already has srcset
+            if ( stripos( $tag, 'srcset=' ) !== false ) {
+                return $tag;
+            }
+
+            // Extract src
+            if ( ! preg_match( '/\bsrc=["\']([^"\']+)["\']/i', $tag, $src_m ) ) {
+                return $tag;
+            }
+
+            $src = $src_m[1];
+
+            // Only process local uploads
+            if ( ! str_contains( $src, '/wp-content/uploads/' ) ) {
+                return $tag;
+            }
+
+            $att_id = attachment_url_to_postid( $src );
+            if ( ! $att_id ) {
+                return $tag;
+            }
+
+            $srcset = wp_get_attachment_image_srcset( $att_id, 'full' );
+            if ( ! $srcset ) {
+                return $tag;
+            }
+
+            $sizes = wp_get_attachment_image_sizes( $att_id, 'full' ) ?: '(max-width: 480px) 100vw, (max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw';
+
+            // Add width/height if missing
+            $extra = '';
+            if ( stripos( $tag, 'width=' ) === false ) {
+                $meta = wp_get_attachment_metadata( $att_id );
+                if ( ! empty( $meta['width'] ) ) {
+                    $extra .= ' width="' . intval( $meta['width'] ) . '" height="' . intval( $meta['height'] ) . '"';
+                }
+            }
+
+            // Insert srcset before closing
+            $insert = ' srcset="' . esc_attr( $srcset ) . '" sizes="' . esc_attr( $sizes ) . '"' . $extra;
+
+            return str_replace( '<img', '<img' . $insert, $tag );
+        }, $html );
+    }
+
+    /**
+     * Gli script di servizio della pagina (ingressi, tile pigre, ancore, tilt, giroscopio, torcia, pennellata…)
+     * UNA volta per pagina. Prima uscivano interi a ogni template disegnato (pagina, testata, pannelli del Mega Menu,
+     * piè): sulla home di olotheme.com cinque copie, circa 250 KB di HTML e cinque compilazioni dello stesso
+     * JavaScript (GTmetrix, 22 nov 2026). In una pagina normale vanno nel piè (wp_footer, priorità 20); se si sta già
+     * disegnando il piè escono lì, una volta; nelle risposte REST e AJAX (anteprima del builder) restano in linea a
+     * ogni template, come prima. Si leggono da soli il DOM (DOMContentLoaded o subito): nel piè lo trovano già intero.
+     */
+    public static function accoda_script_runtime() {
+        static $accodato = false;
+        if ( wp_doing_ajax() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
+            self::stampa_script_runtime();
+            return;
+        }
+        if ( $accodato ) {
+            return;
+        }
+        $accodato = true;
+        if ( doing_action( 'wp_footer' ) || did_action( 'wp_footer' ) ) {
+            self::stampa_script_runtime();
+            return;
+        }
+        add_action( 'wp_footer', [ __CLASS__, 'stampa_script_runtime' ], 20 );
+    }
+
+    /** Il testo degli script di servizio (vedi accoda_script_runtime). */
+    public static function stampa_script_runtime() {
+        ?>
             <script>
             (function(){
               if(window.__oloEntranceInit) return;
@@ -1546,25 +1727,34 @@ trait Olobuild_Renderer_Page_Trait {
                 return [];
               }
               function ms(v){ v = String(v || '0'); var n = parseFloat(v) || 0; return v.indexOf('ms') > -1 ? n : n * 1000; }
-              function preparaStagger(el){
-                if(el._oloFigli) return;
+              /* Lettura e scrittura separate (22 nov 2026): leggiStagger legge soltanto, applicaStagger scrive
+                 soltanto, così prepara() legge tutte le tile e poi scrive. Prima si alternavano e ogni lettura
+                 dopo una scrittura rifaceva l'impaginazione della pagina intera (sulla home di olotheme.com
+                 170 ms di lavoro bloccante a ogni apertura, col processore di un telefono). */
+              function leggiStagger(el){
+                if(el._oloFigli) return null;
                 var cs = getComputedStyle(el);
                 var nome = String(cs.animationName || '').split(',')[0].trim();
-                if(nome.indexOf('olo-fx-') !== 0) return;
+                if(nome.indexOf('olo-fx-') !== 0) return null;
                 // un figlio con un ingresso suo continua a usare quello
                 var figli = figliDi(el).filter(function(c){ return !/(^|\s)olo-entrance-/.test(c.className); });
-                if(figli.length < 2) return;
-                var passo = parseInt(cs.getPropertyValue('--olo-stagger-delay')) || 100;
-                var dur = String(cs.animationDuration).split(',')[0].trim();
-                var curva = String(cs.animationTimingFunction).split(/,(?![^(]*\))/)[0].trim();
-                var base = ms(String(cs.animationDelay).split(',')[0]);
-                figli.forEach(function(c, i){
+                if(figli.length < 2) return null;
+                return { figli: figli, nome: nome, passo: parseInt(cs.getPropertyValue('--olo-stagger-delay')) || 100,
+                  dur: String(cs.animationDuration).split(',')[0].trim(),
+                  curva: String(cs.animationTimingFunction).split(/,(?![^(]*\))/)[0].trim(),
+                  base: ms(String(cs.animationDelay).split(',')[0]) };
+              }
+              function applicaStagger(el, s){
+                if(!s || el._oloFigli) return;
+                s.figli.forEach(function(c, i){
                   c.classList.add('olo-stagger-figlio');
-                  c.style.setProperty('--olo-sf-anim', nome + ' ' + dur + ' ' + curva + ' ' + Math.round(base + i * passo) + 'ms');
+                  c.style.setProperty('--olo-sf-anim', s.nome + ' ' + s.dur + ' ' + s.curva + ' ' + Math.round(s.base + i * s.passo) + 'ms');
                 });
-                el._oloFigli = figli;
+                el._oloFigli = s.figli;
                 el.classList.add('olo-stagger-attivo');
               }
+              function preparaStagger(el){ applicaStagger(el, leggiStagger(el)); }
+              var giroIniziale = true;
               function entra(el){
                 if(el._oloFigli){ el._oloFigli.forEach(function(c){ c.classList.add('olo-sf-via'); }); }
                 // Insieme, nello stesso istante: con fill-mode both la posa di partenza vale subito,
@@ -1595,18 +1785,37 @@ trait Olobuild_Renderer_Page_Trait {
                   return;
                 }
                 var vh = window.innerHeight || document.documentElement.clientHeight;
+                /* All'apertura della pagina ciò che è già sullo schermo entra SUBITO, con la sua animazione
+                   intera e senza cascata (utente, 22 nov 2026): la cascata la prepara questo script, che arriva
+                   dopo il caricamento, e le colonne già visibili ripartivano da capo; il titolo dell'apertura
+                   compariva per ultimo (LCP 2,4 s invece di 0,8). La cascata resta per ciò che entra scorrendo,
+                   per le tile montate a richiesta e nel canvas del builder (una pagina dentro un iframe), dove
+                   la si guarda mentre la si imposta. */
+                var subito = false;
+                if(giroIniziale){
+                  if(radice === document){
+                    giroIniziale = false;
+                    subito = window.self === window.top;
+                  }
+                }
+                // 1) SOLO letture, per tutte le tile del lotto: una sola impaginazione
+                var lotto = [];
                 els.forEach(function(el){
                   if(el.dataset.oloIngresso) return;
-                  el.dataset.oloIngresso = '1';
                   // prima di metterlo in attesa: l'animazione del contenitore si legge mentre ce l'ha ancora
-                  if(el.classList.contains('olo-stagger-parent')) preparaStagger(el);
+                  var st = el.classList.contains('olo-stagger-parent') ? leggiStagger(el) : null;
                   // sotto la zona visibile: in attesa (una tile nascosta, alta 0, non si tocca)
                   var r = el.getBoundingClientRect();
-                  if(r.height > 0){
-                    if(r.top > vh * 0.88){
-                      el.classList.remove('olo-visible');
-                      el.classList.add('olo-in-attesa');
-                    }
+                  lotto.push({ el: el, st: st, sotto: r.height > 0 ? r.top > vh * 0.88 : false });
+                });
+                // 2) SOLO scritture
+                lotto.forEach(function(x){
+                  var el = x.el;
+                  el.dataset.oloIngresso = '1';
+                  if(x.sotto){ applicaStagger(el, x.st); } else if(!subito){ applicaStagger(el, x.st); }
+                  if(x.sotto){
+                    el.classList.remove('olo-visible');
+                    el.classList.add('olo-in-attesa');
                   }
                   // già sullo schermo: i figli partono subito, uno dopo l'altro
                   if(el._oloFigli){ if(!el.classList.contains('olo-in-attesa')) entra(el); }
@@ -2302,155 +2511,7 @@ trait Olobuild_Renderer_Page_Trait {
               frame();
             })();
             </script>
-            <?php if ( $has_any_snap ) : ?>
-            <script>
-            (function(){
-              var sections = document.querySelectorAll('[data-olo-snap-section]');
-              if (!sections.length) return;
-
-              /* Apply scroll-snap-type to the scroll container (html element) */
-              var html = document.documentElement;
-              html.style.scrollSnapType = 'y proximity';
-              html.style.overflowY = 'scroll';
-              html.style.height = '100vh';
-
-              /* Make header/footer reachable — give snap-align to non-snap siblings */
-              var header = document.querySelector('.olo-header-wrap');
-              if (header) { header.style.scrollSnapAlign = 'start'; }
-              var footer = document.querySelector('.olo-footer-wrap');
-              if (footer) { footer.style.scrollSnapAlign = 'end'; }
-
-              /* Build dots navigation */
-              var dotColor = sections[0].dataset.snapDotColor || '#ffffff';
-              var dotActive = sections[0].dataset.snapDotActive || '';
-              var dotPos = sections[0].dataset.snapDotPos || 'right';
-
-              var nav = document.createElement('div');
-              nav.className = 'olo-snap-dots';
-              nav.setAttribute('aria-label', 'Navigazione sezioni');
-              nav.style.cssText = 'position:fixed;top:50%;transform:translateY(-50%);z-index:9990;display:flex;flex-direction:column;gap:12px;padding:8px;' + dotPos + ':16px';
-
-              var dots = [];
-              sections.forEach(function(sec, i) {
-                var dot = document.createElement('button');
-                dot.type = 'button';
-                dot.setAttribute('aria-label', 'Vai alla sezione ' + (i + 1));
-                dot.style.cssText = 'width:12px;height:12px;border-radius:50%;border:2px solid ' + dotColor + ';background:transparent;cursor:pointer;padding:0;transition:background 0.3s,transform 0.3s;outline:none';
-                dot.addEventListener('click', function() {
-                  sec.scrollIntoView({ behavior: 'smooth' });
-                });
-                nav.appendChild(dot);
-                dots.push(dot);
-              });
-
-              document.body.appendChild(nav);
-
-              /* IntersectionObserver to highlight active dot */
-              var activeIdx = 0;
-              function setActive(idx) {
-                if (idx === activeIdx) {
-                  if (dots[idx]) {
-                    /* ensure first load paints correctly */
-                  }
-                }
-                activeIdx = idx;
-                dots.forEach(function(d, j) {
-                  if (j === idx) {
-                    d.style.background = dotActive || dotColor;
-                    d.style.borderColor = dotActive || dotColor;
-                    d.style.transform = 'scale(1.3)';
-                  } else {
-                    d.style.background = 'transparent';
-                    d.style.borderColor = dotColor;
-                    d.style.transform = 'scale(1)';
-                  }
-                });
-              }
-              setActive(0);
-
-              var obs = new IntersectionObserver(function(entries) {
-                entries.forEach(function(e) {
-                  if (e.isIntersecting) {
-                    if (e.intersectionRatio >= 0.5) {
-                      var idx = Array.prototype.indexOf.call(sections, e.target);
-                      if (idx >= 0) setActive(idx);
-                    }
-                  }
-                });
-              }, { threshold: 0.5 });
-
-              sections.forEach(function(sec) { obs.observe(sec); });
-            })();
-            </script>
-            <?php endif; ?>
-        </div>
         <?php
-
-        // Signal that Olobuild frontend content was rendered (used by a11y scripts)
-        do_action( 'olobuild_frontend_rendered', $id );
-
-        $html = ob_get_clean();
-
-        // Post-process: add srcset to images missing it
-        $html = $this->add_srcset_to_images( $html );
-
-        return $html;
     }
 
-    /**
-     * Post-process HTML: find <img> tags without srcset and add it
-     * by resolving the attachment ID from the src URL.
-     */
-    private function add_srcset_to_images( $html ) {
-        if ( ! str_contains( $html, '<img' ) ) {
-            return $html;
-        }
-
-        return preg_replace_callback( '/<img\b([^>]*?)\/?\s*>/i', function ( $match ) {
-            $tag = $match[0];
-
-            // Skip if already has srcset
-            if ( stripos( $tag, 'srcset=' ) !== false ) {
-                return $tag;
-            }
-
-            // Extract src
-            if ( ! preg_match( '/\bsrc=["\']([^"\']+)["\']/i', $tag, $src_m ) ) {
-                return $tag;
-            }
-
-            $src = $src_m[1];
-
-            // Only process local uploads
-            if ( ! str_contains( $src, '/wp-content/uploads/' ) ) {
-                return $tag;
-            }
-
-            $att_id = attachment_url_to_postid( $src );
-            if ( ! $att_id ) {
-                return $tag;
-            }
-
-            $srcset = wp_get_attachment_image_srcset( $att_id, 'full' );
-            if ( ! $srcset ) {
-                return $tag;
-            }
-
-            $sizes = wp_get_attachment_image_sizes( $att_id, 'full' ) ?: '(max-width: 480px) 100vw, (max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw';
-
-            // Add width/height if missing
-            $extra = '';
-            if ( stripos( $tag, 'width=' ) === false ) {
-                $meta = wp_get_attachment_metadata( $att_id );
-                if ( ! empty( $meta['width'] ) ) {
-                    $extra .= ' width="' . intval( $meta['width'] ) . '" height="' . intval( $meta['height'] ) . '"';
-                }
-            }
-
-            // Insert srcset before closing
-            $insert = ' srcset="' . esc_attr( $srcset ) . '" sizes="' . esc_attr( $sizes ) . '"' . $extra;
-
-            return str_replace( '<img', '<img' . $insert, $tag );
-        }, $html );
-    }
 }
