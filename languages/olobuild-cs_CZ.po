@@ -2508,3 +2508,25 @@ msgstr "DOPORUČENÁ SEKCE"
 
 msgid "Tutti i diritti riservati."
 msgstr "Všechna práva vyhrazena."
+
+#: licenza-1.4.1345
+msgid "Questo tema fa parte di OLObuild Pro: si importa con la licenza Pro."
+msgstr "Tato šablona patří do OLObuild Pro: importuje se s licencí Pro."
+
+msgid "Per scaricare i temi del Pro il server deve avere l’estensione PHP zip."
+msgstr "Ke stažení šablon Pro potřebuje server rozšíření PHP zip."
+
+msgid "Non è stato possibile scaricare il tema da olotheme.com: riprova tra poco."
+msgstr "Šablonu se nepodařilo stáhnout z olotheme.com: zkuste to za chvíli znovu."
+
+msgid "Non è stato possibile scrivere nella cartella dei caricamenti."
+msgstr "Do složky nahraných souborů nelze zapisovat."
+
+msgid "Edizione"
+msgstr "Edice"
+
+msgid "Tema di OLObuild Pro"
+msgstr "Šablona OLObuild Pro"
+
+msgid "Passa al Pro"
+msgstr "Přejít na Pro"

@@ -46,6 +46,10 @@ function etichette() {
     updateLabel: t('Aggiorna %s'),
     importWithLabel: t('Importa con %s'),
     installsTitle: t('Si installa da sé: %s arriva da wordpress.org quando importi il tema'),
+    // I temi del Pro (1.4.1347)
+    editionLabel: t('Edizione'),
+    proTitle: t('Tema di OLObuild Pro'),
+    proUpgradeLabel: t('Passa al Pro'),
   };
 }
 

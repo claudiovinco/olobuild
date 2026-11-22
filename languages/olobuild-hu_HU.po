@@ -2508,3 +2508,25 @@ msgstr "JAVASOLT SZEKCIÓ"
 
 msgid "Tutti i diritti riservati."
 msgstr "Minden jog fenntartva."
+
+#: licenza-1.4.1345
+msgid "Questo tema fa parte di OLObuild Pro: si importa con la licenza Pro."
+msgstr "Ez a téma az OLObuild Pro része: a Pro licenccel importálható."
+
+msgid "Per scaricare i temi del Pro il server deve avere l’estensione PHP zip."
+msgstr "A Pro témák letöltéséhez a szervernek szüksége van a PHP zip kiterjesztésre."
+
+msgid "Non è stato possibile scaricare il tema da olotheme.com: riprova tra poco."
+msgstr "A téma letöltése az olotheme.com oldalról nem sikerült: kicsit később újra lehet próbálni."
+
+msgid "Non è stato possibile scrivere nella cartella dei caricamenti."
+msgstr "Nem sikerült írni a feltöltések mappájába."
+
+msgid "Edizione"
+msgstr "Kiadás"
+
+msgid "Tema di OLObuild Pro"
+msgstr "OLObuild Pro téma"
+
+msgid "Passa al Pro"
+msgstr "Váltás Pro-ra"

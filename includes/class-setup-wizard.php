@@ -570,6 +570,10 @@ class Olobuild_Setup_Wizard {
                         'importWithLabel'      => __( 'Importa con %s', 'olobuild' ),
                         /* translators: %s: nome del plugin */
                         'installsTitle'        => __( 'Si installa da sé: %s arriva da wordpress.org quando importi il tema', 'olobuild' ),
+                        // I temi del Pro (1.4.1347)
+                        'editionLabel'         => __( 'Edizione', 'olobuild' ),
+                        'proTitle'             => __( 'Tema di OLObuild Pro', 'olobuild' ),
+                        'proUpgradeLabel'      => __( 'Passa al Pro', 'olobuild' ),
                     ] ); ?>,
                     onSelect: function (id, tema) {
                         selectedThemeId = id;

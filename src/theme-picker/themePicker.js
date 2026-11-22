@@ -17,6 +17,7 @@ const ICON = {
   import: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>',
   blank: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 3"><rect x="5" y="3" width="14" height="18" rx="2"/></svg>',
   ext: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg>',
+  lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
 };
 
 const DEFAULT_I18N = {
@@ -51,6 +52,10 @@ const DEFAULT_I18N = {
   // Plugin mancante che si installa da qui (WooCommerce da wordpress.org): l'import lo installa e lo attiva prima
   importWithLabel: 'Importa con %s',
   installsTitle: 'Si installa da sé: %s arriva da wordpress.org quando importi il tema',
+  // I temi del Pro (1.4.1347): filtro «Edizione», bollino Pro sull'anteprima, lucchetto e «Passa al Pro»
+  editionLabel: 'Edizione',
+  proTitle: 'Tema di OLObuild Pro',
+  proUpgradeLabel: 'Passa al Pro',
 };
 
 function esc(s) {
@@ -116,6 +121,10 @@ export function createThemePicker(opts = {}) {
   let activeReq = '';
   let REQS = [];
   let reqBtns = {};
+  // Filtro «Edizione» (1.4.1347): '' = tutte, 'free' o 'pro'. Compare solo se ci sono temi di tutte e due.
+  let activeEd = '';
+  let EDS = [];
+  let edBtns = {};
   let selectedId = null;
   let rootEl = null;     // .otmp (sidebar+main) — anche figlio dell'overlay in modal
   let overlayEl = null;  // modal only
@@ -131,6 +140,10 @@ export function createThemePicker(opts = {}) {
         <div>
           <div class="otmp-side-lab">${esc(i18n.categoriesLabel)}</div>
           <div class="otmp-cats" data-cats></div>
+        </div>
+        <div data-eds-wrap hidden>
+          <div class="otmp-side-lab">${esc(i18n.editionLabel)}</div>
+          <div class="otmp-cats" data-eds role="group" aria-label="${esc(i18n.editionLabel)}"></div>
         </div>
         <div data-reqs-wrap hidden>
           <div class="otmp-side-lab">${esc(i18n.requirementsLabel)}</div>
@@ -188,8 +201,15 @@ export function createThemePicker(opts = {}) {
         <span class="otmp-pv-sw">${pal}</span>`;
   }
 
+  // Il bollino «Pro» in alto a destra dell'anteprima; col lucchetto se questo sito non ha la licenza Pro.
+  function proBadge(t) {
+    if (t.edizione !== 'pro') return '';
+    const chiuso = t.pro_ok === false;
+    return `<span class="otmp-pv-pro${chiuso ? ' is-locked' : ''}" title="${esc(i18n.proTitle)}">${chiuso ? ICON.lock : ''}Pro</span>`;
+  }
+
   function previewHTML(t) {
-    const zone = t.zone ? `<span class="otmp-pv-zone"><span class="d"></span>${esc(t.zone)}</span>` : '';
+    const zone = (t.zone ? `<span class="otmp-pv-zone"><span class="d"></span>${esc(t.zone)}</span>` : '') + proBadge(t);
     if (t.screenshot) {
       // miniatura reale del tema (screenshot remoto da olotheme.com). Se l'immagine non
       // carica (offline / non ancora pubblicata sul server) l'onerror ripiega sull'anteprima
@@ -236,12 +256,16 @@ export function createThemePicker(opts = {}) {
     // Plugin mancante che il server sa installare e attivare da sé (WooCommerce da wordpress.org, chi guarda può
     // installare plugin): il tema si importa lo stesso, con «Importa con {label}».
     const installabile = !!(req && status === 'missing' && req.installabile && !t.is_remote_only);
+    // Tema del Pro su un sito senza la licenza Pro (1.4.1347): non si importa, «Passa al Pro» porta ai prezzi.
+    const proChiuso = t.edizione === 'pro' && t.pro_ok === false;
     // Tema che c'è solo nel catalogo remoto: i suoi file arrivano col plugin che lo porta,
     // quindi qui non si importa anche se il plugin è attivo (una versione che non ha ancora il tema).
-    const blocked = (req && !reqOk && !installabile) || !!t.is_remote_only;
-    const discoverBtn = (req && blocked && req.purchase_url)
-      ? `<a class="otmp-cb-btn is-discover" href="${esc(req.purchase_url)}" target="_blank" rel="noopener" data-stop>${ICON.ext}${esc(fmt(status === 'old' ? i18n.updateLabel : i18n.discoverLabel, reqLabel))}</a>`
-      : '';
+    const blocked = (req && !reqOk && !installabile) || !!t.is_remote_only || proChiuso;
+    const discoverBtn = proChiuso
+      ? (t.pro_url ? `<a class="otmp-cb-btn is-discover" href="${esc(t.pro_url)}" target="_blank" rel="noopener" data-stop>${ICON.lock}${esc(i18n.proUpgradeLabel)}</a>` : '')
+      : (req && blocked && req.purchase_url)
+        ? `<a class="otmp-cb-btn is-discover" href="${esc(req.purchase_url)}" target="_blank" rel="noopener" data-stop>${ICON.ext}${esc(fmt(status === 'old' ? i18n.updateLabel : i18n.discoverLabel, reqLabel))}</a>`
+        : '';
     const foot = selectMode || action === 'browse'
       ? `<div class="otmp-cb-foot">${ver}${link ? `<span class="otmp-cb-spacer"></span>${link}` : ''}${selectMode && blocked ? discoverBtn : ''}</div>`
       : blocked
@@ -275,6 +299,10 @@ export function createThemePicker(opts = {}) {
   }
   function reqName(r) {
     return r.key === 'none' ? i18n.onlyOlobuildLabel : fmt(i18n.withPluginLabel, r.label);
+  }
+  // I nomi delle edizioni sono quelli del prodotto, uguali in ogni lingua.
+  function edName(e) {
+    return e === 'pro' ? 'OLObuild Pro' : 'OLObuild Free';
   }
   // Stato del requisito sul sito: requires_plugin_status dal server; con un server di prima
   // si ricava da requires_plugin_ok e is_remote_only.
@@ -325,21 +353,27 @@ export function createThemePicker(opts = {}) {
       || (`${t.name} ${t.category} ${(t.tags || []).join(' ')} ${t.description} ${reqOf(t) ? (reqOf(t).label || reqOf(t).slug || '') : ''}`).toLowerCase().includes(query));
     const matchCat = t => activeCat === 'Tutti' || t.category === activeCat;
     const matchReq = t => !activeReq || reqKey(t) === activeReq;
-    // Conteggi a faccette: ogni gruppo conta i temi che passano la ricerca e l'altro gruppo.
-    const byReq = bySearch.filter(matchReq);
+    const matchEd = t => !activeEd || t.edizione === activeEd;
+    // Conteggi a faccette: ogni gruppo conta i temi che passano la ricerca e gli altri gruppi.
+    const byReqEd = bySearch.filter(t => matchReq(t) && matchEd(t));
     CATS.forEach(c => {
-      const n = c === 'Tutti' ? byReq.length : byReq.filter(t => t.category === c).length;
+      const n = c === 'Tutti' ? byReqEd.length : byReqEd.filter(t => t.category === c).length;
       const b = catBtns[c];
       if (b) b.querySelector('.n').textContent = n;
     });
-    const byCat = bySearch.filter(matchCat);
+    const byCatEd = bySearch.filter(t => matchCat(t) && matchEd(t));
     REQS.forEach(r => {
       const b = reqBtns[r.key];
-      if (b) b.querySelector('.n').textContent = byCat.filter(t => reqKey(t) === r.key).length;
+      if (b) b.querySelector('.n').textContent = byCatEd.filter(t => reqKey(t) === r.key).length;
     });
-    const list = byCat.filter(matchReq);
+    const byCatReq = bySearch.filter(t => matchCat(t) && matchReq(t));
+    EDS.forEach(e => {
+      const b = edBtns[e];
+      if (b) b.querySelector('.n').textContent = byCatReq.filter(t => t.edizione === e).length;
+    });
+    const list = byCatReq.filter(matchEd);
     // card "Vuoto" (solo senza filtri attivi)
-    const showBlank = blank && action === 'select' && activeCat === 'Tutti' && !activeReq && !query;
+    const showBlank = blank && action === 'select' && activeCat === 'Tutti' && !activeReq && !activeEd && !query;
     const cards = list.map(cardHTML);
     if (showBlank) cards.push(cardHTML(Object.assign({ _blank: true }, blank)));
     const emptyTxt = themes.length ? i18n.emptyFiltered : (loadError || i18n.emptyNone);
@@ -387,7 +421,11 @@ export function createThemePicker(opts = {}) {
     const reqSel = activeReq ? REQS.find(r => r.key === activeReq) : null;
     const catTitle = activeCat === 'Tutti' ? i18n.allLabel : activeCat;
     const titleEl = q('[data-title]');
-    if (titleEl) titleEl.textContent = !reqSel ? catTitle : (activeCat === 'Tutti' ? reqName(reqSel) : `${catTitle} · ${reqName(reqSel)}`);
+    const parti = [];
+    if (activeCat !== 'Tutti' || (!reqSel && !activeEd)) parti.push(catTitle);
+    if (reqSel) parti.push(reqName(reqSel));
+    if (activeEd) parti.push(edName(activeEd));
+    if (titleEl) titleEl.textContent = parti.join(' · ');
     const countEl = q('[data-count]'); if (countEl) countEl.textContent = `${list.length} ${list.length === 1 ? i18n.themeWord : i18n.themesWord}`;
   }
 
@@ -450,6 +488,35 @@ export function createThemePicker(opts = {}) {
         };
         reqsEl.appendChild(b);
         reqBtns[r.key] = b;
+      });
+    }
+
+    // Gruppo «Edizione» (1.4.1347): OLObuild Free e OLObuild Pro, solo se ci sono temi di tutte e due.
+    EDS = ['free', 'pro'].filter(e => themes.some(t => t.edizione === e));
+    if (EDS.length < 2) EDS = [];
+    if (activeEd && !EDS.includes(activeEd)) activeEd = '';
+    const edsWrap = q('[data-eds-wrap]');
+    const edsEl = q('[data-eds]');
+    edBtns = {};
+    if (edsWrap) edsWrap.hidden = !EDS.length;
+    if (edsEl) {
+      edsEl.innerHTML = '';
+      EDS.forEach(e => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'otmp-catbtn' + (e === activeEd ? ' on' : '');
+        b.setAttribute('aria-pressed', e === activeEd ? 'true' : 'false');
+        b.innerHTML = `<span>${esc(edName(e))}</span><span class="n"></span>`;
+        b.onclick = () => {
+          activeEd = activeEd === e ? '' : e;
+          Object.keys(edBtns).forEach(k => {
+            edBtns[k].classList.toggle('on', k === activeEd);
+            edBtns[k].setAttribute('aria-pressed', k === activeEd ? 'true' : 'false');
+          });
+          renderGrid();
+        };
+        edsEl.appendChild(b);
+        edBtns[e] = b;
       });
     }
     if (opts.fonts !== false) injectFonts(themes);
@@ -655,6 +722,13 @@ const CSS = `
   font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#fff;}
 .otmp-pv-zone .d{width:6px;height:6px;border-radius:50%;background:var(--c-acc);}
 .otmp-pv.light .otmp-pv-zone{background:rgba(255,255,255,.62);border-color:rgba(0,0,0,.1);color:#1a1a1a;}
+/* Il bollino «Pro» (1.4.1347): stessa pillola della zona, in alto a destra; col lucchetto se il sito non ha il Pro. */
+.otmp-pv-pro{position:absolute;right:10px;top:10px;z-index:2;display:inline-flex;align-items:center;gap:4px;
+  background:rgba(8,10,16,.62);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
+  border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:4px 9px;
+  font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;line-height:1;}
+.otmp-pv-pro svg{width:10px;height:10px;}
+.otmp-pv.light .otmp-pv-pro{background:rgba(255,255,255,.72);border-color:rgba(0,0,0,.12);color:#1a1a1a;}
 .otmp-blankpv{align-items:center;justify-content:center;background:var(--side);color:var(--faint);}
 .otmp-card.is-selected .otmp-blankpv,.otmp-card:hover .otmp-blankpv{color:var(--accent);}
 .otmp-blankpv svg{width:34px;height:34px;}
@@ -708,6 +782,8 @@ const CSS = `
 .otmp-card.req-missing .otmp-cb-btn.is-discover svg{width:12px;height:12px;}
 .otmp-cb-btn{margin-left:auto;display:inline-flex;align-items:center;gap:7px;background:var(--accent);color:var(--on-accent);border:0;border-radius:9px;
   padding:9px 15px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s,transform .12s;}
+/* «Scopri…» e «Passa al Pro» sono link: fuori dal builder WordPress li sottolineerebbe. */
+.otmp a.otmp-cb-btn,.otmp a.otmp-cb-btn:hover,.otmp a.otmp-cb-btn:focus{text-decoration:none;}
 .otmp-cb-btn:hover{background:var(--accent-d);transform:translateY(-1px);}
 .otmp-cb-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 .otmp-cb-btn svg{width:14px;height:14px;}

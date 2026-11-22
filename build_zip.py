@@ -2,11 +2,17 @@
 Build installable ZIP for a WordPress plugin.
 Creates a ZIP with Linux-style forward-slash paths, safe for WordPress install.
 
-Usage: python build_zip.py [plugin_name] [--root=PATH]
+Usage: python build_zip.py [plugin_name] [--root=PATH] [--completo]
 If plugin_name is omitted, defaults to 'olobuild'.
 --root overrides the source folder (e.g. a clean staging export of git HEAD)
 while keeping plugin_name as the ZIP root folder and output name.
+
+OLObuild (1.4.1347): lo zip è quello della Free. Dei temi che non sono in assets/data/temi-free.json resta solo
+theme.json, la scheda per il selettore, con "solo_scheda": true e "pacchetto" (l'impronta delle sue pagine): le
+pagine si scaricano da olotheme.com con la licenza Pro (Olobuild_Temi_Pro). Con --completo restano tutte.
 """
+import hashlib
+import json
 import os
 import sys
 import zipfile
@@ -17,6 +23,25 @@ _root_args = [a.split("=", 1)[1] for a in sys.argv[1:] if a.startswith("--root="
 PLUGIN = _positional[0] if _positional else "olobuild"
 PROJECT_ROOT = Path(_root_args[0]) if _root_args else Path(f"T:/TECNICA/{PLUGIN}")
 OUTPUT_DIR = Path("T:/TECNICA/olobuild/dist")
+COMPLETO = "--completo" in sys.argv[1:]
+
+# I temi della Free: gli altri restano solo come scheda (vedi sopra).
+TEMI_FREE = None
+_tf = PROJECT_ROOT / "assets" / "data" / "temi-free.json"
+if PLUGIN == "olobuild" and not COMPLETO and _tf.exists():
+    TEMI_FREE = set(json.loads(_tf.read_text(encoding="utf-8"))["free"])
+TEMI_DIR = PROJECT_ROOT / "assets" / "data" / "themes"
+
+
+def scheda_pro(tema_dir: Path) -> bytes:
+    """theme.json di un tema del Pro con "solo_scheda" e l'impronta di tutte le sue pagine."""
+    h = hashlib.sha1()
+    for f in sorted(p for p in tema_dir.iterdir() if p.is_file() and p.suffix == ".json"):
+        h.update(f.name.encode("utf-8") + b"\0" + f.read_bytes() + b"\0")
+    d = json.loads((tema_dir / "theme.json").read_text(encoding="utf-8"))
+    d["solo_scheda"] = True
+    d["pacchetto"] = h.hexdigest()[:16]
+    return (json.dumps(d, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
 
 # Read version from main PHP file
 main_php = PROJECT_ROOT / f"{PLUGIN}.php"
@@ -92,6 +117,7 @@ print(f"Output: {OUTPUT_ZIP}")
 print("\n[1/2] Collecting files...")
 files_to_zip = []
 total_size = 0
+temi_pro_schede = set()
 
 for root, dirs, files in os.walk(PROJECT_ROOT):
     root_path = Path(root)
@@ -134,11 +160,31 @@ for root, dirs, files in os.walk(PROJECT_ROOT):
         # Use forward slashes (Linux style)
         arc_name = f"{PLUGIN}/" + rel_path.as_posix()
 
+        # Tema del Pro nello zip della Free: solo la scheda.
+        _parti = _rp.split("/")
+        if TEMI_FREE is not None and len(_parti) == 5 and _rp.startswith("assets/data/themes/") and _parti[3] not in TEMI_FREE:
+            if filename != "theme.json":
+                continue
+            dati = scheda_pro(root_path)
+            files_to_zip.append((dati, arc_name))
+            total_size += len(dati)
+            temi_pro_schede.add(_parti[3])
+            continue
+
         files_to_zip.append((abs_path, arc_name))
         total_size += abs_path.stat().st_size
 
 print(f"  Files to archive: {len(files_to_zip)}")
 print(f"  Total source size: {total_size / 1024 / 1024:.1f} MB")
+if TEMI_FREE is not None:
+    _tutti = {p.name for p in TEMI_DIR.iterdir() if (p / "theme.json").exists()} if TEMI_DIR.exists() else set()
+    _mancano = sorted(TEMI_FREE - _tutti)
+    if _mancano:
+        print(f"ERROR: in temi-free.json ci sono temi che non esistono: {_mancano}")
+        sys.exit(1)
+    print(f"  Temi: {len(_tutti & TEMI_FREE)} della Free interi, {len(temi_pro_schede)} del Pro solo con la scheda")
+elif PLUGIN == "olobuild":
+    print("  Temi: tutti interi" + (" (--completo)" if COMPLETO else " (manca temi-free.json)"))
 
 # Sanity check
 main_in_zip = f"{PLUGIN}/{PLUGIN}.php"
@@ -151,6 +197,8 @@ if not any(arc == main_in_zip for _, arc in files_to_zip):
 # "Il plugin ha un'intestazione non valida".
 offenders = []
 for abs_path, arc in files_to_zip:
+    if isinstance(abs_path, bytes):
+        continue
     if arc.endswith(".php") and arc != main_in_zip:
         try:
             with open(abs_path, "r", encoding="utf-8", errors="ignore") as fh:
@@ -173,7 +221,10 @@ if OUTPUT_ZIP.exists():
 
 with zipfile.ZipFile(OUTPUT_ZIP, "w", zipfile.ZIP_DEFLATED, compresslevel=6) as zf:
     for abs_path, arc_name in files_to_zip:
-        zf.write(abs_path, arc_name)
+        if isinstance(abs_path, bytes):
+            zf.writestr(arc_name, abs_path)
+        else:
+            zf.write(abs_path, arc_name)
 
 zip_size = OUTPUT_ZIP.stat().st_size
 print(f"  Output: {OUTPUT_ZIP}")

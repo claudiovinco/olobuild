@@ -53878,3 +53878,25 @@ msgstr "SUGGESTED SECTION"
 
 msgid "Tutti i diritti riservati."
 msgstr "All rights reserved."
+
+#: licenza-1.4.1345
+msgid "Questo tema fa parte di OLObuild Pro: si importa con la licenza Pro."
+msgstr "This theme is part of OLObuild Pro: you can import it with a Pro licence."
+
+msgid "Per scaricare i temi del Pro il server deve avere l’estensione PHP zip."
+msgstr "To download Pro themes, the server needs the PHP zip extension."
+
+msgid "Non è stato possibile scaricare il tema da olotheme.com: riprova tra poco."
+msgstr "The theme could not be downloaded from olotheme.com: please try again shortly."
+
+msgid "Non è stato possibile scrivere nella cartella dei caricamenti."
+msgstr "Could not write to the uploads folder."
+
+msgid "Edizione"
+msgstr "Edition"
+
+msgid "Tema di OLObuild Pro"
+msgstr "OLObuild Pro theme"
+
+msgid "Passa al Pro"
+msgstr "Upgrade to Pro"

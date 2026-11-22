@@ -16994,3 +16994,25 @@ msgstr "おすすめセクション"
 
 msgid "Tutti i diritti riservati."
 msgstr "全著作権所有。"
+
+#: licenza-1.4.1345
+msgid "Questo tema fa parte di OLObuild Pro: si importa con la licenza Pro."
+msgstr "このテーマは OLObuild Pro に含まれています。Pro ライセンスでインポートできます。"
+
+msgid "Per scaricare i temi del Pro il server deve avere l’estensione PHP zip."
+msgstr "Pro テーマをダウンロードするには、サーバーに PHP の zip 拡張機能が必要です。"
+
+msgid "Non è stato possibile scaricare il tema da olotheme.com: riprova tra poco."
+msgstr "olotheme.com からテーマをダウンロードできませんでした。しばらくしてからもう一度お試しください。"
+
+msgid "Non è stato possibile scrivere nella cartella dei caricamenti."
+msgstr "アップロードフォルダーに書き込めませんでした。"
+
+msgid "Edizione"
+msgstr "エディション"
+
+msgid "Tema di OLObuild Pro"
+msgstr "OLObuild Pro のテーマ"
+
+msgid "Passa al Pro"
+msgstr "Pro にアップグレード"

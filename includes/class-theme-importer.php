@@ -29,6 +29,9 @@ class Olobuild_Theme_Importer {
             if ( $extra_files ) $files = array_merge( $files, $extra_files );
         }
 
+        // I temi del Pro (1.4.1347): si importano solo con la licenza col modulo temi-pro.
+        $pro_ok = class_exists( 'Olobuild_Temi_Pro' ) ? Olobuild_Temi_Pro::permesso() : true;
+
         foreach ( $files as $file ) {
             $data = json_decode( file_get_contents( $file ), true );
             if ( ! $data || empty( $data['id'] ) ) continue;
@@ -37,6 +40,18 @@ class Olobuild_Theme_Importer {
             if ( ! empty( $data['in_lavorazione'] ) ) continue;
             $dir = dirname( $file );
             $theme_id = basename( $dir );
+            // Free o Pro. Nello zip della Free un tema del Pro è solo la sua scheda (solo_scheda): le pagine sono
+            // quelle già scaricate, se l'impronta torna, altrimenti si scaricano all'importazione.
+            $edizione     = class_exists( 'Olobuild_Temi_Pro' ) ? Olobuild_Temi_Pro::edizione( $theme_id, $dir ) : '';
+            $da_scaricare = false;
+            if ( 'pro' === $edizione && ! empty( $data['solo_scheda'] ) ) {
+                $giu = Olobuild_Temi_Pro::scaricata( $theme_id, $data );
+                if ( '' !== $giu ) {
+                    $dir = $giu;
+                } else {
+                    $da_scaricare = true;
+                }
+            }
             // Anteprima (screenshot): servita dalla LIBRERIA REMOTA su olotheme.com, così lo
             // zip del plugin resta leggero (le immagini NON sono nel pacchetto wp.org). Il
             // contenuto dei template resta locale → l'import funziona anche offline. Base URL
@@ -91,6 +106,12 @@ class Olobuild_Theme_Importer {
                 'requires_plugin' => isset( $data['requires_plugin'] ) && is_array( $data['requires_plugin'] )
                     ? $data['requires_plugin'] : null,
                 'is_remote_only' => false,
+                // Edizione (1.4.1347): 'free', 'pro' o '' (temi dei plugin fratelli). Un tema del Pro senza la licenza
+                // giusta si vede col lucchetto e «Passa al Pro» (pro_url).
+                'edizione'     => $edizione,
+                'pro_ok'       => 'pro' !== $edizione || $pro_ok,
+                'da_scaricare' => $da_scaricare,
+                'pro_url'      => 'pro' === $edizione ? Olobuild_Temi_Pro::PREZZI : '',
             ], self::build_preview( $data, $theme_id ) );
         }
 
@@ -195,6 +216,8 @@ class Olobuild_Theme_Importer {
             'requires_plugin' => isset( $r['requires_plugin'] ) && is_array( $r['requires_plugin'] )
                 ? $r['requires_plugin'] : null,
             'is_remote_only' => true,
+            // i temi del catalogo remoto vengono coi plugin fratelli: né Free né Pro
+            'edizione' => '', 'pro_ok' => true, 'da_scaricare' => false, 'pro_url' => '',
         ], self::build_preview( $r, $theme_id ) );
     }
 
@@ -554,6 +577,17 @@ class Olobuild_Theme_Importer {
                 return new WP_Error( 'requires_plugin', sprintf( 'Aggiorna %1$s alla %2$s o successiva prima di importare questo tema.', $label, (string) $req['min_version'] ), [ 'requires_plugin' => $req ] );
             }
             return new WP_Error( 'requires_plugin', sprintf( 'Attiva %s prima di importare questo tema.', $label ), [ 'requires_plugin' => $req ] );
+        }
+        // Tema del Pro (1.4.1347): solo con la licenza col modulo temi-pro; nello zip della Free le pagine si
+        // scaricano adesso da olotheme.com.
+        if ( 'pro' === ( $theme['edizione'] ?? '' ) ) {
+            if ( empty( $theme['pro_ok'] ) ) return Olobuild_Temi_Pro::errore_pro();
+            if ( ! empty( $theme['da_scaricare'] ) ) {
+                $scheda = json_decode( (string) file_get_contents( $theme['dir'] . '/theme.json' ), true );
+                $giu    = Olobuild_Temi_Pro::scarica( $theme_id, is_array( $scheda ) ? $scheda : [] );
+                if ( is_wp_error( $giu ) ) return $giu;
+                $theme['dir'] = $giu;
+            }
         }
 
         $dir = $theme['dir'];
