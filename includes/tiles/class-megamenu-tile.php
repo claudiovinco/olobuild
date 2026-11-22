@@ -3947,6 +3947,43 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                 if (document.fonts) { document.fonts.ready.then(adattaNome); }
             }
 
+            /* ── Pannelli-template montati al primo passaggio (22 nov 2026) ──
+               Il server li manda dentro un <template class="olo-mm-pigro">, fuori dal DOM della pagina: sulla home di
+               olotheme.com erano 822 elementi su 2.400 e un terzo del lavoro al caricamento, anche se nessuno apriva
+               il menu. Si montano al primo mouseover, focus, tocco o pressione sulla voce (prima che il pannello si
+               apra e venga misurato); gli script dentro si ricreano, come per le tile pigre. */
+            function montaPannello(li) {
+                var box = li.querySelector(":scope > .olo-mm-panel-tpl");
+                if (!box) { return; }
+                var tpl = box.querySelector(":scope > template.olo-mm-pigro");
+                if (!tpl) { return; }
+                var frag = document.importNode(tpl.content, true);
+                var vecchi = Array.prototype.slice.call(frag.querySelectorAll("script"));
+                vecchi.forEach(function (s) { s.parentNode.removeChild(s); });
+                box.appendChild(frag);
+                tpl.remove();
+                vecchi.forEach(function (old) {
+                    var ns = document.createElement("script");
+                    Array.prototype.forEach.call(old.attributes, function (a) { ns.setAttribute(a.name, a.value); });
+                    if (!old.src) { ns.textContent = old.textContent; }
+                    box.appendChild(ns);
+                });
+                if (window.oloIdrata) { try { window.oloIdrata(box); } catch (_) {} }
+                if (window.UIkit) { if (typeof window.UIkit.update === "function") { try { window.UIkit.update(box); } catch (_) {} } }
+                try { document.dispatchEvent(new CustomEvent("olo:lazy-hydrated", { detail: { target: box } })); } catch (_) {}
+            }
+            function montaDa(e) {
+                var li = e.target ? (e.target.closest ? e.target.closest("li") : null) : null;
+                while (li) {
+                    if (!root.contains(li)) { break; }
+                    montaPannello(li);
+                    li = li.parentElement ? li.parentElement.closest("li") : null;
+                }
+            }
+            ["mouseover", "focusin", "touchstart", "pointerdown"].forEach(function (t) {
+                root.addEventListener(t, montaDa, { capture: true, passive: true });
+            });
+
             /* ── Hover Intent Desktop ── */
             var timers = {};
             var isFull = <?php echo $s['panel_width'] === 'full' ? 'true' : 'false'; ?>;
@@ -4948,10 +4985,20 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         return 0;
     }
 
+    /**
+     * Il pannello-template di una voce. Sul sito il suo HTML va dentro un <template class="olo-mm-pigro">: il browser lo
+     * legge ma non lo disegna, e lo script del Mega Menu lo monta al primo passaggio sulla voce (montaPannello). Prima
+     * i pannelli stavano interi nel DOM di ogni pagina anche se nessuno apriva il menu (22 nov 2026). Nelle risposte
+     * REST (anteprima del builder) restano interi, come prima.
+     */
     private function render_template_panel( $tpl_id ) {
+        $html = do_shortcode( '[olo_template id="' . absint( $tpl_id ) . '"]' );
+        $pigro = ! ( defined( 'REST_REQUEST' ) && REST_REQUEST ) && ! wp_doing_ajax();
         ?>
         <div class="olo-mm-panel olo-mm-panel-tpl">
-            <?php echo do_shortcode( '[olo_template id="' . absint( $tpl_id ) . '"]' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- template HTML rendered by the [olo_template] shortcode; tile renderers escape their own output ?>
+            <?php if ( $pigro ) : ?><template class="olo-mm-pigro"><?php endif; ?>
+            <?php echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- template HTML rendered by the [olo_template] shortcode; tile renderers escape their own output ?>
+            <?php if ( $pigro ) : ?></template><?php endif; ?>
         </div>
         <?php
     }
