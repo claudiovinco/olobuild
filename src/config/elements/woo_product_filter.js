@@ -20,6 +20,9 @@ export default {
     show_categories: true,
     show_attributes: true,
     show_stock: true,
+    show_on_sale: false,
+    show_sort: false,
+    senza_ricarica: true,
     filter_style: 'sidebar',
     price_range_min: '0',
     price_range_max: '500',
@@ -57,7 +60,12 @@ export default {
     { key: 'attributes', label: t('Attributi'), type: 'text', placeholder: t('es. color, size'),
       description: t('Gli attributi WooCommerce da offrire, separati da virgola (color oppure pa_color). Vuoto = tutti gli attributi del negozio.'),
       condition: { field: 'show_attributes', value: true } },
-    { key: 'show_stock', label: t('Filtro disponibilita'), type: 'toggle' },
+    { key: 'show_stock', label: t('Filtro disponibilità'), type: 'toggle' },
+    { key: 'show_on_sale', label: t('Filtro «In offerta»'), type: 'toggle' },
+    { key: 'senza_ricarica', label: t('Filtra senza ricaricare la pagina'), type: 'toggle',
+      description: t('Scelto un filtro, la griglia Prodotti WC della pagina si aggiorna sul posto e l’indirizzo ricorda i filtri. Se nella pagina non c’è una griglia da aggiornare, la pagina si ricarica come prima.') },
+    { key: 'show_sort', label: t('Ordinamento per chi visita'), type: 'toggle',
+      description: t('Un menu «Ordina» (più recenti, più venduti, prezzo, nome): la tile Prodotti WC della pagina mostra i prodotti nell’ordine scelto.') },
     { key: 'show_count', label: t('Mostra conteggio prodotti'), type: 'toggle' },
 
     // «Prezzo minimo/massimo» (price_range_min/max) non ci sono più: il cursore prende sempre

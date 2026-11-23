@@ -18047,3 +18047,423 @@ msgstr "Filteren op categorie"
 
 msgid "Ritardo fra le foto"
 msgstr "Vertraging tussen de foto’s"
+
+#: licenza-1.4.1345
+msgid "1 foto"
+msgstr "1 foto"
+
+msgid "%d foto"
+msgstr "%d foto’s"
+
+msgid "Mostra altre (%d)"
+msgstr "Meer tonen (%d)"
+
+msgid "Anteprima video"
+msgstr "Videovoorbeeld"
+
+msgid "Avanzamento galleria"
+msgstr "Voortgang van de galerij"
+
+msgid "Vai alla foto"
+msgstr "Naar de foto"
+
+msgid "Ordina"
+msgstr "Sorteren"
+
+msgid "Ordine della galleria"
+msgstr "Volgorde van de galerij"
+
+msgid "Titolo dalla A alla Z"
+msgstr "Titel A tot Z"
+
+msgid "Titolo dalla Z alla A"
+msgstr "Titel Z tot A"
+
+msgid "Testo crescente (anni, prezzi…)"
+msgstr "Tekst oplopend (jaren, prijzen…)"
+
+msgid "Testo decrescente"
+msgstr "Tekst aflopend"
+
+msgid "Pagine della galleria"
+msgstr "Pagina’s van de galerij"
+
+msgid "WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento."
+msgstr "WooCommerce is niet actief. Installeer en activeer WooCommerce om dit element te gebruiken."
+
+msgid "Filtra"
+msgstr "Filteren"
+
+msgid "Filtri attivi"
+msgstr "Actieve filters"
+
+msgid "Solo prodotti disponibili"
+msgstr "Alleen beschikbare producten"
+
+msgid "Solo prodotti in offerta"
+msgstr "Alleen producten in de aanbieding"
+
+msgid "Come nel negozio"
+msgstr "Zoals in de winkel"
+
+msgid "Più venduti"
+msgstr "Best verkocht"
+
+msgid "Più votati"
+msgstr "Best beoordeeld"
+
+msgid "Prezzo crescente"
+msgstr "Prijs: laag naar hoog"
+
+msgid "Prezzo decrescente"
+msgstr "Prijs: hoog naar laag"
+
+msgid "Nome dalla A alla Z"
+msgstr "Naam A tot Z"
+
+msgid "Prezzo min"
+msgstr "Min. prijs"
+
+msgid "Prezzo max"
+msgstr "Max. prijs"
+
+msgid "Solo disponibili"
+msgstr "Alleen beschikbaar"
+
+msgid "In offerta"
+msgstr "In de aanbieding"
+
+msgid "Nessun prodotto in saldo"
+msgstr "Geen producten in de uitverkoop"
+
+msgid "Nessun prodotto trovato"
+msgstr "Geen producten gevonden"
+
+msgid "1 prodotto"
+msgstr "1 product"
+
+msgid "%d prodotti"
+msgstr "%d producten"
+
+msgid "carosello"
+msgstr "carrousel"
+
+msgid "Seleziona opzioni"
+msgstr "Opties kiezen"
+
+msgid "Aggiunto!"
+msgstr "Toegevoegd!"
+
+msgid "Confronta"
+msgstr "Vergelijken"
+
+msgid "Vai al gruppo"
+msgstr "Naar de groep"
+
+msgid "Colori disponibili"
+msgstr "Beschikbare kleuren"
+
+msgid "Vista rapida prodotto"
+msgstr "Snelle weergave van het product"
+
+msgid "Errore nel caricamento."
+msgstr "Fout bij het laden."
+
+msgid "Mostra immagine: %s"
+msgstr "Afbeelding tonen: %s"
+
+msgid "Valutazione %s su 5"
+msgstr "Beoordeeld met %s van 5"
+
+msgid "Vedi dettagli completi"
+msgstr "Alle details bekijken"
+
+msgid "Non è stato possibile aggiungerlo: riprova"
+msgstr "Toevoegen is niet gelukt: probeer het opnieuw"
+
+msgid "Questa combinazione non c’è"
+msgstr "Deze combinatie bestaat niet"
+
+msgid "Uno in meno"
+msgstr "Eén minder"
+
+msgid "Uno in più"
+msgstr "Eén meer"
+
+msgid "Il testo di un pulsante sotto i testi della foto (vuoto = niente pulsante). Porta dove porta la foto: il suo link o la lightbox."
+msgstr "De tekst van een knop onder de teksten van de foto (leeg = geen knop). Hij gaat waar de foto heen gaat: de link of de lightbox."
+
+msgid "Filtri, ricerca e pagine"
+msgstr "Filters, zoeken en pagina’s"
+
+msgid "Link ai filtri"
+msgstr "Links naar de filters"
+
+msgid "L’indirizzo della pagina ricorda il filtro scelto (…#filtro=categoria): copiandolo, o mettendolo in un pulsante o nel menu, la galleria si apre già filtrata."
+msgstr "Het adres van de pagina onthoudt het gekozen filter (…#filtro=categorie): kopieer het, of zet het in een knop of in het menu, en de galerij opent al gefilterd."
+
+msgid "Una casella che tiene solo le foto col testo cercato nel titolo, nel sottotitolo, nel testo o nella categoria."
+msgstr "Een vak dat alleen de foto’s overhoudt met de gezochte tekst in de titel, ondertitel, tekst of categorie."
+
+msgid "Testo della casella"
+msgstr "Tekst in het vak"
+
+msgid "Ordinamento"
+msgstr "Sortering"
+
+msgid "Un menu per mettere le foto in ordine di titolo o di testo (anni, prezzi), crescente o decrescente."
+msgstr "Een menu om de foto’s op titel of tekst (jaren, prijzen) te sorteren, oplopend of aflopend."
+
+msgid "Foto da mostrare"
+msgstr "Te tonen foto’s"
+
+msgid "Tutte subito"
+msgstr "Alle meteen"
+
+msgid "Un gruppo, poi «Mostra altre»"
+msgstr "Een groep, dan „Meer tonen”"
+
+msgid "A pagine"
+msgstr "Per pagina"
+
+msgid "Foto per gruppo o pagina"
+msgstr "Foto’s per groep of pagina"
+
+msgid "Menu a tendina"
+msgstr "Keuzemenu"
+
+msgid "Fra il telefono e il computer (da 640 a 1199 px); vuoto = come al computer."
+msgstr "Tussen telefoon en computer (640 tot 1199 px); leeg = zoals op de computer."
+
+msgid "Filtro disponibilità"
+msgstr "Beschikbaarheidsfilter"
+
+msgid "Filtro «In offerta»"
+msgstr "Filter „In de aanbieding”"
+
+msgid "Ordinamento per chi visita"
+msgstr "Sortering voor bezoekers"
+
+msgid "Un menu «Ordina» (più recenti, più venduti, prezzo, nome): la tile Prodotti WC della pagina mostra i prodotti nell’ordine scelto."
+msgstr "Een menu „Sorteren” (nieuwste, best verkocht, prijs, naam): de tile WC-producten van de pagina toont de producten in de gekozen volgorde."
+
+msgid "Pallini dei colori"
+msgstr "Kleurbolletjes"
+
+msgid "Sotto il prezzo dei prodotti a varianti un pallino per ogni colore; passandoci sopra la foto mostra quel colore. Il colore viene da un plugin dei colori, se c’è, o dal nome (Nero, Blu navy, Cognac…)."
+msgstr "Onder de prijs van producten met varianten een bolletje voor elke kleur; bij aanwijzen toont de foto die kleur. De kleur komt uit een kleurenplugin, als die er is, of uit de naam (Zwart, Marineblauw, Cognac…)."
+
+msgid "Quanti prodotti"
+msgstr "Aantal producten"
+
+msgid "Sopra la griglia il numero dei prodotti trovati, anche dopo i filtri."
+msgstr "Boven het raster het aantal gevonden producten, ook na het filteren."
+
+#: licenza-1.4.1345
+msgid "Un gruppo, poi le altre scorrendo"
+msgstr "Een groep, dan de rest tijdens het scrollen"
+
+#: licenza-1.4.1345
+msgid "Nessun contenuto dalla fonte social: controlla il canale o l’indirizzo. Questo avviso lo vede solo chi modifica il sito."
+msgstr "Geen inhoud van de sociale bron: controleer het kanaal of het adres. Alleen wie de site bewerkt ziet deze melding."
+
+msgid "Azzera i filtri"
+msgstr "Filters wissen"
+
+msgid "Quello del contenuto aperto"
+msgstr "Die van de geopende inhoud"
+
+msgid "Card di testo"
+msgstr "Tekstkaart"
+
+msgid "Testo grande (citazione, annuncio)..."
+msgstr "Grote tekst (citaat, aankondiging)..."
+
+msgid "Firma..."
+msgstr "Ondertekening..."
+
+msgid "Una card senza foto, coi testi su un fondo colorato (citazioni, annunci)"
+msgstr "Een kaart zonder foto, met de tekst op een gekleurde achtergrond (citaten, aankondigingen)"
+
+msgid "Foto da un social"
+msgstr "Foto’s van een sociaal netwerk"
+
+msgid "Fonte"
+msgstr "Bron"
+
+msgid "Le foto di «Media»"
+msgstr "De foto’s van „Media”"
+
+msgid "YouTube (canale, @nome o playlist)"
+msgstr "YouTube (kanaal, @naam of afspeellijst)"
+
+msgid "Vimeo (utente o canale)"
+msgstr "Vimeo (gebruiker of kanaal)"
+
+msgid "Flickr (utente o tag)"
+msgstr "Flickr (gebruiker of tags)"
+
+msgid "Pinterest (profilo o bacheca)"
+msgstr "Pinterest (profiel of bord)"
+
+msgid "Instagram (account di OLOsocial)"
+msgstr "Instagram (OLOsocial-account)"
+
+msgid "Feed RSS"
+msgstr "RSS-feed"
+
+msgid "Le foto o i video arrivano dal social e si aggiornano da soli ogni ora; quelli di «Media» restano salvati ma non si mostrano. YouTube, Vimeo, Flickr, Pinterest e i feed RSS non chiedono chiavi; Instagram usa l’account collegato in OLOsocial."
+msgstr "Foto’s of video’s komen van het sociale netwerk en worden elk uur vanzelf bijgewerkt; die in „Media” blijven bewaard maar worden niet getoond. YouTube, Vimeo, Flickr, Pinterest en RSS-feeds vragen geen sleutels; Instagram gebruikt het account dat in OLOsocial is gekoppeld."
+
+msgid "Canale, account o indirizzo"
+msgstr "Kanaal, account of adres"
+
+msgid "YouTube: @nome, indirizzo del canale o della playlist. Vimeo: nome utente o channels/nome. Flickr: l’id utente (12345678@N00) o dei tag. Pinterest: nome o nome/bacheca. Instagram: @nome (vuoto = il primo account collegato). RSS: l’indirizzo del feed."
+msgstr "YouTube: @naam, adres van het kanaal of de afspeellijst. Vimeo: gebruikersnaam of channels/naam. Flickr: de gebruikers-ID (12345678@N00) of tags. Pinterest: naam of naam/bord. Instagram: @naam (leeg = het eerste gekoppelde account). RSS: het adres van de feed."
+
+msgid "Quante"
+msgstr "Hoeveel"
+
+msgid "Apri sul social"
+msgstr "Openen op het sociale netwerk"
+
+msgid "Il clic porta al post sul social invece di aprire la lightbox."
+msgstr "Een klik gaat naar het bericht op het sociale netwerk in plaats van de lightbox te openen."
+
+msgid "Accanto alla foto (biglietto)"
+msgstr "Naast de foto (kaartje)"
+
+msgid "«Sotto la foto» e «Accanto alla foto» valgono per gli schemi Griglia e Masonry; negli altri i testi vanno sulla foto. Nel biglietto il testo della foto diventa la scritta grande (per esempio «20 mag sab»): accendi «Mostra il testo»."
+msgstr "„Onder de foto” en „Naast de foto” gelden voor de schema’s Raster en Masonry; in de andere komt de tekst op de foto. In het kaartje wordt de tekst van de foto het grote opschrift (bijvoorbeeld „20 mei za”): zet „Tekst tonen” aan."
+
+msgid "Sopra la galleria un pulsante per ogni categoria e «Tutti»: cliccando, restano le foto di quella categoria e la galleria si riordina. La categoria si scrive sotto ogni foto in «Media»; più categorie si separano con la virgola. Per più gruppi che si combinano scrivi «Gruppo: valore», per esempio «Tipo: Guida, Livello: Base»: sopra la galleria compare una fila per gruppo."
+msgstr "Boven de galerij een knop per categorie en „Alle”: bij een klik blijven de foto’s van die categorie over en ordent de galerij zich opnieuw. Schrijf de categorie onder elke foto in „Media”; scheid meerdere categorieën met komma’s. Voor meerdere groepen die samengaan schrijf je „Groep: waarde”, bijvoorbeeld „Type: Gids, Niveau: Basis”: boven de galerij verschijnt een rij per groep."
+
+msgid "Entrata dei testi"
+msgstr "Entree van de tekst"
+
+msgid "Uno alla volta, dal basso"
+msgstr "Eén voor één, van onderen"
+
+msgid "Uno alla volta, da sinistra"
+msgstr "Eén voor één, van links"
+
+msgid "Uno alla volta, si svelano"
+msgstr "Eén voor één, onthuld"
+
+msgid "Uno alla volta, si ingrandiscono"
+msgstr "Eén voor één, groeiend"
+
+msgid "Uno alla volta, sfumano"
+msgstr "Eén voor één, invloeiend"
+
+msgid "Categoria, numero, titolo, sottotitolo, testo e pulsante arrivano uno dopo l’altro quando la foto entra nello schermo, o al passaggio se i testi compaiono così. Con «riduci movimento» del sistema non si muove niente."
+msgstr "Categorie, nummer, titel, ondertitel, tekst en knop komen na elkaar binnen als de foto in beeld komt, of bij aanwijzen als de tekst zo verschijnt. Met „beweging verminderen” van het systeem beweegt er niets."
+
+msgid "Sfondo delle card di testo"
+msgstr "Achtergrond van de tekstkaarten"
+
+msgid "Colore delle voci"
+msgstr "Kleur van de items"
+
+msgid "Un colore per ogni foto o card: tinge la cornice, la categoria, il numero, il pulsante, il biglietto e il fondo delle card di testo. Vuoto = il colore della galleria."
+msgstr "Een kleur voor elke foto of kaart: die kleurt de lijst, de categorie, het nummer, de knop, het kaartje en de achtergrond van de tekstkaarten. Leeg = de kleur van de galerij."
+
+msgid "Filtra senza ricaricare la pagina"
+msgstr "Filteren zonder de pagina te herladen"
+
+msgid "Scelto un filtro, la griglia Prodotti WC della pagina si aggiorna sul posto e l’indirizzo ricorda i filtri. Se nella pagina non c’è una griglia da aggiornare, la pagina si ricarica come prima."
+msgstr "Na het kiezen van een filter wordt het raster WC-producten van de pagina ter plekke bijgewerkt en onthoudt het adres de filters. Staat er geen raster op de pagina, dan herlaadt de pagina zoals voorheen."
+
+#: licenza-1.4.1345
+msgid "N."
+msgstr "Nr."
+
+msgid "Come lo schema"
+msgstr "Zoals het schema"
+
+msgid "In alto al centro"
+msgstr "Boven in het midden"
+
+msgid "Al centro a sinistra"
+msgstr "Midden links"
+
+msgid "Al centro a destra"
+msgstr "Midden rechts"
+
+msgid "In basso al centro"
+msgstr "Onder in het midden"
+
+msgid "Facebook (pagina di OLOsocial)"
+msgstr "Facebook (OLOsocial-pagina)"
+
+msgid "Le foto o i video arrivano dal social e si aggiornano da soli ogni ora; quelli di «Media» restano salvati ma non si mostrano. YouTube, Vimeo, Flickr, Pinterest e i feed RSS non chiedono chiavi; Instagram e Facebook usano gli account collegati in OLOsocial."
+msgstr "Foto’s of video’s komen van het sociale netwerk en worden elk uur vanzelf bijgewerkt; die in „Media” blijven bewaard maar worden niet getoond. YouTube, Vimeo, Flickr, Pinterest en RSS-feeds vragen geen sleutels; Instagram en Facebook gebruiken de accounts die in OLOsocial zijn gekoppeld."
+
+msgid "YouTube: @nome, indirizzo del canale o della playlist. Vimeo: nome utente o channels/nome. Flickr: l’id utente (12345678@N00) o dei tag. Pinterest: nome o nome/bacheca. Instagram e Facebook: @nome o nome della pagina (vuoto = il primo account collegato in OLOsocial). RSS: l’indirizzo del feed."
+msgstr "YouTube: @naam, adres van het kanaal of de afspeellijst. Vimeo: gebruikersnaam of channels/naam. Flickr: de gebruikers-ID (12345678@N00) of tags. Pinterest: naam of naam/bord. Instagram en Facebook: @naam of paginanaam (leeg = het eerste account dat in OLOsocial is gekoppeld). RSS: het adres van de feed."
+
+msgid "Sulla foto, in un riquadro"
+msgstr "Op de foto, in een kader"
+
+msgid "Formato del numero"
+msgstr "Notatie van het nummer"
+
+msgid "N. 01 / 12"
+msgstr "Nr. 01 / 12"
+
+msgid "Posizione del titolo"
+msgstr "Positie van de titel"
+
+msgid "Ogni parte della card può andare in una delle nove zone della foto: in alto, al centro o in basso, a sinistra, al centro o a destra. «Come lo schema» la lascia dov’è."
+msgstr "Elk deel van de kaart kan in een van de negen zones van de foto: boven, midden of onder, links, midden of rechts. „Zoals het schema” laat het waar het is."
+
+msgid "Posizione del sottotitolo"
+msgstr "Positie van de ondertitel"
+
+msgid "Posizione della categoria"
+msgstr "Positie van de categorie"
+
+msgid "Posizione del numero"
+msgstr "Positie van het nummer"
+
+msgid "Posizione del pulsante"
+msgstr "Positie van de knop"
+
+msgid "Posizione dell’icona"
+msgstr "Positie van het pictogram"
+
+msgid "Card in evidenza"
+msgstr "Uitgelichte kaart"
+
+msgid "La prima, grande (2 × 2)"
+msgstr "De eerste, groot (2 × 2)"
+
+msgid "Al computer la prima card occupa due colonne e due righe, con la foto grande: il prodotto da mettere in vetrina. Sul tablet e sul telefono torna come le altre."
+msgstr "Op de computer beslaat de eerste kaart twee kolommen en twee rijen, met een grote foto: het product voor de etalage. Op tablet en telefoon wordt hij weer zoals de andere."
+
+#: licenza-1.4.1345
+msgid "Più valori insieme"
+msgstr "Meerdere waarden tegelijk"
+
+msgid "In ogni gruppo si possono accendere più valori insieme: restano le foto che ne hanno almeno uno (Guida o Modello). Gruppi diversi restano combinati (Guida o Modello, e di livello Base). Vale coi filtri a pulsanti."
+msgstr "In elke groep kun je meerdere waarden tegelijk aanzetten: de foto’s met minstens één ervan blijven over (Gids of Sjabloon). Verschillende groepen blijven gecombineerd (Gids of Sjabloon, en niveau Basis). Werkt met filters als knoppen."
+
+msgid "Mescola a ogni visita"
+msgstr "Bij elk bezoek schudden"
+
+msgid "Le foto escono in un ordine diverso a ogni visita. Con l’«Ordinamento» acceso, chi visita può rimetterle in ordine."
+msgstr "De foto’s verschijnen bij elk bezoek in een andere volgorde. Met „Sortering” aan kunnen bezoekers ze weer ordenen."
+
+#: licenza-1.4.1345
+msgid "Colonne schermi grandi"
+msgstr "Kolommen grote schermen"
+
+msgid "Da 1400 px in su (monitor grandi); vuoto = come al computer."
+msgstr "Vanaf 1400 px (grote monitoren); leeg = zoals op de computer."
+
+msgid "Colonne telefoni piccoli"
+msgstr "Kolommen kleine telefoons"
+
+msgid "Sotto i 480 px; vuoto = come le colonne mobile."
+msgstr "Onder 480 px; leeg = zoals de mobiele kolommen."

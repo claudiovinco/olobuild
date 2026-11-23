@@ -3561,3 +3561,426 @@ msgstr "Фильтр по категории"
 
 msgid "Ritardo fra le foto"
 msgstr "Задержка между фото"
+
+#: licenza-1.4.1345
+msgid "1 foto"
+msgstr "1 фото"
+
+msgid "%d foto"
+msgstr "%d фото"
+
+msgid "Mostra altre (%d)"
+msgstr "Показать ещё (%d)"
+
+msgid "Anteprima video"
+msgstr "Предпросмотр видео"
+
+msgid "Avanzamento galleria"
+msgstr "Прогресс галереи"
+
+msgid "Vai alla foto"
+msgstr "Перейти к фото"
+
+msgid "Ordina"
+msgstr "Сортировка"
+
+msgid "Ordine della galleria"
+msgstr "Порядок галереи"
+
+msgid "Titolo dalla A alla Z"
+msgstr "Название от А до Я"
+
+msgid "Titolo dalla Z alla A"
+msgstr "Название от Я до А"
+
+msgid "Testo crescente (anni, prezzi…)"
+msgstr "Текст по возрастанию (годы, цены…)"
+
+msgid "Testo decrescente"
+msgstr "Текст по убыванию"
+
+msgid "Pagine della galleria"
+msgstr "Страницы галереи"
+
+msgid "WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento."
+msgstr "WooCommerce не активен. Установите и активируйте WooCommerce, чтобы использовать этот элемент."
+
+msgid "Filtra"
+msgstr "Фильтровать"
+
+msgid "Filtri attivi"
+msgstr "Активные фильтры"
+
+msgid "Solo prodotti disponibili"
+msgstr "Только товары в наличии"
+
+msgid "Solo prodotti in offerta"
+msgstr "Только товары со скидкой"
+
+msgid "Come nel negozio"
+msgstr "Как в магазине"
+
+msgid "Più venduti"
+msgstr "Самые продаваемые"
+
+msgid "Più votati"
+msgstr "С лучшим рейтингом"
+
+msgid "Prezzo crescente"
+msgstr "Цена по возрастанию"
+
+msgid "Prezzo decrescente"
+msgstr "Цена по убыванию"
+
+msgid "Nome dalla A alla Z"
+msgstr "Название от А до Я"
+
+msgid "Prezzo min"
+msgstr "Мин. цена"
+
+msgid "Prezzo max"
+msgstr "Макс. цена"
+
+msgid "Solo disponibili"
+msgstr "Только в наличии"
+
+msgid "In offerta"
+msgstr "Со скидкой"
+
+msgid "Nessun prodotto in saldo"
+msgstr "Нет товаров на распродаже"
+
+msgid "Nessun prodotto trovato"
+msgstr "Товары не найдены"
+
+msgid "1 prodotto"
+msgstr "1 товар"
+
+msgid "%d prodotti"
+msgstr "%d товаров"
+
+msgid "carosello"
+msgstr "карусель"
+
+msgid "Seleziona opzioni"
+msgstr "Выбрать параметры"
+
+msgid "Aggiunto!"
+msgstr "Добавлено!"
+
+msgid "Confronta"
+msgstr "Сравнить"
+
+msgid "Vai al gruppo"
+msgstr "Перейти к группе"
+
+msgid "Colori disponibili"
+msgstr "Доступные цвета"
+
+msgid "Vista rapida prodotto"
+msgstr "Быстрый просмотр товара"
+
+msgid "Errore nel caricamento."
+msgstr "Ошибка загрузки."
+
+msgid "Mostra immagine: %s"
+msgstr "Показать изображение: %s"
+
+msgid "Valutazione %s su 5"
+msgstr "Оценка %s из 5"
+
+msgid "Vedi dettagli completi"
+msgstr "Подробнее"
+
+msgid "Non è stato possibile aggiungerlo: riprova"
+msgstr "Не удалось добавить: попробуйте ещё раз"
+
+msgid "Questa combinazione non c’è"
+msgstr "Такого сочетания нет"
+
+msgid "Uno in meno"
+msgstr "На один меньше"
+
+msgid "Uno in più"
+msgstr "На один больше"
+
+msgid "Il testo di un pulsante sotto i testi della foto (vuoto = niente pulsante). Porta dove porta la foto: il suo link o la lightbox."
+msgstr "Текст кнопки под текстами фото (пусто = без кнопки). Ведёт туда же, куда и фото: по его ссылке или в лайтбокс."
+
+msgid "Filtri, ricerca e pagine"
+msgstr "Фильтры, поиск и страницы"
+
+msgid "Link ai filtri"
+msgstr "Ссылки на фильтры"
+
+msgid "L’indirizzo della pagina ricorda il filtro scelto (…#filtro=categoria): copiandolo, o mettendolo in un pulsante o nel menu, la galleria si apre già filtrata."
+msgstr "Адрес страницы запоминает выбранный фильтр (…#filtro=категория): если его скопировать или поставить в кнопку или меню, галерея откроется уже отфильтрованной."
+
+msgid "Una casella che tiene solo le foto col testo cercato nel titolo, nel sottotitolo, nel testo o nella categoria."
+msgstr "Поле, которое оставляет только фото с искомым текстом в заголовке, подзаголовке, тексте или категории."
+
+msgid "Testo della casella"
+msgstr "Текст в поле"
+
+msgid "Ordinamento"
+msgstr "Сортировка"
+
+msgid "Un menu per mettere le foto in ordine di titolo o di testo (anni, prezzi), crescente o decrescente."
+msgstr "Меню, чтобы упорядочить фото по заголовку или тексту (годы, цены), по возрастанию или убыванию."
+
+msgid "Foto da mostrare"
+msgstr "Показ фото"
+
+msgid "Tutte subito"
+msgstr "Все сразу"
+
+msgid "Un gruppo, poi «Mostra altre»"
+msgstr "Группа, затем «Показать ещё»"
+
+msgid "A pagine"
+msgstr "По страницам"
+
+msgid "Foto per gruppo o pagina"
+msgstr "Фото на группу или страницу"
+
+msgid "Menu a tendina"
+msgstr "Выпадающее меню"
+
+msgid "Fra il telefono e il computer (da 640 a 1199 px); vuoto = come al computer."
+msgstr "Между телефоном и компьютером (от 640 до 1199 px); пусто = как на компьютере."
+
+msgid "Filtro disponibilità"
+msgstr "Фильтр наличия"
+
+msgid "Filtro «In offerta»"
+msgstr "Фильтр «Со скидкой»"
+
+msgid "Ordinamento per chi visita"
+msgstr "Сортировка для посетителей"
+
+msgid "Un menu «Ordina» (più recenti, più venduti, prezzo, nome): la tile Prodotti WC della pagina mostra i prodotti nell’ordine scelto."
+msgstr "Меню «Сортировка» (новые, самые продаваемые, цена, название): плитка «Товары WC» на странице показывает товары в выбранном порядке."
+
+msgid "Pallini dei colori"
+msgstr "Цветные точки"
+
+msgid "Sotto il prezzo dei prodotti a varianti un pallino per ogni colore; passandoci sopra la foto mostra quel colore. Il colore viene da un plugin dei colori, se c’è, o dal nome (Nero, Blu navy, Cognac…)."
+msgstr "Под ценой вариативных товаров точка для каждого цвета; при наведении фото показывает этот цвет. Цвет берётся из плагина цветов, если он есть, или из названия (Чёрный, Тёмно-синий, Коньячный…)."
+
+msgid "Quanti prodotti"
+msgstr "Количество товаров"
+
+msgid "Sopra la griglia il numero dei prodotti trovati, anche dopo i filtri."
+msgstr "Над сеткой количество найденных товаров, в том числе после фильтров."
+
+#: licenza-1.4.1345
+msgid "Un gruppo, poi le altre scorrendo"
+msgstr "Группа, затем остальные при прокрутке"
+
+#: licenza-1.4.1345
+msgid "Nessun contenuto dalla fonte social: controlla il canale o l’indirizzo. Questo avviso lo vede solo chi modifica il sito."
+msgstr "Нет содержимого из соцсети: проверьте канал или адрес. Это уведомление видят только те, кто редактирует сайт."
+
+msgid "Azzera i filtri"
+msgstr "Сбросить фильтры"
+
+msgid "Quello del contenuto aperto"
+msgstr "Из открытого содержимого"
+
+msgid "Card di testo"
+msgstr "Текстовая карточка"
+
+msgid "Testo grande (citazione, annuncio)..."
+msgstr "Крупный текст (цитата, объявление)..."
+
+msgid "Firma..."
+msgstr "Подпись..."
+
+msgid "Una card senza foto, coi testi su un fondo colorato (citazioni, annunci)"
+msgstr "Карточка без фото, с текстом на цветном фоне (цитаты, объявления)"
+
+msgid "Foto da un social"
+msgstr "Фото из соцсети"
+
+msgid "Fonte"
+msgstr "Источник"
+
+msgid "Le foto di «Media»"
+msgstr "Фото из «Медиа»"
+
+msgid "YouTube (canale, @nome o playlist)"
+msgstr "YouTube (канал, @имя или плейлист)"
+
+msgid "Vimeo (utente o canale)"
+msgstr "Vimeo (пользователь или канал)"
+
+msgid "Flickr (utente o tag)"
+msgstr "Flickr (пользователь или теги)"
+
+msgid "Pinterest (profilo o bacheca)"
+msgstr "Pinterest (профиль или доска)"
+
+msgid "Instagram (account di OLOsocial)"
+msgstr "Instagram (аккаунт OLOsocial)"
+
+msgid "Feed RSS"
+msgstr "RSS-лента"
+
+msgid "Le foto o i video arrivano dal social e si aggiornano da soli ogni ora; quelli di «Media» restano salvati ma non si mostrano. YouTube, Vimeo, Flickr, Pinterest e i feed RSS non chiedono chiavi; Instagram usa l’account collegato in OLOsocial."
+msgstr "Фото или видео приходят из соцсети и обновляются сами каждый час; содержимое «Медиа» сохраняется, но не показывается. YouTube, Vimeo, Flickr, Pinterest и RSS-ленты не требуют ключей; Instagram использует аккаунт, подключённый в OLOsocial."
+
+msgid "Canale, account o indirizzo"
+msgstr "Канал, аккаунт или адрес"
+
+msgid "YouTube: @nome, indirizzo del canale o della playlist. Vimeo: nome utente o channels/nome. Flickr: l’id utente (12345678@N00) o dei tag. Pinterest: nome o nome/bacheca. Instagram: @nome (vuoto = il primo account collegato). RSS: l’indirizzo del feed."
+msgstr "YouTube: @имя, адрес канала или плейлиста. Vimeo: имя пользователя или channels/имя. Flickr: ID пользователя (12345678@N00) или теги. Pinterest: имя или имя/доска. Instagram: @имя (пусто = первый подключённый аккаунт). RSS: адрес ленты."
+
+msgid "Quante"
+msgstr "Сколько"
+
+msgid "Apri sul social"
+msgstr "Открывать в соцсети"
+
+msgid "Il clic porta al post sul social invece di aprire la lightbox."
+msgstr "Клик ведёт к посту в соцсети вместо открытия лайтбокса."
+
+msgid "Accanto alla foto (biglietto)"
+msgstr "Рядом с фото (билет)"
+
+msgid "«Sotto la foto» e «Accanto alla foto» valgono per gli schemi Griglia e Masonry; negli altri i testi vanno sulla foto. Nel biglietto il testo della foto diventa la scritta grande (per esempio «20 mag sab»): accendi «Mostra il testo»."
+msgstr "«Под фото» и «Рядом с фото» работают в схемах «Сетка» и Masonry; в остальных тексты располагаются на фото. В билете текст фото становится крупной надписью (например, «20 мая сб»): включите «Показывать текст»."
+
+msgid "Sopra la galleria un pulsante per ogni categoria e «Tutti»: cliccando, restano le foto di quella categoria e la galleria si riordina. La categoria si scrive sotto ogni foto in «Media»; più categorie si separano con la virgola. Per più gruppi che si combinano scrivi «Gruppo: valore», per esempio «Tipo: Guida, Livello: Base»: sopra la galleria compare una fila per gruppo."
+msgstr "Над галереей кнопка для каждой категории и «Все»: при нажатии остаются фото этой категории, а галерея перестраивается. Категорию пишите под каждым фото в «Медиа»; несколько категорий разделяйте запятыми. Для нескольких сочетающихся групп пишите «Группа: значение», например «Тип: Руководство, Уровень: Базовый»: над галереей появится строка для каждой группы."
+
+msgid "Entrata dei testi"
+msgstr "Появление текстов"
+
+msgid "Uno alla volta, dal basso"
+msgstr "По одному, снизу"
+
+msgid "Uno alla volta, da sinistra"
+msgstr "По одному, слева"
+
+msgid "Uno alla volta, si svelano"
+msgstr "По одному, проявляются"
+
+msgid "Uno alla volta, si ingrandiscono"
+msgstr "По одному, увеличиваются"
+
+msgid "Uno alla volta, sfumano"
+msgstr "По одному, проявляются плавно"
+
+msgid "Categoria, numero, titolo, sottotitolo, testo e pulsante arrivano uno dopo l’altro quando la foto entra nello schermo, o al passaggio se i testi compaiono così. Con «riduci movimento» del sistema non si muove niente."
+msgstr "Категория, номер, заголовок, подзаголовок, текст и кнопка появляются один за другим, когда фото попадает на экран, или при наведении, если тексты появляются так. При системном «уменьшении движения» ничего не движется."
+
+msgid "Sfondo delle card di testo"
+msgstr "Фон текстовых карточек"
+
+msgid "Colore delle voci"
+msgstr "Цвет элементов"
+
+msgid "Un colore per ogni foto o card: tinge la cornice, la categoria, il numero, il pulsante, il biglietto e il fondo delle card di testo. Vuoto = il colore della galleria."
+msgstr "Цвет для каждого фото или карточки: окрашивает рамку, категорию, номер, кнопку, билет и фон текстовых карточек. Пусто = цвет галереи."
+
+msgid "Filtra senza ricaricare la pagina"
+msgstr "Фильтровать без перезагрузки страницы"
+
+msgid "Scelto un filtro, la griglia Prodotti WC della pagina si aggiorna sul posto e l’indirizzo ricorda i filtri. Se nella pagina non c’è una griglia da aggiornare, la pagina si ricarica come prima."
+msgstr "После выбора фильтра сетка «Товары WC» на странице обновляется на месте, а адрес запоминает фильтры. Если на странице нет сетки для обновления, страница перезагрузится, как раньше."
+
+#: licenza-1.4.1345
+msgid "N."
+msgstr "№"
+
+msgid "Come lo schema"
+msgstr "Как в схеме"
+
+msgid "In alto al centro"
+msgstr "Сверху по центру"
+
+msgid "Al centro a sinistra"
+msgstr "По центру слева"
+
+msgid "Al centro a destra"
+msgstr "По центру справа"
+
+msgid "In basso al centro"
+msgstr "Снизу по центру"
+
+msgid "Facebook (pagina di OLOsocial)"
+msgstr "Facebook (страница OLOsocial)"
+
+msgid "Le foto o i video arrivano dal social e si aggiornano da soli ogni ora; quelli di «Media» restano salvati ma non si mostrano. YouTube, Vimeo, Flickr, Pinterest e i feed RSS non chiedono chiavi; Instagram e Facebook usano gli account collegati in OLOsocial."
+msgstr "Фото или видео приходят из соцсети и обновляются сами каждый час; содержимое «Медиа» сохраняется, но не показывается. YouTube, Vimeo, Flickr, Pinterest и RSS-ленты не требуют ключей; Instagram и Facebook используют аккаунты, подключённые в OLOsocial."
+
+msgid "YouTube: @nome, indirizzo del canale o della playlist. Vimeo: nome utente o channels/nome. Flickr: l’id utente (12345678@N00) o dei tag. Pinterest: nome o nome/bacheca. Instagram e Facebook: @nome o nome della pagina (vuoto = il primo account collegato in OLOsocial). RSS: l’indirizzo del feed."
+msgstr "YouTube: @имя, адрес канала или плейлиста. Vimeo: имя пользователя или channels/имя. Flickr: ID пользователя (12345678@N00) или теги. Pinterest: имя или имя/доска. Instagram и Facebook: @имя или название страницы (пусто = первый аккаунт, подключённый в OLOsocial). RSS: адрес ленты."
+
+msgid "Sulla foto, in un riquadro"
+msgstr "На фото, в рамке"
+
+msgid "Formato del numero"
+msgstr "Формат номера"
+
+msgid "N. 01 / 12"
+msgstr "№ 01 / 12"
+
+msgid "Posizione del titolo"
+msgstr "Положение заголовка"
+
+msgid "Ogni parte della card può andare in una delle nove zone della foto: in alto, al centro o in basso, a sinistra, al centro o a destra. «Come lo schema» la lascia dov’è."
+msgstr "Каждая часть карточки может стоять в одной из девяти зон фото: сверху, по центру или снизу, слева, по центру или справа. «Как в схеме» оставляет её на месте."
+
+msgid "Posizione del sottotitolo"
+msgstr "Положение подзаголовка"
+
+msgid "Posizione della categoria"
+msgstr "Положение категории"
+
+msgid "Posizione del numero"
+msgstr "Положение номера"
+
+msgid "Posizione del pulsante"
+msgstr "Положение кнопки"
+
+msgid "Posizione dell’icona"
+msgstr "Положение значка"
+
+msgid "Card in evidenza"
+msgstr "Выделенная карточка"
+
+msgid "La prima, grande (2 × 2)"
+msgstr "Первая, большая (2 × 2)"
+
+msgid "Al computer la prima card occupa due colonne e due righe, con la foto grande: il prodotto da mettere in vetrina. Sul tablet e sul telefono torna come le altre."
+msgstr "На компьютере первая карточка занимает два столбца и две строки, с большим фото: товар для витрины. На планшете и телефоне она снова как остальные."
+
+#: licenza-1.4.1345
+msgid "Ordine casuale"
+msgstr "Случайный порядок"
+
+msgid "Più valori insieme"
+msgstr "Несколько значений сразу"
+
+msgid "In ogni gruppo si possono accendere più valori insieme: restano le foto che ne hanno almeno uno (Guida o Modello). Gruppi diversi restano combinati (Guida o Modello, e di livello Base). Vale coi filtri a pulsanti."
+msgstr "В каждой группе можно включить несколько значений сразу: остаются фото, у которых есть хотя бы одно из них (Руководство или Шаблон). Разные группы по-прежнему сочетаются (Руководство или Шаблон, и уровень Базовый). Работает с фильтрами-кнопками."
+
+msgid "Mescola a ogni visita"
+msgstr "Перемешивать при каждом визите"
+
+msgid "Le foto escono in un ordine diverso a ogni visita. Con l’«Ordinamento» acceso, chi visita può rimetterle in ordine."
+msgstr "Фото выводятся в другом порядке при каждом визите. С включённой «Сортировкой» посетители могут упорядочить их снова."
+
+#: licenza-1.4.1345
+msgid "Colonne schermi grandi"
+msgstr "Колонки больших экранов"
+
+msgid "Da 1400 px in su (monitor grandi); vuoto = come al computer."
+msgstr "От 1400 px (большие мониторы); пусто = как на компьютере."
+
+msgid "Colonne telefoni piccoli"
+msgstr "Колонки маленьких телефонов"
+
+msgid "Sotto i 480 px; vuoto = come le colonne mobile."
+msgstr "Меньше 480 px; пусто = как колонки для мобильных."

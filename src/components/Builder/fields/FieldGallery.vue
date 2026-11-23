@@ -26,7 +26,15 @@
             non c'era mai stata. Cliccare qui cambia IL SOLO media e lascia
             intatto tutto il resto della riga.
           -->
+          <!-- La card di solo testo non ha un media: al posto dell'anteprima un riquadro col colore della voce. -->
+          <div
+            v-if="isTesto(img)"
+            class="fg-testo mb-relative mb-flex mb-items-center mb-justify-center mb-w-16 mb-h-16 mb-shrink-0 mb-rounded mb-border mb-border-gray-600"
+            :style="img.colore ? { background: img.colore } : null"
+            :title="t('Card di testo')"
+          >Aa</div>
           <button
+            v-else
             type="button"
             @click="sostituisci(idx)"
             :title="t('Cambia questo media')"
@@ -64,7 +72,7 @@
               type="text"
               :value="img.caption || ''"
               @input="updateCaption(idx, $event.target.value)"
-              :placeholder="righeExtra ? t('Titolo...') : t('Didascalia...')"
+              :placeholder="isTesto(img) ? t('Testo grande (citazione, annuncio)...') : (righeExtra ? t('Titolo...') : t('Didascalia...'))"
               class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200 mb-placeholder-gray-500"
             />
             <!--
@@ -84,7 +92,7 @@
                 type="text"
                 :value="img.subtitle || ''"
                 @input="updateRiga(idx, 'subtitle', $event.target.value)"
-                :placeholder="t('Sottotitolo...')"
+                :placeholder="isTesto(img) ? t('Firma...') : t('Sottotitolo...')"
                 class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200 mb-placeholder-gray-500"
               />
               <input
@@ -135,7 +143,7 @@
               Il comando primario non sta dentro un hover: chi non sa che
               l'anteprima si clicca non ci passa sopra il mouse per scoprirlo.
             -->
-            <div class="fg-cmds">
+            <div v-if="!isTesto(img)" class="fg-cmds">
               <button
                 type="button"
                 @click="sostituisci(idx)"
@@ -223,6 +231,13 @@
       >
         Media
       </button>
+      <button
+        v-if="cardTesto"
+        type="button"
+        @click="addTesto"
+        class="mb-flex-1 mb-py-1.5 mb-px-2 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-text-xs mb-text-gray-300 hover:mb-bg-gray-600 mb-transition-colors"
+        :title="t('Una card senza foto, coi testi su un fondo colorato (citazioni, annunci)')"
+      >{{ t('Card di testo') }}</button>
       <button
         @click="addVideo"
         class="mb-flex-1 mb-py-1.5 mb-px-2 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-text-xs mb-text-gray-300 hover:mb-bg-gray-600 mb-transition-colors"
@@ -401,6 +416,8 @@ const props = defineProps({
   linkVoce: { type: Boolean, default: false },
   /** Accende la misura di ogni foto (Pro Gallery, schema Metro: colonne × righe). */
   misuraVoce: { type: Boolean, default: false },
+  /** Accende «Card di testo»: voci senza foto, coi testi su un fondo colorato (Pro Gallery). */
+  cardTesto: { type: Boolean, default: false },
   /*
    * L'inquadratura per singola foto.
    *
@@ -454,7 +471,20 @@ const { itemDraggable, itemDrop } = useListSort({
 });
 
 function itemKey(item) {
-  return `${item.id || 0}-${item.url || ''}-${item.embed || ''}`;
+  return `${item.id || 0}-${item.url || ''}-${item.embed || ''}-${item.uid || ''}`;
+}
+
+function isTesto(img) {
+  return img && img.type === 'testo';
+}
+
+// ── Card di solo testo (Pro Gallery) ──
+function addTesto() {
+  const current = props.modelValue || [];
+  emit('update:modelValue', [
+    ...current,
+    { type: 'testo', uid: 'tx' + Date.now().toString(36), url: '', id: 0, caption: '', subtitle: '', text: '' },
+  ]);
 }
 
 function isVideo(img) {
@@ -909,5 +939,12 @@ function formatDuration(sec) {
   background: var(--olo-ui-accent, #e8622a);
   border-color: var(--olo-ui-accent, #e8622a);
   color: #fff !important;
+}
+.fg-testo {
+  background: var(--olo-color-primary, #e1474f);
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.01em;
 }
 </style>

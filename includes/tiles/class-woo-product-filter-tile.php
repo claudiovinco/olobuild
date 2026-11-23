@@ -15,6 +15,9 @@ class Olobuild_Woo_Product_Filter_Tile extends Olobuild_Tile_Base {
         'show_categories'  => true,
         'show_attributes'  => true,
         'show_stock'       => true,
+        'show_on_sale'     => false,
+        'show_sort'        => false,
+        'senza_ricarica'   => true,
         'show_active'      => true,
         'price_min'        => 0,
         'price_max'        => 1000,
@@ -249,6 +252,29 @@ class Olobuild_Woo_Product_Filter_Tile extends Olobuild_Tile_Base {
                 align-items: center;
                 justify-content: space-between;
                 padding: 4px 0;
+            }
+            .<?php echo $uid; ?> .olo-pf-ordina {
+                display: flex;
+                align-items: center;
+                gap: .6rem;
+            }
+            .<?php echo $uid; ?> .olo-pf-ordina-lab {
+                font-size: 13px;
+                color: var(--olo-color-text-muted, #6B7280);
+            }
+            .<?php echo $uid; ?> .olo-pf-ordina select {
+                font: inherit;
+                font-size: 13px;
+                color: <?php echo $text_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colore già passato da safe_color_css() ?>;
+                background: transparent;
+                border: 1px solid <?php echo $border_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colore già passato da safe_color_css() ?>;
+                border-radius: 100vmax;
+                padding: .5em 1em;
+                cursor: pointer;
+            }
+            .<?php echo $uid; ?> .olo-pf-ordina select:focus-visible {
+                outline: 2px solid <?php echo $accent_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colore già passato da safe_color_css() ?>;
+                outline-offset: 2px;
             }
             .<?php echo $uid; ?> .olo-pf-toggle {
                 position: relative;
@@ -545,6 +571,45 @@ class Olobuild_Woo_Product_Filter_Tile extends Olobuild_Tile_Base {
             </div>
             <?php endif; ?>
 
+            <?php /* --- IN OFFERTA --- */ ?>
+            <?php if ( ! empty( $s['show_on_sale'] ) ) : ?>
+            <div class="olo-pf-section">
+                <?php echo $this->intestazione( olobuild_t( 'Offerte' ), $uid . '-body-sale', $collapsed, $can_fold ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup di intestazione() con esc_html()/esc_attr()
+                ?>
+                <div class="olo-pf-body<?php echo $collapsed ? ' is-collapsed' : ''; ?>" id="<?php echo esc_attr( $uid ); ?>-body-sale" style="max-height:200px">
+                    <div class="olo-pf-toggle-wrap">
+                        <span><?php echo esc_html( olobuild_t( 'Solo prodotti in offerta' ) ); ?></span>
+                        <button type="button" class="olo-pf-toggle" data-olo-pf-sale-toggle role="switch" aria-checked="false" aria-label="<?php echo esc_attr( olobuild_t( 'Solo prodotti in offerta' ) ); ?>"></button>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <?php /* --- ORDINAMENTO PER CHI VISITA (orderby di WooCommerce, letto da Prodotti WC) --- */ ?>
+            <?php
+            if ( ! empty( $s['show_sort'] ) ) :
+                // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- sola lettura dell'ordinamento pubblico scelto nell'indirizzo
+                $ord_ora = isset( $_GET['orderby'] ) && is_scalar( $_GET['orderby'] ) ? sanitize_key( wp_unslash( $_GET['orderby'] ) ) : '';
+                $ordini  = [
+                    ''           => olobuild_t( 'Come nel negozio' ),
+                    'date'       => olobuild_t( 'Più recenti' ),
+                    'popularity' => olobuild_t( 'Più venduti' ),
+                    'rating'     => olobuild_t( 'Più votati' ),
+                    'price'      => olobuild_t( 'Prezzo crescente' ),
+                    'price-desc' => olobuild_t( 'Prezzo decrescente' ),
+                    'title'      => olobuild_t( 'Nome dalla A alla Z' ),
+                ];
+                ?>
+            <div class="olo-pf-section olo-pf-ordina">
+                <label class="olo-pf-ordina-lab" for="<?php echo esc_attr( $uid ); ?>-ordina"><?php echo esc_html( olobuild_t( 'Ordina' ) ); ?></label>
+                <select id="<?php echo esc_attr( $uid ); ?>-ordina" data-olo-pf-sort>
+                    <?php foreach ( $ordini as $v => $l ) : ?>
+                    <option value="<?php echo esc_attr( $v ); ?>"<?php selected( $ord_ora, $v ); ?>><?php echo esc_html( $l ); ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <?php endif; ?>
+
             <div class="olo-pf-actions">
                 <?php if ( $apply_btn ) : // senza il pulsante i filtri si applicano a ogni scelta (script sotto) ?>
                 <button type="button" class="olo-pf-btn olo-pf-btn-primary" data-olo-pf-apply><?php echo $btn_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() at assignment above ?></button>
@@ -559,11 +624,14 @@ class Olobuild_Woo_Product_Filter_Tile extends Olobuild_Tile_Base {
             if(!root){return}
             var dropdown  = <?php echo $is_dropdown ? 'true' : 'false'; ?>;
             var autoApply = <?php echo $apply_btn ? 'false' : 'true'; ?>;
+            var ajax      = <?php echo ! empty( $s['senza_ricarica'] ) ? 'true' : 'false'; ?>;
+            var usatoAjax = false;
             var L = {
                 min: '<?php echo esc_js( olobuild_t( 'Prezzo min' ) ); ?>',
                 max: '<?php echo esc_js( olobuild_t( 'Prezzo max' ) ); ?>',
                 cat: '<?php echo esc_js( olobuild_t( 'Categorie' ) ); ?>',
-                stock: '<?php echo esc_js( olobuild_t( 'Solo disponibili' ) ); ?>'
+                stock: '<?php echo esc_js( olobuild_t( 'Solo disponibili' ) ); ?>',
+                sale: '<?php echo esc_js( olobuild_t( 'In offerta' ) ); ?>'
             };
             /* I parametri che il filtro scrive (nomi di WooCommerce): «Rimuovi tutti» e «Resetta»
                tolgono solo questi, non gli altri dell'indirizzo (lingua, tracciamenti…). */
@@ -572,13 +640,57 @@ class Olobuild_Woo_Product_Filter_Tile extends Olobuild_Tile_Base {
                 if(k === 'max_price'){return true}
                 if(k === 'product_cat'){return true}
                 if(k === 'in_stock'){return true}
+                if(k === 'on_sale'){return true}
                 if(k === 'paged'){return true}
                 return k.indexOf('filter_') === 0;
             }
-            function go(params){
-                var q = params.toString();
-                window.location.search = q ? '?' + q : '';
+            /* SENZA RICARICARE: si scarica la stessa pagina coi parametri nuovi e si sostituiscono le tile Prodotti WC
+               (la tile intera, per id, col suo CSS). Se una griglia manca, o la rete sbaglia, si ricarica come prima. */
+            function griglie(){
+                var out = [];
+                document.querySelectorAll('[data-olo-woo-griglia]').forEach(function(el){
+                    var w = el.closest('.olo-frontend-tile[id]');
+                    if(w){ if(out.indexOf(w) < 0){ out.push(w); } }
+                });
+                return out;
             }
+            function trovaIn(doc, id){
+                var el = doc.getElementById(id);
+                if(el){ return el; }
+                var ts = doc.querySelectorAll('template');
+                for(var i = 0; i < ts.length; i++){
+                    var f = ts[i].content.querySelector('[id="' + id + '"]');
+                    if(f){ return f; }
+                }
+                return null;
+            }
+            function go(params){
+                var q   = params.toString();
+                var url = window.location.pathname + (q ? '?' + q : '');
+                var gs  = ajax ? griglie() : [];
+                if(!gs.length || !window.fetch || !window.DOMParser){ window.location.href = url; return; }
+                gs.forEach(function(w){ w.setAttribute('aria-busy', 'true'); w.style.transition = 'opacity .2s ease'; w.style.opacity = '.45'; });
+                fetch(url, { credentials: 'same-origin' })
+                .then(function(r){ if(!r.ok){ throw new Error(String(r.status)); } return r.text(); })
+                .then(function(html){
+                    var doc = new DOMParser().parseFromString(html, 'text/html');
+                    var nuovi = gs.map(function(w){ return trovaIn(doc, w.id); });
+                    if(nuovi.indexOf(null) > -1){ window.location.href = url; return; }
+                    gs.forEach(function(w, i){
+                        var el = document.importNode(nuovi[i], true);
+                        w.parentNode.replaceChild(el, w);
+                        try { document.dispatchEvent(new CustomEvent('olo:lazy-hydrated', { detail: { target: el } })); } catch(e){}
+                    });
+                    usatoAjax = true;
+                    if(history.pushState){ history.pushState({ oloFiltro: 1 }, '', url); }
+                    mostraAttivi(new URLSearchParams(window.location.search));
+                    var primo = griglie()[0];
+                    if(primo){ if(primo.getBoundingClientRect().top < 0){ primo.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }
+                })
+                .catch(function(){ window.location.href = url; });
+            }
+            /* Indietro e avanti dopo un filtro sul posto: la pagina giusta si ricarica dall'indirizzo. */
+            window.addEventListener('popstate', function(){ if(usatoAjax){ window.location.reload(); } });
             function cleanParams(){
                 var params = new URLSearchParams(window.location.search);
                 var keys = [];
@@ -669,6 +781,27 @@ class Olobuild_Woo_Product_Filter_Tile extends Olobuild_Tile_Base {
                 });
             }
 
+            /* --- In offerta (come «Solo disponibili») --- */
+            var saleToggle = root.querySelector('[data-olo-pf-sale-toggle]');
+            if(saleToggle){
+                saleToggle.addEventListener('click', function(){
+                    var on = !saleToggle.classList.contains('is-active');
+                    saleToggle.classList.toggle('is-active', on);
+                    saleToggle.setAttribute('aria-checked', on ? 'true' : 'false');
+                    if(autoApply){ apply(); }
+                });
+            }
+            /* --- Ordinamento: si applica subito e resta anche azzerando i filtri --- */
+            var sortSel = root.querySelector('[data-olo-pf-sort]');
+            if(sortSel){
+                sortSel.addEventListener('change', function(){
+                    var p = new URLSearchParams(window.location.search);
+                    if(sortSel.value){ p.set('orderby', sortSel.value); } else { p.delete('orderby'); }
+                    p.delete('paged');
+                    go(p);
+                });
+            }
+
             /* --- Scelte già nell'indirizzo: si ripropongono sempre, anche senza «Filtri attivi» --- */
             var sp = new URLSearchParams(window.location.search);
             var catParam = sp.get('product_cat');
@@ -687,6 +820,7 @@ class Olobuild_Woo_Product_Filter_Tile extends Olobuild_Tile_Base {
                     });
                 });
             });
+            if(saleToggle){ if(sp.get('on_sale')){ saleToggle.classList.add('is-active'); saleToggle.setAttribute('aria-checked', 'true'); } }
             if(sp.get('in_stock')){
                 if(stockToggle){ stockToggle.classList.add('is-active'); stockToggle.setAttribute('aria-checked', 'true'); }
             }
@@ -698,27 +832,31 @@ class Olobuild_Woo_Product_Filter_Tile extends Olobuild_Tile_Base {
             var activeWrap = root.querySelector('[data-olo-pf-active]');
             var activeTags = root.querySelector('[data-olo-pf-active-tags]');
             var clearAll   = root.querySelector('[data-olo-pf-clear-all]');
-            if(activeWrap){
+            function mostraAttivi(sp){
+                if(!activeWrap){ return; }
+                var catParam = sp.get('product_cat');
                 var tags = [];
                 if(sp.get('min_price')){ tags.push(L.min + ': ' + sp.get('min_price')); }
                 if(sp.get('max_price')){ tags.push(L.max + ': ' + sp.get('max_price')); }
                 if(catParam){ tags.push(L.cat + ': ' + catParam); }
                 if(sp.get('in_stock')){ tags.push(L.stock); }
+                if(sp.get('on_sale')){ tags.push(L.sale); }
                 sp.forEach(function(v, k){
                     if(k.indexOf('filter_') === 0){ tags.push(k.replace('filter_','') + ': ' + v); }
                 });
-                if(tags.length > 0){
-                    activeWrap.style.display = 'block';
-                    if(activeTags){
-                        activeTags.textContent = '';
-                        tags.forEach(function(t){
-                            var el = document.createElement('span');
-                            el.className = 'olo-pf-active-tag';
-                            el.textContent = t;
-                            activeTags.appendChild(el);
-                        });
-                    }
+                activeWrap.style.display = tags.length > 0 ? 'block' : 'none';
+                if(activeTags){
+                    activeTags.textContent = '';
+                    tags.forEach(function(t){
+                        var el = document.createElement('span');
+                        el.className = 'olo-pf-active-tag';
+                        el.textContent = t;
+                        activeTags.appendChild(el);
+                    });
                 }
+            }
+            mostraAttivi(sp);
+            if(activeWrap){
                 if(clearAll){
                     clearAll.addEventListener('click', function(e){
                         e.preventDefault();
@@ -764,6 +902,7 @@ class Olobuild_Woo_Product_Filter_Tile extends Olobuild_Tile_Base {
                 if(stockToggle){
                     if(stockToggle.classList.contains('is-active')){ params.set('in_stock', '1'); }
                 }
+                if(saleToggle){ if(saleToggle.classList.contains('is-active')){ params.set('on_sale', '1'); } }
 
                 go(params);
             }
@@ -787,6 +926,7 @@ class Olobuild_Woo_Product_Filter_Tile extends Olobuild_Tile_Base {
                     if(pMax){ pMax.value = pMax.max; if(pMaxLabel){pMaxLabel.textContent=pMax.value} }
                     /* Reset stock toggle */
                     if(stockToggle){ stockToggle.classList.remove('is-active'); stockToggle.setAttribute('aria-checked', 'false'); }
+                    if(saleToggle){ saleToggle.classList.remove('is-active'); saleToggle.setAttribute('aria-checked', 'false'); }
                     /* Clear URL (solo i filtri) */
                     go(cleanParams());
                 });

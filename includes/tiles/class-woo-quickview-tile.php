@@ -139,6 +139,9 @@ class Olobuild_Woo_Quickview_Tile extends Olobuild_Tile_Base {
         }
         if ( ! $this->mostra( $s, 'show_add_to_cart' ) ) {
             $nascondi[] = '.olo-qv-atc';
+            $nascondi[] = '.olo-qv-varianti';
+            $nascondi[] = '.olo-qv-stock';
+            $nascondi[] = '.olo-qv-esito';
         }
         $con_sku = $this->mostra( $s, 'show_sku', 'show_meta' );
         $con_cat = $this->mostra( $s, 'show_categories', 'show_meta' );
@@ -351,6 +354,117 @@ class Olobuild_Woo_Quickview_Tile extends Olobuild_Tile_Base {
                 margin-top: 12px;
                 font-size: 14px;
             }
+            .<?php echo $uid; ?>-body .olo-qv-attr {
+                margin: 0 0 .9rem;
+            }
+            .<?php echo $uid; ?>-body .olo-qv-attr-tit {
+                font-size: 13px;
+                font-weight: 600;
+                margin: 0 0 .45rem;
+            }
+            .<?php echo $uid; ?>-body .olo-qv-attr-val {
+                font-weight: 400;
+                color: var(--olo-color-text-muted, #9CA3AF);
+            }
+            .<?php echo $uid; ?>-body .olo-qv-attr-opz {
+                display: flex;
+                flex-wrap: wrap;
+                gap: .45rem;
+            }
+            .<?php echo $uid; ?>-body .olo-qv-opz {
+                min-width: 2.6rem;
+                padding: .45rem .8rem;
+                border: 1px solid var(--olo-color-border, #E5E7EB);
+                border-radius: .375rem;
+                background: transparent;
+                color: inherit;
+                font: inherit;
+                font-size: 13px;
+                line-height: 1.2;
+                cursor: pointer;
+                transition: border-color .2s, background-color .2s, color .2s;
+            }
+            .<?php echo $uid; ?>-body .olo-qv-opz:hover {
+                border-color: <?php echo $accent; ?>;
+            }
+            .<?php echo $uid; ?>-body .olo-qv-opz.is-scelto {
+                border-color: <?php echo $accent; ?>;
+                background: <?php echo $accent; ?>;
+                color: var(--olo-color-primary-contrast, #FFFFFF);
+            }
+            .<?php echo $uid; ?>-body .olo-qv-opz-colore {
+                width: 1.9rem;
+                height: 1.9rem;
+                padding: 0;
+                border: 2px solid <?php echo $modal_bg; ?>;
+                border-radius: 50%;
+                background: var(--c);
+                box-shadow: 0 0 0 1px var(--olo-color-border, #E5E7EB);
+                cursor: pointer;
+                transition: box-shadow .2s;
+            }
+            .<?php echo $uid; ?>-body .olo-qv-opz-colore:hover,
+            .<?php echo $uid; ?>-body .olo-qv-opz-colore.is-scelto {
+                box-shadow: 0 0 0 2px <?php echo $accent; ?>;
+            }
+            .<?php echo $uid; ?>-body .olo-qv-stock {
+                font-size: 13px;
+                font-weight: 600;
+                margin-top: .5rem;
+                color: var(--olo-color-success, #16A34A);
+            }
+            .<?php echo $uid; ?>-body .olo-qv-stock.is-no {
+                color: var(--olo-color-danger, #EF4444);
+            }
+            .<?php echo $uid; ?>-body .olo-qv-passi {
+                display: inline-flex;
+                align-items: stretch;
+                height: 2.5rem;
+                border: 1px solid var(--olo-color-border, #E5E7EB);
+                border-radius: .375rem;
+                overflow: hidden;
+            }
+            .<?php echo $uid; ?>-body .olo-qv-passi button {
+                width: 2.25rem;
+                padding: 0;
+                border: 0;
+                background: var(--olo-color-muted, #F3F4F6);
+                color: inherit;
+                font-size: 1rem;
+                cursor: pointer;
+            }
+            .<?php echo $uid; ?>-body .olo-qv-passi .olo-qv-qty {
+                width: 3rem;
+                height: auto;
+                border: 0;
+                border-radius: 0;
+                background: transparent;
+                color: inherit;
+                -moz-appearance: textfield;
+                appearance: textfield;
+            }
+            .<?php echo $uid; ?>-body .olo-qv-passi .olo-qv-qty::-webkit-inner-spin-button,
+            .<?php echo $uid; ?>-body .olo-qv-passi .olo-qv-qty::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            .<?php echo $uid; ?>-body .olo-qv-atc-btn:disabled {
+                opacity: .45;
+                cursor: not-allowed;
+            }
+            .<?php echo $uid; ?>-body .olo-qv-atc-btn.is-attesa {
+                opacity: .7;
+                cursor: progress;
+            }
+            .<?php echo $uid; ?>-body .olo-qv-atc-btn.is-fatto {
+                background: var(--olo-color-success, #16A34A);
+                opacity: 1;
+            }
+            .<?php echo $uid; ?>-body .olo-qv-esito {
+                font-size: 13px;
+                margin: .5rem 0 0;
+                min-height: 1.2em;
+            }
             .<?php echo $uid; ?>-body .olo-qv-meta {
                 font-size: 12px;
                 color: var(--olo-color-text-muted, #9CA3AF);
@@ -370,6 +484,9 @@ class Olobuild_Woo_Quickview_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?>-close:focus-visible,
             .<?php echo $uid; ?>-body .olo-qv-thumb:focus-visible,
             .<?php echo $uid; ?>-body .olo-qv-atc-btn:focus-visible,
+            .<?php echo $uid; ?>-body .olo-qv-opz:focus-visible,
+            .<?php echo $uid; ?>-body .olo-qv-opz-colore:focus-visible,
+            .<?php echo $uid; ?>-body .olo-qv-passi button:focus-visible,
             .<?php echo $uid; ?>-body .olo-qv-link:focus-visible {
                 outline: 2px solid <?php echo $accent; ?>;
                 outline-offset: 2px;
@@ -518,6 +635,98 @@ class Olobuild_Woo_Quickview_Tile extends Olobuild_Tile_Base {
                 document.body.style.overflow = 'hidden';
                 if(closeBtn){ closeBtn.focus(); } else if(dialog){ dialog.focus(); }
 
+                if(!window.oloQvAcquisto){
+                    /* Varianti, quantità e carrello. Niente e commerciale scritta negli script in linea
+                       (WordPress la riscrive in entità e il codice si rompe): condizioni annidate. */
+                    window.oloQvAcquisto = function(box, pid, mainImg){
+                        var btn = box.querySelector('[data-olo-qv-atc-btn]');
+                        var qty = box.querySelector('.olo-qv-qty');
+                        var esito = box.querySelector('.olo-qv-esito');
+                        var prezzo = box.querySelector('.olo-qv-price');
+                        var stock = box.querySelector('[data-olo-qv-stock]');
+                        var varBox = box.querySelector('[data-olo-qv-var]');
+                        var scelta = {}, varianti = [], vid = 0;
+                        var imgOrig = mainImg ? mainImg.getAttribute('src') : '';
+                        box.querySelectorAll('[data-olo-qv-passo]').forEach(function(b){
+                            b.addEventListener('click', function(){
+                                if(!qty){ return; }
+                                var v = (parseInt(qty.value, 10) || 1) + parseInt(b.getAttribute('data-olo-qv-passo'), 10);
+                                qty.value = Math.max(1, Math.min(parseInt(qty.max || '99', 10), v));
+                            });
+                        });
+                        function cerca(){
+                            for(var i = 0; i < varianti.length; i++){
+                                var v = varianti[i], ok = true;
+                                Object.keys(scelta).forEach(function(k){ var a = v.attributi[k]; if(a){ if(a !== scelta[k]){ ok = false; } } });
+                                if(ok){ return v; }
+                            }
+                            return null;
+                        }
+                        function aggiorna(){
+                            var tutte = varBox ? varBox.querySelectorAll('[data-olo-qv-attr]').length === Object.keys(scelta).length : true;
+                            var v = varBox ? cerca() : null;
+                            if(varBox){
+                                vid = v ? (tutte ? v.id : 0) : 0;
+                                if(v){ if(v.prezzo){ if(prezzo){ prezzo.innerHTML = v.prezzo; } } }
+                                if(mainImg){ mainImg.setAttribute('src', (v ? v.foto : '') || imgOrig); }
+                                if(stock){
+                                    stock.hidden = !v;
+                                    if(v){ stock.textContent = v.disponibile ? (v.disponibilita || stock.getAttribute('data-si')) : stock.getAttribute('data-no'); stock.classList.toggle('is-no', !v.disponibile); }
+                                }
+                                if(qty){ if(v){ if(v.max){ qty.max = v.max; } } }
+                                if(btn){ btn.disabled = !vid || (v ? !v.disponibile : false); }
+                                if(esito){ esito.textContent = (v ? false : tutte) ? esito.getAttribute('data-nessuna') : ''; }
+                            }
+                        }
+                        if(varBox){
+                            try { varianti = JSON.parse(varBox.getAttribute('data-olo-qv-var') || '[]'); } catch(e){ varianti = []; }
+                            varBox.querySelectorAll('[data-olo-qv-attr]').forEach(function(g){
+                                var nome = g.getAttribute('data-olo-qv-attr'), etich = g.querySelector('.olo-qv-attr-val');
+                                g.querySelectorAll('[data-valore]').forEach(function(o){
+                                    o.addEventListener('click', function(){
+                                        scelta[nome] = o.getAttribute('data-valore');
+                                        g.querySelectorAll('[data-valore]').forEach(function(x){ var on = x === o; x.classList.toggle('is-scelto', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+                                        if(etich){ etich.textContent = o.getAttribute('data-etichetta') || ''; }
+                                        aggiorna();
+                                    });
+                                    if(o.classList.contains('is-scelto')){ scelta[nome] = o.getAttribute('data-valore'); if(etich){ etich.textContent = o.getAttribute('data-etichetta') || ''; } }
+                                });
+                            });
+                            aggiorna();
+                        }
+                        if(!btn || btn.tagName !== 'BUTTON'){ return; }
+                        btn.addEventListener('click', function(){
+                            var id = varBox ? vid : parseInt(btn.getAttribute('data-pid') || pid, 10);
+                            if(!id){ return; }
+                            var wcp = window.wc_add_to_cart_params || {};
+                            var base = btn.getAttribute('data-ajax') || (wcp.wc_ajax_url ? wcp.wc_ajax_url.replace('%%endpoint%%', 'add_to_cart') : '/?wc-ajax=add_to_cart');
+                            var dati = new URLSearchParams();
+                            dati.set('product_id', id);
+                            dati.set('quantity', qty ? qty.value : 1);
+                            Object.keys(scelta).forEach(function(k){ dati.set(k, scelta[k]); });
+                            btn.classList.add('is-attesa'); btn.disabled = true;
+                            fetch(base, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: dati.toString() })
+                            .then(function(r){ return r.json(); })
+                            .then(function(r){
+                                btn.classList.remove('is-attesa');
+                                if(!r || r.error){
+                                    btn.disabled = false;
+                                    if(esito){ esito.textContent = esito.getAttribute('data-errore'); }
+                                    if(r){ if(r.product_url){ window.location.href = r.product_url; } }
+                                    return;
+                                }
+                                if(r.fragments){
+                                    Object.keys(r.fragments).forEach(function(sel){ document.querySelectorAll(sel).forEach(function(el){ el.outerHTML = r.fragments[sel]; }); });
+                                }
+                                if(window.jQuery){ window.jQuery(document.body).trigger('added_to_cart', [r.fragments, r.cart_hash, window.jQuery(btn)]); }
+                                btn.classList.add('is-fatto');
+                                if(esito){ esito.textContent = esito.getAttribute('data-fatto'); }
+                                setTimeout(function(){ btn.classList.remove('is-fatto'); btn.disabled = false; }, 2200);
+                            })
+                            .catch(function(){ btn.classList.remove('is-attesa'); btn.disabled = false; if(esito){ esito.textContent = esito.getAttribute('data-errore'); } });
+                        });
+                    };
+                }
                 fetch(restBase + pid)
                 .then(function(r){ return r.json(); })
                 .then(function(data){
@@ -546,16 +755,7 @@ class Olobuild_Woo_Quickview_Tile extends Olobuild_Tile_Base {
                             });
                         });
 
-                        /* ATC handler. Niente e commerciale scritta negli script in linea (WordPress la
-                           riscrive in entità e il codice si rompe): \x26 nella stringa. */
-                        var atcBtn = content.querySelector('[data-olo-qv-atc-btn]');
-                        if(atcBtn){
-                            atcBtn.addEventListener('click', function(){
-                                var qty = content.querySelector('.olo-qv-qty');
-                                var q = qty ? qty.value : 1;
-                                window.location.href = '?add-to-cart=' + pid + '\x26quantity=' + q;
-                            });
-                        }
+                        oloQvAcquisto(content, pid, mainImg);
                     }
                 })
                 .catch(function(){
@@ -749,25 +949,7 @@ class Olobuild_Woo_Quickview_Tile extends Olobuild_Tile_Base {
                 <?php if ( $product->get_short_description() ) : ?>
                 <div class="olo-qv-excerpt"><?php echo wp_kses_post( $product->get_short_description() ); ?></div>
                 <?php endif; ?>
-                <?php if ( ! $product->is_in_stock() ) : ?>
-                <div class="olo-qv-stock-out"><?php echo esc_html( olobuild_t( 'Esaurito' ) ); ?></div>
-                <?php elseif ( $product->is_type( 'simple' ) ) : ?>
-                    <?php if ( $product->is_purchasable() ) : ?>
-                    <div class="olo-qv-atc">
-                        <input type="number" class="olo-qv-qty" value="1" min="1" max="<?php echo (int) ( $product->get_stock_quantity() ?: 99 ); ?>" aria-label="<?php echo esc_attr( olobuild_t( 'Quantità' ) ); ?>" />
-                        <button type="button" class="olo-qv-atc-btn" data-olo-qv-atc-btn><?php echo esc_html( olobuild_t( 'Aggiungi al carrello' ) ); ?></button>
-                    </div>
-                    <?php endif; ?>
-                <?php else : ?>
-                <?php
-                // Variabili, raggruppati, esterni: il «?add-to-cart=» del semplice non basta (manca la
-                // variante) e WooCommerce rispondeva con un errore. Si porta dove si sceglie, col testo
-                // e l'indirizzo che WooCommerce dà a quel tipo di prodotto.
-                ?>
-                <div class="olo-qv-atc">
-                    <a class="olo-qv-atc-btn" href="<?php echo esc_url( $product->add_to_cart_url() ); ?>"><?php echo esc_html( $product->add_to_cart_text() ); ?></a>
-                </div>
-                <?php endif; ?>
+                <?php echo $this->acquisto_html( $product ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- acquisto_html() escapa ogni testo e attributo; il prezzo è HTML di WooCommerce. ?>
                 <div class="olo-qv-meta">
                     <?php if ( $product->get_sku() ) : ?>
                     <div class="olo-qv-sku">SKU: <?php echo esc_html( $product->get_sku() ); ?></div>
@@ -785,5 +967,93 @@ class Olobuild_Woo_Quickview_Tile extends Olobuild_Tile_Base {
         $html = ob_get_clean();
 
         return rest_ensure_response( [ 'html' => $html ] );
+    }
+
+    /**
+     * LA PARTE D'ACQUISTO della finestra: disponibilità, scelta delle varianti, quantità, «Aggiungi al carrello».
+     *
+     * Prima un prodotto a varianti portava alla sua pagina («Scegli le opzioni»): ora colore, taglia e le altre
+     * scelte stanno nella finestra (i colori a pallini, il resto a pillole), e prezzo, foto e disponibilità
+     * seguono la variante. L'aggiunta passa da wc-ajax=add_to_cart: niente ricarica, e il mini carrello si aggiorna
+     * coi frammenti di WooCommerce. Raggruppati ed esterni portano ancora alla loro pagina.
+     *
+     * @param WC_Product $product il prodotto
+     * @return string HTML
+     */
+    private function acquisto_html( $product ) {
+        $esito = '<p class="olo-qv-esito" aria-live="polite" data-fatto="' . esc_attr( olobuild_t( 'Aggiunto al carrello' ) ) . '" data-errore="' . esc_attr( olobuild_t( 'Non è stato possibile aggiungerlo: riprova' ) ) . '" data-nessuna="' . esc_attr( olobuild_t( 'Questa combinazione non c’è' ) ) . '"></p>';
+        $passo = function ( $max ) {
+            return '<div class="olo-qv-passi"><button type="button" data-olo-qv-passo="-1" aria-label="' . esc_attr( olobuild_t( 'Uno in meno' ) ) . '">&minus;</button>'
+                . '<input type="number" class="olo-qv-qty" value="1" min="1" max="' . (int) $max . '" aria-label="' . esc_attr( olobuild_t( 'Quantità' ) ) . '">'
+                . '<button type="button" data-olo-qv-passo="1" aria-label="' . esc_attr( olobuild_t( 'Uno in più' ) ) . '">+</button></div>';
+        };
+        $ajax = class_exists( 'WC_AJAX' ) ? ' data-ajax="' . esc_url( WC_AJAX::get_endpoint( 'add_to_cart' ) ) . '"' : '';
+        if ( ! $product->is_in_stock() ) {
+            return '<div class="olo-qv-stock-out">' . esc_html( olobuild_t( 'Esaurito' ) ) . '</div>';
+        }
+        if ( $product->is_type( 'simple' ) && $product->is_purchasable() ) {
+            $disp = wp_strip_all_tags( (string) ( $product->get_availability()['availability'] ?? '' ) );
+            return '<div class="olo-qv-stock" data-olo-qv-stock>' . esc_html( '' !== $disp ? $disp : olobuild_t( 'Disponibile' ) ) . '</div>'
+                . '<div class="olo-qv-atc">' . $passo( $product->get_stock_quantity() ?: 99 )
+                . '<button type="button" class="olo-qv-atc-btn" data-olo-qv-atc-btn data-pid="' . (int) $product->get_id() . '"' . $ajax . '>' . esc_html( olobuild_t( 'Aggiungi al carrello' ) ) . '</button></div>' . $esito;
+        }
+        if ( $product->is_type( 'variable' ) && $product->is_purchasable() ) {
+            $varianti = [];
+            foreach ( $product->get_available_variations( 'objects' ) as $v ) {
+                if ( ! $v || ! $v->variation_is_visible() ) {
+                    continue;
+                }
+                $foto = $v->get_image_id() ? wp_get_attachment_image_url( $v->get_image_id(), 'large' ) : '';
+                $varianti[] = [
+                    'id'            => $v->get_id(),
+                    'attributi'     => array_combine( array_map( function ( $k ) { return 'attribute_' . $k; }, array_keys( $v->get_attributes() ) ), array_values( $v->get_attributes() ) ),
+                    'prezzo'        => $v->get_price_html(),
+                    'foto'          => $foto ? $foto : '',
+                    'disponibile'   => $v->is_in_stock(),
+                    'disponibilita' => wp_strip_all_tags( (string) ( $v->get_availability()['availability'] ?? '' ) ),
+                    'max'           => $v->get_max_purchase_quantity() > 0 ? $v->get_max_purchase_quantity() : 99,
+                ];
+            }
+            if ( ! $varianti ) {
+                return '<div class="olo-qv-stock-out">' . esc_html( olobuild_t( 'Esaurito' ) ) . '</div>';
+            }
+            $predef = $product->get_default_attributes();
+            $h      = '<div class="olo-qv-varianti" data-olo-qv-var="' . esc_attr( wp_json_encode( $varianti ) ) . '">';
+            foreach ( $product->get_variation_attributes() as $nome => $valori ) {
+                $tax     = taxonomy_exists( $nome );
+                $colore  = $tax && preg_match( '/colou?re?|color/i', $nome );
+                $chiave  = 'attribute_' . sanitize_title( $nome );
+                $scelto  = (string) ( $predef[ sanitize_title( $nome ) ] ?? '' );
+                $termini = $tax ? wc_get_product_terms( $product->get_id(), $nome, [ 'fields' => 'all' ] ) : [];
+                $voci    = [];
+                if ( $tax ) {
+                    foreach ( $termini as $t ) {
+                        if ( in_array( $t->slug, $valori, true ) ) {
+                            $voci[] = [ $t->slug, $t->name, $colore ? Olobuild_Tile_Utils::colore_termine( $t ) : '' ];
+                        }
+                    }
+                } else {
+                    foreach ( $valori as $val ) {
+                        $voci[] = [ $val, $val, '' ];
+                    }
+                }
+                if ( '' === $scelto && $voci ) {
+                    $scelto = $voci[0][0];
+                }
+                $h .= '<div class="olo-qv-attr" data-olo-qv-attr="' . esc_attr( $chiave ) . '"><div class="olo-qv-attr-tit">' . esc_html( wc_attribute_label( $nome, $product ) ) . ' <span class="olo-qv-attr-val"></span></div><div class="olo-qv-attr-opz">';
+                foreach ( $voci as $voce ) {
+                    list( $val, $etich, $c ) = $voce;
+                    $on = $val === $scelto;
+                    $h .= '<button type="button" class="' . ( $c ? 'olo-qv-opz-colore' : 'olo-qv-opz' ) . ( $on ? ' is-scelto' : '' ) . '" aria-pressed="' . ( $on ? 'true' : 'false' ) . '" data-valore="' . esc_attr( $val ) . '" data-etichetta="' . esc_attr( $etich ) . '"'
+                        . ( $c ? ' style="--c:' . esc_attr( $c ) . '" aria-label="' . esc_attr( $etich ) . '" title="' . esc_attr( $etich ) . '">' : '>' . esc_html( $etich ) ) . '</button>';
+                }
+                $h .= '</div></div>';
+            }
+            $h .= '</div>';
+            $h .= '<div class="olo-qv-stock" data-olo-qv-stock data-si="' . esc_attr( olobuild_t( 'Disponibile' ) ) . '" data-no="' . esc_attr( olobuild_t( 'Esaurito' ) ) . '" hidden></div>';
+            $h .= '<div class="olo-qv-atc">' . $passo( 99 ) . '<button type="button" class="olo-qv-atc-btn" data-olo-qv-atc-btn' . $ajax . ' disabled>' . esc_html( olobuild_t( 'Aggiungi al carrello' ) ) . '</button></div>' . $esito;
+            return $h;
+        }
+        return '<div class="olo-qv-atc"><a class="olo-qv-atc-btn" href="' . esc_url( $product->add_to_cart_url() ) . '">' . esc_html( $product->add_to_cart_text() ) . '</a></div>';
     }
 }

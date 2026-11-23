@@ -3561,3 +3561,426 @@ msgstr "Filtrovat podle kategorie"
 
 msgid "Ritardo fra le foto"
 msgstr "Zpoždění mezi fotkami"
+
+#: licenza-1.4.1345
+msgid "1 foto"
+msgstr "1 fotka"
+
+msgid "%d foto"
+msgstr "%d fotek"
+
+msgid "Mostra altre (%d)"
+msgstr "Zobrazit další (%d)"
+
+msgid "Anteprima video"
+msgstr "Náhled videa"
+
+msgid "Avanzamento galleria"
+msgstr "Postup galerie"
+
+msgid "Vai alla foto"
+msgstr "Přejít na fotku"
+
+msgid "Ordina"
+msgstr "Řadit"
+
+msgid "Ordine della galleria"
+msgstr "Pořadí galerie"
+
+msgid "Titolo dalla A alla Z"
+msgstr "Název od A do Z"
+
+msgid "Titolo dalla Z alla A"
+msgstr "Název od Z do A"
+
+msgid "Testo crescente (anni, prezzi…)"
+msgstr "Text vzestupně (roky, ceny…)"
+
+msgid "Testo decrescente"
+msgstr "Text sestupně"
+
+msgid "Pagine della galleria"
+msgstr "Stránky galerie"
+
+msgid "WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento."
+msgstr "WooCommerce není aktivní. Nainstalujte a aktivujte WooCommerce, abyste mohli tento prvek používat."
+
+msgid "Filtra"
+msgstr "Filtrovat"
+
+msgid "Filtri attivi"
+msgstr "Aktivní filtry"
+
+msgid "Solo prodotti disponibili"
+msgstr "Jen dostupné produkty"
+
+msgid "Solo prodotti in offerta"
+msgstr "Jen produkty ve slevě"
+
+msgid "Come nel negozio"
+msgstr "Jako v obchodě"
+
+msgid "Più venduti"
+msgstr "Nejprodávanější"
+
+msgid "Più votati"
+msgstr "Nejlépe hodnocené"
+
+msgid "Prezzo crescente"
+msgstr "Cena vzestupně"
+
+msgid "Prezzo decrescente"
+msgstr "Cena sestupně"
+
+msgid "Nome dalla A alla Z"
+msgstr "Název od A do Z"
+
+msgid "Prezzo min"
+msgstr "Cena od"
+
+msgid "Prezzo max"
+msgstr "Cena do"
+
+msgid "Solo disponibili"
+msgstr "Jen dostupné"
+
+msgid "In offerta"
+msgstr "Ve slevě"
+
+msgid "Nessun prodotto in saldo"
+msgstr "Žádné produkty ve výprodeji"
+
+msgid "Nessun prodotto trovato"
+msgstr "Nebyly nalezeny žádné produkty"
+
+msgid "1 prodotto"
+msgstr "1 produkt"
+
+msgid "%d prodotti"
+msgstr "%d produktů"
+
+msgid "carosello"
+msgstr "karusel"
+
+msgid "Seleziona opzioni"
+msgstr "Vybrat možnosti"
+
+msgid "Aggiunto!"
+msgstr "Přidáno!"
+
+msgid "Confronta"
+msgstr "Porovnat"
+
+msgid "Vai al gruppo"
+msgstr "Přejít na skupinu"
+
+msgid "Colori disponibili"
+msgstr "Dostupné barvy"
+
+msgid "Vista rapida prodotto"
+msgstr "Rychlý náhled produktu"
+
+msgid "Errore nel caricamento."
+msgstr "Chyba při načítání."
+
+msgid "Mostra immagine: %s"
+msgstr "Zobrazit obrázek: %s"
+
+msgid "Valutazione %s su 5"
+msgstr "Hodnocení %s z 5"
+
+msgid "Vedi dettagli completi"
+msgstr "Zobrazit všechny podrobnosti"
+
+msgid "Non è stato possibile aggiungerlo: riprova"
+msgstr "Nepodařilo se přidat: zkuste to znovu"
+
+msgid "Questa combinazione non c’è"
+msgstr "Tato kombinace neexistuje"
+
+msgid "Uno in meno"
+msgstr "O jeden méně"
+
+msgid "Uno in più"
+msgstr "O jeden více"
+
+msgid "Il testo di un pulsante sotto i testi della foto (vuoto = niente pulsante). Porta dove porta la foto: il suo link o la lightbox."
+msgstr "Text tlačítka pod texty fotky (prázdné = žádné tlačítko). Vede tam, kam vede fotka: na její odkaz nebo do lightboxu."
+
+msgid "Filtri, ricerca e pagine"
+msgstr "Filtry, hledání a stránky"
+
+msgid "Link ai filtri"
+msgstr "Odkazy na filtry"
+
+msgid "L’indirizzo della pagina ricorda il filtro scelto (…#filtro=categoria): copiandolo, o mettendolo in un pulsante o nel menu, la galleria si apre già filtrata."
+msgstr "Adresa stránky si pamatuje zvolený filtr (…#filtro=kategorie): když ji zkopírujete nebo vložíte do tlačítka či menu, galerie se otevře už vyfiltrovaná."
+
+msgid "Una casella che tiene solo le foto col testo cercato nel titolo, nel sottotitolo, nel testo o nella categoria."
+msgstr "Pole, které ponechá jen fotky s hledaným textem v nadpisu, podnadpisu, textu nebo kategorii."
+
+msgid "Testo della casella"
+msgstr "Text v poli"
+
+msgid "Ordinamento"
+msgstr "Řazení"
+
+msgid "Un menu per mettere le foto in ordine di titolo o di testo (anni, prezzi), crescente o decrescente."
+msgstr "Menu pro seřazení fotek podle nadpisu nebo textu (roky, ceny), vzestupně nebo sestupně."
+
+msgid "Foto da mostrare"
+msgstr "Zobrazené fotky"
+
+msgid "Tutte subito"
+msgstr "Všechny hned"
+
+msgid "Un gruppo, poi «Mostra altre»"
+msgstr "Skupina, pak „Zobrazit další“"
+
+msgid "A pagine"
+msgstr "Po stránkách"
+
+msgid "Foto per gruppo o pagina"
+msgstr "Fotek na skupinu nebo stránku"
+
+msgid "Menu a tendina"
+msgstr "Rozbalovací nabídka"
+
+msgid "Fra il telefono e il computer (da 640 a 1199 px); vuoto = come al computer."
+msgstr "Mezi telefonem a počítačem (od 640 do 1199 px); prázdné = jako na počítači."
+
+msgid "Filtro disponibilità"
+msgstr "Filtr dostupnosti"
+
+msgid "Filtro «In offerta»"
+msgstr "Filtr „Ve slevě“"
+
+msgid "Ordinamento per chi visita"
+msgstr "Řazení pro návštěvníky"
+
+msgid "Un menu «Ordina» (più recenti, più venduti, prezzo, nome): la tile Prodotti WC della pagina mostra i prodotti nell’ordine scelto."
+msgstr "Menu „Řadit“ (nejnovější, nejprodávanější, cena, název): tile Produkty WC na stránce zobrazí produkty ve zvoleném pořadí."
+
+msgid "Pallini dei colori"
+msgstr "Barevné tečky"
+
+msgid "Sotto il prezzo dei prodotti a varianti un pallino per ogni colore; passandoci sopra la foto mostra quel colore. Il colore viene da un plugin dei colori, se c’è, o dal nome (Nero, Blu navy, Cognac…)."
+msgstr "Pod cenou produktů s variantami tečka pro každou barvu; po najetí ukáže fotka tuto barvu. Barva pochází z pluginu barev, pokud je, nebo z názvu (Černá, Námořnická modrá, Koňak…)."
+
+msgid "Quanti prodotti"
+msgstr "Počet produktů"
+
+msgid "Sopra la griglia il numero dei prodotti trovati, anche dopo i filtri."
+msgstr "Nad mřížkou počet nalezených produktů, i po filtrování."
+
+#: licenza-1.4.1345
+msgid "Un gruppo, poi le altre scorrendo"
+msgstr "Skupina, pak ostatní při posouvání"
+
+#: licenza-1.4.1345
+msgid "Nessun contenuto dalla fonte social: controlla il canale o l’indirizzo. Questo avviso lo vede solo chi modifica il sito."
+msgstr "Ze sociálního zdroje nepřišel žádný obsah: zkontrolujte kanál nebo adresu. Toto upozornění vidí jen ti, kdo web upravují."
+
+msgid "Azzera i filtri"
+msgstr "Zrušit filtry"
+
+msgid "Quello del contenuto aperto"
+msgstr "Ten z otevřeného obsahu"
+
+msgid "Card di testo"
+msgstr "Textová karta"
+
+msgid "Testo grande (citazione, annuncio)..."
+msgstr "Velký text (citát, oznámení)..."
+
+msgid "Firma..."
+msgstr "Podpis..."
+
+msgid "Una card senza foto, coi testi su un fondo colorato (citazioni, annunci)"
+msgstr "Karta bez fotky, s texty na barevném pozadí (citáty, oznámení)"
+
+msgid "Foto da un social"
+msgstr "Fotky ze sociální sítě"
+
+msgid "Fonte"
+msgstr "Zdroj"
+
+msgid "Le foto di «Media»"
+msgstr "Fotky z „Média“"
+
+msgid "YouTube (canale, @nome o playlist)"
+msgstr "YouTube (kanál, @jméno nebo playlist)"
+
+msgid "Vimeo (utente o canale)"
+msgstr "Vimeo (uživatel nebo kanál)"
+
+msgid "Flickr (utente o tag)"
+msgstr "Flickr (uživatel nebo štítky)"
+
+msgid "Pinterest (profilo o bacheca)"
+msgstr "Pinterest (profil nebo nástěnka)"
+
+msgid "Instagram (account di OLOsocial)"
+msgstr "Instagram (účet OLOsocial)"
+
+msgid "Feed RSS"
+msgstr "RSS kanál"
+
+msgid "Le foto o i video arrivano dal social e si aggiornano da soli ogni ora; quelli di «Media» restano salvati ma non si mostrano. YouTube, Vimeo, Flickr, Pinterest e i feed RSS non chiedono chiavi; Instagram usa l’account collegato in OLOsocial."
+msgstr "Fotky nebo videa přicházejí ze sociální sítě a samy se aktualizují každou hodinu; ty z „Média“ zůstanou uložené, ale nezobrazí se. YouTube, Vimeo, Flickr, Pinterest a RSS kanály nepotřebují klíče; Instagram používá účet propojený v OLOsocial."
+
+msgid "Canale, account o indirizzo"
+msgstr "Kanál, účet nebo adresa"
+
+msgid "YouTube: @nome, indirizzo del canale o della playlist. Vimeo: nome utente o channels/nome. Flickr: l’id utente (12345678@N00) o dei tag. Pinterest: nome o nome/bacheca. Instagram: @nome (vuoto = il primo account collegato). RSS: l’indirizzo del feed."
+msgstr "YouTube: @jméno, adresa kanálu nebo playlistu. Vimeo: uživatelské jméno nebo channels/jméno. Flickr: ID uživatele (12345678@N00) nebo štítky. Pinterest: jméno nebo jméno/nástěnka. Instagram: @jméno (prázdné = první propojený účet). RSS: adresa kanálu."
+
+msgid "Quante"
+msgstr "Kolik"
+
+msgid "Apri sul social"
+msgstr "Otevřít na sociální síti"
+
+msgid "Il clic porta al post sul social invece di aprire la lightbox."
+msgstr "Kliknutí vede na příspěvek na sociální síti místo otevření lightboxu."
+
+msgid "Accanto alla foto (biglietto)"
+msgstr "Vedle fotky (lístek)"
+
+msgid "«Sotto la foto» e «Accanto alla foto» valgono per gli schemi Griglia e Masonry; negli altri i testi vanno sulla foto. Nel biglietto il testo della foto diventa la scritta grande (per esempio «20 mag sab»): accendi «Mostra il testo»."
+msgstr "„Pod fotkou“ a „Vedle fotky“ platí pro rozvržení Mřížka a Masonry; v ostatních jsou texty na fotce. V lístku se text fotky stane velkým nápisem (například „20 kvě so“): zapněte „Zobrazit text“."
+
+msgid "Sopra la galleria un pulsante per ogni categoria e «Tutti»: cliccando, restano le foto di quella categoria e la galleria si riordina. La categoria si scrive sotto ogni foto in «Media»; più categorie si separano con la virgola. Per più gruppi che si combinano scrivi «Gruppo: valore», per esempio «Tipo: Guida, Livello: Base»: sopra la galleria compare una fila per gruppo."
+msgstr "Nad galerií tlačítko pro každou kategorii a „Vše“: po kliknutí zůstanou fotky dané kategorie a galerie se přeuspořádá. Kategorii napište pod každou fotku v „Média“; více kategorií oddělte čárkami. Pro více skupin, které se kombinují, napište „Skupina: hodnota“, například „Typ: Návod, Úroveň: Základní“: nad galerií se objeví řádek pro každou skupinu."
+
+msgid "Entrata dei testi"
+msgstr "Nástup textů"
+
+msgid "Uno alla volta, dal basso"
+msgstr "Postupně, zdola"
+
+msgid "Uno alla volta, da sinistra"
+msgstr "Postupně, zleva"
+
+msgid "Uno alla volta, si svelano"
+msgstr "Postupně, odhalují se"
+
+msgid "Uno alla volta, si ingrandiscono"
+msgstr "Postupně, zvětšují se"
+
+msgid "Uno alla volta, sfumano"
+msgstr "Postupně, prolínají se"
+
+msgid "Categoria, numero, titolo, sottotitolo, testo e pulsante arrivano uno dopo l’altro quando la foto entra nello schermo, o al passaggio se i testi compaiono così. Con «riduci movimento» del sistema non si muove niente."
+msgstr "Kategorie, číslo, nadpis, podnadpis, text a tlačítko přicházejí jeden po druhém, když fotka vstoupí na obrazovku, nebo při najetí, pokud se texty zobrazují takto. Se systémovým „omezením pohybu“ se nic nehýbe."
+
+msgid "Sfondo delle card di testo"
+msgstr "Pozadí textových karet"
+
+msgid "Colore delle voci"
+msgstr "Barva položek"
+
+msgid "Un colore per ogni foto o card: tinge la cornice, la categoria, il numero, il pulsante, il biglietto e il fondo delle card di testo. Vuoto = il colore della galleria."
+msgstr "Barva pro každou fotku nebo kartu: obarví rámeček, kategorii, číslo, tlačítko, lístek a pozadí textových karet. Prázdné = barva galerie."
+
+msgid "Filtra senza ricaricare la pagina"
+msgstr "Filtrovat bez načtení stránky"
+
+msgid "Scelto un filtro, la griglia Prodotti WC della pagina si aggiorna sul posto e l’indirizzo ricorda i filtri. Se nella pagina non c’è una griglia da aggiornare, la pagina si ricarica come prima."
+msgstr "Po zvolení filtru se mřížka Produkty WC na stránce aktualizuje na místě a adresa si pamatuje filtry. Pokud na stránce není mřížka k aktualizaci, stránka se načte znovu jako dřív."
+
+#: licenza-1.4.1345
+msgid "N."
+msgstr "Č."
+
+msgid "Come lo schema"
+msgstr "Podle rozvržení"
+
+msgid "In alto al centro"
+msgstr "Nahoře uprostřed"
+
+msgid "Al centro a sinistra"
+msgstr "Uprostřed vlevo"
+
+msgid "Al centro a destra"
+msgstr "Uprostřed vpravo"
+
+msgid "In basso al centro"
+msgstr "Dole uprostřed"
+
+msgid "Facebook (pagina di OLOsocial)"
+msgstr "Facebook (stránka OLOsocial)"
+
+msgid "Le foto o i video arrivano dal social e si aggiornano da soli ogni ora; quelli di «Media» restano salvati ma non si mostrano. YouTube, Vimeo, Flickr, Pinterest e i feed RSS non chiedono chiavi; Instagram e Facebook usano gli account collegati in OLOsocial."
+msgstr "Fotky nebo videa přicházejí ze sociální sítě a samy se aktualizují každou hodinu; ty z „Média“ zůstanou uložené, ale nezobrazí se. YouTube, Vimeo, Flickr, Pinterest a RSS kanály nepotřebují klíče; Instagram a Facebook používají účty propojené v OLOsocial."
+
+msgid "YouTube: @nome, indirizzo del canale o della playlist. Vimeo: nome utente o channels/nome. Flickr: l’id utente (12345678@N00) o dei tag. Pinterest: nome o nome/bacheca. Instagram e Facebook: @nome o nome della pagina (vuoto = il primo account collegato in OLOsocial). RSS: l’indirizzo del feed."
+msgstr "YouTube: @jméno, adresa kanálu nebo playlistu. Vimeo: uživatelské jméno nebo channels/jméno. Flickr: ID uživatele (12345678@N00) nebo štítky. Pinterest: jméno nebo jméno/nástěnka. Instagram a Facebook: @jméno nebo název stránky (prázdné = první účet propojený v OLOsocial). RSS: adresa kanálu."
+
+msgid "Sulla foto, in un riquadro"
+msgstr "Na fotce, v rámečku"
+
+msgid "Formato del numero"
+msgstr "Formát čísla"
+
+msgid "N. 01 / 12"
+msgstr "Č. 01 / 12"
+
+msgid "Posizione del titolo"
+msgstr "Pozice nadpisu"
+
+msgid "Ogni parte della card può andare in una delle nove zone della foto: in alto, al centro o in basso, a sinistra, al centro o a destra. «Come lo schema» la lascia dov’è."
+msgstr "Každá část karty může jít do jedné z devíti zón fotky: nahoru, doprostřed nebo dolů, vlevo, doprostřed nebo vpravo. „Podle rozvržení“ ji nechá, kde je."
+
+msgid "Posizione del sottotitolo"
+msgstr "Pozice podnadpisu"
+
+msgid "Posizione della categoria"
+msgstr "Pozice kategorie"
+
+msgid "Posizione del numero"
+msgstr "Pozice čísla"
+
+msgid "Posizione del pulsante"
+msgstr "Pozice tlačítka"
+
+msgid "Posizione dell’icona"
+msgstr "Pozice ikony"
+
+msgid "Card in evidenza"
+msgstr "Zvýrazněná karta"
+
+msgid "La prima, grande (2 × 2)"
+msgstr "První, velká (2 × 2)"
+
+msgid "Al computer la prima card occupa due colonne e due righe, con la foto grande: il prodotto da mettere in vetrina. Sul tablet e sul telefono torna come le altre."
+msgstr "Na počítači zabírá první karta dva sloupce a dva řádky s velkou fotkou: produkt do výlohy. Na tabletu a telefonu je opět jako ostatní."
+
+#: licenza-1.4.1345
+msgid "Ordine casuale"
+msgstr "Náhodné pořadí"
+
+msgid "Più valori insieme"
+msgstr "Více hodnot najednou"
+
+msgid "In ogni gruppo si possono accendere più valori insieme: restano le foto che ne hanno almeno uno (Guida o Modello). Gruppi diversi restano combinati (Guida o Modello, e di livello Base). Vale coi filtri a pulsanti."
+msgstr "V každé skupině lze zapnout více hodnot najednou: zůstanou fotky, které mají aspoň jednu z nich (Návod nebo Šablona). Různé skupiny se dál kombinují (Návod nebo Šablona, a úroveň Základní). Platí pro filtry s tlačítky."
+
+msgid "Mescola a ogni visita"
+msgstr "Zamíchat při každé návštěvě"
+
+msgid "Le foto escono in un ordine diverso a ogni visita. Con l’«Ordinamento» acceso, chi visita può rimetterle in ordine."
+msgstr "Fotky se při každé návštěvě zobrazí v jiném pořadí. Se zapnutým „Řazením“ si je návštěvníci mohou znovu seřadit."
+
+#: licenza-1.4.1345
+msgid "Colonne schermi grandi"
+msgstr "Sloupce velkých obrazovek"
+
+msgid "Da 1400 px in su (monitor grandi); vuoto = come al computer."
+msgstr "Od 1400 px výš (velké monitory); prázdné = jako na počítači."
+
+msgid "Colonne telefoni piccoli"
+msgstr "Sloupce malých telefonů"
+
+msgid "Sotto i 480 px; vuoto = come le colonne mobile."
+msgstr "Pod 480 px; prázdné = jako mobilní sloupce."

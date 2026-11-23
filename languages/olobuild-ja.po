@@ -18047,3 +18047,423 @@ msgstr "カテゴリーで絞り込む"
 
 msgid "Ritardo fra le foto"
 msgstr "写真ごとの遅延"
+
+#: licenza-1.4.1345
+msgid "1 foto"
+msgstr "1 枚の写真"
+
+msgid "%d foto"
+msgstr "%d 枚の写真"
+
+msgid "Mostra altre (%d)"
+msgstr "さらに表示（%d）"
+
+msgid "Anteprima video"
+msgstr "動画のプレビュー"
+
+msgid "Avanzamento galleria"
+msgstr "ギャラリーの進行"
+
+msgid "Vai alla foto"
+msgstr "写真へ移動"
+
+msgid "Ordina"
+msgstr "並べ替え"
+
+msgid "Ordine della galleria"
+msgstr "ギャラリーの並び順"
+
+msgid "Titolo dalla A alla Z"
+msgstr "タイトル（A→Z）"
+
+msgid "Titolo dalla Z alla A"
+msgstr "タイトル（Z→A）"
+
+msgid "Testo crescente (anni, prezzi…)"
+msgstr "テキスト昇順（年、価格…）"
+
+msgid "Testo decrescente"
+msgstr "テキスト降順"
+
+msgid "Pagine della galleria"
+msgstr "ギャラリーのページ"
+
+msgid "WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento."
+msgstr "WooCommerce が有効になっていません。この要素を使うには WooCommerce をインストールして有効にしてください。"
+
+msgid "Filtra"
+msgstr "絞り込む"
+
+msgid "Filtri attivi"
+msgstr "適用中のフィルター"
+
+msgid "Solo prodotti disponibili"
+msgstr "在庫ありの商品のみ"
+
+msgid "Solo prodotti in offerta"
+msgstr "セール中の商品のみ"
+
+msgid "Come nel negozio"
+msgstr "ショップの既定"
+
+msgid "Più venduti"
+msgstr "売れ筋順"
+
+msgid "Più votati"
+msgstr "評価の高い順"
+
+msgid "Prezzo crescente"
+msgstr "価格の安い順"
+
+msgid "Prezzo decrescente"
+msgstr "価格の高い順"
+
+msgid "Nome dalla A alla Z"
+msgstr "名前（A→Z）"
+
+msgid "Prezzo min"
+msgstr "最低価格"
+
+msgid "Prezzo max"
+msgstr "最高価格"
+
+msgid "Solo disponibili"
+msgstr "在庫ありのみ"
+
+msgid "In offerta"
+msgstr "セール中"
+
+msgid "Nessun prodotto in saldo"
+msgstr "セール中の商品はありません"
+
+msgid "Nessun prodotto trovato"
+msgstr "商品が見つかりません"
+
+msgid "1 prodotto"
+msgstr "1 件の商品"
+
+msgid "%d prodotti"
+msgstr "%d 件の商品"
+
+msgid "carosello"
+msgstr "カルーセル"
+
+msgid "Seleziona opzioni"
+msgstr "オプションを選択"
+
+msgid "Aggiunto!"
+msgstr "追加しました！"
+
+msgid "Confronta"
+msgstr "比較"
+
+msgid "Vai al gruppo"
+msgstr "グループへ移動"
+
+msgid "Colori disponibili"
+msgstr "選べる色"
+
+msgid "Vista rapida prodotto"
+msgstr "商品のクイックビュー"
+
+msgid "Errore nel caricamento."
+msgstr "読み込みエラー。"
+
+msgid "Mostra immagine: %s"
+msgstr "画像を表示：%s"
+
+msgid "Valutazione %s su 5"
+msgstr "5 段階中 %s の評価"
+
+msgid "Vedi dettagli completi"
+msgstr "詳細をすべて見る"
+
+msgid "Non è stato possibile aggiungerlo: riprova"
+msgstr "追加できませんでした。もう一度お試しください"
+
+msgid "Questa combinazione non c’è"
+msgstr "この組み合わせはありません"
+
+msgid "Uno in meno"
+msgstr "1 つ減らす"
+
+msgid "Uno in più"
+msgstr "1 つ増やす"
+
+msgid "Il testo di un pulsante sotto i testi della foto (vuoto = niente pulsante). Porta dove porta la foto: il suo link o la lightbox."
+msgstr "写真のテキストの下に置くボタンの文字（空欄＝ボタンなし）。写真と同じ場所へ移動します：写真のリンクまたはライトボックス。"
+
+msgid "Filtri, ricerca e pagine"
+msgstr "フィルター、検索、ページ"
+
+msgid "Link ai filtri"
+msgstr "フィルターへのリンク"
+
+msgid "L’indirizzo della pagina ricorda il filtro scelto (…#filtro=categoria): copiandolo, o mettendolo in un pulsante o nel menu, la galleria si apre già filtrata."
+msgstr "ページのアドレスが選んだフィルターを覚えます（…#filtro=カテゴリー）。コピーしたり、ボタンやメニューに入れたりすると、ギャラリーは最初から絞り込まれた状態で開きます。"
+
+msgid "Una casella che tiene solo le foto col testo cercato nel titolo, nel sottotitolo, nel testo o nella categoria."
+msgstr "タイトル、サブタイトル、テキスト、カテゴリーに検索語を含む写真だけを残す入力欄です。"
+
+msgid "Testo della casella"
+msgstr "入力欄の文字"
+
+msgid "Ordinamento"
+msgstr "並べ替え"
+
+msgid "Un menu per mettere le foto in ordine di titolo o di testo (anni, prezzi), crescente o decrescente."
+msgstr "写真をタイトルまたはテキスト（年、価格）で昇順・降順に並べ替えるメニューです。"
+
+msgid "Foto da mostrare"
+msgstr "表示する写真"
+
+msgid "Tutte subito"
+msgstr "すべて一度に"
+
+msgid "Un gruppo, poi «Mostra altre»"
+msgstr "一部を表示し、その後「さらに表示」"
+
+msgid "A pagine"
+msgstr "ページ送り"
+
+msgid "Foto per gruppo o pagina"
+msgstr "グループ／ページごとの写真数"
+
+msgid "Menu a tendina"
+msgstr "ドロップダウンメニュー"
+
+msgid "Fra il telefono e il computer (da 640 a 1199 px); vuoto = come al computer."
+msgstr "スマートフォンとパソコンの間（640〜1199 px）。空欄＝パソコンと同じ。"
+
+msgid "Filtro disponibilità"
+msgstr "在庫フィルター"
+
+msgid "Filtro «In offerta»"
+msgstr "「セール中」フィルター"
+
+msgid "Ordinamento per chi visita"
+msgstr "訪問者向けの並べ替え"
+
+msgid "Un menu «Ordina» (più recenti, più venduti, prezzo, nome): la tile Prodotti WC della pagina mostra i prodotti nell’ordine scelto."
+msgstr "「並べ替え」メニュー（新着、売れ筋、価格、名前）。ページの WC 商品タイルが選んだ順番で商品を表示します。"
+
+msgid "Pallini dei colori"
+msgstr "カラースウォッチ"
+
+msgid "Sotto il prezzo dei prodotti a varianti un pallino per ogni colore; passandoci sopra la foto mostra quel colore. Il colore viene da un plugin dei colori, se c’è, o dal nome (Nero, Blu navy, Cognac…)."
+msgstr "バリエーションのある商品の価格の下に色ごとの丸を表示し、カーソルを合わせると写真がその色に変わります。色はカラープラグインがあればそこから、なければ名前（ブラック、ネイビー、コニャック…）から決まります。"
+
+msgid "Quanti prodotti"
+msgstr "商品数"
+
+msgid "Sopra la griglia il numero dei prodotti trovati, anche dopo i filtri."
+msgstr "グリッドの上に、見つかった商品の数を表示します（絞り込み後も）。"
+
+#: licenza-1.4.1345
+msgid "Un gruppo, poi le altre scorrendo"
+msgstr "一部を表示し、残りはスクロールで表示"
+
+#: licenza-1.4.1345
+msgid "Nessun contenuto dalla fonte social: controlla il canale o l’indirizzo. Questo avviso lo vede solo chi modifica il sito."
+msgstr "ソーシャルのソースからコンテンツが届いていません。チャンネルまたはアドレスを確認してください。この通知はサイトを編集する人にだけ表示されます。"
+
+msgid "Azzera i filtri"
+msgstr "フィルターをクリア"
+
+msgid "Quello del contenuto aperto"
+msgstr "開いているコンテンツのもの"
+
+msgid "Card di testo"
+msgstr "テキストカード"
+
+msgid "Testo grande (citazione, annuncio)..."
+msgstr "大きなテキスト（引用、お知らせ）..."
+
+msgid "Firma..."
+msgstr "署名..."
+
+msgid "Una card senza foto, coi testi su un fondo colorato (citazioni, annunci)"
+msgstr "写真のないカード。色付きの背景にテキストを載せます（引用、お知らせ）"
+
+msgid "Foto da un social"
+msgstr "ソーシャルの写真"
+
+msgid "Fonte"
+msgstr "ソース"
+
+msgid "Le foto di «Media»"
+msgstr "「メディア」の写真"
+
+msgid "YouTube (canale, @nome o playlist)"
+msgstr "YouTube（チャンネル、@名前、再生リスト）"
+
+msgid "Vimeo (utente o canale)"
+msgstr "Vimeo（ユーザーまたはチャンネル）"
+
+msgid "Flickr (utente o tag)"
+msgstr "Flickr（ユーザーまたはタグ）"
+
+msgid "Pinterest (profilo o bacheca)"
+msgstr "Pinterest（プロフィールまたはボード）"
+
+msgid "Instagram (account di OLOsocial)"
+msgstr "Instagram（OLOsocial のアカウント）"
+
+msgid "Feed RSS"
+msgstr "RSS フィード"
+
+msgid "Le foto o i video arrivano dal social e si aggiornano da soli ogni ora; quelli di «Media» restano salvati ma non si mostrano. YouTube, Vimeo, Flickr, Pinterest e i feed RSS non chiedono chiavi; Instagram usa l’account collegato in OLOsocial."
+msgstr "写真や動画はソーシャルから届き、1 時間ごとに自動で更新されます。「メディア」の項目は保存されたままですが表示されません。YouTube、Vimeo、Flickr、Pinterest、RSS はキー不要です。Instagram は OLOsocial で連携したアカウントを使います。"
+
+msgid "Canale, account o indirizzo"
+msgstr "チャンネル、アカウント、アドレス"
+
+msgid "YouTube: @nome, indirizzo del canale o della playlist. Vimeo: nome utente o channels/nome. Flickr: l’id utente (12345678@N00) o dei tag. Pinterest: nome o nome/bacheca. Instagram: @nome (vuoto = il primo account collegato). RSS: l’indirizzo del feed."
+msgstr "YouTube：@名前、チャンネルまたは再生リストのアドレス。Vimeo：ユーザー名または channels/名前。Flickr：ユーザー ID（12345678@N00）またはタグ。Pinterest：名前または名前/ボード。Instagram：@名前（空欄＝最初に連携したアカウント）。RSS：フィードのアドレス。"
+
+msgid "Quante"
+msgstr "件数"
+
+msgid "Apri sul social"
+msgstr "ソーシャルで開く"
+
+msgid "Il clic porta al post sul social invece di aprire la lightbox."
+msgstr "クリックするとライトボックスではなくソーシャルの投稿を開きます。"
+
+msgid "Accanto alla foto (biglietto)"
+msgstr "写真の横（チケット）"
+
+msgid "«Sotto la foto» e «Accanto alla foto» valgono per gli schemi Griglia e Masonry; negli altri i testi vanno sulla foto. Nel biglietto il testo della foto diventa la scritta grande (per esempio «20 mag sab»): accendi «Mostra il testo»."
+msgstr "「写真の下」と「写真の横」はグリッドとメイソンリーで使えます。その他のレイアウトではテキストは写真の上に表示されます。チケットでは写真のテキストが大きな文字になります（例：「20 5月 土」）。「テキストを表示」をオンにしてください。"
+
+msgid "Sopra la galleria un pulsante per ogni categoria e «Tutti»: cliccando, restano le foto di quella categoria e la galleria si riordina. La categoria si scrive sotto ogni foto in «Media»; più categorie si separano con la virgola. Per più gruppi che si combinano scrivi «Gruppo: valore», per esempio «Tipo: Guida, Livello: Base»: sopra la galleria compare una fila per gruppo."
+msgstr "ギャラリーの上にカテゴリーごとのボタンと「すべて」が並びます。クリックするとそのカテゴリーの写真だけが残り、ギャラリーが並び替わります。カテゴリーは「メディア」の各写真の下に書き、複数ある場合はカンマで区切ります。組み合わせる複数のグループには「グループ: 値」と書きます（例：「種類: ガイド, レベル: 初級」）。ギャラリーの上にグループごとの行が表示されます。"
+
+msgid "Entrata dei testi"
+msgstr "テキストの登場"
+
+msgid "Uno alla volta, dal basso"
+msgstr "1 つずつ、下から"
+
+msgid "Uno alla volta, da sinistra"
+msgstr "1 つずつ、左から"
+
+msgid "Uno alla volta, si svelano"
+msgstr "1 つずつ、現れる"
+
+msgid "Uno alla volta, si ingrandiscono"
+msgstr "1 つずつ、拡大"
+
+msgid "Uno alla volta, sfumano"
+msgstr "1 つずつ、フェードイン"
+
+msgid "Categoria, numero, titolo, sottotitolo, testo e pulsante arrivano uno dopo l’altro quando la foto entra nello schermo, o al passaggio se i testi compaiono così. Con «riduci movimento» del sistema non si muove niente."
+msgstr "カテゴリー、番号、タイトル、サブタイトル、テキスト、ボタンが、写真が画面に入ったとき（テキストがホバーで出る設定ならホバー時）に順番に現れます。システムの「視差効果を減らす」がオンなら何も動きません。"
+
+msgid "Sfondo delle card di testo"
+msgstr "テキストカードの背景"
+
+msgid "Colore delle voci"
+msgstr "各項目の色"
+
+msgid "Un colore per ogni foto o card: tinge la cornice, la categoria, il numero, il pulsante, il biglietto e il fondo delle card di testo. Vuoto = il colore della galleria."
+msgstr "写真やカードごとの色。枠、カテゴリー、番号、ボタン、チケット、テキストカードの背景に色を付けます。空欄＝ギャラリーの色。"
+
+msgid "Filtra senza ricaricare la pagina"
+msgstr "ページを再読み込みせずに絞り込む"
+
+msgid "Scelto un filtro, la griglia Prodotti WC della pagina si aggiorna sul posto e l’indirizzo ricorda i filtri. Se nella pagina non c’è una griglia da aggiornare, la pagina si ricarica come prima."
+msgstr "フィルターを選ぶと、ページの WC 商品グリッドがその場で更新され、アドレスがフィルターを記憶します。更新するグリッドがページにない場合は、これまでどおり再読み込みします。"
+
+#: licenza-1.4.1345
+msgid "N."
+msgstr "No."
+
+msgid "Come lo schema"
+msgstr "レイアウトどおり"
+
+msgid "In alto al centro"
+msgstr "上中央"
+
+msgid "Al centro a sinistra"
+msgstr "中央左"
+
+msgid "Al centro a destra"
+msgstr "中央右"
+
+msgid "In basso al centro"
+msgstr "下中央"
+
+msgid "Facebook (pagina di OLOsocial)"
+msgstr "Facebook（OLOsocial のページ）"
+
+msgid "Le foto o i video arrivano dal social e si aggiornano da soli ogni ora; quelli di «Media» restano salvati ma non si mostrano. YouTube, Vimeo, Flickr, Pinterest e i feed RSS non chiedono chiavi; Instagram e Facebook usano gli account collegati in OLOsocial."
+msgstr "写真や動画はソーシャルから届き、1 時間ごとに自動で更新されます。「メディア」の項目は保存されたままですが表示されません。YouTube、Vimeo、Flickr、Pinterest、RSS はキー不要です。Instagram と Facebook は OLOsocial で連携したアカウントを使います。"
+
+msgid "YouTube: @nome, indirizzo del canale o della playlist. Vimeo: nome utente o channels/nome. Flickr: l’id utente (12345678@N00) o dei tag. Pinterest: nome o nome/bacheca. Instagram e Facebook: @nome o nome della pagina (vuoto = il primo account collegato in OLOsocial). RSS: l’indirizzo del feed."
+msgstr "YouTube：@名前、チャンネルまたは再生リストのアドレス。Vimeo：ユーザー名または channels/名前。Flickr：ユーザー ID（12345678@N00）またはタグ。Pinterest：名前または名前/ボード。Instagram と Facebook：@名前またはページ名（空欄＝OLOsocial で最初に連携したアカウント）。RSS：フィードのアドレス。"
+
+msgid "Sulla foto, in un riquadro"
+msgstr "写真の上、パネル内"
+
+msgid "Formato del numero"
+msgstr "番号の形式"
+
+msgid "N. 01 / 12"
+msgstr "No. 01 / 12"
+
+msgid "Posizione del titolo"
+msgstr "タイトルの位置"
+
+msgid "Ogni parte della card può andare in una delle nove zone della foto: in alto, al centro o in basso, a sinistra, al centro o a destra. «Come lo schema» la lascia dov’è."
+msgstr "カードの各パーツを写真の 9 つのゾーン（上・中央・下 × 左・中央・右）のどこにでも置けます。「レイアウトどおり」はそのままにします。"
+
+msgid "Posizione del sottotitolo"
+msgstr "サブタイトルの位置"
+
+msgid "Posizione della categoria"
+msgstr "カテゴリーの位置"
+
+msgid "Posizione del numero"
+msgstr "番号の位置"
+
+msgid "Posizione del pulsante"
+msgstr "ボタンの位置"
+
+msgid "Posizione dell’icona"
+msgstr "アイコンの位置"
+
+msgid "Card in evidenza"
+msgstr "注目カード"
+
+msgid "La prima, grande (2 × 2)"
+msgstr "最初のカードを大きく（2 × 2）"
+
+msgid "Al computer la prima card occupa due colonne e due righe, con la foto grande: il prodotto da mettere in vetrina. Sul tablet e sul telefono torna come le altre."
+msgstr "パソコンでは最初のカードが 2 列 2 行を占め、写真が大きくなります（ショーウィンドウに置く商品）。タブレットとスマートフォンでは他のカードと同じになります。"
+
+#: licenza-1.4.1345
+msgid "Più valori insieme"
+msgstr "複数の値を同時に"
+
+msgid "In ogni gruppo si possono accendere più valori insieme: restano le foto che ne hanno almeno uno (Guida o Modello). Gruppi diversi restano combinati (Guida o Modello, e di livello Base). Vale coi filtri a pulsanti."
+msgstr "各グループで複数の値を同時にオンにできます。どれか 1 つでも持つ写真が残ります（ガイドまたはテンプレート）。グループ同士は組み合わさったままです（ガイドまたはテンプレート、かつレベル初級）。ボタン形式のフィルターで使えます。"
+
+msgid "Mescola a ogni visita"
+msgstr "訪問ごとにシャッフル"
+
+msgid "Le foto escono in un ordine diverso a ogni visita. Con l’«Ordinamento» acceso, chi visita può rimetterle in ordine."
+msgstr "訪問のたびに写真の順番が変わります。「並べ替え」をオンにすると、訪問者が順番を戻せます。"
+
+#: licenza-1.4.1345
+msgid "Colonne schermi grandi"
+msgstr "大画面の列数"
+
+msgid "Da 1400 px in su (monitor grandi); vuoto = come al computer."
+msgstr "1400 px 以上（大きなモニター）。空欄＝パソコンと同じ。"
+
+msgid "Colonne telefoni piccoli"
+msgstr "小さなスマホの列数"
+
+msgid "Sotto i 480 px; vuoto = come le colonne mobile."
+msgstr "480 px 未満。空欄＝モバイルの列数と同じ。"

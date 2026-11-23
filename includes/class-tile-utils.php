@@ -951,4 +951,69 @@ class Olobuild_Tile_Utils {
         if ( $l ) { $css .= "border-left:{$l}px {$style} {$color};"; }
         return $css;
     }
+
+    /**
+     * IL COLORE DI UN TERMINE (pallini dei colori del negozio, scelta del colore nella Quick View).
+     *
+     * WooCommerce non salva un colore per i termini degli attributi: si prende quello che un plugin dei colori ha
+     * scritto nei meta del termine, se c'è, altrimenti si ricava dal nome («Nero», «Grigio fumo», «Navy»).
+     * Il filtro `olobuild_colore_termine` permette di correggerlo. '' = colore sconosciuto (niente pallino).
+     *
+     * @param WP_Term $term termine di un attributo (pa_colore, pa_color…)
+     * @return string colore CSS (#rrggbb) o ''
+     */
+    public static function colore_termine( $term ) {
+        if ( ! $term || empty( $term->term_id ) ) {
+            return '';
+        }
+        $c = '';
+        foreach ( [ 'color', 'colore', 'colour', 'swatch_color', 'product_attribute_color', 'pa_color', '_swatch_color', 'term_color' ] as $chiave ) {
+            $v = trim( (string) get_term_meta( $term->term_id, $chiave, true ) );
+            if ( preg_match( '/^#([0-9a-f]{3}|[0-9a-f]{6})$/i', $v ) ) {
+                $c = $v;
+                break;
+            }
+        }
+        if ( '' === $c ) {
+            $c = self::colore_da_nome( $term->name );
+        }
+        if ( '' === $c ) {
+            $c = self::colore_da_nome( str_replace( '-', ' ', $term->slug ) );
+        }
+        return (string) apply_filters( 'olobuild_colore_termine', $c, $term );
+    }
+
+    /** Il colore di un nome («Grigio fumo» → grigio): prima il nome intero, poi parola per parola. */
+    public static function colore_da_nome( $nome ) {
+        static $tinte = [
+            'nero' => '#1d1d1f', 'black' => '#1d1d1f', 'antracite' => '#383b3f', 'grafite' => '#45484d', 'bianco' => '#f7f7f5',
+            'white' => '#f7f7f5', 'avorio' => '#f3eddc', 'panna' => '#f2ead3', 'crema' => '#efe3c6', 'cream' => '#efe3c6',
+            'grigio' => '#8a8d91', 'grey' => '#8a8d91', 'gray' => '#8a8d91', 'fumo' => '#6b6e72', 'argento' => '#c3c6ca',
+            'silver' => '#c3c6ca', 'rosso' => '#c62f2b', 'red' => '#c62f2b', 'bordeaux' => '#6d1a2a', 'vinaccia' => '#5e1f2c',
+            'burgundy' => '#6d1a2a', 'corallo' => '#ef6f5e', 'rosa' => '#e8a2b6', 'pink' => '#e8a2b6', 'cipria' => '#e9c6c0',
+            'fucsia' => '#d4247c', 'arancio' => '#ea7a2a', 'arancione' => '#ea7a2a', 'orange' => '#ea7a2a', 'giallo' => '#f2c230',
+            'yellow' => '#f2c230', 'senape' => '#c9a227', 'ocra' => '#c58d31', 'oro' => '#c9a54b', 'gold' => '#c9a54b',
+            'verde' => '#3f7d4e', 'green' => '#3f7d4e', 'oliva' => '#6b6f32', 'olive' => '#6b6f32', 'salvia' => '#9bab8e',
+            'sage' => '#9bab8e', 'smeraldo' => '#13795b', 'menta' => '#a8d8c1', 'bosco' => '#2f4f37', 'blu' => '#2a4f9e',
+            'blue' => '#2a4f9e', 'navy' => '#1f2a44', 'notte' => '#1f2a44', 'marina' => '#1f2f4f', 'azzurro' => '#6fa8dc',
+            'celeste' => '#a9cfe8', 'turchese' => '#2fb3ad', 'petrolio' => '#155e6b', 'teal' => '#1d7874', 'viola' => '#6c3f97',
+            'purple' => '#6c3f97', 'lilla' => '#b39ad1', 'lavanda' => '#b7a7d6', 'prugna' => '#5b2c4f', 'marrone' => '#6b4329',
+            'brown' => '#6b4329', 'cioccolato' => '#4a2c1d', 'caffe' => '#5a3a24', 'cognac' => '#9a5b2e', 'cuoio' => '#a8754a',
+            'tabacco' => '#7a5230', 'camel' => '#b98a57', 'beige' => '#d8c3a5', 'sabbia' => '#d5c09a', 'sand' => '#d5c09a',
+            'tortora' => '#a99a8a', 'taupe' => '#8b7d70', 'naturale' => '#d9c7a7', 'bronzo' => '#8c6239', 'rame' => '#b26a3c',
+        ];
+        $n = strtolower( remove_accents( trim( (string) $nome ) ) );
+        if ( '' === $n ) {
+            return '';
+        }
+        if ( isset( $tinte[ $n ] ) ) {
+            return $tinte[ $n ];
+        }
+        foreach ( preg_split( '/[\s\/,+-]+/', $n ) as $parola ) {
+            if ( isset( $tinte[ $parola ] ) ) {
+                return $tinte[ $parola ];
+            }
+        }
+        return '';
+    }
 }

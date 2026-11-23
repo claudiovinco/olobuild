@@ -18,6 +18,9 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
         'category'        => '',
         'tag'             => '',
         'on_sale'         => false,
+        'pallini'         => false,
+        'in_evidenza'     => '',
+        'mostra_risultati' => false,
         'featured'        => false,
         'show_image'      => true,
         'show_title'      => true,
@@ -191,6 +194,31 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
             $query_args['orderby']  = 'meta_value_num';
         }
 
+        // L'ordinamento scelto da chi visita (Filtro prodotti WC → orderby nell'indirizzo, nomi di WooCommerce)
+        $ord_url = sanitize_key( $this->filtro_url( 'orderby' ) );
+        if ( '' !== $ord_url ) {
+            unset( $query_args['meta_key'] );
+            if ( 'price' === $ord_url || 'price-desc' === $ord_url ) {
+                $query_args['meta_key'] = '_price'; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- ordinamento per prezzo scelto da chi visita
+                $query_args['orderby']  = 'meta_value_num';
+                $query_args['order']    = 'price' === $ord_url ? 'ASC' : 'DESC';
+            } elseif ( 'popularity' === $ord_url ) {
+                $query_args['meta_key'] = 'total_sales'; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- ordinamento per vendite scelto da chi visita
+                $query_args['orderby']  = 'meta_value_num';
+                $query_args['order']    = 'DESC';
+            } elseif ( 'rating' === $ord_url ) {
+                $query_args['meta_key'] = '_wc_average_rating'; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- ordinamento per voto scelto da chi visita
+                $query_args['orderby']  = 'meta_value_num';
+                $query_args['order']    = 'DESC';
+            } elseif ( 'title' === $ord_url ) {
+                $query_args['orderby'] = 'title';
+                $query_args['order']   = 'ASC';
+            } elseif ( 'date' === $ord_url ) {
+                $query_args['orderby'] = 'date';
+                $query_args['order']   = 'DESC';
+            }
+        }
+
         // Tax query
         $tax_query = [ 'relation' => 'AND' ];
         $cat_slug  = sanitize_text_field( $s['category'] );
@@ -264,7 +292,7 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
         }
 
         // On sale
-        if ( ! empty( $s['on_sale'] ) ) {
+        if ( ! empty( $s['on_sale'] ) || '1' === $this->filtro_url( 'on_sale' ) ) {
             $sale_ids = wc_get_product_ids_on_sale();
             if ( ! empty( $sale_ids ) ) {
                 $query_args['post__in'] = $sale_ids;
@@ -300,6 +328,15 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
                 grid-template-columns: repeat(<?php echo (int) $cols; ?>, 1fr);
                 gap: <?php echo (int) $gap; ?>px;
             }
+            <?php if ( 'prima' === ( $s['in_evidenza'] ?? '' ) && $cols >= 3 ) : // La prima card grande (2 × 2) al computer ?>
+            @media (min-width: 960px) {
+                .<?php echo $uid; ?> { grid-auto-flow: dense; }
+                .<?php echo $uid; ?> > .olo-woo-card:first-child { grid-column: span 2; grid-row: span 2; display: flex; flex-direction: column; }
+                .<?php echo $uid; ?> > .olo-woo-card:first-child .olo-woo-card-img { flex: 1 1 auto; padding-top: 0; min-height: 20rem; }
+                .<?php echo $uid; ?> > .olo-woo-card:first-child .olo-woo-card-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+                .<?php echo $uid; ?> > .olo-woo-card:first-child .olo-woo-card-title { font-size: 1.3em; }
+            }
+            <?php endif; ?>
             <?php else : ?>
             .<?php echo $uid; ?> .olo-woo-car-stage {
                 position: relative;
@@ -667,13 +704,22 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
             }
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+        <?php
+        if ( ! empty( $s['mostra_risultati'] ) ) {
+            $n_ris = (int) $products->found_posts;
+            echo '<p class="olo-woo-risultati" aria-live="polite" style="font-size:13px;opacity:.75;margin:0 0 .75rem">' . esc_html( 1 === $n_ris ? olobuild_t( '1 prodotto' ) : sprintf( olobuild_t( '%d prodotti' ), $n_ris ) ) . '</p>';
+        }
+        if ( ! empty( $s['pallini'] ) ) {
+            echo $this->pallini_risorse(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS e script fissi, nessun dato.
+        }
+        ?>
         <?php if ( $is_carousel ) : ?>
         <div class="<?php echo esc_attr( $uid ); ?>" id="<?php echo esc_attr( $uid ); ?>">
         <div class="olo-woo-car-stage">
         <div class="olo-woo-car-viewport" tabindex="0" role="region" aria-roledescription="<?php echo esc_attr( olobuild_t( 'carosello' ) ); ?>" aria-label="<?php echo esc_attr( olobuild_t( 'Prodotti' ) ); ?>">
         <div class="olo-woo-car-track">
-        <?php else : ?>
-        <div class="<?php echo esc_attr( $uid ); ?>">
+        <?php else : // data-olo-woo-griglia: il Filtro prodotti WC la aggiorna senza ricaricare la pagina ?>
+        <div class="<?php echo esc_attr( $uid ); ?>" data-olo-woo-griglia>
         <?php endif; ?>
         <?php
         while ( $products->have_posts() ) :
@@ -780,7 +826,17 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
                     </div>
                     <?php endif; ?>
                     <?php if ( ! empty( $s['show_price'] ) ) : ?>
+                    <?php if ( ! empty( $s['pallini'] ) ) { $pallini_html = $this->pallini_html( $product ); } ?>
+                    <?php if ( ! empty( $pallini_html ) ) : // I pallini sulla riga del prezzo, a destra: la card non si allunga e i pulsanti restano allineati. ?>
+                    <div class="olo-woo-prezzo-riga">
+                    <?php endif; ?>
                     <div class="olo-woo-card-price"><?php echo $price_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WooCommerce price HTML from WC_Product::get_price_html(), escaped by WooCommerce core ?></div>
+                    <?php
+                    if ( ! empty( $pallini_html ) ) {
+                        echo $pallini_html . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- pallini_html() escapa ogni attributo.
+                    }
+                    $pallini_html = '';
+                    ?>
                     <?php
                     if ( $risparmio ) {
                         if ( $on_sale ) {
@@ -1042,5 +1098,83 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
     private function filtro_url_elenco( $nome ) {
         $voci = array_filter( array_map( 'sanitize_title', explode( ',', $this->filtro_url( $nome ) ) ) );
         return array_slice( array_values( array_unique( $voci ) ), 0, 50 );
+    }
+
+    /**
+     * I PALLINI DEI COLORI di un prodotto a varianti: uno per colore dell'attributo dei colori (pa_colore, pa_color…),
+     * con la foto della variante, che lo script mette nella card al passaggio sul pallino. Massimo sei, poi «+N».
+     *
+     * @param WC_Product $product il prodotto
+     * @return string HTML già escapato ('' se non ha colori riconoscibili)
+     */
+    private function pallini_html( $product ) {
+        if ( ! $product || ! $product->is_type( 'variable' ) ) {
+            return '';
+        }
+        $tax = '';
+        foreach ( $product->get_attributes() as $nome => $attr ) {
+            if ( is_object( $attr ) && $attr->is_taxonomy() && preg_match( '/colou?re?|color/i', $nome ) ) {
+                $tax = $nome;
+                break;
+            }
+        }
+        if ( '' === $tax ) {
+            return '';
+        }
+        $foto = [];
+        foreach ( $product->get_children() as $vid ) {
+            $v = wc_get_product( $vid );
+            if ( ! $v || ! $v->get_image_id() ) {
+                continue;
+            }
+            $slug = (string) $v->get_attribute( $tax );
+            $att  = $v->get_attributes();
+            $slug = isset( $att[ $tax ] ) ? (string) $att[ $tax ] : sanitize_title( $slug );
+            if ( '' !== $slug && ! isset( $foto[ $slug ] ) ) {
+                $foto[ $slug ] = $v->get_image_id();
+            }
+        }
+        $voci = [];
+        foreach ( wc_get_product_terms( $product->get_id(), $tax, [ 'fields' => 'all' ] ) as $term ) {
+            $c = Olobuild_Tile_Utils::colore_termine( $term );
+            if ( '' === $c ) {
+                continue;
+            }
+            $img = isset( $foto[ $term->slug ] ) ? wp_get_attachment_image_src( $foto[ $term->slug ], 'woocommerce_thumbnail' ) : false;
+            $voci[] = '<span class="olo-woo-pallino" role="img" style="--c:' . esc_attr( $c ) . '" title="' . esc_attr( $term->name ) . '" aria-label="' . esc_attr( $term->name ) . '"'
+                . ( $img ? ' data-img="' . esc_url( $img[0] ) . '" data-srcset="' . esc_attr( (string) wp_get_attachment_image_srcset( $foto[ $term->slug ], 'woocommerce_thumbnail' ) ) . '"' : '' ) . '></span>';
+        }
+        if ( ! $voci ) {
+            return '';
+        }
+        $altri = count( $voci ) - 6;
+        $voci  = array_slice( $voci, 0, 6 );
+        return '<div class="olo-woo-pallini" aria-label="' . esc_attr( olobuild_t( 'Colori disponibili' ) ) . '">' . implode( '', $voci )
+            . ( $altri > 0 ? '<span class="olo-woo-pallini-altri">+' . (int) $altri . '</span>' : '' ) . '</div>';
+    }
+
+    /** Stile e script dei pallini, una volta per pagina: al passaggio su un pallino la card mostra la foto della variante. */
+    private function pallini_risorse() {
+        static $fatto = false;
+        if ( $fatto ) {
+            return '';
+        }
+        $fatto = true;
+        return '<style>.olo-woo-pallini{display:flex;align-items:center;gap:.35rem;margin-top:.5rem}'
+            . '.olo-woo-prezzo-riga{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.25rem .5rem;margin-bottom:.625rem}'
+            . '.olo-woo-prezzo-riga .olo-woo-card-price{margin-bottom:0}.olo-woo-prezzo-riga .olo-woo-pallini{margin-top:0}'
+            . '.olo-woo-pallino{width:12px;height:12px;border-radius:50%;background:var(--c);box-shadow:inset 0 0 0 1px rgb(0 0 0 / .18);cursor:pointer;transition:transform .2s ease}'
+            . '.olo-woo-pallino:hover,.olo-woo-pallino.attivo{transform:scale(1.25);box-shadow:inset 0 0 0 1px rgb(0 0 0 / .18),0 0 0 2px var(--olo-color-background,#fff),0 0 0 3px currentColor}'
+            . '.olo-woo-pallini-altri{font-size:11px;opacity:.7;margin-left:.15rem}</style>'
+            . '<script>(function(){if(window.oloWooPallini)return;window.oloWooPallini=1;'
+            . 'document.addEventListener("mouseover",function(e){var p=e.target.closest?e.target.closest(".olo-woo-pallino[data-img]"):null;if(!p)return;'
+            . 'var c=p.closest(".olo-woo-card");if(!c)return;var im=c.querySelector(".olo-woo-card-img img:not(.olo-woo-card-img2)");if(!im)return;'
+            . 'if(!im.hasAttribute("data-orig")){im.setAttribute("data-orig",im.getAttribute("src")||"");im.setAttribute("data-orig-set",im.getAttribute("srcset")||"")}'
+            . 'im.setAttribute("src",p.getAttribute("data-img"));if(p.getAttribute("data-srcset"))im.setAttribute("srcset",p.getAttribute("data-srcset"));else im.removeAttribute("srcset");'
+            . 'c.querySelectorAll(".olo-woo-pallino").forEach(function(x){x.classList.toggle("attivo",x===p)})});'
+            . 'document.addEventListener("mouseout",function(e){var c=e.target.closest?e.target.closest(".olo-woo-card"):null;if(!c||c.contains(e.relatedTarget))return;'
+            . 'var im=c.querySelector(".olo-woo-card-img img[data-orig]");if(!im)return;im.setAttribute("src",im.getAttribute("data-orig"));'
+            . 'if(im.getAttribute("data-orig-set"))im.setAttribute("srcset",im.getAttribute("data-orig-set"));c.querySelectorAll(".olo-woo-pallino").forEach(function(x){x.classList.remove("attivo")})});'
+            . '})();</script>';
     }
 }

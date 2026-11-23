@@ -54931,3 +54931,423 @@ msgstr "Filter by category"
 
 msgid "Ritardo fra le foto"
 msgstr "Delay between photos"
+
+#: licenza-1.4.1345
+msgid "1 foto"
+msgstr "1 photo"
+
+msgid "%d foto"
+msgstr "%d photos"
+
+msgid "Mostra altre (%d)"
+msgstr "Show more (%d)"
+
+msgid "Anteprima video"
+msgstr "Video preview"
+
+msgid "Avanzamento galleria"
+msgstr "Gallery progress"
+
+msgid "Vai alla foto"
+msgstr "Go to photo"
+
+msgid "Ordina"
+msgstr "Sort"
+
+msgid "Ordine della galleria"
+msgstr "Gallery order"
+
+msgid "Titolo dalla A alla Z"
+msgstr "Title A to Z"
+
+msgid "Titolo dalla Z alla A"
+msgstr "Title Z to A"
+
+msgid "Testo crescente (anni, prezzi…)"
+msgstr "Text ascending (years, prices…)"
+
+msgid "Testo decrescente"
+msgstr "Text descending"
+
+msgid "Pagine della galleria"
+msgstr "Gallery pages"
+
+msgid "WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento."
+msgstr "WooCommerce is not active. Install and activate WooCommerce to use this element."
+
+msgid "Filtra"
+msgstr "Filter"
+
+msgid "Filtri attivi"
+msgstr "Active filters"
+
+msgid "Solo prodotti disponibili"
+msgstr "In-stock products only"
+
+msgid "Solo prodotti in offerta"
+msgstr "Products on sale only"
+
+msgid "Come nel negozio"
+msgstr "Shop default"
+
+msgid "Più venduti"
+msgstr "Best selling"
+
+msgid "Più votati"
+msgstr "Top rated"
+
+msgid "Prezzo crescente"
+msgstr "Price: low to high"
+
+msgid "Prezzo decrescente"
+msgstr "Price: high to low"
+
+msgid "Nome dalla A alla Z"
+msgstr "Name A to Z"
+
+msgid "Prezzo min"
+msgstr "Min price"
+
+msgid "Prezzo max"
+msgstr "Max price"
+
+msgid "Solo disponibili"
+msgstr "In stock only"
+
+msgid "In offerta"
+msgstr "On sale"
+
+msgid "Nessun prodotto in saldo"
+msgstr "No products on sale"
+
+msgid "Nessun prodotto trovato"
+msgstr "No products found"
+
+msgid "1 prodotto"
+msgstr "1 product"
+
+msgid "%d prodotti"
+msgstr "%d products"
+
+msgid "carosello"
+msgstr "carousel"
+
+msgid "Seleziona opzioni"
+msgstr "Select options"
+
+msgid "Aggiunto!"
+msgstr "Added!"
+
+msgid "Confronta"
+msgstr "Compare"
+
+msgid "Vai al gruppo"
+msgstr "Go to group"
+
+msgid "Colori disponibili"
+msgstr "Available colours"
+
+msgid "Vista rapida prodotto"
+msgstr "Product quick view"
+
+msgid "Errore nel caricamento."
+msgstr "Loading error."
+
+msgid "Mostra immagine: %s"
+msgstr "Show image: %s"
+
+msgid "Valutazione %s su 5"
+msgstr "Rated %s out of 5"
+
+msgid "Vedi dettagli completi"
+msgstr "See full details"
+
+msgid "Non è stato possibile aggiungerlo: riprova"
+msgstr "It couldn’t be added: please try again"
+
+msgid "Questa combinazione non c’è"
+msgstr "This combination isn’t available"
+
+msgid "Uno in meno"
+msgstr "One less"
+
+msgid "Uno in più"
+msgstr "One more"
+
+msgid "Il testo di un pulsante sotto i testi della foto (vuoto = niente pulsante). Porta dove porta la foto: il suo link o la lightbox."
+msgstr "The text of a button under the photo’s text (empty = no button). It goes where the photo goes: its link or the lightbox."
+
+msgid "Filtri, ricerca e pagine"
+msgstr "Filters, search and pages"
+
+msgid "Link ai filtri"
+msgstr "Links to filters"
+
+msgid "L’indirizzo della pagina ricorda il filtro scelto (…#filtro=categoria): copiandolo, o mettendolo in un pulsante o nel menu, la galleria si apre già filtrata."
+msgstr "The page address remembers the chosen filter (…#filtro=category): copy it, or put it in a button or in the menu, and the gallery opens already filtered."
+
+msgid "Una casella che tiene solo le foto col testo cercato nel titolo, nel sottotitolo, nel testo o nella categoria."
+msgstr "A box that keeps only the photos with the searched text in the title, subtitle, text or category."
+
+msgid "Testo della casella"
+msgstr "Box placeholder"
+
+msgid "Ordinamento"
+msgstr "Sorting"
+
+msgid "Un menu per mettere le foto in ordine di titolo o di testo (anni, prezzi), crescente o decrescente."
+msgstr "A menu to sort the photos by title or by text (years, prices), ascending or descending."
+
+msgid "Foto da mostrare"
+msgstr "Photos to show"
+
+msgid "Tutte subito"
+msgstr "All at once"
+
+msgid "Un gruppo, poi «Mostra altre»"
+msgstr "A group, then “Show more”"
+
+msgid "A pagine"
+msgstr "In pages"
+
+msgid "Foto per gruppo o pagina"
+msgstr "Photos per group or page"
+
+msgid "Menu a tendina"
+msgstr "Drop-down menu"
+
+msgid "Fra il telefono e il computer (da 640 a 1199 px); vuoto = come al computer."
+msgstr "Between phone and computer (640 to 1199 px); empty = same as on computer."
+
+msgid "Filtro disponibilità"
+msgstr "Availability filter"
+
+msgid "Filtro «In offerta»"
+msgstr "“On sale” filter"
+
+msgid "Ordinamento per chi visita"
+msgstr "Sorting for visitors"
+
+msgid "Un menu «Ordina» (più recenti, più venduti, prezzo, nome): la tile Prodotti WC della pagina mostra i prodotti nell’ordine scelto."
+msgstr "A “Sort” menu (newest, best selling, price, name): the page’s WC Products tile shows the products in the chosen order."
+
+msgid "Pallini dei colori"
+msgstr "Colour swatches"
+
+msgid "Sotto il prezzo dei prodotti a varianti un pallino per ogni colore; passandoci sopra la foto mostra quel colore. Il colore viene da un plugin dei colori, se c’è, o dal nome (Nero, Blu navy, Cognac…)."
+msgstr "Under the price of variable products, a dot for each colour; hovering over it, the photo shows that colour. The colour comes from a colour plugin, if there is one, or from the name (Black, Navy blue, Cognac…)."
+
+msgid "Quanti prodotti"
+msgstr "Product count"
+
+msgid "Sopra la griglia il numero dei prodotti trovati, anche dopo i filtri."
+msgstr "Above the grid, the number of products found, also after filtering."
+
+#: licenza-1.4.1345
+msgid "Un gruppo, poi le altre scorrendo"
+msgstr "A group, then the rest as you scroll"
+
+#: licenza-1.4.1345
+msgid "Nessun contenuto dalla fonte social: controlla il canale o l’indirizzo. Questo avviso lo vede solo chi modifica il sito."
+msgstr "No content from the social source: check the channel or the address. Only people who edit the site see this notice."
+
+msgid "Azzera i filtri"
+msgstr "Clear filters"
+
+msgid "Quello del contenuto aperto"
+msgstr "The one of the open content"
+
+msgid "Card di testo"
+msgstr "Text card"
+
+msgid "Testo grande (citazione, annuncio)..."
+msgstr "Large text (quote, announcement)..."
+
+msgid "Firma..."
+msgstr "Signature..."
+
+msgid "Una card senza foto, coi testi su un fondo colorato (citazioni, annunci)"
+msgstr "A card without a photo, with the text on a coloured background (quotes, announcements)"
+
+msgid "Foto da un social"
+msgstr "Photos from a social network"
+
+msgid "Fonte"
+msgstr "Source"
+
+msgid "Le foto di «Media»"
+msgstr "The photos in “Media”"
+
+msgid "YouTube (canale, @nome o playlist)"
+msgstr "YouTube (channel, @name or playlist)"
+
+msgid "Vimeo (utente o canale)"
+msgstr "Vimeo (user or channel)"
+
+msgid "Flickr (utente o tag)"
+msgstr "Flickr (user or tags)"
+
+msgid "Pinterest (profilo o bacheca)"
+msgstr "Pinterest (profile or board)"
+
+msgid "Instagram (account di OLOsocial)"
+msgstr "Instagram (OLOsocial account)"
+
+msgid "Feed RSS"
+msgstr "RSS feed"
+
+msgid "Le foto o i video arrivano dal social e si aggiornano da soli ogni ora; quelli di «Media» restano salvati ma non si mostrano. YouTube, Vimeo, Flickr, Pinterest e i feed RSS non chiedono chiavi; Instagram usa l’account collegato in OLOsocial."
+msgstr "Photos or videos come from the social network and update by themselves every hour; those in “Media” stay saved but are not shown. YouTube, Vimeo, Flickr, Pinterest and RSS feeds need no keys; Instagram uses the account connected in OLOsocial."
+
+msgid "Canale, account o indirizzo"
+msgstr "Channel, account or address"
+
+msgid "YouTube: @nome, indirizzo del canale o della playlist. Vimeo: nome utente o channels/nome. Flickr: l’id utente (12345678@N00) o dei tag. Pinterest: nome o nome/bacheca. Instagram: @nome (vuoto = il primo account collegato). RSS: l’indirizzo del feed."
+msgstr "YouTube: @name, channel or playlist address. Vimeo: username or channels/name. Flickr: the user ID (12345678@N00) or some tags. Pinterest: name or name/board. Instagram: @name (empty = the first connected account). RSS: the feed address."
+
+msgid "Quante"
+msgstr "How many"
+
+msgid "Apri sul social"
+msgstr "Open on the social network"
+
+msgid "Il clic porta al post sul social invece di aprire la lightbox."
+msgstr "Clicking goes to the post on the social network instead of opening the lightbox."
+
+msgid "Accanto alla foto (biglietto)"
+msgstr "Beside the photo (ticket)"
+
+msgid "«Sotto la foto» e «Accanto alla foto» valgono per gli schemi Griglia e Masonry; negli altri i testi vanno sulla foto. Nel biglietto il testo della foto diventa la scritta grande (per esempio «20 mag sab»): accendi «Mostra il testo»."
+msgstr "“Below the photo” and “Beside the photo” work with the Grid and Masonry layouts; in the others the text goes on the photo. In the ticket, the photo’s text becomes the large lettering (for example “20 May Sat”): turn on “Show the text”."
+
+msgid "Sopra la galleria un pulsante per ogni categoria e «Tutti»: cliccando, restano le foto di quella categoria e la galleria si riordina. La categoria si scrive sotto ogni foto in «Media»; più categorie si separano con la virgola. Per più gruppi che si combinano scrivi «Gruppo: valore», per esempio «Tipo: Guida, Livello: Base»: sopra la galleria compare una fila per gruppo."
+msgstr "Above the gallery, a button for each category and “All”: clicking one keeps that category’s photos and the gallery rearranges itself. Write the category under each photo in “Media”; separate several categories with commas. For several groups that combine, write “Group: value”, for example “Type: Guide, Level: Basic”: a row for each group appears above the gallery."
+
+msgid "Entrata dei testi"
+msgstr "Text entrance"
+
+msgid "Uno alla volta, dal basso"
+msgstr "One at a time, from below"
+
+msgid "Uno alla volta, da sinistra"
+msgstr "One at a time, from the left"
+
+msgid "Uno alla volta, si svelano"
+msgstr "One at a time, revealed"
+
+msgid "Uno alla volta, si ingrandiscono"
+msgstr "One at a time, growing"
+
+msgid "Uno alla volta, sfumano"
+msgstr "One at a time, fading in"
+
+msgid "Categoria, numero, titolo, sottotitolo, testo e pulsante arrivano uno dopo l’altro quando la foto entra nello schermo, o al passaggio se i testi compaiono così. Con «riduci movimento» del sistema non si muove niente."
+msgstr "Category, number, title, subtitle, text and button arrive one after another when the photo enters the screen, or on hover if the text appears that way. With the system’s “reduce motion” nothing moves."
+
+msgid "Sfondo delle card di testo"
+msgstr "Text card background"
+
+msgid "Colore delle voci"
+msgstr "Item colours"
+
+msgid "Un colore per ogni foto o card: tinge la cornice, la categoria, il numero, il pulsante, il biglietto e il fondo delle card di testo. Vuoto = il colore della galleria."
+msgstr "A colour for each photo or card: it tints the frame, the category, the number, the button, the ticket and the background of text cards. Empty = the gallery colour."
+
+msgid "Filtra senza ricaricare la pagina"
+msgstr "Filter without reloading the page"
+
+msgid "Scelto un filtro, la griglia Prodotti WC della pagina si aggiorna sul posto e l’indirizzo ricorda i filtri. Se nella pagina non c’è una griglia da aggiornare, la pagina si ricarica come prima."
+msgstr "Once a filter is chosen, the page’s WC Products grid updates in place and the address remembers the filters. If there is no grid to update on the page, the page reloads as before."
+
+#: licenza-1.4.1345
+msgid "N."
+msgstr "No."
+
+msgid "Come lo schema"
+msgstr "As the layout"
+
+msgid "In alto al centro"
+msgstr "Top centre"
+
+msgid "Al centro a sinistra"
+msgstr "Middle left"
+
+msgid "Al centro a destra"
+msgstr "Middle right"
+
+msgid "In basso al centro"
+msgstr "Bottom centre"
+
+msgid "Facebook (pagina di OLOsocial)"
+msgstr "Facebook (OLOsocial page)"
+
+msgid "Le foto o i video arrivano dal social e si aggiornano da soli ogni ora; quelli di «Media» restano salvati ma non si mostrano. YouTube, Vimeo, Flickr, Pinterest e i feed RSS non chiedono chiavi; Instagram e Facebook usano gli account collegati in OLOsocial."
+msgstr "Photos or videos come from the social network and update by themselves every hour; those in “Media” stay saved but are not shown. YouTube, Vimeo, Flickr, Pinterest and RSS feeds need no keys; Instagram and Facebook use the accounts connected in OLOsocial."
+
+msgid "YouTube: @nome, indirizzo del canale o della playlist. Vimeo: nome utente o channels/nome. Flickr: l’id utente (12345678@N00) o dei tag. Pinterest: nome o nome/bacheca. Instagram e Facebook: @nome o nome della pagina (vuoto = il primo account collegato in OLOsocial). RSS: l’indirizzo del feed."
+msgstr "YouTube: @name, channel or playlist address. Vimeo: username or channels/name. Flickr: the user ID (12345678@N00) or some tags. Pinterest: name or name/board. Instagram and Facebook: @name or page name (empty = the first account connected in OLOsocial). RSS: the feed address."
+
+msgid "Sulla foto, in un riquadro"
+msgstr "On the photo, in a panel"
+
+msgid "Formato del numero"
+msgstr "Number format"
+
+msgid "N. 01 / 12"
+msgstr "No. 01 / 12"
+
+msgid "Posizione del titolo"
+msgstr "Title position"
+
+msgid "Ogni parte della card può andare in una delle nove zone della foto: in alto, al centro o in basso, a sinistra, al centro o a destra. «Come lo schema» la lascia dov’è."
+msgstr "Each part of the card can go in one of the nine zones of the photo: top, middle or bottom, left, centre or right. “As the layout” leaves it where it is."
+
+msgid "Posizione del sottotitolo"
+msgstr "Subtitle position"
+
+msgid "Posizione della categoria"
+msgstr "Category position"
+
+msgid "Posizione del numero"
+msgstr "Number position"
+
+msgid "Posizione del pulsante"
+msgstr "Button position"
+
+msgid "Posizione dell’icona"
+msgstr "Icon position"
+
+msgid "Card in evidenza"
+msgstr "Featured card"
+
+msgid "La prima, grande (2 × 2)"
+msgstr "The first one, large (2 × 2)"
+
+msgid "Al computer la prima card occupa due colonne e due righe, con la foto grande: il prodotto da mettere in vetrina. Sul tablet e sul telefono torna come le altre."
+msgstr "On computers the first card takes two columns and two rows, with a large photo: the product to put in the window. On tablets and phones it goes back to being like the others."
+
+#: licenza-1.4.1345
+msgid "Più valori insieme"
+msgstr "Several values together"
+
+msgid "In ogni gruppo si possono accendere più valori insieme: restano le foto che ne hanno almeno uno (Guida o Modello). Gruppi diversi restano combinati (Guida o Modello, e di livello Base). Vale coi filtri a pulsanti."
+msgstr "In each group you can turn on several values together: the photos with at least one of them remain (Guide or Template). Different groups stay combined (Guide or Template, and Basic level). Works with button filters."
+
+msgid "Mescola a ogni visita"
+msgstr "Shuffle on every visit"
+
+msgid "Le foto escono in un ordine diverso a ogni visita. Con l’«Ordinamento» acceso, chi visita può rimetterle in ordine."
+msgstr "The photos come out in a different order on every visit. With “Sorting” on, visitors can put them back in order."
+
+#: licenza-1.4.1345
+msgid "Colonne schermi grandi"
+msgstr "Large screen columns"
+
+msgid "Da 1400 px in su (monitor grandi); vuoto = come al computer."
+msgstr "From 1400 px up (large monitors); empty = same as on computer."
+
+msgid "Colonne telefoni piccoli"
+msgstr "Small phone columns"
+
+msgid "Sotto i 480 px; vuoto = come le colonne mobile."
+msgstr "Below 480 px; empty = same as the mobile columns."

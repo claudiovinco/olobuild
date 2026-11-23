@@ -13,7 +13,23 @@ const conSchede = (s) => SCHEMI_SCHEDE.includes(schema(s));
 const filtrabile = (s) => SCHEMI_FILTRI.includes(schema(s));
 const schedaAccesa = (s) => conSchede(s) && (!!s.scheda || schema(s) === 'elenco');
 // «Sotto la foto» c'è solo in Griglia e Masonry: negli altri schemi i testi vanno sulla foto.
-const schedaSopra = (s) => s.scheda === 'sopra' || (s.scheda === 'sotto' && !['grid', 'masonry'].includes(schema(s)));
+const schedaSopra = (s) => ['sopra', 'riquadro'].includes(s.scheda) || (['sotto', 'biglietto'].includes(s.scheda) && !['grid', 'masonry'].includes(schema(s)));
+// Le zone in cui può andare ogni parte della card (Posizione libera, solo coi testi sulla foto)
+const ZONE = [
+  { value: '', label: t('Come lo schema') },
+  { value: 'as', label: t('In alto a sinistra') },
+  { value: 'ac', label: t('In alto al centro') },
+  { value: 'ad', label: t('In alto a destra') },
+  { value: 'cs', label: t('Al centro a sinistra') },
+  { value: 'cc', label: t('Al centro') },
+  { value: 'cd', label: t('Al centro a destra') },
+  { value: 'bs', label: t('In basso a sinistra') },
+  { value: 'bc', label: t('In basso al centro') },
+  { value: 'bd', label: t('In basso a destra') },
+];
+const conZone = (s) => schedaAccesa(s) && ['sopra', 'riquadro'].includes(s.scheda) && schema(s) !== 'elenco';
+// La galleria ha card di solo testo (citazioni, annunci)?
+const haTesti = (s) => Array.isArray(s.images) && s.images.some(i => i && i.type === 'testo');
 
 /**
  * Tile Pro Gallery — split CONTENUTO/STILE (regola universale Olobuild).
@@ -154,6 +170,32 @@ export default {
     filtri_stile: 'pillole',
     filtri_allinea: 'left',
     filtri_colore: '',
+    filtri_link: false,
+    filtri_multipli: false,
+    mescola: false,
+    cerca: false,
+    cerca_testo: '',
+    ordina: false,
+    piu_foto: '',
+    per_pagina: 8,
+    scheda_pulsante: '',
+    tablet_columns: '',
+    large_columns: '',
+    small_columns: '',
+    scheda_anima: '',
+    scheda_numero_formato: '',
+    zona_categoria: '',
+    zona_numero: '',
+    zona_titolo: '',
+    zona_sottotitolo: '',
+    zona_testo: '',
+    zona_pulsante: '',
+    zona_icona: '',
+    testo_sfondo: '',
+    social: '',
+    social_fonte: '',
+    social_quante: 12,
+    social_link: false,
     // "+N" overlay
     more_bg: 'rgba(0,0,0,0.55)',
     more_color: '',
@@ -204,7 +246,7 @@ export default {
     // quale valore partire: senza, il pad mostrerebbe un ritaglio che non e'
     // quello vero e la scelta si farebbe su un'immagine sbagliata.
     { key: 'images', label: t('Media'), type: 'gallery', righeExtra: true, puntoFocale: true,
-      categoria: true, linkVoce: true, misuraVoce: true,
+      categoria: true, linkVoce: true, misuraVoce: true, cardTesto: true,
       contextKeys: { fit: 'object_fit', pos: 'object_position' }, supportsDynamic: true,
       dynamicItemFields: [
         { key: 'url', label: t('Immagine'), type: 'image' },
@@ -213,6 +255,23 @@ export default {
         { key: 'text', label: t('Testo'), type: 'text' },
         { key: 'alt', label: t('Testo alternativo'), type: 'text' },
       ] },
+    // ─── Foto da un social (al posto di quelle di Media) ───
+    { type: 'separator', label: t('Foto da un social') },
+    { key: 'social', label: t('Fonte'), type: 'select', options: [
+      { value: '', label: t('Le foto di «Media»') },
+      { value: 'youtube', label: t('YouTube (canale, @nome o playlist)') },
+      { value: 'vimeo', label: t('Vimeo (utente o canale)') },
+      { value: 'flickr', label: t('Flickr (utente o tag)') },
+      { value: 'pinterest', label: t('Pinterest (profilo o bacheca)') },
+      { value: 'instagram', label: t('Instagram (account di OLOsocial)') },
+      { value: 'facebook', label: t('Facebook (pagina di OLOsocial)') },
+      { value: 'rss', label: t('Feed RSS') },
+    ], description: t('Le foto o i video arrivano dal social e si aggiornano da soli ogni ora; quelli di «Media» restano salvati ma non si mostrano. YouTube, Vimeo, Flickr, Pinterest e i feed RSS non chiedono chiavi; Instagram e Facebook usano gli account collegati in OLOsocial.') },
+    { key: 'social_fonte', label: t('Canale, account o indirizzo'), type: 'text', placeholder: '@nome', show: s => !!s.social,
+      description: t('YouTube: @nome, indirizzo del canale o della playlist. Vimeo: nome utente o channels/nome. Flickr: l’id utente (12345678@N00) o dei tag. Pinterest: nome o nome/bacheca. Instagram e Facebook: @nome o nome della pagina (vuoto = il primo account collegato in OLOsocial). RSS: l’indirizzo del feed.') },
+    { key: 'social_quante', label: t('Quante'), type: 'number', min: 1, max: 50, step: 1, show: s => !!s.social },
+    { key: 'social_link', label: t('Apri sul social'), type: 'toggle', show: s => !!s.social,
+      description: t('Il clic porta al post sul social invece di aprire la lightbox.') },
     { type: 'separator', label: t('Video'), show: s => s.images?.some(i => i.type === 'video') },
     { key: 'video_preview', label: t('Preview video'), type: 'select', options: [
       { value: 'poster', label: t('Poster statico') },
@@ -263,8 +322,10 @@ export default {
       { value: '', label: t('Solo la didascalia al passaggio') },
       { value: 'sopra', label: t('Sulla foto') },
       { value: 'sotto', label: t('Sotto la foto') },
+      { value: 'riquadro', label: t('Sulla foto, in un riquadro') },
+      { value: 'biglietto', label: t('Accanto alla foto (biglietto)') },
     ], show: s => conSchede(s) && s.layout !== 'elenco',
-      description: t('«Sotto la foto» vale per gli schemi Griglia e Masonry; negli altri i testi vanno sulla foto.') },
+      description: t('«Sotto la foto» e «Accanto alla foto» valgono per gli schemi Griglia e Masonry; negli altri i testi vanno sulla foto. Nel biglietto il testo della foto diventa la scritta grande (per esempio «20 mag sab»): accendi «Mostra il testo».') },
     { key: 'scheda_quando', label: t('Quando si vedono'), type: 'select', options: [
       { value: 'sempre', label: t('Sempre') },
       { value: 'passaggio', label: t('Al passaggio del mouse') },
@@ -280,15 +341,37 @@ export default {
       { value: 'freccia', label: t('Freccia') },
       { value: 'lente', label: t('Lente') },
     ], show: s => schedaAccesa(s) && s.layout !== 'elenco' },
+    { key: 'scheda_pulsante', label: t('Pulsante'), type: 'text', placeholder: t('Scopri'),
+      show: s => schedaAccesa(s) && s.layout !== 'elenco',
+      description: t('Il testo di un pulsante sotto i testi della foto (vuoto = niente pulsante). Porta dove porta la foto: il suo link o la lightbox.') },
     { key: 'elenco_miniatura', label: t('Mostra la miniatura'), type: 'toggle', show: s => s.layout === 'elenco' },
 
     // ─── Filtri per categoria ───
-    { type: 'separator', label: t('Filtri'), show: s => filtrabile(s) },
+    { type: 'separator', label: t('Filtri, ricerca e pagine'), show: s => filtrabile(s) },
     { key: 'filtri', label: t('Filtri per categoria'), type: 'toggle', show: s => filtrabile(s),
-      description: t('Sopra la galleria un pulsante per ogni categoria e «Tutti»: cliccando, restano le foto di quella categoria e la galleria si riordina. La categoria si scrive sotto ogni foto in «Media»; più categorie si separano con la virgola.') },
+      description: t('Sopra la galleria un pulsante per ogni categoria e «Tutti»: cliccando, restano le foto di quella categoria e la galleria si riordina. La categoria si scrive sotto ogni foto in «Media»; più categorie si separano con la virgola. Per più gruppi che si combinano scrivi «Gruppo: valore», per esempio «Tipo: Guida, Livello: Base»: sopra la galleria compare una fila per gruppo.') },
     { key: 'filtri_tutti', label: t('Testo di «Tutti»'), type: 'text', placeholder: t('Tutti'),
       show: s => filtrabile(s) && !!s.filtri },
     { key: 'filtri_conteggi', label: t('Mostra quante foto'), type: 'toggle', show: s => filtrabile(s) && !!s.filtri },
+    { key: 'filtri_link', label: t('Link ai filtri'), type: 'toggle', show: s => filtrabile(s) && !!s.filtri,
+      description: t('L’indirizzo della pagina ricorda il filtro scelto (…#filtro=categoria): copiandolo, o mettendolo in un pulsante o nel menu, la galleria si apre già filtrata.') },
+    { key: 'filtri_multipli', label: t('Più valori insieme'), type: 'toggle', show: s => filtrabile(s) && !!s.filtri,
+      description: t('In ogni gruppo si possono accendere più valori insieme: restano le foto che ne hanno almeno uno (Guida o Modello). Gruppi diversi restano combinati (Guida o Modello, e di livello Base). Vale coi filtri a pulsanti.') },
+    { key: 'cerca', label: t('Ricerca'), type: 'toggle', show: s => filtrabile(s),
+      description: t('Una casella che tiene solo le foto col testo cercato nel titolo, nel sottotitolo, nel testo o nella categoria.') },
+    { key: 'cerca_testo', label: t('Testo della casella'), type: 'text', placeholder: t('Cerca…'), show: s => filtrabile(s) && !!s.cerca },
+    { key: 'ordina', label: t('Ordinamento'), type: 'toggle', show: s => filtrabile(s),
+      description: t('Un menu per mettere le foto in ordine di titolo o di testo (anni, prezzi), crescente o decrescente.') },
+    { key: 'mescola', label: t('Mescola a ogni visita'), type: 'toggle', show: s => ['grid', 'masonry', 'justified', 'diagonal', 'elenco'].includes(schema(s)),
+      description: t('Le foto escono in un ordine diverso a ogni visita. Con l’«Ordinamento» acceso, chi visita può rimetterle in ordine.') },
+    { key: 'piu_foto', label: t('Foto da mostrare'), type: 'select', options: [
+      { value: '', label: t('Tutte subito') },
+      { value: 'carica', label: t('Un gruppo, poi «Mostra altre»') },
+      { value: 'infinito', label: t('Un gruppo, poi le altre scorrendo') },
+      { value: 'pagine', label: t('A pagine') },
+    ], show: s => filtrabile(s) },
+    { key: 'per_pagina', label: t('Foto per gruppo o pagina'), type: 'number', min: 2, max: 60, step: 1,
+      show: s => filtrabile(s) && !!s.piu_foto },
 
     // ─── Lightbox (comportamento) ───
     { type: 'separator', label: t('Lightbox') },
@@ -567,6 +650,7 @@ export default {
       { value: 'torn', label: t('Strappata') },
       { value: 'tape', label: t('Nastro adesivo') },
       { value: 'inset', label: t('Interna') },
+      { value: 'pellicola', label: t('Pellicola') },
     ]},
     { key: 'frame_color', label: t('Colore cornice'), type: 'color',
       show: s => s.frame === 'polaroid' || s.frame === 'shadow-box' || s.frame === 'inset' },
@@ -598,7 +682,7 @@ export default {
     { type: 'typography', label: t('Mostra altro'), responsiveKeys: [], keys: { size: 'more_size', color: 'more_color' }, sizeMin: 16, sizeMax: 48, sizeStep: 2 },
 
     // ─── Testi sulle foto ───
-    { type: 'separator', label: t('Testi sulle foto'), show: s => schedaAccesa(s) },
+    { type: 'separator', label: t('Testi sulle foto'), show: s => schedaAccesa(s) || haTesti(s) },
     { type: 'typography', label: t('Titolo'), responsiveKeys: [],
       keys: { family: 'scheda_font', size: 'scheda_titolo_size', weight: 'scheda_peso', color: 'scheda_colore' },
       sizeMin: 12, sizeMax: 72, show: s => schedaAccesa(s) },
@@ -606,8 +690,44 @@ export default {
     { key: 'scheda_velo', label: t('Velo sotto i testi'), type: 'range', min: 0, max: 100, step: 5, unit: '%',
       show: s => schedaAccesa(s) && schedaSopra(s) && schema(s) !== 'elenco' },
     { key: 'scheda_sfondo', label: t('Sfondo dei testi'), type: 'color',
-      show: s => schedaAccesa(s) && s.scheda === 'sotto' && ['grid', 'masonry'].includes(schema(s)) },
+      show: s => schedaAccesa(s) && (s.scheda === 'riquadro' || (['sotto', 'biglietto'].includes(s.scheda) && ['grid', 'masonry'].includes(schema(s)))) },
+    { key: 'scheda_numero_formato', label: t('Formato del numero'), type: 'select', options: [
+      { value: '', label: '01' },
+      { value: 'su', label: '01 / 12' },
+      { value: 'n', label: t('N. 01 / 12') },
+      { value: 'semplice', label: '1' },
+    ], show: s => schedaAccesa(s) && !!s.scheda_numero },
+    { key: 'zona_titolo', label: t('Posizione del titolo'), type: 'select', options: ZONE, show: s => conZone(s),
+      description: t('Ogni parte della card può andare in una delle nove zone della foto: in alto, al centro o in basso, a sinistra, al centro o a destra. «Come lo schema» la lascia dov’è.') },
+    { key: 'zona_sottotitolo', label: t('Posizione del sottotitolo'), type: 'select', options: ZONE, show: s => conZone(s) },
+    { key: 'zona_testo', label: t('Posizione del testo'), type: 'select', options: ZONE, show: s => conZone(s) },
+    { key: 'zona_categoria', label: t('Posizione della categoria'), type: 'select', options: ZONE, show: s => conZone(s) },
+    { key: 'zona_numero', label: t('Posizione del numero'), type: 'select', options: ZONE, show: s => conZone(s) },
+    { key: 'zona_pulsante', label: t('Posizione del pulsante'), type: 'select', options: ZONE, show: s => conZone(s) },
+    { key: 'zona_icona', label: t('Posizione dell’icona'), type: 'select', options: ZONE, show: s => conZone(s) },
     { key: 'scheda_padding', label: t('Padding testi'), type: 'spacing', max: 64, show: s => schedaAccesa(s) },
+    { key: 'scheda_anima', label: t('Entrata dei testi'), type: 'select', options: [
+      { value: '', label: t('Tutti insieme') },
+      { value: 'sale', label: t('Uno alla volta, dal basso') },
+      { value: 'lato', label: t('Uno alla volta, da sinistra') },
+      { value: 'maschera', label: t('Uno alla volta, si svelano') },
+      { value: 'scala', label: t('Uno alla volta, si ingrandiscono') },
+      { value: 'sfuma', label: t('Uno alla volta, sfumano') },
+    ], show: s => (schedaAccesa(s) && schema(s) !== 'elenco') || haTesti(s),
+      description: t('Categoria, numero, titolo, sottotitolo, testo e pulsante arrivano uno dopo l’altro quando la foto entra nello schermo, o al passaggio se i testi compaiono così. Con «riduci movimento» del sistema non si muove niente.') },
+
+    // ─── Card di testo ───
+    { type: 'separator', label: t('Card di testo'), show: s => haTesti(s) },
+    { key: 'testo_sfondo', label: t('Sfondo delle card di testo'), type: 'color', show: s => haTesti(s) },
+
+    // ─── Colore di ogni voce (specchio di Media: stesse voci, solo il colore) ───
+    { type: 'separator', label: t('Colore delle voci'), show: s => Array.isArray(s.images) && s.images.length > 0 && !s.social },
+    { key: 'images', type: 'content-items', label: t('Voci'), itemLabel: t('Voce'), etichettaDa: 'caption', miniaturaDa: 'url',
+      show: s => Array.isArray(s.images) && s.images.length > 0 && !s.social,
+      description: t('Un colore per ogni foto o card: tinge la cornice, la categoria, il numero, il pulsante, il biglietto e il fondo delle card di testo. Vuoto = il colore della galleria.'),
+      itemFields: [
+        { key: 'colore', label: t('Colore'), type: 'color' },
+      ] },
 
     // ─── Filtri ───
     { type: 'separator', label: t('Filtri'), show: s => filtrabile(s) && !!s.filtri },
@@ -615,6 +735,7 @@ export default {
       { value: 'pillole', label: t('Pillole') },
       { value: 'contorno', label: t('Contorno') },
       { value: 'sottolineato', label: t('Sottolineato') },
+      { value: 'menu', label: t('Menu a tendina') },
     ], show: s => filtrabile(s) && !!s.filtri },
     { key: 'filtri_allinea', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
@@ -662,7 +783,16 @@ export default {
     }},
     { key: 'columns', label: t('Colonne'), type: 'range', min: 2, max: 6, step: 1,
       show: s => !(s.layout && s.layout.startsWith('strip')) && s.layout !== 'elenco' },
+    { key: 'large_columns', label: t('Colonne schermi grandi'), type: 'range', min: 1, max: 8, step: 1,
+      show: s => ['grid', 'diagonal', 'masonry'].includes(s.layout || 'grid'),
+      description: t('Da 1400 px in su (monitor grandi); vuoto = come al computer.') },
+    { key: 'tablet_columns', label: t('Colonne tablet'), type: 'range', min: 1, max: 6, step: 1,
+      show: s => ['grid', 'diagonal', 'masonry'].includes(s.layout || 'grid'),
+      description: t('Fra il telefono e il computer (da 640 a 1199 px); vuoto = come al computer.') },
     { key: 'mobile_columns', label: t('Colonne mobile'), type: 'range', min: 1, max: 4, step: 1,
       show: s => !(s.layout && s.layout.startsWith('strip')) && s.layout !== 'elenco' },
+    { key: 'small_columns', label: t('Colonne telefoni piccoli'), type: 'range', min: 1, max: 4, step: 1,
+      show: s => ['grid', 'diagonal', 'masonry'].includes(s.layout || 'grid'),
+      description: t('Sotto i 480 px; vuoto = come le colonne mobile.') },
   ],
 };

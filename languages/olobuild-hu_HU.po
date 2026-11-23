@@ -3561,3 +3561,426 @@ msgstr "Szűrés kategória szerint"
 
 msgid "Ritardo fra le foto"
 msgstr "Késleltetés a fotók között"
+
+#: licenza-1.4.1345
+msgid "1 foto"
+msgstr "1 fotó"
+
+msgid "%d foto"
+msgstr "%d fotó"
+
+msgid "Mostra altre (%d)"
+msgstr "Továbbiak (%d)"
+
+msgid "Anteprima video"
+msgstr "Videó előnézet"
+
+msgid "Avanzamento galleria"
+msgstr "Galéria haladása"
+
+msgid "Vai alla foto"
+msgstr "Ugrás a fotóhoz"
+
+msgid "Ordina"
+msgstr "Rendezés"
+
+msgid "Ordine della galleria"
+msgstr "Galéria sorrendje"
+
+msgid "Titolo dalla A alla Z"
+msgstr "Cím A–Z"
+
+msgid "Titolo dalla Z alla A"
+msgstr "Cím Z–A"
+
+msgid "Testo crescente (anni, prezzi…)"
+msgstr "Szöveg növekvő (évek, árak…)"
+
+msgid "Testo decrescente"
+msgstr "Szöveg csökkenő"
+
+msgid "Pagine della galleria"
+msgstr "Galéria oldalai"
+
+msgid "WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento."
+msgstr "A WooCommerce nem aktív. Telepítsd és kapcsold be a WooCommerce-t az elem használatához."
+
+msgid "Filtra"
+msgstr "Szűrés"
+
+msgid "Filtri attivi"
+msgstr "Aktív szűrők"
+
+msgid "Solo prodotti disponibili"
+msgstr "Csak elérhető termékek"
+
+msgid "Solo prodotti in offerta"
+msgstr "Csak akciós termékek"
+
+msgid "Come nel negozio"
+msgstr "Ahogy a boltban"
+
+msgid "Più venduti"
+msgstr "Legnépszerűbb"
+
+msgid "Più votati"
+msgstr "Legjobbra értékelt"
+
+msgid "Prezzo crescente"
+msgstr "Ár szerint növekvő"
+
+msgid "Prezzo decrescente"
+msgstr "Ár szerint csökkenő"
+
+msgid "Nome dalla A alla Z"
+msgstr "Név A–Z"
+
+msgid "Prezzo min"
+msgstr "Minimális ár"
+
+msgid "Prezzo max"
+msgstr "Maximális ár"
+
+msgid "Solo disponibili"
+msgstr "Csak elérhetők"
+
+msgid "In offerta"
+msgstr "Akciós"
+
+msgid "Nessun prodotto in saldo"
+msgstr "Nincs leárazott termék"
+
+msgid "Nessun prodotto trovato"
+msgstr "Nincs találat"
+
+msgid "1 prodotto"
+msgstr "1 termék"
+
+msgid "%d prodotti"
+msgstr "%d termék"
+
+msgid "carosello"
+msgstr "körhinta"
+
+msgid "Seleziona opzioni"
+msgstr "Opciók kiválasztása"
+
+msgid "Aggiunto!"
+msgstr "Hozzáadva!"
+
+msgid "Confronta"
+msgstr "Összehasonlítás"
+
+msgid "Vai al gruppo"
+msgstr "Ugrás a csoporthoz"
+
+msgid "Colori disponibili"
+msgstr "Elérhető színek"
+
+msgid "Vista rapida prodotto"
+msgstr "Termék gyorsnézete"
+
+msgid "Errore nel caricamento."
+msgstr "Betöltési hiba."
+
+msgid "Mostra immagine: %s"
+msgstr "Kép megjelenítése: %s"
+
+msgid "Valutazione %s su 5"
+msgstr "Értékelés: %s / 5"
+
+msgid "Vedi dettagli completi"
+msgstr "Részletek megtekintése"
+
+msgid "Non è stato possibile aggiungerlo: riprova"
+msgstr "Nem sikerült hozzáadni: próbáld újra"
+
+msgid "Questa combinazione non c’è"
+msgstr "Ez a kombináció nem létezik"
+
+msgid "Uno in meno"
+msgstr "Eggyel kevesebb"
+
+msgid "Uno in più"
+msgstr "Eggyel több"
+
+msgid "Il testo di un pulsante sotto i testi della foto (vuoto = niente pulsante). Porta dove porta la foto: il suo link o la lightbox."
+msgstr "Egy gomb szövege a fotó szövegei alatt (üres = nincs gomb). Oda visz, ahová a fotó: a linkjére vagy a lightboxba."
+
+msgid "Filtri, ricerca e pagine"
+msgstr "Szűrők, keresés és oldalak"
+
+msgid "Link ai filtri"
+msgstr "Linkek a szűrőkhöz"
+
+msgid "L’indirizzo della pagina ricorda il filtro scelto (…#filtro=categoria): copiandolo, o mettendolo in un pulsante o nel menu, la galleria si apre già filtrata."
+msgstr "Az oldal címe megjegyzi a választott szűrőt (…#filtro=kategória): ha kimásolod, vagy gombba, menübe teszed, a galéria már szűrve nyílik meg."
+
+msgid "Una casella che tiene solo le foto col testo cercato nel titolo, nel sottotitolo, nel testo o nella categoria."
+msgstr "Egy mező, amely csak azokat a fotókat hagyja meg, amelyek címében, alcímében, szövegében vagy kategóriájában szerepel a keresett szöveg."
+
+msgid "Testo della casella"
+msgstr "A mező szövege"
+
+msgid "Ordinamento"
+msgstr "Rendezés"
+
+msgid "Un menu per mettere le foto in ordine di titolo o di testo (anni, prezzi), crescente o decrescente."
+msgstr "Menü a fotók cím vagy szöveg (évek, árak) szerinti rendezéséhez, növekvő vagy csökkenő sorrendben."
+
+msgid "Foto da mostrare"
+msgstr "Megjelenített fotók"
+
+msgid "Tutte subito"
+msgstr "Mind egyszerre"
+
+msgid "Un gruppo, poi «Mostra altre»"
+msgstr "Egy csoport, aztán „Továbbiak”"
+
+msgid "A pagine"
+msgstr "Oldalanként"
+
+msgid "Foto per gruppo o pagina"
+msgstr "Fotó csoportonként vagy oldalanként"
+
+msgid "Menu a tendina"
+msgstr "Legördülő menü"
+
+msgid "Fra il telefono e il computer (da 640 a 1199 px); vuoto = come al computer."
+msgstr "A telefon és a számítógép között (640–1199 px); üres = mint számítógépen."
+
+msgid "Filtro disponibilità"
+msgstr "Elérhetőségi szűrő"
+
+msgid "Filtro «In offerta»"
+msgstr "„Akciós” szűrő"
+
+msgid "Ordinamento per chi visita"
+msgstr "Rendezés a látogatóknak"
+
+msgid "Un menu «Ordina» (più recenti, più venduti, prezzo, nome): la tile Prodotti WC della pagina mostra i prodotti nell’ordine scelto."
+msgstr "Egy „Rendezés” menü (legújabb, legnépszerűbb, ár, név): az oldal WC termékek tile-ja a választott sorrendben mutatja a termékeket."
+
+msgid "Pallini dei colori"
+msgstr "Színpöttyök"
+
+msgid "Sotto il prezzo dei prodotti a varianti un pallino per ogni colore; passandoci sopra la foto mostra quel colore. Il colore viene da un plugin dei colori, se c’è, o dal nome (Nero, Blu navy, Cognac…)."
+msgstr "A változatos termékek ára alatt minden színhez egy pötty; rámutatva a fotó azt a színt mutatja. A szín egy színbővítményből jön, ha van, vagy a névből (Fekete, Tengerészkék, Konyak…)."
+
+msgid "Quanti prodotti"
+msgstr "Termékek száma"
+
+msgid "Sopra la griglia il numero dei prodotti trovati, anche dopo i filtri."
+msgstr "A rács fölött a talált termékek száma, szűrés után is."
+
+#: licenza-1.4.1345
+msgid "Un gruppo, poi le altre scorrendo"
+msgstr "Egy csoport, aztán a többi görgetéskor"
+
+#: licenza-1.4.1345
+msgid "Nessun contenuto dalla fonte social: controlla il canale o l’indirizzo. Questo avviso lo vede solo chi modifica il sito."
+msgstr "Nem érkezett tartalom a közösségi forrásból: ellenőrizd a csatornát vagy a címet. Ezt az üzenetet csak a webhely szerkesztői látják."
+
+msgid "Azzera i filtri"
+msgstr "Szűrők törlése"
+
+msgid "Quello del contenuto aperto"
+msgstr "A megnyitott tartalomé"
+
+msgid "Card di testo"
+msgstr "Szöveges kártya"
+
+msgid "Testo grande (citazione, annuncio)..."
+msgstr "Nagy szöveg (idézet, hirdetmény)..."
+
+msgid "Firma..."
+msgstr "Aláírás..."
+
+msgid "Una card senza foto, coi testi su un fondo colorato (citazioni, annunci)"
+msgstr "Fotó nélküli kártya, a szöveg színes háttéren (idézetek, hirdetmények)"
+
+msgid "Foto da un social"
+msgstr "Fotók egy közösségi oldalról"
+
+msgid "Fonte"
+msgstr "Forrás"
+
+msgid "Le foto di «Media»"
+msgstr "A „Média” fotói"
+
+msgid "YouTube (canale, @nome o playlist)"
+msgstr "YouTube (csatorna, @név vagy lejátszási lista)"
+
+msgid "Vimeo (utente o canale)"
+msgstr "Vimeo (felhasználó vagy csatorna)"
+
+msgid "Flickr (utente o tag)"
+msgstr "Flickr (felhasználó vagy címkék)"
+
+msgid "Pinterest (profilo o bacheca)"
+msgstr "Pinterest (profil vagy tábla)"
+
+msgid "Instagram (account di OLOsocial)"
+msgstr "Instagram (OLOsocial-fiók)"
+
+msgid "Feed RSS"
+msgstr "RSS-hírcsatorna"
+
+msgid "Le foto o i video arrivano dal social e si aggiornano da soli ogni ora; quelli di «Media» restano salvati ma non si mostrano. YouTube, Vimeo, Flickr, Pinterest e i feed RSS non chiedono chiavi; Instagram usa l’account collegato in OLOsocial."
+msgstr "A fotók vagy videók a közösségi oldalról jönnek, és óránként maguktól frissülnek; a „Média” elemei megmaradnak, de nem jelennek meg. A YouTube, a Vimeo, a Flickr, a Pinterest és az RSS nem kér kulcsot; az Instagram az OLOsocialban összekapcsolt fiókot használja."
+
+msgid "Canale, account o indirizzo"
+msgstr "Csatorna, fiók vagy cím"
+
+msgid "YouTube: @nome, indirizzo del canale o della playlist. Vimeo: nome utente o channels/nome. Flickr: l’id utente (12345678@N00) o dei tag. Pinterest: nome o nome/bacheca. Instagram: @nome (vuoto = il primo account collegato). RSS: l’indirizzo del feed."
+msgstr "YouTube: @név, a csatorna vagy a lejátszási lista címe. Vimeo: felhasználónév vagy channels/név. Flickr: a felhasználói azonosító (12345678@N00) vagy címkék. Pinterest: név vagy név/tábla. Instagram: @név (üres = az első összekapcsolt fiók). RSS: a hírcsatorna címe."
+
+msgid "Quante"
+msgstr "Hány"
+
+msgid "Apri sul social"
+msgstr "Megnyitás a közösségi oldalon"
+
+msgid "Il clic porta al post sul social invece di aprire la lightbox."
+msgstr "A kattintás a közösségi bejegyzéshez visz a lightbox helyett."
+
+msgid "Accanto alla foto (biglietto)"
+msgstr "A fotó mellett (jegy)"
+
+msgid "«Sotto la foto» e «Accanto alla foto» valgono per gli schemi Griglia e Masonry; negli altri i testi vanno sulla foto. Nel biglietto il testo della foto diventa la scritta grande (per esempio «20 mag sab»): accendi «Mostra il testo»."
+msgstr "A „Fotó alatt” és a „Fotó mellett” a Rács és a Masonry elrendezésnél működik; a többinél a szöveg a fotóra kerül. A jegyen a fotó szövege lesz a nagy felirat (például „máj 20 szo”): kapcsold be a „Szöveg megjelenítése” opciót."
+
+msgid "Sopra la galleria un pulsante per ogni categoria e «Tutti»: cliccando, restano le foto di quella categoria e la galleria si riordina. La categoria si scrive sotto ogni foto in «Media»; più categorie si separano con la virgola. Per più gruppi che si combinano scrivi «Gruppo: valore», per esempio «Tipo: Guida, Livello: Base»: sopra la galleria compare una fila per gruppo."
+msgstr "A galéria fölött minden kategóriának egy gomb és „Összes”: kattintásra az adott kategória fotói maradnak, és a galéria átrendeződik. A kategóriát a „Média” részben minden fotó alá írd; több kategóriát vesszővel válassz el. Több, egymással kombinálható csoporthoz írd: „Csoport: érték”, például „Típus: Útmutató, Szint: Alap”: a galéria fölött csoportonként egy sor jelenik meg."
+
+msgid "Entrata dei testi"
+msgstr "Szövegek megjelenése"
+
+msgid "Uno alla volta, dal basso"
+msgstr "Egyenként, alulról"
+
+msgid "Uno alla volta, da sinistra"
+msgstr "Egyenként, balról"
+
+msgid "Uno alla volta, si svelano"
+msgstr "Egyenként, felfedve"
+
+msgid "Uno alla volta, si ingrandiscono"
+msgstr "Egyenként, nagyodva"
+
+msgid "Uno alla volta, sfumano"
+msgstr "Egyenként, beúszva"
+
+msgid "Categoria, numero, titolo, sottotitolo, testo e pulsante arrivano uno dopo l’altro quando la foto entra nello schermo, o al passaggio se i testi compaiono così. Con «riduci movimento» del sistema non si muove niente."
+msgstr "A kategória, a szám, a cím, az alcím, a szöveg és a gomb egymás után érkezik, amikor a fotó a képernyőre ér, vagy rámutatáskor, ha a szöveg így jelenik meg. A rendszer „mozgás csökkentése” beállításával semmi sem mozog."
+
+msgid "Sfondo delle card di testo"
+msgstr "Szöveges kártyák háttere"
+
+msgid "Colore delle voci"
+msgstr "Elemek színe"
+
+msgid "Un colore per ogni foto o card: tinge la cornice, la categoria, il numero, il pulsante, il biglietto e il fondo delle card di testo. Vuoto = il colore della galleria."
+msgstr "Szín minden fotóhoz vagy kártyához: megszínezi a keretet, a kategóriát, a számot, a gombot, a jegyet és a szöveges kártyák hátterét. Üres = a galéria színe."
+
+msgid "Filtra senza ricaricare la pagina"
+msgstr "Szűrés az oldal újratöltése nélkül"
+
+msgid "Scelto un filtro, la griglia Prodotti WC della pagina si aggiorna sul posto e l’indirizzo ricorda i filtri. Se nella pagina non c’è una griglia da aggiornare, la pagina si ricarica come prima."
+msgstr "Szűrő választása után az oldal WC termékek rácsa helyben frissül, a cím pedig megjegyzi a szűrőket. Ha nincs frissíthető rács az oldalon, az oldal a korábbiak szerint újratöltődik."
+
+#: licenza-1.4.1345
+msgid "N."
+msgstr "Sz."
+
+msgid "Come lo schema"
+msgstr "Az elrendezés szerint"
+
+msgid "In alto al centro"
+msgstr "Fent középen"
+
+msgid "Al centro a sinistra"
+msgstr "Középen balra"
+
+msgid "Al centro a destra"
+msgstr "Középen jobbra"
+
+msgid "In basso al centro"
+msgstr "Lent középen"
+
+msgid "Facebook (pagina di OLOsocial)"
+msgstr "Facebook (OLOsocial-oldal)"
+
+msgid "Le foto o i video arrivano dal social e si aggiornano da soli ogni ora; quelli di «Media» restano salvati ma non si mostrano. YouTube, Vimeo, Flickr, Pinterest e i feed RSS non chiedono chiavi; Instagram e Facebook usano gli account collegati in OLOsocial."
+msgstr "A fotók vagy videók a közösségi oldalról jönnek, és óránként maguktól frissülnek; a „Média” elemei megmaradnak, de nem jelennek meg. A YouTube, a Vimeo, a Flickr, a Pinterest és az RSS nem kér kulcsot; az Instagram és a Facebook az OLOsocialban összekapcsolt fiókokat használja."
+
+msgid "YouTube: @nome, indirizzo del canale o della playlist. Vimeo: nome utente o channels/nome. Flickr: l’id utente (12345678@N00) o dei tag. Pinterest: nome o nome/bacheca. Instagram e Facebook: @nome o nome della pagina (vuoto = il primo account collegato in OLOsocial). RSS: l’indirizzo del feed."
+msgstr "YouTube: @név, a csatorna vagy a lejátszási lista címe. Vimeo: felhasználónév vagy channels/név. Flickr: a felhasználói azonosító (12345678@N00) vagy címkék. Pinterest: név vagy név/tábla. Instagram és Facebook: @név vagy az oldal neve (üres = az első OLOsocialban összekapcsolt fiók). RSS: a hírcsatorna címe."
+
+msgid "Sulla foto, in un riquadro"
+msgstr "A fotón, egy dobozban"
+
+msgid "Formato del numero"
+msgstr "Számformátum"
+
+msgid "N. 01 / 12"
+msgstr "Sz. 01 / 12"
+
+msgid "Posizione del titolo"
+msgstr "A cím helye"
+
+msgid "Ogni parte della card può andare in una delle nove zone della foto: in alto, al centro o in basso, a sinistra, al centro o a destra. «Come lo schema» la lascia dov’è."
+msgstr "A kártya minden része a fotó kilenc zónájának egyikébe kerülhet: fent, középen vagy lent, balra, középen vagy jobbra. Az „Az elrendezés szerint” a helyén hagyja."
+
+msgid "Posizione del sottotitolo"
+msgstr "Az alcím helye"
+
+msgid "Posizione della categoria"
+msgstr "A kategória helye"
+
+msgid "Posizione del numero"
+msgstr "A szám helye"
+
+msgid "Posizione del pulsante"
+msgstr "A gomb helye"
+
+msgid "Posizione dell’icona"
+msgstr "Az ikon helye"
+
+msgid "Card in evidenza"
+msgstr "Kiemelt kártya"
+
+msgid "La prima, grande (2 × 2)"
+msgstr "Az első, nagy (2 × 2)"
+
+msgid "Al computer la prima card occupa due colonne e due righe, con la foto grande: il prodotto da mettere in vetrina. Sul tablet e sul telefono torna come le altre."
+msgstr "Számítógépen az első kártya két oszlopot és két sort foglal el nagy fotóval: a kirakatba szánt termék. Tableten és telefonon olyan, mint a többi."
+
+#: licenza-1.4.1345
+msgid "Ordine casuale"
+msgstr "Véletlen sorrend"
+
+msgid "Più valori insieme"
+msgstr "Több érték egyszerre"
+
+msgid "In ogni gruppo si possono accendere più valori insieme: restano le foto che ne hanno almeno uno (Guida o Modello). Gruppi diversi restano combinati (Guida o Modello, e di livello Base). Vale coi filtri a pulsanti."
+msgstr "Minden csoportban több érték is bekapcsolható egyszerre: azok a fotók maradnak, amelyeknek legalább az egyik megvan (Útmutató vagy Sablon). A különböző csoportok továbbra is kombinálódnak (Útmutató vagy Sablon, és Alap szint). Gombos szűrőkkel működik."
+
+msgid "Mescola a ogni visita"
+msgstr "Keverés minden látogatáskor"
+
+msgid "Le foto escono in un ordine diverso a ogni visita. Con l’«Ordinamento» acceso, chi visita può rimetterle in ordine."
+msgstr "A fotók minden látogatáskor más sorrendben jelennek meg. Bekapcsolt „Rendezés” mellett a látogatók visszarendezhetik őket."
+
+#: licenza-1.4.1345
+msgid "Colonne schermi grandi"
+msgstr "Oszlopok nagy képernyőn"
+
+msgid "Da 1400 px in su (monitor grandi); vuoto = come al computer."
+msgstr "1400 px-től felfelé (nagy monitorok); üres = mint számítógépen."
+
+msgid "Colonne telefoni piccoli"
+msgstr "Oszlopok kis telefonon"
+
+msgid "Sotto i 480 px; vuoto = come le colonne mobile."
+msgstr "480 px alatt; üres = mint a mobil oszlopok."
