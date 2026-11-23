@@ -54018,3 +54018,276 @@ msgstr "Upgrade to Pro"
 #: licenza-1.4.1345
 msgid "Free e Pro"
 msgstr "Free and Pro"
+
+#: licenza-1.4.1345
+msgid "Con OLObuild Pro"
+msgstr "With OLObuild Pro"
+
+msgid "%1$s non fa parte di OLObuild Free: lo hai con OLObuild Pro o con la licenza di %2$s."
+msgstr "%1$s isn’t part of OLObuild Free: you get it with OLObuild Pro or with a %2$s license."
+
+#: licenza-1.4.1345
+msgid "Sfondo della slide"
+msgstr "Slide background"
+
+msgid "segue lo scorrimento"
+msgstr "follows the scroll"
+
+msgid "Trascina per vedere come si muovono i livelli mentre la pagina scorre: 0% è l’inizio, 100% la fine del tratto dello slider. ▶ fa vedere tutto il movimento. Per spostare e modificare i livelli torna alla vista ferma con ×."
+msgstr "Drag to see how the layers move while the page scrolls: 0% is the start, 100% the end of the slider’s stretch. ▶ plays the whole movement. To move and edit the layers, go back to the still view with ×."
+
+msgid "Anteprima dello scorrimento"
+msgstr "Scroll preview"
+
+msgid "Guarda il movimento"
+msgstr "Watch the movement"
+
+msgid "ferma"
+msgstr "still"
+
+msgid "Torna alla vista ferma"
+msgstr "Back to the still view"
+
+msgid "Stato dei livelli"
+msgstr "Layer state"
+
+msgid "Alcuni livelli si vedono solo in uno stato (◐ nella barra dei livelli), che cambia quando si clicca un altro livello. «Come all’avvio» mostra lo slider come lo vede chi apre la pagina; scegli uno stato per vedere solo i suoi livelli; «Tutti i livelli insieme» li mostra uno sopra l’altro, per modificarli."
+msgstr "Some layers show only in one state (◐ in the layer bar), which changes when another layer is clicked. «As at start» shows the slider the way visitors see it when they open the page; pick a state to see only its layers; «All layers together» shows them one on top of the other, to edit them."
+
+msgid "Anteprima degli stati"
+msgstr "States preview"
+
+msgid "In questa slide"
+msgstr "In this slide"
+
+msgid "Quanti livelli fanno qualcosa, e cosa. Nella barra dei livelli lo stesso bollino dice quali: ↕ scorrendo, ⏱ linea del tempo, Aa lettere, ◐ stato, ☝ clic, ∞ continuo, {} CSS, ▭ solo su alcuni schermi. Passa il puntatore su un bollino per leggerlo."
+msgstr "How many layers do something, and what. In the layer bar the same badge tells which ones: ↕ scrolling, ⏱ timeline, Aa letters, ◐ state, ☝ click, ∞ continuous, {} CSS, ▭ only on some screens. Hover over a badge to read it."
+
+msgid "Cosa succede in questa slide"
+msgstr "What happens in this slide"
+
+msgid "Come all’avvio"
+msgstr "As at start"
+
+msgid "Tutti i livelli insieme"
+msgstr "All layers together"
+
+msgid "si muovono scorrendo"
+msgstr "move when scrolling"
+
+msgid "con linea del tempo"
+msgstr "with a timeline"
+
+msgid "entrano lettera per lettera"
+msgstr "come in letter by letter"
+
+msgid "legati a uno stato"
+msgstr "tied to a state"
+
+msgid "cliccabili"
+msgstr "clickable"
+
+msgid "da pulire col puntatore"
+msgstr "to wipe with the pointer"
+
+msgid "in movimento continuo"
+msgstr "in continuous motion"
+
+msgid "in parallasse"
+msgstr "in parallax"
+
+msgid "con CSS su misura"
+msgstr "with custom CSS"
+
+msgid "solo su alcuni schermi"
+msgstr "only on some screens"
+
+msgid "Nome del livello"
+msgstr "Layer name"
+
+msgid "Serve solo a te, per riconoscere il livello nella barra dei livelli: sul sito non si vede. Vuoto, il livello prende il nome dal suo testo o dal file."
+msgstr "It is just for you, to recognize the layer in the layer bar: it doesn’t show on the site. If empty, the layer takes its name from its text or file."
+
+msgid "Cosa mostra l’immagine (per chi non la vede)"
+msgstr "What the image shows (for those who can’t see it)"
+
+msgid "Tappe del percorso"
+msgstr "Path stages"
+
+msgid "Ogni tappa dice com’è il livello a quel punto del suo tratto (0% = inizio, 100% = fine); fra una tappa e l’altra il livello passa da un valore all’altro. Clicca una tappa per vederla sulla tela e cambiarla: la tela va a quel punto dello scorrimento."
+msgstr "Each stage says how the layer looks at that point of its stretch (0% = start, 100% = end); between one stage and the next the layer moves from one value to the other. Click a stage to see it on the canvas and change it: the canvas jumps to that point of the scroll."
+
+msgid "Elimina tappa"
+msgstr "Delete stage"
+
+msgid "A che punto del tratto"
+msgstr "Point along the stretch"
+
+msgid "Non muovere più questa proprietà"
+msgstr "Stop moving this property"
+
+msgid "+ Muovi anche…"
+msgstr "+ Also move…"
+
+msgid "com’è sulla tela"
+msgstr "as on the canvas"
+
+msgid "Si muove scorrendo la pagina"
+msgstr "Moves as the page scrolls"
+
+msgid "tappe"
+msgstr "stages"
+
+msgid "Linea del tempo"
+msgstr "Timeline"
+
+msgid "fotogrammi chiave"
+msgstr "keyframes"
+
+msgid "Le lettere entrano una alla volta"
+msgstr "The letters come in one at a time"
+
+msgid "Si vede solo in uno stato"
+msgstr "Shows only in one state"
+
+msgid "Fa qualcosa al clic"
+msgstr "Does something on click"
+
+msgid "Si cancella passandoci sopra"
+msgstr "Wipes away when you move over it"
+
+msgid "Ha un CSS su misura (Avanzate)"
+msgstr "Has custom CSS (Advanced)"
+
+msgid "Nascosto all’avvio: lo mostra un altro livello al clic"
+msgstr "Hidden at start: another layer shows it on click"
+
+msgid "computer"
+msgstr "computer"
+
+msgid "notebook"
+msgstr "notebook"
+
+msgid "tablet"
+msgstr "tablet"
+
+msgid "telefono"
+msgstr "phone"
+
+msgid "Si vede solo su"
+msgstr "Shows only on"
+
+msgid "Non si vede su nessuno schermo"
+msgstr "Doesn’t show on any screen"
+
+msgid "Testo del pulsante che azzera"
+msgstr "Text of the reset button"
+
+msgid "Resetta"
+msgstr "Reset"
+
+msgid "Sfondo contatore"
+msgstr "Counter background"
+
+msgid "Colore contatore"
+msgstr "Counter color"
+
+msgid "Mostra lo sconto"
+msgstr "Show the discount"
+
+msgid "Sui prodotti in saldo, un bollino con la percentuale di sconto sulla foto."
+msgstr "On products on sale, a badge with the discount percentage on the photo."
+
+msgid "Sfondo bollino sconto"
+msgstr "Discount badge background"
+
+msgid "Nome del link"
+msgstr "Link name"
+
+msgid "es. Il mio account"
+msgstr "e.g. My account"
+
+msgid "Lo legge chi usa un lettore di schermo al posto dell’icona. Vuoto: il nome dell’icona."
+msgstr "Screen reader users hear it instead of the icon. If empty: the icon’s name."
+
+msgid "Lo spazio attorno al contenuto dell’hero. Se imposti il Padding del Contenitore, vale quello."
+msgstr "The space around the hero’s content. If you set the Container padding, that one applies."
+
+msgid "Proprietà CSS applicate direttamente al riquadro della tile, per esempio color: red; oppure transform: rotate(2deg);"
+msgstr "CSS properties applied directly to the tile’s box, for example color: red; or transform: rotate(2deg);"
+
+msgid "&quot;Foto interne&quot;: ogni immagine o video dentro la tile (gallerie, griglie) si inclina singolarmente."
+msgstr "&quot;Inner photos&quot;: each image or video inside the tile (galleries, grids) tilts on its own."
+
+msgid "Il cursore che segue il mouse in tutto il sito, al posto della freccia. Ogni pagina può sceglierne un altro in «Cursore di questa pagina». Su telefoni e tablet, e nel canvas del builder, resta quello di sistema; solo la Torcia resta anche su telefoni e tablet, con la luce ferma al centro dello schermo."
+msgstr "The cursor that follows the mouse across the whole site, instead of the arrow. Each page can choose a different one in «Cursor for this page». On phones and tablets, and in the builder canvas, the system one stays; only the Torch also stays on phones and tablets, with the light still in the middle of the screen."
+
+msgid "JavaScript eseguito sul sito, non nel builder. La variabile «el» contiene l'elemento della tile."
+msgstr "JavaScript run on the site, not in the builder. The variable «el» holds the tile’s element."
+
+msgid "Piena: la tile occupa tutta la riga della colonna, e il suo Allineamento la sposta a sinistra, al centro o a destra."
+msgstr "Full: the tile takes the whole row of the column, and its Alignment moves it left, center or right."
+
+msgid "Adattata: la tile è larga quanto il suo contenuto, e più tile adattate una dopo l'altra si affiancano sulla stessa riga (per esempio due pulsanti vicini). L'Allineamento della prima allinea tutta la fila."
+msgstr "Fitted: the tile is as wide as its content, and several fitted tiles one after another sit side by side on the same row (for example two buttons next to each other). The Alignment of the first aligns the whole row."
+
+#: licenza-1.4.1345
+msgid "Zoom lento (Ken Burns)"
+msgstr "Slow zoom (Ken Burns)"
+
+msgid "Spostamento orizzontale"
+msgstr "Horizontal offset"
+
+msgid "Spostamento verticale"
+msgstr "Vertical offset"
+
+msgid "Etichetta della scheda"
+msgstr "Tab label"
+
+msgid "Zoom al 100%"
+msgstr "Zoom to 100%"
+
+msgid "mp4 o indirizzo YouTube"
+msgstr "mp4 or YouTube address"
+
+msgid "mp3 o indirizzo dell’audio"
+msgstr "mp3 or audio address"
+
+msgid "Livello da mostrare o nascondere"
+msgstr "Layer to show or hide"
+
+msgid "Spaziatura lettere"
+msgstr "Letter spacing"
+
+msgid "Contorno del testo"
+msgstr "Text outline"
+
+msgid "Spessore del tratto"
+msgstr "Stroke width"
+
+msgid "Filtro sfondo"
+msgstr "Background filter"
+
+msgid "Ombra del testo"
+msgstr "Text shadow"
+
+msgid "Rivelazione a blocco"
+msgstr "Block reveal"
+
+msgid "Cursore del mouse"
+msgstr "Mouse cursor"
+
+msgid "Ritardo fra le lettere"
+msgstr "Delay between letters"
+
+msgid "Movimento continuo"
+msgstr "Continuous motion"
+
+msgid "Inclinazione orizzontale"
+msgstr "Horizontal skew"
+
+msgid "Percorso"
+msgstr "Path"
+
+msgid "Percorso SVG (d=\"\")"
+msgstr "SVG path (d=\"\")"

@@ -2534,3 +2534,276 @@ msgstr "Váltás Pro-ra"
 #: licenza-1.4.1345
 msgid "Free e Pro"
 msgstr "Free és Pro"
+
+#: licenza-1.4.1345
+msgid "Con OLObuild Pro"
+msgstr "Az OLObuild Pro-val"
+
+msgid "%1$s non fa parte di OLObuild Free: lo hai con OLObuild Pro o con la licenza di %2$s."
+msgstr "A(z) %1$s nem része az OLObuild Free-nek: az OLObuild Pro-val vagy a(z) %2$s licencével kapod meg."
+
+#: licenza-1.4.1345
+msgid "Sfondo della slide"
+msgstr "A dia háttere"
+
+msgid "segue lo scorrimento"
+msgstr "követi a görgetést"
+
+msgid "Trascina per vedere come si muovono i livelli mentre la pagina scorre: 0% è l’inizio, 100% la fine del tratto dello slider. ▶ fa vedere tutto il movimento. Per spostare e modificare i livelli torna alla vista ferma con ×."
+msgstr "Húzd, hogy lásd, hogyan mozognak a rétegek a lap görgetése közben: 0% a kezdet, 100% a slider szakaszának vége. ▶ lejátssza az egész mozgást. A rétegek mozgatásához és szerkesztéséhez térj vissza az álló nézethez a × gombbal."
+
+msgid "Anteprima dello scorrimento"
+msgstr "Görgetés előnézete"
+
+msgid "Guarda il movimento"
+msgstr "Mozgás megtekintése"
+
+msgid "ferma"
+msgstr "álló"
+
+msgid "Torna alla vista ferma"
+msgstr "Vissza az álló nézethez"
+
+msgid "Stato dei livelli"
+msgstr "Rétegek állapota"
+
+msgid "Alcuni livelli si vedono solo in uno stato (◐ nella barra dei livelli), che cambia quando si clicca un altro livello. «Come all’avvio» mostra lo slider come lo vede chi apre la pagina; scegli uno stato per vedere solo i suoi livelli; «Tutti i livelli insieme» li mostra uno sopra l’altro, per modificarli."
+msgstr "Néhány réteg csak egy állapotban látszik (◐ a rétegsávban), amely akkor változik, ha egy másik rétegre kattintanak. A «Mint induláskor» úgy mutatja a slidert, ahogy a lapot megnyitó látja; válassz egy állapotot, hogy csak annak rétegeit lásd; az «Összes réteg együtt» egymásra rakva mutatja őket, a szerkesztéshez."
+
+msgid "Anteprima degli stati"
+msgstr "Állapotok előnézete"
+
+msgid "In questa slide"
+msgstr "Ebben a diában"
+
+msgid "Quanti livelli fanno qualcosa, e cosa. Nella barra dei livelli lo stesso bollino dice quali: ↕ scorrendo, ⏱ linea del tempo, Aa lettere, ◐ stato, ☝ clic, ∞ continuo, {} CSS, ▭ solo su alcuni schermi. Passa il puntatore su un bollino per leggerlo."
+msgstr "Hány réteg csinál valamit, és mit. A rétegsávban ugyanez a jelvény mutatja, melyek: ↕ görgetéskor, ⏱ idővonal, Aa betűk, ◐ állapot, ☝ kattintás, ∞ folyamatos, {} CSS, ▭ csak néhány képernyőn. Vidd a mutatót egy jelvény fölé, hogy elolvasd."
+
+msgid "Cosa succede in questa slide"
+msgstr "Mi történik ebben a diában"
+
+msgid "Come all’avvio"
+msgstr "Mint induláskor"
+
+msgid "Tutti i livelli insieme"
+msgstr "Összes réteg együtt"
+
+msgid "si muovono scorrendo"
+msgstr "görgetéskor mozognak"
+
+msgid "con linea del tempo"
+msgstr "idővonallal"
+
+msgid "entrano lettera per lettera"
+msgstr "betűről betűre érkeznek"
+
+msgid "legati a uno stato"
+msgstr "állapothoz kötve"
+
+msgid "cliccabili"
+msgstr "kattinthatók"
+
+msgid "da pulire col puntatore"
+msgstr "mutatóval letörölhetők"
+
+msgid "in movimento continuo"
+msgstr "folyamatos mozgásban"
+
+msgid "in parallasse"
+msgstr "parallaxszal"
+
+msgid "con CSS su misura"
+msgstr "egyedi CSS-sel"
+
+msgid "solo su alcuni schermi"
+msgstr "csak néhány képernyőn"
+
+msgid "Nome del livello"
+msgstr "Réteg neve"
+
+msgid "Serve solo a te, per riconoscere il livello nella barra dei livelli: sul sito non si vede. Vuoto, il livello prende il nome dal suo testo o dal file."
+msgstr "Csak neked szól, hogy felismerd a réteget a rétegsávban: az oldalon nem látszik. Ha üres, a réteg a szövegéből vagy a fájljából kap nevet."
+
+msgid "Cosa mostra l’immagine (per chi non la vede)"
+msgstr "Mit mutat a kép (annak, aki nem látja)"
+
+msgid "Tappe del percorso"
+msgstr "Az út állomásai"
+
+msgid "Ogni tappa dice com’è il livello a quel punto del suo tratto (0% = inizio, 100% = fine); fra una tappa e l’altra il livello passa da un valore all’altro. Clicca una tappa per vederla sulla tela e cambiarla: la tela va a quel punto dello scorrimento."
+msgstr "Minden állomás megmondja, milyen a réteg a szakasza adott pontján (0% = kezdet, 100% = vég); két állomás között a réteg egyik értékből a másikba megy át. Kattints egy állomásra, hogy lásd a vásznon és módosítsd: a vászon a görgetés adott pontjára ugrik."
+
+msgid "Elimina tappa"
+msgstr "Állomás törlése"
+
+msgid "A che punto del tratto"
+msgstr "Pont a szakaszon"
+
+msgid "Non muovere più questa proprietà"
+msgstr "Ne mozogjon többé ez a tulajdonság"
+
+msgid "+ Muovi anche…"
+msgstr "+ Mozogjon még…"
+
+msgid "com’è sulla tela"
+msgstr "mint a vásznon"
+
+msgid "Si muove scorrendo la pagina"
+msgstr "A lap görgetésekor mozog"
+
+msgid "tappe"
+msgstr "állomás"
+
+msgid "Linea del tempo"
+msgstr "Idővonal"
+
+msgid "fotogrammi chiave"
+msgstr "kulcskocka"
+
+msgid "Le lettere entrano una alla volta"
+msgstr "A betűk egyenként érkeznek"
+
+msgid "Si vede solo in uno stato"
+msgstr "Csak egy állapotban látszik"
+
+msgid "Fa qualcosa al clic"
+msgstr "Kattintásra csinál valamit"
+
+msgid "Si cancella passandoci sopra"
+msgstr "Áthúzva letörlődik"
+
+msgid "Ha un CSS su misura (Avanzate)"
+msgstr "Egyedi CSS-e van (Haladó)"
+
+msgid "Nascosto all’avvio: lo mostra un altro livello al clic"
+msgstr "Induláskor rejtett: egy másik réteg kattintásra megmutatja"
+
+msgid "computer"
+msgstr "számítógép"
+
+msgid "notebook"
+msgstr "laptop"
+
+msgid "tablet"
+msgstr "tablet"
+
+msgid "telefono"
+msgstr "telefon"
+
+msgid "Si vede solo su"
+msgstr "Csak itt látszik:"
+
+msgid "Non si vede su nessuno schermo"
+msgstr "Egyik képernyőn sem látszik"
+
+msgid "Testo del pulsante che azzera"
+msgstr "A visszaállító gomb szövege"
+
+msgid "Resetta"
+msgstr "Visszaállítás"
+
+msgid "Sfondo contatore"
+msgstr "Számláló háttere"
+
+msgid "Colore contatore"
+msgstr "Számláló színe"
+
+msgid "Mostra lo sconto"
+msgstr "Kedvezmény mutatása"
+
+msgid "Sui prodotti in saldo, un bollino con la percentuale di sconto sulla foto."
+msgstr "Akciós termékeknél egy jelvény a kedvezmény százalékával a fotón."
+
+msgid "Sfondo bollino sconto"
+msgstr "Kedvezményjelvény háttere"
+
+msgid "Nome del link"
+msgstr "Hivatkozás neve"
+
+msgid "es. Il mio account"
+msgstr "pl. Fiókom"
+
+msgid "Lo legge chi usa un lettore di schermo al posto dell’icona. Vuoto: il nome dell’icona."
+msgstr "Ezt hallja az ikon helyett, aki képernyőolvasót használ. Üresen: az ikon neve."
+
+msgid "Lo spazio attorno al contenuto dell’hero. Se imposti il Padding del Contenitore, vale quello."
+msgstr "A hero tartalma körüli tér. Ha beállítod a Tároló paddingját, az érvényes."
+
+msgid "Proprietà CSS applicate direttamente al riquadro della tile, per esempio color: red; oppure transform: rotate(2deg);"
+msgstr "Közvetlenül a csempe keretére alkalmazott CSS-tulajdonságok, például color: red; vagy transform: rotate(2deg);"
+
+msgid "&quot;Foto interne&quot;: ogni immagine o video dentro la tile (gallerie, griglie) si inclina singolarmente."
+msgstr "&quot;Belső fotók&quot;: a csempén belül minden kép vagy videó (galériák, rácsok) külön dől meg."
+
+msgid "Il cursore che segue il mouse in tutto il sito, al posto della freccia. Ogni pagina può sceglierne un altro in «Cursore di questa pagina». Su telefoni e tablet, e nel canvas del builder, resta quello di sistema; solo la Torcia resta anche su telefoni e tablet, con la luce ferma al centro dello schermo."
+msgstr "A kurzor, amely a nyíl helyett követi az egeret az egész oldalon. Minden lap választhat másikat «Az oldal kurzora» alatt. Telefonon, táblagépen és a builder vásznán a rendszeré marad; csak a Zseblámpa marad meg telefonon és táblagépen is, a fénnyel a képernyő közepén."
+
+msgid "JavaScript eseguito sul sito, non nel builder. La variabile «el» contiene l'elemento della tile."
+msgstr "Az oldalon, nem a builderben futó JavaScript. Az «el» változó a csempe elemét tartalmazza."
+
+msgid "Piena: la tile occupa tutta la riga della colonna, e il suo Allineamento la sposta a sinistra, al centro o a destra."
+msgstr "Teljes: a csempe az oszlop egész sorát elfoglalja, és az Igazítása balra, középre vagy jobbra viszi."
+
+msgid "Adattata: la tile è larga quanto il suo contenuto, e più tile adattate una dopo l'altra si affiancano sulla stessa riga (per esempio due pulsanti vicini). L'Allineamento della prima allinea tutta la fila."
+msgstr "Igazított: a csempe olyan széles, mint a tartalma, és több egymás utáni igazított csempe egymás mellé kerül ugyanabban a sorban (például két szomszédos gomb). Az első Igazítása az egész sort igazítja."
+
+#: licenza-1.4.1345
+msgid "Zoom lento (Ken Burns)"
+msgstr "Lassú zoom (Ken Burns)"
+
+msgid "Spostamento orizzontale"
+msgstr "Vízszintes eltolás"
+
+msgid "Spostamento verticale"
+msgstr "Függőleges eltolás"
+
+msgid "Etichetta della scheda"
+msgstr "Fül felirata"
+
+msgid "Zoom al 100%"
+msgstr "Nagyítás 100%-ra"
+
+msgid "mp4 o indirizzo YouTube"
+msgstr "mp4 vagy YouTube-cím"
+
+msgid "mp3 o indirizzo dell’audio"
+msgstr "mp3 vagy a hang címe"
+
+msgid "Livello da mostrare o nascondere"
+msgstr "Megjelenítendő vagy elrejtendő réteg"
+
+msgid "Spaziatura lettere"
+msgstr "Betűköz"
+
+msgid "Contorno del testo"
+msgstr "Szöveg körvonala"
+
+msgid "Spessore del tratto"
+msgstr "Vonalvastagság"
+
+msgid "Filtro sfondo"
+msgstr "Háttérszűrő"
+
+msgid "Ombra del testo"
+msgstr "Szöveg árnyéka"
+
+msgid "Rivelazione a blocco"
+msgstr "Blokkos feltárás"
+
+msgid "Cursore del mouse"
+msgstr "Egérmutató"
+
+msgid "Ritardo fra le lettere"
+msgstr "Késleltetés a betűk között"
+
+msgid "Movimento continuo"
+msgstr "Folyamatos mozgás"
+
+msgid "Inclinazione orizzontale"
+msgstr "Vízszintes ferdítés"
+
+msgid "Percorso"
+msgstr "Útvonal"
+
+msgid "Percorso SVG (d=\"\")"
+msgstr "SVG-útvonal (d=\"\")"

@@ -17020,3 +17020,276 @@ msgstr "Mudar para o Pro"
 #: licenza-1.4.1345
 msgid "Free e Pro"
 msgstr "Free e Pro"
+
+#: licenza-1.4.1345
+msgid "Con OLObuild Pro"
+msgstr "Com o OLObuild Pro"
+
+msgid "%1$s non fa parte di OLObuild Free: lo hai con OLObuild Pro o con la licenza di %2$s."
+msgstr "O %1$s não faz parte do OLObuild Free: você o tem com o OLObuild Pro ou com a licença do %2$s."
+
+#: licenza-1.4.1345
+msgid "Sfondo della slide"
+msgstr "Fundo do slide"
+
+msgid "segue lo scorrimento"
+msgstr "acompanha a rolagem"
+
+msgid "Trascina per vedere come si muovono i livelli mentre la pagina scorre: 0% è l’inizio, 100% la fine del tratto dello slider. ▶ fa vedere tutto il movimento. Per spostare e modificare i livelli torna alla vista ferma con ×."
+msgstr "Arraste para ver como as camadas se movem enquanto a página rola: 0% é o início, 100% o fim do trecho do slider. ▶ mostra todo o movimento. Para mover e editar as camadas, volte à vista parada com ×."
+
+msgid "Anteprima dello scorrimento"
+msgstr "Prévia da rolagem"
+
+msgid "Guarda il movimento"
+msgstr "Ver o movimento"
+
+msgid "ferma"
+msgstr "parado"
+
+msgid "Torna alla vista ferma"
+msgstr "Voltar à vista parada"
+
+msgid "Stato dei livelli"
+msgstr "Estado das camadas"
+
+msgid "Alcuni livelli si vedono solo in uno stato (◐ nella barra dei livelli), che cambia quando si clicca un altro livello. «Come all’avvio» mostra lo slider come lo vede chi apre la pagina; scegli uno stato per vedere solo i suoi livelli; «Tutti i livelli insieme» li mostra uno sopra l’altro, per modificarli."
+msgstr "Algumas camadas aparecem só em um estado (◐ na barra de camadas), que muda quando se clica em outra camada. «Como no início» mostra o slider como quem abre a página o vê; escolha um estado para ver só as camadas dele; «Todas as camadas juntas» mostra-as uma sobre a outra, para editá-las."
+
+msgid "Anteprima degli stati"
+msgstr "Prévia dos estados"
+
+msgid "In questa slide"
+msgstr "Neste slide"
+
+msgid "Quanti livelli fanno qualcosa, e cosa. Nella barra dei livelli lo stesso bollino dice quali: ↕ scorrendo, ⏱ linea del tempo, Aa lettere, ◐ stato, ☝ clic, ∞ continuo, {} CSS, ▭ solo su alcuni schermi. Passa il puntatore su un bollino per leggerlo."
+msgstr "Quantas camadas fazem algo, e o quê. Na barra de camadas o mesmo selo diz quais: ↕ ao rolar, ⏱ linha do tempo, Aa letras, ◐ estado, ☝ clique, ∞ contínuo, {} CSS, ▭ só em algumas telas. Passe o ponteiro sobre um selo para lê-lo."
+
+msgid "Cosa succede in questa slide"
+msgstr "O que acontece neste slide"
+
+msgid "Come all’avvio"
+msgstr "Como no início"
+
+msgid "Tutti i livelli insieme"
+msgstr "Todas as camadas juntas"
+
+msgid "si muovono scorrendo"
+msgstr "se movem ao rolar"
+
+msgid "con linea del tempo"
+msgstr "com linha do tempo"
+
+msgid "entrano lettera per lettera"
+msgstr "entram letra por letra"
+
+msgid "legati a uno stato"
+msgstr "ligadas a um estado"
+
+msgid "cliccabili"
+msgstr "clicáveis"
+
+msgid "da pulire col puntatore"
+msgstr "para apagar com o ponteiro"
+
+msgid "in movimento continuo"
+msgstr "em movimento contínuo"
+
+msgid "in parallasse"
+msgstr "em parallax"
+
+msgid "con CSS su misura"
+msgstr "com CSS personalizado"
+
+msgid "solo su alcuni schermi"
+msgstr "só em algumas telas"
+
+msgid "Nome del livello"
+msgstr "Nome da camada"
+
+msgid "Serve solo a te, per riconoscere il livello nella barra dei livelli: sul sito non si vede. Vuoto, il livello prende il nome dal suo testo o dal file."
+msgstr "Serve só para você reconhecer a camada na barra de camadas: no site não aparece. Vazio, a camada usa o nome do seu texto ou arquivo."
+
+msgid "Cosa mostra l’immagine (per chi non la vede)"
+msgstr "O que a imagem mostra (para quem não a vê)"
+
+msgid "Tappe del percorso"
+msgstr "Etapas do percurso"
+
+msgid "Ogni tappa dice com’è il livello a quel punto del suo tratto (0% = inizio, 100% = fine); fra una tappa e l’altra il livello passa da un valore all’altro. Clicca una tappa per vederla sulla tela e cambiarla: la tela va a quel punto dello scorrimento."
+msgstr "Cada etapa diz como a camada está naquele ponto do seu trecho (0% = início, 100% = fim); entre uma etapa e outra a camada passa de um valor ao outro. Clique em uma etapa para vê-la na tela e alterá-la: a tela vai para aquele ponto da rolagem."
+
+msgid "Elimina tappa"
+msgstr "Excluir etapa"
+
+msgid "A che punto del tratto"
+msgstr "Ponto do trecho"
+
+msgid "Non muovere più questa proprietà"
+msgstr "Parar de mover esta propriedade"
+
+msgid "+ Muovi anche…"
+msgstr "+ Mover também…"
+
+msgid "com’è sulla tela"
+msgstr "como na tela"
+
+msgid "Si muove scorrendo la pagina"
+msgstr "Move-se ao rolar a página"
+
+msgid "tappe"
+msgstr "etapas"
+
+msgid "Linea del tempo"
+msgstr "Linha do tempo"
+
+msgid "fotogrammi chiave"
+msgstr "quadros-chave"
+
+msgid "Le lettere entrano una alla volta"
+msgstr "As letras entram uma de cada vez"
+
+msgid "Si vede solo in uno stato"
+msgstr "Aparece só em um estado"
+
+msgid "Fa qualcosa al clic"
+msgstr "Faz algo ao clicar"
+
+msgid "Si cancella passandoci sopra"
+msgstr "Apaga-se ao passar por cima"
+
+msgid "Ha un CSS su misura (Avanzate)"
+msgstr "Tem CSS personalizado (Avançado)"
+
+msgid "Nascosto all’avvio: lo mostra un altro livello al clic"
+msgstr "Oculta no início: outra camada a mostra ao clicar"
+
+msgid "computer"
+msgstr "computador"
+
+msgid "notebook"
+msgstr "notebook"
+
+msgid "tablet"
+msgstr "tablet"
+
+msgid "telefono"
+msgstr "celular"
+
+msgid "Si vede solo su"
+msgstr "Aparece só em"
+
+msgid "Non si vede su nessuno schermo"
+msgstr "Não aparece em nenhuma tela"
+
+msgid "Testo del pulsante che azzera"
+msgstr "Texto do botão de limpar"
+
+msgid "Resetta"
+msgstr "Limpar"
+
+msgid "Sfondo contatore"
+msgstr "Fundo do contador"
+
+msgid "Colore contatore"
+msgstr "Cor do contador"
+
+msgid "Mostra lo sconto"
+msgstr "Mostrar o desconto"
+
+msgid "Sui prodotti in saldo, un bollino con la percentuale di sconto sulla foto."
+msgstr "Nos produtos em promoção, um selo com a porcentagem de desconto na foto."
+
+msgid "Sfondo bollino sconto"
+msgstr "Fundo do selo de desconto"
+
+msgid "Nome del link"
+msgstr "Nome do link"
+
+msgid "es. Il mio account"
+msgstr "ex.: Minha conta"
+
+msgid "Lo legge chi usa un lettore di schermo al posto dell’icona. Vuoto: il nome dell’icona."
+msgstr "É o que ouve quem usa leitor de tela no lugar do ícone. Vazio: o nome do ícone."
+
+msgid "Lo spazio attorno al contenuto dell’hero. Se imposti il Padding del Contenitore, vale quello."
+msgstr "O espaço em volta do conteúdo do hero. Se você definir o Padding do Contêiner, vale esse."
+
+msgid "Proprietà CSS applicate direttamente al riquadro della tile, per esempio color: red; oppure transform: rotate(2deg);"
+msgstr "Propriedades CSS aplicadas diretamente ao quadro da tile, por exemplo color: red; ou transform: rotate(2deg);"
+
+msgid "&quot;Foto interne&quot;: ogni immagine o video dentro la tile (gallerie, griglie) si inclina singolarmente."
+msgstr "&quot;Fotos internas&quot;: cada imagem ou vídeo dentro da tile (galerias, grades) se inclina separadamente."
+
+msgid "Il cursore che segue il mouse in tutto il sito, al posto della freccia. Ogni pagina può sceglierne un altro in «Cursore di questa pagina». Su telefoni e tablet, e nel canvas del builder, resta quello di sistema; solo la Torcia resta anche su telefoni e tablet, con la luce ferma al centro dello schermo."
+msgstr "O cursor que segue o mouse em todo o site, no lugar da seta. Cada página pode escolher outro em «Cursor desta página». Em celulares e tablets, e na tela do builder, fica o do sistema; só a Lanterna fica também em celulares e tablets, com a luz parada no centro da tela."
+
+msgid "JavaScript eseguito sul sito, non nel builder. La variabile «el» contiene l'elemento della tile."
+msgstr "JavaScript executado no site, não no builder. A variável «el» contém o elemento da tile."
+
+msgid "Piena: la tile occupa tutta la riga della colonna, e il suo Allineamento la sposta a sinistra, al centro o a destra."
+msgstr "Cheia: a tile ocupa toda a linha da coluna, e o seu Alinhamento a move para a esquerda, o centro ou a direita."
+
+msgid "Adattata: la tile è larga quanto il suo contenuto, e più tile adattate una dopo l'altra si affiancano sulla stessa riga (per esempio due pulsanti vicini). L'Allineamento della prima allinea tutta la fila."
+msgstr "Ajustada: a tile é tão larga quanto o seu conteúdo, e várias tiles ajustadas uma após a outra ficam lado a lado na mesma linha (por exemplo dois botões vizinhos). O Alinhamento da primeira alinha toda a fila."
+
+#: licenza-1.4.1345
+msgid "Zoom lento (Ken Burns)"
+msgstr "Zoom lento (Ken Burns)"
+
+msgid "Spostamento orizzontale"
+msgstr "Deslocamento horizontal"
+
+msgid "Spostamento verticale"
+msgstr "Deslocamento vertical"
+
+msgid "Etichetta della scheda"
+msgstr "Rótulo da aba"
+
+msgid "Zoom al 100%"
+msgstr "Zoom em 100%"
+
+msgid "mp4 o indirizzo YouTube"
+msgstr "mp4 ou endereço do YouTube"
+
+msgid "mp3 o indirizzo dell’audio"
+msgstr "mp3 ou endereço do áudio"
+
+msgid "Livello da mostrare o nascondere"
+msgstr "Camada a mostrar ou ocultar"
+
+msgid "Spaziatura lettere"
+msgstr "Espaçamento entre letras"
+
+msgid "Contorno del testo"
+msgstr "Contorno do texto"
+
+msgid "Spessore del tratto"
+msgstr "Espessura do traço"
+
+msgid "Filtro sfondo"
+msgstr "Filtro de fundo"
+
+msgid "Ombra del testo"
+msgstr "Sombra do texto"
+
+msgid "Rivelazione a blocco"
+msgstr "Revelação em bloco"
+
+msgid "Cursore del mouse"
+msgstr "Cursor do mouse"
+
+msgid "Ritardo fra le lettere"
+msgstr "Atraso entre letras"
+
+msgid "Movimento continuo"
+msgstr "Movimento contínuo"
+
+msgid "Inclinazione orizzontale"
+msgstr "Inclinação horizontal"
+
+msgid "Percorso"
+msgstr "Trajetória"
+
+msgid "Percorso SVG (d=\"\")"
+msgstr "Caminho SVG (d=\"\")"

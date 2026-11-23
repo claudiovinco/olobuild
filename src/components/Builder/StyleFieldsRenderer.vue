@@ -286,12 +286,16 @@ function filterSectionsBySearch(sections) {
 
 // Valuta la `condition` dichiarata sul field (es. `text_effect_phrases` visibile
 // SOLO se `text_effect === 'typewriter-loop'`): valutatore condiviso (@/utils/fieldCondition).
+// Le impostazioni della tile completate coi suoi predefiniti (23 nov 2026): una chiave che il tema non ha salvato non
+// nasconde un campo che sulla pagina agisce, come nel tab Contenuto.
+const conDefault = computed(() => ({ ...(getElementDefaults(props.tileType) || {}), ...(props.tileSettings || {}) }));
 function isFieldVisible(field, settings) {
-  return sharedIsFieldVisible(field, settings || {});
+  const s = !settings || settings === props.tileSettings ? conDefault.value : settings;
+  return sharedIsFieldVisible(field, s);
 }
 // Una sezione si vede se la condizione del suo SEPARATORE è vera e ha un campo visibile.
 function sectionHasVisibleFields(section) {
-  return isSectionVisible(section.sep, section.fields, props.tileSettings || {});
+  return isSectionVisible(section.sep, section.fields, conDefault.value);
 }
 
 const groupedSections   = computed(() => filterSectionsBySearch(groupBySeparator(styleFieldsBase(props.tileType))));

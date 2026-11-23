@@ -6,8 +6,9 @@ import {
   findNodeById, findAncestorPath, findParentAndIndex, findNodeWithChildrenArray,
   normalizeNodes, countNodes, posizioneIncolla, liberaPostoGriglia,
 } from './treeUtils.js';
-import { migrateTreeBackgrounds } from '@/utils/bgMigrate';
+import { migrateTreeBackgrounds, chiaviVecchieDaSvuotare } from '@/utils/bgMigrate';
 import { migraTorciaBlendText } from '@/utils/torciaMigra';
+import { migraImpostazioni } from '@/utils/migraImpostazioni';
 import { getElementDef } from '@/config/elementRegistry';
 import { incollaImpostazioni } from '@/utils/incollaStile';
 import { PALETTE_CATEGORIES, STRUCTURE_CATEGORY, paletteCategoryOf } from '@/config/paletteCategories';
@@ -52,6 +53,7 @@ function preparaContenuto(content) {
   normalizeNodes(nodi);
   migrateTreeBackgrounds(nodi);
   migraTorciaBlendText(nodi);
+  migraImpostazioni(nodi);
   return nodi;
 }
 
@@ -393,7 +395,13 @@ export const useTilesStore = defineStore('tiles', {
     updateTile(tileId, settings) {
       const tile = this.getTileById(tileId);
       if (tile) {
-        tile.settings = { ...tile.settings, ...settings };
+        // Cambiando il pannello dello sfondo si svuotano le chiavi vecchie che aveva preso al caricamento
+        // (bgMigrate): altrimenti il renderer le riusava come ripiego e l'immagine tolta ricompariva.
+        const vuote = {};
+        for (const k of chiaviVecchieDaSvuotare(tile.type, Object.keys(settings || {}))) {
+          if (tile.settings && tile.settings[k]) vuote[k] = '';
+        }
+        tile.settings = { ...tile.settings, ...vuote, ...settings };
       }
     },
 

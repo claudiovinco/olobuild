@@ -124,6 +124,8 @@ export default {
     { key: 'button_color', label: t('Colore testo pulsante'), type: 'color' },
     { key: 'button_bg', label: t('Sfondo pulsante'), type: 'color' },
     { key: 'divider_color', label: t('Colore divisore'), type: 'color' },
+    { key: 'border_color', label: t('Colore bordo card'), type: 'color' },
+    { key: 'border_radius', label: t('Raggio card'), type: 'border-radius' },
 
     ...shadowField,
     ...borderFields(),

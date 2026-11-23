@@ -28,7 +28,9 @@
         ]"
       >
         <span class="mps-lb-ico mb-opacity-60" aria-hidden="true" v-html="svg(typeIcon(layer.type))"></span>
-        <span class="mb-max-w-24 mb-truncate">{{ layerLabel(layer) }}</span>
+        <span class="mb-max-w-32 mb-truncate" :title="layerLabel(layer)">{{ layerLabel(layer) }}</span>
+        <!-- Cosa fa il livello (1.4.1352): un bollino per animazione, la spiegazione nel suggerimento -->
+        <span v-for="a in animazioni(layer)" :key="a.k" :class="['mps-lb-anim', 'mps-lb-anim--' + a.k]" :title="a.titolo" :aria-label="a.titolo">{{ a.testo }}</span>
         <span v-if="hasResponsiveOverride(layer)" class="mb-w-1.5 mb-h-1.5 mb-rounded-full mb-bg-yellow-400 mb-shrink-0" :title="t('Override responsive')"></span>
 
         <!-- Move up (toward front / higher z-index) -->
@@ -72,6 +74,7 @@
 import { computed } from 'vue';
 import { t } from '@/i18n';
 import lucideIcons from './lucideIconsSvg.js';
+import { nomeLivello, animazioniLivello } from './livelloUtils.js';
 
 const props = defineProps({
   layers: { type: Array, default: () => [] },
@@ -109,10 +112,12 @@ function svg(chiave) {
   return lucideIcons[chiave] || '';
 }
 
+// Il nome che dice cos'è (1.4.1352): prima tutte le immagini erano «Immagine» e le forme «Forma».
 function layerLabel(l) {
-  if (l.type === 'text' || l.type === 'button') return l.content || l.type;
-  if (l.type === 'icon') return l.iconName || t('Icona');
-  return layerTypes.find(lt => lt.type === l.type)?.label || l.type;
+  return nomeLivello(l);
+}
+function animazioni(l) {
+  return animazioniLivello(l);
 }
 </script>
 
@@ -128,6 +133,28 @@ function layerLabel(l) {
   width: 13px;
   height: 13px;
 }
+/* I bollini delle animazioni: piccoli, colorati per famiglia, la spiegazione nel suggerimento. */
+.mps-lb-anim {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  color: #cbd5e1;
+  background: #334155;
+  flex-shrink: 0;
+  cursor: help;
+}
+.mps-lb-anim--scroll { background: #1e3a5f; color: #93c5fd; }
+.mps-lb-anim--timeline { background: #3b2f5f; color: #c4b5fd; }
+.mps-lb-anim--stato, .mps-lb-anim--azione, .mps-lb-anim--pulisci { background: #4a3a14; color: #fcd34d; }
+.mps-lb-anim--css { background: #4c1d1d; color: #fca5a5; }
+.mps-lb-anim--formati, .mps-lb-anim--nascosto { background: #374151; color: #9ca3af; }
 .mps-bar-btn {
   margin-left: 2px;
   font-size: 10px;

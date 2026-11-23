@@ -17020,3 +17020,276 @@ msgstr "Overstappen naar Pro"
 #: licenza-1.4.1345
 msgid "Free e Pro"
 msgstr "Free en Pro"
+
+#: licenza-1.4.1345
+msgid "Con OLObuild Pro"
+msgstr "Met OLObuild Pro"
+
+msgid "%1$s non fa parte di OLObuild Free: lo hai con OLObuild Pro o con la licenza di %2$s."
+msgstr "%1$s hoort niet bij OLObuild Free: je krijgt het met OLObuild Pro of met een licentie voor %2$s."
+
+#: licenza-1.4.1345
+msgid "Sfondo della slide"
+msgstr "Achtergrond van de slide"
+
+msgid "segue lo scorrimento"
+msgstr "volgt het scrollen"
+
+msgid "Trascina per vedere come si muovono i livelli mentre la pagina scorre: 0% è l’inizio, 100% la fine del tratto dello slider. ▶ fa vedere tutto il movimento. Per spostare e modificare i livelli torna alla vista ferma con ×."
+msgstr "Sleep om te zien hoe de lagen bewegen terwijl de pagina scrolt: 0% is het begin, 100% het einde van het traject van de slider. ▶ toont de hele beweging. Om de lagen te verplaatsen en te bewerken, ga je met × terug naar de stilstaande weergave."
+
+msgid "Anteprima dello scorrimento"
+msgstr "Voorbeeld van het scrollen"
+
+msgid "Guarda il movimento"
+msgstr "Bekijk de beweging"
+
+msgid "ferma"
+msgstr "stilstaand"
+
+msgid "Torna alla vista ferma"
+msgstr "Terug naar de stilstaande weergave"
+
+msgid "Stato dei livelli"
+msgstr "Toestand van de lagen"
+
+msgid "Alcuni livelli si vedono solo in uno stato (◐ nella barra dei livelli), che cambia quando si clicca un altro livello. «Come all’avvio» mostra lo slider come lo vede chi apre la pagina; scegli uno stato per vedere solo i suoi livelli; «Tutti i livelli insieme» li mostra uno sopra l’altro, per modificarli."
+msgstr "Sommige lagen zijn alleen zichtbaar in één toestand (◐ in de lagenbalk), die verandert wanneer op een andere laag wordt geklikt. «Zoals bij de start» toont de slider zoals bezoekers hem zien als ze de pagina openen; kies een toestand om alleen de lagen daarvan te zien; «Alle lagen samen» toont ze boven elkaar, om ze te bewerken."
+
+msgid "Anteprima degli stati"
+msgstr "Voorbeeld van de toestanden"
+
+msgid "In questa slide"
+msgstr "In deze slide"
+
+msgid "Quanti livelli fanno qualcosa, e cosa. Nella barra dei livelli lo stesso bollino dice quali: ↕ scorrendo, ⏱ linea del tempo, Aa lettere, ◐ stato, ☝ clic, ∞ continuo, {} CSS, ▭ solo su alcuni schermi. Passa il puntatore su un bollino per leggerlo."
+msgstr "Hoeveel lagen iets doen, en wat. In de lagenbalk vertelt hetzelfde label welke: ↕ bij scrollen, ⏱ tijdlijn, Aa letters, ◐ toestand, ☝ klik, ∞ doorlopend, {} CSS, ▭ alleen op sommige schermen. Ga met de aanwijzer over een label om het te lezen."
+
+msgid "Cosa succede in questa slide"
+msgstr "Wat er in deze slide gebeurt"
+
+msgid "Come all’avvio"
+msgstr "Zoals bij de start"
+
+msgid "Tutti i livelli insieme"
+msgstr "Alle lagen samen"
+
+msgid "si muovono scorrendo"
+msgstr "bewegen bij het scrollen"
+
+msgid "con linea del tempo"
+msgstr "met een tijdlijn"
+
+msgid "entrano lettera per lettera"
+msgstr "komen letter voor letter binnen"
+
+msgid "legati a uno stato"
+msgstr "gekoppeld aan een toestand"
+
+msgid "cliccabili"
+msgstr "klikbaar"
+
+msgid "da pulire col puntatore"
+msgstr "weg te vegen met de aanwijzer"
+
+msgid "in movimento continuo"
+msgstr "in doorlopende beweging"
+
+msgid "in parallasse"
+msgstr "met parallax"
+
+msgid "con CSS su misura"
+msgstr "met eigen CSS"
+
+msgid "solo su alcuni schermi"
+msgstr "alleen op sommige schermen"
+
+msgid "Nome del livello"
+msgstr "Naam van de laag"
+
+msgid "Serve solo a te, per riconoscere il livello nella barra dei livelli: sul sito non si vede. Vuoto, il livello prende il nome dal suo testo o dal file."
+msgstr "Alleen voor jou, om de laag te herkennen in de lagenbalk: op de site zie je hem niet. Leeg krijgt de laag de naam van haar tekst of bestand."
+
+msgid "Cosa mostra l’immagine (per chi non la vede)"
+msgstr "Wat de afbeelding toont (voor wie haar niet ziet)"
+
+msgid "Tappe del percorso"
+msgstr "Etappes van het traject"
+
+msgid "Ogni tappa dice com’è il livello a quel punto del suo tratto (0% = inizio, 100% = fine); fra una tappa e l’altra il livello passa da un valore all’altro. Clicca una tappa per vederla sulla tela e cambiarla: la tela va a quel punto dello scorrimento."
+msgstr "Elke etappe zegt hoe de laag eruitziet op dat punt van haar traject (0% = begin, 100% = einde); tussen twee etappes gaat de laag van de ene waarde naar de andere. Klik op een etappe om haar op het canvas te zien en te wijzigen: het canvas springt naar dat punt van het scrollen."
+
+msgid "Elimina tappa"
+msgstr "Etappe verwijderen"
+
+msgid "A che punto del tratto"
+msgstr "Punt van het traject"
+
+msgid "Non muovere più questa proprietà"
+msgstr "Deze eigenschap niet meer bewegen"
+
+msgid "+ Muovi anche…"
+msgstr "+ Ook bewegen…"
+
+msgid "com’è sulla tela"
+msgstr "zoals op het canvas"
+
+msgid "Si muove scorrendo la pagina"
+msgstr "Beweegt bij het scrollen van de pagina"
+
+msgid "tappe"
+msgstr "etappes"
+
+msgid "Linea del tempo"
+msgstr "Tijdlijn"
+
+msgid "fotogrammi chiave"
+msgstr "keyframes"
+
+msgid "Le lettere entrano una alla volta"
+msgstr "De letters komen één voor één binnen"
+
+msgid "Si vede solo in uno stato"
+msgstr "Alleen zichtbaar in één toestand"
+
+msgid "Fa qualcosa al clic"
+msgstr "Doet iets bij een klik"
+
+msgid "Si cancella passandoci sopra"
+msgstr "Verdwijnt als je eroverheen gaat"
+
+msgid "Ha un CSS su misura (Avanzate)"
+msgstr "Heeft eigen CSS (Geavanceerd)"
+
+msgid "Nascosto all’avvio: lo mostra un altro livello al clic"
+msgstr "Verborgen bij de start: een andere laag toont hem bij een klik"
+
+msgid "computer"
+msgstr "computer"
+
+msgid "notebook"
+msgstr "laptop"
+
+msgid "tablet"
+msgstr "tablet"
+
+msgid "telefono"
+msgstr "telefoon"
+
+msgid "Si vede solo su"
+msgstr "Alleen zichtbaar op"
+
+msgid "Non si vede su nessuno schermo"
+msgstr "Op geen enkel scherm zichtbaar"
+
+msgid "Testo del pulsante che azzera"
+msgstr "Tekst van de resetknop"
+
+msgid "Resetta"
+msgstr "Resetten"
+
+msgid "Sfondo contatore"
+msgstr "Achtergrond van de teller"
+
+msgid "Colore contatore"
+msgstr "Kleur van de teller"
+
+msgid "Mostra lo sconto"
+msgstr "Korting tonen"
+
+msgid "Sui prodotti in saldo, un bollino con la percentuale di sconto sulla foto."
+msgstr "Bij producten in de aanbieding een label met het kortingspercentage op de foto."
+
+msgid "Sfondo bollino sconto"
+msgstr "Achtergrond van het kortingslabel"
+
+msgid "Nome del link"
+msgstr "Naam van de link"
+
+msgid "es. Il mio account"
+msgstr "bijv. Mijn account"
+
+msgid "Lo legge chi usa un lettore di schermo al posto dell’icona. Vuoto: il nome dell’icona."
+msgstr "Dit hoort wie een schermlezer gebruikt in plaats van het pictogram. Leeg: de naam van het pictogram."
+
+msgid "Lo spazio attorno al contenuto dell’hero. Se imposti il Padding del Contenitore, vale quello."
+msgstr "De ruimte rond de inhoud van de hero. Als je de Padding van de Container instelt, geldt die."
+
+msgid "Proprietà CSS applicate direttamente al riquadro della tile, per esempio color: red; oppure transform: rotate(2deg);"
+msgstr "CSS-eigenschappen die direct op het kader van de tile worden toegepast, bijvoorbeeld color: red; of transform: rotate(2deg);"
+
+msgid "&quot;Foto interne&quot;: ogni immagine o video dentro la tile (gallerie, griglie) si inclina singolarmente."
+msgstr "&quot;Interne foto’s&quot;: elke afbeelding of video in de tile (galerijen, rasters) kantelt afzonderlijk."
+
+msgid "Il cursore che segue il mouse in tutto il sito, al posto della freccia. Ogni pagina può sceglierne un altro in «Cursore di questa pagina». Su telefoni e tablet, e nel canvas del builder, resta quello di sistema; solo la Torcia resta anche su telefoni e tablet, con la luce ferma al centro dello schermo."
+msgstr "De cursor die de muis over de hele site volgt, in plaats van de pijl. Elke pagina kan een andere kiezen in «Cursor van deze pagina». Op telefoons en tablets, en in het canvas van de builder, blijft die van het systeem; alleen de Zaklamp blijft ook op telefoons en tablets, met het licht vast in het midden van het scherm."
+
+msgid "JavaScript eseguito sul sito, non nel builder. La variabile «el» contiene l'elemento della tile."
+msgstr "JavaScript dat op de site wordt uitgevoerd, niet in de builder. De variabele «el» bevat het element van de tile."
+
+msgid "Piena: la tile occupa tutta la riga della colonna, e il suo Allineamento la sposta a sinistra, al centro o a destra."
+msgstr "Volledig: de tile neemt de hele rij van de kolom in, en haar Uitlijning verplaatst haar naar links, het midden of rechts."
+
+msgid "Adattata: la tile è larga quanto il suo contenuto, e più tile adattate una dopo l'altra si affiancano sulla stessa riga (per esempio due pulsanti vicini). L'Allineamento della prima allinea tutta la fila."
+msgstr "Aangepast: de tile is zo breed als haar inhoud, en meerdere aangepaste tiles na elkaar staan naast elkaar op dezelfde rij (bijvoorbeeld twee knoppen naast elkaar). De Uitlijning van de eerste lijnt de hele rij uit."
+
+#: licenza-1.4.1345
+msgid "Zoom lento (Ken Burns)"
+msgstr "Langzame zoom (Ken Burns)"
+
+msgid "Spostamento orizzontale"
+msgstr "Horizontale verschuiving"
+
+msgid "Spostamento verticale"
+msgstr "Verticale verschuiving"
+
+msgid "Etichetta della scheda"
+msgstr "Label van het tabblad"
+
+msgid "Zoom al 100%"
+msgstr "Zoom naar 100%"
+
+msgid "mp4 o indirizzo YouTube"
+msgstr "mp4 of YouTube-adres"
+
+msgid "mp3 o indirizzo dell’audio"
+msgstr "mp3 of adres van de audio"
+
+msgid "Livello da mostrare o nascondere"
+msgstr "Laag om te tonen of te verbergen"
+
+msgid "Spaziatura lettere"
+msgstr "Letterafstand"
+
+msgid "Contorno del testo"
+msgstr "Tekstcontour"
+
+msgid "Spessore del tratto"
+msgstr "Lijndikte"
+
+msgid "Filtro sfondo"
+msgstr "Achtergrondfilter"
+
+msgid "Ombra del testo"
+msgstr "Tekstschaduw"
+
+msgid "Rivelazione a blocco"
+msgstr "Blokonthulling"
+
+msgid "Cursore del mouse"
+msgstr "Muiscursor"
+
+msgid "Ritardo fra le lettere"
+msgstr "Vertraging tussen letters"
+
+msgid "Movimento continuo"
+msgstr "Doorlopende beweging"
+
+msgid "Inclinazione orizzontale"
+msgstr "Horizontale helling"
+
+msgid "Percorso"
+msgstr "Pad"
+
+msgid "Percorso SVG (d=\"\")"
+msgstr "SVG-pad (d=\"\")"

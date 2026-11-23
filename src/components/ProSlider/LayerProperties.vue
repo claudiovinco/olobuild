@@ -4,6 +4,11 @@
       <!-- Header -->
       <div class="mb-p-2 mb-border-b mb-border-gray-700 mb-text-xs mb-font-semibold mb-text-gray-300">
         {{ t('Livello') }} {{ nomeTipo }}
+        <!-- Il nome del livello (1.4.1352): quello che compare nella barra dei livelli. Vuoto = il testo, il file o il tipo. -->
+        <div class="mb-mt-1.5 mb-font-normal">
+          <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Nome del livello') }}<InfoTip :testo="t('Serve solo a te, per riconoscere il livello nella barra dei livelli: sul sito non si vede. Vuoto, il livello prende il nome dal suo testo o dal file.')" :titolo="t('Nome del livello')" /></label>
+          <input :value="layer.name || ''" @input="up('name', $event.target.value)" class="mps-input" :placeholder="nomeSuggerito" />
+        </div>
       </div>
 
       <!-- Tabs -->
@@ -85,13 +90,13 @@
             <div>
               <label class="mps-label">{{ t('URL Video') }}</label>
               <div class="mb-flex mb-gap-1">
-                <input :value="layer.videoSrc" @input="up('videoSrc', $event.target.value)" class="mps-input mb-flex-1" placeholder="mp4 o YouTube URL" />
+                <input :value="layer.videoSrc" @input="up('videoSrc', $event.target.value)" class="mps-input mb-flex-1" :placeholder="t('mp4 o indirizzo YouTube')" />
                 <button @click="pickVideo" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-xs mb-text-gray-300 hover:mb-bg-gray-500">{{ t('Sfoglia') }}</button>
               </div>
             </div>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="layer.videoAutoplay" @change="up('videoAutoplay', $event.target.checked)" class="mb-rounded" />
-              <span class="mb-text-[11px] mb-text-gray-400">Autoplay</span>
+              <span class="mb-text-[11px] mb-text-gray-400">{{ t('Riproduzione automatica') }}</span>
             </label>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="layer.videoMuted" @change="up('videoMuted', $event.target.checked)" class="mb-rounded" />
@@ -99,7 +104,7 @@
             </label>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="layer.videoLoop" @change="up('videoLoop', $event.target.checked)" class="mb-rounded" />
-              <span class="mb-text-[11px] mb-text-gray-400">Loop</span>
+              <span class="mb-text-[11px] mb-text-gray-400">{{ t('Ripeti') }}</span>
             </label>
           </template>
           <!-- Audio -->
@@ -107,17 +112,17 @@
             <div>
               <label class="mps-label">{{ t('URL Audio') }}</label>
               <div class="mb-flex mb-gap-1">
-                <input :value="layer.audioSrc" @input="up('audioSrc', $event.target.value)" class="mps-input mb-flex-1" placeholder="mp3 o url audio" />
+                <input :value="layer.audioSrc" @input="up('audioSrc', $event.target.value)" class="mps-input mb-flex-1" :placeholder="t('mp3 o indirizzo dell’audio')" />
                 <button @click="pickAudio" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-xs mb-text-gray-300 hover:mb-bg-gray-500">{{ t('Sfoglia') }}</button>
               </div>
             </div>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="layer.audioAutoplay" @change="up('audioAutoplay', $event.target.checked)" class="mb-rounded" />
-              <span class="mb-text-[11px] mb-text-gray-400">Autoplay</span>
+              <span class="mb-text-[11px] mb-text-gray-400">{{ t('Riproduzione automatica') }}</span>
             </label>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="layer.audioLoop" @change="up('audioLoop', $event.target.checked)" class="mb-rounded" />
-              <span class="mb-text-[11px] mb-text-gray-400">Loop</span>
+              <span class="mb-text-[11px] mb-text-gray-400">{{ t('Ripeti') }}</span>
             </label>
           </template>
 
@@ -155,7 +160,7 @@
           </template>
           <template v-if="layer.action?.type === 'toggleLayer'">
             <div>
-              <label class="mps-label">Layer target</label>
+              <label class="mps-label">{{ t('Livello da mostrare o nascondere') }}</label>
               <FieldSelect
                 v-if="targetableLayers.length"
                 ui="dropdown" size="compact" theme="dark"
@@ -290,14 +295,14 @@
             <label class="mps-label" :class="{ 'mb-text-yellow-400': isOverridden('x') }">X (%)</label>
             <div class="mb-flex mb-items-center mb-gap-2">
               <NumberScrubber class="mb-flex-1" theme="dark" :modelValue="rv('x')" :min="0" :max="100" :step="0.5" emitAs="number" :sliderOnFocus="false" unit="%" ariaLabel="X (%)" @update:modelValue="up('x', Math.round($event * 10) / 10)" />
-              <button v-if="isOverridden('x')" @click="clearOverride('x')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
+              <button v-if="isOverridden('x')" @click="clearOverride('x')" class="mb-text-yellow-500 mb-text-[10px]" :title="t('Azzera')">&times;</button>
             </div>
           </div>
           <div>
             <label class="mps-label" :class="{ 'mb-text-yellow-400': isOverridden('y') }">Y (%)</label>
             <div class="mb-flex mb-items-center mb-gap-2">
               <NumberScrubber class="mb-flex-1" theme="dark" :modelValue="rv('y')" :min="0" :max="100" :step="0.5" emitAs="number" :sliderOnFocus="false" unit="%" ariaLabel="Y (%)" @update:modelValue="up('y', Math.round($event * 10) / 10)" />
-              <button v-if="isOverridden('y')" @click="clearOverride('y')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
+              <button v-if="isOverridden('y')" @click="clearOverride('y')" class="mb-text-yellow-500 mb-text-[10px]" :title="t('Azzera')">&times;</button>
             </div>
           </div>
           <div>
@@ -309,7 +314,7 @@
               <template v-if="rv('width') !== 'auto'">
                 <NumberScrubber class="mb-flex-1" theme="dark" :modelValue="rv('width')" :min="5" :max="100" :step="0.5" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Larghezza (%)')" @update:modelValue="up('width', Math.round($event * 10) / 10)" />
               </template>
-              <button v-if="isOverridden('width')" @click="clearOverride('width')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
+              <button v-if="isOverridden('width')" @click="clearOverride('width')" class="mb-text-yellow-500 mb-text-[10px]" :title="t('Azzera')">&times;</button>
             </div>
           </div>
           <div>
@@ -321,14 +326,14 @@
               <template v-if="rv('height') !== 'auto'">
                 <NumberScrubber class="mb-flex-1" theme="dark" :modelValue="rv('height')" :min="5" :max="100" :step="0.5" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Altezza (%)')" @update:modelValue="up('height', Math.round($event * 10) / 10)" />
               </template>
-              <button v-if="isOverridden('height')" @click="clearOverride('height')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
+              <button v-if="isOverridden('height')" @click="clearOverride('height')" class="mb-text-yellow-500 mb-text-[10px]" :title="t('Azzera')">&times;</button>
             </div>
           </div>
           <div v-if="layer.type === 'text' || layer.type === 'button' || layer.type === 'icon'">
-            <label class="mps-label" :class="{ 'mb-text-yellow-400': isOverridden('fontSize') }">Font size (px)</label>
+            <label class="mps-label" :class="{ 'mb-text-yellow-400': isOverridden('fontSize') }">{{ t('Dimensione testo') }}</label>
             <div class="mb-flex mb-items-center mb-gap-2">
               <NumberScrubber class="mb-flex-1" theme="dark" :modelValue="rv('fontSize')" :min="8" :max="200" :step="1" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Font size (px)" @update:modelValue="up('fontSize', $event)" />
-              <button v-if="isOverridden('fontSize')" @click="clearOverride('fontSize')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
+              <button v-if="isOverridden('fontSize')" @click="clearOverride('fontSize')" class="mb-text-yellow-500 mb-text-[10px]" :title="t('Azzera')">&times;</button>
             </div>
           </div>
         </template>
@@ -366,7 +371,7 @@
                   @click="up('textAlign', a)"
                   :class="['mb-flex-1 mb-py-1 mb-rounded mb-text-xs', (rv('textAlign') || 'left') === a ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-400']"
                 >{{ a }}</button>
-                <button v-if="isOverridden('textAlign')" @click="clearOverride('textAlign')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
+                <button v-if="isOverridden('textAlign')" @click="clearOverride('textAlign')" class="mb-text-yellow-500 mb-text-[10px]" :title="t('Azzera')">&times;</button>
               </div>
             </div>
             <div v-if="layer.type === 'text' && layer.height && layer.height !== 'auto'">
@@ -379,11 +384,11 @@
               </div>
             </div>
             <div>
-              <label class="mps-label">Line-height</label>
+              <label class="mps-label">{{ t('Interlinea') }}</label>
               <NumberScrubber theme="dark" :modelValue="layer.lineHeight ?? 1.2" :min="0.8" :max="3" :step="0.1" :defaultValue="1.2" emitAs="number" :sliderOnFocus="false" ariaLabel="Line-height" @update:modelValue="up('lineHeight', $event)" />
             </div>
             <div>
-              <label class="mps-label">Letter-spacing (px)</label>
+              <label class="mps-label">{{ t('Spaziatura lettere') }}</label>
               <NumberScrubber theme="dark" :modelValue="layer.letterSpacing ?? 0" :min="-5" :max="20" :step="0.5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Letter-spacing (px)" @update:modelValue="up('letterSpacing', $event)" />
             </div>
             <div>
@@ -396,7 +401,7 @@
             </div>
             <!-- Text Stroke -->
             <div>
-              <label class="mps-label">Text stroke (px)</label>
+              <label class="mps-label">{{ t('Contorno del testo') }}</label>
               <NumberScrubber theme="dark" :modelValue="layer.textStrokeWidth ?? 0" :min="0" :max="10" :step="0.5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Text stroke (px)" @update:modelValue="up('textStrokeWidth', $event)" />
             </div>
             <template v-if="(layer.textStrokeWidth ?? 0) > 0">
@@ -430,11 +435,11 @@
               <FieldColor :modelValue="layer.iconStrokeColor || ''" @update:modelValue="up('iconStrokeColor', $event)" />
             </div>
             <div>
-              <label class="mps-label">Stroke width (px)</label>
+              <label class="mps-label">{{ t('Spessore del tratto') }}</label>
               <NumberScrubber theme="dark" :modelValue="layer.iconStrokeWidth ?? 0" :min="0" :max="10" :step="0.5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Stroke width (px)" @update:modelValue="up('iconStrokeWidth', $event)" />
             </div>
             <div>
-              <label class="mps-label">Stroke dash</label>
+              <label class="mps-label">{{ t('Tratteggio') }}</label>
               <NumberScrubber theme="dark" :modelValue="layer.iconStrokeDash ?? 0" :min="0" :max="50" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" ariaLabel="Stroke dash" @update:modelValue="up('iconStrokeDash', $event)" />
             </div>
           </template>
@@ -494,19 +499,19 @@
             <template v-else>
               <div class="mb-grid mb-grid-cols-2 mb-gap-2">
                 <div>
-                  <label class="mps-label">TL</label>
+                  <label class="mps-label">↖</label>
                   <NumberScrubber theme="dark" :modelValue="layer.borderRadiusTL ?? 0" :min="0" :max="200" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" ariaLabel="Border radius TL" @update:modelValue="up('borderRadiusTL', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">TR</label>
+                  <label class="mps-label">↗</label>
                   <NumberScrubber theme="dark" :modelValue="layer.borderRadiusTR ?? 0" :min="0" :max="200" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" ariaLabel="Border radius TR" @update:modelValue="up('borderRadiusTR', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">BL</label>
+                  <label class="mps-label">↙</label>
                   <NumberScrubber theme="dark" :modelValue="layer.borderRadiusBL ?? 0" :min="0" :max="200" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" ariaLabel="Border radius BL" @update:modelValue="up('borderRadiusBL', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">BR</label>
+                  <label class="mps-label">↘</label>
                   <NumberScrubber theme="dark" :modelValue="layer.borderRadiusBR ?? 0" :min="0" :max="200" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" ariaLabel="Border radius BR" @update:modelValue="up('borderRadiusBR', $event)" />
                 </div>
               </div>
@@ -550,7 +555,7 @@
             <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Spaziatura') }}</p>
             <div>
               <div class="mb-flex mb-items-center mb-justify-between">
-                <label class="mps-label mb-mb-0">Padding (px)</label>
+                <label class="mps-label mb-mb-0">{{ t('Padding') }}</label>
                 <button @click="up('paddingLinked', !layer.paddingLinked)" :class="['mb-text-[10px] mb-px-1.5 mb-rounded', layer.paddingLinked !== false ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-400']" :title="t('Lega/slega lati')">&#x1F517;</button>
               </div>
               <template v-if="layer.paddingLinked !== false">
@@ -621,9 +626,9 @@
 
           <!-- ── Backdrop Filter (tutti i tipi) ── -->
           <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Backdrop Filter</p>
+          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Filtro sfondo') }}</p>
           <div>
-            <label class="mps-label">Backdrop blur (px)</label>
+            <label class="mps-label">{{ t('Sfocatura dietro') }}</label>
             <NumberScrubber theme="dark" :modelValue="layer.backdropBlur ?? 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Backdrop blur (px)" @update:modelValue="up('backdropBlur', $event)" />
           </div>
           <div>
@@ -658,7 +663,7 @@
           <!-- Box shadow (tutti) -->
           <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
             <input type="checkbox" :checked="!!layer.boxShadow" @change="toggleBoxShadow($event.target.checked)" class="mb-rounded" />
-            <span class="mb-text-[11px] mb-text-gray-400">Box shadow</span>
+            <span class="mb-text-[11px] mb-text-gray-400">{{ t('Ombra') }}</span>
           </label>
           <template v-if="layer.boxShadow">
             <div class="mb-grid mb-grid-cols-2 mb-gap-2">
@@ -671,11 +676,11 @@
                 <NumberScrubber theme="dark" :modelValue="layer.boxShadow.y ?? 4" :min="-30" :max="30" :step="1" :defaultValue="4" emitAs="number" :sliderOnFocus="false" ariaLabel="Box shadow Y" @update:modelValue="upBoxShadow('y', $event)" />
               </div>
               <div>
-                <label class="mps-label">Blur</label>
+                <label class="mps-label">{{ t('Sfocatura') }}</label>
                 <NumberScrubber theme="dark" :modelValue="layer.boxShadow.blur ?? 10" :min="0" :max="60" :step="1" :defaultValue="10" emitAs="number" :sliderOnFocus="false" ariaLabel="Box shadow blur" @update:modelValue="upBoxShadow('blur', $event)" />
               </div>
               <div>
-                <label class="mps-label">Spread</label>
+                <label class="mps-label">{{ t('Estensione') }}</label>
                 <NumberScrubber theme="dark" :modelValue="layer.boxShadow.spread ?? 0" :min="-20" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" ariaLabel="Box shadow spread" @update:modelValue="upBoxShadow('spread', $event)" />
               </div>
             </div>
@@ -689,7 +694,7 @@
           <template v-if="layer.type === 'text' || layer.type === 'button'">
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer mb-mt-2">
               <input type="checkbox" :checked="!!layer.textShadow" @change="toggleTextShadow($event.target.checked)" class="mb-rounded" />
-              <span class="mb-text-[11px] mb-text-gray-400">Text shadow</span>
+              <span class="mb-text-[11px] mb-text-gray-400">{{ t('Ombra del testo') }}</span>
             </label>
             <template v-if="layer.textShadow">
               <div class="mb-grid mb-grid-cols-2 mb-gap-2">
@@ -703,7 +708,7 @@
                 </div>
               </div>
               <div>
-                <label class="mps-label">Blur</label>
+                <label class="mps-label">{{ t('Sfocatura') }}</label>
                 <NumberScrubber theme="dark" :modelValue="layer.textShadow.blur ?? 4" :min="0" :max="30" :step="1" :defaultValue="4" emitAs="number" :sliderOnFocus="false" ariaLabel="Text shadow blur" @update:modelValue="upTextShadow('blur', $event)" />
               </div>
               <div>
@@ -721,14 +726,14 @@
             <NumberScrubber theme="dark" :modelValue="layer.opacity ?? 100" :min="0" :max="100" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Opacita (%)')" @update:modelValue="up('opacity', $event)" />
           </div>
           <div>
-            <label class="mps-label">Blend Mode</label>
+            <label class="mps-label">{{ t('Fusione') }}</label>
             <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.blendMode || 'normal'" :options="OPTS_BLEND_MODE" @update:model-value="up('blendMode', $event)" />
           </div>
 
           <!-- SFX Block Reveal (solo text/button/icon) -->
           <template v-if="layer.type === 'text' || layer.type === 'button' || layer.type === 'icon'">
           <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">SFX Block Reveal</p>
+          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Rivelazione a blocco') }}</p>
           <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
             <input type="checkbox" :checked="!!layer.sfx" @change="toggleSfx($event.target.checked)" class="mb-rounded" />
             <span class="mb-text-[11px] mb-text-gray-400">{{ t('Attivo') }}</span>
@@ -753,7 +758,7 @@
           <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
           <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Cursore') }}</p>
           <div>
-            <label class="mps-label">Mouse cursor</label>
+            <label class="mps-label">{{ t('Cursore del mouse') }}</label>
             <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.cursor || 'auto'" :options="OPTS_CURSOR" @update:model-value="up('cursor', $event)" />
           </div>
 
@@ -788,7 +793,7 @@
               @click="setAnimMode('timeline')"
               :class="['mb-flex-1 mb-py-1 mb-rounded mb-text-[10px] mb-font-medium mb-transition-colors',
                 hasTimeline ? 'mb-bg-primary-600 mb-text-white' : 'mb-text-gray-400 hover:mb-text-gray-300']"
-            >Timeline</button>
+            >{{ t('Linea del tempo') }}</button>
           </div>
 
           <!-- Modo SEMPLICE -->
@@ -852,15 +857,15 @@
                   <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.charAnim.direction || 'forward'" :options="OPTS_CHAR_DIRECTION" @update:model-value="upCharAnim('direction', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Stagger (ms)</label>
+                  <label class="mps-label">{{ t('Ritardo fra le lettere') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.charAnim.stagger || 30" :min="5" :max="200" :step="5" :defaultValue="30" emitAs="number" :sliderOnFocus="false" unit="ms" ariaLabel="Stagger (ms)" @update:modelValue="upCharAnim('stagger', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Offset X (px)</label>
+                  <label class="mps-label">{{ t('Spostamento orizzontale') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.charAnim.offsetX || 0" :min="-100" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Offset X (px)" @update:modelValue="upCharAnim('offsetX', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Offset Y (px)</label>
+                  <label class="mps-label">{{ t('Spostamento verticale') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.charAnim.offsetY || 0" :min="-100" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Offset Y (px)" @update:modelValue="upCharAnim('offsetY', $event)" />
                 </div>
                 <div>
@@ -888,7 +893,7 @@
 
             <!-- Loop Animation -->
             <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Loop</p>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Movimento continuo') }}</p>
             <div>
               <label class="mps-label">{{ t('Animazione continua') }}</label>
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.animLoop || 'none'" :options="loopAnimGroups" @update:model-value="up('animLoop', $event)" />
@@ -899,21 +904,21 @@
                 <NumberScrubber theme="dark" :modelValue="layer.animLoopDuration || 3000" :min="500" :max="10000" :step="100" :defaultValue="3000" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata loop (ms)')" @update:modelValue="up('animLoopDuration', $event)" />
               </div>
               <div>
-                <label class="mps-label">Easing loop</label>
+                <label class="mps-label">{{ t('Andamento') }}</label>
                 <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.animLoopEasing || 'ease-in-out'" :options="EASING_GROUPS" @update:model-value="up('animLoopEasing', $event)" />
               </div>
             </template>
 
             <!-- Hover Effects -->
             <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Hover</p>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Al passaggio del mouse') }}</p>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="!!layer.hover" @change="toggleHover($event.target.checked)" class="mb-rounded" />
               <span class="mb-text-[11px] mb-text-gray-400">{{ t('Effetto hover attivo') }}</span>
             </label>
             <template v-if="layer.hover">
               <!-- Transform -->
-              <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-1">Transform</p>
+              <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-1">{{ t('Trasformazione') }}</p>
               <div class="mb-grid mb-grid-cols-2 mb-gap-2">
                 <div>
                   <label class="mps-label">{{ t('Scala') }}</label>
@@ -932,19 +937,19 @@
                   <NumberScrubber theme="dark" :modelValue="layer.hover.rotateY ?? 0" :min="-90" :max="90" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="°" :ariaLabel="t('Rotazione Y')" @update:modelValue="upHover('rotateY', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Skew X</label>
+                  <label class="mps-label">{{ t('Inclinazione orizzontale') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.hover.skewX ?? 0" :min="-30" :max="30" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="°" ariaLabel="Skew X" @update:modelValue="upHover('skewX', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Skew Y</label>
+                  <label class="mps-label">{{ t('Inclinazione verticale') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.hover.skewY ?? 0" :min="-30" :max="30" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="°" ariaLabel="Skew Y" @update:modelValue="upHover('skewY', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Offset X (%)</label>
+                  <label class="mps-label">{{ t('Spostamento orizzontale') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.hover.x ?? 0" :min="-20" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" ariaLabel="Hover offset X (%)" @update:modelValue="upHover('x', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Offset Y (%)</label>
+                  <label class="mps-label">{{ t('Spostamento verticale') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.hover.y ?? 0" :min="-20" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" ariaLabel="Hover offset Y (%)" @update:modelValue="upHover('y', $event)" />
                 </div>
               </div>
@@ -969,14 +974,14 @@
                 <FieldColor :modelValue="layer.hover.borderColor || ''" @update:modelValue="upHover('borderColor', $event)" />
               </div>
               <div>
-                <label class="mps-label">Border radius hover</label>
+                <label class="mps-label">{{ t('Raggio') }}</label>
                 <NumberScrubber theme="dark" :modelValue="layer.hover.borderRadius ?? ''" :min="0" :max="200" :step="1" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Border radius hover" @update:modelValue="upHover('borderRadius', $event)" />
               </div>
               <!-- Filtri hover -->
               <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-2">{{ t('Filtri hover') }}</p>
               <div class="mb-grid mb-grid-cols-2 mb-gap-2">
                 <div>
-                  <label class="mps-label">Blur (px)</label>
+                  <label class="mps-label">{{ t('Sfocatura') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.hover.blur ?? 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Hover blur (px)" @update:modelValue="upHover('blur', $event)" />
                 </div>
                 <div>
@@ -995,7 +1000,7 @@
                 <NumberScrubber theme="dark" :modelValue="layer.hover.duration ?? 300" :min="100" :max="1000" :step="50" :defaultValue="300" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata (ms)')" @update:modelValue="upHover('duration', $event)" />
               </div>
               <div>
-                <label class="mps-label">Easing</label>
+                <label class="mps-label">{{ t('Andamento') }}</label>
                 <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.hover.easing || 'ease'" :options="OPTS_EASING" @update:model-value="upHover('easing', $event)" />
               </div>
               <div>
@@ -1006,31 +1011,31 @@
 
             <!-- Mask / Clip-Path -->
             <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Mask (Clip-Path)</p>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Maschera') }}</p>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="!!layer.mask" @change="toggleMask($event.target.checked)" class="mb-rounded" />
               <span class="mb-text-[11px] mb-text-gray-400">{{ t('Maschera attiva') }}</span>
             </label>
             <template v-if="layer.mask">
               <div>
-                <label class="mps-label">Preset</label>
+                <label class="mps-label">{{ t('Modello') }}</label>
                 <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.mask.preset || 'custom'" :options="OPTS_MASK_PRESET" @update:model-value="applyMaskPreset($event)" />
               </div>
               <div class="mb-grid mb-grid-cols-2 mb-gap-2">
                 <div>
-                  <label class="mps-label">Top (%)</label>
+                  <label class="mps-label">{{ t('Alto') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.mask.top ?? 0" :min="0" :max="100" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" ariaLabel="Mask top (%)" @update:modelValue="upMask('top', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Right (%)</label>
+                  <label class="mps-label">{{ t('Destra') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.mask.right ?? 0" :min="0" :max="100" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" ariaLabel="Mask right (%)" @update:modelValue="upMask('right', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Bottom (%)</label>
+                  <label class="mps-label">{{ t('Basso') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.mask.bottom ?? 0" :min="0" :max="100" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" ariaLabel="Mask bottom (%)" @update:modelValue="upMask('bottom', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Left (%)</label>
+                  <label class="mps-label">{{ t('Sinistra') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.mask.left ?? 0" :min="0" :max="100" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" ariaLabel="Mask left (%)" @update:modelValue="upMask('left', $event)" />
                 </div>
               </div>
@@ -1039,7 +1044,7 @@
             <!-- Ken Burns per Layer -->
             <template v-if="layer.type === 'image'">
               <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-              <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Ken Burns</p>
+              <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Zoom lento (Ken Burns)') }}</p>
               <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
                 <input type="checkbox" :checked="!!layer.kenBurns" @change="toggleKenBurns($event.target.checked)" class="mb-rounded" />
                 <span class="mb-text-[11px] mb-text-gray-400">{{ t('Attivo') }}</span>
@@ -1062,7 +1067,7 @@
 
             <!-- Motion Path -->
             <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Motion Path</p>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Percorso') }}</p>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="!!layer.motionPath" @change="toggleMotionPath($event.target.checked)" class="mb-rounded" />
               <span class="mb-text-[11px] mb-text-gray-400">{{ t('Anima lungo percorso') }}</span>
@@ -1074,7 +1079,7 @@
               </div>
               <template v-if="layer.motionPath.preset === 'custom'">
                 <div>
-                  <label class="mps-label">SVG Path (d="")</label>
+                  <label class="mps-label">{{ t('Percorso SVG (d="")') }}</label>
                   <textarea :value="layer.motionPath.path" @input="upMotionPath('path', $event.target.value)" rows="2"
                     class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-[10px] mb-text-gray-900 mb-resize-y mb-font-mono" placeholder="M0,0 C50,0 50,100 100,100"></textarea>
                 </div>
@@ -1089,17 +1094,17 @@
               </label>
               <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
                 <input type="checkbox" :checked="layer.motionPath.loop !== false" @change="upMotionPath('loop', $event.target.checked)" class="mb-rounded" />
-                <span class="mb-text-[11px] mb-text-gray-400">Loop</span>
+                <span class="mb-text-[11px] mb-text-gray-400">{{ t('Ripeti') }}</span>
               </label>
               <div>
-                <label class="mps-label">Easing</label>
+                <label class="mps-label">{{ t('Andamento') }}</label>
                 <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.motionPath.easing || 'linear'" :options="EASING_GROUPS" @update:model-value="upMotionPath('easing', $event)" />
               </div>
             </template>
 
             <!-- Parallax Layer -->
             <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Parallax Layer</p>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Parallasse') }}</p>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="!!layer.parallax" @change="toggleParallax($event.target.checked)" class="mb-rounded" />
               <span class="mb-text-[11px] mb-text-gray-400">{{ t('Parallax attivo') }}</span>
@@ -1116,7 +1121,7 @@
               <template v-if="layer.parallax.type === 'mouse' || layer.parallax.type === 'both'">
                 <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
                   <input type="checkbox" :checked="layer.parallax.tilt3d" @change="upParallax('tilt3d', $event.target.checked)" class="mb-rounded" />
-                  <span class="mb-text-[11px] mb-text-gray-400">Tilt 3D</span>
+                  <span class="mb-text-[11px] mb-text-gray-400">{{ t('Inclinazione 3D') }}</span>
                 </label>
               </template>
               <template v-if="layer.parallax.type === 'scroll' || layer.parallax.type === 'both'">
@@ -1149,16 +1154,42 @@
                 <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Andamento') }}<InfoTip :testo="t('Morbido: fra una tappa e l’altra il livello parte e arriva piano. Costante: va a velocità uniforme e la scala cresce in proporzione, così uno zoom che attraversa più tappe non rallenta a ogni tappa.')" :titolo="t('Andamento')" /></label>
                 <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.scrollMove.andamento || 'morbido'" :options="OPTS_ANDAMENTO" @update:model-value="upScrollMove('andamento', $event === 'morbido' ? undefined : $event)" />
               </div>
-              <p v-if="(layer.scrollMove.tappe || []).length > 2" class="mb-text-[10px] mb-text-gray-500">{{ t('Percorso a tappe: qui si cambiano la prima e l’ultima.') }} ({{ layer.scrollMove.tappe.length }})</p>
-              <template v-for="stato in ['da', 'a']" :key="stato">
-                <p class="mb-text-[10px] mb-text-gray-400 mb-mt-1">{{ stato === 'da' ? t('All’inizio') : t('Alla fine') }}</p>
-                <div class="mb-grid mb-grid-cols-2 mb-gap-2">
-                  <div v-for="c in SCROLL_MOVE_CAMPI.filter(c => !c.testo || layer.type === 'text' || layer.type === 'button')" :key="stato + c.k">
-                    <label class="mps-label">{{ t(c.l) }}</label>
-                    <NumberScrubber theme="dark" :modelValue="smVal(stato, c.k, c.d)" :min="c.min" :max="c.max" :step="c.step" :defaultValue="c.d" emitAs="number" :sliderOnFocus="false" :unit="c.u" :ariaLabel="t(c.l)" @update:modelValue="upSmVal(stato, c.k, $event)" />
-                  </div>
+              <!-- Le tappe del percorso (1.4.1352): tutte, col punto in cui stanno. Prima si vedevano solo la prima e
+                   l'ultima («All'inizio», «Alla fine», 30 cursori): il momento in cui un livello si muove non si vedeva. -->
+              <div class="mps-tappe">
+                <div class="mb-flex mb-items-center mb-justify-between">
+                  <label class="mps-label mb-mb-0 mb-flex mb-items-center mb-gap-1">{{ t('Tappe del percorso') }}<InfoTip :testo="t('Ogni tappa dice com’è il livello a quel punto del suo tratto (0% = inizio, 100% = fine); fra una tappa e l’altra il livello passa da un valore all’altro. Clicca una tappa per vederla sulla tela e cambiarla: la tela va a quel punto dello scorrimento.')" :titolo="t('Tappe del percorso')" /></label>
+                  <span class="mb-text-[10px] mb-text-gray-500">{{ tappeSM.length }}</span>
                 </div>
-              </template>
+                <!-- il tratto: i punti delle tappe e, con l'anteprima accesa, dov'è lo scorrimento -->
+                <div class="mps-tappe-barra" role="presentation">
+                  <span v-for="(tp, i) in tappeSM" :key="'b' + i" :class="['mps-tappe-punto', { 'is-on': i === tappaScelta }]" :style="{ left: tp.p + '%' }" :title="fmtP(tp.p) + '%'" @click="scegliTappa(i)"></span>
+                  <span v-if="scrollPreview != null" class="mps-tappe-ora" :style="{ left: delLivello(layer.scrollMove, scrollPreview) + '%' }"></span>
+                </div>
+                <div class="mb-space-y-0.5">
+                  <button v-for="(tp, i) in tappeSM" :key="'r' + i" type="button" :class="['mps-tappa', { 'is-on': i === tappaScelta }]" @click="scegliTappa(i)">
+                    <span class="mps-tappa-p">{{ fmtP(tp.p) }}%</span>
+                    <span class="mps-tappa-v">{{ riassuntoTappa(tp) }}</span>
+                  </button>
+                </div>
+                <div class="mb-flex mb-gap-1">
+                  <button type="button" class="mps-tappe-btn" @click="aggiungiTappa">+ {{ t('Tappa') }}</button>
+                  <button type="button" class="mps-tappe-btn" :disabled="tappeSM.length <= 2" @click="eliminaTappa">{{ t('Elimina tappa') }}</button>
+                </div>
+                <template v-if="tappaCorrente">
+                  <div>
+                    <label class="mps-label">{{ t('A che punto del tratto') }}</label>
+                    <NumberScrubber theme="dark" :modelValue="tappaCorrente.p" :min="0" :max="100" :step="0.5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('A che punto del tratto')" @update:modelValue="upTappa('p', $event)" />
+                  </div>
+                  <div class="mb-grid mb-grid-cols-1 mb-gap-2">
+                    <div v-for="c in campiTappa" :key="c.k">
+                      <label class="mps-label mb-flex mb-items-center mb-justify-between">{{ t(c.l) }}<button type="button" class="mps-tappe-x" :title="t('Non muovere più questa proprietà')" :aria-label="t('Non muovere più questa proprietà')" @click="togliChiave(c.k)">&times;</button></label>
+                      <NumberScrubber theme="dark" :modelValue="tappaCorrente.v[c.k] ?? c.d" :min="c.min" :max="c.max" :step="c.step" :defaultValue="c.d" emitAs="number" :sliderOnFocus="false" :unit="c.u" :ariaLabel="t(c.l)" @update:modelValue="upTappa(c.k, $event)" />
+                    </div>
+                  </div>
+                  <FieldSelect v-if="campiAggiungibili.length" ui="dropdown" size="compact" theme="dark" :model-value="''" :options="opzioniAggiungi" @update:model-value="aggiungiChiave" />
+                </template>
+              </div>
             </template>
           </template>
 
@@ -1187,7 +1218,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import IconPicker from './IconPicker.vue';
 import iconsSvg from './uikitIconsSvg.js';
 import FieldColor from '@/components/Builder/fields/FieldColor.vue';
@@ -1199,13 +1230,19 @@ import InfoTip from '../Builder/InfoTip.vue';
 // easing_to_css). La curva dell'hover resta fra le 5 di base, che il PHP accetta per l'hover.
 import { defaultTimeline, EASING_GROUPS } from './timelineUtils.js';
 import { t } from '@/i18n';
+import { nomeLivello, tappeDi, chiaviUsate, valoreSM, delLivello, dellaScena, SM_CHIAVI } from './livelloUtils.js';
 
 const props = defineProps({
   layer: { type: Object, default: null },
   selectedKeyframeId: { type: String, default: null },
   activeBreakpoint: { type: String, default: 'desktop' },
   slideLayers: { type: Array, default: () => [] },
+  // Anteprima dello scorrimento dell'editor (0–100 o null): le tappe del movimento la leggono e la spostano.
+  scrollPreview: { type: Number, default: null },
 });
+
+// Il nome che il livello avrebbe senza «Nome del livello» (testo, file, id parlante, tipo): segnaposto del campo.
+const nomeSuggerito = computed(() => (props.layer ? nomeLivello({ ...props.layer, name: '' }) : ''));
 
 const targetableLayers = computed(() => {
   const cur = props.layer?.id;
@@ -1238,7 +1275,7 @@ function targetLayerLabel(l) {
   return `${ico} ${short}`;
 }
 
-const emit = defineEmits(['update', 'update-keyframe', 'capture-from-canvas']);
+const emit = defineEmits(['update', 'update-keyframe', 'capture-from-canvas', 'set-scroll-preview']);
 
 const hasTimeline = computed(() => {
   return !!(props.layer?.timeline?.keyframes?.length);
@@ -1842,6 +1879,108 @@ function upSmVal(stato, k, val) {
   }
 }
 
+// ── Le tappe del percorso (1.4.1352) ──
+// Si leggono sempre come tappe ([{ p, v }]); si scrivono in scrollMove.tappe (il PHP le preferisce a da/a, che restano
+// valide per chi non le tocca): i dati salvati dei temi non cambiano finché non si modifica il livello.
+const tappaScelta = ref(0);
+const tappeSM = computed(() => tappeDi(props.layer?.scrollMove));
+const tappaCorrente = computed(() => tappeSM.value[Math.min(tappaScelta.value, tappeSM.value.length - 1)] || null);
+const perTesto = (c) => !c.testo || props.layer?.type === 'text' || props.layer?.type === 'button';
+const campiTappa = computed(() => {
+  const usate = chiaviUsate(props.layer?.scrollMove);
+  return SCROLL_MOVE_CAMPI.filter((c) => usate.includes(c.k) && perTesto(c));
+});
+const campiAggiungibili = computed(() => {
+  const usate = chiaviUsate(props.layer?.scrollMove);
+  return SCROLL_MOVE_CAMPI.filter((c) => !usate.includes(c.k) && perTesto(c));
+});
+const opzioniAggiungi = computed(() => [
+  { value: '', label: t('+ Muovi anche…') },
+  ...campiAggiungibili.value.map((c) => ({ value: c.k, label: t(c.l) })),
+]);
+watch(() => props.layer?.id, () => { tappaScelta.value = 0; });
+
+function fmtP(p) {
+  return Math.round(p * 10) / 10;
+}
+const BREVI = {
+  x: ['oriz.', 'px'], y: ['vert.', 'px'], s: ['scala', ''], sx: ['largh.', '×'], sy: ['alt.', '×'], r: ['rot.', '°'], rx: ['rot. X', '°'], ry: ['rot. Y', '°'],
+  o: ['opac.', '%'], mt: ['masch. ↓', '%'], mr: ['masch. ←', '%'], mb: ['masch. ↑', '%'], ml: ['masch. →', '%'], wdth: ['largh. car.', ''], wght: ['peso', ''],
+};
+function riassuntoTappa(tp) {
+  const parti = SM_CHIAVI.filter((k) => tp.v[k] !== undefined).map((k) => t(BREVI[k][0]) + ' ' + (Math.round(tp.v[k] * 100) / 100) + BREVI[k][1]);
+  return parti.length ? parti.join(' · ') : t('com’è sulla tela');
+}
+function scriviTappe(nuove) {
+  const sm = props.layer?.scrollMove;
+  if (!sm) return;
+  const pulite = [...nuove].sort((a, b) => a.p - b.p).map((x) => ({ p: Math.round(x.p * 100) / 100, ...x.v }));
+  const out = { ...sm, tappe: pulite };
+  delete out.da;
+  delete out.a;
+  up('scrollMove', out);
+}
+function scegliTappa(i) {
+  tappaScelta.value = i;
+  const tp = tappeSM.value[i];
+  // la tela va a quel punto dello scorrimento: si vede com'è il livello in quella tappa
+  if (tp) emit('set-scroll-preview', Math.round(dellaScena(props.layer.scrollMove, tp.p) * 10) / 10);
+}
+function upTappa(k, val) {
+  const i = Math.min(tappaScelta.value, tappeSM.value.length - 1);
+  const nuove = tappeSM.value.map((x, j) => (j === i ? (k === 'p' ? { p: Math.max(0, Math.min(100, +val || 0)), v: x.v } : { p: x.p, v: { ...x.v, [k]: val } }) : x));
+  if (k === 'p') {
+    // dopo lo spostamento la tappa resta scelta anche se cambia posto nell'ordine
+    const presa = nuove[i];
+    scriviTappe(nuove);
+    const ord = [...nuove].sort((a, b) => a.p - b.p);
+    tappaScelta.value = ord.indexOf(presa);
+  } else {
+    scriviTappe(nuove);
+  }
+}
+function aggiungiTappa() {
+  const sm = props.layer?.scrollMove;
+  const t2 = tappeSM.value;
+  if (!sm || !t2.length) return;
+  // al punto dell'anteprima, se è accesa; se no a metà fra la tappa scelta e la successiva (o la precedente)
+  let p;
+  if (props.scrollPreview != null) p = delLivello(sm, props.scrollPreview);
+  else {
+    const i = Math.min(tappaScelta.value, t2.length - 1);
+    const b = t2[i + 1] || t2[i - 1] || { p: 100 };
+    p = (t2[i].p + b.p) / 2;
+  }
+  p = Math.round(p * 10) / 10;
+  const c = sm.andamento === 'costante';
+  const v = {};
+  for (const k of chiaviUsate(sm)) v[k] = Math.round(valoreSM(t2, p, k, c) * 100) / 100;
+  const nuova = { p, v };
+  const nuove = [...t2, nuova];
+  scriviTappe(nuove);
+  tappaScelta.value = [...nuove].sort((a, b) => a.p - b.p).indexOf(nuova);
+}
+function eliminaTappa() {
+  const t2 = tappeSM.value;
+  if (t2.length <= 2) return;
+  const i = Math.min(tappaScelta.value, t2.length - 1);
+  scriviTappe(t2.filter((_, j) => j !== i));
+  tappaScelta.value = Math.max(0, i - 1);
+}
+function aggiungiChiave(k) {
+  if (!k) return;
+  const c = SCROLL_MOVE_CAMPI.find((x) => x.k === k);
+  // il valore di serie su tutte le tappe: non cambia niente finché non lo si modifica in una tappa
+  scriviTappe(tappeSM.value.map((x) => ({ p: x.p, v: { ...x.v, [k]: c ? c.d : 0 } })));
+}
+function togliChiave(k) {
+  scriviTappe(tappeSM.value.map((x) => {
+    const v = { ...x.v };
+    delete v[k];
+    return { p: x.p, v };
+  }));
+}
+
 // Parallax layer helpers
 function toggleParallax(enabled) {
   up('parallax', enabled ? { type: 'mouse', depth: 5, tilt3d: false, scrollSpeed: 0.5 } : null);
@@ -1853,6 +1992,24 @@ function upParallax(key, val) {
 </script>
 
 <style scoped>
+/* Le tappe del percorso (1.4.1352) */
+.mps-tappe { display: flex; flex-direction: column; gap: 6px; padding: 8px; border: 1px solid #374151; border-radius: 6px; background: #111827; }
+.mps-tappe-barra { position: relative; height: 18px; margin: 2px 6px; }
+.mps-tappe-barra::before { content: ''; position: absolute; left: 0; right: 0; top: 8px; height: 2px; background: #374151; border-radius: 1px; }
+.mps-tappe-punto { position: absolute; top: 3px; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; background: #60a5fa; border: 2px solid #111827; cursor: pointer; }
+.mps-tappe-punto.is-on { background: #fbbf24; box-shadow: 0 0 0 2px #fbbf24; }
+.mps-tappe-ora { position: absolute; top: 0; width: 2px; height: 18px; margin-left: -1px; background: #f87171; pointer-events: none; }
+.mps-tappa { display: flex; align-items: baseline; gap: 8px; width: 100%; text-align: left; padding: 3px 6px; border-radius: 4px; background: transparent; border: 1px solid transparent; color: #d1d5db; cursor: pointer; font-size: 10px; }
+.mps-tappa:hover { background: #1f2937; }
+.mps-tappa.is-on { background: #1e293b; border-color: #fbbf24; }
+.mps-tappa:focus-visible, .mps-tappe-btn:focus-visible, .mps-tappe-x:focus-visible { outline: 2px solid #93c5fd; outline-offset: 1px; }
+.mps-tappa-p { font-family: ui-monospace, monospace; font-weight: 700; color: #93c5fd; min-width: 40px; }
+.mps-tappa-v { color: #9ca3af; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mps-tappe-btn { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: #374151; color: #e5e7eb; border: 1px solid #4b5563; cursor: pointer; }
+.mps-tappe-btn:hover:not(:disabled) { background: #4b5563; }
+.mps-tappe-btn:disabled { opacity: .4; cursor: default; }
+.mps-tappe-x { background: none; border: 0; color: #6b7280; cursor: pointer; font-size: 12px; line-height: 1; padding: 0 2px; }
+.mps-tappe-x:hover { color: #f87171; }
 .mps-label {
   display: block;
   font-size: 10px;

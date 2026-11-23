@@ -30,9 +30,12 @@
         <!-- Video (mp4 thumbnail) -->
         <video
           v-else-if="slideBg.type === 'video' && slideBg.video && !isYouTube(slideBg.video)"
+          ref="bgVideo"
           :src="slideBg.video"
+          :poster="slideBg.image || undefined"
           class="mb-w-full mb-h-full mb-object-cover"
           muted
+          preload="metadata"
         ></video>
         <!-- Color / Gradient -->
         <div v-else class="mb-w-full mb-h-full" :style="bgColorStyle"></div>
@@ -148,6 +151,7 @@ import iconsSvg from './uikitIconsSvg.js';
 import { interpolateAtTime } from './timelineUtils.js';
 import { useStylesStore } from '@/stores/styles';
 import { t } from '@/i18n';
+import { statoSM, statoVale } from './livelloUtils.js';
 
 const props = defineProps({
   slide: { type: Object, required: true },
@@ -161,6 +165,11 @@ const props = defineProps({
   canvasMaxWidth: { type: Number, default: null },
   zoom: { type: Number, default: 1 },
   hiddenIds: { type: Set, default: () => new Set() },
+  // Anteprime (1.4.1352): lo scorrimento della pagina (0–100, null = vista ferma per modificare) e lo stato scelto
+  // ({ nome: valore }, null = tutti i livelli), con i valori degli stati all'avvio (impostazione «Stati all'avvio»).
+  scrollPreview: { type: Number, default: null },
+  statePreview: { type: Object, default: null },
+  initialStates: { type: Object, default: () => ({}) },
 });
 
 const emit = defineEmits(['deselect', 'select-layer', 'update-layer', 'update-keyframe', 'start-edit', 'stop-edit']);
@@ -180,6 +189,14 @@ function velo(bg) {
 
 const canvasWrap = ref(null);
 const canvasEl = ref(null);
+const bgVideo = ref(null);
+
+// Lo sfondo video che «Segue lo scorrimento»: nell'anteprima avanza col cursore, come sul sito.
+watch(() => props.scrollPreview, (p) => {
+  const v = bgVideo.value;
+  if (!v || p == null || !props.slide?.background?.videoScroll || !(v.duration > 0)) return;
+  try { v.currentTime = Math.max(0, Math.min(v.duration - 0.05, (p / 100) * v.duration)); } catch (e) { /* non ancora caricato */ }
+});
 
 const CANVAS_W = computed(() => {
   if (props.canvasMaxWidth) {
@@ -273,7 +290,27 @@ function resolveLayerValues(l) {
   return { ...l, ...merged };
 }
 
+// Lo stile di un livello con le anteprime (1.4.1352): nello stato scelto i livelli degli altri valori spariscono, e
+// col cursore «Scorrimento» il livello si muove come sul sito (translate/scale/rotate si sommano al suo transform).
 function layerStyle(l) {
+  if (props.statePreview && l.stato?.nome) {
+    const nome = String(l.stato.nome).toLowerCase();
+    const v = Object.prototype.hasOwnProperty.call(props.statePreview, nome) ? props.statePreview[nome] : (props.initialStates?.[nome] ?? '');
+    if (!statoVale(l.stato.vale, v)) return { display: 'none' };
+  }
+  const st = layerStyleBase(l);
+  if (st.display === 'none' || props.scrollPreview == null || !l.scrollMove) return st;
+  const sm = statoSM(l.scrollMove, props.scrollPreview, CANVAS_W.value / 1440);
+  if (!sm) return st;
+  if (sm.translate) st.translate = sm.translate;
+  if (sm.scale) st.scale = sm.scale;
+  if (sm.rotate) st.rotate = sm.rotate;
+  if (sm.opacita != null) st.opacity = (st.opacity ?? 1) * sm.opacita;
+  if (sm.clipPath) st.clipPath = sm.clipPath;
+  return st;
+}
+
+function layerStyleBase(l) {
   const rl = resolveLayerValues(l);
   // Nascondi layer se visible === false nel breakpoint
   if (rl.visible === false) {

@@ -91,18 +91,18 @@
                 </div>
                 <label class="mb-flex mb-items-center mb-gap-1">
                   <input type="checkbox" :checked="currentBg.kenBurns" @change="updateBg('kenBurns', $event.target.checked)" class="mb-rounded" />
-                  <span class="mb-text-[10px] mb-text-gray-400">Ken Burns</span>
+                  <span class="mb-text-[10px] mb-text-gray-400">{{ t('Zoom lento (Ken Burns)') }}</span>
                 </label>
                 <template v-if="currentBg.kenBurns">
                   <div class="mb-w-28">
                     <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="currentBg.kenBurnsDirection || 'in'" :options="OPTS_KENBURNS_DIR" @update:model-value="updateBg('kenBurnsDirection', $event)" />
                   </div>
                   <div class="mb-flex mb-items-center mb-gap-1">
-                    <label class="mb-text-[10px] mb-text-gray-400">Pan X%</label>
+                    <label class="mb-text-[10px] mb-text-gray-400">{{ t('Spostamento orizzontale') }}</label>
                     <NumberScrubber theme="dark" :modelValue="currentBg.kenBurnsPanX || 0" :min="-50" :max="50" :step="5" :defaultValue="0" emitAs="number" unit="%" :ariaLabel="'Pan X%'" @update:modelValue="updateBg('kenBurnsPanX', $event)" />
                   </div>
                   <div class="mb-flex mb-items-center mb-gap-1">
-                    <label class="mb-text-[10px] mb-text-gray-400">Pan Y%</label>
+                    <label class="mb-text-[10px] mb-text-gray-400">{{ t('Spostamento verticale') }}</label>
                     <NumberScrubber theme="dark" :modelValue="currentBg.kenBurnsPanY || 0" :min="-50" :max="50" :step="5" :defaultValue="0" emitAs="number" unit="%" :ariaLabel="'Pan Y%'" @update:modelValue="updateBg('kenBurnsPanY', $event)" />
                   </div>
                   <div class="mb-flex mb-items-center mb-gap-1">
@@ -155,7 +155,7 @@
               </div>
               <!-- Tab label (per navigazione tab) -->
               <div class="mb-flex mb-items-center mb-gap-1">
-                <label class="mb-text-[10px] mb-text-gray-400">Tab label</label>
+                <label class="mb-text-[10px] mb-text-gray-400">{{ t('Etichetta della scheda') }}</label>
                 <input :value="activeSlide?.tabLabel || ''" @input="activeSlide.tabLabel = $event.target.value" class="mps-inp mb-w-28" placeholder="Slide N" />
               </div>
               <!-- Overlay -->
@@ -177,10 +177,14 @@
               </div>
             </div>
           </div>
-          <div v-else class="mb-border-b mb-border-gray-700 mb-px-3 mb-py-1">
-            <button @click="showSlideBg = true" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-gray-300">
-              {{ t('Mostra sfondo slide') }} &darr;
-            </button>
+          <!-- Sfondo della slide chiuso (1.4.1352): dice subito cos'è (un video, un'immagine) e da dove si cambia.
+               Prima c'era solo «Mostra sfondo slide»: il video della tela sembrava venire dal nulla. -->
+          <div v-else class="mps-sfondo-chiuso mb-border-b mb-border-gray-700 mb-px-3 mb-py-1.5">
+            <span class="mb-text-[10px] mb-text-gray-500">{{ t('Sfondo della slide') }}:</span>
+            <span :class="['mps-sfondo-tipo', 'mps-sfondo-tipo--' + (currentBg.type || 'color')]">{{ nomeTipoSfondo }}</span>
+            <span v-if="fileSfondo" class="mb-text-[10px] mb-text-gray-400 mb-truncate mb-max-w-xs" :title="fileSfondo">{{ fileSfondo }}</span>
+            <span v-if="currentBg.type === 'video' && currentBg.videoScroll" class="mb-text-[10px] mb-text-blue-300">· {{ t('segue lo scorrimento') }}</span>
+            <button @click="showSlideBg = true" class="mps-sfondo-cambia">{{ currentBg.type === 'video' || currentBg.type === 'image' ? t('Cambia') : t('Modifica') }}</button>
           </div>
 
           <!-- Breakpoint bar -->
@@ -191,6 +195,31 @@
               :class="['mb-px-2 mb-py-0.5 mb-rounded mb-text-[10px] mb-transition-colors', activeBreakpoint === bp.key ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-400 hover:mb-bg-gray-600']"
               :title="bp.label + ' (' + bp.width + 'px)'"
             ><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:-1px;margin-right:3px"><path :d="bp.icon" /></svg>{{ bp.label }}</button>
+
+            <!-- Anteprime (1.4.1352): lo scorrimento della pagina e gli stati, come sul sito -->
+            <div class="mps-anteprime mb-ml-auto mb-flex mb-items-center mb-gap-3">
+              <div v-if="usaScorrimento" class="mb-flex mb-items-center mb-gap-1.5">
+                <span class="mb-text-[10px] mb-text-gray-400 mb-flex mb-items-center mb-gap-1">{{ t('Scorrimento') }}<InfoTip :testo="t('Trascina per vedere come si muovono i livelli mentre la pagina scorre: 0% è l’inizio, 100% la fine del tratto dello slider. ▶ fa vedere tutto il movimento. Per spostare e modificare i livelli torna alla vista ferma con ×.')" :titolo="t('Anteprima dello scorrimento')" /></span>
+                <button @click="guardaMovimento" class="mps-ant-btn" :title="t('Guarda il movimento')" :aria-label="t('Guarda il movimento')">
+                  <svg v-if="!scrollPlaying" width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4l14 8-14 8z"/></svg>
+                  <svg v-else width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+                </button>
+                <input type="range" min="0" max="100" step="0.5" :value="scrollPreview ?? 0" @input="fermaScorrimento(); scrollPreview = +$event.target.value" class="mps-ant-range" :aria-label="t('Scorrimento')" />
+                <span class="mb-text-[10px] mb-font-mono mb-w-9 mb-text-right" :class="scrollPreview == null ? 'mb-text-gray-500' : 'mb-text-blue-300'">{{ scrollPreview == null ? t('ferma') : Math.round(scrollPreview) + '%' }}</span>
+                <button v-if="scrollPreview != null" @click="chiudiAnteprimaScorrimento" class="mps-ant-btn" :title="t('Torna alla vista ferma')" :aria-label="t('Torna alla vista ferma')">&times;</button>
+              </div>
+              <div v-if="opzioniStato.length > 2" class="mb-flex mb-items-center mb-gap-1.5">
+                <span class="mb-text-[10px] mb-text-gray-400 mb-flex mb-items-center mb-gap-1">{{ t('Stato dei livelli') }}<InfoTip :testo="t('Alcuni livelli si vedono solo in uno stato (◐ nella barra dei livelli), che cambia quando si clicca un altro livello. «Come all’avvio» mostra lo slider come lo vede chi apre la pagina; scegli uno stato per vedere solo i suoi livelli; «Tutti i livelli insieme» li mostra uno sopra l’altro, per modificarli.')" :titolo="t('Anteprima degli stati')" /></span>
+                <div class="mb-w-40">
+                  <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="valoreStatoScelto" :options="opzioniStato" @update:model-value="scegliStato" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Cosa fa la slide, in numeri (i bollini della barra dei livelli dicono quale livello) -->
+          <div v-if="riepilogoAnimazioni.length" class="mps-riepilogo mb-flex mb-flex-wrap mb-items-center mb-gap-x-3 mb-gap-y-1 mb-px-3 mb-py-1 mb-border-b mb-border-gray-700">
+            <span class="mb-text-[10px] mb-text-gray-500 mb-flex mb-items-center mb-gap-1">{{ t('In questa slide') }}<InfoTip :testo="t('Quanti livelli fanno qualcosa, e cosa. Nella barra dei livelli lo stesso bollino dice quali: ↕ scorrendo, ⏱ linea del tempo, Aa lettere, ◐ stato, ☝ clic, ∞ continuo, {} CSS, ▭ solo su alcuni schermi. Passa il puntatore su un bollino per leggerlo.')" :titolo="t('Cosa succede in questa slide')" />:</span>
+            <span v-for="r in riepilogoAnimazioni" :key="r.k" :class="['mps-riep', 'mps-riep--' + r.k]">{{ r.testo }}</span>
           </div>
 
           <!-- Canvas -->
@@ -207,6 +236,9 @@
               :canvasMaxWidth="canvasDesignWidth"
               :zoom="canvasZoom"
               :hiddenIds="hiddenLayerIds"
+              :scrollPreview="scrollPreview"
+              :statePreview="statePreview"
+              :initialStates="statiIniziali"
               @deselect="selectedLayerId = null"
               @select-layer="selectedLayerId = $event"
               @update-layer="updateLayer"
@@ -216,11 +248,11 @@
             />
             <!-- Zoom controls overlay -->
             <div class="mb-absolute mb-bottom-2 mb-right-2 mb-flex mb-items-center mb-gap-1 mb-bg-gray-800/90 mb-rounded mb-px-2 mb-py-1 mb-z-10">
-              <button @click="canvasZoom = Math.max(0.25, canvasZoom - 0.25)" class="mb-text-gray-400 hover:mb-text-white mb-text-xs mb-px-1" title="Zoom out">−</button>
+              <button @click="canvasZoom = Math.max(0.25, canvasZoom - 0.25)" class="mb-text-gray-400 hover:mb-text-white mb-text-xs mb-px-1" :title="t('Riduci')">−</button>
               <input type="range" :value="canvasZoom * 100" @input="canvasZoom = Math.max(25, Math.min(300, parseInt($event.target.value))) / 100" min="25" max="300" step="25" class="mb-w-20" />
-              <button @click="canvasZoom = Math.min(3, canvasZoom + 0.25)" class="mb-text-gray-400 hover:mb-text-white mb-text-xs mb-px-1" title="Zoom in">+</button>
+              <button @click="canvasZoom = Math.min(3, canvasZoom + 0.25)" class="mb-text-gray-400 hover:mb-text-white mb-text-xs mb-px-1" :title="t('Ingrandisci')">+</button>
               <span class="mb-text-[10px] mb-text-gray-400 mb-font-mono mb-w-10 mb-text-center">{{ Math.round(canvasZoom * 100) }}%</span>
-              <button @click="canvasZoom = 1" class="mb-text-[10px] mb-text-gray-500 hover:mb-text-white mb-px-1" title="Reset zoom">⊘</button>
+              <button @click="canvasZoom = 1" class="mb-text-[10px] mb-text-gray-500 hover:mb-text-white mb-px-1" :title="t('Zoom al 100%')">⊘</button>
             </div>
           </div>
 
@@ -270,6 +302,8 @@
           :selectedKeyframeId="selectedKeyframeId"
           :activeBreakpoint="activeBreakpoint"
           :slideLayers="activeSlide?.layers || []"
+          :scrollPreview="scrollPreview"
+          @set-scroll-preview="fermaScorrimento(); scrollPreview = $event"
           @update="updateLayerProp"
           @update-keyframe="onUpdateKeyframe"
           @capture-from-canvas="captureLayerToKeyframe"
@@ -299,6 +333,7 @@ import FieldSelect from '../Builder/fields/FieldSelect.vue';
 import NumberScrubber from '../Builder/fields/NumberScrubber.vue';
 import { t } from '@/i18n';
 import InfoTip from '../Builder/InfoTip.vue';
+import { leggiStati, statiDellaSlide, animazioniLivello } from './livelloUtils.js';
 
 // Option arrays per FieldSelect (stessi value dei vecchi <option>: dati salvati invariati)
 const OPTS_BG_TYPE = [
@@ -409,6 +444,89 @@ const hasAnyTimeline = computed(() => {
   const layers = activeSlide.value?.layers || [];
   return layers.some(l => l.timeline?.keyframes?.length >= 2);
 });
+
+// ── Anteprime (1.4.1352): vedere sulla tela quello che fa lo slider sul sito ──
+// Scorrimento: 0–100 come l'avanzamento della scena sul sito (col «Scorrimento fissato» il tratto in cui lo slider resta
+// fermo in cima); null = vista ferma, quella per modificare (i livelli che entrano scorrendo restano visibili).
+const scrollPreview = ref(null);
+// Stato: {} = come all'avvio (quello che vede chi apre la pagina: di serie, se no i livelli dei vari stati stanno
+// tutti uno sopra l'altro), null = tutti i livelli insieme (per modificarli), { nome: valore } = quello stato.
+const statePreview = ref({});
+let scrollPlayRaf = null;
+const usaScorrimento = computed(() => {
+  const layers = activeSlide.value?.layers || [];
+  return !!data.scrollTimeline || layers.some(l => l.scrollMove) || !!activeSlide.value?.background?.videoScroll;
+});
+const statiIniziali = computed(() => leggiStati(data.stati || ''));
+const statiSlide = computed(() => statiDellaSlide(activeSlide.value?.layers || [], statiIniziali.value));
+const opzioniStato = computed(() => {
+  const opts = [{ value: 'avvio', label: t('Come all’avvio') }, { value: 'tutti', label: t('Tutti i livelli insieme') }];
+  for (const [nome, valori] of Object.entries(statiSlide.value)) {
+    for (const v of valori) opts.push({ value: nome + '=' + v, label: nome + ' = ' + v });
+  }
+  return opts;
+});
+const valoreStatoScelto = computed(() => {
+  const s = statePreview.value;
+  if (!s) return 'tutti';
+  const [n] = Object.keys(s);
+  return n ? n + '=' + s[n] : 'avvio';
+});
+function scegliStato(v) {
+  if (!v || v === 'avvio') { statePreview.value = {}; return; }
+  if (v === 'tutti') { statePreview.value = null; return; }
+  const i = v.indexOf('=');
+  statePreview.value = { [v.slice(0, i)]: v.slice(i + 1) };
+}
+const scrollPlaying = ref(false);
+function fermaScorrimento() {
+  if (scrollPlayRaf) cancelAnimationFrame(scrollPlayRaf);
+  scrollPlayRaf = null;
+  scrollPlaying.value = false;
+}
+// Lo sfondo della slide, detto in chiaro nella barra chiusa: il tipo e il nome del file.
+const nomeTipoSfondo = computed(() => {
+  const tipi = { color: t('Colore'), image: t('Immagine'), video: t('Video'), gradient: t('Gradiente'), transparent: t('Trasparente') };
+  return tipi[currentBg.value.type || 'color'] || currentBg.value.type;
+});
+const fileSfondo = computed(() => {
+  const bg = currentBg.value;
+  const url = bg.type === 'video' ? bg.video : (bg.type === 'image' ? bg.image : '');
+  return url ? String(url).split(/[?#]/)[0].split('/').pop() : '';
+});
+function chiudiAnteprimaScorrimento() {
+  fermaScorrimento();
+  scrollPreview.value = null;
+}
+// «Guarda il movimento»: la scena da 0 a 100 in 6 secondi, poi resta alla fine.
+function guardaMovimento() {
+  if (scrollPlayRaf) { fermaScorrimento(); return; }
+  const durata = 6000;
+  const partenza = scrollPreview.value != null && scrollPreview.value < 99 ? scrollPreview.value : 0;
+  const t0 = performance.now() - (partenza / 100) * durata;
+  const passo = (ts) => {
+    const p = Math.min(100, ((ts - t0) / durata) * 100);
+    scrollPreview.value = Math.round(p * 10) / 10;
+    scrollPlayRaf = p < 100 ? requestAnimationFrame(passo) : null;
+    if (!scrollPlayRaf) scrollPlaying.value = false;
+  };
+  scrollPlaying.value = true;
+  scrollPlayRaf = requestAnimationFrame(passo);
+}
+// Cosa succede nella slide, in numeri (riga sopra la tela): quanti livelli scorrendo, con uno stato, ecc.
+const riepilogoAnimazioni = computed(() => {
+  const conta = {};
+  for (const l of activeSlide.value?.layers || []) {
+    for (const a of animazioniLivello(l)) conta[a.k] = (conta[a.k] || 0) + 1;
+  }
+  const nomi = {
+    scroll: t('si muovono scorrendo'), timeline: t('con linea del tempo'), lettere: t('entrano lettera per lettera'),
+    stato: t('legati a uno stato'), azione: t('cliccabili'), pulisci: t('da pulire col puntatore'), ciclo: t('in movimento continuo'),
+    parallasse: t('in parallasse'), css: t('con CSS su misura'), formati: t('solo su alcuni schermi'),
+  };
+  return Object.entries(conta).filter(([k]) => nomi[k]).map(([k, n]) => ({ k, testo: n + ' ' + nomi[k] }));
+});
+watch(activeSlideIndex, () => { statePreview.value = {}; });
 
 function onTimelineSelectLayer(layerId) {
   editingGlobal.value = false;
@@ -839,6 +957,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   stopTimelinePlay();
+  fermaScorrimento();
   window.removeEventListener('pointermove', onPanelResizeMove);
   window.removeEventListener('pointerup', onPanelResizeUp);
 });
@@ -848,6 +967,23 @@ onUnmounted(() => {
 .mb-bg-gray-850 {
   background: #1a2234;
 }
+/* Lo sfondo della slide nella barra chiusa (1.4.1352) */
+.mps-sfondo-chiuso { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.mps-sfondo-tipo { font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 999px; background: #334155; color: #e2e8f0; flex-shrink: 0; }
+.mps-sfondo-tipo--video { background: #7f1d1d; color: #fecaca; }
+.mps-sfondo-tipo--image { background: #1e3a5f; color: #bfdbfe; }
+.mps-sfondo-cambia { margin-left: 4px; font-size: 10px; font-weight: 600; color: #e5e7eb; background: #374151; border: 1px solid #4b5563; border-radius: 4px; padding: 1px 8px; cursor: pointer; flex-shrink: 0; }
+.mps-sfondo-cambia:hover { background: #4b5563; }
+.mps-sfondo-cambia:focus-visible, .mps-ant-btn:focus-visible { outline: 2px solid #93c5fd; outline-offset: 1px; }
+/* Anteprime di scorrimento e stato */
+.mps-ant-btn { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 4px; background: #374151; color: #e5e7eb; border: 1px solid #4b5563; cursor: pointer; font-size: 13px; line-height: 1; }
+.mps-ant-btn:hover { background: #4b5563; }
+.mps-ant-range { width: 140px; accent-color: #60a5fa; }
+.mps-riep { font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 999px; background: #334155; color: #cbd5e1; }
+.mps-riep--scroll { background: #1e3a5f; color: #93c5fd; }
+.mps-riep--timeline { background: #3b2f5f; color: #c4b5fd; }
+.mps-riep--stato, .mps-riep--azione, .mps-riep--pulisci { background: #4a3a14; color: #fcd34d; }
+.mps-riep--css { background: #4c1d1d; color: #fca5a5; }
 .mps-inp {
   background: #ffffff;
   border: 1px solid #d1d5db;

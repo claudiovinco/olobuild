@@ -41,6 +41,9 @@ export default {
   fields: [
     { key: 'icon', label: t('Nome icona'), type: 'icon' },
     { key: 'link_url', label: t('URL link'), type: 'link' },
+    { key: 'link_label', label: t('Nome del link'), type: 'text', placeholder: t('es. Il mio account'),
+      condition: { field: 'link_url', op: 'notEmpty' },
+      description: t('Lo legge chi usa un lettore di schermo al posto dell’icona. Vuoto: il nome dell’icona.') },
     { key: 'link_target', label: t('Apri in'), type: 'select', options: [
       { value: '_self', label: t('Stessa finestra') },
       { value: '_blank', label: t('Nuova finestra') },

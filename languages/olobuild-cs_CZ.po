@@ -2534,3 +2534,276 @@ msgstr "Přejít na Pro"
 #: licenza-1.4.1345
 msgid "Free e Pro"
 msgstr "Free a Pro"
+
+#: licenza-1.4.1345
+msgid "Con OLObuild Pro"
+msgstr "S OLObuild Pro"
+
+msgid "%1$s non fa parte di OLObuild Free: lo hai con OLObuild Pro o con la licenza di %2$s."
+msgstr "%1$s není součástí OLObuild Free: získáte ho s OLObuild Pro nebo s licencí %2$s."
+
+#: licenza-1.4.1345
+msgid "Sfondo della slide"
+msgstr "Pozadí snímku"
+
+msgid "segue lo scorrimento"
+msgstr "sleduje posouvání"
+
+msgid "Trascina per vedere come si muovono i livelli mentre la pagina scorre: 0% è l’inizio, 100% la fine del tratto dello slider. ▶ fa vedere tutto il movimento. Per spostare e modificare i livelli torna alla vista ferma con ×."
+msgstr "Přetažením uvidíte, jak se vrstvy pohybují při posouvání stránky: 0 % je začátek, 100 % konec úseku slideru. ▶ přehraje celý pohyb. Chcete-li vrstvy přesouvat a upravovat, vraťte se křížkem × do klidového zobrazení."
+
+msgid "Anteprima dello scorrimento"
+msgstr "Náhled posouvání"
+
+msgid "Guarda il movimento"
+msgstr "Přehrát pohyb"
+
+msgid "ferma"
+msgstr "klid"
+
+msgid "Torna alla vista ferma"
+msgstr "Zpět do klidového zobrazení"
+
+msgid "Stato dei livelli"
+msgstr "Stav vrstev"
+
+msgid "Alcuni livelli si vedono solo in uno stato (◐ nella barra dei livelli), che cambia quando si clicca un altro livello. «Come all’avvio» mostra lo slider come lo vede chi apre la pagina; scegli uno stato per vedere solo i suoi livelli; «Tutti i livelli insieme» li mostra uno sopra l’altro, per modificarli."
+msgstr "Některé vrstvy jsou vidět jen v jednom stavu (◐ v liště vrstev), který se mění kliknutím na jinou vrstvu. «Jako na začátku» ukáže slider tak, jak ho vidí ten, kdo otevře stránku; zvolte stav a uvidíte jen jeho vrstvy; «Všechny vrstvy najednou» je ukáže jednu přes druhou, abyste je mohli upravit."
+
+msgid "Anteprima degli stati"
+msgstr "Náhled stavů"
+
+msgid "In questa slide"
+msgstr "V tomto snímku"
+
+msgid "Quanti livelli fanno qualcosa, e cosa. Nella barra dei livelli lo stesso bollino dice quali: ↕ scorrendo, ⏱ linea del tempo, Aa lettere, ◐ stato, ☝ clic, ∞ continuo, {} CSS, ▭ solo su alcuni schermi. Passa il puntatore su un bollino per leggerlo."
+msgstr "Kolik vrstev něco dělá a co. V liště vrstev to samé označení říká které: ↕ při posouvání, ⏱ časová osa, Aa písmena, ◐ stav, ☝ kliknutí, ∞ nepřetržitě, {} CSS, ▭ jen na některých obrazovkách. Najeďte na označení ukazatelem a přečtete si ho."
+
+msgid "Cosa succede in questa slide"
+msgstr "Co se děje v tomto snímku"
+
+msgid "Come all’avvio"
+msgstr "Jako na začátku"
+
+msgid "Tutti i livelli insieme"
+msgstr "Všechny vrstvy najednou"
+
+msgid "si muovono scorrendo"
+msgstr "se hýbou při posouvání"
+
+msgid "con linea del tempo"
+msgstr "s časovou osou"
+
+msgid "entrano lettera per lettera"
+msgstr "přicházejí písmeno po písmenu"
+
+msgid "legati a uno stato"
+msgstr "vázané na stav"
+
+msgid "cliccabili"
+msgstr "klikatelné"
+
+msgid "da pulire col puntatore"
+msgstr "k setření ukazatelem"
+
+msgid "in movimento continuo"
+msgstr "v nepřetržitém pohybu"
+
+msgid "in parallasse"
+msgstr "s paralaxou"
+
+msgid "con CSS su misura"
+msgstr "s vlastním CSS"
+
+msgid "solo su alcuni schermi"
+msgstr "jen na některých obrazovkách"
+
+msgid "Nome del livello"
+msgstr "Název vrstvy"
+
+msgid "Serve solo a te, per riconoscere il livello nella barra dei livelli: sul sito non si vede. Vuoto, il livello prende il nome dal suo testo o dal file."
+msgstr "Slouží jen vám, abyste vrstvu poznali v liště vrstev: na webu není vidět. Když je prázdný, vrstva převezme název ze svého textu nebo souboru."
+
+msgid "Cosa mostra l’immagine (per chi non la vede)"
+msgstr "Co obrázek ukazuje (pro ty, kdo ho nevidí)"
+
+msgid "Tappe del percorso"
+msgstr "Zastávky dráhy"
+
+msgid "Ogni tappa dice com’è il livello a quel punto del suo tratto (0% = inizio, 100% = fine); fra una tappa e l’altra il livello passa da un valore all’altro. Clicca una tappa per vederla sulla tela e cambiarla: la tela va a quel punto dello scorrimento."
+msgstr "Každá zastávka říká, jak vrstva vypadá v daném bodě svého úseku (0 % = začátek, 100 % = konec); mezi zastávkami vrstva přechází z jedné hodnoty do druhé. Klikněte na zastávku, uvidíte ji na plátně a můžete ji změnit: plátno skočí do toho bodu posouvání."
+
+msgid "Elimina tappa"
+msgstr "Smazat zastávku"
+
+msgid "A che punto del tratto"
+msgstr "Bod úseku"
+
+msgid "Non muovere più questa proprietà"
+msgstr "Tuto vlastnost už nehýbat"
+
+msgid "+ Muovi anche…"
+msgstr "+ Hýbat také…"
+
+msgid "com’è sulla tela"
+msgstr "jako na plátně"
+
+msgid "Si muove scorrendo la pagina"
+msgstr "Hýbe se při posouvání stránky"
+
+msgid "tappe"
+msgstr "zastávky"
+
+msgid "Linea del tempo"
+msgstr "Časová osa"
+
+msgid "fotogrammi chiave"
+msgstr "klíčové snímky"
+
+msgid "Le lettere entrano una alla volta"
+msgstr "Písmena přicházejí po jednom"
+
+msgid "Si vede solo in uno stato"
+msgstr "Vidět jen v jednom stavu"
+
+msgid "Fa qualcosa al clic"
+msgstr "Po kliknutí něco udělá"
+
+msgid "Si cancella passandoci sopra"
+msgstr "Smaže se přejetím"
+
+msgid "Ha un CSS su misura (Avanzate)"
+msgstr "Má vlastní CSS (Pokročilé)"
+
+msgid "Nascosto all’avvio: lo mostra un altro livello al clic"
+msgstr "Na začátku skrytá: zobrazí ji jiná vrstva po kliknutí"
+
+msgid "computer"
+msgstr "počítač"
+
+msgid "notebook"
+msgstr "notebook"
+
+msgid "tablet"
+msgstr "tablet"
+
+msgid "telefono"
+msgstr "telefon"
+
+msgid "Si vede solo su"
+msgstr "Vidět jen na"
+
+msgid "Non si vede su nessuno schermo"
+msgstr "Není vidět na žádné obrazovce"
+
+msgid "Testo del pulsante che azzera"
+msgstr "Text tlačítka pro vymazání"
+
+msgid "Resetta"
+msgstr "Vymazat"
+
+msgid "Sfondo contatore"
+msgstr "Pozadí počítadla"
+
+msgid "Colore contatore"
+msgstr "Barva počítadla"
+
+msgid "Mostra lo sconto"
+msgstr "Zobrazit slevu"
+
+msgid "Sui prodotti in saldo, un bollino con la percentuale di sconto sulla foto."
+msgstr "U zlevněných produktů štítek s procentem slevy na fotce."
+
+msgid "Sfondo bollino sconto"
+msgstr "Pozadí štítku slevy"
+
+msgid "Nome del link"
+msgstr "Název odkazu"
+
+msgid "es. Il mio account"
+msgstr "např. Můj účet"
+
+msgid "Lo legge chi usa un lettore di schermo al posto dell’icona. Vuoto: il nome dell’icona."
+msgstr "Uslyší ho uživatelé čteček obrazovky místo ikony. Prázdné: název ikony."
+
+msgid "Lo spazio attorno al contenuto dell’hero. Se imposti il Padding del Contenitore, vale quello."
+msgstr "Prostor kolem obsahu hera. Pokud nastavíte Padding kontejneru, platí ten."
+
+msgid "Proprietà CSS applicate direttamente al riquadro della tile, per esempio color: red; oppure transform: rotate(2deg);"
+msgstr "Vlastnosti CSS použité přímo na rámeček dlaždice, například color: red; nebo transform: rotate(2deg);"
+
+msgid "&quot;Foto interne&quot;: ogni immagine o video dentro la tile (gallerie, griglie) si inclina singolarmente."
+msgstr "&quot;Vnitřní fotky&quot;: každý obrázek nebo video v dlaždici (galerie, mřížky) se naklání samostatně."
+
+msgid "Il cursore che segue il mouse in tutto il sito, al posto della freccia. Ogni pagina può sceglierne un altro in «Cursore di questa pagina». Su telefoni e tablet, e nel canvas del builder, resta quello di sistema; solo la Torcia resta anche su telefoni e tablet, con la luce ferma al centro dello schermo."
+msgstr "Kurzor, který sleduje myš po celém webu místo šipky. Každá stránka si může zvolit jiný v «Kurzor této stránky». Na telefonech a tabletech a na plátně builderu zůstává systémový; jen Baterka zůstává i na telefonech a tabletech, se světlem nehybně uprostřed obrazovky."
+
+msgid "JavaScript eseguito sul sito, non nel builder. La variabile «el» contiene l'elemento della tile."
+msgstr "JavaScript spuštěný na webu, ne v builderu. Proměnná «el» obsahuje prvek dlaždice."
+
+msgid "Piena: la tile occupa tutta la riga della colonna, e il suo Allineamento la sposta a sinistra, al centro o a destra."
+msgstr "Plná: dlaždice zabírá celý řádek sloupce a její Zarovnání ji posouvá vlevo, na střed nebo vpravo."
+
+msgid "Adattata: la tile è larga quanto il suo contenuto, e più tile adattate una dopo l'altra si affiancano sulla stessa riga (per esempio due pulsanti vicini). L'Allineamento della prima allinea tutta la fila."
+msgstr "Přizpůsobená: dlaždice je široká jako její obsah a několik přizpůsobených dlaždic za sebou stojí vedle sebe na stejném řádku (například dvě tlačítka vedle sebe). Zarovnání první zarovná celou řadu."
+
+#: licenza-1.4.1345
+msgid "Zoom lento (Ken Burns)"
+msgstr "Pomalý zoom (Ken Burns)"
+
+msgid "Spostamento orizzontale"
+msgstr "Vodorovný posun"
+
+msgid "Spostamento verticale"
+msgstr "Svislý posun"
+
+msgid "Etichetta della scheda"
+msgstr "Popisek karty"
+
+msgid "Zoom al 100%"
+msgstr "Zvětšení na 100 %"
+
+msgid "mp4 o indirizzo YouTube"
+msgstr "mp4 nebo adresa YouTube"
+
+msgid "mp3 o indirizzo dell’audio"
+msgstr "mp3 nebo adresa zvuku"
+
+msgid "Livello da mostrare o nascondere"
+msgstr "Vrstva k zobrazení nebo skrytí"
+
+msgid "Spaziatura lettere"
+msgstr "Rozestup písmen"
+
+msgid "Contorno del testo"
+msgstr "Obrys textu"
+
+msgid "Spessore del tratto"
+msgstr "Tloušťka tahu"
+
+msgid "Filtro sfondo"
+msgstr "Filtr pozadí"
+
+msgid "Ombra del testo"
+msgstr "Stín textu"
+
+msgid "Rivelazione a blocco"
+msgstr "Odhalení blokem"
+
+msgid "Cursore del mouse"
+msgstr "Kurzor myši"
+
+msgid "Ritardo fra le lettere"
+msgstr "Zpoždění mezi písmeny"
+
+msgid "Movimento continuo"
+msgstr "Nepřetržitý pohyb"
+
+msgid "Inclinazione orizzontale"
+msgstr "Vodorovné zkosení"
+
+msgid "Percorso"
+msgstr "Dráha"
+
+msgid "Percorso SVG (d=\"\")"
+msgstr "Cesta SVG (d=\"\")"

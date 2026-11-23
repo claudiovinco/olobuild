@@ -137,13 +137,13 @@ export function createThemePicker(opts = {}) {
     return `
       <aside class="otmp-side">
         <label class="otmp-search">${ICON.search}<input type="text" placeholder="${esc(i18n.searchPlaceholder)}" data-search aria-label="${esc(i18n.searchPlaceholder)}"/></label>
+        <div data-eds-wrap hidden>
+          <div class="otmp-side-lab">${esc(i18n.editionLabel)}</div>
+          <div class="otmp-cats otmp-cats--riga" data-eds role="group" aria-label="${esc(i18n.editionLabel)}"></div>
+        </div>
         <div>
           <div class="otmp-side-lab">${esc(i18n.categoriesLabel)}</div>
           <div class="otmp-cats" data-cats></div>
-        </div>
-        <div data-eds-wrap hidden>
-          <div class="otmp-side-lab">${esc(i18n.editionLabel)}</div>
-          <div class="otmp-cats" data-eds role="group" aria-label="${esc(i18n.editionLabel)}"></div>
         </div>
         <div data-reqs-wrap hidden>
           <div class="otmp-side-lab">${esc(i18n.requirementsLabel)}</div>
@@ -506,7 +506,9 @@ export function createThemePicker(opts = {}) {
         b.type = 'button';
         b.className = 'otmp-catbtn' + (e === activeEd ? ' on' : '');
         b.setAttribute('aria-pressed', e === activeEd ? 'true' : 'false');
-        b.innerHTML = `<span>${esc(edName(e))}</span><span class="n"></span>`;
+        // due pulsanti affiancati in cima alla colonna: il nome corto, quello intero nel suggerimento e nel titolo
+        b.title = edName(e);
+        b.innerHTML = `<span>${e === 'pro' ? 'Pro' : 'Free'}</span><span class="n"></span>`;
         b.onclick = () => {
           activeEd = activeEd === e ? '' : e;
           Object.keys(edBtns).forEach(k => {
@@ -683,12 +685,19 @@ const CSS = `
 .otmp-catbtn .n{margin-left:auto;flex:none;font-size:11px;color:var(--mute);font-variant-numeric:tabular-nums;
   background:var(--panel);border:1px solid var(--line);border-radius:999px;min-width:22px;text-align:center;padding:1px 6px;}
 .otmp-catbtn.on .n{color:var(--on-accent);background:var(--accent);border-color:var(--accent);}
+/* «Edizione» (1.4.1350): Free e Pro affiancati in cima alla colonna, come un interruttore a due posizioni. */
+.otmp-cats--riga{flex-direction:row;gap:6px;}
+.otmp-cats--riga .otmp-catbtn{flex:1 1 0;min-width:0;gap:4px;padding:7px 8px;border:1px solid var(--line);justify-content:center;}
+.otmp-cats--riga .otmp-catbtn span:first-child{overflow:visible;}
+.otmp-cats--riga .otmp-catbtn .n{margin-left:2px;min-width:0;padding:1px 5px;}
+.otmp-cats--riga .otmp-catbtn.on{box-shadow:inset 0 0 0 1px var(--accent);border-color:var(--accent);}
 
 .otmp-main{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--area);}
 .otmp-main-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 22px;border-bottom:1px solid var(--line);flex:none;}
 .otmp-main-top h2{font-size:14px;font-weight:600;color:var(--txt);}
 .otmp-count{font-size:12px;color:var(--mute);white-space:nowrap;font-variant-numeric:tabular-nums;}
-.otmp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(244px,1fr));grid-auto-rows:max-content;
+/* Sempre almeno due colonne (1.4.1350): con la colonna dei filtri accanto, a 244 px la guidata ne aveva una sola. */
+.otmp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px,calc(50% - 9px)),1fr));grid-auto-rows:max-content;
   gap:18px;padding:22px;overflow-y:auto;overflow-x:hidden;max-height:64vh;}
 .otmp--embed .otmp-grid{max-height:50vh;}
 .otmp-grid::-webkit-scrollbar{width:9px;}
@@ -702,7 +711,8 @@ const CSS = `
 .otmp-card.is-select:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 .otmp-card.is-selected{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);}
 
-.otmp-pv{position:relative;height:172px;flex:none;overflow:hidden;border-bottom:1px solid var(--line);
+/* L'anteprima segue la scheda (16:10) invece di 172 px fissi: nelle schede strette non diventa una fascia enorme. */
+.otmp-pv{position:relative;aspect-ratio:16/10;flex:none;overflow:hidden;border-bottom:1px solid var(--line);
   background:var(--c-bg);display:flex;flex-direction:column;padding:13px 14px 0;}
 .otmp-pv-bar{display:flex;align-items:center;gap:6px;margin-bottom:auto;}
 .otmp-pv-logo{width:13px;height:13px;border-radius:4px;background:var(--c-acc);}
@@ -749,7 +759,7 @@ const CSS = `
   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
 .otmp-cb-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
 .otmp-cb-tags span{font-size:11px;font-weight:500;color:var(--txt-2);background:var(--fill);border:1px solid var(--line);border-radius:6px;padding:3px 9px;}
-.otmp-cb-foot{display:flex;align-items:center;gap:12px;margin-top:auto;}
+.otmp-cb-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:auto;}
 .otmp-cb-ver{font-size:11.5px;color:var(--mute);font-variant-numeric:tabular-nums;}
 .otmp-cb-spacer{flex:1;}
 .otmp-cb-link{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:500;color:var(--txt-2);text-decoration:none;transition:color .15s;}

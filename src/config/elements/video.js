@@ -16,6 +16,17 @@ const playDisegnato = (s) => (isFile(s) ? !s.autoplay : s.facade !== false);
  */
 export default {
   type: 'video',
+  // Le proporzioni stavano in aspect_ratio (o cover_mode), che il PHP legge ancora finché «Visualizzazione» è
+  // 16:9: passano nel menu e le chiavi vecchie si svuotano. Senza svuotarle, scegliere 16:9 riportava il
+  // video alle proporzioni di prima (src/utils/migraImpostazioni.js).
+  migraAlCaricamento(s) {
+    if (!s.display_mode || s.display_mode === '16:9') {
+      if (s.cover_mode) s.display_mode = 'cover';
+      else if (s.aspect_ratio && s.aspect_ratio !== '16:9') s.display_mode = s.aspect_ratio;
+    }
+    if (s.aspect_ratio) s.aspect_ratio = '';
+    if (s.cover_mode) s.cover_mode = false;
+  },
   name: t('Video'),
   icon: 'dashicons-video-alt3',
   category: 'essential',

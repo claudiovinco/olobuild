@@ -80,6 +80,8 @@ export default {
 
     { type: 'separator', label: t('Miniature') },
     { key: 'show_thumbnails', label: t('Mostra miniature'), type: 'toggle' },
+    { key: 'show_badge', label: t('Mostra lo sconto'), type: 'toggle',
+      description: t('Sui prodotti in saldo, un bollino con la percentuale di sconto sulla foto.') },
 
     { type: 'separator', label: t('Slider') },
     { key: 'transition', label: t('Transizione'), type: 'select', options: [
@@ -136,6 +138,7 @@ export default {
     { key: 'main_bg', label: t('Sfondo immagine'), type: 'color' },
     { key: 'thumbnail_border', label: t('Bordo miniature'), type: 'color' },
     { key: 'thumbnail_active_border', label: t('Bordo miniatura attiva'), type: 'color' },
+    { key: 'badge_bg', label: t('Sfondo bollino sconto'), type: 'color', condition: { field: 'show_badge', op: 'neq', value: false } },
     { key: 'arrow_color', label: t('Colore frecce'), type: 'color' },
     { key: 'arrow_bg', label: t('Sfondo frecce'), type: 'color' },
     { key: 'dot_color', label: t('Colore pallini'), type: 'color', condition: { field: 'dots', value: true } },

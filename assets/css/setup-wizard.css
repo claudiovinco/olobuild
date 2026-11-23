@@ -160,6 +160,13 @@ body.is-wide .ws-step { max-width: none; }
 .ws-done li { display: flex; gap: 12px; align-items: flex-start; padding: 13px 16px; border-radius: 12px; background: var(--card); border: 1px solid var(--line);
 	font-size: 14.5px; line-height: 1.5; color: var(--txt-2); }
 .ws-done li svg { flex: none; width: 18px; height: 18px; margin-top: 2px; color: var(--ok); }
+/* Un software scelto che la licenza non comprende (1.4.1350): avviso nel rosso del marchio, col link alla sua pagina. */
+.ws-done li.is-avviso { border-color: var(--red-glow); background: var(--red-soft); color: var(--txt); }
+.ws-done li.is-avviso svg { color: var(--red-h); }
+.ws-done-link { color: var(--txt); font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--red-h); white-space: nowrap; }
+.ws-done-link:hover { color: #fff; border-color: #fff; }
+.ws-done-link:focus-visible { outline: 2px solid var(--red-h); outline-offset: 3px; border-radius: 2px; }
+.ws-net-pro { color: var(--red-h); font-weight: 600; }
 .quick-cards { display: grid; gap: 10px; margin-top: 24px; max-width: 640px; }
 .quick-card { display: flex; gap: 14px; align-items: center; padding: 14px 16px; background: var(--card); border: 1px solid var(--line);
 	border-radius: 12px; text-decoration: none; color: var(--txt); transition: border-color .2s, transform .2s; }

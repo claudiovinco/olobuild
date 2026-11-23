@@ -1,4 +1,4 @@
-import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { t } from '@/i18n';
 
 /**
@@ -71,6 +71,7 @@ export default {
       description: t('Spento: i filtri si applicano a ogni scelta, senza premere il pulsante.') },
     { key: 'button_text', label: t('Testo pulsante'), type: 'text',
       condition: { field: 'apply_button', value: true } },
+    { key: 'reset_text', label: t('Testo del pulsante che azzera'), type: 'text', placeholder: t('Resetta') },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -117,6 +118,10 @@ export default {
       condition: { field: 'apply_button', value: true } },
     { key: 'button_bg', label: t('Sfondo pulsante'), type: 'color',
       condition: { field: 'apply_button', value: true } },
+    // Sfondo, linee e raggio del pannello: il PHP li leggeva da sempre, ma nell'inspector non c'erano.
+    { key: 'bg_color', label: t('Sfondo pannello'), type: 'color' },
+    { key: 'border_color', label: t('Colore delle linee'), type: 'color' },
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }, { noDuration: true }),
 
     ...shadowField,
     ...borderFields(),

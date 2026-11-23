@@ -1139,7 +1139,7 @@ export function borderFields(opts = {}) {
   return [
     { type: 'separator', label: t('Bordo') },
     withHover(
-      { key, label: t('Bordo'), type: 'border' },
+      { key, label: t('Bordo'), type: 'border', ...(opts.legacyKeys ? { legacyKeys: opts.legacyKeys } : {}) },
       { hoverKey, hoverDurationKey: durKey }
     ),
     ...(opts.raggio ? [opts.raggio] : []),

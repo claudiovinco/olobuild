@@ -468,6 +468,8 @@ export default {
       { value: '0.8fr 1fr',   label: '40 / 60' },
     ]},
     { key: 'gap',        label: t('Gap colonne'),    type: 'range', min: 0, max: 160, step: 4 },
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 200,
+      description: t('Lo spazio attorno al contenuto dell’hero. Se imposti il Padding del Contenitore, vale quello.') },
     { key: 'min_height', label: t('Altezza minima'), type: 'range', min: 0, max: 1200, step: 20 },
 
     { type: 'separator', label: t('Profondità allo scorrimento') },

@@ -182,10 +182,14 @@ class Olobuild_Setup_Wizard {
         }
         $piatto  = static function ( $s ) { return preg_replace( '/[^a-z]/', '', strtolower( (string) $s ) ); };
         $plugins = get_plugins();
+        // I moduli della licenza: un software che si installa da qui ma non è nella licenza (OLOlang con la Free) lo dice
+        // già nella scheda («Con OLObuild Pro») e nel riepilogo (1.4.1350).
+        $moduli = class_exists( 'Olobuild_Licenza' ) ? (array) Olobuild_Licenza::moduli() : [];
         foreach ( $voci as $k => &$v ) {
             $v['url']   = 'https://olotheme.com/' . $k . '/';
             $v['logo']  = OLOBUILD_URL . 'assets/img/rete/' . $k . '-w.png';
             $v['stato'] = '';
+            $v['pro']   = isset( self::DA_OLOTHEME[ $k ] ) && ! in_array( self::DA_OLOTHEME[ $k ][1], $moduli, true );
             foreach ( $plugins as $file => $dati ) {
                 // la cartella (olo-lang, olo-booking…) o il nome (OLOlang…) del plugin, senza trattini né spazi
                 if ( 0 !== strpos( $piatto( dirname( $file ) ), $k ) && 0 !== strpos( $piatto( $dati['Name'] ?? '' ), $k ) ) continue;
@@ -349,6 +353,7 @@ class Olobuild_Setup_Wizard {
                                         <span class="ws-net-on"><?php esc_html_e( 'Già attivo', 'olobuild' ); ?></span>
                                     <?php else : ?>
                                         <?php if ( 'installato' === $v['stato'] ) : ?><?php esc_html_e( 'Installato', 'olobuild' ); ?> · <?php endif; ?>
+                                        <?php if ( ! empty( $v['pro'] ) && 'installato' !== $v['stato'] ) : ?><span class="ws-net-pro"><?php esc_html_e( 'Con OLObuild Pro', 'olobuild' ); ?></span> · <?php endif; ?>
                                         <a class="ws-net-link" href="<?php echo esc_url( $v['url'] ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Scopri', 'olobuild' ); ?></a>
                                     <?php endif; ?>
                                 </span>
@@ -433,9 +438,10 @@ class Olobuild_Setup_Wizard {
             var ajaxurl = '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>';
             var PASSI = <?php echo wp_json_encode( array_keys( $passi ) ); ?>;
             var SPUNTA = <?php echo wp_json_encode( $spunta ); ?>;
+            var AVVISO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>';
             var selectedThemeId = null;
             // per il riepilogo dell'ultimo passo
-            var temaWp = <?php echo $theme_active ? 'true' : 'null'; ?>, temaImportato = null, partenzaVuota = false, reteScelta = [], reteInstallati = [], reteErrori = [];
+            var temaWp = <?php echo $theme_active ? 'true' : 'null'; ?>, temaImportato = null, partenzaVuota = false, reteScelta = [], reteInstallati = [], reteErrori = [], reteAvvisi = [];
             var oloSetupI18n = {
                 installing: <?php echo wp_json_encode( __( 'Installazione...', 'olobuild' ) ); ?>,
                 installingProgress: <?php echo wp_json_encode( __( 'Installazione in corso...', 'olobuild' ) ); ?>,
@@ -741,7 +747,10 @@ class Olobuild_Setup_Wizard {
                     // quelli installati adesso escono dai «segnati per dopo» ed entrano fra gli installati
                     var d = (j && j.data) || {};
                     reteInstallati = d.installati || [];
-                    reteScelta = reteScelta.filter(function (n) { return reteInstallati.indexOf(n) < 0; });
+                    reteAvvisi = d.avvisi || [];
+                    // quelli che la licenza non comprende hanno un avviso loro, non stanno fra i «segnati per dopo»
+                    var conAvviso = reteAvvisi.map(function (a) { return a.nome; });
+                    reteScelta = reteScelta.filter(function (n) { return reteInstallati.indexOf(n) < 0 && conAvviso.indexOf(n) < 0; });
                     reteErrori = d.errori || [];
                     vai();
                 }, vai);
@@ -766,7 +775,24 @@ class Olobuild_Setup_Wizard {
                     li.appendChild(s);
                     ul.appendChild(li);
                 });
-                ul.hidden = !voci.length;
+                // Un software scelto che la licenza non comprende (OLOlang con la Free): avviso col link alla sua pagina.
+                reteAvvisi.forEach(function (a) {
+                    var li = document.createElement('li');
+                    li.className = 'is-avviso';
+                    li.innerHTML = AVVISO;
+                    var s = document.createElement('span');
+                    s.textContent = a.testo + ' ';
+                    var l = document.createElement('a');
+                    l.className = 'ws-done-link';
+                    l.href = a.url;
+                    l.target = '_blank';
+                    l.rel = 'noopener';
+                    l.textContent = a.link + ' →';
+                    s.appendChild(l);
+                    li.appendChild(s);
+                    ul.appendChild(li);
+                });
+                ul.hidden = !(voci.length || reteAvvisi.length);
             }
 
             function markComplete() {
@@ -958,16 +984,28 @@ class Olobuild_Setup_Wizard {
         update_option( 'olobuild_rete_richiesti_il', time(), false );
         $installati = [];
         $errori     = [];
+        $avvisi     = [];
         foreach ( $voci as $v ) {
             if ( ! isset( self::DA_OLOTHEME[ $v ] ) ) continue;
             $r = self::installa_da_olotheme( $v );
             if ( true === $r ) {
                 $installati[] = $rete[ $v ]['nome'];
+            } elseif ( 'non_compreso' === $r->get_error_code() ) {
+                // Non è nella licenza (OLOlang con la Free): lo si dice, col link alla sua pagina (1.4.1350).
+                $nome     = $rete[ $v ]['nome'];
+                $avvisi[] = [
+                    'nome'  => $nome,
+                    /* translators: %1$s e %2$s: il nome del software (OLOlang) */
+                    'testo' => sprintf( __( '%1$s non fa parte di OLObuild Free: lo hai con OLObuild Pro o con la licenza di %2$s.', 'olobuild' ), $nome, $nome ),
+                    'url'   => $rete[ $v ]['url'],
+                    /* translators: %s: nome del plugin */
+                    'link'  => sprintf( __( 'Scopri %s', 'olobuild' ), $nome ),
+                ];
             } elseif ( '' !== $r->get_error_message() ) {
                 $errori[] = $rete[ $v ]['nome'] . ': ' . $r->get_error_message();
             }
         }
-        wp_send_json_success( [ 'rete' => $voci, 'installati' => $installati, 'errori' => $errori ] );
+        wp_send_json_success( [ 'rete' => $voci, 'installati' => $installati, 'errori' => $errori, 'avvisi' => $avvisi ] );
     }
 
     /**

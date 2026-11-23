@@ -915,7 +915,11 @@ const sezioneDi = computed(() => {
 // un separatore se la sua condizione è vera e la sezione ha almeno un campo visibile.
 function campoVisibileNellaVoce(field, i, element) {
   const campi = props.itemFields || [];
-  const voce = element || {};
+  // Una voce salvata senza una chiave (le voci dei temi senza «Tipo» della card) vale coi valori di una voce NUOVA,
+  // come la legge il renderer col suo predefinito: prima la condizione «Tipo = Immagine» vedeva il vuoto e nascondeva
+  // il campo Immagine, mentre sulla pagina la foto c'era e non si sapeva da dove cambiarla (23 nov 2026, 44 voci di
+  // Overlay Grid nei temi della Free). Le chiavi presenti nella voce vincono sempre.
+  const voce = { ...(props.newItemDefaults || {}), ...(element || {}) };
   // `condizioneTile`: una condizione su un'impostazione della TILE, non della voce (16 nov 2026: «Numero o scritta»
   // di ogni passo non conta quando i «Numeri automatici» sono accesi, e allora non si mostra). Vale anche per un
   // separatore, e una sezione i cui campi sono tutti nascosti da lei sparisce col suo titolo.

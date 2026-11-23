@@ -84,3 +84,44 @@ export function migrateTreeBackgrounds(nodes, _depth = 0) {
     if (Array.isArray(node.children)) migrateTreeBackgrounds(node.children, _depth + 1);
   }
 }
+
+/** Tutte le chiavi che un campo dell'inspector della tile mostra (anche dentro gruppi e varianti a chiavi). */
+function chiaviDeiCampi(def) {
+  const set = new Set();
+  const add = (f) => {
+    if (!f || typeof f !== 'object') return;
+    if (typeof f.key === 'string' && f.key) set.add(f.key);
+    if (f.keys && typeof f.keys === 'object') Object.values(f.keys).forEach((k) => typeof k === 'string' && set.add(k));
+    for (const sub of ['fields', 'children', 'controls']) if (Array.isArray(f[sub])) f[sub].forEach(add);
+  };
+  [...(def.fields || []), ...(def.styleFields || [])].forEach(add);
+  return set;
+}
+
+const DA_SVUOTARE = ['imageKey', 'imagePosKey', 'imageSizeKey', 'videoKey', 'posterKey'];
+
+/**
+ * Le chiavi vecchie da svuotare quando l'utente cambia il pannello che le ha prese al caricamento.
+ * Il renderer le usa come ripiego quando il pannello è vuoto: senza svuotarle, un'immagine tolta
+ * dal pannello ricompariva da sola sulla pagina (e tornava nel pannello al caricamento seguente).
+ * Si svuotano solo media e posizione, e solo quelle che nessun campo della tile mostra.
+ * @param {string} type  tipo della tile
+ * @param {string[]} cambiate  chiavi che l'utente sta scrivendo
+ * @returns {string[]}
+ */
+export function chiaviVecchieDaSvuotare(type, cambiate) {
+  const def = getElementDef(type);
+  const spec = def && def.bgMigrate;
+  if (!spec || !Array.isArray(cambiate) || !cambiate.length) return [];
+  const specs = Array.isArray(spec) ? spec : [spec];
+  const mostrate = chiaviDeiCampi(def);
+  const out = [];
+  for (const s of specs) {
+    if (!cambiate.includes(s.target || 'media_bg')) continue;
+    for (const prop of DA_SVUOTARE) {
+      const k = s[prop];
+      if (typeof k === 'string' && k && !mostrate.has(k) && !cambiate.includes(k)) out.push(k);
+    }
+  }
+  return out;
+}

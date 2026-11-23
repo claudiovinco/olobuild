@@ -2534,3 +2534,276 @@ msgstr "Перейти на Pro"
 #: licenza-1.4.1345
 msgid "Free e Pro"
 msgstr "Free и Pro"
+
+#: licenza-1.4.1345
+msgid "Con OLObuild Pro"
+msgstr "С OLObuild Pro"
+
+msgid "%1$s non fa parte di OLObuild Free: lo hai con OLObuild Pro o con la licenza di %2$s."
+msgstr "%1$s не входит в OLObuild Free: он доступен с OLObuild Pro или с лицензией %2$s."
+
+#: licenza-1.4.1345
+msgid "Sfondo della slide"
+msgstr "Фон слайда"
+
+msgid "segue lo scorrimento"
+msgstr "следует за прокруткой"
+
+msgid "Trascina per vedere come si muovono i livelli mentre la pagina scorre: 0% è l’inizio, 100% la fine del tratto dello slider. ▶ fa vedere tutto il movimento. Per spostare e modificare i livelli torna alla vista ferma con ×."
+msgstr "Перетащите, чтобы увидеть, как слои движутся при прокрутке страницы: 0% — начало, 100% — конец участка слайдера. ▶ показывает всё движение. Чтобы перемещать и редактировать слои, вернитесь к неподвижному виду кнопкой ×."
+
+msgid "Anteprima dello scorrimento"
+msgstr "Предпросмотр прокрутки"
+
+msgid "Guarda il movimento"
+msgstr "Показать движение"
+
+msgid "ferma"
+msgstr "неподвижно"
+
+msgid "Torna alla vista ferma"
+msgstr "Вернуться к неподвижному виду"
+
+msgid "Stato dei livelli"
+msgstr "Состояние слоёв"
+
+msgid "Alcuni livelli si vedono solo in uno stato (◐ nella barra dei livelli), che cambia quando si clicca un altro livello. «Come all’avvio» mostra lo slider come lo vede chi apre la pagina; scegli uno stato per vedere solo i suoi livelli; «Tutti i livelli insieme» li mostra uno sopra l’altro, per modificarli."
+msgstr "Некоторые слои видны только в одном состоянии (◐ на панели слоёв), которое меняется при нажатии на другой слой. «Как при запуске» показывает слайдер так, как его видит открывший страницу; выберите состояние, чтобы видеть только его слои; «Все слои вместе» показывает их один поверх другого, чтобы их редактировать."
+
+msgid "Anteprima degli stati"
+msgstr "Предпросмотр состояний"
+
+msgid "In questa slide"
+msgstr "На этом слайде"
+
+msgid "Quanti livelli fanno qualcosa, e cosa. Nella barra dei livelli lo stesso bollino dice quali: ↕ scorrendo, ⏱ linea del tempo, Aa lettere, ◐ stato, ☝ clic, ∞ continuo, {} CSS, ▭ solo su alcuni schermi. Passa il puntatore su un bollino per leggerlo."
+msgstr "Сколько слоёв что-то делают и что именно. На панели слоёв тот же значок показывает какие: ↕ при прокрутке, ⏱ временная шкала, Aa буквы, ◐ состояние, ☝ клик, ∞ непрерывно, {} CSS, ▭ только на некоторых экранах. Наведите указатель на значок, чтобы прочитать его."
+
+msgid "Cosa succede in questa slide"
+msgstr "Что происходит на этом слайде"
+
+msgid "Come all’avvio"
+msgstr "Как при запуске"
+
+msgid "Tutti i livelli insieme"
+msgstr "Все слои вместе"
+
+msgid "si muovono scorrendo"
+msgstr "движутся при прокрутке"
+
+msgid "con linea del tempo"
+msgstr "с временной шкалой"
+
+msgid "entrano lettera per lettera"
+msgstr "появляются по буквам"
+
+msgid "legati a uno stato"
+msgstr "привязаны к состоянию"
+
+msgid "cliccabili"
+msgstr "кликабельны"
+
+msgid "da pulire col puntatore"
+msgstr "стираются указателем"
+
+msgid "in movimento continuo"
+msgstr "в непрерывном движении"
+
+msgid "in parallasse"
+msgstr "с параллаксом"
+
+msgid "con CSS su misura"
+msgstr "со своим CSS"
+
+msgid "solo su alcuni schermi"
+msgstr "только на некоторых экранах"
+
+msgid "Nome del livello"
+msgstr "Имя слоя"
+
+msgid "Serve solo a te, per riconoscere il livello nella barra dei livelli: sul sito non si vede. Vuoto, il livello prende il nome dal suo testo o dal file."
+msgstr "Нужно только вам, чтобы узнать слой на панели слоёв: на сайте его не видно. Если пусто, слой получает имя из своего текста или файла."
+
+msgid "Cosa mostra l’immagine (per chi non la vede)"
+msgstr "Что показывает изображение (для тех, кто его не видит)"
+
+msgid "Tappe del percorso"
+msgstr "Этапы пути"
+
+msgid "Ogni tappa dice com’è il livello a quel punto del suo tratto (0% = inizio, 100% = fine); fra una tappa e l’altra il livello passa da un valore all’altro. Clicca una tappa per vederla sulla tela e cambiarla: la tela va a quel punto dello scorrimento."
+msgstr "Каждый этап показывает, каким слой будет в этой точке своего участка (0% — начало, 100% — конец); между этапами слой плавно переходит от одного значения к другому. Нажмите на этап, чтобы увидеть его на холсте и изменить: холст перейдёт к этой точке прокрутки."
+
+msgid "Elimina tappa"
+msgstr "Удалить этап"
+
+msgid "A che punto del tratto"
+msgstr "Точка участка"
+
+msgid "Non muovere più questa proprietà"
+msgstr "Больше не двигать это свойство"
+
+msgid "+ Muovi anche…"
+msgstr "+ Также двигать…"
+
+msgid "com’è sulla tela"
+msgstr "как на холсте"
+
+msgid "Si muove scorrendo la pagina"
+msgstr "Движется при прокрутке страницы"
+
+msgid "tappe"
+msgstr "этапы"
+
+msgid "Linea del tempo"
+msgstr "Временная шкала"
+
+msgid "fotogrammi chiave"
+msgstr "ключевые кадры"
+
+msgid "Le lettere entrano una alla volta"
+msgstr "Буквы появляются по одной"
+
+msgid "Si vede solo in uno stato"
+msgstr "Виден только в одном состоянии"
+
+msgid "Fa qualcosa al clic"
+msgstr "Что-то делает по клику"
+
+msgid "Si cancella passandoci sopra"
+msgstr "Стирается при наведении"
+
+msgid "Ha un CSS su misura (Avanzate)"
+msgstr "Есть свой CSS (Дополнительно)"
+
+msgid "Nascosto all’avvio: lo mostra un altro livello al clic"
+msgstr "Скрыт при запуске: его показывает другой слой по клику"
+
+msgid "computer"
+msgstr "компьютер"
+
+msgid "notebook"
+msgstr "ноутбук"
+
+msgid "tablet"
+msgstr "планшет"
+
+msgid "telefono"
+msgstr "телефон"
+
+msgid "Si vede solo su"
+msgstr "Виден только на"
+
+msgid "Non si vede su nessuno schermo"
+msgstr "Не виден ни на одном экране"
+
+msgid "Testo del pulsante che azzera"
+msgstr "Текст кнопки сброса"
+
+msgid "Resetta"
+msgstr "Сбросить"
+
+msgid "Sfondo contatore"
+msgstr "Фон счётчика"
+
+msgid "Colore contatore"
+msgstr "Цвет счётчика"
+
+msgid "Mostra lo sconto"
+msgstr "Показывать скидку"
+
+msgid "Sui prodotti in saldo, un bollino con la percentuale di sconto sulla foto."
+msgstr "На товарах со скидкой — значок с процентом скидки на фото."
+
+msgid "Sfondo bollino sconto"
+msgstr "Фон значка скидки"
+
+msgid "Nome del link"
+msgstr "Название ссылки"
+
+msgid "es. Il mio account"
+msgstr "напр. Мой аккаунт"
+
+msgid "Lo legge chi usa un lettore di schermo al posto dell’icona. Vuoto: il nome dell’icona."
+msgstr "Это услышат пользователи экранных дикторов вместо значка. Пусто — название значка."
+
+msgid "Lo spazio attorno al contenuto dell’hero. Se imposti il Padding del Contenitore, vale quello."
+msgstr "Пространство вокруг содержимого hero. Если задать Padding контейнера, действует он."
+
+msgid "Proprietà CSS applicate direttamente al riquadro della tile, per esempio color: red; oppure transform: rotate(2deg);"
+msgstr "Свойства CSS, применяемые прямо к рамке плитки, например color: red; или transform: rotate(2deg);"
+
+msgid "&quot;Foto interne&quot;: ogni immagine o video dentro la tile (gallerie, griglie) si inclina singolarmente."
+msgstr "&quot;Внутренние фото&quot;: каждое изображение или видео внутри плитки (галереи, сетки) наклоняется отдельно."
+
+msgid "Il cursore che segue il mouse in tutto il sito, al posto della freccia. Ogni pagina può sceglierne un altro in «Cursore di questa pagina». Su telefoni e tablet, e nel canvas del builder, resta quello di sistema; solo la Torcia resta anche su telefoni e tablet, con la luce ferma al centro dello schermo."
+msgstr "Курсор, который следует за мышью по всему сайту вместо стрелки. Каждая страница может выбрать другой в «Курсор этой страницы». На телефонах, планшетах и на холсте конструктора остаётся системный; только Фонарик остаётся и на телефонах и планшетах, со светом неподвижно в центре экрана."
+
+msgid "JavaScript eseguito sul sito, non nel builder. La variabile «el» contiene l'elemento della tile."
+msgstr "JavaScript, выполняемый на сайте, а не в конструкторе. Переменная «el» содержит элемент плитки."
+
+msgid "Piena: la tile occupa tutta la riga della colonna, e il suo Allineamento la sposta a sinistra, al centro o a destra."
+msgstr "Полная: плитка занимает всю строку колонки, а её Выравнивание сдвигает её влево, по центру или вправо."
+
+msgid "Adattata: la tile è larga quanto il suo contenuto, e più tile adattate una dopo l'altra si affiancano sulla stessa riga (per esempio due pulsanti vicini). L'Allineamento della prima allinea tutta la fila."
+msgstr "Подогнанная: плитка шириной с её содержимое, и несколько подогнанных плиток подряд встают рядом в одной строке (например, две кнопки рядом). Выравнивание первой выравнивает весь ряд."
+
+#: licenza-1.4.1345
+msgid "Zoom lento (Ken Burns)"
+msgstr "Медленный зум (Ken Burns)"
+
+msgid "Spostamento orizzontale"
+msgstr "Горизонтальный сдвиг"
+
+msgid "Spostamento verticale"
+msgstr "Вертикальный сдвиг"
+
+msgid "Etichetta della scheda"
+msgstr "Подпись вкладки"
+
+msgid "Zoom al 100%"
+msgstr "Масштаб 100%"
+
+msgid "mp4 o indirizzo YouTube"
+msgstr "mp4 или адрес YouTube"
+
+msgid "mp3 o indirizzo dell’audio"
+msgstr "mp3 или адрес аудио"
+
+msgid "Livello da mostrare o nascondere"
+msgstr "Слой, который показать или скрыть"
+
+msgid "Spaziatura lettere"
+msgstr "Межбуквенный интервал"
+
+msgid "Contorno del testo"
+msgstr "Контур текста"
+
+msgid "Spessore del tratto"
+msgstr "Толщина линии"
+
+msgid "Filtro sfondo"
+msgstr "Фильтр фона"
+
+msgid "Ombra del testo"
+msgstr "Тень текста"
+
+msgid "Rivelazione a blocco"
+msgstr "Появление блоком"
+
+msgid "Cursore del mouse"
+msgstr "Курсор мыши"
+
+msgid "Ritardo fra le lettere"
+msgstr "Задержка между буквами"
+
+msgid "Movimento continuo"
+msgstr "Непрерывное движение"
+
+msgid "Inclinazione orizzontale"
+msgstr "Горизонтальный наклон"
+
+msgid "Percorso"
+msgstr "Траектория"
+
+msgid "Percorso SVG (d=\"\")"
+msgstr "Путь SVG (d=\"\")"

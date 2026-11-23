@@ -2705,7 +2705,10 @@ function ensureContentItems(tile, field) {
 
 function isFieldVisible(field, sectionLabel = null) {
   const settings = selectedTile.value?.settings || {};
-  if (!sharedIsFieldVisible(field, settings)) return false; // condition + show (protetta)
+  // Le condizioni leggono le impostazioni completate coi predefiniti della tile, come il renderer PHP (23 nov 2026):
+  // una chiave che il tema non ha salvato non deve nascondere un campo che sulla pagina agisce.
+  const conDefault = { ...(elementDef.value?.defaults || {}), ...settings };
+  if (!sharedIsFieldVisible(field, conDefault)) return false; // condition + show (protetta)
   // Filter "show only modified": confronta valore corrente con default del tile config
   if (showOnlyModified.value && field.key) {
     const cur = settings[field.key];
@@ -2763,7 +2766,7 @@ const groupedSections = computed(() => {
  * visibile (con i filtri dell'inspector: ricerca, «solo modificati»).
  */
 function sectionHasVisibleFields(section) {
-  return isSectionVisible(section.sep, section.fields, selectedTile.value?.settings || {},
+  return isSectionVisible(section.sep, section.fields, { ...(elementDef.value?.defaults || {}), ...(selectedTile.value?.settings || {}) },
     (f) => isFieldVisible(f, section.label));
 }
 

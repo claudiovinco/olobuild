@@ -55443,3 +55443,276 @@ msgstr "Passer au Pro"
 #: licenza-1.4.1345
 msgid "Free e Pro"
 msgstr "Free et Pro"
+
+#: licenza-1.4.1345
+msgid "Con OLObuild Pro"
+msgstr "Avec OLObuild Pro"
+
+msgid "%1$s non fa parte di OLObuild Free: lo hai con OLObuild Pro o con la licenza di %2$s."
+msgstr "%1$s ne fait pas partie d’OLObuild Free : vous l’obtenez avec OLObuild Pro ou avec une licence %2$s."
+
+#: licenza-1.4.1345
+msgid "Sfondo della slide"
+msgstr "Arrière-plan de la diapositive"
+
+msgid "segue lo scorrimento"
+msgstr "suit le défilement"
+
+msgid "Trascina per vedere come si muovono i livelli mentre la pagina scorre: 0% è l’inizio, 100% la fine del tratto dello slider. ▶ fa vedere tutto il movimento. Per spostare e modificare i livelli torna alla vista ferma con ×."
+msgstr "Faites glisser pour voir comment les calques bougent pendant que la page défile : 0 % est le début, 100 % la fin du parcours du slider. ▶ montre tout le mouvement. Pour déplacer et modifier les calques, revenez à la vue fixe avec ×."
+
+msgid "Anteprima dello scorrimento"
+msgstr "Aperçu du défilement"
+
+msgid "Guarda il movimento"
+msgstr "Voir le mouvement"
+
+msgid "ferma"
+msgstr "fixe"
+
+msgid "Torna alla vista ferma"
+msgstr "Revenir à la vue fixe"
+
+msgid "Stato dei livelli"
+msgstr "État des calques"
+
+msgid "Alcuni livelli si vedono solo in uno stato (◐ nella barra dei livelli), che cambia quando si clicca un altro livello. «Come all’avvio» mostra lo slider come lo vede chi apre la pagina; scegli uno stato per vedere solo i suoi livelli; «Tutti i livelli insieme» li mostra uno sopra l’altro, per modificarli."
+msgstr "Certains calques n’apparaissent que dans un état (◐ dans la barre des calques), qui change quand on clique sur un autre calque. « Comme au départ » montre le slider tel que le voit qui ouvre la page ; choisissez un état pour ne voir que ses calques ; « Tous les calques ensemble » les montre les uns sur les autres, pour les modifier."
+
+msgid "Anteprima degli stati"
+msgstr "Aperçu des états"
+
+msgid "In questa slide"
+msgstr "Dans cette diapositive"
+
+msgid "Quanti livelli fanno qualcosa, e cosa. Nella barra dei livelli lo stesso bollino dice quali: ↕ scorrendo, ⏱ linea del tempo, Aa lettere, ◐ stato, ☝ clic, ∞ continuo, {} CSS, ▭ solo su alcuni schermi. Passa il puntatore su un bollino per leggerlo."
+msgstr "Combien de calques font quelque chose, et quoi. Dans la barre des calques, la même pastille indique lesquels : ↕ au défilement, ⏱ ligne de temps, Aa lettres, ◐ état, ☝ clic, ∞ continu, {} CSS, ▭ seulement sur certains écrans. Survolez une pastille pour la lire."
+
+msgid "Cosa succede in questa slide"
+msgstr "Ce qui se passe dans cette diapositive"
+
+msgid "Come all’avvio"
+msgstr "Comme au départ"
+
+msgid "Tutti i livelli insieme"
+msgstr "Tous les calques ensemble"
+
+msgid "si muovono scorrendo"
+msgstr "bougent au défilement"
+
+msgid "con linea del tempo"
+msgstr "avec une ligne de temps"
+
+msgid "entrano lettera per lettera"
+msgstr "entrent lettre par lettre"
+
+msgid "legati a uno stato"
+msgstr "liés à un état"
+
+msgid "cliccabili"
+msgstr "cliquables"
+
+msgid "da pulire col puntatore"
+msgstr "à effacer avec le pointeur"
+
+msgid "in movimento continuo"
+msgstr "en mouvement continu"
+
+msgid "in parallasse"
+msgstr "en parallaxe"
+
+msgid "con CSS su misura"
+msgstr "avec un CSS sur mesure"
+
+msgid "solo su alcuni schermi"
+msgstr "seulement sur certains écrans"
+
+msgid "Nome del livello"
+msgstr "Nom du calque"
+
+msgid "Serve solo a te, per riconoscere il livello nella barra dei livelli: sul sito non si vede. Vuoto, il livello prende il nome dal suo testo o dal file."
+msgstr "Il ne sert qu’à vous, pour reconnaître le calque dans la barre des calques : il n’apparaît pas sur le site. Vide, le calque prend le nom de son texte ou de son fichier."
+
+msgid "Cosa mostra l’immagine (per chi non la vede)"
+msgstr "Ce que montre l’image (pour qui ne la voit pas)"
+
+msgid "Tappe del percorso"
+msgstr "Étapes du parcours"
+
+msgid "Ogni tappa dice com’è il livello a quel punto del suo tratto (0% = inizio, 100% = fine); fra una tappa e l’altra il livello passa da un valore all’altro. Clicca una tappa per vederla sulla tela e cambiarla: la tela va a quel punto dello scorrimento."
+msgstr "Chaque étape dit comment est le calque à ce point de son parcours (0 % = début, 100 % = fin) ; d’une étape à l’autre, le calque passe d’une valeur à l’autre. Cliquez sur une étape pour la voir sur la toile et la modifier : la toile va à ce point du défilement."
+
+msgid "Elimina tappa"
+msgstr "Supprimer l’étape"
+
+msgid "A che punto del tratto"
+msgstr "Point du parcours"
+
+msgid "Non muovere più questa proprietà"
+msgstr "Ne plus animer cette propriété"
+
+msgid "+ Muovi anche…"
+msgstr "+ Animer aussi…"
+
+msgid "com’è sulla tela"
+msgstr "comme sur la toile"
+
+msgid "Si muove scorrendo la pagina"
+msgstr "Bouge au défilement de la page"
+
+msgid "tappe"
+msgstr "étapes"
+
+msgid "Linea del tempo"
+msgstr "Ligne de temps"
+
+msgid "fotogrammi chiave"
+msgstr "images clés"
+
+msgid "Le lettere entrano una alla volta"
+msgstr "Les lettres entrent une à une"
+
+msgid "Si vede solo in uno stato"
+msgstr "Visible seulement dans un état"
+
+msgid "Fa qualcosa al clic"
+msgstr "Fait quelque chose au clic"
+
+msgid "Si cancella passandoci sopra"
+msgstr "S’efface quand on passe dessus"
+
+msgid "Ha un CSS su misura (Avanzate)"
+msgstr "A un CSS sur mesure (Avancé)"
+
+msgid "Nascosto all’avvio: lo mostra un altro livello al clic"
+msgstr "Caché au départ : un autre calque le montre au clic"
+
+msgid "computer"
+msgstr "ordinateur"
+
+msgid "notebook"
+msgstr "portable"
+
+msgid "tablet"
+msgstr "tablette"
+
+msgid "telefono"
+msgstr "téléphone"
+
+msgid "Si vede solo su"
+msgstr "Visible seulement sur"
+
+msgid "Non si vede su nessuno schermo"
+msgstr "Visible sur aucun écran"
+
+msgid "Testo del pulsante che azzera"
+msgstr "Texte du bouton de réinitialisation"
+
+msgid "Resetta"
+msgstr "Réinitialiser"
+
+msgid "Sfondo contatore"
+msgstr "Fond du compteur"
+
+msgid "Colore contatore"
+msgstr "Couleur du compteur"
+
+msgid "Mostra lo sconto"
+msgstr "Afficher la remise"
+
+msgid "Sui prodotti in saldo, un bollino con la percentuale di sconto sulla foto."
+msgstr "Sur les produits en promotion, une pastille avec le pourcentage de remise sur la photo."
+
+msgid "Sfondo bollino sconto"
+msgstr "Fond de la pastille de remise"
+
+msgid "Nome del link"
+msgstr "Nom du lien"
+
+msgid "es. Il mio account"
+msgstr "ex. Mon compte"
+
+msgid "Lo legge chi usa un lettore di schermo al posto dell’icona. Vuoto: il nome dell’icona."
+msgstr "C’est ce qu’entendent les utilisateurs de lecteurs d’écran à la place de l’icône. Vide : le nom de l’icône."
+
+msgid "Lo spazio attorno al contenuto dell’hero. Se imposti il Padding del Contenitore, vale quello."
+msgstr "L’espace autour du contenu du hero. Si vous réglez le Padding du Conteneur, c’est lui qui s’applique."
+
+msgid "Proprietà CSS applicate direttamente al riquadro della tile, per esempio color: red; oppure transform: rotate(2deg);"
+msgstr "Propriétés CSS appliquées directement au cadre de la tile, par exemple color: red; ou transform: rotate(2deg);"
+
+msgid "&quot;Foto interne&quot;: ogni immagine o video dentro la tile (gallerie, griglie) si inclina singolarmente."
+msgstr "&quot;Photos internes&quot; : chaque image ou vidéo dans la tile (galeries, grilles) s’incline séparément."
+
+msgid "Il cursore che segue il mouse in tutto il sito, al posto della freccia. Ogni pagina può sceglierne un altro in «Cursore di questa pagina». Su telefoni e tablet, e nel canvas del builder, resta quello di sistema; solo la Torcia resta anche su telefoni e tablet, con la luce ferma al centro dello schermo."
+msgstr "Le curseur qui suit la souris sur tout le site, à la place de la flèche. Chaque page peut en choisir un autre dans « Curseur de cette page ». Sur téléphones et tablettes, et dans le canevas du builder, celui du système reste ; seule la Torche reste aussi sur téléphones et tablettes, avec la lumière fixe au centre de l’écran."
+
+msgid "JavaScript eseguito sul sito, non nel builder. La variabile «el» contiene l'elemento della tile."
+msgstr "JavaScript exécuté sur le site, pas dans le builder. La variable « el » contient l’élément de la tile."
+
+msgid "Piena: la tile occupa tutta la riga della colonna, e il suo Allineamento la sposta a sinistra, al centro o a destra."
+msgstr "Pleine : la tile occupe toute la ligne de la colonne, et son Alignement la déplace à gauche, au centre ou à droite."
+
+msgid "Adattata: la tile è larga quanto il suo contenuto, e più tile adattate una dopo l'altra si affiancano sulla stessa riga (per esempio due pulsanti vicini). L'Allineamento della prima allinea tutta la fila."
+msgstr "Ajustée : la tile est aussi large que son contenu, et plusieurs tiles ajustées à la suite se placent côte à côte sur la même ligne (par exemple deux boutons voisins). L’Alignement de la première aligne toute la rangée."
+
+#: licenza-1.4.1345
+msgid "Zoom lento (Ken Burns)"
+msgstr "Zoom lent (Ken Burns)"
+
+msgid "Spostamento orizzontale"
+msgstr "Décalage horizontal"
+
+msgid "Spostamento verticale"
+msgstr "Décalage vertical"
+
+msgid "Etichetta della scheda"
+msgstr "Libellé de l’onglet"
+
+msgid "Zoom al 100%"
+msgstr "Zoom à 100 %"
+
+msgid "mp4 o indirizzo YouTube"
+msgstr "mp4 ou adresse YouTube"
+
+msgid "mp3 o indirizzo dell’audio"
+msgstr "mp3 ou adresse de l’audio"
+
+msgid "Livello da mostrare o nascondere"
+msgstr "Calque à afficher ou masquer"
+
+msgid "Spaziatura lettere"
+msgstr "Espacement des lettres"
+
+msgid "Contorno del testo"
+msgstr "Contour du texte"
+
+msgid "Spessore del tratto"
+msgstr "Épaisseur du trait"
+
+msgid "Filtro sfondo"
+msgstr "Filtre d’arrière-plan"
+
+msgid "Ombra del testo"
+msgstr "Ombre du texte"
+
+msgid "Rivelazione a blocco"
+msgstr "Révélation par bloc"
+
+msgid "Cursore del mouse"
+msgstr "Curseur de la souris"
+
+msgid "Ritardo fra le lettere"
+msgstr "Délai entre les lettres"
+
+msgid "Movimento continuo"
+msgstr "Mouvement continu"
+
+msgid "Inclinazione orizzontale"
+msgstr "Inclinaison horizontale"
+
+msgid "Percorso"
+msgstr "Trajectoire"
+
+msgid "Percorso SVG (d=\"\")"
+msgstr "Tracé SVG (d=\"\")"

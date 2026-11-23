@@ -171,7 +171,8 @@ export default {
       legacyKeys: { h: 'hover_shadow_h', v: 'hover_shadow_v', blur: 'hover_shadow_blur', spread: 'hover_shadow_spread', color: 'hover_shadow_color', inset: 'hover_shadow_inset' },
       condition: { field: 'hover_shadow', op: 'eq', value: 'custom' } },
 
-    ...borderFields(),
+    // Il bordo dei pulsanti più vecchi stava in border_width + border_color: il controllo parte da lì.
+    ...borderFields({ legacyKeys: { width: 'border_width', color: 'border_color' } }),
 
     // "Stato hover" residuo: NON sono "hover di una property CSS" (gestiti dal toggle)
     // ma feature a sé — effetto transform e media alternativi al passaggio del mouse.

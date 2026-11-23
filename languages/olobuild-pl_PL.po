@@ -17020,3 +17020,276 @@ msgstr "Przejdź na Pro"
 #: licenza-1.4.1345
 msgid "Free e Pro"
 msgstr "Free i Pro"
+
+#: licenza-1.4.1345
+msgid "Con OLObuild Pro"
+msgstr "Z OLObuild Pro"
+
+msgid "%1$s non fa parte di OLObuild Free: lo hai con OLObuild Pro o con la licenza di %2$s."
+msgstr "%1$s nie należy do OLObuild Free: masz go z OLObuild Pro albo z licencją %2$s."
+
+#: licenza-1.4.1345
+msgid "Sfondo della slide"
+msgstr "Tło slajdu"
+
+msgid "segue lo scorrimento"
+msgstr "podąża za przewijaniem"
+
+msgid "Trascina per vedere come si muovono i livelli mentre la pagina scorre: 0% è l’inizio, 100% la fine del tratto dello slider. ▶ fa vedere tutto il movimento. Per spostare e modificare i livelli torna alla vista ferma con ×."
+msgstr "Przeciągnij, aby zobaczyć, jak warstwy poruszają się podczas przewijania strony: 0% to początek, 100% koniec odcinka slidera. ▶ pokazuje cały ruch. Aby przesuwać i edytować warstwy, wróć do widoku nieruchomego przyciskiem ×."
+
+msgid "Anteprima dello scorrimento"
+msgstr "Podgląd przewijania"
+
+msgid "Guarda il movimento"
+msgstr "Zobacz ruch"
+
+msgid "ferma"
+msgstr "nieruchomo"
+
+msgid "Torna alla vista ferma"
+msgstr "Wróć do widoku nieruchomego"
+
+msgid "Stato dei livelli"
+msgstr "Stan warstw"
+
+msgid "Alcuni livelli si vedono solo in uno stato (◐ nella barra dei livelli), che cambia quando si clicca un altro livello. «Come all’avvio» mostra lo slider come lo vede chi apre la pagina; scegli uno stato per vedere solo i suoi livelli; «Tutti i livelli insieme» li mostra uno sopra l’altro, per modificarli."
+msgstr "Niektóre warstwy są widoczne tylko w jednym stanie (◐ na pasku warstw), który zmienia się po kliknięciu innej warstwy. «Jak na starcie» pokazuje slider tak, jak widzi go osoba otwierająca stronę; wybierz stan, aby zobaczyć tylko jego warstwy; «Wszystkie warstwy razem» pokazuje je jedna na drugiej, do edycji."
+
+msgid "Anteprima degli stati"
+msgstr "Podgląd stanów"
+
+msgid "In questa slide"
+msgstr "Na tym slajdzie"
+
+msgid "Quanti livelli fanno qualcosa, e cosa. Nella barra dei livelli lo stesso bollino dice quali: ↕ scorrendo, ⏱ linea del tempo, Aa lettere, ◐ stato, ☝ clic, ∞ continuo, {} CSS, ▭ solo su alcuni schermi. Passa il puntatore su un bollino per leggerlo."
+msgstr "Ile warstw coś robi i co. Na pasku warstw ta sama plakietka mówi które: ↕ przy przewijaniu, ⏱ oś czasu, Aa litery, ◐ stan, ☝ kliknięcie, ∞ ciągły ruch, {} CSS, ▭ tylko na niektórych ekranach. Najedź kursorem na plakietkę, aby ją przeczytać."
+
+msgid "Cosa succede in questa slide"
+msgstr "Co dzieje się na tym slajdzie"
+
+msgid "Come all’avvio"
+msgstr "Jak na starcie"
+
+msgid "Tutti i livelli insieme"
+msgstr "Wszystkie warstwy razem"
+
+msgid "si muovono scorrendo"
+msgstr "poruszają się przy przewijaniu"
+
+msgid "con linea del tempo"
+msgstr "z osią czasu"
+
+msgid "entrano lettera per lettera"
+msgstr "wchodzą litera po literze"
+
+msgid "legati a uno stato"
+msgstr "powiązane ze stanem"
+
+msgid "cliccabili"
+msgstr "klikalne"
+
+msgid "da pulire col puntatore"
+msgstr "do zmazania kursorem"
+
+msgid "in movimento continuo"
+msgstr "w ciągłym ruchu"
+
+msgid "in parallasse"
+msgstr "z paralaksą"
+
+msgid "con CSS su misura"
+msgstr "z własnym CSS"
+
+msgid "solo su alcuni schermi"
+msgstr "tylko na niektórych ekranach"
+
+msgid "Nome del livello"
+msgstr "Nazwa warstwy"
+
+msgid "Serve solo a te, per riconoscere il livello nella barra dei livelli: sul sito non si vede. Vuoto, il livello prende il nome dal suo testo o dal file."
+msgstr "Służy tylko tobie, żeby rozpoznać warstwę na pasku warstw: na stronie jej nie widać. Gdy jest pusta, warstwa bierze nazwę ze swojego tekstu lub pliku."
+
+msgid "Cosa mostra l’immagine (per chi non la vede)"
+msgstr "Co pokazuje obraz (dla osób, które go nie widzą)"
+
+msgid "Tappe del percorso"
+msgstr "Etapy trasy"
+
+msgid "Ogni tappa dice com’è il livello a quel punto del suo tratto (0% = inizio, 100% = fine); fra una tappa e l’altra il livello passa da un valore all’altro. Clicca una tappa per vederla sulla tela e cambiarla: la tela va a quel punto dello scorrimento."
+msgstr "Każdy etap mówi, jak wygląda warstwa w tym punkcie swojego odcinka (0% = początek, 100% = koniec); między etapami warstwa przechodzi od jednej wartości do drugiej. Kliknij etap, aby zobaczyć go na płótnie i zmienić: płótno przeskoczy do tego punktu przewijania."
+
+msgid "Elimina tappa"
+msgstr "Usuń etap"
+
+msgid "A che punto del tratto"
+msgstr "Punkt odcinka"
+
+msgid "Non muovere più questa proprietà"
+msgstr "Przestań animować tę właściwość"
+
+msgid "+ Muovi anche…"
+msgstr "+ Animuj też…"
+
+msgid "com’è sulla tela"
+msgstr "jak na płótnie"
+
+msgid "Si muove scorrendo la pagina"
+msgstr "Porusza się przy przewijaniu strony"
+
+msgid "tappe"
+msgstr "etapy"
+
+msgid "Linea del tempo"
+msgstr "Oś czasu"
+
+msgid "fotogrammi chiave"
+msgstr "klatki kluczowe"
+
+msgid "Le lettere entrano una alla volta"
+msgstr "Litery wchodzą po jednej"
+
+msgid "Si vede solo in uno stato"
+msgstr "Widoczna tylko w jednym stanie"
+
+msgid "Fa qualcosa al clic"
+msgstr "Robi coś po kliknięciu"
+
+msgid "Si cancella passandoci sopra"
+msgstr "Znika, gdy przesuniesz po niej kursor"
+
+msgid "Ha un CSS su misura (Avanzate)"
+msgstr "Ma własny CSS (Zaawansowane)"
+
+msgid "Nascosto all’avvio: lo mostra un altro livello al clic"
+msgstr "Ukryta na starcie: pokazuje ją inna warstwa po kliknięciu"
+
+msgid "computer"
+msgstr "komputer"
+
+msgid "notebook"
+msgstr "laptop"
+
+msgid "tablet"
+msgstr "tablet"
+
+msgid "telefono"
+msgstr "telefon"
+
+msgid "Si vede solo su"
+msgstr "Widoczna tylko na"
+
+msgid "Non si vede su nessuno schermo"
+msgstr "Niewidoczna na żadnym ekranie"
+
+msgid "Testo del pulsante che azzera"
+msgstr "Tekst przycisku resetowania"
+
+msgid "Resetta"
+msgstr "Resetuj"
+
+msgid "Sfondo contatore"
+msgstr "Tło licznika"
+
+msgid "Colore contatore"
+msgstr "Kolor licznika"
+
+msgid "Mostra lo sconto"
+msgstr "Pokaż rabat"
+
+msgid "Sui prodotti in saldo, un bollino con la percentuale di sconto sulla foto."
+msgstr "Przy produktach w promocji plakietka z procentem rabatu na zdjęciu."
+
+msgid "Sfondo bollino sconto"
+msgstr "Tło plakietki rabatu"
+
+msgid "Nome del link"
+msgstr "Nazwa linku"
+
+msgid "es. Il mio account"
+msgstr "np. Moje konto"
+
+msgid "Lo legge chi usa un lettore di schermo al posto dell’icona. Vuoto: il nome dell’icona."
+msgstr "Słyszą to użytkownicy czytników ekranu zamiast ikony. Puste: nazwa ikony."
+
+msgid "Lo spazio attorno al contenuto dell’hero. Se imposti il Padding del Contenitore, vale quello."
+msgstr "Odstęp wokół zawartości hero. Jeśli ustawisz Padding kontenera, obowiązuje on."
+
+msgid "Proprietà CSS applicate direttamente al riquadro della tile, per esempio color: red; oppure transform: rotate(2deg);"
+msgstr "Właściwości CSS stosowane bezpośrednio do ramki kafelka, np. color: red; lub transform: rotate(2deg);"
+
+msgid "&quot;Foto interne&quot;: ogni immagine o video dentro la tile (gallerie, griglie) si inclina singolarmente."
+msgstr "&quot;Zdjęcia wewnętrzne&quot;: każdy obraz lub film w kafelku (galerie, siatki) przechyla się osobno."
+
+msgid "Il cursore che segue il mouse in tutto il sito, al posto della freccia. Ogni pagina può sceglierne un altro in «Cursore di questa pagina». Su telefoni e tablet, e nel canvas del builder, resta quello di sistema; solo la Torcia resta anche su telefoni e tablet, con la luce ferma al centro dello schermo."
+msgstr "Kursor, który podąża za myszą na całej stronie zamiast strzałki. Każda podstrona może wybrać inny w «Kursor tej strony». Na telefonach i tabletach oraz na płótnie buildera zostaje systemowy; tylko Latarka zostaje też na telefonach i tabletach, ze światłem nieruchomym na środku ekranu."
+
+msgid "JavaScript eseguito sul sito, non nel builder. La variabile «el» contiene l'elemento della tile."
+msgstr "JavaScript uruchamiany na stronie, nie w builderze. Zmienna «el» zawiera element kafelka."
+
+msgid "Piena: la tile occupa tutta la riga della colonna, e il suo Allineamento la sposta a sinistra, al centro o a destra."
+msgstr "Pełna: kafelek zajmuje cały wiersz kolumny, a jego Wyrównanie przesuwa go w lewo, na środek lub w prawo."
+
+msgid "Adattata: la tile è larga quanto il suo contenuto, e più tile adattate una dopo l'altra si affiancano sulla stessa riga (per esempio due pulsanti vicini). L'Allineamento della prima allinea tutta la fila."
+msgstr "Dopasowana: kafelek jest tak szeroki jak jego zawartość, a kilka dopasowanych kafelków jeden po drugim staje obok siebie w tym samym wierszu (np. dwa przyciski obok siebie). Wyrównanie pierwszego wyrównuje cały rząd."
+
+#: licenza-1.4.1345
+msgid "Zoom lento (Ken Burns)"
+msgstr "Powolny zoom (Ken Burns)"
+
+msgid "Spostamento orizzontale"
+msgstr "Przesunięcie w poziomie"
+
+msgid "Spostamento verticale"
+msgstr "Przesunięcie w pionie"
+
+msgid "Etichetta della scheda"
+msgstr "Etykieta karty"
+
+msgid "Zoom al 100%"
+msgstr "Powiększenie 100%"
+
+msgid "mp4 o indirizzo YouTube"
+msgstr "mp4 lub adres YouTube"
+
+msgid "mp3 o indirizzo dell’audio"
+msgstr "mp3 lub adres pliku audio"
+
+msgid "Livello da mostrare o nascondere"
+msgstr "Warstwa do pokazania lub ukrycia"
+
+msgid "Spaziatura lettere"
+msgstr "Odstęp liter"
+
+msgid "Contorno del testo"
+msgstr "Obrys tekstu"
+
+msgid "Spessore del tratto"
+msgstr "Grubość linii"
+
+msgid "Filtro sfondo"
+msgstr "Filtr tła"
+
+msgid "Ombra del testo"
+msgstr "Cień tekstu"
+
+msgid "Rivelazione a blocco"
+msgstr "Odsłonięcie blokiem"
+
+msgid "Cursore del mouse"
+msgstr "Kursor myszy"
+
+msgid "Ritardo fra le lettere"
+msgstr "Opóźnienie między literami"
+
+msgid "Movimento continuo"
+msgstr "Ciągły ruch"
+
+msgid "Inclinazione orizzontale"
+msgstr "Pochylenie w poziomie"
+
+msgid "Percorso"
+msgstr "Ścieżka"
+
+msgid "Percorso SVG (d=\"\")"
+msgstr "Ścieżka SVG (d=\"\")"

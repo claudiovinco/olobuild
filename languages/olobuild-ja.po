@@ -17020,3 +17020,276 @@ msgstr "Pro にアップグレード"
 #: licenza-1.4.1345
 msgid "Free e Pro"
 msgstr "Free と Pro"
+
+#: licenza-1.4.1345
+msgid "Con OLObuild Pro"
+msgstr "OLObuild Pro で利用可"
+
+msgid "%1$s non fa parte di OLObuild Free: lo hai con OLObuild Pro o con la licenza di %2$s."
+msgstr "%1$s は OLObuild Free には含まれません。OLObuild Pro または %2$s のライセンスで利用できます。"
+
+#: licenza-1.4.1345
+msgid "Sfondo della slide"
+msgstr "スライドの背景"
+
+msgid "segue lo scorrimento"
+msgstr "スクロールに連動"
+
+msgid "Trascina per vedere come si muovono i livelli mentre la pagina scorre: 0% è l’inizio, 100% la fine del tratto dello slider. ▶ fa vedere tutto il movimento. Per spostare e modificare i livelli torna alla vista ferma con ×."
+msgstr "ドラッグすると、ページのスクロールに合わせてレイヤーがどう動くかを確認できます。0% はスライダー区間の始まり、100% は終わりです。▶ で動き全体を再生します。レイヤーを移動・編集するには × で静止表示に戻ってください。"
+
+msgid "Anteprima dello scorrimento"
+msgstr "スクロールのプレビュー"
+
+msgid "Guarda il movimento"
+msgstr "動きを見る"
+
+msgid "ferma"
+msgstr "静止"
+
+msgid "Torna alla vista ferma"
+msgstr "静止表示に戻る"
+
+msgid "Stato dei livelli"
+msgstr "レイヤーの状態"
+
+msgid "Alcuni livelli si vedono solo in uno stato (◐ nella barra dei livelli), che cambia quando si clicca un altro livello. «Come all’avvio» mostra lo slider come lo vede chi apre la pagina; scegli uno stato per vedere solo i suoi livelli; «Tutti i livelli insieme» li mostra uno sopra l’altro, per modificarli."
+msgstr "一部のレイヤーは特定の状態でのみ表示されます（レイヤーバーの ◐）。状態は別のレイヤーをクリックすると変わります。「起動時と同じ」はページを開いた人に見える状態でスライダーを表示します。状態を選ぶとそのレイヤーだけが表示され、「すべてのレイヤーを一緒に」は編集しやすいようにすべてを重ねて表示します。"
+
+msgid "Anteprima degli stati"
+msgstr "状態のプレビュー"
+
+msgid "In questa slide"
+msgstr "このスライドでは"
+
+msgid "Quanti livelli fanno qualcosa, e cosa. Nella barra dei livelli lo stesso bollino dice quali: ↕ scorrendo, ⏱ linea del tempo, Aa lettere, ◐ stato, ☝ clic, ∞ continuo, {} CSS, ▭ solo su alcuni schermi. Passa il puntatore su un bollino per leggerlo."
+msgstr "何らかの動きをするレイヤーの数と内容です。レイヤーバーでは同じバッジでどれかが分かります：↕ スクロール、⏱ タイムライン、Aa 文字、◐ 状態、☝ クリック、∞ 連続、{} CSS、▭ 一部の画面のみ。バッジにポインターを合わせると説明が読めます。"
+
+msgid "Cosa succede in questa slide"
+msgstr "このスライドで起きること"
+
+msgid "Come all’avvio"
+msgstr "起動時と同じ"
+
+msgid "Tutti i livelli insieme"
+msgstr "すべてのレイヤーを一緒に"
+
+msgid "si muovono scorrendo"
+msgstr "スクロールで動く"
+
+msgid "con linea del tempo"
+msgstr "タイムラインあり"
+
+msgid "entrano lettera per lettera"
+msgstr "一文字ずつ現れる"
+
+msgid "legati a uno stato"
+msgstr "状態に連動"
+
+msgid "cliccabili"
+msgstr "クリック可能"
+
+msgid "da pulire col puntatore"
+msgstr "ポインターで消せる"
+
+msgid "in movimento continuo"
+msgstr "連続して動く"
+
+msgid "in parallasse"
+msgstr "パララックス"
+
+msgid "con CSS su misura"
+msgstr "カスタム CSS あり"
+
+msgid "solo su alcuni schermi"
+msgstr "一部の画面のみ"
+
+msgid "Nome del livello"
+msgstr "レイヤー名"
+
+msgid "Serve solo a te, per riconoscere il livello nella barra dei livelli: sul sito non si vede. Vuoto, il livello prende il nome dal suo testo o dal file."
+msgstr "レイヤーバーでレイヤーを見分けるためのもので、サイトには表示されません。空欄の場合はテキストまたはファイル名が使われます。"
+
+msgid "Cosa mostra l’immagine (per chi non la vede)"
+msgstr "画像の内容（見えない人のために）"
+
+msgid "Tappe del percorso"
+msgstr "経路のステップ"
+
+msgid "Ogni tappa dice com’è il livello a quel punto del suo tratto (0% = inizio, 100% = fine); fra una tappa e l’altra il livello passa da un valore all’altro. Clicca una tappa per vederla sulla tela e cambiarla: la tela va a quel punto dello scorrimento."
+msgstr "各ステップは、その区間のその地点でレイヤーがどうなるかを示します（0% = 始まり、100% = 終わり）。ステップの間でレイヤーは値から値へ移り変わります。ステップをクリックするとキャンバスに表示されて変更でき、キャンバスはスクロールのその地点に移動します。"
+
+msgid "Elimina tappa"
+msgstr "ステップを削除"
+
+msgid "A che punto del tratto"
+msgstr "区間内の位置"
+
+msgid "Non muovere più questa proprietà"
+msgstr "このプロパティを動かさない"
+
+msgid "+ Muovi anche…"
+msgstr "+ 他にも動かす…"
+
+msgid "com’è sulla tela"
+msgstr "キャンバスどおり"
+
+msgid "Si muove scorrendo la pagina"
+msgstr "ページのスクロールで動く"
+
+msgid "tappe"
+msgstr "ステップ"
+
+msgid "Linea del tempo"
+msgstr "タイムライン"
+
+msgid "fotogrammi chiave"
+msgstr "キーフレーム"
+
+msgid "Le lettere entrano una alla volta"
+msgstr "文字が一つずつ現れる"
+
+msgid "Si vede solo in uno stato"
+msgstr "特定の状態でのみ表示"
+
+msgid "Fa qualcosa al clic"
+msgstr "クリックで動作する"
+
+msgid "Si cancella passandoci sopra"
+msgstr "なぞると消える"
+
+msgid "Ha un CSS su misura (Avanzate)"
+msgstr "カスタム CSS あり（詳細設定）"
+
+msgid "Nascosto all’avvio: lo mostra un altro livello al clic"
+msgstr "起動時は非表示：別のレイヤーのクリックで表示"
+
+msgid "computer"
+msgstr "パソコン"
+
+msgid "notebook"
+msgstr "ノートPC"
+
+msgid "tablet"
+msgstr "タブレット"
+
+msgid "telefono"
+msgstr "スマートフォン"
+
+msgid "Si vede solo su"
+msgstr "表示される画面："
+
+msgid "Non si vede su nessuno schermo"
+msgstr "どの画面にも表示されない"
+
+msgid "Testo del pulsante che azzera"
+msgstr "リセットボタンのテキスト"
+
+msgid "Resetta"
+msgstr "リセット"
+
+msgid "Sfondo contatore"
+msgstr "カウンターの背景"
+
+msgid "Colore contatore"
+msgstr "カウンターの色"
+
+msgid "Mostra lo sconto"
+msgstr "割引を表示"
+
+msgid "Sui prodotti in saldo, un bollino con la percentuale di sconto sulla foto."
+msgstr "セール中の商品で、割引率のバッジを写真に表示します。"
+
+msgid "Sfondo bollino sconto"
+msgstr "割引バッジの背景"
+
+msgid "Nome del link"
+msgstr "リンク名"
+
+msgid "es. Il mio account"
+msgstr "例：マイアカウント"
+
+msgid "Lo legge chi usa un lettore di schermo al posto dell’icona. Vuoto: il nome dell’icona."
+msgstr "スクリーンリーダーの利用者にはアイコンの代わりにこれが読み上げられます。空欄の場合はアイコン名。"
+
+msgid "Lo spazio attorno al contenuto dell’hero. Se imposti il Padding del Contenitore, vale quello."
+msgstr "ヒーローのコンテンツ周りの余白です。コンテナの Padding を設定するとそちらが優先されます。"
+
+msgid "Proprietà CSS applicate direttamente al riquadro della tile, per esempio color: red; oppure transform: rotate(2deg);"
+msgstr "タイルの枠に直接適用される CSS プロパティです。例：color: red; や transform: rotate(2deg);"
+
+msgid "&quot;Foto interne&quot;: ogni immagine o video dentro la tile (gallerie, griglie) si inclina singolarmente."
+msgstr "&quot;内側の写真&quot;：タイル内の各画像・動画（ギャラリー、グリッド）が個別に傾きます。"
+
+msgid "Il cursore che segue il mouse in tutto il sito, al posto della freccia. Ogni pagina può sceglierne un altro in «Cursore di questa pagina». Su telefoni e tablet, e nel canvas del builder, resta quello di sistema; solo la Torcia resta anche su telefoni e tablet, con la luce ferma al centro dello schermo."
+msgstr "サイト全体で矢印の代わりにマウスを追いかけるカーソルです。各ページは「このページのカーソル」で別のものを選べます。スマートフォンやタブレット、ビルダーのキャンバスではシステムのカーソルのままです。トーチだけはスマートフォンとタブレットでも、光を画面中央に固定して表示されます。"
+
+msgid "JavaScript eseguito sul sito, non nel builder. La variabile «el» contiene l'elemento della tile."
+msgstr "ビルダーではなくサイトで実行される JavaScript です。変数「el」にタイルの要素が入ります。"
+
+msgid "Piena: la tile occupa tutta la riga della colonna, e il suo Allineamento la sposta a sinistra, al centro o a destra."
+msgstr "フル：タイルが列の行全体を占め、配置で左・中央・右に移動します。"
+
+msgid "Adattata: la tile è larga quanto il suo contenuto, e più tile adattate una dopo l'altra si affiancano sulla stessa riga (per esempio due pulsanti vicini). L'Allineamento della prima allinea tutta la fila."
+msgstr "フィット：タイルの幅は中身に合わせられ、フィットのタイルを続けて置くと同じ行に横並びになります（例：隣り合う2つのボタン）。最初のタイルの配置で行全体が揃います。"
+
+#: licenza-1.4.1345
+msgid "Zoom lento (Ken Burns)"
+msgstr "スローズーム（Ken Burns）"
+
+msgid "Spostamento orizzontale"
+msgstr "水平方向の移動"
+
+msgid "Spostamento verticale"
+msgstr "垂直方向の移動"
+
+msgid "Etichetta della scheda"
+msgstr "タブのラベル"
+
+msgid "Zoom al 100%"
+msgstr "100% に拡大"
+
+msgid "mp4 o indirizzo YouTube"
+msgstr "mp4 または YouTube のアドレス"
+
+msgid "mp3 o indirizzo dell’audio"
+msgstr "mp3 または音声のアドレス"
+
+msgid "Livello da mostrare o nascondere"
+msgstr "表示・非表示にするレイヤー"
+
+msgid "Spaziatura lettere"
+msgstr "文字間隔"
+
+msgid "Contorno del testo"
+msgstr "文字の輪郭"
+
+msgid "Spessore del tratto"
+msgstr "線の太さ"
+
+msgid "Filtro sfondo"
+msgstr "背景フィルター"
+
+msgid "Ombra del testo"
+msgstr "文字の影"
+
+msgid "Rivelazione a blocco"
+msgstr "ブロックで表示"
+
+msgid "Cursore del mouse"
+msgstr "マウスカーソル"
+
+msgid "Ritardo fra le lettere"
+msgstr "文字間の遅延"
+
+msgid "Movimento continuo"
+msgstr "連続した動き"
+
+msgid "Inclinazione orizzontale"
+msgstr "水平方向の傾き"
+
+msgid "Percorso"
+msgstr "経路"
+
+msgid "Percorso SVG (d=\"\")"
+msgstr "SVG パス（d=\"\"）"

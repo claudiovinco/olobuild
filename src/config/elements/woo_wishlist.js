@@ -9,6 +9,13 @@ import { t } from '@/i18n';
  */
 export default {
   type: 'woo_wishlist',
+  // I colori del pulsante stavano in btn_bg / btn_color, che il PHP legge ancora come ripiego: passano nei
+  // campi «Sfondo pulsante» e «Colore testo pulsante», che altrimenti si mostravano vuoti su un pulsante
+  // trasparente (src/utils/migraImpostazioni.js).
+  migraAlCaricamento(s) {
+    if (!s.button_bg && s.btn_bg) { s.button_bg = s.btn_bg; s.btn_bg = ''; }
+    if (!s.button_color && s.btn_color) { s.button_color = s.btn_color; s.btn_color = ''; }
+  },
   name: t('WC Wishlist'),
   icon: 'dashicons-heart',
   category: 'woocommerce',
@@ -104,6 +111,9 @@ export default {
 
     { type: 'separator', label: t('Colori') },
     { key: 'icon_color', label: t('Colore icona'), type: 'color' },
+    { key: 'icon_size', label: t('Dimensione icona'), type: 'range', min: 14, max: 48, step: 1, unit: 'px' },
+    { key: 'badge_bg', label: t('Sfondo contatore'), type: 'color', condition: { field: 'show_count', value: true } },
+    { key: 'badge_color', label: t('Colore contatore'), type: 'color', condition: { field: 'show_count', value: true } },
     { key: 'icon_color_active', label: t('Colore icona attiva'), type: 'color' },
     { key: 'title_color', label: t('Colore titolo'), type: 'color', condition: { field: 'show_grid', op: 'notEmpty' } },
     { key: 'price_color', label: t('Colore prezzo'), type: 'color', condition: { field: 'show_grid', op: 'notEmpty' } },
