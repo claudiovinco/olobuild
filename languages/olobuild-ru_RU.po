@@ -3984,3 +3984,432 @@ msgstr "Колонки маленьких телефонов"
 
 msgid "Sotto i 480 px; vuoto = come le colonne mobile."
 msgstr "Меньше 480 px; пусто = как колонки для мобильных."
+
+#: licenza-1.4.1345
+msgid "Mostra la durata dei video"
+msgstr "Показывать длительность видео"
+
+msgid "Accanto alla categoria, per esempio «7:40». Per i video caricati nella libreria la durata si legge da sola; per YouTube e Vimeo aggiunti a mano si scrive nel campo «Durata» del video in «Media»."
+msgstr "Рядом с категорией, например «7:40». Для видео из библиотеки длительность читается сама; для YouTube и Vimeo, добавленных вручную, её пишут в поле «Длительность» видео в «Медиа»."
+
+msgid "Numero grande"
+msgstr "Крупный номер"
+
+msgid "Il numero in alto a sinistra, grande, nel carattere dei titoli; sotto, categoria e durata. Come nelle pareti di video."
+msgstr "Номер слева сверху, крупный, шрифтом заголовков; под ним категория и длительность. Как в стенах видео."
+
+msgid "Durata (es. 7:40)"
+msgstr "Длительность (напр. 7:40)"
+
+#: licenza-1.4.1345
+msgid "Ogni parte della card può andare in una delle nove zone: in alto, al centro o in basso, a sinistra, al centro o a destra. Coi testi sotto la foto le zone sono le righe dei testi (per esempio il tempo di lettura in basso a destra, accanto alla firma). «Come lo schema» la lascia dov’è."
+msgstr "Каждая часть карточки может стоять в одной из девяти зон: сверху, по центру или снизу, слева, по центру или справа. Когда тексты под фото, зоны — это строки текста (например, время чтения справа внизу, рядом с автором). «Как в схеме» оставляет её на месте."
+
+#: licenza-1.4.1345
+msgid "Stile del numero"
+msgstr "Стиль номера"
+
+msgid "Etichetta piena"
+msgstr "Заливная метка"
+
+msgid "Stile della categoria"
+msgstr "Стиль категории"
+
+msgid "L’etichetta piena prende il colore della voce (Colore delle voci) o, se manca, quello di categoria e numero: ogni categoria può avere il suo."
+msgstr "Заливная метка берёт цвет элемента («Цвет элементов») или, если его нет, цвет категории и номера: у каждой категории может быть свой."
+
+msgid "Colore del sottotitolo"
+msgstr "Цвет подзаголовка"
+
+msgid "Sottotitolo in maiuscolo piccolo"
+msgstr "Подзаголовок мелкими прописными"
+
+#: licenza-1.4.1345
+msgid "«Sotto la foto» vale per Griglia, Masonry e Nastro, «Accanto alla foto» per Griglia e Masonry; negli altri schemi i testi vanno sulla foto. Nel biglietto il testo della foto diventa la scritta grande (per esempio «20 mag sab»): accendi «Mostra il testo»."
+msgstr "«Под фото» работает в схемах «Сетка», Masonry и «Лента», «Рядом с фото» — в «Сетке» и Masonry; в остальных тексты располагаются на фото. В билете текст фото становится крупной надписью (например, «20 мая сб»): включите «Показывать текст»."
+
+msgid "Colore e segno delle voci"
+msgstr "Цвет и пометка элементов"
+
+msgid "Un colore per ogni foto o card: tinge la cornice, la categoria, il numero, il pulsante, il biglietto, il fondo delle card di testo e il segno a matita. Vuoto = il colore della galleria. Il segno a matita cerchia una foto, come sul provino di un fotografo."
+msgstr "Цвет для каждого фото или карточки: окрашивает рамку, категорию, номер, кнопку, билет, фон текстовых карточек и пометку карандашом. Пусто = цвет галереи. Пометка карандашом обводит фото, как на контактном листе фотографа."
+
+msgid "Segno a matita"
+msgstr "Пометка карандашом"
+
+msgid "Riquadro a matita"
+msgstr "Рамка карандашом"
+
+msgid "Cerchio a matita"
+msgstr "Круг карандашом"
+
+#: licenza-1.4.1345
+msgid "Nota (prezzo, anno…)"
+msgstr "Примечание (цена, год…)"
+
+msgid "Etichetta sulla foto"
+msgstr "Метка на фото"
+
+msgid "Nel piede, a sinistra"
+msgstr "В нижней строке, слева"
+
+msgid "Nel piede, a destra"
+msgstr "В нижней строке, справа"
+
+msgid "Sulla foto, in alto a sinistra"
+msgstr "На фото, вверху слева"
+
+msgid "Sulla foto, in alto a destra"
+msgstr "На фото, вверху справа"
+
+msgid "Sulla foto, in basso a sinistra"
+msgstr "На фото, внизу слева"
+
+msgid "Sulla foto, in basso a destra"
+msgstr "На фото, внизу справа"
+
+msgid "Davanti al titolo"
+msgstr "Перед заголовком"
+
+msgid "Dopo il titolo, nella stessa riga"
+msgstr "После заголовка, в той же строке"
+
+msgid "Play"
+msgstr "Воспроизведение"
+
+msgid "Freccia a destra"
+msgstr "Стрелка вправо"
+
+msgid "«%d» diventa il numero delle foto: «Cerca fra %d risorse»."
+msgstr "«%d» превращается в число фото: «Поиск среди %d материалов»."
+
+msgid "Barretta di avanzamento"
+msgstr "Полоса прогресса"
+
+msgid "Sotto il nastro una barretta corta che dice a che punto si è."
+msgstr "Под лентой короткая полоска показывает, где вы находитесь."
+
+msgid "Filo interno"
+msgstr "Внутренняя линия"
+
+msgid "Bordo pieno"
+msgstr "Сплошная рамка"
+
+msgid "Con un colore per ogni voce (Colore e segno delle voci) filo, bordo e pellicola prendono quello della voce."
+msgstr "Если у каждого элемента свой цвет («Цвет и пометка элементов»), линия, рамка и плёнка берут цвет элемента."
+
+msgid "Scritte sul bordo"
+msgstr "Надписи на краю"
+
+msgid "Le scritte che la pellicola porta stampate sul bordo, come su un provino a contatto: «▸ 03» è il numero del fotogramma (la freccia lo indica), «03A» il mezzo fotogramma che segue, «R1» il rullino e «400» la sensibilità ISO della pellicola."
+msgstr "Надписи, напечатанные на краю плёнки, как на контактном листе: «▸ 03» — номер кадра (на него указывает стрелка), «03A» — следующий полукадр, «R1» — ролик, «400» — светочувствительность ISO."
+
+msgid "Rullino"
+msgstr "Ролик"
+
+msgid "Sensibilità ISO"
+msgstr "Светочувствительность ISO"
+
+msgid "Primo fotogramma"
+msgstr "Первый кадр"
+
+msgid "Ogni quanti fotogrammi"
+msgstr "Через сколько кадров"
+
+msgid "Sul provino il fotografo sceglie i fotogrammi migliori: con 3 e 4 i numeri vanno 03, 07, 11…"
+msgstr "На контактном листе фотограф выбирает лучшие кадры: при 3 и 4 номера идут 03, 07, 11…"
+
+msgid "Fondo nel colore della voce"
+msgstr "Фон цвета элемента"
+
+msgid "La card prende il colore scelto per ogni voce (Colore e segno delle voci), e il testo si fa chiaro o scuro da sé: le card colorate di un negozio."
+msgstr "Карточка принимает цвет, выбранный для каждого элемента («Цвет и пометка элементов»), а текст сам становится светлым или тёмным: цветные карточки магазина."
+
+msgid "Riquadro solo sulle foto grandi"
+msgstr "Плашка только на больших фото"
+
+msgid "Il riquadro coi testi resta sulle foto grandi (almeno due colonne per due righe); sulle piccole i testi stanno sulla foto, senza sottotitolo e senza piede."
+msgstr "Плашка с текстом остаётся на больших фото (минимум две колонки на две строки); на маленьких текст лежит на фото, без подзаголовка и нижней строки."
+
+msgid "Riquadro stretto"
+msgstr "Узкая плашка"
+
+msgid "Il riquadro largo quanto i suoi testi, in un angolo, invece che da un lato all’altro."
+msgstr "Плашка шириной в свой текст, в углу, а не от края до края."
+
+msgid "Colore del corsivo"
+msgstr "Цвет курсива"
+
+msgid "Nel titolo il pezzo fra due asterischi va in corsivo: «Vestiti per *la luce lunga*». Qui il suo colore; vuoto = come il titolo."
+msgstr "В заголовке часть между двумя звёздочками идёт курсивом: «Одета для *долгого света*». Здесь её цвет; пусто = как заголовок."
+
+msgid "Titolo grande quanto la foto"
+msgstr "Заголовок по размеру фото"
+
+msgid "Il titolo cresce con la foto: grande sulle foto grandi, piccolo sulle piccole (negli schemi a misure miste)."
+msgstr "Заголовок растёт вместе с фото: крупный на больших фото, мелкий на маленьких (в схемах со смешанными размерами)."
+
+msgid "Sottotitolo e testo"
+msgstr "Подзаголовок и текст"
+
+msgid "Sottotitolo solo sulle foto grandi"
+msgstr "Подзаголовок только на больших фото"
+
+msgid "Pallino davanti al testo"
+msgstr "Точка перед текстом"
+
+msgid "Un pallino nel colore della voce davanti al testo, come la luce di una lampada accanto alle sue misure."
+msgstr "Точка цвета элемента перед текстом, как свет лампы рядом с её размерами."
+
+msgid "Categoria e durata"
+msgstr "Категория и длительность"
+
+msgid "Categoria, numero e durata"
+msgstr "Категория, номер и длительность"
+
+msgid "Etichetta chiara"
+msgstr "Светлая метка"
+
+msgid "Etichetta scura"
+msgstr "Тёмная метка"
+
+msgid "L’etichetta piena prende il colore della voce (Colore e segno delle voci) o, se manca, quello di categoria e numero: ogni categoria può avere il suo. Chiara e scura stanno bene sulle foto."
+msgstr "Сплошная метка берёт цвет элемента («Цвет и пометка элементов»), а если его нет — цвет категории и номера: у каждой категории может быть свой. Светлая и тёмная хорошо смотрятся на фото."
+
+msgid "Pallino davanti alla categoria"
+msgstr "Точка перед категорией"
+
+msgid "Gruppo da mostrare"
+msgstr "Какую группу показывать"
+
+msgid "Con le categorie a gruppi («Tipo: Guida, Livello: Base») la card mostra solo quelle del gruppo scritto qui, per esempio «Tipo». Vuoto = tutte."
+msgstr "При категориях по группам («Тип: Руководство, Уровень: Базовый») карточка показывает только категории указанной здесь группы, например «Тип». Пусто = все."
+
+msgid "Stile della durata"
+msgstr "Стиль длительности"
+
+msgid "Etichetta col play"
+msgstr "Метка со значком воспроизведения"
+
+msgid "Fra le parti piccole che stanno nella stessa zona: «Interni · 2026», «Regia / 2026», e fra categoria e durata sotto il numero grande."
+msgstr "Между мелкими частями в одной зоне: «Интерьеры · 2026», «Режиссура / 2026», и между категорией и длительностью под крупным номером."
+
+msgid "Lettere o segni davanti e dietro al numero: «Q» dà «Q01», «(» e «)» danno «(01)», «No. » dà «No. 01»."
+msgstr "Буквы или знаки до и после номера: «Q» даёт «Q01», «(» и «)» дают «(01)», «№ » даёт «№ 01»."
+
+msgid "Conta all’indietro"
+msgstr "Обратный отсчёт"
+
+msgid "La prima voce ha il numero più alto: 016, 015, 014… come gli indici dei progetti, dal più recente."
+msgstr "Первый элемент получает самый большой номер: 016, 015, 014… как в указателях проектов, с самого нового."
+
+msgid "Icona del numero"
+msgstr "Значок номера"
+
+msgid "Numero e categoria in un riquadro"
+msgstr "Номер и категория в рамке"
+
+msgid "Quando stanno nella stessa zona, numero e categoria vanno in un riquadro sottile, col numero pieno nel colore della voce."
+msgstr "Если они в одной зоне, номер и категория попадают в тонкую рамку, номер залит цветом элемента."
+
+msgid "Stile della nota"
+msgstr "Стиль примечания"
+
+msgid "Grande (un prezzo)"
+msgstr "Крупно (цена)"
+
+msgid "Con la lineetta"
+msgstr "С чёрточкой"
+
+msgid "La nota di ogni voce (in Media): un prezzo, un anno, un codice. «Grande» fa grande la prima parola e piccolo il resto («€3.40 330 ml»)."
+msgstr "Примечание каждого элемента (в «Медиа»): цена, год, код. «Крупно» делает первое слово крупным, а остальное мелким («3,40 € 330 мл»)."
+
+msgid "Colore dell’etichetta"
+msgstr "Цвет метки"
+
+msgid "Vuoto = il colore di ogni voce."
+msgstr "Пусто = цвет каждого элемента."
+
+msgid "Icona e pulsante"
+msgstr "Значок и кнопка"
+
+msgid "Stile dell’icona"
+msgstr "Стиль значка"
+
+msgid "Nel cerchio"
+msgstr "В круге"
+
+msgid "Nel cerchio pieno"
+msgstr "В закрашенном круге"
+
+msgid "Sola"
+msgstr "Отдельно"
+
+msgid "Colore dell’icona"
+msgstr "Цвет значка"
+
+msgid "A contorno"
+msgstr "Контурная"
+
+msgid "Scritta sottolineata"
+msgstr "Подчёркнутая надпись"
+
+msgid "Linee e colore"
+msgstr "Линии и цвет"
+
+msgid "Linea sopra il piede"
+msgstr "Линия над нижней строкой"
+
+msgid "Una linea sottile sopra il piede della card (le parti messe «Nel piede»)."
+msgstr "Тонкая линия над нижней строкой карточки (части, размещённые «В нижней строке»)."
+
+msgid "Linea sotto ogni card"
+msgstr "Линия под каждой карточкой"
+
+msgid "Barretta nel colore della voce"
+msgstr "Полоска цвета элемента"
+
+msgid "Una barretta in fondo alla foto, nel colore scelto per ogni voce."
+msgstr "Полоска внизу фото цвета, выбранного для каждого элемента."
+
+msgid "Quadratino del colore"
+msgstr "Квадратик цвета"
+
+msgid "Un quadratino nel colore della voce in alto a destra, come il campione di un materiale."
+msgstr "Квадратик цвета элемента вверху справа, как образец материала."
+
+msgid "Posizione delle parti"
+msgstr "Расположение частей"
+
+msgid "Ogni parte della card può andare in una delle nove zone, nel piede (una riga in fondo) o, coi testi sotto la foto, sulla foto. Le parti piccole possono stare anche davanti, dopo o sotto il titolo. «Come lo schema» la lascia dov’è."
+msgstr "Каждая часть карточки может стоять в одной из девяти зон, в нижней строке или — когда текст под фото — на фото. Мелкие части могут стоять также перед заголовком, после него или под ним. «Как в схеме» оставляет её на месте."
+
+msgid "Posizione della durata"
+msgstr "Положение длительности"
+
+msgid "Posizione della nota"
+msgstr "Положение примечания"
+
+msgid "Posizione dell’etichetta"
+msgstr "Положение метки"
+
+msgid "Riquadro a pennarello"
+msgstr "Рамка маркером"
+
+msgid "Icona della categoria"
+msgstr "Значок категории"
+
+msgid "Bordate"
+msgstr "С рамкой"
+
+msgid "Caselle da spuntare"
+msgstr "Флажки"
+
+msgid "Con le caselle si possono spuntare più valori insieme."
+msgstr "Флажками можно отметить несколько значений сразу."
+
+msgid "Squadrata"
+msgstr "Квадратная"
+
+msgid "Conteggi"
+msgstr "Счётчики"
+
+msgid "In alto, piccoli"
+msgstr "Сверху, мелко"
+
+msgid "Accanto al nome"
+msgstr "Рядом с названием"
+
+msgid "Accanto, col punto"
+msgstr "Рядом, с точкой"
+
+msgid "Riga spessa sopra"
+msgstr "Толстая линия сверху"
+
+msgid "Pallino nel colore della categoria"
+msgstr "Точка цвета категории"
+
+msgid "Il colore è quello della prima voce della categoria (Colore e segno delle voci)."
+msgstr "Цвет берётся у первого элемента категории («Цвет и пометка элементов»)."
+
+msgid "Gruppi in una riga"
+msgstr "Группы в одну строку"
+
+msgid "Con più gruppi («Tipo: Guida, Livello: Base») tutti i gruppi stanno in una riga, col loro nome piccolo, e un solo «Tutti» davanti che li azzera."
+msgstr "При нескольких группах («Тип: Руководство, Уровень: Базовый») все группы стоят в одной строке со своим мелким названием, а одно «Все» впереди сбрасывает их."
+
+msgid "Testo dei filtri"
+msgstr "Текст фильтров"
+
+msgid "Testo del filtro attivo"
+msgstr "Текст активного фильтра"
+
+msgid "Vuoto = chiaro o scuro da sé, secondo il colore del filtro attivo."
+msgstr "Пусто = сам становится светлым или тёмным в зависимости от цвета активного фильтра."
+
+msgid "Bordo dei filtri"
+msgstr "Рамка фильтров"
+
+msgid "Vuoto = una linea leggera nel colore del testo."
+msgstr "Пусто = лёгкая линия цвета текста."
+
+msgid "Posizione della ricerca"
+msgstr "Положение поиска"
+
+msgid "Accanto ai filtri"
+msgstr "Рядом с фильтрами"
+
+msgid "Sopra, larga, con la lente"
+msgstr "Сверху, широко, с лупой"
+
+msgid "Linee fra le celle"
+msgstr "Линии между ячейками"
+
+msgid "Le celle si toccano e le divide una linea sottile, dentro un riquadro: le pareti di loghi."
+msgstr "Ячейки соприкасаются, их разделяет тонкая линия, внутри рамки: стены логотипов."
+
+msgid "Sopra il nome"
+msgstr "Над названием"
+
+msgid "Sulla foto, in un’etichetta"
+msgstr "На фото, в метке"
+
+msgid "Le prime due categorie del prodotto («Felpe · Donna»), piccole, nel carattere a spaziatura fissa."
+msgstr "Первые две категории товара («Худи · Женское»), мелко, моноширинным шрифтом."
+
+msgid "Foto a sé"
+msgstr "Фото отдельно"
+
+msgid "La foto ha il fondo e gli angoli della card; nome e prezzo stanno sotto, sulla pagina, senza riquadro."
+msgstr "Фото получает фон и углы карточки; название и цена стоят ниже, на странице, без рамки."
+
+msgid "Foto che sfuma in basso"
+msgstr "Фото, растворяющееся снизу"
+
+msgid "Il fondo della foto sfuma nel fondo della card: bello coi capi fotografati su fondo chiaro."
+msgstr "Низ фото растворяется в фоне карточки: красиво с одеждой, снятой на светлом фоне."
+
+msgid "Pallini in una riga loro"
+msgstr "Точки отдельной строкой"
+
+msgid "I pallini dei colori sotto il prezzo invece che accanto."
+msgstr "Цветные точки под ценой, а не рядом."
+
+#: licenza-1.4.1345
+msgid "Metti in pausa il video"
+msgstr "Поставить видео на паузу"
+
+msgid "Riprendi il video"
+msgstr "Продолжить видео"
+
+msgid "Pulsante di pausa"
+msgstr "Кнопка паузы"
+
+msgid "Sui video che partono da soli un pulsante tondo in alto a sinistra per fermarli e farli ripartire. Con «riduci movimento» del sistema i video partono già fermi."
+msgstr "На видео, которые запускаются сами, круглая кнопка вверху слева, чтобы остановить и снова запустить их. При системной настройке «уменьшить движение» видео начинаются уже на паузе."
+
+msgid "Riflesso olografico"
+msgstr "Голографический отлив"
+
+msgid "L’etichetta della nota (e il filo interno, se c’è) prende i colori cangianti di una carta olografica, che scorrono piano."
+msgstr "Метка примечания (и внутренняя линия, если есть) получает переливчатые цвета голографической карты, которые медленно перетекают."

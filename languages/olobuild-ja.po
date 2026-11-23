@@ -18467,3 +18467,432 @@ msgstr "小さなスマホの列数"
 
 msgid "Sotto i 480 px; vuoto = come le colonne mobile."
 msgstr "480 px 未満。空欄＝モバイルの列数と同じ。"
+
+#: licenza-1.4.1345
+msgid "Mostra la durata dei video"
+msgstr "動画の長さを表示"
+
+msgid "Accanto alla categoria, per esempio «7:40». Per i video caricati nella libreria la durata si legge da sola; per YouTube e Vimeo aggiunti a mano si scrive nel campo «Durata» del video in «Media»."
+msgstr "カテゴリーの横に表示します（例：「7:40」）。ライブラリの動画は長さを自動で読み取ります。手動で追加した YouTube や Vimeo は「メディア」の動画の「長さ」欄に書きます。"
+
+msgid "Numero grande"
+msgstr "大きな番号"
+
+msgid "Il numero in alto a sinistra, grande, nel carattere dei titoli; sotto, categoria e durata. Come nelle pareti di video."
+msgstr "番号を左上に大きく、見出しの書体で表示し、その下にカテゴリーと長さを並べます。動画ウォールのように。"
+
+msgid "Durata (es. 7:40)"
+msgstr "長さ（例：7:40）"
+
+#: licenza-1.4.1345
+msgid "Ogni parte della card può andare in una delle nove zone: in alto, al centro o in basso, a sinistra, al centro o a destra. Coi testi sotto la foto le zone sono le righe dei testi (per esempio il tempo di lettura in basso a destra, accanto alla firma). «Come lo schema» la lascia dov’è."
+msgstr "カードの各パーツを 9 つのゾーン（上・中央・下 × 左・中央・右）のどこにでも置けます。テキストが写真の下にあるときは、ゾーンはテキストの行になります（例：読了時間を右下、署名の横に）。「レイアウトどおり」はそのままにします。"
+
+#: licenza-1.4.1345
+msgid "Stile del numero"
+msgstr "番号のスタイル"
+
+msgid "Etichetta piena"
+msgstr "塗りつぶしラベル"
+
+msgid "Stile della categoria"
+msgstr "カテゴリーのスタイル"
+
+msgid "L’etichetta piena prende il colore della voce (Colore delle voci) o, se manca, quello di categoria e numero: ogni categoria può avere il suo."
+msgstr "塗りつぶしラベルは項目の色（各項目の色）を使い、なければカテゴリーと番号の色を使います。カテゴリーごとに色を変えられます。"
+
+msgid "Colore del sottotitolo"
+msgstr "サブタイトルの色"
+
+msgid "Sottotitolo in maiuscolo piccolo"
+msgstr "サブタイトルを小さな大文字で"
+
+#: licenza-1.4.1345
+msgid "«Sotto la foto» vale per Griglia, Masonry e Nastro, «Accanto alla foto» per Griglia e Masonry; negli altri schemi i testi vanno sulla foto. Nel biglietto il testo della foto diventa la scritta grande (per esempio «20 mag sab»): accendi «Mostra il testo»."
+msgstr "「写真の下」はグリッド・メイソンリー・ストリップ、「写真の横」はグリッドとメイソンリーで使えます。その他のレイアウトではテキストは写真の上に表示されます。チケットでは写真のテキストが大きな文字になります（例：「20 5月 土」）。「テキストを表示」をオンにしてください。"
+
+msgid "Colore e segno delle voci"
+msgstr "各項目の色と印"
+
+msgid "Un colore per ogni foto o card: tinge la cornice, la categoria, il numero, il pulsante, il biglietto, il fondo delle card di testo e il segno a matita. Vuoto = il colore della galleria. Il segno a matita cerchia una foto, come sul provino di un fotografo."
+msgstr "写真やカードごとの色。枠、カテゴリー、番号、ボタン、チケット、テキストカードの背景、鉛筆の印に色を付けます。空欄＝ギャラリーの色。鉛筆の印は、写真家のコンタクトシートのように写真を囲みます。"
+
+msgid "Segno a matita"
+msgstr "鉛筆の印"
+
+msgid "Riquadro a matita"
+msgstr "鉛筆の四角"
+
+msgid "Cerchio a matita"
+msgstr "鉛筆の丸"
+
+#: licenza-1.4.1345
+msgid "Nota (prezzo, anno…)"
+msgstr "メモ（価格、年…）"
+
+msgid "Etichetta sulla foto"
+msgstr "写真上のラベル"
+
+msgid "Nel piede, a sinistra"
+msgstr "フッター・左"
+
+msgid "Nel piede, a destra"
+msgstr "フッター・右"
+
+msgid "Sulla foto, in alto a sinistra"
+msgstr "写真上・左上"
+
+msgid "Sulla foto, in alto a destra"
+msgstr "写真上・右上"
+
+msgid "Sulla foto, in basso a sinistra"
+msgstr "写真上・左下"
+
+msgid "Sulla foto, in basso a destra"
+msgstr "写真上・右下"
+
+msgid "Davanti al titolo"
+msgstr "タイトルの前"
+
+msgid "Dopo il titolo, nella stessa riga"
+msgstr "タイトルの後（同じ行）"
+
+msgid "Play"
+msgstr "再生"
+
+msgid "Freccia a destra"
+msgstr "右向き矢印"
+
+msgid "«%d» diventa il numero delle foto: «Cerca fra %d risorse»."
+msgstr "「%d」は写真の数になります：「%d 件のリソースを検索」。"
+
+msgid "Barretta di avanzamento"
+msgstr "進行バー"
+
+msgid "Sotto il nastro una barretta corta che dice a che punto si è."
+msgstr "ストリップの下に、今どこまで来たかを示す短いバー。"
+
+msgid "Filo interno"
+msgstr "内側のライン"
+
+msgid "Bordo pieno"
+msgstr "ソリッドな枠"
+
+msgid "Con un colore per ogni voce (Colore e segno delle voci) filo, bordo e pellicola prendono quello della voce."
+msgstr "各項目に色があるとき（各項目の色と印）、ライン・枠・フィルムは項目の色になります。"
+
+msgid "Scritte sul bordo"
+msgstr "縁の刻印"
+
+msgid "Le scritte che la pellicola porta stampate sul bordo, come su un provino a contatto: «▸ 03» è il numero del fotogramma (la freccia lo indica), «03A» il mezzo fotogramma che segue, «R1» il rullino e «400» la sensibilità ISO della pellicola."
+msgstr "コンタクトシートのようにフィルムの縁に印刷された文字：「▸ 03」はコマ番号（矢印が示す）、「03A」は続く半コマ、「R1」はロール、「400」はフィルムのISO感度です。"
+
+msgid "Rullino"
+msgstr "ロール"
+
+msgid "Sensibilità ISO"
+msgstr "ISO感度"
+
+msgid "Primo fotogramma"
+msgstr "最初のコマ"
+
+msgid "Ogni quanti fotogrammi"
+msgstr "何コマごと"
+
+msgid "Sul provino il fotografo sceglie i fotogrammi migliori: con 3 e 4 i numeri vanno 03, 07, 11…"
+msgstr "コンタクトシートで写真家は良いコマを選びます：3と4なら番号は03、07、11…と進みます。"
+
+msgid "Fondo nel colore della voce"
+msgstr "項目の色で背景"
+
+msgid "La card prende il colore scelto per ogni voce (Colore e segno delle voci), e il testo si fa chiaro o scuro da sé: le card colorate di un negozio."
+msgstr "カードは各項目に選んだ色（各項目の色と印）になり、文字は自動で明るく／暗くなります：ショップのカラフルなカード。"
+
+msgid "Riquadro solo sulle foto grandi"
+msgstr "大きな写真だけにパネル"
+
+msgid "Il riquadro coi testi resta sulle foto grandi (almeno due colonne per due righe); sulle piccole i testi stanno sulla foto, senza sottotitolo e senza piede."
+msgstr "テキストのパネルは大きな写真（2列×2行以上）に残り、小さな写真ではサブタイトルとフッターなしで写真の上に表示されます。"
+
+msgid "Riquadro stretto"
+msgstr "細いパネル"
+
+msgid "Il riquadro largo quanto i suoi testi, in un angolo, invece che da un lato all’altro."
+msgstr "パネルを端から端ではなく、テキストの幅で隅に置きます。"
+
+msgid "Colore del corsivo"
+msgstr "斜体の色"
+
+msgid "Nel titolo il pezzo fra due asterischi va in corsivo: «Vestiti per *la luce lunga*». Qui il suo colore; vuoto = come il titolo."
+msgstr "タイトル内の2つのアスタリスクに挟まれた部分は斜体になります：「*長い光*のための服」。ここでその色を設定。空欄＝タイトルと同じ。"
+
+msgid "Titolo grande quanto la foto"
+msgstr "写真に合わせたタイトルサイズ"
+
+msgid "Il titolo cresce con la foto: grande sulle foto grandi, piccolo sulle piccole (negli schemi a misure miste)."
+msgstr "タイトルは写真に合わせて大きくなります：大きな写真では大きく、小さな写真では小さく（サイズ混在のレイアウト）。"
+
+msgid "Sottotitolo e testo"
+msgstr "サブタイトルとテキスト"
+
+msgid "Sottotitolo solo sulle foto grandi"
+msgstr "大きな写真だけにサブタイトル"
+
+msgid "Pallino davanti al testo"
+msgstr "テキストの前に点"
+
+msgid "Un pallino nel colore della voce davanti al testo, come la luce di una lampada accanto alle sue misure."
+msgstr "テキストの前に項目の色の点。ランプの寸法の横にある光のように。"
+
+msgid "Categoria e durata"
+msgstr "カテゴリーと長さ"
+
+msgid "Categoria, numero e durata"
+msgstr "カテゴリー・番号・長さ"
+
+msgid "Etichetta chiara"
+msgstr "明るいラベル"
+
+msgid "Etichetta scura"
+msgstr "暗いラベル"
+
+msgid "L’etichetta piena prende il colore della voce (Colore e segno delle voci) o, se manca, quello di categoria e numero: ogni categoria può avere il suo. Chiara e scura stanno bene sulle foto."
+msgstr "塗りのラベルは項目の色（各項目の色と印）を、なければカテゴリーと番号の色を使います。カテゴリーごとに色を変えられます。明るい／暗いラベルは写真の上で映えます。"
+
+msgid "Pallino davanti alla categoria"
+msgstr "カテゴリーの前に点"
+
+msgid "Gruppo da mostrare"
+msgstr "表示するグループ"
+
+msgid "Con le categorie a gruppi («Tipo: Guida, Livello: Base») la card mostra solo quelle del gruppo scritto qui, per esempio «Tipo». Vuoto = tutte."
+msgstr "グループ分けされたカテゴリー（「種類: ガイド, レベル: 初級」）では、ここに書いたグループ（例「種類」）だけをカードに表示します。空欄＝すべて。"
+
+msgid "Stile della durata"
+msgstr "長さのスタイル"
+
+msgid "Etichetta col play"
+msgstr "再生マーク付きラベル"
+
+msgid "Fra le parti piccole che stanno nella stessa zona: «Interni · 2026», «Regia / 2026», e fra categoria e durata sotto il numero grande."
+msgstr "同じゾーン内の小さな要素の間：「インテリア · 2026」「演出 / 2026」、大きな番号の下のカテゴリーと長さの間。"
+
+msgid "Lettere o segni davanti e dietro al numero: «Q» dà «Q01», «(» e «)» danno «(01)», «No. » dà «No. 01»."
+msgstr "番号の前後に付ける文字や記号：「Q」で「Q01」、「(」と「)」で「(01)」、「No. 」で「No. 01」。"
+
+msgid "Conta all’indietro"
+msgstr "逆順に数える"
+
+msgid "La prima voce ha il numero più alto: 016, 015, 014… come gli indici dei progetti, dal più recente."
+msgstr "最初の項目が最大の番号になります：016、015、014…プロジェクト一覧のように新しい順。"
+
+msgid "Icona del numero"
+msgstr "番号のアイコン"
+
+msgid "Numero e categoria in un riquadro"
+msgstr "番号とカテゴリーを枠で囲む"
+
+msgid "Quando stanno nella stessa zona, numero e categoria vanno in un riquadro sottile, col numero pieno nel colore della voce."
+msgstr "同じゾーンにあるとき、番号とカテゴリーは細い枠に入り、番号は項目の色で塗られます。"
+
+msgid "Stile della nota"
+msgstr "メモのスタイル"
+
+msgid "Grande (un prezzo)"
+msgstr "大きく（価格）"
+
+msgid "Con la lineetta"
+msgstr "ダッシュ付き"
+
+msgid "La nota di ogni voce (in Media): un prezzo, un anno, un codice. «Grande» fa grande la prima parola e piccolo il resto («€3.40 330 ml»)."
+msgstr "各項目のメモ（メディア内）：価格、年、コード。「大きく」は最初の単語を大きく、残りを小さくします（「€3.40 330 ml」）。"
+
+msgid "Colore dell’etichetta"
+msgstr "ラベルの色"
+
+msgid "Vuoto = il colore di ogni voce."
+msgstr "空欄＝各項目の色。"
+
+msgid "Icona e pulsante"
+msgstr "アイコンとボタン"
+
+msgid "Stile dell’icona"
+msgstr "アイコンのスタイル"
+
+msgid "Nel cerchio"
+msgstr "円の中"
+
+msgid "Nel cerchio pieno"
+msgstr "塗りの円の中"
+
+msgid "Sola"
+msgstr "単体"
+
+msgid "Colore dell’icona"
+msgstr "アイコンの色"
+
+msgid "A contorno"
+msgstr "輪郭のみ"
+
+msgid "Scritta sottolineata"
+msgstr "下線付きの文字"
+
+msgid "Linee e colore"
+msgstr "線と色"
+
+msgid "Linea sopra il piede"
+msgstr "フッターの上に線"
+
+msgid "Una linea sottile sopra il piede della card (le parti messe «Nel piede»)."
+msgstr "カードのフッター（「フッター」に置いた要素）の上に細い線。"
+
+msgid "Linea sotto ogni card"
+msgstr "各カードの下に線"
+
+msgid "Barretta nel colore della voce"
+msgstr "項目の色のバー"
+
+msgid "Una barretta in fondo alla foto, nel colore scelto per ogni voce."
+msgstr "写真の下端に、各項目に選んだ色のバー。"
+
+msgid "Quadratino del colore"
+msgstr "カラーの小さな四角"
+
+msgid "Un quadratino nel colore della voce in alto a destra, come il campione di un materiale."
+msgstr "右上に項目の色の小さな四角。素材のサンプルのように。"
+
+msgid "Posizione delle parti"
+msgstr "各要素の位置"
+
+msgid "Ogni parte della card può andare in una delle nove zone, nel piede (una riga in fondo) o, coi testi sotto la foto, sulla foto. Le parti piccole possono stare anche davanti, dopo o sotto il titolo. «Come lo schema» la lascia dov’è."
+msgstr "カードの各要素は9つのゾーン、フッター（下の1行）、または写真の下にテキストがある場合は写真の上に置けます。小さな要素はタイトルの前・後・下にも置けます。「レイアウトどおり」はそのままにします。"
+
+msgid "Posizione della durata"
+msgstr "長さの位置"
+
+msgid "Posizione della nota"
+msgstr "メモの位置"
+
+msgid "Posizione dell’etichetta"
+msgstr "ラベルの位置"
+
+msgid "Riquadro a pennarello"
+msgstr "マーカーの四角"
+
+msgid "Icona della categoria"
+msgstr "カテゴリーのアイコン"
+
+msgid "Bordate"
+msgstr "枠付き"
+
+msgid "Caselle da spuntare"
+msgstr "チェックボックス"
+
+msgid "Con le caselle si possono spuntare più valori insieme."
+msgstr "チェックボックスで複数の値を同時に選べます。"
+
+msgid "Squadrata"
+msgstr "角型"
+
+msgid "Conteggi"
+msgstr "件数"
+
+msgid "In alto, piccoli"
+msgstr "右上に小さく"
+
+msgid "Accanto al nome"
+msgstr "名前の横"
+
+msgid "Accanto, col punto"
+msgstr "横に、点付き"
+
+msgid "Riga spessa sopra"
+msgstr "上に太い線"
+
+msgid "Pallino nel colore della categoria"
+msgstr "カテゴリーの色の点"
+
+msgid "Il colore è quello della prima voce della categoria (Colore e segno delle voci)."
+msgstr "色はそのカテゴリーの最初の項目の色です（各項目の色と印）。"
+
+msgid "Gruppi in una riga"
+msgstr "グループを1行に"
+
+msgid "Con più gruppi («Tipo: Guida, Livello: Base») tutti i gruppi stanno in una riga, col loro nome piccolo, e un solo «Tutti» davanti che li azzera."
+msgstr "複数のグループ（「種類: ガイド, レベル: 初級」）があるとき、すべてのグループを小さな名前付きで1行に並べ、先頭の「すべて」1つでリセットします。"
+
+msgid "Testo dei filtri"
+msgstr "フィルターの文字"
+
+msgid "Testo del filtro attivo"
+msgstr "選択中のフィルターの文字"
+
+msgid "Vuoto = chiaro o scuro da sé, secondo il colore del filtro attivo."
+msgstr "空欄＝選択中のフィルターの色に合わせて自動で明るく／暗く。"
+
+msgid "Bordo dei filtri"
+msgstr "フィルターの枠"
+
+msgid "Vuoto = una linea leggera nel colore del testo."
+msgstr "空欄＝文字色の薄い線。"
+
+msgid "Posizione della ricerca"
+msgstr "検索の位置"
+
+msgid "Accanto ai filtri"
+msgstr "フィルターの横"
+
+msgid "Sopra, larga, con la lente"
+msgstr "上に、幅広で、虫眼鏡付き"
+
+msgid "Linee fra le celle"
+msgstr "セル間の線"
+
+msgid "Le celle si toccano e le divide una linea sottile, dentro un riquadro: le pareti di loghi."
+msgstr "セル同士が接し、細い線で区切られ枠に収まります：ロゴウォール。"
+
+msgid "Sopra il nome"
+msgstr "名前の上"
+
+msgid "Sulla foto, in un’etichetta"
+msgstr "写真上のラベルに"
+
+msgid "Le prime due categorie del prodotto («Felpe · Donna»), piccole, nel carattere a spaziatura fissa."
+msgstr "商品の最初の2つのカテゴリー（「パーカー · レディース」）を等幅フォントで小さく。"
+
+msgid "Foto a sé"
+msgstr "写真を独立"
+
+msgid "La foto ha il fondo e gli angoli della card; nome e prezzo stanno sotto, sulla pagina, senza riquadro."
+msgstr "写真にカードの背景と角を付け、名前と価格はその下、ページ上に枠なしで置きます。"
+
+msgid "Foto che sfuma in basso"
+msgstr "下へフェードする写真"
+
+msgid "Il fondo della foto sfuma nel fondo della card: bello coi capi fotografati su fondo chiaro."
+msgstr "写真の下部がカードの背景に溶け込みます：明るい背景で撮った服に最適。"
+
+msgid "Pallini in una riga loro"
+msgstr "点を別の行に"
+
+msgid "I pallini dei colori sotto il prezzo invece che accanto."
+msgstr "色の点を価格の横ではなく下に。"
+
+#: licenza-1.4.1345
+msgid "Metti in pausa il video"
+msgstr "動画を一時停止"
+
+msgid "Riprendi il video"
+msgstr "動画を再開"
+
+msgid "Pulsante di pausa"
+msgstr "一時停止ボタン"
+
+msgid "Sui video che partono da soli un pulsante tondo in alto a sinistra per fermarli e farli ripartire. Con «riduci movimento» del sistema i video partono già fermi."
+msgstr "自動再生される動画の左上に、停止・再開する丸いボタン。システムの「視差効果を減らす」が有効なら、動画は停止した状態で始まります。"
+
+msgid "Riflesso olografico"
+msgstr "ホログラムの輝き"
+
+msgid "L’etichetta della nota (e il filo interno, se c’è) prende i colori cangianti di una carta olografica, che scorrono piano."
+msgstr "メモのラベル（内側のラインがあればそれも）が、ゆっくり流れるホログラムカードの虹色になります。"

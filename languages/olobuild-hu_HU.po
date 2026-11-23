@@ -3984,3 +3984,432 @@ msgstr "Oszlopok kis telefonon"
 
 msgid "Sotto i 480 px; vuoto = come le colonne mobile."
 msgstr "480 px alatt; üres = mint a mobil oszlopok."
+
+#: licenza-1.4.1345
+msgid "Mostra la durata dei video"
+msgstr "Videók hosszának megjelenítése"
+
+msgid "Accanto alla categoria, per esempio «7:40». Per i video caricati nella libreria la durata si legge da sola; per YouTube e Vimeo aggiunti a mano si scrive nel campo «Durata» del video in «Media»."
+msgstr "A kategória mellett, például „7:40”. A médiatárba feltöltött videóknál a hossz magától beolvasódik; a kézzel hozzáadott YouTube- és Vimeo-videóknál írd be a videó „Hossz” mezőjébe a „Média” részben."
+
+msgid "Numero grande"
+msgstr "Nagy szám"
+
+msgid "Il numero in alto a sinistra, grande, nel carattere dei titoli; sotto, categoria e durata. Come nelle pareti di video."
+msgstr "A szám bal felül, nagyban, a címek betűtípusával; alatta kategória és hossz. Mint a videófalakon."
+
+msgid "Durata (es. 7:40)"
+msgstr "Hossz (pl. 7:40)"
+
+#: licenza-1.4.1345
+msgid "Ogni parte della card può andare in una delle nove zone: in alto, al centro o in basso, a sinistra, al centro o a destra. Coi testi sotto la foto le zone sono le righe dei testi (per esempio il tempo di lettura in basso a destra, accanto alla firma). «Come lo schema» la lascia dov’è."
+msgstr "A kártya minden része a kilenc zóna egyikébe kerülhet: fent, középen vagy lent, balra, középen vagy jobbra. A fotó alatti szövegeknél a zónák a szövegsorok (például az olvasási idő jobbra lent, a szerző mellett). Az „Az elrendezés szerint” a helyén hagyja."
+
+#: licenza-1.4.1345
+msgid "Stile del numero"
+msgstr "A szám stílusa"
+
+msgid "Etichetta piena"
+msgstr "Kitöltött címke"
+
+msgid "Stile della categoria"
+msgstr "A kategória stílusa"
+
+msgid "L’etichetta piena prende il colore della voce (Colore delle voci) o, se manca, quello di categoria e numero: ogni categoria può avere il suo."
+msgstr "A kitöltött címke az elem színét kapja (Elemek színe), vagy ha nincs, a kategóriáét és a számét: minden kategóriának lehet sajátja."
+
+msgid "Colore del sottotitolo"
+msgstr "Az alcím színe"
+
+msgid "Sottotitolo in maiuscolo piccolo"
+msgstr "Alcím kis nagybetűkkel"
+
+#: licenza-1.4.1345
+msgid "«Sotto la foto» vale per Griglia, Masonry e Nastro, «Accanto alla foto» per Griglia e Masonry; negli altri schemi i testi vanno sulla foto. Nel biglietto il testo della foto diventa la scritta grande (per esempio «20 mag sab»): accendi «Mostra il testo»."
+msgstr "A „Fotó alatt” a Rács, a Masonry és a Szalag, a „Fotó mellett” a Rács és a Masonry elrendezésnél működik; a többinél a szöveg a fotóra kerül. A jegyen a fotó szövege lesz a nagy felirat (például „máj 20 szo”): kapcsold be a „Szöveg megjelenítése” opciót."
+
+msgid "Colore e segno delle voci"
+msgstr "Elemek színe és jelölése"
+
+msgid "Un colore per ogni foto o card: tinge la cornice, la categoria, il numero, il pulsante, il biglietto, il fondo delle card di testo e il segno a matita. Vuoto = il colore della galleria. Il segno a matita cerchia una foto, come sul provino di un fotografo."
+msgstr "Szín minden fotóhoz vagy kártyához: megszínezi a keretet, a kategóriát, a számot, a gombot, a jegyet, a szöveges kártyák hátterét és a ceruzajelet. Üres = a galéria színe. A ceruzajel bekarikáz egy fotót, mint a fotós kontaktlapján."
+
+msgid "Segno a matita"
+msgstr "Ceruzajel"
+
+msgid "Riquadro a matita"
+msgstr "Ceruzás keret"
+
+msgid "Cerchio a matita"
+msgstr "Ceruzás kör"
+
+#: licenza-1.4.1345
+msgid "Nota (prezzo, anno…)"
+msgstr "Megjegyzés (ár, év…)"
+
+msgid "Etichetta sulla foto"
+msgstr "Címke a fotón"
+
+msgid "Nel piede, a sinistra"
+msgstr "A láblécben, balra"
+
+msgid "Nel piede, a destra"
+msgstr "A láblécben, jobbra"
+
+msgid "Sulla foto, in alto a sinistra"
+msgstr "A fotón, bal felül"
+
+msgid "Sulla foto, in alto a destra"
+msgstr "A fotón, jobb felül"
+
+msgid "Sulla foto, in basso a sinistra"
+msgstr "A fotón, bal alul"
+
+msgid "Sulla foto, in basso a destra"
+msgstr "A fotón, jobb alul"
+
+msgid "Davanti al titolo"
+msgstr "A cím előtt"
+
+msgid "Dopo il titolo, nella stessa riga"
+msgstr "A cím után, ugyanabban a sorban"
+
+msgid "Play"
+msgstr "Lejátszás"
+
+msgid "Freccia a destra"
+msgstr "Jobbra nyíl"
+
+msgid "«%d» diventa il numero delle foto: «Cerca fra %d risorse»."
+msgstr "A „%d” a fotók száma lesz: „Keresés %d forrás között”."
+
+msgid "Barretta di avanzamento"
+msgstr "Folyamatjelző sáv"
+
+msgid "Sotto il nastro una barretta corta che dice a che punto si è."
+msgstr "A szalag alatt egy rövid sáv mutatja, hol tartasz."
+
+msgid "Filo interno"
+msgstr "Belső vonal"
+
+msgid "Bordo pieno"
+msgstr "Teli keret"
+
+msgid "Con un colore per ogni voce (Colore e segno delle voci) filo, bordo e pellicola prendono quello della voce."
+msgstr "Ha minden elemnek saját színe van (Elemek színe és jelölése), a vonal, a keret és a film az elem színét veszi fel."
+
+msgid "Scritte sul bordo"
+msgstr "Peremfeliratok"
+
+msgid "Le scritte che la pellicola porta stampate sul bordo, come su un provino a contatto: «▸ 03» è il numero del fotogramma (la freccia lo indica), «03A» il mezzo fotogramma che segue, «R1» il rullino e «400» la sensibilità ISO della pellicola."
+msgstr "A film szélére nyomtatott feliratok, mint egy kontaktlapon: a „▸ 03” a kocka száma (a nyíl mutatja), a „03A” a következő félkocka, az „R1” a tekercs, a „400” pedig a film ISO-érzékenysége."
+
+msgid "Rullino"
+msgstr "Tekercs"
+
+msgid "Sensibilità ISO"
+msgstr "ISO-érzékenység"
+
+msgid "Primo fotogramma"
+msgstr "Első kocka"
+
+msgid "Ogni quanti fotogrammi"
+msgstr "Hány kockánként"
+
+msgid "Sul provino il fotografo sceglie i fotogrammi migliori: con 3 e 4 i numeri vanno 03, 07, 11…"
+msgstr "A kontaktlapon a fotós kiválasztja a legjobb kockákat: 3-mal és 4-gyel a számok 03, 07, 11…"
+
+msgid "Fondo nel colore della voce"
+msgstr "Háttér az elem színében"
+
+msgid "La card prende il colore scelto per ogni voce (Colore e segno delle voci), e il testo si fa chiaro o scuro da sé: le card colorate di un negozio."
+msgstr "A kártya felveszi az egyes elemekhez választott színt (Elemek színe és jelölése), a szöveg magától lesz világos vagy sötét: egy bolt színes kártyái."
+
+msgid "Riquadro solo sulle foto grandi"
+msgstr "Keret csak a nagy fotókon"
+
+msgid "Il riquadro coi testi resta sulle foto grandi (almeno due colonne per due righe); sulle piccole i testi stanno sulla foto, senza sottotitolo e senza piede."
+msgstr "A szövegkeret a nagy fotókon marad (legalább két oszlop két sorban); a kicsiken a szöveg a fotón van, alcím és lábléc nélkül."
+
+msgid "Riquadro stretto"
+msgstr "Keskeny keret"
+
+msgid "Il riquadro largo quanto i suoi testi, in un angolo, invece che da un lato all’altro."
+msgstr "A keret csak olyan széles, mint a szövege, egy sarokban, nem szélről szélre."
+
+msgid "Colore del corsivo"
+msgstr "Dőlt betűk színe"
+
+msgid "Nel titolo il pezzo fra due asterischi va in corsivo: «Vestiti per *la luce lunga*». Qui il suo colore; vuoto = come il titolo."
+msgstr "A címben a két csillag közötti rész dőlt lesz: „Felöltözve *a hosszú fényhez*”. Itt a színe; üres = mint a cím."
+
+msgid "Titolo grande quanto la foto"
+msgstr "A fotóval arányos cím"
+
+msgid "Il titolo cresce con la foto: grande sulle foto grandi, piccolo sulle piccole (negli schemi a misure miste)."
+msgstr "A cím a fotóval együtt nő: nagy a nagy fotókon, kicsi a kicsiken (vegyes méretű elrendezésekben)."
+
+msgid "Sottotitolo e testo"
+msgstr "Alcím és szöveg"
+
+msgid "Sottotitolo solo sulle foto grandi"
+msgstr "Alcím csak a nagy fotókon"
+
+msgid "Pallino davanti al testo"
+msgstr "Pötty a szöveg előtt"
+
+msgid "Un pallino nel colore della voce davanti al testo, come la luce di una lampada accanto alle sue misure."
+msgstr "Egy pötty az elem színében a szöveg előtt, mint egy lámpa fénye a méretei mellett."
+
+msgid "Categoria e durata"
+msgstr "Kategória és időtartam"
+
+msgid "Categoria, numero e durata"
+msgstr "Kategória, szám és időtartam"
+
+msgid "Etichetta chiara"
+msgstr "Világos címke"
+
+msgid "Etichetta scura"
+msgstr "Sötét címke"
+
+msgid "L’etichetta piena prende il colore della voce (Colore e segno delle voci) o, se manca, quello di categoria e numero: ogni categoria può avere il suo. Chiara e scura stanno bene sulle foto."
+msgstr "A teli címke az elem színét veszi fel (Elemek színe és jelölése), ha nincs, akkor a kategória és a szám színét: minden kategóriának lehet sajátja. A világos és a sötét jól mutat a fotókon."
+
+msgid "Pallino davanti alla categoria"
+msgstr "Pötty a kategória előtt"
+
+msgid "Gruppo da mostrare"
+msgstr "Megjelenítendő csoport"
+
+msgid "Con le categorie a gruppi («Tipo: Guida, Livello: Base») la card mostra solo quelle del gruppo scritto qui, per esempio «Tipo». Vuoto = tutte."
+msgstr "Csoportokba rendezett kategóriáknál („Típus: Útmutató, Szint: Alap”) a kártya csak az itt megadott csoportét mutatja, például „Típus”. Üres = mind."
+
+msgid "Stile della durata"
+msgstr "Időtartam stílusa"
+
+msgid "Etichetta col play"
+msgstr "Címke lejátszás jellel"
+
+msgid "Fra le parti piccole che stanno nella stessa zona: «Interni · 2026», «Regia / 2026», e fra categoria e durata sotto il numero grande."
+msgstr "Az ugyanabban a zónában lévő kis részek között: „Belsőépítészet · 2026”, „Rendezés / 2026”, valamint a kategória és az időtartam között a nagy szám alatt."
+
+msgid "Lettere o segni davanti e dietro al numero: «Q» dà «Q01», «(» e «)» danno «(01)», «No. » dà «No. 01»."
+msgstr "Betűk vagy jelek a szám előtt és után: a „Q”-ból „Q01”, a „(” és „)” jelből „(01)”, a „Sz. ”-ből „Sz. 01” lesz."
+
+msgid "Conta all’indietro"
+msgstr "Visszafelé számolás"
+
+msgid "La prima voce ha il numero più alto: 016, 015, 014… come gli indici dei progetti, dal più recente."
+msgstr "Az első elem kapja a legnagyobb számot: 016, 015, 014… mint a projektjegyzékekben, a legújabbtól."
+
+msgid "Icona del numero"
+msgstr "A szám ikonja"
+
+msgid "Numero e categoria in un riquadro"
+msgstr "Szám és kategória egy keretben"
+
+msgid "Quando stanno nella stessa zona, numero e categoria vanno in un riquadro sottile, col numero pieno nel colore della voce."
+msgstr "Ha ugyanabban a zónában vannak, a szám és a kategória vékony keretbe kerül, a szám az elem színével kitöltve."
+
+msgid "Stile della nota"
+msgstr "Megjegyzés stílusa"
+
+msgid "Grande (un prezzo)"
+msgstr "Nagy (egy ár)"
+
+msgid "Con la lineetta"
+msgstr "Kis vonallal"
+
+msgid "La nota di ogni voce (in Media): un prezzo, un anno, un codice. «Grande» fa grande la prima parola e piccolo il resto («€3.40 330 ml»)."
+msgstr "Minden elem megjegyzése (a Médiában): egy ár, egy év, egy kód. A „Nagy” az első szót nagyra, a többit kicsire veszi („3,40 € 330 ml”)."
+
+msgid "Colore dell’etichetta"
+msgstr "Címke színe"
+
+msgid "Vuoto = il colore di ogni voce."
+msgstr "Üres = az egyes elemek színe."
+
+msgid "Icona e pulsante"
+msgstr "Ikon és gomb"
+
+msgid "Stile dell’icona"
+msgstr "Ikon stílusa"
+
+msgid "Nel cerchio"
+msgstr "Körben"
+
+msgid "Nel cerchio pieno"
+msgstr "Teli körben"
+
+msgid "Sola"
+msgstr "Önmagában"
+
+msgid "Colore dell’icona"
+msgstr "Ikon színe"
+
+msgid "A contorno"
+msgstr "Körvonalas"
+
+msgid "Scritta sottolineata"
+msgstr "Aláhúzott felirat"
+
+msgid "Linee e colore"
+msgstr "Vonalak és szín"
+
+msgid "Linea sopra il piede"
+msgstr "Vonal a lábléc fölött"
+
+msgid "Una linea sottile sopra il piede della card (le parti messe «Nel piede»)."
+msgstr "Vékony vonal a kártya lábléce fölött (a „A láblécben” elhelyezett részek)."
+
+msgid "Linea sotto ogni card"
+msgstr "Vonal minden kártya alatt"
+
+msgid "Barretta nel colore della voce"
+msgstr "Sáv az elem színében"
+
+msgid "Una barretta in fondo alla foto, nel colore scelto per ogni voce."
+msgstr "Egy sáv a fotó alján, az egyes elemekhez választott színben."
+
+msgid "Quadratino del colore"
+msgstr "Színminta"
+
+msgid "Un quadratino nel colore della voce in alto a destra, come il campione di un materiale."
+msgstr "Egy kis négyzet az elem színében jobb felül, mint egy anyagminta."
+
+msgid "Posizione delle parti"
+msgstr "A részek helye"
+
+msgid "Ogni parte della card può andare in una delle nove zone, nel piede (una riga in fondo) o, coi testi sotto la foto, sulla foto. Le parti piccole possono stare anche davanti, dopo o sotto il titolo. «Come lo schema» la lascia dov’è."
+msgstr "A kártya minden része a kilenc zóna egyikébe kerülhet, a láblécbe (egy sor alul) vagy — ha a szöveg a fotó alatt van — a fotóra. A kis részek a cím elé, mögé vagy alá is kerülhetnek. „Ahogy az elrendezés” ott hagyja, ahol van."
+
+msgid "Posizione della durata"
+msgstr "Az időtartam helye"
+
+msgid "Posizione della nota"
+msgstr "A megjegyzés helye"
+
+msgid "Posizione dell’etichetta"
+msgstr "A címke helye"
+
+msgid "Riquadro a pennarello"
+msgstr "Filctollas keret"
+
+msgid "Icona della categoria"
+msgstr "A kategória ikonja"
+
+msgid "Bordate"
+msgstr "Keretes"
+
+msgid "Caselle da spuntare"
+msgstr "Jelölőnégyzetek"
+
+msgid "Con le caselle si possono spuntare più valori insieme."
+msgstr "A jelölőnégyzetekkel több érték is bejelölhető egyszerre."
+
+msgid "Squadrata"
+msgstr "Szögletes"
+
+msgid "Conteggi"
+msgstr "Darabszámok"
+
+msgid "In alto, piccoli"
+msgstr "Felül, kicsik"
+
+msgid "Accanto al nome"
+msgstr "A név mellett"
+
+msgid "Accanto, col punto"
+msgstr "Mellette, ponttal"
+
+msgid "Riga spessa sopra"
+msgstr "Vastag vonal fölötte"
+
+msgid "Pallino nel colore della categoria"
+msgstr "Pötty a kategória színében"
+
+msgid "Il colore è quello della prima voce della categoria (Colore e segno delle voci)."
+msgstr "A szín a kategória első elemének színe (Elemek színe és jelölése)."
+
+msgid "Gruppi in una riga"
+msgstr "Csoportok egy sorban"
+
+msgid "Con più gruppi («Tipo: Guida, Livello: Base») tutti i gruppi stanno in una riga, col loro nome piccolo, e un solo «Tutti» davanti che li azzera."
+msgstr "Több csoportnál („Típus: Útmutató, Szint: Alap”) minden csoport egy sorban áll, kis nevével, és egyetlen „Mind” elöl nullázza őket."
+
+msgid "Testo dei filtri"
+msgstr "Szűrők szövege"
+
+msgid "Testo del filtro attivo"
+msgstr "Aktív szűrő szövege"
+
+msgid "Vuoto = chiaro o scuro da sé, secondo il colore del filtro attivo."
+msgstr "Üres = magától világos vagy sötét, az aktív szűrő színétől függően."
+
+msgid "Bordo dei filtri"
+msgstr "Szűrők kerete"
+
+msgid "Vuoto = una linea leggera nel colore del testo."
+msgstr "Üres = halvány vonal a szöveg színében."
+
+msgid "Posizione della ricerca"
+msgstr "A keresés helye"
+
+msgid "Accanto ai filtri"
+msgstr "A szűrők mellett"
+
+msgid "Sopra, larga, con la lente"
+msgstr "Felül, szélesen, nagyítóval"
+
+msgid "Linee fra le celle"
+msgstr "Vonalak a cellák között"
+
+msgid "Le celle si toccano e le divide una linea sottile, dentro un riquadro: le pareti di loghi."
+msgstr "A cellák összeérnek, vékony vonal választja el őket, egy keretben: logófalak."
+
+msgid "Sopra il nome"
+msgstr "A név fölött"
+
+msgid "Sulla foto, in un’etichetta"
+msgstr "A fotón, címkében"
+
+msgid "Le prime due categorie del prodotto («Felpe · Donna»), piccole, nel carattere a spaziatura fissa."
+msgstr "A termék első két kategóriája („Kapucnis pulóverek · Női”), kicsiben, fix szélességű betűvel."
+
+msgid "Foto a sé"
+msgstr "Különálló fotó"
+
+msgid "La foto ha il fondo e gli angoli della card; nome e prezzo stanno sotto, sulla pagina, senza riquadro."
+msgstr "A fotó kapja a kártya hátterét és sarkait; a név és az ár alatta áll, az oldalon, keret nélkül."
+
+msgid "Foto che sfuma in basso"
+msgstr "Alul elhalványuló fotó"
+
+msgid "Il fondo della foto sfuma nel fondo della card: bello coi capi fotografati su fondo chiaro."
+msgstr "A fotó alja beleolvad a kártya hátterébe: szép a világos háttéren fotózott ruháknál."
+
+msgid "Pallini in una riga loro"
+msgstr "Pöttyök külön sorban"
+
+msgid "I pallini dei colori sotto il prezzo invece che accanto."
+msgstr "A színpöttyök az ár alatt, nem mellette."
+
+#: licenza-1.4.1345
+msgid "Metti in pausa il video"
+msgstr "Videó szüneteltetése"
+
+msgid "Riprendi il video"
+msgstr "Videó folytatása"
+
+msgid "Pulsante di pausa"
+msgstr "Szünet gomb"
+
+msgid "Sui video che partono da soli un pulsante tondo in alto a sinistra per fermarli e farli ripartire. Con «riduci movimento» del sistema i video partono già fermi."
+msgstr "A maguktól induló videókon egy kerek gomb bal felül a megállításhoz és az újraindításhoz. A rendszer „mozgás csökkentése” beállításával a videók eleve megállítva indulnak."
+
+msgid "Riflesso olografico"
+msgstr "Holografikus csillogás"
+
+msgid "L’etichetta della nota (e il filo interno, se c’è) prende i colori cangianti di una carta olografica, che scorrono piano."
+msgstr "A megjegyzés címkéje (és a belső vonal, ha van) egy hologramos kártya változó színeit kapja, amelyek lassan áramlanak."

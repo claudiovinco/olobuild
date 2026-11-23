@@ -3984,3 +3984,432 @@ msgstr "Sloupce malých telefonů"
 
 msgid "Sotto i 480 px; vuoto = come le colonne mobile."
 msgstr "Pod 480 px; prázdné = jako mobilní sloupce."
+
+#: licenza-1.4.1345
+msgid "Mostra la durata dei video"
+msgstr "Zobrazit délku videí"
+
+msgid "Accanto alla categoria, per esempio «7:40». Per i video caricati nella libreria la durata si legge da sola; per YouTube e Vimeo aggiunti a mano si scrive nel campo «Durata» del video in «Media»."
+msgstr "Vedle kategorie, například „7:40“. U videí nahraných do knihovny se délka načte sama; u YouTube a Vimeo přidaných ručně ji napište do pole „Délka“ videa v „Média“."
+
+msgid "Numero grande"
+msgstr "Velké číslo"
+
+msgid "Il numero in alto a sinistra, grande, nel carattere dei titoli; sotto, categoria e durata. Come nelle pareti di video."
+msgstr "Číslo vlevo nahoře, velké, písmem nadpisů; pod ním kategorie a délka. Jako ve stěnách videí."
+
+msgid "Durata (es. 7:40)"
+msgstr "Délka (např. 7:40)"
+
+#: licenza-1.4.1345
+msgid "Ogni parte della card può andare in una delle nove zone: in alto, al centro o in basso, a sinistra, al centro o a destra. Coi testi sotto la foto le zone sono le righe dei testi (per esempio il tempo di lettura in basso a destra, accanto alla firma). «Come lo schema» la lascia dov’è."
+msgstr "Každá část karty může jít do jedné z devíti zón: nahoru, doprostřed nebo dolů, vlevo, doprostřed nebo vpravo. S texty pod fotkou jsou zóny řádky textu (například doba čtení vpravo dole vedle autora). „Podle rozvržení“ ji nechá, kde je."
+
+#: licenza-1.4.1345
+msgid "Stile del numero"
+msgstr "Styl čísla"
+
+msgid "Etichetta piena"
+msgstr "Plný štítek"
+
+msgid "Stile della categoria"
+msgstr "Styl kategorie"
+
+msgid "L’etichetta piena prende il colore della voce (Colore delle voci) o, se manca, quello di categoria e numero: ogni categoria può avere il suo."
+msgstr "Plný štítek má barvu položky (Barva položek), nebo když chybí, barvu kategorie a čísla: každá kategorie může mít svou."
+
+msgid "Colore del sottotitolo"
+msgstr "Barva podnadpisu"
+
+msgid "Sottotitolo in maiuscolo piccolo"
+msgstr "Podnadpis malými verzálkami"
+
+#: licenza-1.4.1345
+msgid "«Sotto la foto» vale per Griglia, Masonry e Nastro, «Accanto alla foto» per Griglia e Masonry; negli altri schemi i testi vanno sulla foto. Nel biglietto il testo della foto diventa la scritta grande (per esempio «20 mag sab»): accendi «Mostra il testo»."
+msgstr "„Pod fotkou“ platí pro Mřížku, Masonry a Pás, „Vedle fotky“ pro Mřížku a Masonry; v ostatních rozvrženích jsou texty na fotce. V lístku se text fotky stane velkým nápisem (například „20 kvě so“): zapněte „Zobrazit text“."
+
+msgid "Colore e segno delle voci"
+msgstr "Barva a značka položek"
+
+msgid "Un colore per ogni foto o card: tinge la cornice, la categoria, il numero, il pulsante, il biglietto, il fondo delle card di testo e il segno a matita. Vuoto = il colore della galleria. Il segno a matita cerchia una foto, come sul provino di un fotografo."
+msgstr "Barva pro každou fotku nebo kartu: obarví rámeček, kategorii, číslo, tlačítko, lístek, pozadí textových karet a značku tužkou. Prázdné = barva galerie. Značka tužkou zakroužkuje fotku jako na kontaktním archu fotografa."
+
+msgid "Segno a matita"
+msgstr "Značka tužkou"
+
+msgid "Riquadro a matita"
+msgstr "Rámeček tužkou"
+
+msgid "Cerchio a matita"
+msgstr "Kroužek tužkou"
+
+#: licenza-1.4.1345
+msgid "Nota (prezzo, anno…)"
+msgstr "Poznámka (cena, rok…)"
+
+msgid "Etichetta sulla foto"
+msgstr "Štítek na fotce"
+
+msgid "Nel piede, a sinistra"
+msgstr "V patičce, vlevo"
+
+msgid "Nel piede, a destra"
+msgstr "V patičce, vpravo"
+
+msgid "Sulla foto, in alto a sinistra"
+msgstr "Na fotce, vlevo nahoře"
+
+msgid "Sulla foto, in alto a destra"
+msgstr "Na fotce, vpravo nahoře"
+
+msgid "Sulla foto, in basso a sinistra"
+msgstr "Na fotce, vlevo dole"
+
+msgid "Sulla foto, in basso a destra"
+msgstr "Na fotce, vpravo dole"
+
+msgid "Davanti al titolo"
+msgstr "Před nadpisem"
+
+msgid "Dopo il titolo, nella stessa riga"
+msgstr "Za nadpisem, na stejném řádku"
+
+msgid "Play"
+msgstr "Přehrát"
+
+msgid "Freccia a destra"
+msgstr "Šipka doprava"
+
+msgid "«%d» diventa il numero delle foto: «Cerca fra %d risorse»."
+msgstr "„%d“ se změní na počet fotek: „Hledat v %d zdrojích“."
+
+msgid "Barretta di avanzamento"
+msgstr "Ukazatel postupu"
+
+msgid "Sotto il nastro una barretta corta che dice a che punto si è."
+msgstr "Pod pásem krátký proužek, který ukazuje, kde právě jste."
+
+msgid "Filo interno"
+msgstr "Vnitřní linka"
+
+msgid "Bordo pieno"
+msgstr "Plný okraj"
+
+msgid "Con un colore per ogni voce (Colore e segno delle voci) filo, bordo e pellicola prendono quello della voce."
+msgstr "S barvou pro každou položku (Barva a značka položek) převezme linka, okraj i film barvu položky."
+
+msgid "Scritte sul bordo"
+msgstr "Nápisy na okraji"
+
+msgid "Le scritte che la pellicola porta stampate sul bordo, come su un provino a contatto: «▸ 03» è il numero del fotogramma (la freccia lo indica), «03A» il mezzo fotogramma che segue, «R1» il rullino e «400» la sensibilità ISO della pellicola."
+msgstr "Nápisy natištěné na okraji filmu jako na kontaktním archu: „▸ 03“ je číslo políčka (ukazuje na něj šipka), „03A“ následující půlpolíčko, „R1“ svitek a „400“ citlivost ISO."
+
+msgid "Rullino"
+msgstr "Svitek"
+
+msgid "Sensibilità ISO"
+msgstr "Citlivost ISO"
+
+msgid "Primo fotogramma"
+msgstr "První políčko"
+
+msgid "Ogni quanti fotogrammi"
+msgstr "Po kolika políčkách"
+
+msgid "Sul provino il fotografo sceglie i fotogrammi migliori: con 3 e 4 i numeri vanno 03, 07, 11…"
+msgstr "Na kontaktním archu fotograf vybírá nejlepší políčka: se 3 a 4 jdou čísla 03, 07, 11…"
+
+msgid "Fondo nel colore della voce"
+msgstr "Pozadí v barvě položky"
+
+msgid "La card prende il colore scelto per ogni voce (Colore e segno delle voci), e il testo si fa chiaro o scuro da sé: le card colorate di un negozio."
+msgstr "Karta převezme barvu zvolenou pro každou položku (Barva a značka položek) a text se sám zesvětlí nebo ztmaví: barevné karty obchodu."
+
+msgid "Riquadro solo sulle foto grandi"
+msgstr "Rámeček jen na velkých fotkách"
+
+msgid "Il riquadro coi testi resta sulle foto grandi (almeno due colonne per due righe); sulle piccole i testi stanno sulla foto, senza sottotitolo e senza piede."
+msgstr "Rámeček s texty zůstává na velkých fotkách (aspoň dva sloupce na dva řádky); na malých jsou texty na fotce, bez podnadpisu a patičky."
+
+msgid "Riquadro stretto"
+msgstr "Úzký rámeček"
+
+msgid "Il riquadro largo quanto i suoi testi, in un angolo, invece che da un lato all’altro."
+msgstr "Rámeček široký jako jeho texty, v rohu, místo od kraje ke kraji."
+
+msgid "Colore del corsivo"
+msgstr "Barva kurzívy"
+
+msgid "Nel titolo il pezzo fra due asterischi va in corsivo: «Vestiti per *la luce lunga*». Qui il suo colore; vuoto = come il titolo."
+msgstr "V nadpisu je část mezi dvěma hvězdičkami kurzívou: „Oblečená pro *dlouhé světlo*“. Zde její barva; prázdné = jako nadpis."
+
+msgid "Titolo grande quanto la foto"
+msgstr "Nadpis velký jako fotka"
+
+msgid "Il titolo cresce con la foto: grande sulle foto grandi, piccolo sulle piccole (negli schemi a misure miste)."
+msgstr "Nadpis roste s fotkou: velký na velkých fotkách, malý na malých (v rozvrženích se smíšenými velikostmi)."
+
+msgid "Sottotitolo e testo"
+msgstr "Podnadpis a text"
+
+msgid "Sottotitolo solo sulle foto grandi"
+msgstr "Podnadpis jen na velkých fotkách"
+
+msgid "Pallino davanti al testo"
+msgstr "Tečka před textem"
+
+msgid "Un pallino nel colore della voce davanti al testo, come la luce di una lampada accanto alle sue misure."
+msgstr "Tečka v barvě položky před textem, jako světlo lampy vedle jejích rozměrů."
+
+msgid "Categoria e durata"
+msgstr "Kategorie a délka"
+
+msgid "Categoria, numero e durata"
+msgstr "Kategorie, číslo a délka"
+
+msgid "Etichetta chiara"
+msgstr "Světlý štítek"
+
+msgid "Etichetta scura"
+msgstr "Tmavý štítek"
+
+msgid "L’etichetta piena prende il colore della voce (Colore e segno delle voci) o, se manca, quello di categoria e numero: ogni categoria può avere il suo. Chiara e scura stanno bene sulle foto."
+msgstr "Plný štítek převezme barvu položky (Barva a značka položek), a pokud chybí, barvu kategorie a čísla: každá kategorie může mít svou. Světlý a tmavý se hodí na fotky."
+
+msgid "Pallino davanti alla categoria"
+msgstr "Tečka před kategorií"
+
+msgid "Gruppo da mostrare"
+msgstr "Skupina k zobrazení"
+
+msgid "Con le categorie a gruppi («Tipo: Guida, Livello: Base») la card mostra solo quelle del gruppo scritto qui, per esempio «Tipo». Vuoto = tutte."
+msgstr "U kategorií ve skupinách („Typ: Návod, Úroveň: Základ“) karta ukáže jen ty ze zde zapsané skupiny, například „Typ“. Prázdné = všechny."
+
+msgid "Stile della durata"
+msgstr "Styl délky"
+
+msgid "Etichetta col play"
+msgstr "Štítek s přehráváním"
+
+msgid "Fra le parti piccole che stanno nella stessa zona: «Interni · 2026», «Regia / 2026», e fra categoria e durata sotto il numero grande."
+msgstr "Mezi malými částmi ve stejné zóně: „Interiéry · 2026“, „Režie / 2026“, a mezi kategorií a délkou pod velkým číslem."
+
+msgid "Lettere o segni davanti e dietro al numero: «Q» dà «Q01», «(» e «)» danno «(01)», «No. » dà «No. 01»."
+msgstr "Písmena nebo znaky před číslem a za ním: „Q“ dá „Q01“, „(“ a „)“ dají „(01)“, „Č. “ dá „Č. 01“."
+
+msgid "Conta all’indietro"
+msgstr "Počítat pozpátku"
+
+msgid "La prima voce ha il numero più alto: 016, 015, 014… come gli indici dei progetti, dal più recente."
+msgstr "První položka má nejvyšší číslo: 016, 015, 014… jako rejstříky projektů, od nejnovějšího."
+
+msgid "Icona del numero"
+msgstr "Ikona čísla"
+
+msgid "Numero e categoria in un riquadro"
+msgstr "Číslo a kategorie v rámečku"
+
+msgid "Quando stanno nella stessa zona, numero e categoria vanno in un riquadro sottile, col numero pieno nel colore della voce."
+msgstr "Když jsou ve stejné zóně, číslo a kategorie jdou do tenkého rámečku, číslo vyplněné barvou položky."
+
+msgid "Stile della nota"
+msgstr "Styl poznámky"
+
+msgid "Grande (un prezzo)"
+msgstr "Velká (cena)"
+
+msgid "Con la lineetta"
+msgstr "S čárkou"
+
+msgid "La nota di ogni voce (in Media): un prezzo, un anno, un codice. «Grande» fa grande la prima parola e piccolo il resto («€3.40 330 ml»)."
+msgstr "Poznámka každé položky (v Médiích): cena, rok, kód. „Velká“ zvětší první slovo a zbytek zmenší („3,40 € 330 ml“)."
+
+msgid "Colore dell’etichetta"
+msgstr "Barva štítku"
+
+msgid "Vuoto = il colore di ogni voce."
+msgstr "Prázdné = barva každé položky."
+
+msgid "Icona e pulsante"
+msgstr "Ikona a tlačítko"
+
+msgid "Stile dell’icona"
+msgstr "Styl ikony"
+
+msgid "Nel cerchio"
+msgstr "V kroužku"
+
+msgid "Nel cerchio pieno"
+msgstr "V plném kroužku"
+
+msgid "Sola"
+msgstr "Samotná"
+
+msgid "Colore dell’icona"
+msgstr "Barva ikony"
+
+msgid "A contorno"
+msgstr "Obrysový"
+
+msgid "Scritta sottolineata"
+msgstr "Podtržený nápis"
+
+msgid "Linee e colore"
+msgstr "Linky a barva"
+
+msgid "Linea sopra il piede"
+msgstr "Linka nad patičkou"
+
+msgid "Una linea sottile sopra il piede della card (le parti messe «Nel piede»)."
+msgstr "Tenká linka nad patičkou karty (části umístěné „V patičce“)."
+
+msgid "Linea sotto ogni card"
+msgstr "Linka pod každou kartou"
+
+msgid "Barretta nel colore della voce"
+msgstr "Proužek v barvě položky"
+
+msgid "Una barretta in fondo alla foto, nel colore scelto per ogni voce."
+msgstr "Proužek dole na fotce v barvě zvolené pro každou položku."
+
+msgid "Quadratino del colore"
+msgstr "Čtvereček barvy"
+
+msgid "Un quadratino nel colore della voce in alto a destra, come il campione di un materiale."
+msgstr "Čtvereček v barvě položky vpravo nahoře, jako vzorek materiálu."
+
+msgid "Posizione delle parti"
+msgstr "Umístění částí"
+
+msgid "Ogni parte della card può andare in una delle nove zone, nel piede (una riga in fondo) o, coi testi sotto la foto, sulla foto. Le parti piccole possono stare anche davanti, dopo o sotto il titolo. «Come lo schema» la lascia dov’è."
+msgstr "Každá část karty může jít do jedné z devíti zón, do patičky (řádek dole) nebo, s texty pod fotkou, na fotku. Malé části mohou být i před nadpisem, za ním nebo pod ním. „Jako rozvržení“ ji nechá, kde je."
+
+msgid "Posizione della durata"
+msgstr "Umístění délky"
+
+msgid "Posizione della nota"
+msgstr "Umístění poznámky"
+
+msgid "Posizione dell’etichetta"
+msgstr "Umístění štítku"
+
+msgid "Riquadro a pennarello"
+msgstr "Rámeček fixou"
+
+msgid "Icona della categoria"
+msgstr "Ikona kategorie"
+
+msgid "Bordate"
+msgstr "S okrajem"
+
+msgid "Caselle da spuntare"
+msgstr "Zaškrtávací políčka"
+
+msgid "Con le caselle si possono spuntare più valori insieme."
+msgstr "Políčky lze zaškrtnout několik hodnot najednou."
+
+msgid "Squadrata"
+msgstr "Hranatá"
+
+msgid "Conteggi"
+msgstr "Počty"
+
+msgid "In alto, piccoli"
+msgstr "Nahoře, malé"
+
+msgid "Accanto al nome"
+msgstr "Vedle názvu"
+
+msgid "Accanto, col punto"
+msgstr "Vedle, s tečkou"
+
+msgid "Riga spessa sopra"
+msgstr "Silná linka nahoře"
+
+msgid "Pallino nel colore della categoria"
+msgstr "Tečka v barvě kategorie"
+
+msgid "Il colore è quello della prima voce della categoria (Colore e segno delle voci)."
+msgstr "Barva je ta první položky kategorie (Barva a značka položek)."
+
+msgid "Gruppi in una riga"
+msgstr "Skupiny v jednom řádku"
+
+msgid "Con più gruppi («Tipo: Guida, Livello: Base») tutti i gruppi stanno in una riga, col loro nome piccolo, e un solo «Tutti» davanti che li azzera."
+msgstr "Při více skupinách („Typ: Návod, Úroveň: Základ“) jsou všechny skupiny v jednom řádku se svým malým názvem a jediné „Vše“ vpředu je vynuluje."
+
+msgid "Testo dei filtri"
+msgstr "Text filtrů"
+
+msgid "Testo del filtro attivo"
+msgstr "Text aktivního filtru"
+
+msgid "Vuoto = chiaro o scuro da sé, secondo il colore del filtro attivo."
+msgstr "Prázdné = sám světlý nebo tmavý podle barvy aktivního filtru."
+
+msgid "Bordo dei filtri"
+msgstr "Okraj filtrů"
+
+msgid "Vuoto = una linea leggera nel colore del testo."
+msgstr "Prázdné = jemná linka v barvě textu."
+
+msgid "Posizione della ricerca"
+msgstr "Umístění hledání"
+
+msgid "Accanto ai filtri"
+msgstr "Vedle filtrů"
+
+msgid "Sopra, larga, con la lente"
+msgstr "Nahoře, široké, s lupou"
+
+msgid "Linee fra le celle"
+msgstr "Linky mezi buňkami"
+
+msgid "Le celle si toccano e le divide una linea sottile, dentro un riquadro: le pareti di loghi."
+msgstr "Buňky se dotýkají a dělí je tenká linka, uvnitř rámečku: stěny log."
+
+msgid "Sopra il nome"
+msgstr "Nad názvem"
+
+msgid "Sulla foto, in un’etichetta"
+msgstr "Na fotce, ve štítku"
+
+msgid "Le prime due categorie del prodotto («Felpe · Donna»), piccole, nel carattere a spaziatura fissa."
+msgstr "První dvě kategorie produktu („Mikiny · Dámské“), malé, v neproporcionálním písmu."
+
+msgid "Foto a sé"
+msgstr "Fotka samostatně"
+
+msgid "La foto ha il fondo e gli angoli della card; nome e prezzo stanno sotto, sulla pagina, senza riquadro."
+msgstr "Fotka má pozadí a rohy karty; název a cena jsou pod ní, na stránce, bez rámečku."
+
+msgid "Foto che sfuma in basso"
+msgstr "Fotka mizející dole"
+
+msgid "Il fondo della foto sfuma nel fondo della card: bello coi capi fotografati su fondo chiaro."
+msgstr "Spodek fotky přechází do pozadí karty: hezké u oblečení foceného na světlém pozadí."
+
+msgid "Pallini in una riga loro"
+msgstr "Tečky na vlastním řádku"
+
+msgid "I pallini dei colori sotto il prezzo invece che accanto."
+msgstr "Barevné tečky pod cenou místo vedle."
+
+#: licenza-1.4.1345
+msgid "Metti in pausa il video"
+msgstr "Pozastavit video"
+
+msgid "Riprendi il video"
+msgstr "Pokračovat ve videu"
+
+msgid "Pulsante di pausa"
+msgstr "Tlačítko pauzy"
+
+msgid "Sui video che partono da soli un pulsante tondo in alto a sinistra per fermarli e farli ripartire. Con «riduci movimento» del sistema i video partono già fermi."
+msgstr "Na videích, která se spouštějí sama, kulaté tlačítko vlevo nahoře pro zastavení a opětovné spuštění. Se systémovým „omezením pohybu“ se videa spouštějí už pozastavená."
+
+msgid "Riflesso olografico"
+msgstr "Holografický lesk"
+
+msgid "L’etichetta della nota (e il filo interno, se c’è) prende i colori cangianti di una carta olografica, che scorrono piano."
+msgstr "Štítek poznámky (a vnitřní linka, pokud je) dostane měňavé barvy holografické karty, které pomalu plynou."

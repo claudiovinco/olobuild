@@ -55351,3 +55351,429 @@ msgstr "Small phone columns"
 
 msgid "Sotto i 480 px; vuoto = come le colonne mobile."
 msgstr "Below 480 px; empty = same as the mobile columns."
+
+#: licenza-1.4.1345
+msgid "Mostra la durata dei video"
+msgstr "Show the video duration"
+
+msgid "Accanto alla categoria, per esempio «7:40». Per i video caricati nella libreria la durata si legge da sola; per YouTube e Vimeo aggiunti a mano si scrive nel campo «Durata» del video in «Media»."
+msgstr "Next to the category, for example “7:40”. For videos uploaded to the library the duration is read automatically; for YouTube and Vimeo added by hand, write it in the video’s “Duration” field in “Media”."
+
+msgid "Il numero in alto a sinistra, grande, nel carattere dei titoli; sotto, categoria e durata. Come nelle pareti di video."
+msgstr "The number at the top left, large, in the heading font; below it, category and duration. Like in video walls."
+
+msgid "Durata (es. 7:40)"
+msgstr "Duration (e.g. 7:40)"
+
+#: licenza-1.4.1345
+msgid "Ogni parte della card può andare in una delle nove zone: in alto, al centro o in basso, a sinistra, al centro o a destra. Coi testi sotto la foto le zone sono le righe dei testi (per esempio il tempo di lettura in basso a destra, accanto alla firma). «Come lo schema» la lascia dov’è."
+msgstr "Each part of the card can go in one of the nine zones: top, middle or bottom, left, centre or right. With the text below the photo, the zones are the rows of text (for example the reading time at the bottom right, next to the byline). “As the layout” leaves it where it is."
+
+#: licenza-1.4.1345
+msgid "Stile del numero"
+msgstr "Number style"
+
+msgid "Etichetta piena"
+msgstr "Filled label"
+
+msgid "Stile della categoria"
+msgstr "Category style"
+
+msgid "L’etichetta piena prende il colore della voce (Colore delle voci) o, se manca, quello di categoria e numero: ogni categoria può avere il suo."
+msgstr "The filled label takes the item colour (Item colours) or, if missing, the category and number colour: each category can have its own."
+
+msgid "Colore del sottotitolo"
+msgstr "Subtitle colour"
+
+msgid "Sottotitolo in maiuscolo piccolo"
+msgstr "Subtitle in small capitals"
+
+#: licenza-1.4.1345
+msgid "«Sotto la foto» vale per Griglia, Masonry e Nastro, «Accanto alla foto» per Griglia e Masonry; negli altri schemi i testi vanno sulla foto. Nel biglietto il testo della foto diventa la scritta grande (per esempio «20 mag sab»): accendi «Mostra il testo»."
+msgstr "“Below the photo” works with Grid, Masonry and Strip, “Beside the photo” with Grid and Masonry; in the other layouts the text goes on the photo. In the ticket, the photo’s text becomes the large lettering (for example “20 May Sat”): turn on “Show the text”."
+
+msgid "Colore e segno delle voci"
+msgstr "Item colours and marks"
+
+msgid "Un colore per ogni foto o card: tinge la cornice, la categoria, il numero, il pulsante, il biglietto, il fondo delle card di testo e il segno a matita. Vuoto = il colore della galleria. Il segno a matita cerchia una foto, come sul provino di un fotografo."
+msgstr "A colour for each photo or card: it tints the frame, the category, the number, the button, the ticket, the background of text cards and the pencil mark. Empty = the gallery colour. The pencil mark circles a photo, like on a photographer’s contact sheet."
+
+msgid "Segno a matita"
+msgstr "Pencil mark"
+
+msgid "Riquadro a matita"
+msgstr "Pencil box"
+
+msgid "Cerchio a matita"
+msgstr "Pencil circle"
+
+#: licenza-1.4.1345
+msgid "Nota (prezzo, anno…)"
+msgstr "Note (price, year…)"
+
+msgid "Etichetta sulla foto"
+msgstr "Label on the photo"
+
+msgid "Nel piede, a sinistra"
+msgstr "In the footer, left"
+
+msgid "Nel piede, a destra"
+msgstr "In the footer, right"
+
+msgid "Sulla foto, in alto a sinistra"
+msgstr "On the photo, top left"
+
+msgid "Sulla foto, in alto a destra"
+msgstr "On the photo, top right"
+
+msgid "Sulla foto, in basso a sinistra"
+msgstr "On the photo, bottom left"
+
+msgid "Sulla foto, in basso a destra"
+msgstr "On the photo, bottom right"
+
+msgid "Davanti al titolo"
+msgstr "Before the title"
+
+msgid "Dopo il titolo, nella stessa riga"
+msgstr "After the title, on the same line"
+
+msgid "Play"
+msgstr "Play"
+
+msgid "Freccia a destra"
+msgstr "Right arrow"
+
+msgid "«%d» diventa il numero delle foto: «Cerca fra %d risorse»."
+msgstr "“%d” becomes the number of photos: “Search %d resources”."
+
+msgid "Barretta di avanzamento"
+msgstr "Progress bar"
+
+msgid "Sotto il nastro una barretta corta che dice a che punto si è."
+msgstr "Below the strip, a short bar that shows how far along you are."
+
+msgid "Filo interno"
+msgstr "Inner line"
+
+msgid "Bordo pieno"
+msgstr "Solid border"
+
+msgid "Con un colore per ogni voce (Colore e segno delle voci) filo, bordo e pellicola prendono quello della voce."
+msgstr "With a colour for each item (Item colours and marks), the inner line, the border and the film take the item’s colour."
+
+msgid "Scritte sul bordo"
+msgstr "Edge markings"
+
+msgid "Le scritte che la pellicola porta stampate sul bordo, come su un provino a contatto: «▸ 03» è il numero del fotogramma (la freccia lo indica), «03A» il mezzo fotogramma che segue, «R1» il rullino e «400» la sensibilità ISO della pellicola."
+msgstr "The markings printed on the edge of the film, as on a contact sheet: “▸ 03” is the frame number (the arrow points to it), “03A” the half frame that follows, “R1” the roll and “400” the film’s ISO speed."
+
+msgid "Rullino"
+msgstr "Roll"
+
+msgid "Sensibilità ISO"
+msgstr "ISO speed"
+
+msgid "Primo fotogramma"
+msgstr "First frame"
+
+msgid "Ogni quanti fotogrammi"
+msgstr "Every how many frames"
+
+msgid "Sul provino il fotografo sceglie i fotogrammi migliori: con 3 e 4 i numeri vanno 03, 07, 11…"
+msgstr "On the contact sheet the photographer picks the best frames: with 3 and 4 the numbers go 03, 07, 11…"
+
+msgid "Fondo nel colore della voce"
+msgstr "Background in the item’s colour"
+
+msgid "La card prende il colore scelto per ogni voce (Colore e segno delle voci), e il testo si fa chiaro o scuro da sé: le card colorate di un negozio."
+msgstr "The card takes the colour chosen for each item (Item colours and marks), and the text turns light or dark by itself: the coloured cards of a shop."
+
+msgid "Riquadro solo sulle foto grandi"
+msgstr "Panel only on large photos"
+
+msgid "Il riquadro coi testi resta sulle foto grandi (almeno due colonne per due righe); sulle piccole i testi stanno sulla foto, senza sottotitolo e senza piede."
+msgstr "The text panel stays on the large photos (at least two columns by two rows); on the small ones the texts sit on the photo, without subtitle or footer."
+
+msgid "Riquadro stretto"
+msgstr "Narrow panel"
+
+msgid "Il riquadro largo quanto i suoi testi, in un angolo, invece che da un lato all’altro."
+msgstr "The panel as wide as its texts, in a corner, instead of from side to side."
+
+msgid "Colore del corsivo"
+msgstr "Italic colour"
+
+msgid "Nel titolo il pezzo fra due asterischi va in corsivo: «Vestiti per *la luce lunga*». Qui il suo colore; vuoto = come il titolo."
+msgstr "In the title the part between two asterisks goes in italics: “Dressed for *the long light*”. Here its colour; empty = like the title."
+
+msgid "Titolo grande quanto la foto"
+msgstr "Title as large as the photo"
+
+msgid "Il titolo cresce con la foto: grande sulle foto grandi, piccolo sulle piccole (negli schemi a misure miste)."
+msgstr "The title grows with the photo: large on the large photos, small on the small ones (in mixed-size layouts)."
+
+msgid "Sottotitolo e testo"
+msgstr "Subtitle and text"
+
+msgid "Sottotitolo solo sulle foto grandi"
+msgstr "Subtitle only on large photos"
+
+msgid "Pallino davanti al testo"
+msgstr "Dot before the text"
+
+msgid "Un pallino nel colore della voce davanti al testo, come la luce di una lampada accanto alle sue misure."
+msgstr "A dot in the item’s colour before the text, like a lamp’s light next to its measurements."
+
+msgid "Categoria e durata"
+msgstr "Category and duration"
+
+msgid "Categoria, numero e durata"
+msgstr "Category, number and duration"
+
+msgid "Etichetta chiara"
+msgstr "Light label"
+
+msgid "Etichetta scura"
+msgstr "Dark label"
+
+msgid "L’etichetta piena prende il colore della voce (Colore e segno delle voci) o, se manca, quello di categoria e numero: ogni categoria può avere il suo. Chiara e scura stanno bene sulle foto."
+msgstr "The filled label takes the item’s colour (Item colours and marks) or, if there is none, the category and number colour: each category can have its own. Light and dark look good on photos."
+
+msgid "Pallino davanti alla categoria"
+msgstr "Dot before the category"
+
+msgid "Gruppo da mostrare"
+msgstr "Group to show"
+
+msgid "Con le categorie a gruppi («Tipo: Guida, Livello: Base») la card mostra solo quelle del gruppo scritto qui, per esempio «Tipo». Vuoto = tutte."
+msgstr "With grouped categories (“Type: Guide, Level: Basic”) the card shows only those of the group written here, for example “Type”. Empty = all."
+
+msgid "Stile della durata"
+msgstr "Duration style"
+
+msgid "Etichetta col play"
+msgstr "Label with play"
+
+msgid "Fra le parti piccole che stanno nella stessa zona: «Interni · 2026», «Regia / 2026», e fra categoria e durata sotto il numero grande."
+msgstr "Between the small parts in the same zone: “Interiors · 2026”, “Direction / 2026”, and between category and duration under the large number."
+
+msgid "Lettere o segni davanti e dietro al numero: «Q» dà «Q01», «(» e «)» danno «(01)», «No. » dà «No. 01»."
+msgstr "Letters or signs before and after the number: “Q” gives “Q01”, “(” and “)” give “(01)”, “No. ” gives “No. 01”."
+
+msgid "Conta all’indietro"
+msgstr "Count down"
+
+msgid "La prima voce ha il numero più alto: 016, 015, 014… come gli indici dei progetti, dal più recente."
+msgstr "The first item has the highest number: 016, 015, 014… like project indexes, newest first."
+
+msgid "Icona del numero"
+msgstr "Number icon"
+
+msgid "Numero e categoria in un riquadro"
+msgstr "Number and category in a box"
+
+msgid "Quando stanno nella stessa zona, numero e categoria vanno in un riquadro sottile, col numero pieno nel colore della voce."
+msgstr "When they are in the same zone, number and category go in a thin box, with the number filled in the item’s colour."
+
+msgid "Stile della nota"
+msgstr "Note style"
+
+msgid "Grande (un prezzo)"
+msgstr "Large (a price)"
+
+msgid "Con la lineetta"
+msgstr "With a dash"
+
+msgid "La nota di ogni voce (in Media): un prezzo, un anno, un codice. «Grande» fa grande la prima parola e piccolo il resto («€3.40 330 ml»)."
+msgstr "Each item’s note (in Media): a price, a year, a code. “Large” makes the first word large and the rest small (“€3.40 330 ml”)."
+
+msgid "Colore dell’etichetta"
+msgstr "Label colour"
+
+msgid "Vuoto = il colore di ogni voce."
+msgstr "Empty = each item’s colour."
+
+msgid "Icona e pulsante"
+msgstr "Icon and button"
+
+msgid "Stile dell’icona"
+msgstr "Icon style"
+
+msgid "Nel cerchio"
+msgstr "In a circle"
+
+msgid "Nel cerchio pieno"
+msgstr "In a filled circle"
+
+msgid "Sola"
+msgstr "On its own"
+
+msgid "Colore dell’icona"
+msgstr "Icon colour"
+
+msgid "A contorno"
+msgstr "Outlined"
+
+msgid "Scritta sottolineata"
+msgstr "Underlined text"
+
+msgid "Linee e colore"
+msgstr "Lines and colour"
+
+msgid "Linea sopra il piede"
+msgstr "Line above the footer"
+
+msgid "Una linea sottile sopra il piede della card (le parti messe «Nel piede»)."
+msgstr "A thin line above the card’s footer (the parts placed “In the footer”)."
+
+msgid "Linea sotto ogni card"
+msgstr "Line under each card"
+
+msgid "Barretta nel colore della voce"
+msgstr "Bar in the item’s colour"
+
+msgid "Una barretta in fondo alla foto, nel colore scelto per ogni voce."
+msgstr "A bar at the bottom of the photo, in the colour chosen for each item."
+
+msgid "Quadratino del colore"
+msgstr "Colour swatch"
+
+msgid "Un quadratino nel colore della voce in alto a destra, come il campione di un materiale."
+msgstr "A small square in the item’s colour at the top right, like a material swatch."
+
+msgid "Posizione delle parti"
+msgstr "Position of the parts"
+
+msgid "Ogni parte della card può andare in una delle nove zone, nel piede (una riga in fondo) o, coi testi sotto la foto, sulla foto. Le parti piccole possono stare anche davanti, dopo o sotto il titolo. «Come lo schema» la lascia dov’è."
+msgstr "Each part of the card can go in one of the nine zones, in the footer (a row at the bottom) or, with the texts below the photo, on the photo. Small parts can also sit before, after or below the title. “As the layout” leaves it where it is."
+
+msgid "Posizione della durata"
+msgstr "Duration position"
+
+msgid "Posizione della nota"
+msgstr "Note position"
+
+msgid "Posizione dell’etichetta"
+msgstr "Label position"
+
+msgid "Riquadro a pennarello"
+msgstr "Marker box"
+
+msgid "Icona della categoria"
+msgstr "Category icon"
+
+msgid "Bordate"
+msgstr "Outlined"
+
+msgid "Caselle da spuntare"
+msgstr "Checkboxes"
+
+msgid "Con le caselle si possono spuntare più valori insieme."
+msgstr "With checkboxes, several values can be ticked at once."
+
+msgid "Squadrata"
+msgstr "Square"
+
+msgid "Conteggi"
+msgstr "Counts"
+
+msgid "In alto, piccoli"
+msgstr "Raised, small"
+
+msgid "Accanto al nome"
+msgstr "Next to the name"
+
+msgid "Accanto, col punto"
+msgstr "Next to it, with a dot"
+
+msgid "Riga spessa sopra"
+msgstr "Thick line above"
+
+msgid "Pallino nel colore della categoria"
+msgstr "Dot in the category’s colour"
+
+msgid "Il colore è quello della prima voce della categoria (Colore e segno delle voci)."
+msgstr "The colour is that of the category’s first item (Item colours and marks)."
+
+msgid "Gruppi in una riga"
+msgstr "Groups on one line"
+
+msgid "Con più gruppi («Tipo: Guida, Livello: Base») tutti i gruppi stanno in una riga, col loro nome piccolo, e un solo «Tutti» davanti che li azzera."
+msgstr "With several groups (“Type: Guide, Level: Basic”) all groups sit on one line, with their small name, and a single “All” in front that resets them."
+
+msgid "Testo dei filtri"
+msgstr "Filter text"
+
+msgid "Testo del filtro attivo"
+msgstr "Active filter text"
+
+msgid "Vuoto = chiaro o scuro da sé, secondo il colore del filtro attivo."
+msgstr "Empty = light or dark by itself, depending on the active filter colour."
+
+msgid "Bordo dei filtri"
+msgstr "Filter border"
+
+msgid "Vuoto = una linea leggera nel colore del testo."
+msgstr "Empty = a light line in the text colour."
+
+msgid "Posizione della ricerca"
+msgstr "Search position"
+
+msgid "Accanto ai filtri"
+msgstr "Next to the filters"
+
+msgid "Sopra, larga, con la lente"
+msgstr "Above, wide, with the magnifier"
+
+msgid "Linee fra le celle"
+msgstr "Lines between cells"
+
+msgid "Le celle si toccano e le divide una linea sottile, dentro un riquadro: le pareti di loghi."
+msgstr "The cells touch and a thin line divides them, inside a frame: logo walls."
+
+msgid "Sopra il nome"
+msgstr "Above the name"
+
+msgid "Sulla foto, in un’etichetta"
+msgstr "On the photo, in a label"
+
+msgid "Le prime due categorie del prodotto («Felpe · Donna»), piccole, nel carattere a spaziatura fissa."
+msgstr "The product’s first two categories (“Hoodies · Women”), small, in the monospaced font."
+
+msgid "Foto a sé"
+msgstr "Photo on its own"
+
+msgid "La foto ha il fondo e gli angoli della card; nome e prezzo stanno sotto, sulla pagina, senza riquadro."
+msgstr "The photo has the card’s background and corners; name and price sit below, on the page, without a box."
+
+msgid "Foto che sfuma in basso"
+msgstr "Photo fading at the bottom"
+
+msgid "Il fondo della foto sfuma nel fondo della card: bello coi capi fotografati su fondo chiaro."
+msgstr "The bottom of the photo fades into the card background: nice with garments shot on a light background."
+
+msgid "Pallini in una riga loro"
+msgstr "Dots on their own line"
+
+msgid "I pallini dei colori sotto il prezzo invece che accanto."
+msgstr "The colour dots below the price instead of next to it."
+
+#: licenza-1.4.1345
+msgid "Metti in pausa il video"
+msgstr "Pause the video"
+
+msgid "Riprendi il video"
+msgstr "Resume the video"
+
+msgid "Pulsante di pausa"
+msgstr "Pause button"
+
+msgid "Sui video che partono da soli un pulsante tondo in alto a sinistra per fermarli e farli ripartire. Con «riduci movimento» del sistema i video partono già fermi."
+msgstr "On videos that start by themselves, a round button at the top left to stop them and start them again. With the system’s “reduce motion”, videos start already paused."
+
+msgid "Riflesso olografico"
+msgstr "Holographic sheen"
+
+msgid "L’etichetta della nota (e il filo interno, se c’è) prende i colori cangianti di una carta olografica, che scorrono piano."
+msgstr "The note label (and the inner line, if there is one) takes the shifting colours of a holographic card, flowing slowly."

@@ -18467,3 +18467,432 @@ msgstr "Kolommen kleine telefoons"
 
 msgid "Sotto i 480 px; vuoto = come le colonne mobile."
 msgstr "Onder 480 px; leeg = zoals de mobiele kolommen."
+
+#: licenza-1.4.1345
+msgid "Mostra la durata dei video"
+msgstr "Duur van de video’s tonen"
+
+msgid "Accanto alla categoria, per esempio «7:40». Per i video caricati nella libreria la durata si legge da sola; per YouTube e Vimeo aggiunti a mano si scrive nel campo «Durata» del video in «Media»."
+msgstr "Naast de categorie, bijvoorbeeld „7:40”. Bij video’s uit de mediabibliotheek wordt de duur vanzelf gelezen; bij met de hand toegevoegde YouTube en Vimeo schrijf je hem in het veld „Duur” van de video in „Media”."
+
+msgid "Numero grande"
+msgstr "Groot nummer"
+
+msgid "Il numero in alto a sinistra, grande, nel carattere dei titoli; sotto, categoria e durata. Come nelle pareti di video."
+msgstr "Het nummer linksboven, groot, in het lettertype van de titels; eronder categorie en duur. Zoals bij videowanden."
+
+msgid "Durata (es. 7:40)"
+msgstr "Duur (bijv. 7:40)"
+
+#: licenza-1.4.1345
+msgid "Ogni parte della card può andare in una delle nove zone: in alto, al centro o in basso, a sinistra, al centro o a destra. Coi testi sotto la foto le zone sono le righe dei testi (per esempio il tempo di lettura in basso a destra, accanto alla firma). «Come lo schema» la lascia dov’è."
+msgstr "Elk deel van de kaart kan in een van de negen zones: boven, midden of onder, links, midden of rechts. Met de tekst onder de foto zijn de zones de tekstregels (bijvoorbeeld de leestijd rechtsonder, naast de auteur). „Zoals het schema” laat het waar het is."
+
+#: licenza-1.4.1345
+msgid "Stile del numero"
+msgstr "Stijl van het nummer"
+
+msgid "Etichetta piena"
+msgstr "Gevuld label"
+
+msgid "Stile della categoria"
+msgstr "Stijl van de categorie"
+
+msgid "L’etichetta piena prende il colore della voce (Colore delle voci) o, se manca, quello di categoria e numero: ogni categoria può avere il suo."
+msgstr "Het gevulde label krijgt de kleur van het item (Kleur van de items) of, als die ontbreekt, die van categorie en nummer: elke categorie kan zijn eigen kleur hebben."
+
+msgid "Colore del sottotitolo"
+msgstr "Kleur van de ondertitel"
+
+msgid "Sottotitolo in maiuscolo piccolo"
+msgstr "Ondertitel in kleine hoofdletters"
+
+#: licenza-1.4.1345
+msgid "«Sotto la foto» vale per Griglia, Masonry e Nastro, «Accanto alla foto» per Griglia e Masonry; negli altri schemi i testi vanno sulla foto. Nel biglietto il testo della foto diventa la scritta grande (per esempio «20 mag sab»): accendi «Mostra il testo»."
+msgstr "„Onder de foto” geldt voor Raster, Masonry en Strook, „Naast de foto” voor Raster en Masonry; in de andere schema’s komt de tekst op de foto. In het kaartje wordt de tekst van de foto het grote opschrift (bijvoorbeeld „20 mei za”): zet „Tekst tonen” aan."
+
+msgid "Colore e segno delle voci"
+msgstr "Kleur en markering van de items"
+
+msgid "Un colore per ogni foto o card: tinge la cornice, la categoria, il numero, il pulsante, il biglietto, il fondo delle card di testo e il segno a matita. Vuoto = il colore della galleria. Il segno a matita cerchia una foto, come sul provino di un fotografo."
+msgstr "Een kleur voor elke foto of kaart: die kleurt de lijst, de categorie, het nummer, de knop, het kaartje, de achtergrond van de tekstkaarten en de potloodmarkering. Leeg = de kleur van de galerij. De potloodmarkering omcirkelt een foto, zoals op het contactvel van een fotograaf."
+
+msgid "Segno a matita"
+msgstr "Potloodmarkering"
+
+msgid "Riquadro a matita"
+msgstr "Potloodkader"
+
+msgid "Cerchio a matita"
+msgstr "Potloodcirkel"
+
+#: licenza-1.4.1345
+msgid "Nota (prezzo, anno…)"
+msgstr "Notitie (prijs, jaar…)"
+
+msgid "Etichetta sulla foto"
+msgstr "Label op de foto"
+
+msgid "Nel piede, a sinistra"
+msgstr "In de voet, links"
+
+msgid "Nel piede, a destra"
+msgstr "In de voet, rechts"
+
+msgid "Sulla foto, in alto a sinistra"
+msgstr "Op de foto, linksboven"
+
+msgid "Sulla foto, in alto a destra"
+msgstr "Op de foto, rechtsboven"
+
+msgid "Sulla foto, in basso a sinistra"
+msgstr "Op de foto, linksonder"
+
+msgid "Sulla foto, in basso a destra"
+msgstr "Op de foto, rechtsonder"
+
+msgid "Davanti al titolo"
+msgstr "Voor de titel"
+
+msgid "Dopo il titolo, nella stessa riga"
+msgstr "Na de titel, op dezelfde regel"
+
+msgid "Play"
+msgstr "Afspelen"
+
+msgid "Freccia a destra"
+msgstr "Pijl naar rechts"
+
+msgid "«%d» diventa il numero delle foto: «Cerca fra %d risorse»."
+msgstr "„%d” wordt het aantal foto’s: „Zoek in %d bronnen”."
+
+msgid "Barretta di avanzamento"
+msgstr "Voortgangsbalk"
+
+msgid "Sotto il nastro una barretta corta che dice a che punto si è."
+msgstr "Onder de strook een korte balk die laat zien waar je bent."
+
+msgid "Filo interno"
+msgstr "Binnenlijn"
+
+msgid "Bordo pieno"
+msgstr "Volle rand"
+
+msgid "Con un colore per ogni voce (Colore e segno delle voci) filo, bordo e pellicola prendono quello della voce."
+msgstr "Met een kleur per item (Kleur en markering van de items) nemen binnenlijn, rand en film de kleur van het item over."
+
+msgid "Scritte sul bordo"
+msgstr "Randopschriften"
+
+msgid "Le scritte che la pellicola porta stampate sul bordo, come su un provino a contatto: «▸ 03» è il numero del fotogramma (la freccia lo indica), «03A» il mezzo fotogramma che segue, «R1» il rullino e «400» la sensibilità ISO della pellicola."
+msgstr "De opschriften die op de rand van de film gedrukt staan, zoals op een contactafdruk: „▸ 03” is het beeldnummer (de pijl wijst ernaar), „03A” het halve beeld dat volgt, „R1” de rol en „400” de ISO-gevoeligheid."
+
+msgid "Rullino"
+msgstr "Rol"
+
+msgid "Sensibilità ISO"
+msgstr "ISO-gevoeligheid"
+
+msgid "Primo fotogramma"
+msgstr "Eerste beeld"
+
+msgid "Ogni quanti fotogrammi"
+msgstr "Om de hoeveel beelden"
+
+msgid "Sul provino il fotografo sceglie i fotogrammi migliori: con 3 e 4 i numeri vanno 03, 07, 11…"
+msgstr "Op de contactafdruk kiest de fotograaf de beste beelden: met 3 en 4 gaan de nummers 03, 07, 11…"
+
+msgid "Fondo nel colore della voce"
+msgstr "Achtergrond in de kleur van het item"
+
+msgid "La card prende il colore scelto per ogni voce (Colore e segno delle voci), e il testo si fa chiaro o scuro da sé: le card colorate di un negozio."
+msgstr "De kaart krijgt de kleur die voor elk item is gekozen (Kleur en markering van de items) en de tekst wordt vanzelf licht of donker: de gekleurde kaarten van een winkel."
+
+msgid "Riquadro solo sulle foto grandi"
+msgstr "Kader alleen op grote foto’s"
+
+msgid "Il riquadro coi testi resta sulle foto grandi (almeno due colonne per due righe); sulle piccole i testi stanno sulla foto, senza sottotitolo e senza piede."
+msgstr "Het tekstkader blijft op de grote foto’s (minstens twee kolommen bij twee rijen); op de kleine staat de tekst op de foto, zonder ondertitel en voet."
+
+msgid "Riquadro stretto"
+msgstr "Smal kader"
+
+msgid "Il riquadro largo quanto i suoi testi, in un angolo, invece che da un lato all’altro."
+msgstr "Het kader zo breed als de tekst, in een hoek, in plaats van van rand tot rand."
+
+msgid "Colore del corsivo"
+msgstr "Kleur van de cursief"
+
+msgid "Nel titolo il pezzo fra due asterischi va in corsivo: «Vestiti per *la luce lunga*». Qui il suo colore; vuoto = come il titolo."
+msgstr "In de titel komt het stuk tussen twee sterretjes cursief: „Gekleed voor *het lange licht*”. Hier de kleur; leeg = zoals de titel."
+
+msgid "Titolo grande quanto la foto"
+msgstr "Titel zo groot als de foto"
+
+msgid "Il titolo cresce con la foto: grande sulle foto grandi, piccolo sulle piccole (negli schemi a misure miste)."
+msgstr "De titel groeit mee met de foto: groot op grote foto’s, klein op kleine (in schema’s met gemengde maten)."
+
+msgid "Sottotitolo e testo"
+msgstr "Ondertitel en tekst"
+
+msgid "Sottotitolo solo sulle foto grandi"
+msgstr "Ondertitel alleen op grote foto’s"
+
+msgid "Pallino davanti al testo"
+msgstr "Stip voor de tekst"
+
+msgid "Un pallino nel colore della voce davanti al testo, come la luce di una lampada accanto alle sue misure."
+msgstr "Een stip in de kleur van het item voor de tekst, zoals het licht van een lamp naast haar maten."
+
+msgid "Categoria e durata"
+msgstr "Categorie en duur"
+
+msgid "Categoria, numero e durata"
+msgstr "Categorie, nummer en duur"
+
+msgid "Etichetta chiara"
+msgstr "Licht label"
+
+msgid "Etichetta scura"
+msgstr "Donker label"
+
+msgid "L’etichetta piena prende il colore della voce (Colore e segno delle voci) o, se manca, quello di categoria e numero: ogni categoria può avere il suo. Chiara e scura stanno bene sulle foto."
+msgstr "Het volle label neemt de kleur van het item (Kleur en markering van de items) of, als die ontbreekt, die van categorie en nummer: elke categorie kan haar eigen kleur hebben. Licht en donker staan goed op foto’s."
+
+msgid "Pallino davanti alla categoria"
+msgstr "Stip voor de categorie"
+
+msgid "Gruppo da mostrare"
+msgstr "Te tonen groep"
+
+msgid "Con le categorie a gruppi («Tipo: Guida, Livello: Base») la card mostra solo quelle del gruppo scritto qui, per esempio «Tipo». Vuoto = tutte."
+msgstr "Bij categorieën in groepen („Type: Gids, Niveau: Basis”) toont de kaart alleen die van de hier genoemde groep, bijvoorbeeld „Type”. Leeg = alle."
+
+msgid "Stile della durata"
+msgstr "Stijl van de duur"
+
+msgid "Etichetta col play"
+msgstr "Label met afspeelknop"
+
+msgid "Fra le parti piccole che stanno nella stessa zona: «Interni · 2026», «Regia / 2026», e fra categoria e durata sotto il numero grande."
+msgstr "Tussen de kleine delen in dezelfde zone: „Interieur · 2026”, „Regie / 2026”, en tussen categorie en duur onder het grote nummer."
+
+msgid "Lettere o segni davanti e dietro al numero: «Q» dà «Q01», «(» e «)» danno «(01)», «No. » dà «No. 01»."
+msgstr "Letters of tekens voor en na het nummer: „Q” geeft „Q01”, „(” en „)” geven „(01)”, „Nr. ” geeft „Nr. 01”."
+
+msgid "Conta all’indietro"
+msgstr "Aftellen"
+
+msgid "La prima voce ha il numero più alto: 016, 015, 014… come gli indici dei progetti, dal più recente."
+msgstr "Het eerste item heeft het hoogste nummer: 016, 015, 014… zoals projectindexen, het nieuwste eerst."
+
+msgid "Icona del numero"
+msgstr "Pictogram bij het nummer"
+
+msgid "Numero e categoria in un riquadro"
+msgstr "Nummer en categorie in een kader"
+
+msgid "Quando stanno nella stessa zona, numero e categoria vanno in un riquadro sottile, col numero pieno nel colore della voce."
+msgstr "Als ze in dezelfde zone staan, komen nummer en categorie in een dun kader, het nummer gevuld in de kleur van het item."
+
+msgid "Stile della nota"
+msgstr "Stijl van de notitie"
+
+msgid "Grande (un prezzo)"
+msgstr "Groot (een prijs)"
+
+msgid "Con la lineetta"
+msgstr "Met een streepje"
+
+msgid "La nota di ogni voce (in Media): un prezzo, un anno, un codice. «Grande» fa grande la prima parola e piccolo il resto («€3.40 330 ml»)."
+msgstr "De notitie van elk item (in Media): een prijs, een jaar, een code. „Groot” maakt het eerste woord groot en de rest klein („€ 3,40 330 ml”)."
+
+msgid "Colore dell’etichetta"
+msgstr "Kleur van het label"
+
+msgid "Vuoto = il colore di ogni voce."
+msgstr "Leeg = de kleur van elk item."
+
+msgid "Icona e pulsante"
+msgstr "Pictogram en knop"
+
+msgid "Stile dell’icona"
+msgstr "Stijl van het pictogram"
+
+msgid "Nel cerchio"
+msgstr "In een cirkel"
+
+msgid "Nel cerchio pieno"
+msgstr "In een gevulde cirkel"
+
+msgid "Sola"
+msgstr "Los"
+
+msgid "Colore dell’icona"
+msgstr "Kleur van het pictogram"
+
+msgid "A contorno"
+msgstr "Omlijnd"
+
+msgid "Scritta sottolineata"
+msgstr "Onderstreepte tekst"
+
+msgid "Linee e colore"
+msgstr "Lijnen en kleur"
+
+msgid "Linea sopra il piede"
+msgstr "Lijn boven de voet"
+
+msgid "Una linea sottile sopra il piede della card (le parti messe «Nel piede»)."
+msgstr "Een dunne lijn boven de voet van de kaart (de delen „In de voet”)."
+
+msgid "Linea sotto ogni card"
+msgstr "Lijn onder elke kaart"
+
+msgid "Barretta nel colore della voce"
+msgstr "Balkje in de kleur van het item"
+
+msgid "Una barretta in fondo alla foto, nel colore scelto per ogni voce."
+msgstr "Een balkje onderaan de foto, in de kleur die voor elk item is gekozen."
+
+msgid "Quadratino del colore"
+msgstr "Kleurvlakje"
+
+msgid "Un quadratino nel colore della voce in alto a destra, come il campione di un materiale."
+msgstr "Een vlakje in de kleur van het item rechtsboven, zoals een materiaalstaal."
+
+msgid "Posizione delle parti"
+msgstr "Positie van de delen"
+
+msgid "Ogni parte della card può andare in una delle nove zone, nel piede (una riga in fondo) o, coi testi sotto la foto, sulla foto. Le parti piccole possono stare anche davanti, dopo o sotto il titolo. «Come lo schema» la lascia dov’è."
+msgstr "Elk deel van de kaart kan in een van de negen zones, in de voet (een rij onderaan) of, met de tekst onder de foto, op de foto. Kleine delen kunnen ook voor, na of onder de titel staan. „Zoals het schema” laat het waar het is."
+
+msgid "Posizione della durata"
+msgstr "Positie van de duur"
+
+msgid "Posizione della nota"
+msgstr "Positie van de notitie"
+
+msgid "Posizione dell’etichetta"
+msgstr "Positie van het label"
+
+msgid "Riquadro a pennarello"
+msgstr "Stiftkader"
+
+msgid "Icona della categoria"
+msgstr "Pictogram van de categorie"
+
+msgid "Bordate"
+msgstr "Omrand"
+
+msgid "Caselle da spuntare"
+msgstr "Vinkvakjes"
+
+msgid "Con le caselle si possono spuntare più valori insieme."
+msgstr "Met vinkvakjes kun je meerdere waarden tegelijk aanvinken."
+
+msgid "Squadrata"
+msgstr "Vierkant"
+
+msgid "Conteggi"
+msgstr "Aantallen"
+
+msgid "In alto, piccoli"
+msgstr "Verhoogd, klein"
+
+msgid "Accanto al nome"
+msgstr "Naast de naam"
+
+msgid "Accanto, col punto"
+msgstr "Ernaast, met een punt"
+
+msgid "Riga spessa sopra"
+msgstr "Dikke lijn erboven"
+
+msgid "Pallino nel colore della categoria"
+msgstr "Stip in de kleur van de categorie"
+
+msgid "Il colore è quello della prima voce della categoria (Colore e segno delle voci)."
+msgstr "De kleur is die van het eerste item van de categorie (Kleur en markering van de items)."
+
+msgid "Gruppi in una riga"
+msgstr "Groepen op één regel"
+
+msgid "Con più gruppi («Tipo: Guida, Livello: Base») tutti i gruppi stanno in una riga, col loro nome piccolo, e un solo «Tutti» davanti che li azzera."
+msgstr "Bij meerdere groepen („Type: Gids, Niveau: Basis”) staan alle groepen op één regel, met hun kleine naam, en één „Alle” vooraan zet ze terug."
+
+msgid "Testo dei filtri"
+msgstr "Tekst van de filters"
+
+msgid "Testo del filtro attivo"
+msgstr "Tekst van het actieve filter"
+
+msgid "Vuoto = chiaro o scuro da sé, secondo il colore del filtro attivo."
+msgstr "Leeg = vanzelf licht of donker, naar de kleur van het actieve filter."
+
+msgid "Bordo dei filtri"
+msgstr "Rand van de filters"
+
+msgid "Vuoto = una linea leggera nel colore del testo."
+msgstr "Leeg = een lichte lijn in de tekstkleur."
+
+msgid "Posizione della ricerca"
+msgstr "Positie van de zoekbalk"
+
+msgid "Accanto ai filtri"
+msgstr "Naast de filters"
+
+msgid "Sopra, larga, con la lente"
+msgstr "Erboven, breed, met vergrootglas"
+
+msgid "Linee fra le celle"
+msgstr "Lijnen tussen de cellen"
+
+msgid "Le celle si toccano e le divide una linea sottile, dentro un riquadro: le pareti di loghi."
+msgstr "De cellen raken elkaar en een dunne lijn scheidt ze, binnen een kader: logomuren."
+
+msgid "Sopra il nome"
+msgstr "Boven de naam"
+
+msgid "Sulla foto, in un’etichetta"
+msgstr "Op de foto, in een label"
+
+msgid "Le prime due categorie del prodotto («Felpe · Donna»), piccole, nel carattere a spaziatura fissa."
+msgstr "De eerste twee categorieën van het product („Hoodies · Dames”), klein, in het lettertype met vaste breedte."
+
+msgid "Foto a sé"
+msgstr "Foto op zichzelf"
+
+msgid "La foto ha il fondo e gli angoli della card; nome e prezzo stanno sotto, sulla pagina, senza riquadro."
+msgstr "De foto krijgt de achtergrond en hoeken van de kaart; naam en prijs staan eronder, op de pagina, zonder kader."
+
+msgid "Foto che sfuma in basso"
+msgstr "Foto die onderaan vervaagt"
+
+msgid "Il fondo della foto sfuma nel fondo della card: bello coi capi fotografati su fondo chiaro."
+msgstr "De onderkant van de foto vloeit over in de kaartachtergrond: mooi bij kleding op een lichte achtergrond."
+
+msgid "Pallini in una riga loro"
+msgstr "Stippen op een eigen regel"
+
+msgid "I pallini dei colori sotto il prezzo invece che accanto."
+msgstr "De kleurstippen onder de prijs in plaats van ernaast."
+
+#: licenza-1.4.1345
+msgid "Metti in pausa il video"
+msgstr "Video pauzeren"
+
+msgid "Riprendi il video"
+msgstr "Video hervatten"
+
+msgid "Pulsante di pausa"
+msgstr "Pauzeknop"
+
+msgid "Sui video che partono da soli un pulsante tondo in alto a sinistra per fermarli e farli ripartire. Con «riduci movimento» del sistema i video partono già fermi."
+msgstr "Op video’s die vanzelf starten een ronde knop linksboven om ze te stoppen en weer te starten. Met „beweging verminderen” van het systeem starten de video’s al gepauzeerd."
+
+msgid "Riflesso olografico"
+msgstr "Holografische glans"
+
+msgid "L’etichetta della nota (e il filo interno, se c’è) prende i colori cangianti di una carta olografica, che scorrono piano."
+msgstr "Het label van de notitie (en de binnenlijn, als die er is) krijgt de wisselende kleuren van een holografische kaart, die langzaam stromen."

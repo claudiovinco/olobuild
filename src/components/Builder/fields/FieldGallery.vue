@@ -128,6 +128,35 @@
               :placeholder="t('Link della foto (facoltativo)')"
               class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200 mb-placeholder-gray-500"
             />
+            <!-- La durata di un video («7:40»): i file della libreria la danno da soli, gli embed no. -->
+            <input
+              v-if="durataVoce && isVideo(img)"
+              type="text"
+              :value="img.durata || ''"
+              @input="updateRiga(idx, 'durata', $event.target.value)"
+              :placeholder="t('Durata (es. 7:40)')"
+              class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200 mb-placeholder-gray-500"
+            />
+            <!-- La nota (un prezzo, un anno, un codice) e l'etichetta scritta sulla foto: affiancate, sono corte. -->
+            <div v-if="notaVoce" class="mb-grid mb-grid-cols-2 mb-gap-1">
+              <input
+                type="text"
+                :value="img.nota || ''"
+                @input="updateRiga(idx, 'nota', $event.target.value)"
+                :placeholder="t('Nota (prezzo, anno…)')"
+                :aria-label="t('Nota')"
+                class="mb-w-full mb-min-w-0 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200 mb-placeholder-gray-500"
+              />
+              <input
+                v-if="!isTesto(img)"
+                type="text"
+                :value="img.etichetta || ''"
+                @input="updateRiga(idx, 'etichetta', $event.target.value)"
+                :placeholder="t('Etichetta sulla foto')"
+                :aria-label="t('Etichetta sulla foto')"
+                class="mb-w-full mb-min-w-0 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200 mb-placeholder-gray-500"
+              />
+            </div>
             <!-- La misura della foto nello schema Metro: quante colonne e righe occupa. -->
             <select
               v-if="misuraVoce"
@@ -418,6 +447,10 @@ const props = defineProps({
   misuraVoce: { type: Boolean, default: false },
   /** Accende «Card di testo»: voci senza foto, coi testi su un fondo colorato (Pro Gallery). */
   cardTesto: { type: Boolean, default: false },
+  /** Accende la durata dei video («7:40», Pro Gallery): per YouTube e Vimeo, che non la dicono da soli. */
+  durataVoce: { type: Boolean, default: false },
+  /** Accende la nota e l'etichetta sulla foto di ogni voce (Pro Gallery). */
+  notaVoce: { type: Boolean, default: false },
   /*
    * L'inquadratura per singola foto.
    *

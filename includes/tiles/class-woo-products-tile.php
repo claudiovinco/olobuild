@@ -45,6 +45,11 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
         'mostra_scorta'   => false,
         'mostra_risparmio' => false,
         'marca_attributo' => '',
+        // Le card dei negozi di Essential Grid (23 nov 2026): spente nei default, le griglie restano com'erano
+        'categoria_mostra' => '',
+        'pallini_sotto'   => false,
+        'immagine_sfuma'  => false,
+        'foto_staccata'   => false,
         'consegna_testo'  => '',
         'testo_evidenza'  => '',
         'titolo_righe'    => 0,
@@ -172,6 +177,9 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
         $evidenza     = trim( (string) ( $s['testo_evidenza'] ?? '' ) );
         $risparmio    = ! empty( $s['mostra_risparmio'] );
         $righe        = max( 0, min( 4, absint( $s['titolo_righe'] ?? 0 ) ) );
+        // La categoria del prodotto sopra il nome o in un'etichetta sulla foto; i pallini in una riga loro
+        $cat_mostra   = in_array( $s['categoria_mostra'] ?? '', [ 'sopra', 'foto' ], true ) ? $s['categoria_mostra'] : '';
+        $pall_sotto   = ! empty( $s['pallini_sotto'] );
 
         // WP_Query args
         $query_args = [
@@ -570,6 +578,48 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
                 outline-offset: 2px;
             }
             <?php endif; ?>
+            .<?php echo $uid; ?> .olo-woo-card-cat {
+                margin: 0 0 .3rem;
+                font-family: var(--olo-font-family-mono, ui-monospace, 'SF Mono', Menlo, Consolas, monospace);
+                font-size: 10px;
+                letter-spacing: .12em;
+                text-transform: uppercase;
+                color: var(--olo-color-text-muted, #6B7280);
+            }
+            .<?php echo $uid; ?> .olo-woo-card-catfoto {
+                padding: .5em .7em;
+                border: 1px solid color-mix(in srgb, var(--olo-color-text, #222) 14%, transparent);
+                border-radius: .2rem;
+                background: color-mix(in srgb, var(--olo-color-background, #fff) 94%, transparent);
+                color: var(--olo-color-text, #222);
+                font-family: var(--olo-font-family-mono, ui-monospace, 'SF Mono', Menlo, Consolas, monospace);
+                font-size: 9px;
+                letter-spacing: .12em;
+                line-height: 1;
+                text-transform: uppercase;
+            }
+            <?php if ( ! empty( $s['immagine_sfuma'] ) ) : // La foto che sfuma in basso nel fondo della card (i ritagli dei capi) ?>
+            .<?php echo $uid; ?> .olo-woo-card-img img {
+                -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent);
+                mask-image: linear-gradient(to bottom, #000 72%, transparent);
+            }
+            <?php endif; ?>
+            <?php if ( ! empty( $s['foto_staccata'] ) ) : // La foto a sé, con gli angoli suoi; nome e prezzo sotto, sulla pagina ?>
+            .<?php echo $uid; ?> .olo-woo-card {
+                background: transparent;
+                border-radius: 0;
+                overflow: visible;
+                box-shadow: none;
+            }
+            .<?php echo $uid; ?> .olo-woo-card-img {
+                border-radius: <?php echo $card_radius; ?>;
+                background: <?php echo $card_bg; ?>;
+            }
+            .<?php echo $uid; ?> .olo-woo-card-body {
+                padding-left: .125rem;
+                padding-right: .125rem;
+            }
+            <?php endif; ?>
             .<?php echo $uid; ?> .olo-woo-card-marca {
                 margin: 0 0 .25rem;
                 font-size: 12px;
@@ -739,6 +789,7 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
             $on_sale    = $product->is_on_sale();
             $avg_rating = $product->get_average_rating();
             $thumb_id   = get_post_thumbnail_id();
+            $cat_nomi   = '' !== $cat_mostra ? array_slice( (array) wc_get_product_terms( $product->get_id(), 'product_cat', [ 'fields' => 'names' ] ), 0, 2 ) : [];
         ?>
             <div class="olo-woo-card" data-product-id="<?php echo esc_attr( $product->get_id() ); ?>"<?php echo $qv_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributo fisso ?>>
                 <?php if ( ! empty( $s['show_image'] ) ) : ?>
@@ -762,6 +813,9 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
                     <?php endif; ?>
                     <?php
                     $bolli = '';
+                    if ( 'foto' === $cat_mostra && $cat_nomi ) {
+                        $bolli .= '<div class="olo-woo-card-catfoto">' . esc_html( implode( ' · ', $cat_nomi ) ) . '</div>';
+                    }
                     if ( ! empty( $s['show_badge'] ) ) {
                         if ( $on_sale ) {
                             $regular = (float) $product->get_regular_price();
@@ -797,6 +851,11 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
                         }
                     }
                     ?>
+                    <?php
+                    if ( 'sopra' === $cat_mostra && $cat_nomi ) {
+                        echo '<p class="olo-woo-card-cat">' . esc_html( implode( ' · ', $cat_nomi ) ) . '</p>';
+                    }
+                    ?>
                     <?php if ( ! empty( $s['show_title'] ) ) : ?>
                     <div class="olo-woo-card-title">
                         <a href="<?php echo esc_url( $permalink ); ?>"><?php echo esc_html( $title ); ?></a>
@@ -827,13 +886,13 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
                     <?php endif; ?>
                     <?php if ( ! empty( $s['show_price'] ) ) : ?>
                     <?php if ( ! empty( $s['pallini'] ) ) { $pallini_html = $this->pallini_html( $product ); } ?>
-                    <?php if ( ! empty( $pallini_html ) ) : // I pallini sulla riga del prezzo, a destra: la card non si allunga e i pulsanti restano allineati. ?>
+                    <?php if ( ! empty( $pallini_html ) ? ! $pall_sotto : false ) : // I pallini sulla riga del prezzo, a destra: la card non si allunga e i pulsanti restano allineati. ?>
                     <div class="olo-woo-prezzo-riga">
                     <?php endif; ?>
                     <div class="olo-woo-card-price"><?php echo $price_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WooCommerce price HTML from WC_Product::get_price_html(), escaped by WooCommerce core ?></div>
                     <?php
                     if ( ! empty( $pallini_html ) ) {
-                        echo $pallini_html . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- pallini_html() escapa ogni attributo.
+                        echo $pallini_html . ( $pall_sotto ? '' : '</div>' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- pallini_html() escapa ogni attributo.
                     }
                     $pallini_html = '';
                     ?>

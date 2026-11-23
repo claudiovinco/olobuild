@@ -56890,3 +56890,429 @@ msgstr "Colonnes petits téléphones"
 
 msgid "Sotto i 480 px; vuoto = come le colonne mobile."
 msgstr "En dessous de 480 px ; vide = comme les colonnes mobiles."
+
+#: licenza-1.4.1345
+msgid "Mostra la durata dei video"
+msgstr "Afficher la durée des vidéos"
+
+msgid "Accanto alla categoria, per esempio «7:40». Per i video caricati nella libreria la durata si legge da sola; per YouTube e Vimeo aggiunti a mano si scrive nel campo «Durata» del video in «Media»."
+msgstr "À côté de la catégorie, par exemple « 7:40 ». Pour les vidéos de la médiathèque, la durée se lit toute seule ; pour YouTube et Vimeo ajoutés à la main, écrivez-la dans le champ « Durée » de la vidéo dans « Médias »."
+
+msgid "Il numero in alto a sinistra, grande, nel carattere dei titoli; sotto, categoria e durata. Come nelle pareti di video."
+msgstr "Le numéro en haut à gauche, grand, dans la police des titres ; dessous, catégorie et durée. Comme dans les murs de vidéos."
+
+msgid "Durata (es. 7:40)"
+msgstr "Durée (ex. 7:40)"
+
+#: licenza-1.4.1345
+msgid "Ogni parte della card può andare in una delle nove zone: in alto, al centro o in basso, a sinistra, al centro o a destra. Coi testi sotto la foto le zone sono le righe dei testi (per esempio il tempo di lettura in basso a destra, accanto alla firma). «Come lo schema» la lascia dov’è."
+msgstr "Chaque partie de la carte peut aller dans l’une des neuf zones : en haut, au centre ou en bas, à gauche, au centre ou à droite. Avec les textes sous la photo, les zones sont les lignes de texte (par exemple le temps de lecture en bas à droite, à côté de la signature). « Comme le schéma » la laisse où elle est."
+
+#: licenza-1.4.1345
+msgid "Stile del numero"
+msgstr "Style du numéro"
+
+msgid "Etichetta piena"
+msgstr "Étiquette pleine"
+
+msgid "Stile della categoria"
+msgstr "Style de la catégorie"
+
+msgid "L’etichetta piena prende il colore della voce (Colore delle voci) o, se manca, quello di categoria e numero: ogni categoria può avere il suo."
+msgstr "L’étiquette pleine prend la couleur de l’élément (Couleur des éléments) ou, à défaut, celle de catégorie et numéro : chaque catégorie peut avoir la sienne."
+
+msgid "Colore del sottotitolo"
+msgstr "Couleur du sous-titre"
+
+msgid "Sottotitolo in maiuscolo piccolo"
+msgstr "Sous-titre en petites majuscules"
+
+#: licenza-1.4.1345
+msgid "«Sotto la foto» vale per Griglia, Masonry e Nastro, «Accanto alla foto» per Griglia e Masonry; negli altri schemi i testi vanno sulla foto. Nel biglietto il testo della foto diventa la scritta grande (per esempio «20 mag sab»): accendi «Mostra il testo»."
+msgstr "« Sous la photo » vaut pour Grille, Masonry et Bande, « À côté de la photo » pour Grille et Masonry ; dans les autres schémas, les textes vont sur la photo. Dans le billet, le texte de la photo devient la grande inscription (par exemple « 20 mai sam ») : activez « Afficher le texte »."
+
+msgid "Colore e segno delle voci"
+msgstr "Couleur et marque des éléments"
+
+msgid "Un colore per ogni foto o card: tinge la cornice, la categoria, il numero, il pulsante, il biglietto, il fondo delle card di testo e il segno a matita. Vuoto = il colore della galleria. Il segno a matita cerchia una foto, come sul provino di un fotografo."
+msgstr "Une couleur pour chaque photo ou carte : elle teinte le cadre, la catégorie, le numéro, le bouton, le billet, le fond des cartes de texte et la marque au crayon. Vide = la couleur de la galerie. La marque au crayon entoure une photo, comme sur la planche-contact d’un photographe."
+
+msgid "Segno a matita"
+msgstr "Marque au crayon"
+
+msgid "Riquadro a matita"
+msgstr "Cadre au crayon"
+
+msgid "Cerchio a matita"
+msgstr "Cercle au crayon"
+
+#: licenza-1.4.1345
+msgid "Nota (prezzo, anno…)"
+msgstr "Note (prix, année…)"
+
+msgid "Etichetta sulla foto"
+msgstr "Étiquette sur la photo"
+
+msgid "Nel piede, a sinistra"
+msgstr "Dans le pied, à gauche"
+
+msgid "Nel piede, a destra"
+msgstr "Dans le pied, à droite"
+
+msgid "Sulla foto, in alto a sinistra"
+msgstr "Sur la photo, en haut à gauche"
+
+msgid "Sulla foto, in alto a destra"
+msgstr "Sur la photo, en haut à droite"
+
+msgid "Sulla foto, in basso a sinistra"
+msgstr "Sur la photo, en bas à gauche"
+
+msgid "Sulla foto, in basso a destra"
+msgstr "Sur la photo, en bas à droite"
+
+msgid "Davanti al titolo"
+msgstr "Avant le titre"
+
+msgid "Dopo il titolo, nella stessa riga"
+msgstr "Après le titre, sur la même ligne"
+
+msgid "Play"
+msgstr "Lecture"
+
+msgid "Freccia a destra"
+msgstr "Flèche vers la droite"
+
+msgid "«%d» diventa il numero delle foto: «Cerca fra %d risorse»."
+msgstr "« %d » devient le nombre de photos : « Rechercher parmi %d ressources »."
+
+msgid "Barretta di avanzamento"
+msgstr "Barre de progression"
+
+msgid "Sotto il nastro una barretta corta che dice a che punto si è."
+msgstr "Sous la bande, une courte barre qui indique où l’on en est."
+
+msgid "Filo interno"
+msgstr "Filet intérieur"
+
+msgid "Bordo pieno"
+msgstr "Bordure pleine"
+
+msgid "Con un colore per ogni voce (Colore e segno delle voci) filo, bordo e pellicola prendono quello della voce."
+msgstr "Avec une couleur par élément (Couleur et marque des éléments), le filet, la bordure et la pellicule prennent celle de l’élément."
+
+msgid "Scritte sul bordo"
+msgstr "Inscriptions sur le bord"
+
+msgid "Le scritte che la pellicola porta stampate sul bordo, come su un provino a contatto: «▸ 03» è il numero del fotogramma (la freccia lo indica), «03A» il mezzo fotogramma che segue, «R1» il rullino e «400» la sensibilità ISO della pellicola."
+msgstr "Les inscriptions imprimées sur le bord de la pellicule, comme sur une planche-contact : « ▸ 03 » est le numéro de la vue (la flèche l’indique), « 03A » la demi-vue qui suit, « R1 » le rouleau et « 400 » la sensibilité ISO."
+
+msgid "Rullino"
+msgstr "Rouleau"
+
+msgid "Sensibilità ISO"
+msgstr "Sensibilité ISO"
+
+msgid "Primo fotogramma"
+msgstr "Première vue"
+
+msgid "Ogni quanti fotogrammi"
+msgstr "Toutes les combien de vues"
+
+msgid "Sul provino il fotografo sceglie i fotogrammi migliori: con 3 e 4 i numeri vanno 03, 07, 11…"
+msgstr "Sur la planche-contact, le photographe choisit les meilleures vues : avec 3 et 4, les numéros vont 03, 07, 11…"
+
+msgid "Fondo nel colore della voce"
+msgstr "Fond dans la couleur de l’élément"
+
+msgid "La card prende il colore scelto per ogni voce (Colore e segno delle voci), e il testo si fa chiaro o scuro da sé: le card colorate di un negozio."
+msgstr "La carte prend la couleur choisie pour chaque élément (Couleur et marque des éléments), et le texte devient clair ou foncé de lui-même : les cartes colorées d’une boutique."
+
+msgid "Riquadro solo sulle foto grandi"
+msgstr "Encadré seulement sur les grandes photos"
+
+msgid "Il riquadro coi testi resta sulle foto grandi (almeno due colonne per due righe); sulle piccole i testi stanno sulla foto, senza sottotitolo e senza piede."
+msgstr "L’encadré des textes reste sur les grandes photos (au moins deux colonnes sur deux rangées) ; sur les petites, les textes sont sur la photo, sans sous-titre ni pied."
+
+msgid "Riquadro stretto"
+msgstr "Encadré étroit"
+
+msgid "Il riquadro largo quanto i suoi testi, in un angolo, invece che da un lato all’altro."
+msgstr "L’encadré aussi large que ses textes, dans un coin, au lieu d’aller d’un bord à l’autre."
+
+msgid "Colore del corsivo"
+msgstr "Couleur de l’italique"
+
+msgid "Nel titolo il pezzo fra due asterischi va in corsivo: «Vestiti per *la luce lunga*». Qui il suo colore; vuoto = come il titolo."
+msgstr "Dans le titre, le passage entre deux astérisques passe en italique : « Habillée pour *la lumière longue* ». Ici sa couleur ; vide = comme le titre."
+
+msgid "Titolo grande quanto la foto"
+msgstr "Titre aussi grand que la photo"
+
+msgid "Il titolo cresce con la foto: grande sulle foto grandi, piccolo sulle piccole (negli schemi a misure miste)."
+msgstr "Le titre grandit avec la photo : grand sur les grandes photos, petit sur les petites (dans les schémas à tailles mixtes)."
+
+msgid "Sottotitolo e testo"
+msgstr "Sous-titre et texte"
+
+msgid "Sottotitolo solo sulle foto grandi"
+msgstr "Sous-titre seulement sur les grandes photos"
+
+msgid "Pallino davanti al testo"
+msgstr "Pastille devant le texte"
+
+msgid "Un pallino nel colore della voce davanti al testo, come la luce di una lampada accanto alle sue misure."
+msgstr "Une pastille dans la couleur de l’élément devant le texte, comme la lumière d’une lampe à côté de ses mesures."
+
+msgid "Categoria e durata"
+msgstr "Catégorie et durée"
+
+msgid "Categoria, numero e durata"
+msgstr "Catégorie, numéro et durée"
+
+msgid "Etichetta chiara"
+msgstr "Étiquette claire"
+
+msgid "Etichetta scura"
+msgstr "Étiquette foncée"
+
+msgid "L’etichetta piena prende il colore della voce (Colore e segno delle voci) o, se manca, quello di categoria e numero: ogni categoria può avere il suo. Chiara e scura stanno bene sulle foto."
+msgstr "L’étiquette pleine prend la couleur de l’élément (Couleur et marque des éléments) ou, à défaut, celle de la catégorie et du numéro : chaque catégorie peut avoir la sienne. Claire et foncée vont bien sur les photos."
+
+msgid "Pallino davanti alla categoria"
+msgstr "Pastille devant la catégorie"
+
+msgid "Gruppo da mostrare"
+msgstr "Groupe à afficher"
+
+msgid "Con le categorie a gruppi («Tipo: Guida, Livello: Base») la card mostra solo quelle del gruppo scritto qui, per esempio «Tipo». Vuoto = tutte."
+msgstr "Avec des catégories en groupes (« Type : Guide, Niveau : Base »), la carte n’affiche que celles du groupe écrit ici, par exemple « Type ». Vide = toutes."
+
+msgid "Stile della durata"
+msgstr "Style de la durée"
+
+msgid "Etichetta col play"
+msgstr "Étiquette avec lecture"
+
+msgid "Fra le parti piccole che stanno nella stessa zona: «Interni · 2026», «Regia / 2026», e fra categoria e durata sotto il numero grande."
+msgstr "Entre les petites parties d’une même zone : « Intérieurs · 2026 », « Réalisation / 2026 », et entre catégorie et durée sous le grand numéro."
+
+msgid "Lettere o segni davanti e dietro al numero: «Q» dà «Q01», «(» e «)» danno «(01)», «No. » dà «No. 01»."
+msgstr "Lettres ou signes avant et après le numéro : « Q » donne « Q01 », « ( » et « ) » donnent « (01) », « N° » donne « N° 01 »."
+
+msgid "Conta all’indietro"
+msgstr "Compter à rebours"
+
+msgid "La prima voce ha il numero più alto: 016, 015, 014… come gli indici dei progetti, dal più recente."
+msgstr "Le premier élément a le numéro le plus élevé : 016, 015, 014… comme les index de projets, du plus récent."
+
+msgid "Icona del numero"
+msgstr "Icône du numéro"
+
+msgid "Numero e categoria in un riquadro"
+msgstr "Numéro et catégorie dans un cadre"
+
+msgid "Quando stanno nella stessa zona, numero e categoria vanno in un riquadro sottile, col numero pieno nel colore della voce."
+msgstr "Quand ils sont dans la même zone, numéro et catégorie vont dans un cadre fin, le numéro plein dans la couleur de l’élément."
+
+msgid "Stile della nota"
+msgstr "Style de la note"
+
+msgid "Grande (un prezzo)"
+msgstr "Grande (un prix)"
+
+msgid "Con la lineetta"
+msgstr "Avec un tiret"
+
+msgid "La nota di ogni voce (in Media): un prezzo, un anno, un codice. «Grande» fa grande la prima parola e piccolo il resto («€3.40 330 ml»)."
+msgstr "La note de chaque élément (dans Médias) : un prix, une année, un code. « Grande » met le premier mot en grand et le reste en petit (« 3,40 € 330 ml »)."
+
+msgid "Colore dell’etichetta"
+msgstr "Couleur de l’étiquette"
+
+msgid "Vuoto = il colore di ogni voce."
+msgstr "Vide = la couleur de chaque élément."
+
+msgid "Icona e pulsante"
+msgstr "Icône et bouton"
+
+msgid "Stile dell’icona"
+msgstr "Style de l’icône"
+
+msgid "Nel cerchio"
+msgstr "Dans un cercle"
+
+msgid "Nel cerchio pieno"
+msgstr "Dans un cercle plein"
+
+msgid "Sola"
+msgstr "Seule"
+
+msgid "Colore dell’icona"
+msgstr "Couleur de l’icône"
+
+msgid "A contorno"
+msgstr "En contour"
+
+msgid "Scritta sottolineata"
+msgstr "Texte souligné"
+
+msgid "Linee e colore"
+msgstr "Lignes et couleur"
+
+msgid "Linea sopra il piede"
+msgstr "Ligne au-dessus du pied"
+
+msgid "Una linea sottile sopra il piede della card (le parti messe «Nel piede»)."
+msgstr "Une ligne fine au-dessus du pied de la carte (les parties placées « Dans le pied »)."
+
+msgid "Linea sotto ogni card"
+msgstr "Ligne sous chaque carte"
+
+msgid "Barretta nel colore della voce"
+msgstr "Barrette dans la couleur de l’élément"
+
+msgid "Una barretta in fondo alla foto, nel colore scelto per ogni voce."
+msgstr "Une barrette en bas de la photo, dans la couleur choisie pour chaque élément."
+
+msgid "Quadratino del colore"
+msgstr "Carré de couleur"
+
+msgid "Un quadratino nel colore della voce in alto a destra, come il campione di un materiale."
+msgstr "Un petit carré dans la couleur de l’élément en haut à droite, comme un échantillon de matière."
+
+msgid "Posizione delle parti"
+msgstr "Position des parties"
+
+msgid "Ogni parte della card può andare in una delle nove zone, nel piede (una riga in fondo) o, coi testi sotto la foto, sulla foto. Le parti piccole possono stare anche davanti, dopo o sotto il titolo. «Come lo schema» la lascia dov’è."
+msgstr "Chaque partie de la carte peut aller dans l’une des neuf zones, dans le pied (une ligne en bas) ou, avec les textes sous la photo, sur la photo. Les petites parties peuvent aussi se placer avant, après ou sous le titre. « Comme le schéma » la laisse où elle est."
+
+msgid "Posizione della durata"
+msgstr "Position de la durée"
+
+msgid "Posizione della nota"
+msgstr "Position de la note"
+
+msgid "Posizione dell’etichetta"
+msgstr "Position de l’étiquette"
+
+msgid "Riquadro a pennarello"
+msgstr "Cadre au feutre"
+
+msgid "Icona della categoria"
+msgstr "Icône de la catégorie"
+
+msgid "Bordate"
+msgstr "Bordées"
+
+msgid "Caselle da spuntare"
+msgstr "Cases à cocher"
+
+msgid "Con le caselle si possono spuntare più valori insieme."
+msgstr "Avec les cases, on peut cocher plusieurs valeurs à la fois."
+
+msgid "Squadrata"
+msgstr "Carrée"
+
+msgid "Conteggi"
+msgstr "Comptes"
+
+msgid "In alto, piccoli"
+msgstr "En haut, petits"
+
+msgid "Accanto al nome"
+msgstr "À côté du nom"
+
+msgid "Accanto, col punto"
+msgstr "À côté, avec un point"
+
+msgid "Riga spessa sopra"
+msgstr "Ligne épaisse au-dessus"
+
+msgid "Pallino nel colore della categoria"
+msgstr "Pastille dans la couleur de la catégorie"
+
+msgid "Il colore è quello della prima voce della categoria (Colore e segno delle voci)."
+msgstr "La couleur est celle du premier élément de la catégorie (Couleur et marque des éléments)."
+
+msgid "Gruppi in una riga"
+msgstr "Groupes sur une ligne"
+
+msgid "Con più gruppi («Tipo: Guida, Livello: Base») tutti i gruppi stanno in una riga, col loro nome piccolo, e un solo «Tutti» davanti che li azzera."
+msgstr "Avec plusieurs groupes (« Type : Guide, Niveau : Base »), tous les groupes tiennent sur une ligne, avec leur petit nom, et un seul « Tous » devant qui les réinitialise."
+
+msgid "Testo dei filtri"
+msgstr "Texte des filtres"
+
+msgid "Testo del filtro attivo"
+msgstr "Texte du filtre actif"
+
+msgid "Vuoto = chiaro o scuro da sé, secondo il colore del filtro attivo."
+msgstr "Vide = clair ou foncé de lui-même, selon la couleur du filtre actif."
+
+msgid "Bordo dei filtri"
+msgstr "Bordure des filtres"
+
+msgid "Vuoto = una linea leggera nel colore del testo."
+msgstr "Vide = une ligne légère dans la couleur du texte."
+
+msgid "Posizione della ricerca"
+msgstr "Position de la recherche"
+
+msgid "Accanto ai filtri"
+msgstr "À côté des filtres"
+
+msgid "Sopra, larga, con la lente"
+msgstr "Au-dessus, large, avec la loupe"
+
+msgid "Linee fra le celle"
+msgstr "Lignes entre les cellules"
+
+msgid "Le celle si toccano e le divide una linea sottile, dentro un riquadro: le pareti di loghi."
+msgstr "Les cellules se touchent et une ligne fine les sépare, dans un cadre : les murs de logos."
+
+msgid "Sopra il nome"
+msgstr "Au-dessus du nom"
+
+msgid "Sulla foto, in un’etichetta"
+msgstr "Sur la photo, dans une étiquette"
+
+msgid "Le prime due categorie del prodotto («Felpe · Donna»), piccole, nel carattere a spaziatura fissa."
+msgstr "Les deux premières catégories du produit (« Sweats · Femme »), en petit, dans la police à chasse fixe."
+
+msgid "Foto a sé"
+msgstr "Photo à part"
+
+msgid "La foto ha il fondo e gli angoli della card; nome e prezzo stanno sotto, sulla pagina, senza riquadro."
+msgstr "La photo a le fond et les coins de la carte ; nom et prix sont dessous, sur la page, sans cadre."
+
+msgid "Foto che sfuma in basso"
+msgstr "Photo qui s’estompe en bas"
+
+msgid "Il fondo della foto sfuma nel fondo della card: bello coi capi fotografati su fondo chiaro."
+msgstr "Le bas de la photo se fond dans le fond de la carte : joli avec des vêtements photographiés sur fond clair."
+
+msgid "Pallini in una riga loro"
+msgstr "Pastilles sur leur propre ligne"
+
+msgid "I pallini dei colori sotto il prezzo invece che accanto."
+msgstr "Les pastilles de couleur sous le prix au lieu d’à côté."
+
+#: licenza-1.4.1345
+msgid "Metti in pausa il video"
+msgstr "Mettre la vidéo en pause"
+
+msgid "Riprendi il video"
+msgstr "Reprendre la vidéo"
+
+msgid "Pulsante di pausa"
+msgstr "Bouton de pause"
+
+msgid "Sui video che partono da soli un pulsante tondo in alto a sinistra per fermarli e farli ripartire. Con «riduci movimento» del sistema i video partono già fermi."
+msgstr "Sur les vidéos qui démarrent seules, un bouton rond en haut à gauche pour les arrêter et les relancer. Avec « réduire les animations » du système, les vidéos démarrent déjà en pause."
+
+msgid "Riflesso olografico"
+msgstr "Reflet holographique"
+
+msgid "L’etichetta della nota (e il filo interno, se c’è) prende i colori cangianti di una carta olografica, che scorrono piano."
+msgstr "L’étiquette de la note (et le filet intérieur, s’il y en a un) prend les couleurs changeantes d’une carte holographique, qui défilent lentement."
