@@ -4,7 +4,7 @@
     <div v-if="keyframe" class="mb-space-y-2">
       <!-- Tempo -->
       <div>
-        <label class="mps-label">{{ t('Tempo (ms)') }}</label>
+        <label class="mps-label">{{ t('Tempo') }}</label>
         <NumberScrubber
           theme="dark"
           :modelValue="keyframe.time"
@@ -21,7 +21,7 @@
 
       <!-- Easing -->
       <div>
-        <label class="mps-label">Easing</label>
+        <label class="mps-label">{{ t('Andamento') }}</label>
         <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="keyframe.easing || 'ease'" :options="EASING_GROUPS" @update:model-value="upKf('easing', $event)" />
       </div>
 
@@ -48,12 +48,12 @@
       <button
         @click="$emit('capture-from-canvas')"
         class="mb-w-full mb-mt-2 mb-px-2 mb-py-1 mb-bg-gray-700 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-600 mb-transition-colors mb-text-center"
-      >{{ t('Cattura posizione dal canvas') }}</button>
+      >{{ t('Prendi la posizione dalla tela') }}</button>
     </div>
 
     <!-- Nessun keyframe selezionato -->
     <div v-else class="mb-text-[10px] mb-text-gray-500 mb-italic mb-text-center mb-py-4">
-      {{ t('Seleziona un keyframe nella timeline') }}
+      {{ t('Seleziona un fotogramma chiave nella linea del tempo') }}
     </div>
   </div>
 </template>

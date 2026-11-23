@@ -7,7 +7,7 @@ import { oloxAccentFields, oloxTestiPaginaField } from './_oloxShared.js';
  */
 export default {
   type: 'oloxquiz',
-  name: t('OLOX — Quiz verifica'),
+  name: t('Quiz di verifica'),
   icon: 'dashicons-editor-help',
   category: 'marketing',
 

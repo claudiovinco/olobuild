@@ -2807,3 +2807,757 @@ msgstr "Útvonal"
 
 msgid "Percorso SVG (d=\"\")"
 msgstr "SVG-útvonal (d=\"\")"
+
+#: licenza-1.4.1345
+msgid "Tutto schermo"
+msgstr "Teljes képernyő"
+
+msgid "Durata di ogni slide (ms)"
+msgstr "Diák időtartama (ms)"
+
+msgid "Scivola sopra"
+msgstr "Ráúszás"
+
+msgid "Dissolvenza al nero"
+msgstr "Áttűnés feketén át"
+
+msgid "Ribaltamento orizzontale"
+msgstr "Vízszintes fordítás"
+
+msgid "Ribaltamento verticale"
+msgstr "Függőleges fordítás"
+
+msgid "Cubo orizzontale"
+msgstr "Vízszintes kocka"
+
+msgid "Cubo verticale"
+msgstr "Függőleges kocka"
+
+msgid "Spinta"
+msgstr "Tolás"
+
+msgid "Spinta verso destra"
+msgstr "Tolás jobbra"
+
+msgid "Spinta verso il basso"
+msgstr "Tolás lefelé"
+
+msgid "Pila"
+msgstr "Halom"
+
+msgid "Carta tagliata"
+msgstr "Papírkivágás"
+
+msgid "Zoom e dissolvenza"
+msgstr "Nagyítás és áttűnés"
+
+msgid "Rotazione della slide"
+msgstr "Dia elforgatása"
+
+msgid "Sipario 3D"
+msgstr "3D függöny"
+
+msgid "Scivola verso l’alto"
+msgstr "Csúszás felfelé"
+
+msgid "Scivola verso il basso"
+msgstr "Csúszás lefelé"
+
+msgid "Barra di avanzamento"
+msgstr "Folyamatjelző sáv"
+
+msgid "Navigazione con la tastiera"
+msgstr "Navigálás billentyűzettel"
+
+msgid "Scorrimento col dito"
+msgstr "Húzás ujjal"
+
+msgid "Rotella del mouse"
+msgstr "Egérgörgő"
+
+msgid "Miniature e schede"
+msgstr "Bélyegképek és fülek"
+
+msgid "Tipo di parallasse"
+msgstr "Parallaxis típusa"
+
+msgid "Modalità carosello"
+msgstr "Körhinta mód"
+
+msgid "Scorrimento della pagina"
+msgstr "Oldalgörgetés"
+
+msgid "Timeline a scorrimento"
+msgstr "Görgetéses idővonal"
+
+msgid "Distanza di scorrimento (px)"
+msgstr "Görgetési távolság (px)"
+
+msgid "Solo la freccia"
+msgstr "Csak a nyíl"
+
+msgid "Nel quadrato"
+msgstr "Négyzetben"
+
+msgid "Vuoto = bianco, per le foto scure. Sulle slide chiare scegli un colore scuro: frecce, contorni e punti lo prendono, e il fondo delle frecce «Solo la freccia» e «Nel quadrato» diventa chiaro da sé."
+msgstr "Üres = fehér, sötét fotókhoz. Világos diákon válassz sötét színt: a nyilak, körvonalak és pöttyök ezt veszik át, a „Csak a nyíl” és „Négyzetben” nyilak háttere pedig magától kivilágosodik."
+
+msgid "Miniature e schede — posizione"
+msgstr "Bélyegképek és fülek — helyzet"
+
+msgid "Posizione schede"
+msgstr "Fülek helyzete"
+
+msgid "Effetto allo scorrimento"
+msgstr "Görgetési effektus"
+
+msgid "Dissolvenza e sfocatura"
+msgstr "Áttűnés és elmosás"
+
+msgid "Intensità della parallasse"
+msgstr "Parallaxis erőssége"
+
+msgid "Larghezza slide (%)"
+msgstr "Dia szélessége (%)"
+
+msgid "Indirizzo dell’immagine"
+msgstr "A kép címe"
+
+msgid "Indirizzo del video"
+msgstr "A videó címe"
+
+msgid "Indirizzo dell’audio"
+msgstr "A hang címe"
+
+msgid "Azione al clic"
+msgstr "Művelet kattintásra"
+
+msgid "Nessun altro livello in questa slide"
+msgstr "Nincs más réteg ezen a dián"
+
+msgid "Azzera tutti"
+msgstr "Összes visszaállítása"
+
+msgid "Stile del carattere"
+msgstr "Betűstílus"
+
+msgid "Colore del tratto"
+msgstr "Vonal színe"
+
+msgid "Colore di riempimento"
+msgstr "Kitöltés színe"
+
+msgid "Colore di riempimento (al posto di quello del file)"
+msgstr "Kitöltés színe (a fájlé helyett)"
+
+msgid "Raggio (px)"
+msgstr "Sugár (px)"
+
+msgid "Animazione del testo"
+msgstr "Szöveganimáció"
+
+msgid "Anima lettere o parole"
+msgstr "Betűk vagy szavak animálása"
+
+msgid "Andata e ritorno"
+msgstr "Oda-vissza"
+
+msgid "Intensità (%)"
+msgstr "Erősség (%)"
+
+msgid "Parallasse attiva"
+msgstr "Parallaxis bekapcsolva"
+
+msgid "Velocità con lo scorrimento"
+msgstr "Sebesség görgetéskor"
+
+msgid "Usa la linea del tempo sotto la tela per aggiungere e spostare i fotogrammi chiave."
+msgstr "A vászon alatti idővonalon adhatsz hozzá és mozgathatsz kulcskockákat."
+
+msgid "Dissolvenza dall’alto"
+msgstr "Áttűnés felülről"
+
+msgid "Dissolvenza da sinistra"
+msgstr "Áttűnés balról"
+
+msgid "Dissolvenza da destra"
+msgstr "Áttűnés jobbról"
+
+msgid "Scivola"
+msgstr "Csúszás"
+
+msgid "Scivola da sinistra"
+msgstr "Csúszás balról"
+
+msgid "Scivola da destra"
+msgstr "Csúszás jobbról"
+
+msgid "Scivola dal basso"
+msgstr "Csúszás alulról"
+
+msgid "Scivola dall’alto"
+msgstr "Csúszás felülről"
+
+msgid "Breve dall’alto"
+msgstr "Rövid csúszás felülről"
+
+msgid "Breve dal basso"
+msgstr "Rövid csúszás alulról"
+
+msgid "Breve da sinistra"
+msgstr "Rövid csúszás balról"
+
+msgid "Breve da destra"
+msgstr "Rövid csúszás jobbról"
+
+msgid "Morbida dal basso"
+msgstr "Lágy csúszás alulról"
+
+msgid "Morbida dall’alto"
+msgstr "Lágy csúszás felülről"
+
+msgid "Morbida da sinistra"
+msgstr "Lágy csúszás balról"
+
+msgid "Morbida da destra"
+msgstr "Lágy csúszás jobbról"
+
+msgid "Inclinata da sinistra"
+msgstr "Ferdén balról"
+
+msgid "Inclinata da destra"
+msgstr "Ferdén jobbról"
+
+msgid "Inclinata breve da sinistra"
+msgstr "Rövid ferdítés balról"
+
+msgid "Inclinata breve da destra"
+msgstr "Rövid ferdítés jobbról"
+
+msgid "Ribaltata 3D"
+msgstr "3D fordulás"
+
+msgid "Ribaltata dall’alto"
+msgstr "Fordulás felülről"
+
+msgid "Ribaltata dal basso"
+msgstr "Fordulás alulról"
+
+msgid "Ribaltata da sinistra"
+msgstr "Fordulás balról"
+
+msgid "Ribaltata da destra"
+msgstr "Fordulás jobbról"
+
+msgid "Ruota entrando"
+msgstr "Beforgás"
+
+msgid "Ruota dal basso"
+msgstr "Forgás alulról"
+
+msgid "Ruota in 3D"
+msgstr "Forgás 3D-ben"
+
+msgid "Ruota da sinistra"
+msgstr "Forgás balról"
+
+msgid "Ruota da destra"
+msgstr "Forgás jobbról"
+
+msgid "Zoom e rimbalzo"
+msgstr "Nagyítás és pattanás"
+
+msgid "Spunta morbida"
+msgstr "Lágy felbukkanás"
+
+msgid "Spunta e torna indietro"
+msgstr "Felbukkanás visszarugózással"
+
+msgid "Rimbalzo dal basso"
+msgstr "Pattanás alulról"
+
+msgid "Rimbalzo dall’alto"
+msgstr "Pattanás felülről"
+
+msgid "Si scopre da sinistra"
+msgstr "Feltárás balról"
+
+msgid "Si scopre da destra"
+msgstr "Feltárás jobbról"
+
+msgid "Si scopre dall’alto"
+msgstr "Feltárás felülről"
+
+msgid "Si scopre dal basso"
+msgstr "Feltárás alulról"
+
+msgid "Si scopre dal centro con zoom"
+msgstr "Feltárás középről nagyítással"
+
+msgid "Si scopre dal centro"
+msgstr "Feltárás középről"
+
+msgid "Dissolvenza verso l’alto"
+msgstr "Áttűnés felfelé"
+
+msgid "Dissolvenza verso il basso"
+msgstr "Áttűnés lefelé"
+
+msgid "Dissolvenza verso sinistra"
+msgstr "Áttűnés balra"
+
+msgid "Dissolvenza verso destra"
+msgstr "Áttűnés jobbra"
+
+msgid "Scivola verso sinistra"
+msgstr "Csúszás balra"
+
+msgid "Scivola verso destra"
+msgstr "Csúszás jobbra"
+
+msgid "Breve verso l’alto"
+msgstr "Rövid csúszás felfelé"
+
+msgid "Breve verso il basso"
+msgstr "Rövid csúszás lefelé"
+
+msgid "Breve verso sinistra"
+msgstr "Rövid csúszás balra"
+
+msgid "Breve verso destra"
+msgstr "Rövid csúszás jobbra"
+
+msgid "Morbida verso il basso"
+msgstr "Lágy csúszás lefelé"
+
+msgid "Morbida verso l’alto"
+msgstr "Lágy csúszás felfelé"
+
+msgid "Morbida verso sinistra"
+msgstr "Lágy csúszás balra"
+
+msgid "Morbida verso destra"
+msgstr "Lágy csúszás jobbra"
+
+msgid "Inclinata verso sinistra"
+msgstr "Ferdén balra"
+
+msgid "Inclinata verso destra"
+msgstr "Ferdén jobbra"
+
+msgid "Inclinata breve verso sinistra"
+msgstr "Rövid ferdítés balra"
+
+msgid "Inclinata breve verso destra"
+msgstr "Rövid ferdítés jobbra"
+
+msgid "Ribaltata verso l’alto"
+msgstr "Fordulás felfelé"
+
+msgid "Ribaltata verso il basso"
+msgstr "Fordulás lefelé"
+
+msgid "Ribaltata verso sinistra"
+msgstr "Fordulás balra"
+
+msgid "Ribaltata verso destra"
+msgstr "Fordulás jobbra"
+
+msgid "Ruota uscendo"
+msgstr "Kiforgás"
+
+msgid "Ruota verso il basso"
+msgstr "Forgás lefelé"
+
+msgid "Ruota verso sinistra"
+msgstr "Forgás balra"
+
+msgid "Ruota verso destra"
+msgstr "Forgás jobbra"
+
+msgid "Si rimpicciolisce"
+msgstr "Összezsugorodik"
+
+msgid "Sparisce morbida"
+msgstr "Lágy eltűnés"
+
+msgid "Si gonfia e sparisce"
+msgstr "Felfúvódik és eltűnik"
+
+msgid "Rimbalzo verso l’alto"
+msgstr "Pattanás felfelé"
+
+msgid "Rimbalzo verso il basso"
+msgstr "Pattanás lefelé"
+
+msgid "Si copre verso sinistra"
+msgstr "Eltakarás balra"
+
+msgid "Si copre verso destra"
+msgstr "Eltakarás jobbra"
+
+msgid "Si copre verso l’alto"
+msgstr "Eltakarás felfelé"
+
+msgid "Si copre verso il basso"
+msgstr "Eltakarás lefelé"
+
+msgid "Si chiude al centro con zoom"
+msgstr "Bezárulás középre nagyítással"
+
+msgid "Si chiude al centro"
+msgstr "Bezárulás középre"
+
+msgid "Pendolo basso"
+msgstr "Alsó inga"
+
+msgid "Pendolo alto"
+msgstr "Felső inga"
+
+msgid "Pendolo a sinistra"
+msgstr "Inga balra"
+
+msgid "Pendolo a destra"
+msgstr "Inga jobbra"
+
+msgid "Onda piccola a sinistra"
+msgstr "Kis hullám balra"
+
+msgid "Onda piccola a destra"
+msgstr "Kis hullám jobbra"
+
+msgid "Onda grande a sinistra"
+msgstr "Nagy hullám balra"
+
+msgid "Onda grande a destra"
+msgstr "Nagy hullám jobbra"
+
+msgid "Vibrazione verticale"
+msgstr "Függőleges rezgés"
+
+msgid "Vibrazione orizzontale"
+msgstr "Vízszintes rezgés"
+
+msgid "Vibrazione 3D"
+msgstr "3D rezgés"
+
+msgid "Vibrazione scatenata"
+msgstr "Vad rezgés"
+
+msgid "Gira in senso orario"
+msgstr "Az óramutató járásával forog"
+
+msgid "Gira in senso antiorario"
+msgstr "Az óramutatóval ellentétesen forog"
+
+msgid "Lampeggio"
+msgstr "Villogás"
+
+msgid "Scivola avanti e indietro"
+msgstr "Ide-oda csúszik"
+
+msgid "Vento (piega dal basso)"
+msgstr "Szél (alulról hajlik)"
+
+msgid "Fluttua piano"
+msgstr "Lágyan lebeg"
+
+msgid "Slide successiva"
+msgstr "Következő dia"
+
+msgid "Slide precedente"
+msgstr "Előző dia"
+
+msgid "Vai alla slide…"
+msgstr "Ugrás diára…"
+
+msgid "Apri un indirizzo"
+msgstr "Cím megnyitása"
+
+msgid "Scorri sotto lo slider"
+msgstr "Görgetés a slider alá"
+
+msgid "Iniziali maiuscole"
+msgstr "Nagy kezdőbetűk"
+
+msgid "Sopralineato"
+msgstr "Felülvonás"
+
+msgid "In alto a sinistra"
+msgstr "Bal fent"
+
+msgid "In alto a destra"
+msgstr "Jobb fent"
+
+msgid "In basso a sinistra"
+msgstr "Bal lent"
+
+msgid "In basso a destra"
+msgstr "Jobb lent"
+
+msgid "Blocco da destra"
+msgstr "Blokk jobbról"
+
+msgid "Blocco da sinistra"
+msgstr "Blokk balról"
+
+msgid "Blocco dall’alto"
+msgstr "Blokk felülről"
+
+msgid "Blocco dal basso"
+msgstr "Blokk alulról"
+
+msgid "Manina"
+msgstr "Mutató kéz"
+
+msgid "Sposta"
+msgstr "Mozgatás"
+
+msgid "Mano aperta"
+msgstr "Nyitott kéz"
+
+msgid "Parole"
+msgstr "Szavak"
+
+msgid "Centro → Bordi"
+msgstr "Közép → Szélek"
+
+msgid "Bordi → Centro"
+msgstr "Szélek → Közép"
+
+msgid "Nessun cambio"
+msgstr "Nincs változás"
+
+msgid "Sipario orizzontale"
+msgstr "Vízszintes függöny"
+
+msgid "Sipario verticale"
+msgstr "Függőleges függöny"
+
+msgid "Si avvicina"
+msgstr "Közelít"
+
+msgid "Si allontana"
+msgstr "Távolodik"
+
+msgid "Scorre a sinistra"
+msgstr "Balra úszik"
+
+msgid "Scorre a destra"
+msgstr "Jobbra úszik"
+
+msgid "Scorre in alto"
+msgstr "Felfelé úszik"
+
+msgid "Scorre in basso"
+msgstr "Lefelé úszik"
+
+msgid "Mouse e scorrimento"
+msgstr "Egér és görgetés"
+
+msgid "Sfocatura all’inizio"
+msgstr "Elmosás az elején"
+
+msgid "Sfocatura alla fine"
+msgstr "Elmosás a végén"
+
+msgid "Notebook"
+msgstr "Notebook"
+
+msgid "Valori propri per"
+msgstr "Saját értékek:"
+
+msgid "Ha valori propri su qualche schermo"
+msgstr "Egyes képernyőkön saját értékei vannak"
+
+msgid "Nessuna icona tua: carica un file SVG."
+msgstr "Még nincs saját ikonod: tölts fel egy SVG-fájlt."
+
+msgid "Prendi la posizione dalla tela"
+msgstr "Helyzet átvétele a vászonról"
+
+msgid "Seleziona un fotogramma chiave nella linea del tempo"
+msgstr "Válassz egy kulcskockát az idővonalon"
+
+msgid "Fotogramma chiave precedente"
+msgstr "Előző kulcskocka"
+
+msgid "Fotogramma chiave successivo"
+msgstr "Következő kulcskocka"
+
+msgid "L’uscita aspetta la fine della slide"
+msgstr "A kilépés megvárja a dia végét"
+
+msgid "Aggiungi un fotogramma chiave a questo punto"
+msgstr "Kulcskocka hozzáadása ezen a ponton"
+
+msgid "Seleziona un livello con la linea del tempo"
+msgstr "Válassz egy idővonalas réteget"
+
+msgid "Riduci la linea del tempo"
+msgstr "Idővonal kicsinyítése"
+
+msgid "Ingrandisci la linea del tempo"
+msgstr "Idővonal nagyítása"
+
+msgid "La linea del tempo ("
+msgstr "Az idővonal ("
+
+msgid "Porta tutti i livelli alla durata più lunga"
+msgstr "Minden réteg a leghosszabb időtartamra"
+
+msgid "Resta visibile fino alla fine della slide"
+msgstr "A dia végéig látható marad"
+
+msgid "Duplica il fotogramma chiave"
+msgstr "Kulcskocka megkettőzése"
+
+msgid "Elimina il fotogramma chiave"
+msgstr "Kulcskocka törlése"
+
+msgid "Semplici"
+msgstr "Egyszerű"
+
+msgid "Accelera"
+msgstr "Gyorsul"
+
+msgid "Rallenta"
+msgstr "Lassul"
+
+msgid "Accelera e rallenta"
+msgstr "Gyorsul és lassul"
+
+msgid "Lo slider resta fermo in cima alla finestra mentre la pagina scorre per la distanza scelta: in quel tratto lo scorrimento fa avanzare le slide e muove i livelli che hanno il «Movimento con lo scorrimento» (Animazione nell’editor dello slider). Finito il tratto, la pagina riprende a scorrere."
+msgstr "A slider az ablak tetején marad, amíg az oldal a választott távolságot görgeti: ezen a szakaszon a görgetés lépteti a diákat, és mozgatja a „Mozgás görgetéskor” beállítású rétegeket (Animáció a slider szerkesztőjében). Utána az oldal újra görgethető."
+
+#: licenza-1.4.1345
+msgid "Durata di ogni slide"
+msgstr "Diák időtartama"
+
+msgid "Distanza di scorrimento"
+msgstr "Görgetési távolság"
+
+msgid "Larghezza slide"
+msgstr "Dia szélessége"
+
+#: licenza-1.4.1345
+msgid "Aspetta la fine"
+msgstr "Vár a végéig"
+
+msgid "Altezza rispetto alla finestra"
+msgstr "Magasság az ablakhoz képest"
+
+#: licenza-1.4.1345
+msgid "Inverti"
+msgstr "Invertálás"
+
+msgid "Cambia al passaggio del mouse"
+msgstr "Változik, ha fölé viszed az egeret"
+
+msgid "Morbido, frena alla fine (predefinito)"
+msgstr "Lágy, a végén lassul (alapértelmezett)"
+
+msgid "Tempo"
+msgstr "Idő"
+
+#: licenza-1.4.1345
+msgid "0° = lavagna dritta; con i gradi negativi gira in senso antiorario, con i positivi in senso orario. Con la parallasse accesa, scorrendo la pagina oscilla appena attorno a questo angolo."
+msgstr "0° = egyenes tábla; negatív fokkal az óramutatóval ellentétesen fordul, pozitívval az óramutató járásával. Bekapcsolt parallaxisnál görgetéskor enyhén leng e szög körül."
+
+#: licenza-1.4.1345
+msgid "Scena minigioco"
+msgstr "Minijáték-jelenet"
+
+msgid "Quiz di verifica"
+msgstr "Ellenőrző kvíz"
+
+#: licenza-1.4.1345
+msgid "Testi sulle foto"
+msgstr "Szövegek a fotókon"
+
+msgid "Solo la didascalia al passaggio"
+msgstr "Csak a képaláírás rámutatáskor"
+
+msgid "Sulla foto"
+msgstr "A fotón"
+
+msgid "«Sotto la foto» vale per gli schemi Griglia e Masonry; negli altri i testi vanno sulla foto."
+msgstr "A „Fotó alatt” a Rács és a Masonry elrendezésnél működik; a többinél a szöveg a fotóra kerül."
+
+msgid "Quando si vedono"
+msgstr "Mikor látszanak"
+
+msgid "Mostra il titolo"
+msgstr "Cím megjelenítése"
+
+msgid "Mostra il sottotitolo"
+msgstr "Alcím megjelenítése"
+
+msgid "Mostra il testo"
+msgstr "Szöveg megjelenítése"
+
+msgid "Mostra la miniatura"
+msgstr "Bélyegkép megjelenítése"
+
+msgid "Sopra la galleria un pulsante per ogni categoria e «Tutti»: cliccando, restano le foto di quella categoria e la galleria si riordina. La categoria si scrive sotto ogni foto in «Media»; più categorie si separano con la virgola."
+msgstr "A galéria fölött minden kategóriának egy gomb és „Összes”: kattintásra az adott kategória fotói maradnak, és a galéria átrendeződik. A kategóriát a „Média” részben minden fotó alá írd; több kategóriát vesszővel válassz el."
+
+msgid "Testo di «Tutti»"
+msgstr "Az „Összes” szövege"
+
+msgid "Mostra quante foto"
+msgstr "Fotók számának megjelenítése"
+
+msgid "Colore di categoria e numero"
+msgstr "Kategória és szám színe"
+
+msgid "Velo sotto i testi"
+msgstr "Fátyol a szöveg alatt"
+
+msgid "Sfondo dei testi"
+msgstr "Szövegek háttere"
+
+msgid "Padding testi"
+msgstr "Szövegek belső margója"
+
+msgid "Stile dei filtri"
+msgstr "Szűrők stílusa"
+
+msgid "Colore del filtro attivo"
+msgstr "Aktív szűrő színe"
+
+msgid "Elenco a righe"
+msgstr "Soros lista"
+
+msgid "Link della foto (facoltativo)"
+msgstr "A fotó linkje (nem kötelező)"
+
+msgid "Misura della foto"
+msgstr "A fotó mérete"
+
+msgid "Misura automatica"
+msgstr "Automatikus méret"
+
+msgid "Piccola (1 × 1)"
+msgstr "Kicsi (1 × 1)"
+
+msgid "Larga (2 × 1)"
+msgstr "Széles (2 × 1)"
+
+msgid "Alta (1 × 2)"
+msgstr "Magas (1 × 2)"
+
+msgid "Grande (2 × 2)"
+msgstr "Nagy (2 × 2)"
+
+msgid "Molto larga (3 × 2)"
+msgstr "Nagyon széles (3 × 2)"
+
+msgid "Molto alta (2 × 3)"
+msgstr "Nagyon magas (2 × 3)"
+
+msgid "Filtra per categoria"
+msgstr "Szűrés kategória szerint"
+
+msgid "Ritardo fra le foto"
+msgstr "Késleltetés a fotók között"

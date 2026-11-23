@@ -3,6 +3,18 @@ import { ratioOptions } from './_imageFrame.js';
 import { demoObj } from '../demoMedia.js';
 import { t } from '@/i18n';
 
+// Gli schemi che reggono i testi sulle foto e i filtri: quelli a griglia o a righe, dove ogni foto è un
+// riquadro nel flusso della pagina. Nastri, coverflow e schemi a posizioni libere (sparso, deriva, cascata,
+// esagoni, puzzle) no: i testi finirebbero tagliati e il riordino non avrebbe dove andare.
+const SCHEMI_SCHEDE = ['grid', 'justified', 'masonry', 'metro', 'mosaic', 'collage', 'diagonal', 'expand', 'elenco'];
+const SCHEMI_FILTRI = ['grid', 'justified', 'masonry', 'metro', 'mosaic', 'collage', 'diagonal', 'elenco'];
+const schema = (s) => s.layout || 'grid';
+const conSchede = (s) => SCHEMI_SCHEDE.includes(schema(s));
+const filtrabile = (s) => SCHEMI_FILTRI.includes(schema(s));
+const schedaAccesa = (s) => conSchede(s) && (!!s.scheda || schema(s) === 'elenco');
+// «Sotto la foto» c'è solo in Griglia e Masonry: negli altri schemi i testi vanno sulla foto.
+const schedaSopra = (s) => s.scheda === 'sopra' || (s.scheda === 'sotto' && !['grid', 'masonry'].includes(schema(s)));
+
 /**
  * Tile Pro Gallery — split CONTENUTO/STILE (regola universale Olobuild).
  *   fields[]      → media items (gallery), preview video, layout schema/family,
@@ -116,6 +128,32 @@ export default {
     lightbox_thumbs: 'none',
     lightbox_thumbs_rows: '1',
     show_caption: false,
+    // Testi sulle foto (schede, 23 nov 2026): '' = come prima, solo la didascalia al passaggio
+    scheda: '',
+    scheda_quando: 'sempre',
+    scheda_categoria: true,
+    scheda_numero: false,
+    scheda_titolo: true,
+    scheda_sottotitolo: true,
+    scheda_testo: false,
+    scheda_icona: 'piu',
+    scheda_titolo_size: '',
+    scheda_colore: '',
+    scheda_font: '',
+    scheda_peso: '',
+    scheda_accento: '',
+    scheda_velo: 55,
+    scheda_sfondo: '',
+    scheda_padding: 18,
+    // Elenco a righe
+    elenco_miniatura: true,
+    // Filtri per categoria
+    filtri: false,
+    filtri_tutti: '',
+    filtri_conteggi: true,
+    filtri_stile: 'pillole',
+    filtri_allinea: 'left',
+    filtri_colore: '',
     // "+N" overlay
     more_bg: 'rgba(0,0,0,0.55)',
     more_color: '',
@@ -166,6 +204,7 @@ export default {
     // quale valore partire: senza, il pad mostrerebbe un ritaglio che non e'
     // quello vero e la scelta si farebbe su un'immagine sbagliata.
     { key: 'images', label: t('Media'), type: 'gallery', righeExtra: true, puntoFocale: true,
+      categoria: true, linkVoce: true, misuraVoce: true,
       contextKeys: { fit: 'object_fit', pos: 'object_position' }, supportsDynamic: true,
       dynamicItemFields: [
         { key: 'url', label: t('Immagine'), type: 'image' },
@@ -215,6 +254,41 @@ export default {
     ], show: s => s.layout === 'strip_marquee' },
     { key: 'strip_arrows', label: t('Frecce navigazione'), type: 'toggle',
       show: s => s.layout && s.layout.startsWith('strip') && s.layout !== 'strip_coverflow' },
+
+    // ─── Testi sulle foto (schede) ───
+    // Titolo, sottotitolo e testo vengono dalle righe di ogni foto in «Media», la categoria dalla sua riga
+    // «Categoria», il numero dall'ordine. Sui nastri e sugli schemi a posizioni libere i testi non ci stanno.
+    { type: 'separator', label: t('Testi sulle foto'), show: s => conSchede(s) },
+    { key: 'scheda', label: t('Testi'), type: 'select', options: [
+      { value: '', label: t('Solo la didascalia al passaggio') },
+      { value: 'sopra', label: t('Sulla foto') },
+      { value: 'sotto', label: t('Sotto la foto') },
+    ], show: s => conSchede(s) && s.layout !== 'elenco',
+      description: t('«Sotto la foto» vale per gli schemi Griglia e Masonry; negli altri i testi vanno sulla foto.') },
+    { key: 'scheda_quando', label: t('Quando si vedono'), type: 'select', options: [
+      { value: 'sempre', label: t('Sempre') },
+      { value: 'passaggio', label: t('Al passaggio del mouse') },
+    ], show: s => conSchede(s) && s.layout !== 'elenco' && schedaSopra(s) },
+    { key: 'scheda_categoria', label: t('Mostra la categoria'), type: 'toggle', show: s => schedaAccesa(s) },
+    { key: 'scheda_numero', label: t('Mostra il numero'), type: 'toggle', show: s => schedaAccesa(s) },
+    { key: 'scheda_titolo', label: t('Mostra il titolo'), type: 'toggle', show: s => schedaAccesa(s) },
+    { key: 'scheda_sottotitolo', label: t('Mostra il sottotitolo'), type: 'toggle', show: s => schedaAccesa(s) },
+    { key: 'scheda_testo', label: t('Mostra il testo'), type: 'toggle', show: s => schedaAccesa(s) },
+    { key: 'scheda_icona', label: t('Icona'), type: 'select', options: [
+      { value: '', label: t('Nessuna') },
+      { value: 'piu', label: t('Più') },
+      { value: 'freccia', label: t('Freccia') },
+      { value: 'lente', label: t('Lente') },
+    ], show: s => schedaAccesa(s) && s.layout !== 'elenco' },
+    { key: 'elenco_miniatura', label: t('Mostra la miniatura'), type: 'toggle', show: s => s.layout === 'elenco' },
+
+    // ─── Filtri per categoria ───
+    { type: 'separator', label: t('Filtri'), show: s => filtrabile(s) },
+    { key: 'filtri', label: t('Filtri per categoria'), type: 'toggle', show: s => filtrabile(s),
+      description: t('Sopra la galleria un pulsante per ogni categoria e «Tutti»: cliccando, restano le foto di quella categoria e la galleria si riordina. La categoria si scrive sotto ogni foto in «Media»; più categorie si separano con la virgola.') },
+    { key: 'filtri_tutti', label: t('Testo di «Tutti»'), type: 'text', placeholder: t('Tutti'),
+      show: s => filtrabile(s) && !!s.filtri },
+    { key: 'filtri_conteggi', label: t('Mostra quante foto'), type: 'toggle', show: s => filtrabile(s) && !!s.filtri },
 
     // ─── Lightbox (comportamento) ───
     { type: 'separator', label: t('Lightbox') },
@@ -280,7 +354,7 @@ export default {
     // galleria salvata prima di questo sprint la chiave non ce l'ha proprio — il caso
     // «chiave assente» deve cadere dalla parte del campo VISIBILE.
     { key: 'img_height', label: t('Altezza immagine'), type: 'unit', units: ['px', 'vh'], min: 0,
-      show: s => !(s.layout && s.layout.startsWith('strip'))
+      show: s => !(s.layout && s.layout.startsWith('strip')) && s.layout !== 'elenco'
         && !(['grid', 'diagonal'].includes(s.layout || 'grid') && (s.aspect_ratio || 'auto') !== 'auto') },
     // Proporzioni: il pezzo di cornice che mancava (adattamento e punto focale c'erano
     // già). Visibile solo su Griglia e Diagonale, gli unici schemi in cui l'item e' un
@@ -407,7 +481,7 @@ export default {
       { value: 'zoom-center', label: t('Zoom dal centro') },
       { value: 'land', label: t('Atterraggio 3D') },
     ]},
-    { key: 'entrance_stagger', label: t('Stagger'), type: 'range', min: 80, max: 400, step: 20,
+    { key: 'entrance_stagger', label: t('Ritardo fra le foto'), type: 'range', min: 80, max: 400, step: 20,
       show: s => s.entrance && s.entrance !== 'none' },
     { key: 'entrance_duration', label: t('Durata'), type: 'range', min: 300, max: 1200, step: 50,
       show: s => s.entrance && s.entrance !== 'none' },
@@ -440,10 +514,12 @@ export default {
       { value: 'overlay', label: t('Overlay pieno') },
       { value: 'frame', label: t('Cornice elegante') },
       { value: 'centered', label: t('Testo centrato') },
-    ]},
+    // Coi «Testi sulle foto» accesi la didascalia al passaggio non c'è: i testi li disegna la scheda.
+    ], show: s => !schedaAccesa(s) },
     { key: 'hover_caption_bg', label: t('Sfondo didascalia'), type: 'color',
-      show: s => s.hover_caption && s.hover_caption !== 'none' && s.hover_caption !== 'centered' },
-    { type: 'typography', label: t('Didascalia (hover)'), responsiveKeys: [], keys: { weight: 'hover_caption_weight', color: 'hover_caption_color' } },
+      show: s => !schedaAccesa(s) && s.hover_caption && s.hover_caption !== 'none' && s.hover_caption !== 'centered' },
+    { type: 'typography', label: t('Didascalia (hover)'), responsiveKeys: [], keys: { weight: 'hover_caption_weight', color: 'hover_caption_color' },
+      show: s => !schedaAccesa(s) },
     { key: 'hover_frame_inset', label: t('Padding cornice'), type: 'spacing', max: 40,
       show: s => s.hover_caption === 'frame' },
 
@@ -521,6 +597,32 @@ export default {
     { key: 'more_bg', label: t('Sfondo overlay'), type: 'color' },
     { type: 'typography', label: t('Mostra altro'), responsiveKeys: [], keys: { size: 'more_size', color: 'more_color' }, sizeMin: 16, sizeMax: 48, sizeStep: 2 },
 
+    // ─── Testi sulle foto ───
+    { type: 'separator', label: t('Testi sulle foto'), show: s => schedaAccesa(s) },
+    { type: 'typography', label: t('Titolo'), responsiveKeys: [],
+      keys: { family: 'scheda_font', size: 'scheda_titolo_size', weight: 'scheda_peso', color: 'scheda_colore' },
+      sizeMin: 12, sizeMax: 72, show: s => schedaAccesa(s) },
+    { key: 'scheda_accento', label: t('Colore di categoria e numero'), type: 'color', show: s => schedaAccesa(s) },
+    { key: 'scheda_velo', label: t('Velo sotto i testi'), type: 'range', min: 0, max: 100, step: 5, unit: '%',
+      show: s => schedaAccesa(s) && schedaSopra(s) && schema(s) !== 'elenco' },
+    { key: 'scheda_sfondo', label: t('Sfondo dei testi'), type: 'color',
+      show: s => schedaAccesa(s) && s.scheda === 'sotto' && ['grid', 'masonry'].includes(schema(s)) },
+    { key: 'scheda_padding', label: t('Padding testi'), type: 'spacing', max: 64, show: s => schedaAccesa(s) },
+
+    // ─── Filtri ───
+    { type: 'separator', label: t('Filtri'), show: s => filtrabile(s) && !!s.filtri },
+    { key: 'filtri_stile', label: t('Stile dei filtri'), type: 'select', options: [
+      { value: 'pillole', label: t('Pillole') },
+      { value: 'contorno', label: t('Contorno') },
+      { value: 'sottolineato', label: t('Sottolineato') },
+    ], show: s => filtrabile(s) && !!s.filtri },
+    { key: 'filtri_allinea', label: t('Allineamento'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
+    ], show: s => filtrabile(s) && !!s.filtri },
+    { key: 'filtri_colore', label: t('Colore del filtro attivo'), type: 'color', show: s => filtrabile(s) && !!s.filtri },
+
     // ─── Ombra & bordi ───
     ...shadowField,
     ...borderFields(),
@@ -555,11 +657,12 @@ export default {
         { value: 'cascade', label: t('Cascata (sovrapposti)') },
         { value: 'metro', label: t('Metro (dimensioni miste)') },
         { value: 'expand', label: t('Espandi (spotlight)') },
+        { value: 'elenco', label: t('Elenco a righe') },
       ];
     }},
     { key: 'columns', label: t('Colonne'), type: 'range', min: 2, max: 6, step: 1,
-      show: s => !(s.layout && s.layout.startsWith('strip')) },
+      show: s => !(s.layout && s.layout.startsWith('strip')) && s.layout !== 'elenco' },
     { key: 'mobile_columns', label: t('Colonne mobile'), type: 'range', min: 1, max: 4, step: 1,
-      show: s => !(s.layout && s.layout.startsWith('strip')) },
+      show: s => !(s.layout && s.layout.startsWith('strip')) && s.layout !== 'elenco' },
   ],
 };

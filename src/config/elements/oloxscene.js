@@ -10,7 +10,7 @@ import { t } from '@/i18n';
  */
 export default {
   type: 'oloxscene',
-  name: t('OLOX — Scena minigioco'),
+  name: t('Scena minigioco'),
   icon: 'dashicons-games',
   category: 'interactive',
   // Ritirata dalla palette (I1, 1.4.506): i giochi e i testi sono del sito olotheme.com e non
@@ -22,7 +22,7 @@ export default {
     color: 'build',
     coord: 'grid · 44×44 · lot 187',
     show_deco: true,
-    // Scene showcase hero-* (fonte unica: tile oloxhero)
+    // Scene showcase hero-* (erano della tile OLOX Hero, tolta il 23 nov 2026)
     wall_count: 187,
     wall_label: 'tile / 187',
     clock_label: 'lo scroll muove le lancette',

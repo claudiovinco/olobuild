@@ -17293,3 +17293,757 @@ msgstr "Pad"
 
 msgid "Percorso SVG (d=\"\")"
 msgstr "SVG-pad (d=\"\")"
+
+#: licenza-1.4.1345
+msgid "Tutto schermo"
+msgstr "Volledig scherm"
+
+msgid "Durata di ogni slide (ms)"
+msgstr "Duur van elke dia (ms)"
+
+msgid "Scivola sopra"
+msgstr "Eroverheen schuiven"
+
+msgid "Dissolvenza al nero"
+msgstr "Via zwart overvloeien"
+
+msgid "Ribaltamento orizzontale"
+msgstr "Horizontaal kantelen"
+
+msgid "Ribaltamento verticale"
+msgstr "Verticaal kantelen"
+
+msgid "Cubo orizzontale"
+msgstr "Horizontale kubus"
+
+msgid "Cubo verticale"
+msgstr "Verticale kubus"
+
+msgid "Spinta"
+msgstr "Duwen"
+
+msgid "Spinta verso destra"
+msgstr "Naar rechts duwen"
+
+msgid "Spinta verso il basso"
+msgstr "Naar beneden duwen"
+
+msgid "Pila"
+msgstr "Stapel"
+
+msgid "Carta tagliata"
+msgstr "Papier knippen"
+
+msgid "Zoom e dissolvenza"
+msgstr "Zoom en overvloeien"
+
+msgid "Rotazione della slide"
+msgstr "Dia draaien"
+
+msgid "Sipario 3D"
+msgstr "3D-gordijn"
+
+msgid "Scivola verso l’alto"
+msgstr "Schuiven naar boven"
+
+msgid "Scivola verso il basso"
+msgstr "Schuiven naar beneden"
+
+msgid "Barra di avanzamento"
+msgstr "Voortgangsbalk"
+
+msgid "Navigazione con la tastiera"
+msgstr "Navigatie met het toetsenbord"
+
+msgid "Scorrimento col dito"
+msgstr "Vegen met de vinger"
+
+msgid "Rotella del mouse"
+msgstr "Muiswiel"
+
+msgid "Miniature e schede"
+msgstr "Miniaturen en tabbladen"
+
+msgid "Tipo di parallasse"
+msgstr "Type parallax"
+
+msgid "Modalità carosello"
+msgstr "Carrouselmodus"
+
+msgid "Scorrimento della pagina"
+msgstr "Pagina scrollen"
+
+msgid "Timeline a scorrimento"
+msgstr "Tijdlijn bij scrollen"
+
+msgid "Distanza di scorrimento (px)"
+msgstr "Scrollafstand (px)"
+
+msgid "Solo la freccia"
+msgstr "Alleen de pijl"
+
+msgid "Nel quadrato"
+msgstr "In een vierkant"
+
+msgid "Vuoto = bianco, per le foto scure. Sulle slide chiare scegli un colore scuro: frecce, contorni e punti lo prendono, e il fondo delle frecce «Solo la freccia» e «Nel quadrato» diventa chiaro da sé."
+msgstr "Leeg = wit, voor donkere foto’s. Kies op lichte dia’s een donkere kleur: pijlen, contouren en punten nemen hem over, en de achtergrond van de pijlen „Alleen de pijl” en „In een vierkant” wordt vanzelf licht."
+
+msgid "Miniature e schede — posizione"
+msgstr "Miniaturen en tabbladen — positie"
+
+msgid "Posizione schede"
+msgstr "Positie van de tabbladen"
+
+msgid "Effetto allo scorrimento"
+msgstr "Effect bij scrollen"
+
+msgid "Dissolvenza e sfocatura"
+msgstr "Overvloeien en vervagen"
+
+msgid "Intensità della parallasse"
+msgstr "Sterkte van de parallax"
+
+msgid "Larghezza slide (%)"
+msgstr "Breedte van de dia (%)"
+
+msgid "Indirizzo dell’immagine"
+msgstr "Adres van de afbeelding"
+
+msgid "Indirizzo del video"
+msgstr "Adres van de video"
+
+msgid "Indirizzo dell’audio"
+msgstr "Adres van de audio"
+
+msgid "Azione al clic"
+msgstr "Actie bij klikken"
+
+msgid "Nessun altro livello in questa slide"
+msgstr "Geen andere laag op deze dia"
+
+msgid "Azzera tutti"
+msgstr "Alles resetten"
+
+msgid "Stile del carattere"
+msgstr "Letterstijl"
+
+msgid "Colore del tratto"
+msgstr "Lijnkleur"
+
+msgid "Colore di riempimento"
+msgstr "Vulkleur"
+
+msgid "Colore di riempimento (al posto di quello del file)"
+msgstr "Vulkleur (in plaats van die van het bestand)"
+
+msgid "Raggio (px)"
+msgstr "Straal (px)"
+
+msgid "Animazione del testo"
+msgstr "Tekstanimatie"
+
+msgid "Anima lettere o parole"
+msgstr "Letters of woorden animeren"
+
+msgid "Andata e ritorno"
+msgstr "Heen en terug"
+
+msgid "Intensità (%)"
+msgstr "Sterkte (%)"
+
+msgid "Parallasse attiva"
+msgstr "Parallax aan"
+
+msgid "Velocità con lo scorrimento"
+msgstr "Snelheid bij scrollen"
+
+msgid "Usa la linea del tempo sotto la tela per aggiungere e spostare i fotogrammi chiave."
+msgstr "Gebruik de tijdlijn onder het canvas om keyframes toe te voegen en te verplaatsen."
+
+msgid "Dissolvenza dall’alto"
+msgstr "Vervagen van boven"
+
+msgid "Dissolvenza da sinistra"
+msgstr "Vervagen van links"
+
+msgid "Dissolvenza da destra"
+msgstr "Vervagen van rechts"
+
+msgid "Scivola"
+msgstr "Schuiven"
+
+msgid "Scivola da sinistra"
+msgstr "Schuiven van links"
+
+msgid "Scivola da destra"
+msgstr "Schuiven van rechts"
+
+msgid "Scivola dal basso"
+msgstr "Schuiven van onder"
+
+msgid "Scivola dall’alto"
+msgstr "Schuiven van boven"
+
+msgid "Breve dall’alto"
+msgstr "Kort schuiven van boven"
+
+msgid "Breve dal basso"
+msgstr "Kort schuiven van onder"
+
+msgid "Breve da sinistra"
+msgstr "Kort schuiven van links"
+
+msgid "Breve da destra"
+msgstr "Kort schuiven van rechts"
+
+msgid "Morbida dal basso"
+msgstr "Zacht schuiven van onder"
+
+msgid "Morbida dall’alto"
+msgstr "Zacht schuiven van boven"
+
+msgid "Morbida da sinistra"
+msgstr "Zacht schuiven van links"
+
+msgid "Morbida da destra"
+msgstr "Zacht schuiven van rechts"
+
+msgid "Inclinata da sinistra"
+msgstr "Schuin van links"
+
+msgid "Inclinata da destra"
+msgstr "Schuin van rechts"
+
+msgid "Inclinata breve da sinistra"
+msgstr "Kort schuin van links"
+
+msgid "Inclinata breve da destra"
+msgstr "Kort schuin van rechts"
+
+msgid "Ribaltata 3D"
+msgstr "3D-kantelen"
+
+msgid "Ribaltata dall’alto"
+msgstr "Kantelen van boven"
+
+msgid "Ribaltata dal basso"
+msgstr "Kantelen van onder"
+
+msgid "Ribaltata da sinistra"
+msgstr "Kantelen van links"
+
+msgid "Ribaltata da destra"
+msgstr "Kantelen van rechts"
+
+msgid "Ruota entrando"
+msgstr "Indraaien"
+
+msgid "Ruota dal basso"
+msgstr "Draaien van onder"
+
+msgid "Ruota in 3D"
+msgstr "Draaien in 3D"
+
+msgid "Ruota da sinistra"
+msgstr "Draaien van links"
+
+msgid "Ruota da destra"
+msgstr "Draaien van rechts"
+
+msgid "Zoom e rimbalzo"
+msgstr "Zoom en stuiteren"
+
+msgid "Spunta morbida"
+msgstr "Zacht opduiken"
+
+msgid "Spunta e torna indietro"
+msgstr "Opduiken en terugveren"
+
+msgid "Rimbalzo dal basso"
+msgstr "Stuiteren van onder"
+
+msgid "Rimbalzo dall’alto"
+msgstr "Stuiteren van boven"
+
+msgid "Si scopre da sinistra"
+msgstr "Onthullen van links"
+
+msgid "Si scopre da destra"
+msgstr "Onthullen van rechts"
+
+msgid "Si scopre dall’alto"
+msgstr "Onthullen van boven"
+
+msgid "Si scopre dal basso"
+msgstr "Onthullen van onder"
+
+msgid "Si scopre dal centro con zoom"
+msgstr "Onthullen vanuit het midden met zoom"
+
+msgid "Si scopre dal centro"
+msgstr "Onthullen vanuit het midden"
+
+msgid "Dissolvenza verso l’alto"
+msgstr "Vervagen naar boven"
+
+msgid "Dissolvenza verso il basso"
+msgstr "Vervagen naar beneden"
+
+msgid "Dissolvenza verso sinistra"
+msgstr "Vervagen naar links"
+
+msgid "Dissolvenza verso destra"
+msgstr "Vervagen naar rechts"
+
+msgid "Scivola verso sinistra"
+msgstr "Schuiven naar links"
+
+msgid "Scivola verso destra"
+msgstr "Schuiven naar rechts"
+
+msgid "Breve verso l’alto"
+msgstr "Kort schuiven naar boven"
+
+msgid "Breve verso il basso"
+msgstr "Kort schuiven naar beneden"
+
+msgid "Breve verso sinistra"
+msgstr "Kort schuiven naar links"
+
+msgid "Breve verso destra"
+msgstr "Kort schuiven naar rechts"
+
+msgid "Morbida verso il basso"
+msgstr "Zacht schuiven naar beneden"
+
+msgid "Morbida verso l’alto"
+msgstr "Zacht schuiven naar boven"
+
+msgid "Morbida verso sinistra"
+msgstr "Zacht schuiven naar links"
+
+msgid "Morbida verso destra"
+msgstr "Zacht schuiven naar rechts"
+
+msgid "Inclinata verso sinistra"
+msgstr "Schuin naar links"
+
+msgid "Inclinata verso destra"
+msgstr "Schuin naar rechts"
+
+msgid "Inclinata breve verso sinistra"
+msgstr "Kort schuin naar links"
+
+msgid "Inclinata breve verso destra"
+msgstr "Kort schuin naar rechts"
+
+msgid "Ribaltata verso l’alto"
+msgstr "Kantelen naar boven"
+
+msgid "Ribaltata verso il basso"
+msgstr "Kantelen naar beneden"
+
+msgid "Ribaltata verso sinistra"
+msgstr "Kantelen naar links"
+
+msgid "Ribaltata verso destra"
+msgstr "Kantelen naar rechts"
+
+msgid "Ruota uscendo"
+msgstr "Uitdraaien"
+
+msgid "Ruota verso il basso"
+msgstr "Draaien naar beneden"
+
+msgid "Ruota verso sinistra"
+msgstr "Draaien naar links"
+
+msgid "Ruota verso destra"
+msgstr "Draaien naar rechts"
+
+msgid "Si rimpicciolisce"
+msgstr "Wordt kleiner"
+
+msgid "Sparisce morbida"
+msgstr "Zacht verdwijnen"
+
+msgid "Si gonfia e sparisce"
+msgstr "Zwelt op en verdwijnt"
+
+msgid "Rimbalzo verso l’alto"
+msgstr "Stuiteren naar boven"
+
+msgid "Rimbalzo verso il basso"
+msgstr "Stuiteren naar beneden"
+
+msgid "Si copre verso sinistra"
+msgstr "Verbergen naar links"
+
+msgid "Si copre verso destra"
+msgstr "Verbergen naar rechts"
+
+msgid "Si copre verso l’alto"
+msgstr "Verbergen naar boven"
+
+msgid "Si copre verso il basso"
+msgstr "Verbergen naar beneden"
+
+msgid "Si chiude al centro con zoom"
+msgstr "Sluiten naar het midden met zoom"
+
+msgid "Si chiude al centro"
+msgstr "Sluiten naar het midden"
+
+msgid "Pendolo basso"
+msgstr "Slinger onder"
+
+msgid "Pendolo alto"
+msgstr "Slinger boven"
+
+msgid "Pendolo a sinistra"
+msgstr "Slinger links"
+
+msgid "Pendolo a destra"
+msgstr "Slinger rechts"
+
+msgid "Onda piccola a sinistra"
+msgstr "Kleine golf naar links"
+
+msgid "Onda piccola a destra"
+msgstr "Kleine golf naar rechts"
+
+msgid "Onda grande a sinistra"
+msgstr "Grote golf naar links"
+
+msgid "Onda grande a destra"
+msgstr "Grote golf naar rechts"
+
+msgid "Vibrazione verticale"
+msgstr "Verticaal wiebelen"
+
+msgid "Vibrazione orizzontale"
+msgstr "Horizontaal wiebelen"
+
+msgid "Vibrazione 3D"
+msgstr "3D-wiebelen"
+
+msgid "Vibrazione scatenata"
+msgstr "Wild wiebelen"
+
+msgid "Gira in senso orario"
+msgstr "Draait met de klok mee"
+
+msgid "Gira in senso antiorario"
+msgstr "Draait tegen de klok in"
+
+msgid "Lampeggio"
+msgstr "Knipperen"
+
+msgid "Scivola avanti e indietro"
+msgstr "Schuift heen en weer"
+
+msgid "Vento (piega dal basso)"
+msgstr "Wind (buigt van onderaf)"
+
+msgid "Fluttua piano"
+msgstr "Zweeft zacht"
+
+msgid "Slide successiva"
+msgstr "Volgende dia"
+
+msgid "Slide precedente"
+msgstr "Vorige dia"
+
+msgid "Vai alla slide…"
+msgstr "Naar dia…"
+
+msgid "Apri un indirizzo"
+msgstr "Een adres openen"
+
+msgid "Scorri sotto lo slider"
+msgstr "Onder de slider scrollen"
+
+msgid "Iniziali maiuscole"
+msgstr "Hoofdletters aan het begin"
+
+msgid "Sopralineato"
+msgstr "Bovenlijn"
+
+msgid "In alto a sinistra"
+msgstr "Linksboven"
+
+msgid "In alto a destra"
+msgstr "Rechtsboven"
+
+msgid "In basso a sinistra"
+msgstr "Linksonder"
+
+msgid "In basso a destra"
+msgstr "Rechtsonder"
+
+msgid "Blocco da destra"
+msgstr "Blok van rechts"
+
+msgid "Blocco da sinistra"
+msgstr "Blok van links"
+
+msgid "Blocco dall’alto"
+msgstr "Blok van boven"
+
+msgid "Blocco dal basso"
+msgstr "Blok van onder"
+
+msgid "Manina"
+msgstr "Handje"
+
+msgid "Sposta"
+msgstr "Verplaatsen"
+
+msgid "Mano aperta"
+msgstr "Open hand"
+
+msgid "Parole"
+msgstr "Woorden"
+
+msgid "Centro → Bordi"
+msgstr "Midden → Randen"
+
+msgid "Bordi → Centro"
+msgstr "Randen → Midden"
+
+msgid "Nessun cambio"
+msgstr "Geen wijziging"
+
+msgid "Sipario orizzontale"
+msgstr "Horizontaal gordijn"
+
+msgid "Sipario verticale"
+msgstr "Verticaal gordijn"
+
+msgid "Si avvicina"
+msgstr "Zoomt in"
+
+msgid "Si allontana"
+msgstr "Zoomt uit"
+
+msgid "Scorre a sinistra"
+msgstr "Pant naar links"
+
+msgid "Scorre a destra"
+msgstr "Pant naar rechts"
+
+msgid "Scorre in alto"
+msgstr "Pant omhoog"
+
+msgid "Scorre in basso"
+msgstr "Pant omlaag"
+
+msgid "Mouse e scorrimento"
+msgstr "Muis en scrollen"
+
+msgid "Sfocatura all’inizio"
+msgstr "Vervaging aan het begin"
+
+msgid "Sfocatura alla fine"
+msgstr "Vervaging aan het einde"
+
+msgid "Notebook"
+msgstr "Notebook"
+
+msgid "Valori propri per"
+msgstr "Eigen waarden voor"
+
+msgid "Ha valori propri su qualche schermo"
+msgstr "Heeft op sommige schermen eigen waarden"
+
+msgid "Nessuna icona tua: carica un file SVG."
+msgstr "Nog geen eigen pictogrammen: upload een SVG-bestand."
+
+msgid "Prendi la posizione dalla tela"
+msgstr "Positie van het canvas overnemen"
+
+msgid "Seleziona un fotogramma chiave nella linea del tempo"
+msgstr "Selecteer een keyframe in de tijdlijn"
+
+msgid "Fotogramma chiave precedente"
+msgstr "Vorige keyframe"
+
+msgid "Fotogramma chiave successivo"
+msgstr "Volgende keyframe"
+
+msgid "L’uscita aspetta la fine della slide"
+msgstr "De uitgang wacht op het einde van de dia"
+
+msgid "Aggiungi un fotogramma chiave a questo punto"
+msgstr "Keyframe op dit punt toevoegen"
+
+msgid "Seleziona un livello con la linea del tempo"
+msgstr "Selecteer een laag met een tijdlijn"
+
+msgid "Riduci la linea del tempo"
+msgstr "Tijdlijn verkleinen"
+
+msgid "Ingrandisci la linea del tempo"
+msgstr "Tijdlijn vergroten"
+
+msgid "La linea del tempo ("
+msgstr "De tijdlijn ("
+
+msgid "Porta tutti i livelli alla durata più lunga"
+msgstr "Alle lagen op de langste duur zetten"
+
+msgid "Resta visibile fino alla fine della slide"
+msgstr "Blijft zichtbaar tot het einde van de dia"
+
+msgid "Duplica il fotogramma chiave"
+msgstr "Keyframe dupliceren"
+
+msgid "Elimina il fotogramma chiave"
+msgstr "Keyframe verwijderen"
+
+msgid "Semplici"
+msgstr "Eenvoudig"
+
+msgid "Accelera"
+msgstr "Versnelt"
+
+msgid "Rallenta"
+msgstr "Vertraagt"
+
+msgid "Accelera e rallenta"
+msgstr "Versnelt en vertraagt"
+
+msgid "Lo slider resta fermo in cima alla finestra mentre la pagina scorre per la distanza scelta: in quel tratto lo scorrimento fa avanzare le slide e muove i livelli che hanno il «Movimento con lo scorrimento» (Animazione nell’editor dello slider). Finito il tratto, la pagina riprende a scorrere."
+msgstr "De slider blijft bovenaan het venster staan terwijl de pagina over de gekozen afstand scrolt: op dat stuk laat het scrollen de dia’s verdergaan en beweegt het de lagen met „Beweging bij scrollen” (Animatie in de slider-editor). Daarna scrolt de pagina weer gewoon door."
+
+#: licenza-1.4.1345
+msgid "Durata di ogni slide"
+msgstr "Duur van elke dia"
+
+msgid "Distanza di scorrimento"
+msgstr "Scrollafstand"
+
+msgid "Larghezza slide"
+msgstr "Breedte van de dia"
+
+#: licenza-1.4.1345
+msgid "Aspetta la fine"
+msgstr "Wachten op het einde"
+
+msgid "Altezza rispetto alla finestra"
+msgstr "Hoogte ten opzichte van het venster"
+
+#: licenza-1.4.1345
+msgid "Inverti"
+msgstr "Omkeren"
+
+msgid "Cambia al passaggio del mouse"
+msgstr "Verandert bij muisaanwijzing"
+
+msgid "Morbido, frena alla fine (predefinito)"
+msgstr "Zacht, vertraagt aan het einde (standaard)"
+
+msgid "Tempo"
+msgstr "Tijd"
+
+#: licenza-1.4.1345
+msgid "0° = lavagna dritta; con i gradi negativi gira in senso antiorario, con i positivi in senso orario. Con la parallasse accesa, scorrendo la pagina oscilla appena attorno a questo angolo."
+msgstr "0° = recht bord; negatieve graden draaien het tegen de klok in, positieve met de klok mee. Met parallax aan schommelt het bij het scrollen licht rond deze hoek."
+
+#: licenza-1.4.1345
+msgid "Scena minigioco"
+msgstr "Minigame-scène"
+
+msgid "Quiz di verifica"
+msgstr "Controlequiz"
+
+#: licenza-1.4.1345
+msgid "Testi sulle foto"
+msgstr "Tekst op de foto’s"
+
+msgid "Solo la didascalia al passaggio"
+msgstr "Alleen het bijschrift bij aanwijzen"
+
+msgid "Sulla foto"
+msgstr "Op de foto"
+
+msgid "«Sotto la foto» vale per gli schemi Griglia e Masonry; negli altri i testi vanno sulla foto."
+msgstr "„Onder de foto” geldt voor de schema’s Raster en Masonry; in de andere komt de tekst op de foto."
+
+msgid "Quando si vedono"
+msgstr "Wanneer ze verschijnen"
+
+msgid "Mostra il titolo"
+msgstr "Titel tonen"
+
+msgid "Mostra il sottotitolo"
+msgstr "Ondertitel tonen"
+
+msgid "Mostra il testo"
+msgstr "Tekst tonen"
+
+msgid "Mostra la miniatura"
+msgstr "Miniatuur tonen"
+
+msgid "Sopra la galleria un pulsante per ogni categoria e «Tutti»: cliccando, restano le foto di quella categoria e la galleria si riordina. La categoria si scrive sotto ogni foto in «Media»; più categorie si separano con la virgola."
+msgstr "Boven de galerij een knop per categorie en „Alle”: bij een klik blijven de foto’s van die categorie over en ordent de galerij zich opnieuw. Schrijf de categorie onder elke foto in „Media”; scheid meerdere categorieën met komma’s."
+
+msgid "Testo di «Tutti»"
+msgstr "Tekst voor „Alle”"
+
+msgid "Mostra quante foto"
+msgstr "Aantal foto’s tonen"
+
+msgid "Colore di categoria e numero"
+msgstr "Kleur van categorie en nummer"
+
+msgid "Velo sotto i testi"
+msgstr "Waas onder de tekst"
+
+msgid "Sfondo dei testi"
+msgstr "Achtergrond van de tekst"
+
+msgid "Padding testi"
+msgstr "Opvulling van de tekst"
+
+msgid "Stile dei filtri"
+msgstr "Stijl van de filters"
+
+msgid "Colore del filtro attivo"
+msgstr "Kleur van het actieve filter"
+
+msgid "Elenco a righe"
+msgstr "Lijst in rijen"
+
+msgid "Link della foto (facoltativo)"
+msgstr "Link van de foto (optioneel)"
+
+msgid "Misura della foto"
+msgstr "Grootte van de foto"
+
+msgid "Misura automatica"
+msgstr "Automatische grootte"
+
+msgid "Piccola (1 × 1)"
+msgstr "Klein (1 × 1)"
+
+msgid "Larga (2 × 1)"
+msgstr "Breed (2 × 1)"
+
+msgid "Alta (1 × 2)"
+msgstr "Hoog (1 × 2)"
+
+msgid "Grande (2 × 2)"
+msgstr "Groot (2 × 2)"
+
+msgid "Molto larga (3 × 2)"
+msgstr "Extra breed (3 × 2)"
+
+msgid "Molto alta (2 × 3)"
+msgstr "Extra hoog (2 × 3)"
+
+msgid "Filtra per categoria"
+msgstr "Filteren op categorie"
+
+msgid "Ritardo fra le foto"
+msgstr "Vertraging tussen de foto’s"

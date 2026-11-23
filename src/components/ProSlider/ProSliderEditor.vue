@@ -35,7 +35,7 @@
               <span class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Livelli globali') }}</span>
               <div class="mb-flex mb-gap-1">
                 <button @click="addGlobalLayer('text')" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-white mb-px-1" :title="t('Testo')">T</button>
-                <button @click="addGlobalLayer('button')" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-white mb-px-1" :title="t('Bottone')">B</button>
+                <button @click="addGlobalLayer('button')" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-white mb-px-1" :title="t('Pulsante')">B</button>
                 <button @click="addGlobalLayer('image')" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-white mb-px-1" :title="t('Immagine')">I</button>
                 <button @click="addGlobalLayer('icon')" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-white mb-px-1" :title="t('Icona')">Ic</button>
               </div>
@@ -62,7 +62,7 @@
           <!-- Slide bg controls (collapsible) -->
           <div v-if="showSlideBg" class="mb-bg-gray-850 mb-border-b mb-border-gray-700 mb-p-3">
             <div class="mb-flex mb-items-center mb-justify-between mb-mb-2">
-              <span class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Sfondo Slide') }}</span>
+              <span class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Sfondo della slide') }}</span>
               <button @click="showSlideBg = false" class="mb-text-gray-500 mb-text-xs">&times;</button>
             </div>
             <div class="mb-flex mb-gap-3 mb-flex-wrap mb-items-end">
@@ -99,27 +99,27 @@
                   </div>
                   <div class="mb-flex mb-items-center mb-gap-1">
                     <label class="mb-text-[10px] mb-text-gray-400">{{ t('Spostamento orizzontale') }}</label>
-                    <NumberScrubber theme="dark" :modelValue="currentBg.kenBurnsPanX || 0" :min="-50" :max="50" :step="5" :defaultValue="0" emitAs="number" unit="%" :ariaLabel="'Pan X%'" @update:modelValue="updateBg('kenBurnsPanX', $event)" />
+                    <NumberScrubber theme="dark" :modelValue="currentBg.kenBurnsPanX || 0" :min="-50" :max="50" :step="5" :defaultValue="0" emitAs="number" unit="%" :ariaLabel="t('Spostamento orizzontale')" @update:modelValue="updateBg('kenBurnsPanX', $event)" />
                   </div>
                   <div class="mb-flex mb-items-center mb-gap-1">
                     <label class="mb-text-[10px] mb-text-gray-400">{{ t('Spostamento verticale') }}</label>
-                    <NumberScrubber theme="dark" :modelValue="currentBg.kenBurnsPanY || 0" :min="-50" :max="50" :step="5" :defaultValue="0" emitAs="number" unit="%" :ariaLabel="'Pan Y%'" @update:modelValue="updateBg('kenBurnsPanY', $event)" />
+                    <NumberScrubber theme="dark" :modelValue="currentBg.kenBurnsPanY || 0" :min="-50" :max="50" :step="5" :defaultValue="0" emitAs="number" unit="%" :ariaLabel="t('Spostamento verticale')" @update:modelValue="updateBg('kenBurnsPanY', $event)" />
                   </div>
                   <div class="mb-flex mb-items-center mb-gap-1">
-                    <label class="mb-text-[10px] mb-text-gray-400">{{ t('Blur inizio') }}</label>
-                    <NumberScrubber theme="dark" :modelValue="currentBg.kenBurnsBlurStart || 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" unit="px" :ariaLabel="t('Blur inizio')" @update:modelValue="updateBg('kenBurnsBlurStart', $event)" />
+                    <label class="mb-text-[10px] mb-text-gray-400">{{ t('Sfocatura all’inizio') }}</label>
+                    <NumberScrubber theme="dark" :modelValue="currentBg.kenBurnsBlurStart || 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" unit="px" :ariaLabel="t('Sfocatura all’inizio')" @update:modelValue="updateBg('kenBurnsBlurStart', $event)" />
                   </div>
                   <div class="mb-flex mb-items-center mb-gap-1">
-                    <label class="mb-text-[10px] mb-text-gray-400">{{ t('Blur fine') }}</label>
-                    <NumberScrubber theme="dark" :modelValue="currentBg.kenBurnsBlurEnd || 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" unit="px" :ariaLabel="t('Blur fine')" @update:modelValue="updateBg('kenBurnsBlurEnd', $event)" />
+                    <label class="mb-text-[10px] mb-text-gray-400">{{ t('Sfocatura alla fine') }}</label>
+                    <NumberScrubber theme="dark" :modelValue="currentBg.kenBurnsBlurEnd || 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" unit="px" :ariaLabel="t('Sfocatura alla fine')" @update:modelValue="updateBg('kenBurnsBlurEnd', $event)" />
                   </div>
                 </template>
               </div>
               <!-- Video -->
               <div v-if="currentBg.type === 'video'">
-                <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('URL Video') }}</label>
+                <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('Indirizzo del video') }}</label>
                 <div class="mb-flex mb-gap-1">
-                  <input :value="currentBg.video" @input="updateBg('video', $event.target.value)" class="mps-inp mb-w-52" :placeholder="t('mp4 o URL YouTube')" />
+                  <input :value="currentBg.video" @input="updateBg('video', $event.target.value)" class="mps-inp mb-w-52" :placeholder="t('mp4 o indirizzo YouTube')" />
                   <button @click="pickSlideVideo" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-500">{{ t('Sfoglia') }}</button>
                 </div>
               </div>
@@ -337,15 +337,15 @@ import { leggiStati, statiDellaSlide, animazioniLivello } from './livelloUtils.j
 
 // Option arrays per FieldSelect (stessi value dei vecchi <option>: dati salvati invariati)
 const OPTS_BG_TYPE = [
-  { value: 'color', label: 'Colore' },
-  { value: 'image', label: 'Immagine' },
-  { value: 'video', label: 'Video' },
-  { value: 'gradient', label: 'Gradiente' },
-  { value: 'transparent', label: 'Trasparente' },
+  { value: 'color', label: t('Colore') },
+  { value: 'image', label: t('Immagine') },
+  { value: 'video', label: t('Video') },
+  { value: 'gradient', label: t('Gradiente') },
+  { value: 'transparent', label: t('Trasparente') },
 ];
 const OPTS_KENBURNS_DIR = [
-  { value: 'in', label: 'Zoom In' },
-  { value: 'out', label: 'Zoom Out' },
+  { value: 'in', label: t('Si avvicina') },
+  { value: 'out', label: t('Si allontana') },
 ];
 
 const props = defineProps({
@@ -380,10 +380,10 @@ const editingGlobal = ref(false);
 const activeBreakpoint = ref('desktop');
 const breakpoints = [
   // Icone SVG (tracciati Lucide), mai emoji.
-  { key: 'desktop',  label: 'Desktop',  icon: 'M4 3h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM8 21h8M12 17v4', width: 1440 },
-  { key: 'notebook', label: 'Notebook', icon: 'M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16', width: 1240 },
-  { key: 'tablet',   label: 'Tablet',   icon: 'M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM12 18h.01', width: 1024 },
-  { key: 'mobile',   label: 'Mobile',   icon: 'M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM12 18h.01', width: 640 },
+  { key: 'desktop',  label: t('Computer'),  icon: 'M4 3h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM8 21h8M12 17v4', width: 1440 },
+  { key: 'notebook', label: t('Notebook'), icon: 'M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16', width: 1240 },
+  { key: 'tablet',   label: t('Tablet'),   icon: 'M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM12 18h.01', width: 1024 },
+  { key: 'mobile',   label: t('Telefono'),   icon: 'M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM12 18h.01', width: 640 },
 ];
 
 const activeCanvasWidth = computed(() => {

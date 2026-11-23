@@ -54291,3 +54291,757 @@ msgstr "Path"
 
 msgid "Percorso SVG (d=\"\")"
 msgstr "SVG path (d=\"\")"
+
+#: licenza-1.4.1345
+msgid "Tutto schermo"
+msgstr "Full screen"
+
+msgid "Durata di ogni slide (ms)"
+msgstr "Duration of each slide (ms)"
+
+msgid "Scivola sopra"
+msgstr "Slide over"
+
+msgid "Dissolvenza al nero"
+msgstr "Fade through black"
+
+msgid "Ribaltamento orizzontale"
+msgstr "Horizontal flip"
+
+msgid "Ribaltamento verticale"
+msgstr "Vertical flip"
+
+msgid "Cubo orizzontale"
+msgstr "Horizontal cube"
+
+msgid "Cubo verticale"
+msgstr "Vertical cube"
+
+msgid "Spinta"
+msgstr "Push"
+
+msgid "Spinta verso destra"
+msgstr "Push to the right"
+
+msgid "Spinta verso il basso"
+msgstr "Push down"
+
+msgid "Pila"
+msgstr "Stack"
+
+msgid "Carta tagliata"
+msgstr "Paper cut"
+
+msgid "Zoom e dissolvenza"
+msgstr "Zoom and fade"
+
+msgid "Rotazione della slide"
+msgstr "Slide rotation"
+
+msgid "Sipario 3D"
+msgstr "3D curtain"
+
+msgid "Scivola verso l’alto"
+msgstr "Slide upwards"
+
+msgid "Scivola verso il basso"
+msgstr "Slide downwards"
+
+msgid "Barra di avanzamento"
+msgstr "Progress bar"
+
+msgid "Navigazione con la tastiera"
+msgstr "Keyboard navigation"
+
+msgid "Scorrimento col dito"
+msgstr "Swipe with a finger"
+
+msgid "Rotella del mouse"
+msgstr "Mouse wheel"
+
+msgid "Miniature e schede"
+msgstr "Thumbnails and tabs"
+
+msgid "Tipo di parallasse"
+msgstr "Parallax type"
+
+msgid "Modalità carosello"
+msgstr "Carousel mode"
+
+msgid "Scorrimento della pagina"
+msgstr "Page scrolling"
+
+msgid "Timeline a scorrimento"
+msgstr "Scroll timeline"
+
+msgid "Distanza di scorrimento (px)"
+msgstr "Scroll distance (px)"
+
+msgid "Solo la freccia"
+msgstr "Arrow only"
+
+msgid "Nel quadrato"
+msgstr "In a square"
+
+msgid "Vuoto = bianco, per le foto scure. Sulle slide chiare scegli un colore scuro: frecce, contorni e punti lo prendono, e il fondo delle frecce «Solo la freccia» e «Nel quadrato» diventa chiaro da sé."
+msgstr "Empty = white, for dark photos. On light slides choose a dark color: arrows, outlines and dots take it, and the background of the “Arrow only” and “In a square” arrows turns light by itself."
+
+msgid "Miniature e schede — posizione"
+msgstr "Thumbnails and tabs — position"
+
+msgid "Posizione schede"
+msgstr "Tab position"
+
+msgid "Effetto allo scorrimento"
+msgstr "Scroll effect"
+
+msgid "Dissolvenza e sfocatura"
+msgstr "Fade and blur"
+
+msgid "Intensità della parallasse"
+msgstr "Parallax intensity"
+
+msgid "Larghezza slide (%)"
+msgstr "Slide width (%)"
+
+msgid "Indirizzo dell’immagine"
+msgstr "Image address"
+
+msgid "Indirizzo del video"
+msgstr "Video address"
+
+msgid "Indirizzo dell’audio"
+msgstr "Audio address"
+
+msgid "Azione al clic"
+msgstr "Action on click"
+
+msgid "Nessun altro livello in questa slide"
+msgstr "No other layer on this slide"
+
+msgid "Azzera tutti"
+msgstr "Reset all"
+
+msgid "Stile del carattere"
+msgstr "Font style"
+
+msgid "Colore del tratto"
+msgstr "Stroke color"
+
+msgid "Colore di riempimento"
+msgstr "Fill color"
+
+msgid "Colore di riempimento (al posto di quello del file)"
+msgstr "Fill color (instead of the file’s)"
+
+msgid "Raggio (px)"
+msgstr "Radius (px)"
+
+msgid "Animazione del testo"
+msgstr "Text animation"
+
+msgid "Anima lettere o parole"
+msgstr "Animate letters or words"
+
+msgid "Andata e ritorno"
+msgstr "Back and forth"
+
+msgid "Intensità (%)"
+msgstr "Intensity (%)"
+
+msgid "Parallasse attiva"
+msgstr "Parallax on"
+
+msgid "Velocità con lo scorrimento"
+msgstr "Speed while scrolling"
+
+msgid "Usa la linea del tempo sotto la tela per aggiungere e spostare i fotogrammi chiave."
+msgstr "Use the timeline below the canvas to add and move keyframes."
+
+msgid "Dissolvenza dall’alto"
+msgstr "Fade from the top"
+
+msgid "Dissolvenza da sinistra"
+msgstr "Fade from the left"
+
+msgid "Dissolvenza da destra"
+msgstr "Fade from the right"
+
+msgid "Scivola"
+msgstr "Slide"
+
+msgid "Scivola da sinistra"
+msgstr "Slide from the left"
+
+msgid "Scivola da destra"
+msgstr "Slide from the right"
+
+msgid "Scivola dal basso"
+msgstr "Slide from the bottom"
+
+msgid "Scivola dall’alto"
+msgstr "Slide from the top"
+
+msgid "Breve dall’alto"
+msgstr "Short slide from the top"
+
+msgid "Breve dal basso"
+msgstr "Short slide from the bottom"
+
+msgid "Breve da sinistra"
+msgstr "Short slide from the left"
+
+msgid "Breve da destra"
+msgstr "Short slide from the right"
+
+msgid "Morbida dal basso"
+msgstr "Smooth slide from the bottom"
+
+msgid "Morbida dall’alto"
+msgstr "Smooth slide from the top"
+
+msgid "Morbida da sinistra"
+msgstr "Smooth slide from the left"
+
+msgid "Morbida da destra"
+msgstr "Smooth slide from the right"
+
+msgid "Inclinata da sinistra"
+msgstr "Skewed from the left"
+
+msgid "Inclinata da destra"
+msgstr "Skewed from the right"
+
+msgid "Inclinata breve da sinistra"
+msgstr "Short skew from the left"
+
+msgid "Inclinata breve da destra"
+msgstr "Short skew from the right"
+
+msgid "Ribaltata 3D"
+msgstr "3D flip"
+
+msgid "Ribaltata dall’alto"
+msgstr "Flip from the top"
+
+msgid "Ribaltata dal basso"
+msgstr "Flip from the bottom"
+
+msgid "Ribaltata da sinistra"
+msgstr "Flip from the left"
+
+msgid "Ribaltata da destra"
+msgstr "Flip from the right"
+
+msgid "Ruota entrando"
+msgstr "Rotate in"
+
+msgid "Ruota dal basso"
+msgstr "Rotate from the bottom"
+
+msgid "Ruota in 3D"
+msgstr "Rotate in 3D"
+
+msgid "Ruota da sinistra"
+msgstr "Rotate from the left"
+
+msgid "Ruota da destra"
+msgstr "Rotate from the right"
+
+msgid "Zoom e rimbalzo"
+msgstr "Zoom and bounce"
+
+msgid "Spunta morbida"
+msgstr "Smooth pop-up"
+
+msgid "Spunta e torna indietro"
+msgstr "Pop up and settle back"
+
+msgid "Rimbalzo dal basso"
+msgstr "Bounce from the bottom"
+
+msgid "Rimbalzo dall’alto"
+msgstr "Bounce from the top"
+
+msgid "Si scopre da sinistra"
+msgstr "Reveal from the left"
+
+msgid "Si scopre da destra"
+msgstr "Reveal from the right"
+
+msgid "Si scopre dall’alto"
+msgstr "Reveal from the top"
+
+msgid "Si scopre dal basso"
+msgstr "Reveal from the bottom"
+
+msgid "Si scopre dal centro con zoom"
+msgstr "Reveal from the center with zoom"
+
+msgid "Si scopre dal centro"
+msgstr "Reveal from the center"
+
+msgid "Dissolvenza verso l’alto"
+msgstr "Fade upwards"
+
+msgid "Dissolvenza verso il basso"
+msgstr "Fade downwards"
+
+msgid "Dissolvenza verso sinistra"
+msgstr "Fade to the left"
+
+msgid "Dissolvenza verso destra"
+msgstr "Fade to the right"
+
+msgid "Scivola verso sinistra"
+msgstr "Slide to the left"
+
+msgid "Scivola verso destra"
+msgstr "Slide to the right"
+
+msgid "Breve verso l’alto"
+msgstr "Short slide upwards"
+
+msgid "Breve verso il basso"
+msgstr "Short slide downwards"
+
+msgid "Breve verso sinistra"
+msgstr "Short slide to the left"
+
+msgid "Breve verso destra"
+msgstr "Short slide to the right"
+
+msgid "Morbida verso il basso"
+msgstr "Smooth slide downwards"
+
+msgid "Morbida verso l’alto"
+msgstr "Smooth slide upwards"
+
+msgid "Morbida verso sinistra"
+msgstr "Smooth slide to the left"
+
+msgid "Morbida verso destra"
+msgstr "Smooth slide to the right"
+
+msgid "Inclinata verso sinistra"
+msgstr "Skewed to the left"
+
+msgid "Inclinata verso destra"
+msgstr "Skewed to the right"
+
+msgid "Inclinata breve verso sinistra"
+msgstr "Short skew to the left"
+
+msgid "Inclinata breve verso destra"
+msgstr "Short skew to the right"
+
+msgid "Ribaltata verso l’alto"
+msgstr "Flip upwards"
+
+msgid "Ribaltata verso il basso"
+msgstr "Flip downwards"
+
+msgid "Ribaltata verso sinistra"
+msgstr "Flip to the left"
+
+msgid "Ribaltata verso destra"
+msgstr "Flip to the right"
+
+msgid "Ruota uscendo"
+msgstr "Rotate out"
+
+msgid "Ruota verso il basso"
+msgstr "Rotate downwards"
+
+msgid "Ruota verso sinistra"
+msgstr "Rotate to the left"
+
+msgid "Ruota verso destra"
+msgstr "Rotate to the right"
+
+msgid "Si rimpicciolisce"
+msgstr "Shrinks"
+
+msgid "Sparisce morbida"
+msgstr "Smooth fade-away"
+
+msgid "Si gonfia e sparisce"
+msgstr "Swells and disappears"
+
+msgid "Rimbalzo verso l’alto"
+msgstr "Bounce upwards"
+
+msgid "Rimbalzo verso il basso"
+msgstr "Bounce downwards"
+
+msgid "Si copre verso sinistra"
+msgstr "Hide to the left"
+
+msgid "Si copre verso destra"
+msgstr "Hide to the right"
+
+msgid "Si copre verso l’alto"
+msgstr "Hide upwards"
+
+msgid "Si copre verso il basso"
+msgstr "Hide downwards"
+
+msgid "Si chiude al centro con zoom"
+msgstr "Close to the center with zoom"
+
+msgid "Si chiude al centro"
+msgstr "Close to the center"
+
+msgid "Pendolo basso"
+msgstr "Low pendulum"
+
+msgid "Pendolo alto"
+msgstr "High pendulum"
+
+msgid "Pendolo a sinistra"
+msgstr "Pendulum on the left"
+
+msgid "Pendolo a destra"
+msgstr "Pendulum on the right"
+
+msgid "Onda piccola a sinistra"
+msgstr "Small wave to the left"
+
+msgid "Onda piccola a destra"
+msgstr "Small wave to the right"
+
+msgid "Onda grande a sinistra"
+msgstr "Big wave to the left"
+
+msgid "Onda grande a destra"
+msgstr "Big wave to the right"
+
+msgid "Vibrazione verticale"
+msgstr "Vertical wiggle"
+
+msgid "Vibrazione orizzontale"
+msgstr "Horizontal wiggle"
+
+msgid "Vibrazione 3D"
+msgstr "3D wiggle"
+
+msgid "Vibrazione scatenata"
+msgstr "Wild wiggle"
+
+msgid "Gira in senso orario"
+msgstr "Spins clockwise"
+
+msgid "Gira in senso antiorario"
+msgstr "Spins counterclockwise"
+
+msgid "Lampeggio"
+msgstr "Blink"
+
+msgid "Scivola avanti e indietro"
+msgstr "Slides back and forth"
+
+msgid "Vento (piega dal basso)"
+msgstr "Wind (bends from the bottom)"
+
+msgid "Fluttua piano"
+msgstr "Floats gently"
+
+msgid "Slide successiva"
+msgstr "Next slide"
+
+msgid "Slide precedente"
+msgstr "Previous slide"
+
+msgid "Vai alla slide…"
+msgstr "Go to slide…"
+
+msgid "Apri un indirizzo"
+msgstr "Open an address"
+
+msgid "Scorri sotto lo slider"
+msgstr "Scroll below the slider"
+
+msgid "Iniziali maiuscole"
+msgstr "Capitalized initials"
+
+msgid "Sopralineato"
+msgstr "Overline"
+
+msgid "In alto a sinistra"
+msgstr "Top left"
+
+msgid "In alto a destra"
+msgstr "Top right"
+
+msgid "In basso a sinistra"
+msgstr "Bottom left"
+
+msgid "In basso a destra"
+msgstr "Bottom right"
+
+msgid "Blocco da destra"
+msgstr "Block from the right"
+
+msgid "Blocco da sinistra"
+msgstr "Block from the left"
+
+msgid "Blocco dall’alto"
+msgstr "Block from the top"
+
+msgid "Blocco dal basso"
+msgstr "Block from the bottom"
+
+msgid "Manina"
+msgstr "Pointing hand"
+
+msgid "Sposta"
+msgstr "Move"
+
+msgid "Mano aperta"
+msgstr "Open hand"
+
+msgid "Parole"
+msgstr "Words"
+
+msgid "Centro → Bordi"
+msgstr "Center → Edges"
+
+msgid "Bordi → Centro"
+msgstr "Edges → Center"
+
+msgid "Nessun cambio"
+msgstr "No change"
+
+msgid "Sipario orizzontale"
+msgstr "Horizontal curtain"
+
+msgid "Sipario verticale"
+msgstr "Vertical curtain"
+
+msgid "Si avvicina"
+msgstr "Zooms in"
+
+msgid "Si allontana"
+msgstr "Zooms out"
+
+msgid "Scorre a sinistra"
+msgstr "Pans left"
+
+msgid "Scorre a destra"
+msgstr "Pans right"
+
+msgid "Scorre in alto"
+msgstr "Pans up"
+
+msgid "Scorre in basso"
+msgstr "Pans down"
+
+msgid "Mouse e scorrimento"
+msgstr "Mouse and scrolling"
+
+msgid "Sfocatura all’inizio"
+msgstr "Blur at the start"
+
+msgid "Sfocatura alla fine"
+msgstr "Blur at the end"
+
+msgid "Notebook"
+msgstr "Notebook"
+
+msgid "Valori propri per"
+msgstr "Own values for"
+
+msgid "Ha valori propri su qualche schermo"
+msgstr "Has its own values on some screens"
+
+msgid "Nessuna icona tua: carica un file SVG."
+msgstr "None of your icons yet: upload an SVG file."
+
+msgid "Prendi la posizione dalla tela"
+msgstr "Take the position from the canvas"
+
+msgid "Seleziona un fotogramma chiave nella linea del tempo"
+msgstr "Select a keyframe in the timeline"
+
+msgid "Fotogramma chiave precedente"
+msgstr "Previous keyframe"
+
+msgid "Fotogramma chiave successivo"
+msgstr "Next keyframe"
+
+msgid "L’uscita aspetta la fine della slide"
+msgstr "The exit waits for the end of the slide"
+
+msgid "Aggiungi un fotogramma chiave a questo punto"
+msgstr "Add a keyframe at this point"
+
+msgid "Seleziona un livello con la linea del tempo"
+msgstr "Select a layer with a timeline"
+
+msgid "Riduci la linea del tempo"
+msgstr "Zoom out the timeline"
+
+msgid "Ingrandisci la linea del tempo"
+msgstr "Zoom in the timeline"
+
+msgid "La linea del tempo ("
+msgstr "The timeline ("
+
+msgid "Porta tutti i livelli alla durata più lunga"
+msgstr "Set all layers to the longest duration"
+
+msgid "Resta visibile fino alla fine della slide"
+msgstr "Stays visible until the end of the slide"
+
+msgid "Duplica il fotogramma chiave"
+msgstr "Duplicate the keyframe"
+
+msgid "Elimina il fotogramma chiave"
+msgstr "Delete the keyframe"
+
+msgid "Semplici"
+msgstr "Simple"
+
+msgid "Accelera"
+msgstr "Speeds up"
+
+msgid "Rallenta"
+msgstr "Slows down"
+
+msgid "Accelera e rallenta"
+msgstr "Speeds up and slows down"
+
+msgid "Lo slider resta fermo in cima alla finestra mentre la pagina scorre per la distanza scelta: in quel tratto lo scorrimento fa avanzare le slide e muove i livelli che hanno il «Movimento con lo scorrimento» (Animazione nell’editor dello slider). Finito il tratto, la pagina riprende a scorrere."
+msgstr "The slider stays pinned to the top of the window while the page scrolls for the chosen distance: along that stretch scrolling advances the slides and moves the layers that have “Scroll movement” (Animation in the slider editor). After that stretch the page scrolls on again."
+
+#: licenza-1.4.1345
+msgid "Durata di ogni slide"
+msgstr "Duration of each slide"
+
+msgid "Distanza di scorrimento"
+msgstr "Scroll distance"
+
+msgid "Larghezza slide"
+msgstr "Slide width"
+
+#: licenza-1.4.1345
+msgid "Aspetta la fine"
+msgstr "Wait for the end"
+
+msgid "Altezza rispetto alla finestra"
+msgstr "Height relative to the window"
+
+#: licenza-1.4.1345
+msgid "Inverti"
+msgstr "Invert"
+
+msgid "Cambia al passaggio del mouse"
+msgstr "Changes on mouse hover"
+
+msgid "Morbido, frena alla fine (predefinito)"
+msgstr "Smooth, slows down at the end (default)"
+
+msgid "Tempo"
+msgstr "Time"
+
+#: licenza-1.4.1345
+msgid "0° = lavagna dritta; con i gradi negativi gira in senso antiorario, con i positivi in senso orario. Con la parallasse accesa, scorrendo la pagina oscilla appena attorno a questo angolo."
+msgstr "0° = straight board; negative degrees turn it counterclockwise, positive ones clockwise. With parallax on, it sways slightly around this angle as the page scrolls."
+
+#: licenza-1.4.1345
+msgid "Scena minigioco"
+msgstr "Mini-game scene"
+
+msgid "Quiz di verifica"
+msgstr "Check quiz"
+
+#: licenza-1.4.1345
+msgid "Testi sulle foto"
+msgstr "Text on photos"
+
+msgid "Solo la didascalia al passaggio"
+msgstr "Caption on hover only"
+
+msgid "Sulla foto"
+msgstr "On the photo"
+
+msgid "«Sotto la foto» vale per gli schemi Griglia e Masonry; negli altri i testi vanno sulla foto."
+msgstr "“Below the photo” works with the Grid and Masonry layouts; in the others the text goes on the photo."
+
+msgid "Quando si vedono"
+msgstr "When they show"
+
+msgid "Mostra il titolo"
+msgstr "Show the title"
+
+msgid "Mostra il sottotitolo"
+msgstr "Show the subtitle"
+
+msgid "Mostra il testo"
+msgstr "Show the text"
+
+msgid "Mostra la miniatura"
+msgstr "Show the thumbnail"
+
+msgid "Sopra la galleria un pulsante per ogni categoria e «Tutti»: cliccando, restano le foto di quella categoria e la galleria si riordina. La categoria si scrive sotto ogni foto in «Media»; più categorie si separano con la virgola."
+msgstr "Above the gallery, a button for each category and “All”: clicking one keeps that category’s photos and the gallery rearranges itself. Write the category under each photo in “Media”; separate several categories with commas."
+
+msgid "Testo di «Tutti»"
+msgstr "Text for “All”"
+
+msgid "Mostra quante foto"
+msgstr "Show how many photos"
+
+msgid "Colore di categoria e numero"
+msgstr "Category and number color"
+
+msgid "Velo sotto i testi"
+msgstr "Shade under the text"
+
+msgid "Sfondo dei testi"
+msgstr "Text background"
+
+msgid "Padding testi"
+msgstr "Text padding"
+
+msgid "Stile dei filtri"
+msgstr "Filter style"
+
+msgid "Colore del filtro attivo"
+msgstr "Active filter color"
+
+msgid "Elenco a righe"
+msgstr "List in rows"
+
+msgid "Link della foto (facoltativo)"
+msgstr "Photo link (optional)"
+
+msgid "Misura della foto"
+msgstr "Photo size"
+
+msgid "Misura automatica"
+msgstr "Automatic size"
+
+msgid "Piccola (1 × 1)"
+msgstr "Small (1 × 1)"
+
+msgid "Larga (2 × 1)"
+msgstr "Wide (2 × 1)"
+
+msgid "Alta (1 × 2)"
+msgstr "Tall (1 × 2)"
+
+msgid "Grande (2 × 2)"
+msgstr "Large (2 × 2)"
+
+msgid "Molto larga (3 × 2)"
+msgstr "Extra wide (3 × 2)"
+
+msgid "Molto alta (2 × 3)"
+msgstr "Extra tall (2 × 3)"
+
+msgid "Filtra per categoria"
+msgstr "Filter by category"
+
+msgid "Ritardo fra le foto"
+msgstr "Delay between photos"

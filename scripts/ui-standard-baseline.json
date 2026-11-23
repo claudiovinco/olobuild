@@ -20,7 +20,7 @@
     "dispositivo-letto": 0,
     "stile-proprio-elenco": 0,
     "atomiche-elenco": 0,
-    "fantasma-preset": 3,
+    "fantasma-preset": 2,
     "fantasma-hover": 0,
     "fantasma-dispositivo": 8,
     "fantasma-bordo": 0,
@@ -41,7 +41,7 @@
     "densita-doppia": 0,
     "densita-ds-senza-ripiego": 0,
     "densita-token-in-tile-esistenti": 0,
-    "densita-letterali": 1913,
+    "densita-letterali": 1902,
     "componente-orfano": 0,
     "campo-orfano": 0,
     "fieldbox-celle": 0

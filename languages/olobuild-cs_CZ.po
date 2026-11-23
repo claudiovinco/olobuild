@@ -2807,3 +2807,757 @@ msgstr "Dráha"
 
 msgid "Percorso SVG (d=\"\")"
 msgstr "Cesta SVG (d=\"\")"
+
+#: licenza-1.4.1345
+msgid "Tutto schermo"
+msgstr "Celá obrazovka"
+
+msgid "Durata di ogni slide (ms)"
+msgstr "Délka každého snímku (ms)"
+
+msgid "Scivola sopra"
+msgstr "Přesunout přes"
+
+msgid "Dissolvenza al nero"
+msgstr "Prolnutí přes černou"
+
+msgid "Ribaltamento orizzontale"
+msgstr "Vodorovné překlopení"
+
+msgid "Ribaltamento verticale"
+msgstr "Svislé překlopení"
+
+msgid "Cubo orizzontale"
+msgstr "Vodorovná krychle"
+
+msgid "Cubo verticale"
+msgstr "Svislá krychle"
+
+msgid "Spinta"
+msgstr "Odsunutí"
+
+msgid "Spinta verso destra"
+msgstr "Odsunutí doprava"
+
+msgid "Spinta verso il basso"
+msgstr "Odsunutí dolů"
+
+msgid "Pila"
+msgstr "Hromádka"
+
+msgid "Carta tagliata"
+msgstr "Vystřižený papír"
+
+msgid "Zoom e dissolvenza"
+msgstr "Přiblížení a prolnutí"
+
+msgid "Rotazione della slide"
+msgstr "Otočení snímku"
+
+msgid "Sipario 3D"
+msgstr "3D opona"
+
+msgid "Scivola verso l’alto"
+msgstr "Posun nahoru"
+
+msgid "Scivola verso il basso"
+msgstr "Posun dolů"
+
+msgid "Barra di avanzamento"
+msgstr "Ukazatel průběhu"
+
+msgid "Navigazione con la tastiera"
+msgstr "Ovládání klávesnicí"
+
+msgid "Scorrimento col dito"
+msgstr "Posun prstem"
+
+msgid "Rotella del mouse"
+msgstr "Kolečko myši"
+
+msgid "Miniature e schede"
+msgstr "Náhledy a karty"
+
+msgid "Tipo di parallasse"
+msgstr "Typ paralaxy"
+
+msgid "Modalità carosello"
+msgstr "Režim karuselu"
+
+msgid "Scorrimento della pagina"
+msgstr "Posouvání stránky"
+
+msgid "Timeline a scorrimento"
+msgstr "Časová osa při posouvání"
+
+msgid "Distanza di scorrimento (px)"
+msgstr "Vzdálenost posunu (px)"
+
+msgid "Solo la freccia"
+msgstr "Jen šipka"
+
+msgid "Nel quadrato"
+msgstr "Ve čtverci"
+
+msgid "Vuoto = bianco, per le foto scure. Sulle slide chiare scegli un colore scuro: frecce, contorni e punti lo prendono, e il fondo delle frecce «Solo la freccia» e «Nel quadrato» diventa chiaro da sé."
+msgstr "Prázdné = bílá, pro tmavé fotky. Na světlých snímcích zvolte tmavou barvu: šipky, obrysy a tečky ji převezmou a pozadí šipek „Jen šipka“ a „Ve čtverci“ se samo zesvětlí."
+
+msgid "Miniature e schede — posizione"
+msgstr "Náhledy a karty — umístění"
+
+msgid "Posizione schede"
+msgstr "Umístění karet"
+
+msgid "Effetto allo scorrimento"
+msgstr "Efekt při posouvání"
+
+msgid "Dissolvenza e sfocatura"
+msgstr "Prolnutí a rozostření"
+
+msgid "Intensità della parallasse"
+msgstr "Síla paralaxy"
+
+msgid "Larghezza slide (%)"
+msgstr "Šířka snímku (%)"
+
+msgid "Indirizzo dell’immagine"
+msgstr "Adresa obrázku"
+
+msgid "Indirizzo del video"
+msgstr "Adresa videa"
+
+msgid "Indirizzo dell’audio"
+msgstr "Adresa zvuku"
+
+msgid "Azione al clic"
+msgstr "Akce po kliknutí"
+
+msgid "Nessun altro livello in questa slide"
+msgstr "Na tomto snímku není jiná vrstva"
+
+msgid "Azzera tutti"
+msgstr "Vynulovat vše"
+
+msgid "Stile del carattere"
+msgstr "Styl písma"
+
+msgid "Colore del tratto"
+msgstr "Barva tahu"
+
+msgid "Colore di riempimento"
+msgstr "Barva výplně"
+
+msgid "Colore di riempimento (al posto di quello del file)"
+msgstr "Barva výplně (místo barvy ze souboru)"
+
+msgid "Raggio (px)"
+msgstr "Poloměr (px)"
+
+msgid "Animazione del testo"
+msgstr "Animace textu"
+
+msgid "Anima lettere o parole"
+msgstr "Animovat písmena nebo slova"
+
+msgid "Andata e ritorno"
+msgstr "Tam a zpět"
+
+msgid "Intensità (%)"
+msgstr "Intenzita (%)"
+
+msgid "Parallasse attiva"
+msgstr "Paralaxa zapnutá"
+
+msgid "Velocità con lo scorrimento"
+msgstr "Rychlost při posouvání"
+
+msgid "Usa la linea del tempo sotto la tela per aggiungere e spostare i fotogrammi chiave."
+msgstr "Klíčové snímky přidávejte a posouvejte na časové ose pod plátnem."
+
+msgid "Dissolvenza dall’alto"
+msgstr "Prolnutí shora"
+
+msgid "Dissolvenza da sinistra"
+msgstr "Prolnutí zleva"
+
+msgid "Dissolvenza da destra"
+msgstr "Prolnutí zprava"
+
+msgid "Scivola"
+msgstr "Posun"
+
+msgid "Scivola da sinistra"
+msgstr "Posun zleva"
+
+msgid "Scivola da destra"
+msgstr "Posun zprava"
+
+msgid "Scivola dal basso"
+msgstr "Posun zdola"
+
+msgid "Scivola dall’alto"
+msgstr "Posun shora"
+
+msgid "Breve dall’alto"
+msgstr "Krátký posun shora"
+
+msgid "Breve dal basso"
+msgstr "Krátký posun zdola"
+
+msgid "Breve da sinistra"
+msgstr "Krátký posun zleva"
+
+msgid "Breve da destra"
+msgstr "Krátký posun zprava"
+
+msgid "Morbida dal basso"
+msgstr "Plynulý posun zdola"
+
+msgid "Morbida dall’alto"
+msgstr "Plynulý posun shora"
+
+msgid "Morbida da sinistra"
+msgstr "Plynulý posun zleva"
+
+msgid "Morbida da destra"
+msgstr "Plynulý posun zprava"
+
+msgid "Inclinata da sinistra"
+msgstr "Zkosení zleva"
+
+msgid "Inclinata da destra"
+msgstr "Zkosení zprava"
+
+msgid "Inclinata breve da sinistra"
+msgstr "Krátké zkosení zleva"
+
+msgid "Inclinata breve da destra"
+msgstr "Krátké zkosení zprava"
+
+msgid "Ribaltata 3D"
+msgstr "3D překlopení"
+
+msgid "Ribaltata dall’alto"
+msgstr "Překlopení shora"
+
+msgid "Ribaltata dal basso"
+msgstr "Překlopení zdola"
+
+msgid "Ribaltata da sinistra"
+msgstr "Překlopení zleva"
+
+msgid "Ribaltata da destra"
+msgstr "Překlopení zprava"
+
+msgid "Ruota entrando"
+msgstr "Příchod s otočením"
+
+msgid "Ruota dal basso"
+msgstr "Otočení zdola"
+
+msgid "Ruota in 3D"
+msgstr "Otočení ve 3D"
+
+msgid "Ruota da sinistra"
+msgstr "Otočení zleva"
+
+msgid "Ruota da destra"
+msgstr "Otočení zprava"
+
+msgid "Zoom e rimbalzo"
+msgstr "Přiblížení a odraz"
+
+msgid "Spunta morbida"
+msgstr "Plynné vyskočení"
+
+msgid "Spunta e torna indietro"
+msgstr "Vyskočení se zhoupnutím"
+
+msgid "Rimbalzo dal basso"
+msgstr "Odraz zdola"
+
+msgid "Rimbalzo dall’alto"
+msgstr "Odraz shora"
+
+msgid "Si scopre da sinistra"
+msgstr "Odkrytí zleva"
+
+msgid "Si scopre da destra"
+msgstr "Odkrytí zprava"
+
+msgid "Si scopre dall’alto"
+msgstr "Odkrytí shora"
+
+msgid "Si scopre dal basso"
+msgstr "Odkrytí zdola"
+
+msgid "Si scopre dal centro con zoom"
+msgstr "Odkrytí od středu s přiblížením"
+
+msgid "Si scopre dal centro"
+msgstr "Odkrytí od středu"
+
+msgid "Dissolvenza verso l’alto"
+msgstr "Prolnutí nahoru"
+
+msgid "Dissolvenza verso il basso"
+msgstr "Prolnutí dolů"
+
+msgid "Dissolvenza verso sinistra"
+msgstr "Prolnutí doleva"
+
+msgid "Dissolvenza verso destra"
+msgstr "Prolnutí doprava"
+
+msgid "Scivola verso sinistra"
+msgstr "Posun doleva"
+
+msgid "Scivola verso destra"
+msgstr "Posun doprava"
+
+msgid "Breve verso l’alto"
+msgstr "Krátký posun nahoru"
+
+msgid "Breve verso il basso"
+msgstr "Krátký posun dolů"
+
+msgid "Breve verso sinistra"
+msgstr "Krátký posun doleva"
+
+msgid "Breve verso destra"
+msgstr "Krátký posun doprava"
+
+msgid "Morbida verso il basso"
+msgstr "Plynulý posun dolů"
+
+msgid "Morbida verso l’alto"
+msgstr "Plynulý posun nahoru"
+
+msgid "Morbida verso sinistra"
+msgstr "Plynulý posun doleva"
+
+msgid "Morbida verso destra"
+msgstr "Plynulý posun doprava"
+
+msgid "Inclinata verso sinistra"
+msgstr "Zkosení doleva"
+
+msgid "Inclinata verso destra"
+msgstr "Zkosení doprava"
+
+msgid "Inclinata breve verso sinistra"
+msgstr "Krátké zkosení doleva"
+
+msgid "Inclinata breve verso destra"
+msgstr "Krátké zkosení doprava"
+
+msgid "Ribaltata verso l’alto"
+msgstr "Překlopení nahoru"
+
+msgid "Ribaltata verso il basso"
+msgstr "Překlopení dolů"
+
+msgid "Ribaltata verso sinistra"
+msgstr "Překlopení doleva"
+
+msgid "Ribaltata verso destra"
+msgstr "Překlopení doprava"
+
+msgid "Ruota uscendo"
+msgstr "Odchod s otočením"
+
+msgid "Ruota verso il basso"
+msgstr "Otočení dolů"
+
+msgid "Ruota verso sinistra"
+msgstr "Otočení doleva"
+
+msgid "Ruota verso destra"
+msgstr "Otočení doprava"
+
+msgid "Si rimpicciolisce"
+msgstr "Zmenší se"
+
+msgid "Sparisce morbida"
+msgstr "Plynné zmizení"
+
+msgid "Si gonfia e sparisce"
+msgstr "Nafoukne se a zmizí"
+
+msgid "Rimbalzo verso l’alto"
+msgstr "Odraz nahoru"
+
+msgid "Rimbalzo verso il basso"
+msgstr "Odraz dolů"
+
+msgid "Si copre verso sinistra"
+msgstr "Zakrytí doleva"
+
+msgid "Si copre verso destra"
+msgstr "Zakrytí doprava"
+
+msgid "Si copre verso l’alto"
+msgstr "Zakrytí nahoru"
+
+msgid "Si copre verso il basso"
+msgstr "Zakrytí dolů"
+
+msgid "Si chiude al centro con zoom"
+msgstr "Zavření do středu s přiblížením"
+
+msgid "Si chiude al centro"
+msgstr "Zavření do středu"
+
+msgid "Pendolo basso"
+msgstr "Kyvadlo dole"
+
+msgid "Pendolo alto"
+msgstr "Kyvadlo nahoře"
+
+msgid "Pendolo a sinistra"
+msgstr "Kyvadlo vlevo"
+
+msgid "Pendolo a destra"
+msgstr "Kyvadlo vpravo"
+
+msgid "Onda piccola a sinistra"
+msgstr "Malá vlna doleva"
+
+msgid "Onda piccola a destra"
+msgstr "Malá vlna doprava"
+
+msgid "Onda grande a sinistra"
+msgstr "Velká vlna doleva"
+
+msgid "Onda grande a destra"
+msgstr "Velká vlna doprava"
+
+msgid "Vibrazione verticale"
+msgstr "Svislé chvění"
+
+msgid "Vibrazione orizzontale"
+msgstr "Vodorovné chvění"
+
+msgid "Vibrazione 3D"
+msgstr "3D chvění"
+
+msgid "Vibrazione scatenata"
+msgstr "Divoké chvění"
+
+msgid "Gira in senso orario"
+msgstr "Točí se po směru hodin"
+
+msgid "Gira in senso antiorario"
+msgstr "Točí se proti směru hodin"
+
+msgid "Lampeggio"
+msgstr "Blikání"
+
+msgid "Scivola avanti e indietro"
+msgstr "Posouvá se tam a zpět"
+
+msgid "Vento (piega dal basso)"
+msgstr "Vítr (ohýbá se zdola)"
+
+msgid "Fluttua piano"
+msgstr "Jemně se vznáší"
+
+msgid "Slide successiva"
+msgstr "Další snímek"
+
+msgid "Slide precedente"
+msgstr "Předchozí snímek"
+
+msgid "Vai alla slide…"
+msgstr "Přejít na snímek…"
+
+msgid "Apri un indirizzo"
+msgstr "Otevřít adresu"
+
+msgid "Scorri sotto lo slider"
+msgstr "Posunout pod slider"
+
+msgid "Iniziali maiuscole"
+msgstr "Velká počáteční písmena"
+
+msgid "Sopralineato"
+msgstr "Nadtržení"
+
+msgid "In alto a sinistra"
+msgstr "Vlevo nahoře"
+
+msgid "In alto a destra"
+msgstr "Vpravo nahoře"
+
+msgid "In basso a sinistra"
+msgstr "Vlevo dole"
+
+msgid "In basso a destra"
+msgstr "Vpravo dole"
+
+msgid "Blocco da destra"
+msgstr "Blok zprava"
+
+msgid "Blocco da sinistra"
+msgstr "Blok zleva"
+
+msgid "Blocco dall’alto"
+msgstr "Blok shora"
+
+msgid "Blocco dal basso"
+msgstr "Blok zdola"
+
+msgid "Manina"
+msgstr "Ručička"
+
+msgid "Sposta"
+msgstr "Přesunout"
+
+msgid "Mano aperta"
+msgstr "Otevřená dlaň"
+
+msgid "Parole"
+msgstr "Slova"
+
+msgid "Centro → Bordi"
+msgstr "Střed → Okraje"
+
+msgid "Bordi → Centro"
+msgstr "Okraje → Střed"
+
+msgid "Nessun cambio"
+msgstr "Beze změny"
+
+msgid "Sipario orizzontale"
+msgstr "Vodorovná opona"
+
+msgid "Sipario verticale"
+msgstr "Svislá opona"
+
+msgid "Si avvicina"
+msgstr "Přibližuje se"
+
+msgid "Si allontana"
+msgstr "Vzdaluje se"
+
+msgid "Scorre a sinistra"
+msgstr "Posouvá se doleva"
+
+msgid "Scorre a destra"
+msgstr "Posouvá se doprava"
+
+msgid "Scorre in alto"
+msgstr "Posouvá se nahoru"
+
+msgid "Scorre in basso"
+msgstr "Posouvá se dolů"
+
+msgid "Mouse e scorrimento"
+msgstr "Myš a posouvání"
+
+msgid "Sfocatura all’inizio"
+msgstr "Rozostření na začátku"
+
+msgid "Sfocatura alla fine"
+msgstr "Rozostření na konci"
+
+msgid "Notebook"
+msgstr "Notebook"
+
+msgid "Valori propri per"
+msgstr "Vlastní hodnoty pro"
+
+msgid "Ha valori propri su qualche schermo"
+msgstr "Na některých obrazovkách má vlastní hodnoty"
+
+msgid "Nessuna icona tua: carica un file SVG."
+msgstr "Žádné vlastní ikony: nahrajte soubor SVG."
+
+msgid "Prendi la posizione dalla tela"
+msgstr "Převzít polohu z plátna"
+
+msgid "Seleziona un fotogramma chiave nella linea del tempo"
+msgstr "Vyberte klíčový snímek na časové ose"
+
+msgid "Fotogramma chiave precedente"
+msgstr "Předchozí klíčový snímek"
+
+msgid "Fotogramma chiave successivo"
+msgstr "Další klíčový snímek"
+
+msgid "L’uscita aspetta la fine della slide"
+msgstr "Odchod čeká na konec snímku"
+
+msgid "Aggiungi un fotogramma chiave a questo punto"
+msgstr "Přidat klíčový snímek v tomto bodě"
+
+msgid "Seleziona un livello con la linea del tempo"
+msgstr "Vyberte vrstvu s časovou osou"
+
+msgid "Riduci la linea del tempo"
+msgstr "Zmenšit časovou osu"
+
+msgid "Ingrandisci la linea del tempo"
+msgstr "Zvětšit časovou osu"
+
+msgid "La linea del tempo ("
+msgstr "Časová osa ("
+
+msgid "Porta tutti i livelli alla durata più lunga"
+msgstr "Nastavit všem vrstvám nejdelší dobu"
+
+msgid "Resta visibile fino alla fine della slide"
+msgstr "Zůstane viditelná do konce snímku"
+
+msgid "Duplica il fotogramma chiave"
+msgstr "Duplikovat klíčový snímek"
+
+msgid "Elimina il fotogramma chiave"
+msgstr "Smazat klíčový snímek"
+
+msgid "Semplici"
+msgstr "Jednoduché"
+
+msgid "Accelera"
+msgstr "Zrychluje"
+
+msgid "Rallenta"
+msgstr "Zpomaluje"
+
+msgid "Accelera e rallenta"
+msgstr "Zrychluje a zpomaluje"
+
+msgid "Lo slider resta fermo in cima alla finestra mentre la pagina scorre per la distanza scelta: in quel tratto lo scorrimento fa avanzare le slide e muove i livelli che hanno il «Movimento con lo scorrimento» (Animazione nell’editor dello slider). Finito il tratto, la pagina riprende a scorrere."
+msgstr "Slider zůstane stát nahoře v okně, zatímco se stránka posouvá o zvolenou vzdálenost: na tomto úseku posouvání přepíná snímky a hýbe vrstvami s „Pohybem při posouvání“ (Animace v editoru slideru). Potom se stránka zase posouvá dál."
+
+#: licenza-1.4.1345
+msgid "Durata di ogni slide"
+msgstr "Délka každého snímku"
+
+msgid "Distanza di scorrimento"
+msgstr "Vzdálenost posunu"
+
+msgid "Larghezza slide"
+msgstr "Šířka snímku"
+
+#: licenza-1.4.1345
+msgid "Aspetta la fine"
+msgstr "Čekat na konec"
+
+msgid "Altezza rispetto alla finestra"
+msgstr "Výška vzhledem k oknu"
+
+#: licenza-1.4.1345
+msgid "Inverti"
+msgstr "Invertovat"
+
+msgid "Cambia al passaggio del mouse"
+msgstr "Mění se při najetí myší"
+
+msgid "Morbido, frena alla fine (predefinito)"
+msgstr "Plynule, na konci zpomalí (výchozí)"
+
+msgid "Tempo"
+msgstr "Čas"
+
+#: licenza-1.4.1345
+msgid "0° = lavagna dritta; con i gradi negativi gira in senso antiorario, con i positivi in senso orario. Con la parallasse accesa, scorrendo la pagina oscilla appena attorno a questo angolo."
+msgstr "0° = rovná tabule; zápornými stupni se otáčí proti směru hodin, kladnými po směru. Se zapnutou paralaxou se při posouvání stránky lehce houpe kolem tohoto úhlu."
+
+#: licenza-1.4.1345
+msgid "Scena minigioco"
+msgstr "Scéna s minihrou"
+
+msgid "Quiz di verifica"
+msgstr "Ověřovací kvíz"
+
+#: licenza-1.4.1345
+msgid "Testi sulle foto"
+msgstr "Texty na fotkách"
+
+msgid "Solo la didascalia al passaggio"
+msgstr "Jen popisek při najetí"
+
+msgid "Sulla foto"
+msgstr "Na fotce"
+
+msgid "«Sotto la foto» vale per gli schemi Griglia e Masonry; negli altri i testi vanno sulla foto."
+msgstr "„Pod fotkou“ platí pro rozvržení Mřížka a Masonry; v ostatních jsou texty na fotce."
+
+msgid "Quando si vedono"
+msgstr "Kdy se zobrazí"
+
+msgid "Mostra il titolo"
+msgstr "Zobrazit nadpis"
+
+msgid "Mostra il sottotitolo"
+msgstr "Zobrazit podnadpis"
+
+msgid "Mostra il testo"
+msgstr "Zobrazit text"
+
+msgid "Mostra la miniatura"
+msgstr "Zobrazit náhled"
+
+msgid "Sopra la galleria un pulsante per ogni categoria e «Tutti»: cliccando, restano le foto di quella categoria e la galleria si riordina. La categoria si scrive sotto ogni foto in «Media»; più categorie si separano con la virgola."
+msgstr "Nad galerií tlačítko pro každou kategorii a „Vše“: po kliknutí zůstanou fotky dané kategorie a galerie se přeuspořádá. Kategorii napište pod každou fotku v „Média“; více kategorií oddělte čárkami."
+
+msgid "Testo di «Tutti»"
+msgstr "Text pro „Vše“"
+
+msgid "Mostra quante foto"
+msgstr "Zobrazit počet fotek"
+
+msgid "Colore di categoria e numero"
+msgstr "Barva kategorie a čísla"
+
+msgid "Velo sotto i testi"
+msgstr "Závoj pod texty"
+
+msgid "Sfondo dei testi"
+msgstr "Pozadí textů"
+
+msgid "Padding testi"
+msgstr "Odsazení textů"
+
+msgid "Stile dei filtri"
+msgstr "Styl filtrů"
+
+msgid "Colore del filtro attivo"
+msgstr "Barva aktivního filtru"
+
+msgid "Elenco a righe"
+msgstr "Seznam v řádcích"
+
+msgid "Link della foto (facoltativo)"
+msgstr "Odkaz fotky (volitelné)"
+
+msgid "Misura della foto"
+msgstr "Velikost fotky"
+
+msgid "Misura automatica"
+msgstr "Automatická velikost"
+
+msgid "Piccola (1 × 1)"
+msgstr "Malá (1 × 1)"
+
+msgid "Larga (2 × 1)"
+msgstr "Široká (2 × 1)"
+
+msgid "Alta (1 × 2)"
+msgstr "Vysoká (1 × 2)"
+
+msgid "Grande (2 × 2)"
+msgstr "Velká (2 × 2)"
+
+msgid "Molto larga (3 × 2)"
+msgstr "Velmi široká (3 × 2)"
+
+msgid "Molto alta (2 × 3)"
+msgstr "Velmi vysoká (2 × 3)"
+
+msgid "Filtra per categoria"
+msgstr "Filtrovat podle kategorie"
+
+msgid "Ritardo fra le foto"
+msgstr "Zpoždění mezi fotkami"

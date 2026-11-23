@@ -31,7 +31,7 @@
         <span class="mb-max-w-32 mb-truncate" :title="layerLabel(layer)">{{ layerLabel(layer) }}</span>
         <!-- Cosa fa il livello (1.4.1352): un bollino per animazione, la spiegazione nel suggerimento -->
         <span v-for="a in animazioni(layer)" :key="a.k" :class="['mps-lb-anim', 'mps-lb-anim--' + a.k]" :title="a.titolo" :aria-label="a.titolo">{{ a.testo }}</span>
-        <span v-if="hasResponsiveOverride(layer)" class="mb-w-1.5 mb-h-1.5 mb-rounded-full mb-bg-yellow-400 mb-shrink-0" :title="t('Override responsive')"></span>
+        <span v-if="hasResponsiveOverride(layer)" class="mb-w-1.5 mb-h-1.5 mb-rounded-full mb-bg-yellow-400 mb-shrink-0" :title="t('Ha valori propri su qualche schermo')"></span>
 
         <!-- Move up (toward front / higher z-index) -->
         <button

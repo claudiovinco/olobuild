@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 class Olobuild_OloxQuiz_Tile extends Olobuild_Olox_Base_Tile {
 
     protected $type     = 'oloxquiz';
-    protected $name     = 'OLOX — Quiz verifica';
+    protected $name     = 'Quiz di verifica';
     protected $icon     = 'dashicons-editor-help';
     protected $category = 'marketing';
     protected $defaults = [

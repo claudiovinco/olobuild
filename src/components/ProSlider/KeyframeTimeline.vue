@@ -22,7 +22,7 @@
         @click="seekPrevKf"
         :disabled="!prevKfTime && prevKfTime !== 0"
         class="mb-w-6 mb-h-6 mb-flex mb-items-center mb-justify-center mb-bg-gray-700 mb-rounded hover:mb-bg-gray-600 mb-text-gray-300 mb-transition-colors disabled:mb-opacity-30 disabled:mb-cursor-default"
-        :title="t('Keyframe precedente')"
+        :title="t('Fotogramma chiave precedente')"
       >
         <svg viewBox="0 0 16 16" class="mb-w-3 mb-h-3" fill="currentColor"><rect x="2" y="3" width="2.5" height="10"/><polygon points="14,3 6,8 14,13"/></svg>
       </button>
@@ -32,7 +32,7 @@
         @click="seekNextKf"
         :disabled="!nextKfTime && nextKfTime !== 0"
         class="mb-w-6 mb-h-6 mb-flex mb-items-center mb-justify-center mb-bg-gray-700 mb-rounded hover:mb-bg-gray-600 mb-text-gray-300 mb-transition-colors disabled:mb-opacity-30 disabled:mb-cursor-default"
-        :title="t('Keyframe successivo')"
+        :title="t('Fotogramma chiave successivo')"
       >
         <svg viewBox="0 0 16 16" class="mb-w-3 mb-h-3" fill="currentColor"><polygon points="2,3 10,8 2,13"/><rect x="11.5" y="3" width="2.5" height="10"/></svg>
       </button>
@@ -61,7 +61,7 @@
         </label>
 
         <label class="mb-flex mb-items-center mb-gap-1">
-          <span class="mb-text-[10px] mb-text-gray-500">Delay</span>
+          <span class="mb-text-[10px] mb-text-gray-500">{{ t('Ritardo') }}</span>
           <NumberScrubber
             theme="dark"
             :modelValue="activeTimeline.delay || 0"
@@ -83,26 +83,26 @@
             @change="$emit('update-timeline-prop', 'loop', $event.target.checked)"
             class="mb-rounded mb-w-3 mb-h-3"
           />
-          <span class="mb-text-[10px] mb-text-gray-400">Loop</span>
+          <span class="mb-text-[10px] mb-text-gray-400">{{ t('Ripeti') }}</span>
         </label>
 
-        <label class="mb-flex mb-items-center mb-gap-1 mb-cursor-pointer" :title="t('Layer OUT aspetta la fine della slide (WAIT)')">
+        <label class="mb-flex mb-items-center mb-gap-1 mb-cursor-pointer" :title="t('L’uscita aspetta la fine della slide')">
           <input
             type="checkbox"
             :checked="activeTimeline.endWithSlide !== false"
             @change="$emit('update-timeline-prop', 'endWithSlide', $event.target.checked)"
             class="mb-rounded mb-w-3 mb-h-3"
           />
-          <span class="mb-text-[10px] mb-text-gray-400">WAIT</span>
+          <span class="mb-text-[10px] mb-text-gray-400">{{ t('Aspetta la fine') }}</span>
         </label>
 
         <button
           @click="addKeyframeAtPlayhead"
           class="mb-ml-auto mb-px-2 mb-py-0.5 mb-bg-gray-700 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-600 mb-transition-colors"
-          :title="t('Aggiungi keyframe al tempo corrente')"
+          :title="t('Aggiungi un fotogramma chiave a questo punto')"
         >+ Keyframe</button>
       </template>
-      <span v-else class="mb-text-[10px] mb-text-gray-500 mb-italic">{{ t('Seleziona un layer con timeline') }}</span>
+      <span v-else class="mb-text-[10px] mb-text-gray-500 mb-italic">{{ t('Seleziona un livello con la linea del tempo') }}</span>
 
       <!-- Timeline zoom controls -->
       <div class="mb-ml-auto mb-flex mb-items-center mb-gap-1 mb-pl-3 mb-border-l mb-border-gray-600">
@@ -110,27 +110,27 @@
           @click="timelineZoom = Math.max(1, +(timelineZoom - 0.5).toFixed(1))"
           :disabled="timelineZoom <= 1"
           class="mb-w-5 mb-h-5 mb-flex mb-items-center mb-justify-center mb-bg-gray-700 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-600 mb-transition-colors disabled:mb-opacity-30"
-          :title="t('Riduci zoom timeline')"
+          :title="t('Riduci la linea del tempo')"
         >−</button>
         <span class="mb-text-[10px] mb-text-gray-400 mb-font-mono mb-w-8 mb-text-center">{{ Math.round(timelineZoom * 100) }}%</span>
         <button
           @click="timelineZoom = Math.min(10, +(timelineZoom + 0.5).toFixed(1))"
           :disabled="timelineZoom >= 10"
           class="mb-w-5 mb-h-5 mb-flex mb-items-center mb-justify-center mb-bg-gray-700 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-600 mb-transition-colors disabled:mb-opacity-30"
-          :title="t('Aumenta zoom timeline')"
+          :title="t('Ingrandisci la linea del tempo')"
         >+</button>
         <button
           v-if="timelineZoom !== 1"
           @click="timelineZoom = 1"
           class="mb-w-5 mb-h-5 mb-flex mb-items-center mb-justify-center mb-bg-gray-700 mb-rounded mb-text-[10px] mb-text-gray-400 hover:mb-bg-gray-600 mb-transition-colors"
-          :title="t('Reset zoom')"
+          :title="t('Zoom al 100%')"
         >⟲</button>
       </div>
 
       <!-- Separator + Slide duration controls (always visible) -->
       <div class="mb-flex mb-items-center mb-gap-2 mb-pl-3 mb-border-l mb-border-gray-600">
         <label class="mb-flex mb-items-center mb-gap-1">
-          <span class="mb-text-[10px] mb-text-gray-500">Slide</span>
+          <span class="mb-text-[10px] mb-text-gray-500">{{ t('Slide') }}</span>
           <NumberScrubber
             theme="dark"
             :modelValue="effectiveSlideDuration / 1000"
@@ -148,13 +148,13 @@
           v-if="maxDuration > effectiveSlideDuration"
           @click="emit('update-slide-duration', maxDuration)"
           class="mb-px-1.5 mb-py-0.5 mb-bg-yellow-600/30 mb-border mb-border-yellow-600/50 mb-rounded mb-text-[10px] mb-text-yellow-300 hover:mb-bg-yellow-600/50 mb-transition-colors"
-          :title="t('La timeline (') + (maxDuration/1000).toFixed(1) + t('s) è più lunga della slide (') + (effectiveSlideDuration/1000).toFixed(1) + t('s). Clicca per sincronizzare.')"
+          :title="t('La linea del tempo (') + (maxDuration/1000).toFixed(1) + t('s) è più lunga della slide (') + (effectiveSlideDuration/1000).toFixed(1) + t('s). Clicca per sincronizzare.')"
         >⚠ Sync</button>
         <button
           v-if="timelineTracks.length > 1"
           @click="emit('set-all-durations', maxDuration)"
           class="mb-px-1.5 mb-py-0.5 mb-bg-gray-700 mb-rounded mb-text-[10px] mb-text-gray-400 hover:mb-bg-gray-600 mb-transition-colors"
-          :title="t('Imposta tutte le durate layer alla durata massima')"
+          :title="t('Porta tutti i livelli alla durata più lunga')"
         >= {{ t('Tutti') }}</button>
       </div>
     </div>
@@ -260,7 +260,7 @@
                 background: track.color,
                 opacity: 0.15,
               }"
-              :title="t('WAIT — layer resta visibile fino a fine slide')"
+              :title="t('Resta visibile fino alla fine della slide')"
             ></div>
 
             <!-- Tloop range indicator -->
@@ -319,12 +319,12 @@
       <button
         @click="duplicateKeyframe(ctxMenu.kf, ctxMenu.track); ctxMenu = null"
         class="mb-block mb-w-full mb-text-left mb-px-3 mb-py-1 mb-text-xs mb-text-gray-300 hover:mb-bg-gray-700"
-      >{{ t('Duplica keyframe') }}</button>
+      >{{ t('Duplica il fotogramma chiave') }}</button>
       <button
         v-if="canDeleteKf(ctxMenu.track)"
         @click="$emit('select-layer', ctxMenu.track.layer.id); $emit('remove-keyframe', ctxMenu.kf.id); ctxMenu = null"
         class="mb-block mb-w-full mb-text-left mb-px-3 mb-py-1 mb-text-xs mb-text-red-400 hover:mb-bg-gray-700"
-      >{{ t('Elimina keyframe') }}</button>
+      >{{ t('Elimina il fotogramma chiave') }}</button>
     </div>
   </div>
 </template>

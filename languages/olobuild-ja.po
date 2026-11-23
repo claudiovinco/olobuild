@@ -17293,3 +17293,757 @@ msgstr "経路"
 
 msgid "Percorso SVG (d=\"\")"
 msgstr "SVG パス（d=\"\"）"
+
+#: licenza-1.4.1345
+msgid "Tutto schermo"
+msgstr "全画面"
+
+msgid "Durata di ogni slide (ms)"
+msgstr "各スライドの時間（ms）"
+
+msgid "Scivola sopra"
+msgstr "上に重ねてスライド"
+
+msgid "Dissolvenza al nero"
+msgstr "黒を経由してフェード"
+
+msgid "Ribaltamento orizzontale"
+msgstr "水平フリップ"
+
+msgid "Ribaltamento verticale"
+msgstr "垂直フリップ"
+
+msgid "Cubo orizzontale"
+msgstr "水平キューブ"
+
+msgid "Cubo verticale"
+msgstr "垂直キューブ"
+
+msgid "Spinta"
+msgstr "プッシュ"
+
+msgid "Spinta verso destra"
+msgstr "右へプッシュ"
+
+msgid "Spinta verso il basso"
+msgstr "下へプッシュ"
+
+msgid "Pila"
+msgstr "スタック"
+
+msgid "Carta tagliata"
+msgstr "切り絵"
+
+msgid "Zoom e dissolvenza"
+msgstr "ズームとフェード"
+
+msgid "Rotazione della slide"
+msgstr "スライドの回転"
+
+msgid "Sipario 3D"
+msgstr "3D カーテン"
+
+msgid "Scivola verso l’alto"
+msgstr "上へスライド"
+
+msgid "Scivola verso il basso"
+msgstr "下へスライド"
+
+msgid "Barra di avanzamento"
+msgstr "進行バー"
+
+msgid "Navigazione con la tastiera"
+msgstr "キーボード操作"
+
+msgid "Scorrimento col dito"
+msgstr "指でスワイプ"
+
+msgid "Rotella del mouse"
+msgstr "マウスホイール"
+
+msgid "Miniature e schede"
+msgstr "サムネイルとタブ"
+
+msgid "Tipo di parallasse"
+msgstr "パララックスの種類"
+
+msgid "Modalità carosello"
+msgstr "カルーセルモード"
+
+msgid "Scorrimento della pagina"
+msgstr "ページのスクロール"
+
+msgid "Timeline a scorrimento"
+msgstr "スクロールタイムライン"
+
+msgid "Distanza di scorrimento (px)"
+msgstr "スクロール距離（px）"
+
+msgid "Solo la freccia"
+msgstr "矢印のみ"
+
+msgid "Nel quadrato"
+msgstr "四角の中"
+
+msgid "Vuoto = bianco, per le foto scure. Sulle slide chiare scegli un colore scuro: frecce, contorni e punti lo prendono, e il fondo delle frecce «Solo la freccia» e «Nel quadrato» diventa chiaro da sé."
+msgstr "空欄 = 白（暗い写真向け）。明るいスライドでは暗い色を選んでください。矢印・輪郭・ドットがその色になり、「矢印のみ」と「四角の中」の矢印の背景は自動で明るくなります。"
+
+msgid "Miniature e schede — posizione"
+msgstr "サムネイルとタブ — 位置"
+
+msgid "Posizione schede"
+msgstr "タブの位置"
+
+msgid "Effetto allo scorrimento"
+msgstr "スクロール時の効果"
+
+msgid "Dissolvenza e sfocatura"
+msgstr "フェードとぼかし"
+
+msgid "Intensità della parallasse"
+msgstr "パララックスの強さ"
+
+msgid "Larghezza slide (%)"
+msgstr "スライドの幅（%）"
+
+msgid "Indirizzo dell’immagine"
+msgstr "画像のアドレス"
+
+msgid "Indirizzo del video"
+msgstr "動画のアドレス"
+
+msgid "Indirizzo dell’audio"
+msgstr "音声のアドレス"
+
+msgid "Azione al clic"
+msgstr "クリック時の動作"
+
+msgid "Nessun altro livello in questa slide"
+msgstr "このスライドに他のレイヤーはありません"
+
+msgid "Azzera tutti"
+msgstr "すべてリセット"
+
+msgid "Stile del carattere"
+msgstr "フォントのスタイル"
+
+msgid "Colore del tratto"
+msgstr "線の色"
+
+msgid "Colore di riempimento"
+msgstr "塗りの色"
+
+msgid "Colore di riempimento (al posto di quello del file)"
+msgstr "塗りの色（ファイルの色の代わり）"
+
+msgid "Raggio (px)"
+msgstr "角丸（px）"
+
+msgid "Animazione del testo"
+msgstr "テキストのアニメーション"
+
+msgid "Anima lettere o parole"
+msgstr "文字または単語をアニメーション"
+
+msgid "Andata e ritorno"
+msgstr "往復"
+
+msgid "Intensità (%)"
+msgstr "強さ（%）"
+
+msgid "Parallasse attiva"
+msgstr "パララックスを有効"
+
+msgid "Velocità con lo scorrimento"
+msgstr "スクロール時の速さ"
+
+msgid "Usa la linea del tempo sotto la tela per aggiungere e spostare i fotogrammi chiave."
+msgstr "キャンバスの下のタイムラインでキーフレームを追加・移動します。"
+
+msgid "Dissolvenza dall’alto"
+msgstr "上からフェード"
+
+msgid "Dissolvenza da sinistra"
+msgstr "左からフェード"
+
+msgid "Dissolvenza da destra"
+msgstr "右からフェード"
+
+msgid "Scivola"
+msgstr "スライド"
+
+msgid "Scivola da sinistra"
+msgstr "左からスライド"
+
+msgid "Scivola da destra"
+msgstr "右からスライド"
+
+msgid "Scivola dal basso"
+msgstr "下からスライド"
+
+msgid "Scivola dall’alto"
+msgstr "上からスライド"
+
+msgid "Breve dall’alto"
+msgstr "上から短いスライド"
+
+msgid "Breve dal basso"
+msgstr "下から短いスライド"
+
+msgid "Breve da sinistra"
+msgstr "左から短いスライド"
+
+msgid "Breve da destra"
+msgstr "右から短いスライド"
+
+msgid "Morbida dal basso"
+msgstr "下からなめらかなスライド"
+
+msgid "Morbida dall’alto"
+msgstr "上からなめらかなスライド"
+
+msgid "Morbida da sinistra"
+msgstr "左からなめらかなスライド"
+
+msgid "Morbida da destra"
+msgstr "右からなめらかなスライド"
+
+msgid "Inclinata da sinistra"
+msgstr "左から傾き"
+
+msgid "Inclinata da destra"
+msgstr "右から傾き"
+
+msgid "Inclinata breve da sinistra"
+msgstr "左から短い傾き"
+
+msgid "Inclinata breve da destra"
+msgstr "右から短い傾き"
+
+msgid "Ribaltata 3D"
+msgstr "3D フリップ"
+
+msgid "Ribaltata dall’alto"
+msgstr "上からフリップ"
+
+msgid "Ribaltata dal basso"
+msgstr "下からフリップ"
+
+msgid "Ribaltata da sinistra"
+msgstr "左からフリップ"
+
+msgid "Ribaltata da destra"
+msgstr "右からフリップ"
+
+msgid "Ruota entrando"
+msgstr "回転して登場"
+
+msgid "Ruota dal basso"
+msgstr "下から回転"
+
+msgid "Ruota in 3D"
+msgstr "3D 回転"
+
+msgid "Ruota da sinistra"
+msgstr "左から回転"
+
+msgid "Ruota da destra"
+msgstr "右から回転"
+
+msgid "Zoom e rimbalzo"
+msgstr "ズームとバウンド"
+
+msgid "Spunta morbida"
+msgstr "なめらかに出現"
+
+msgid "Spunta e torna indietro"
+msgstr "飛び出して戻る"
+
+msgid "Rimbalzo dal basso"
+msgstr "下からバウンド"
+
+msgid "Rimbalzo dall’alto"
+msgstr "上からバウンド"
+
+msgid "Si scopre da sinistra"
+msgstr "左から現れる"
+
+msgid "Si scopre da destra"
+msgstr "右から現れる"
+
+msgid "Si scopre dall’alto"
+msgstr "上から現れる"
+
+msgid "Si scopre dal basso"
+msgstr "下から現れる"
+
+msgid "Si scopre dal centro con zoom"
+msgstr "中央からズームで現れる"
+
+msgid "Si scopre dal centro"
+msgstr "中央から現れる"
+
+msgid "Dissolvenza verso l’alto"
+msgstr "上へフェード"
+
+msgid "Dissolvenza verso il basso"
+msgstr "下へフェード"
+
+msgid "Dissolvenza verso sinistra"
+msgstr "左へフェード"
+
+msgid "Dissolvenza verso destra"
+msgstr "右へフェード"
+
+msgid "Scivola verso sinistra"
+msgstr "左へスライド"
+
+msgid "Scivola verso destra"
+msgstr "右へスライド"
+
+msgid "Breve verso l’alto"
+msgstr "上へ短いスライド"
+
+msgid "Breve verso il basso"
+msgstr "下へ短いスライド"
+
+msgid "Breve verso sinistra"
+msgstr "左へ短いスライド"
+
+msgid "Breve verso destra"
+msgstr "右へ短いスライド"
+
+msgid "Morbida verso il basso"
+msgstr "下へなめらかなスライド"
+
+msgid "Morbida verso l’alto"
+msgstr "上へなめらかなスライド"
+
+msgid "Morbida verso sinistra"
+msgstr "左へなめらかなスライド"
+
+msgid "Morbida verso destra"
+msgstr "右へなめらかなスライド"
+
+msgid "Inclinata verso sinistra"
+msgstr "左へ傾き"
+
+msgid "Inclinata verso destra"
+msgstr "右へ傾き"
+
+msgid "Inclinata breve verso sinistra"
+msgstr "左へ短い傾き"
+
+msgid "Inclinata breve verso destra"
+msgstr "右へ短い傾き"
+
+msgid "Ribaltata verso l’alto"
+msgstr "上へフリップ"
+
+msgid "Ribaltata verso il basso"
+msgstr "下へフリップ"
+
+msgid "Ribaltata verso sinistra"
+msgstr "左へフリップ"
+
+msgid "Ribaltata verso destra"
+msgstr "右へフリップ"
+
+msgid "Ruota uscendo"
+msgstr "回転して退場"
+
+msgid "Ruota verso il basso"
+msgstr "下へ回転"
+
+msgid "Ruota verso sinistra"
+msgstr "左へ回転"
+
+msgid "Ruota verso destra"
+msgstr "右へ回転"
+
+msgid "Si rimpicciolisce"
+msgstr "縮小"
+
+msgid "Sparisce morbida"
+msgstr "なめらかに消える"
+
+msgid "Si gonfia e sparisce"
+msgstr "膨らんで消える"
+
+msgid "Rimbalzo verso l’alto"
+msgstr "上へバウンド"
+
+msgid "Rimbalzo verso il basso"
+msgstr "下へバウンド"
+
+msgid "Si copre verso sinistra"
+msgstr "左へ隠れる"
+
+msgid "Si copre verso destra"
+msgstr "右へ隠れる"
+
+msgid "Si copre verso l’alto"
+msgstr "上へ隠れる"
+
+msgid "Si copre verso il basso"
+msgstr "下へ隠れる"
+
+msgid "Si chiude al centro con zoom"
+msgstr "中央へズームで閉じる"
+
+msgid "Si chiude al centro"
+msgstr "中央へ閉じる"
+
+msgid "Pendolo basso"
+msgstr "下の振り子"
+
+msgid "Pendolo alto"
+msgstr "上の振り子"
+
+msgid "Pendolo a sinistra"
+msgstr "左の振り子"
+
+msgid "Pendolo a destra"
+msgstr "右の振り子"
+
+msgid "Onda piccola a sinistra"
+msgstr "左へ小さな波"
+
+msgid "Onda piccola a destra"
+msgstr "右へ小さな波"
+
+msgid "Onda grande a sinistra"
+msgstr "左へ大きな波"
+
+msgid "Onda grande a destra"
+msgstr "右へ大きな波"
+
+msgid "Vibrazione verticale"
+msgstr "縦の揺れ"
+
+msgid "Vibrazione orizzontale"
+msgstr "横の揺れ"
+
+msgid "Vibrazione 3D"
+msgstr "3D の揺れ"
+
+msgid "Vibrazione scatenata"
+msgstr "激しい揺れ"
+
+msgid "Gira in senso orario"
+msgstr "時計回りに回転"
+
+msgid "Gira in senso antiorario"
+msgstr "反時計回りに回転"
+
+msgid "Lampeggio"
+msgstr "点滅"
+
+msgid "Scivola avanti e indietro"
+msgstr "前後にスライド"
+
+msgid "Vento (piega dal basso)"
+msgstr "風（下からしなる）"
+
+msgid "Fluttua piano"
+msgstr "ふわりと浮かぶ"
+
+msgid "Slide successiva"
+msgstr "次のスライド"
+
+msgid "Slide precedente"
+msgstr "前のスライド"
+
+msgid "Vai alla slide…"
+msgstr "スライドへ移動…"
+
+msgid "Apri un indirizzo"
+msgstr "アドレスを開く"
+
+msgid "Scorri sotto lo slider"
+msgstr "スライダーの下へスクロール"
+
+msgid "Iniziali maiuscole"
+msgstr "頭文字を大文字"
+
+msgid "Sopralineato"
+msgstr "上線"
+
+msgid "In alto a sinistra"
+msgstr "左上"
+
+msgid "In alto a destra"
+msgstr "右上"
+
+msgid "In basso a sinistra"
+msgstr "左下"
+
+msgid "In basso a destra"
+msgstr "右下"
+
+msgid "Blocco da destra"
+msgstr "右からブロック"
+
+msgid "Blocco da sinistra"
+msgstr "左からブロック"
+
+msgid "Blocco dall’alto"
+msgstr "上からブロック"
+
+msgid "Blocco dal basso"
+msgstr "下からブロック"
+
+msgid "Manina"
+msgstr "指さし"
+
+msgid "Sposta"
+msgstr "移動"
+
+msgid "Mano aperta"
+msgstr "開いた手"
+
+msgid "Parole"
+msgstr "単語"
+
+msgid "Centro → Bordi"
+msgstr "中央 → 端"
+
+msgid "Bordi → Centro"
+msgstr "端 → 中央"
+
+msgid "Nessun cambio"
+msgstr "変更なし"
+
+msgid "Sipario orizzontale"
+msgstr "横のカーテン"
+
+msgid "Sipario verticale"
+msgstr "縦のカーテン"
+
+msgid "Si avvicina"
+msgstr "ズームイン"
+
+msgid "Si allontana"
+msgstr "ズームアウト"
+
+msgid "Scorre a sinistra"
+msgstr "左へパン"
+
+msgid "Scorre a destra"
+msgstr "右へパン"
+
+msgid "Scorre in alto"
+msgstr "上へパン"
+
+msgid "Scorre in basso"
+msgstr "下へパン"
+
+msgid "Mouse e scorrimento"
+msgstr "マウスとスクロール"
+
+msgid "Sfocatura all’inizio"
+msgstr "開始時のぼかし"
+
+msgid "Sfocatura alla fine"
+msgstr "終了時のぼかし"
+
+msgid "Notebook"
+msgstr "ノートパソコン"
+
+msgid "Valori propri per"
+msgstr "個別の値："
+
+msgid "Ha valori propri su qualche schermo"
+msgstr "一部の画面で個別の値があります"
+
+msgid "Nessuna icona tua: carica un file SVG."
+msgstr "自分のアイコンはまだありません。SVG ファイルをアップロードしてください。"
+
+msgid "Prendi la posizione dalla tela"
+msgstr "キャンバスから位置を取得"
+
+msgid "Seleziona un fotogramma chiave nella linea del tempo"
+msgstr "タイムラインでキーフレームを選択してください"
+
+msgid "Fotogramma chiave precedente"
+msgstr "前のキーフレーム"
+
+msgid "Fotogramma chiave successivo"
+msgstr "次のキーフレーム"
+
+msgid "L’uscita aspetta la fine della slide"
+msgstr "退場はスライドの終わりまで待ちます"
+
+msgid "Aggiungi un fotogramma chiave a questo punto"
+msgstr "この位置にキーフレームを追加"
+
+msgid "Seleziona un livello con la linea del tempo"
+msgstr "タイムラインのあるレイヤーを選択してください"
+
+msgid "Riduci la linea del tempo"
+msgstr "タイムラインを縮小"
+
+msgid "Ingrandisci la linea del tempo"
+msgstr "タイムラインを拡大"
+
+msgid "La linea del tempo ("
+msgstr "タイムライン（"
+
+msgid "Porta tutti i livelli alla durata più lunga"
+msgstr "すべてのレイヤーを最長の時間に揃える"
+
+msgid "Resta visibile fino alla fine della slide"
+msgstr "スライドの終わりまで表示されたまま"
+
+msgid "Duplica il fotogramma chiave"
+msgstr "キーフレームを複製"
+
+msgid "Elimina il fotogramma chiave"
+msgstr "キーフレームを削除"
+
+msgid "Semplici"
+msgstr "シンプル"
+
+msgid "Accelera"
+msgstr "加速"
+
+msgid "Rallenta"
+msgstr "減速"
+
+msgid "Accelera e rallenta"
+msgstr "加速して減速"
+
+msgid "Lo slider resta fermo in cima alla finestra mentre la pagina scorre per la distanza scelta: in quel tratto lo scorrimento fa avanzare le slide e muove i livelli che hanno il «Movimento con lo scorrimento» (Animazione nell’editor dello slider). Finito il tratto, la pagina riprende a scorrere."
+msgstr "ページが指定した距離だけスクロールする間、スライダーはウィンドウ上部に固定されます。その区間ではスクロールでスライドが進み、「スクロールでの動き」（スライダーエディターのアニメーション）が設定されたレイヤーが動きます。区間が終わると、ページは再びスクロールします。"
+
+#: licenza-1.4.1345
+msgid "Durata di ogni slide"
+msgstr "各スライドの時間"
+
+msgid "Distanza di scorrimento"
+msgstr "スクロール距離"
+
+msgid "Larghezza slide"
+msgstr "スライドの幅"
+
+#: licenza-1.4.1345
+msgid "Aspetta la fine"
+msgstr "終わりまで待つ"
+
+msgid "Altezza rispetto alla finestra"
+msgstr "ウィンドウに対する高さ"
+
+#: licenza-1.4.1345
+msgid "Inverti"
+msgstr "反転"
+
+msgid "Cambia al passaggio del mouse"
+msgstr "マウスを乗せると変化"
+
+msgid "Morbido, frena alla fine (predefinito)"
+msgstr "なめらか・最後に減速（既定）"
+
+msgid "Tempo"
+msgstr "時間"
+
+#: licenza-1.4.1345
+msgid "0° = lavagna dritta; con i gradi negativi gira in senso antiorario, con i positivi in senso orario. Con la parallasse accesa, scorrendo la pagina oscilla appena attorno a questo angolo."
+msgstr "0° = 黒板はまっすぐ。マイナスの角度で反時計回り、プラスで時計回りに回ります。パララックスがオンなら、スクロールに合わせてこの角度のまわりでわずかに揺れます。"
+
+#: licenza-1.4.1345
+msgid "Scena minigioco"
+msgstr "ミニゲームのシーン"
+
+msgid "Quiz di verifica"
+msgstr "確認クイズ"
+
+#: licenza-1.4.1345
+msgid "Testi sulle foto"
+msgstr "写真の上のテキスト"
+
+msgid "Solo la didascalia al passaggio"
+msgstr "ホバー時のキャプションのみ"
+
+msgid "Sulla foto"
+msgstr "写真の上"
+
+msgid "«Sotto la foto» vale per gli schemi Griglia e Masonry; negli altri i testi vanno sulla foto."
+msgstr "「写真の下」はグリッドとメイソンリーで使えます。その他のレイアウトではテキストは写真の上に表示されます。"
+
+msgid "Quando si vedono"
+msgstr "表示するタイミング"
+
+msgid "Mostra il titolo"
+msgstr "タイトルを表示"
+
+msgid "Mostra il sottotitolo"
+msgstr "サブタイトルを表示"
+
+msgid "Mostra il testo"
+msgstr "テキストを表示"
+
+msgid "Mostra la miniatura"
+msgstr "サムネイルを表示"
+
+msgid "Sopra la galleria un pulsante per ogni categoria e «Tutti»: cliccando, restano le foto di quella categoria e la galleria si riordina. La categoria si scrive sotto ogni foto in «Media»; più categorie si separano con la virgola."
+msgstr "ギャラリーの上にカテゴリーごとのボタンと「すべて」が並びます。クリックするとそのカテゴリーの写真だけが残り、ギャラリーが並び替わります。カテゴリーは「メディア」の各写真の下に書き、複数ある場合はカンマで区切ります。"
+
+msgid "Testo di «Tutti»"
+msgstr "「すべて」の文字"
+
+msgid "Mostra quante foto"
+msgstr "写真の数を表示"
+
+msgid "Colore di categoria e numero"
+msgstr "カテゴリーと番号の色"
+
+msgid "Velo sotto i testi"
+msgstr "テキストの下の影"
+
+msgid "Sfondo dei testi"
+msgstr "テキストの背景"
+
+msgid "Padding testi"
+msgstr "テキストの余白"
+
+msgid "Stile dei filtri"
+msgstr "フィルターのスタイル"
+
+msgid "Colore del filtro attivo"
+msgstr "選択中のフィルターの色"
+
+msgid "Elenco a righe"
+msgstr "行のリスト"
+
+msgid "Link della foto (facoltativo)"
+msgstr "写真のリンク（任意）"
+
+msgid "Misura della foto"
+msgstr "写真のサイズ"
+
+msgid "Misura automatica"
+msgstr "自動サイズ"
+
+msgid "Piccola (1 × 1)"
+msgstr "小（1 × 1）"
+
+msgid "Larga (2 × 1)"
+msgstr "横長（2 × 1）"
+
+msgid "Alta (1 × 2)"
+msgstr "縦長（1 × 2）"
+
+msgid "Grande (2 × 2)"
+msgstr "大（2 × 2）"
+
+msgid "Molto larga (3 × 2)"
+msgstr "特大横長（3 × 2）"
+
+msgid "Molto alta (2 × 3)"
+msgstr "特大縦長（2 × 3）"
+
+msgid "Filtra per categoria"
+msgstr "カテゴリーで絞り込む"
+
+msgid "Ritardo fra le foto"
+msgstr "写真ごとの遅延"

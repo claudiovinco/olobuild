@@ -266,7 +266,7 @@ if (!window._oloLightbox) {
     buildDOM();
 
     document.addEventListener('click', function (e) {
-      var link = e.target.closest('[data-olo-lb] a.olo-pg-item');
+      var link = e.target.closest('[data-olo-lb] a.olo-pg-item:not(.olo-pg-link)');
       if (!link) return;
       e.preventDefault();
 
@@ -278,7 +278,7 @@ if (!window._oloLightbox) {
       catch (ex) { return; }
 
       /* collect all items from DOM */
-      var allLinks = container.querySelectorAll('a.olo-pg-item, a.olo-pg-hidden');
+      var allLinks = container.querySelectorAll('a.olo-pg-item:not(.olo-pg-link), a.olo-pg-hidden');
       var collected = [];
       var startIdx = 0;
       allLinks.forEach(function (a, i) {

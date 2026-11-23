@@ -1,5 +1,5 @@
 <template>
-  <!-- anteprima canvas condivisa delle scene-minigioco (usata da OloxSceneTile e OloxPanelTile) -->
+  <!-- anteprima canvas delle scene-minigioco (OloxSceneTile) -->
   <div v-if="scene === 'madlib'" class="madwrap">
     <div class="madcard">
       <div class="madhead"><span>{{ s.mad_doc }}</span><span class="blinkdot"></span><span>{{ s.mad_line }}</span></div>
@@ -66,7 +66,7 @@
         <div class="tq-stat">trascina la risposta giusta nello spazio · +60 xp</div>
       </div>
     </div>
-    <!-- Scene showcase hero-* (gemelle statiche del PHP: fonte unica oloxhero) -->
+    <!-- Scene showcase hero-* (gemelle statiche del PHP della Scena) -->
     <div v-else-if="scene === 'hero-wall'" data-olox="hwall" style="width:min(100%,520px);">
       <div class="ox-hwall" data-cells="84">
         <div class="count"><b>{{ s.wall_count || 187 }}</b>{{ s.wall_label }}</div>

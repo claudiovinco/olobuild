@@ -23,7 +23,7 @@ def scorri(tappe, inizio=0, fine=100, costante=False):
     """Il movimento a scorrimento di un livello dello Slider Pro: tappe = [(p, {proprietà})]."""
     o = {'inizio': inizio, 'fine': fine, 'tappe': [dict(p=p, **v) for p, v in tappe]}
     if costante:
-        o['c'] = True
+        o['andamento'] = 'costante'  # la chiave che leggono editor e PHP (c: true non la leggeva nessuno)
     return o
 
 

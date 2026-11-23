@@ -2807,3 +2807,757 @@ msgstr "Траектория"
 
 msgid "Percorso SVG (d=\"\")"
 msgstr "Путь SVG (d=\"\")"
+
+#: licenza-1.4.1345
+msgid "Tutto schermo"
+msgstr "Во весь экран"
+
+msgid "Durata di ogni slide (ms)"
+msgstr "Длительность каждого слайда (мс)"
+
+msgid "Scivola sopra"
+msgstr "Наплыв сверху"
+
+msgid "Dissolvenza al nero"
+msgstr "Затемнение через чёрный"
+
+msgid "Ribaltamento orizzontale"
+msgstr "Горизонтальный переворот"
+
+msgid "Ribaltamento verticale"
+msgstr "Вертикальный переворот"
+
+msgid "Cubo orizzontale"
+msgstr "Горизонтальный куб"
+
+msgid "Cubo verticale"
+msgstr "Вертикальный куб"
+
+msgid "Spinta"
+msgstr "Выталкивание"
+
+msgid "Spinta verso destra"
+msgstr "Выталкивание вправо"
+
+msgid "Spinta verso il basso"
+msgstr "Выталкивание вниз"
+
+msgid "Pila"
+msgstr "Стопка"
+
+msgid "Carta tagliata"
+msgstr "Вырезанная бумага"
+
+msgid "Zoom e dissolvenza"
+msgstr "Масштаб и растворение"
+
+msgid "Rotazione della slide"
+msgstr "Поворот слайда"
+
+msgid "Sipario 3D"
+msgstr "3D-занавес"
+
+msgid "Scivola verso l’alto"
+msgstr "Сдвиг вверх"
+
+msgid "Scivola verso il basso"
+msgstr "Сдвиг вниз"
+
+msgid "Barra di avanzamento"
+msgstr "Индикатор прогресса"
+
+msgid "Navigazione con la tastiera"
+msgstr "Навигация с клавиатуры"
+
+msgid "Scorrimento col dito"
+msgstr "Пролистывание пальцем"
+
+msgid "Rotella del mouse"
+msgstr "Колесо мыши"
+
+msgid "Miniature e schede"
+msgstr "Миниатюры и вкладки"
+
+msgid "Tipo di parallasse"
+msgstr "Тип параллакса"
+
+msgid "Modalità carosello"
+msgstr "Режим карусели"
+
+msgid "Scorrimento della pagina"
+msgstr "Прокрутка страницы"
+
+msgid "Timeline a scorrimento"
+msgstr "Таймлайн при прокрутке"
+
+msgid "Distanza di scorrimento (px)"
+msgstr "Расстояние прокрутки (px)"
+
+msgid "Solo la freccia"
+msgstr "Только стрелка"
+
+msgid "Nel quadrato"
+msgstr "В квадрате"
+
+msgid "Vuoto = bianco, per le foto scure. Sulle slide chiare scegli un colore scuro: frecce, contorni e punti lo prendono, e il fondo delle frecce «Solo la freccia» e «Nel quadrato» diventa chiaro da sé."
+msgstr "Пусто = белый, для тёмных фото. На светлых слайдах выберите тёмный цвет: стрелки, контуры и точки примут его, а фон стрелок «Только стрелка» и «В квадрате» сам станет светлым."
+
+msgid "Miniature e schede — posizione"
+msgstr "Миниатюры и вкладки — положение"
+
+msgid "Posizione schede"
+msgstr "Положение вкладок"
+
+msgid "Effetto allo scorrimento"
+msgstr "Эффект при прокрутке"
+
+msgid "Dissolvenza e sfocatura"
+msgstr "Растворение и размытие"
+
+msgid "Intensità della parallasse"
+msgstr "Сила параллакса"
+
+msgid "Larghezza slide (%)"
+msgstr "Ширина слайда (%)"
+
+msgid "Indirizzo dell’immagine"
+msgstr "Адрес изображения"
+
+msgid "Indirizzo del video"
+msgstr "Адрес видео"
+
+msgid "Indirizzo dell’audio"
+msgstr "Адрес аудио"
+
+msgid "Azione al clic"
+msgstr "Действие по клику"
+
+msgid "Nessun altro livello in questa slide"
+msgstr "На этом слайде нет других слоёв"
+
+msgid "Azzera tutti"
+msgstr "Сбросить все"
+
+msgid "Stile del carattere"
+msgstr "Начертание шрифта"
+
+msgid "Colore del tratto"
+msgstr "Цвет обводки"
+
+msgid "Colore di riempimento"
+msgstr "Цвет заливки"
+
+msgid "Colore di riempimento (al posto di quello del file)"
+msgstr "Цвет заливки (вместо цвета из файла)"
+
+msgid "Raggio (px)"
+msgstr "Радиус (px)"
+
+msgid "Animazione del testo"
+msgstr "Анимация текста"
+
+msgid "Anima lettere o parole"
+msgstr "Анимировать буквы или слова"
+
+msgid "Andata e ritorno"
+msgstr "Туда и обратно"
+
+msgid "Intensità (%)"
+msgstr "Интенсивность (%)"
+
+msgid "Parallasse attiva"
+msgstr "Параллакс включён"
+
+msgid "Velocità con lo scorrimento"
+msgstr "Скорость при прокрутке"
+
+msgid "Usa la linea del tempo sotto la tela per aggiungere e spostare i fotogrammi chiave."
+msgstr "Используйте таймлайн под холстом, чтобы добавлять и перемещать ключевые кадры."
+
+msgid "Dissolvenza dall’alto"
+msgstr "Растворение сверху"
+
+msgid "Dissolvenza da sinistra"
+msgstr "Растворение слева"
+
+msgid "Dissolvenza da destra"
+msgstr "Растворение справа"
+
+msgid "Scivola"
+msgstr "Сдвиг"
+
+msgid "Scivola da sinistra"
+msgstr "Сдвиг слева"
+
+msgid "Scivola da destra"
+msgstr "Сдвиг справа"
+
+msgid "Scivola dal basso"
+msgstr "Сдвиг снизу"
+
+msgid "Scivola dall’alto"
+msgstr "Сдвиг сверху"
+
+msgid "Breve dall’alto"
+msgstr "Короткий сдвиг сверху"
+
+msgid "Breve dal basso"
+msgstr "Короткий сдвиг снизу"
+
+msgid "Breve da sinistra"
+msgstr "Короткий сдвиг слева"
+
+msgid "Breve da destra"
+msgstr "Короткий сдвиг справа"
+
+msgid "Morbida dal basso"
+msgstr "Плавный сдвиг снизу"
+
+msgid "Morbida dall’alto"
+msgstr "Плавный сдвиг сверху"
+
+msgid "Morbida da sinistra"
+msgstr "Плавный сдвиг слева"
+
+msgid "Morbida da destra"
+msgstr "Плавный сдвиг справа"
+
+msgid "Inclinata da sinistra"
+msgstr "С наклоном слева"
+
+msgid "Inclinata da destra"
+msgstr "С наклоном справа"
+
+msgid "Inclinata breve da sinistra"
+msgstr "Короткий наклон слева"
+
+msgid "Inclinata breve da destra"
+msgstr "Короткий наклон справа"
+
+msgid "Ribaltata 3D"
+msgstr "3D-переворот"
+
+msgid "Ribaltata dall’alto"
+msgstr "Переворот сверху"
+
+msgid "Ribaltata dal basso"
+msgstr "Переворот снизу"
+
+msgid "Ribaltata da sinistra"
+msgstr "Переворот слева"
+
+msgid "Ribaltata da destra"
+msgstr "Переворот справа"
+
+msgid "Ruota entrando"
+msgstr "Вход с поворотом"
+
+msgid "Ruota dal basso"
+msgstr "Поворот снизу"
+
+msgid "Ruota in 3D"
+msgstr "Поворот в 3D"
+
+msgid "Ruota da sinistra"
+msgstr "Поворот слева"
+
+msgid "Ruota da destra"
+msgstr "Поворот справа"
+
+msgid "Zoom e rimbalzo"
+msgstr "Масштаб и отскок"
+
+msgid "Spunta morbida"
+msgstr "Плавное появление"
+
+msgid "Spunta e torna indietro"
+msgstr "Появление с отдачей"
+
+msgid "Rimbalzo dal basso"
+msgstr "Отскок снизу"
+
+msgid "Rimbalzo dall’alto"
+msgstr "Отскок сверху"
+
+msgid "Si scopre da sinistra"
+msgstr "Открытие слева"
+
+msgid "Si scopre da destra"
+msgstr "Открытие справа"
+
+msgid "Si scopre dall’alto"
+msgstr "Открытие сверху"
+
+msgid "Si scopre dal basso"
+msgstr "Открытие снизу"
+
+msgid "Si scopre dal centro con zoom"
+msgstr "Открытие из центра с масштабом"
+
+msgid "Si scopre dal centro"
+msgstr "Открытие из центра"
+
+msgid "Dissolvenza verso l’alto"
+msgstr "Растворение вверх"
+
+msgid "Dissolvenza verso il basso"
+msgstr "Растворение вниз"
+
+msgid "Dissolvenza verso sinistra"
+msgstr "Растворение влево"
+
+msgid "Dissolvenza verso destra"
+msgstr "Растворение вправо"
+
+msgid "Scivola verso sinistra"
+msgstr "Сдвиг влево"
+
+msgid "Scivola verso destra"
+msgstr "Сдвиг вправо"
+
+msgid "Breve verso l’alto"
+msgstr "Короткий сдвиг вверх"
+
+msgid "Breve verso il basso"
+msgstr "Короткий сдвиг вниз"
+
+msgid "Breve verso sinistra"
+msgstr "Короткий сдвиг влево"
+
+msgid "Breve verso destra"
+msgstr "Короткий сдвиг вправо"
+
+msgid "Morbida verso il basso"
+msgstr "Плавный сдвиг вниз"
+
+msgid "Morbida verso l’alto"
+msgstr "Плавный сдвиг вверх"
+
+msgid "Morbida verso sinistra"
+msgstr "Плавный сдвиг влево"
+
+msgid "Morbida verso destra"
+msgstr "Плавный сдвиг вправо"
+
+msgid "Inclinata verso sinistra"
+msgstr "С наклоном влево"
+
+msgid "Inclinata verso destra"
+msgstr "С наклоном вправо"
+
+msgid "Inclinata breve verso sinistra"
+msgstr "Короткий наклон влево"
+
+msgid "Inclinata breve verso destra"
+msgstr "Короткий наклон вправо"
+
+msgid "Ribaltata verso l’alto"
+msgstr "Переворот вверх"
+
+msgid "Ribaltata verso il basso"
+msgstr "Переворот вниз"
+
+msgid "Ribaltata verso sinistra"
+msgstr "Переворот влево"
+
+msgid "Ribaltata verso destra"
+msgstr "Переворот вправо"
+
+msgid "Ruota uscendo"
+msgstr "Выход с поворотом"
+
+msgid "Ruota verso il basso"
+msgstr "Поворот вниз"
+
+msgid "Ruota verso sinistra"
+msgstr "Поворот влево"
+
+msgid "Ruota verso destra"
+msgstr "Поворот вправо"
+
+msgid "Si rimpicciolisce"
+msgstr "Уменьшается"
+
+msgid "Sparisce morbida"
+msgstr "Плавное исчезновение"
+
+msgid "Si gonfia e sparisce"
+msgstr "Раздувается и исчезает"
+
+msgid "Rimbalzo verso l’alto"
+msgstr "Отскок вверх"
+
+msgid "Rimbalzo verso il basso"
+msgstr "Отскок вниз"
+
+msgid "Si copre verso sinistra"
+msgstr "Скрытие влево"
+
+msgid "Si copre verso destra"
+msgstr "Скрытие вправо"
+
+msgid "Si copre verso l’alto"
+msgstr "Скрытие вверх"
+
+msgid "Si copre verso il basso"
+msgstr "Скрытие вниз"
+
+msgid "Si chiude al centro con zoom"
+msgstr "Закрытие к центру с масштабом"
+
+msgid "Si chiude al centro"
+msgstr "Закрытие к центру"
+
+msgid "Pendolo basso"
+msgstr "Нижний маятник"
+
+msgid "Pendolo alto"
+msgstr "Верхний маятник"
+
+msgid "Pendolo a sinistra"
+msgstr "Маятник слева"
+
+msgid "Pendolo a destra"
+msgstr "Маятник справа"
+
+msgid "Onda piccola a sinistra"
+msgstr "Малая волна влево"
+
+msgid "Onda piccola a destra"
+msgstr "Малая волна вправо"
+
+msgid "Onda grande a sinistra"
+msgstr "Большая волна влево"
+
+msgid "Onda grande a destra"
+msgstr "Большая волна вправо"
+
+msgid "Vibrazione verticale"
+msgstr "Вертикальное дрожание"
+
+msgid "Vibrazione orizzontale"
+msgstr "Горизонтальное дрожание"
+
+msgid "Vibrazione 3D"
+msgstr "3D-дрожание"
+
+msgid "Vibrazione scatenata"
+msgstr "Бешеное дрожание"
+
+msgid "Gira in senso orario"
+msgstr "Вращается по часовой"
+
+msgid "Gira in senso antiorario"
+msgstr "Вращается против часовой"
+
+msgid "Lampeggio"
+msgstr "Мигание"
+
+msgid "Scivola avanti e indietro"
+msgstr "Скользит туда и обратно"
+
+msgid "Vento (piega dal basso)"
+msgstr "Ветер (гнётся снизу)"
+
+msgid "Fluttua piano"
+msgstr "Плавно парит"
+
+msgid "Slide successiva"
+msgstr "Следующий слайд"
+
+msgid "Slide precedente"
+msgstr "Предыдущий слайд"
+
+msgid "Vai alla slide…"
+msgstr "Перейти к слайду…"
+
+msgid "Apri un indirizzo"
+msgstr "Открыть адрес"
+
+msgid "Scorri sotto lo slider"
+msgstr "Прокрутить ниже слайдера"
+
+msgid "Iniziali maiuscole"
+msgstr "Заглавные первые буквы"
+
+msgid "Sopralineato"
+msgstr "Надчёркнутый"
+
+msgid "In alto a sinistra"
+msgstr "Вверху слева"
+
+msgid "In alto a destra"
+msgstr "Вверху справа"
+
+msgid "In basso a sinistra"
+msgstr "Внизу слева"
+
+msgid "In basso a destra"
+msgstr "Внизу справа"
+
+msgid "Blocco da destra"
+msgstr "Блок справа"
+
+msgid "Blocco da sinistra"
+msgstr "Блок слева"
+
+msgid "Blocco dall’alto"
+msgstr "Блок сверху"
+
+msgid "Blocco dal basso"
+msgstr "Блок снизу"
+
+msgid "Manina"
+msgstr "Рука"
+
+msgid "Sposta"
+msgstr "Перемещение"
+
+msgid "Mano aperta"
+msgstr "Открытая ладонь"
+
+msgid "Parole"
+msgstr "Слова"
+
+msgid "Centro → Bordi"
+msgstr "Центр → Края"
+
+msgid "Bordi → Centro"
+msgstr "Края → Центр"
+
+msgid "Nessun cambio"
+msgstr "Без изменений"
+
+msgid "Sipario orizzontale"
+msgstr "Горизонтальный занавес"
+
+msgid "Sipario verticale"
+msgstr "Вертикальный занавес"
+
+msgid "Si avvicina"
+msgstr "Приближается"
+
+msgid "Si allontana"
+msgstr "Отдаляется"
+
+msgid "Scorre a sinistra"
+msgstr "Панорама влево"
+
+msgid "Scorre a destra"
+msgstr "Панорама вправо"
+
+msgid "Scorre in alto"
+msgstr "Панорама вверх"
+
+msgid "Scorre in basso"
+msgstr "Панорама вниз"
+
+msgid "Mouse e scorrimento"
+msgstr "Мышь и прокрутка"
+
+msgid "Sfocatura all’inizio"
+msgstr "Размытие в начале"
+
+msgid "Sfocatura alla fine"
+msgstr "Размытие в конце"
+
+msgid "Notebook"
+msgstr "Ноутбук"
+
+msgid "Valori propri per"
+msgstr "Свои значения для"
+
+msgid "Ha valori propri su qualche schermo"
+msgstr "На некоторых экранах свои значения"
+
+msgid "Nessuna icona tua: carica un file SVG."
+msgstr "Своих значков нет: загрузите файл SVG."
+
+msgid "Prendi la posizione dalla tela"
+msgstr "Взять положение с холста"
+
+msgid "Seleziona un fotogramma chiave nella linea del tempo"
+msgstr "Выберите ключевой кадр на таймлайне"
+
+msgid "Fotogramma chiave precedente"
+msgstr "Предыдущий ключевой кадр"
+
+msgid "Fotogramma chiave successivo"
+msgstr "Следующий ключевой кадр"
+
+msgid "L’uscita aspetta la fine della slide"
+msgstr "Выход ждёт конца слайда"
+
+msgid "Aggiungi un fotogramma chiave a questo punto"
+msgstr "Добавить ключевой кадр в этой точке"
+
+msgid "Seleziona un livello con la linea del tempo"
+msgstr "Выберите слой с таймлайном"
+
+msgid "Riduci la linea del tempo"
+msgstr "Уменьшить таймлайн"
+
+msgid "Ingrandisci la linea del tempo"
+msgstr "Увеличить таймлайн"
+
+msgid "La linea del tempo ("
+msgstr "Таймлайн ("
+
+msgid "Porta tutti i livelli alla durata più lunga"
+msgstr "Задать всем слоям наибольшую длительность"
+
+msgid "Resta visibile fino alla fine della slide"
+msgstr "Остаётся видимым до конца слайда"
+
+msgid "Duplica il fotogramma chiave"
+msgstr "Дублировать ключевой кадр"
+
+msgid "Elimina il fotogramma chiave"
+msgstr "Удалить ключевой кадр"
+
+msgid "Semplici"
+msgstr "Простые"
+
+msgid "Accelera"
+msgstr "Ускоряется"
+
+msgid "Rallenta"
+msgstr "Замедляется"
+
+msgid "Accelera e rallenta"
+msgstr "Ускоряется и замедляется"
+
+msgid "Lo slider resta fermo in cima alla finestra mentre la pagina scorre per la distanza scelta: in quel tratto lo scorrimento fa avanzare le slide e muove i livelli che hanno il «Movimento con lo scorrimento» (Animazione nell’editor dello slider). Finito il tratto, la pagina riprende a scorrere."
+msgstr "Слайдер остаётся закреплённым вверху окна, пока страница прокручивается на выбранное расстояние: на этом участке прокрутка переключает слайды и двигает слои с «Движением при прокрутке» (Анимация в редакторе слайдера). Затем страница снова прокручивается."
+
+#: licenza-1.4.1345
+msgid "Durata di ogni slide"
+msgstr "Длительность каждого слайда"
+
+msgid "Distanza di scorrimento"
+msgstr "Расстояние прокрутки"
+
+msgid "Larghezza slide"
+msgstr "Ширина слайда"
+
+#: licenza-1.4.1345
+msgid "Aspetta la fine"
+msgstr "Ждать конца"
+
+msgid "Altezza rispetto alla finestra"
+msgstr "Высота относительно окна"
+
+#: licenza-1.4.1345
+msgid "Inverti"
+msgstr "Инверсия"
+
+msgid "Cambia al passaggio del mouse"
+msgstr "Меняется при наведении мыши"
+
+msgid "Morbido, frena alla fine (predefinito)"
+msgstr "Плавно, замедляется в конце (по умолчанию)"
+
+msgid "Tempo"
+msgstr "Время"
+
+#: licenza-1.4.1345
+msgid "0° = lavagna dritta; con i gradi negativi gira in senso antiorario, con i positivi in senso orario. Con la parallasse accesa, scorrendo la pagina oscilla appena attorno a questo angolo."
+msgstr "0° = доска ровная; при отрицательных градусах поворачивается против часовой стрелки, при положительных — по часовой. При включённом параллаксе при прокрутке слегка качается вокруг этого угла."
+
+#: licenza-1.4.1345
+msgid "Scena minigioco"
+msgstr "Сцена с мини-игрой"
+
+msgid "Quiz di verifica"
+msgstr "Проверочный тест"
+
+#: licenza-1.4.1345
+msgid "Testi sulle foto"
+msgstr "Тексты на фото"
+
+msgid "Solo la didascalia al passaggio"
+msgstr "Только подпись при наведении"
+
+msgid "Sulla foto"
+msgstr "На фото"
+
+msgid "«Sotto la foto» vale per gli schemi Griglia e Masonry; negli altri i testi vanno sulla foto."
+msgstr "«Под фото» работает в схемах «Сетка» и Masonry; в остальных тексты располагаются на фото."
+
+msgid "Quando si vedono"
+msgstr "Когда видны"
+
+msgid "Mostra il titolo"
+msgstr "Показывать заголовок"
+
+msgid "Mostra il sottotitolo"
+msgstr "Показывать подзаголовок"
+
+msgid "Mostra il testo"
+msgstr "Показывать текст"
+
+msgid "Mostra la miniatura"
+msgstr "Показывать миниатюру"
+
+msgid "Sopra la galleria un pulsante per ogni categoria e «Tutti»: cliccando, restano le foto di quella categoria e la galleria si riordina. La categoria si scrive sotto ogni foto in «Media»; più categorie si separano con la virgola."
+msgstr "Над галереей кнопка для каждой категории и «Все»: при нажатии остаются фото этой категории, а галерея перестраивается. Категорию пишите под каждым фото в «Медиа»; несколько категорий разделяйте запятыми."
+
+msgid "Testo di «Tutti»"
+msgstr "Текст для «Все»"
+
+msgid "Mostra quante foto"
+msgstr "Показывать количество фото"
+
+msgid "Colore di categoria e numero"
+msgstr "Цвет категории и номера"
+
+msgid "Velo sotto i testi"
+msgstr "Вуаль под текстом"
+
+msgid "Sfondo dei testi"
+msgstr "Фон текстов"
+
+msgid "Padding testi"
+msgstr "Отступы текста"
+
+msgid "Stile dei filtri"
+msgstr "Стиль фильтров"
+
+msgid "Colore del filtro attivo"
+msgstr "Цвет активного фильтра"
+
+msgid "Elenco a righe"
+msgstr "Список строками"
+
+msgid "Link della foto (facoltativo)"
+msgstr "Ссылка фото (необязательно)"
+
+msgid "Misura della foto"
+msgstr "Размер фото"
+
+msgid "Misura automatica"
+msgstr "Автоматический размер"
+
+msgid "Piccola (1 × 1)"
+msgstr "Маленький (1 × 1)"
+
+msgid "Larga (2 × 1)"
+msgstr "Широкий (2 × 1)"
+
+msgid "Alta (1 × 2)"
+msgstr "Высокий (1 × 2)"
+
+msgid "Grande (2 × 2)"
+msgstr "Большой (2 × 2)"
+
+msgid "Molto larga (3 × 2)"
+msgstr "Очень широкий (3 × 2)"
+
+msgid "Molto alta (2 × 3)"
+msgstr "Очень высокий (2 × 3)"
+
+msgid "Filtra per categoria"
+msgstr "Фильтр по категории"
+
+msgid "Ritardo fra le foto"
+msgstr "Задержка между фото"

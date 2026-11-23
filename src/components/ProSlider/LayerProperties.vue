@@ -43,7 +43,7 @@
           <!-- Image -->
           <template v-if="layer.type === 'image'">
             <div>
-              <label class="mps-label">{{ t('URL Immagine') }}</label>
+              <label class="mps-label">{{ t('Indirizzo dell’immagine') }}</label>
               <div class="mb-flex mb-gap-1">
                 <input :value="layer.imageSrc" @input="up('imageSrc', $event.target.value)" class="mps-input mb-flex-1" placeholder="https://..." />
                 <button @click="pickImage" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-xs mb-text-gray-300 hover:mb-bg-gray-500">{{ t('Sfoglia') }}</button>
@@ -61,7 +61,7 @@
               <input :value="layer.content" @input="up('content', $event.target.value)" class="mps-input" />
             </div>
             <div>
-              <label class="mps-label">{{ t('URL') }}</label>
+              <label class="mps-label">{{ t('Indirizzo') }}</label>
               <input :value="layer.buttonUrl" @input="up('buttonUrl', $event.target.value)" class="mps-input" placeholder="https://..." />
             </div>
             <div>
@@ -88,7 +88,7 @@
           <!-- Video -->
           <template v-if="layer.type === 'video'">
             <div>
-              <label class="mps-label">{{ t('URL Video') }}</label>
+              <label class="mps-label">{{ t('Indirizzo del video') }}</label>
               <div class="mb-flex mb-gap-1">
                 <input :value="layer.videoSrc" @input="up('videoSrc', $event.target.value)" class="mps-input mb-flex-1" :placeholder="t('mp4 o indirizzo YouTube')" />
                 <button @click="pickVideo" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-xs mb-text-gray-300 hover:mb-bg-gray-500">{{ t('Sfoglia') }}</button>
@@ -110,7 +110,7 @@
           <!-- Audio -->
           <template v-if="layer.type === 'audio'">
             <div>
-              <label class="mps-label">{{ t('URL Audio') }}</label>
+              <label class="mps-label">{{ t('Indirizzo dell’audio') }}</label>
               <div class="mb-flex mb-gap-1">
                 <input :value="layer.audioSrc" @input="up('audioSrc', $event.target.value)" class="mps-input mb-flex-1" :placeholder="t('mp3 o indirizzo dell’audio')" />
                 <button @click="pickAudio" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-xs mb-text-gray-300 hover:mb-bg-gray-500">{{ t('Sfoglia') }}</button>
@@ -137,7 +137,7 @@
 
           <!-- Layer Action (tutti i tipi) -->
           <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Azione Click') }}</p>
+          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Azione al clic') }}</p>
           <div>
             <label class="mps-label">{{ t('Tipo azione') }}</label>
             <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.action?.type || 'none'" :options="OPTS_ACTION_TYPE" @update:model-value="setAction('type', $event)" />
@@ -150,7 +150,7 @@
           </template>
           <template v-if="layer.action?.type === 'openUrl'">
             <div>
-              <label class="mps-label">{{ t('URL') }}</label>
+              <label class="mps-label">{{ t('Indirizzo') }}</label>
               <input :value="layer.action.url || ''" @input="setAction('url', $event.target.value)" class="mps-input mb-w-full" placeholder="https://..." />
             </div>
             <div>
@@ -168,7 +168,7 @@
                 :options="targetLayerOptions"
                 @update:model-value="setAction('target', $event)"
               />
-              <p v-else class="mb-text-[10px] mb-text-gray-500 mb-italic">{{ t('Nessun altro layer in questa slide') }}</p>
+              <p v-else class="mb-text-[10px] mb-text-gray-500 mb-italic">{{ t('Nessun altro livello in questa slide') }}</p>
               <p v-if="layer.action.target" class="mb-text-[9px] mb-text-gray-500 mb-mt-1 mb-font-mono">id: {{ layer.action.target }}</p>
             </div>
           </template>
@@ -280,7 +280,7 @@
                 v-if="hasAnyOverride"
                 @click="clearAllOverrides"
                 class="mb-text-[10px] mb-text-yellow-500 hover:mb-text-yellow-300 mb-whitespace-nowrap mb-ml-2"
-              >{{ t('Reset tutti') }}</button>
+              >{{ t('Azzera tutti') }}</button>
             </div>
           </div>
           <!-- Visibility toggle per breakpoint (anche Desktop: un livello solo per il telefono si nasconde qui e si
@@ -349,15 +349,15 @@
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.fontFamily || ''" :options="fontGroupOpts" @update:model-value="up('fontFamily', $event)" />
             </div>
             <div>
-              <label class="mps-label">{{ t('Dimensione font (px)') }}</label>
-              <NumberScrubber theme="dark" :modelValue="layer.fontSize" :min="8" :max="200" :step="1" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="t('Dimensione font (px)')" @update:modelValue="up('fontSize', $event)" />
+              <label class="mps-label">{{ t('Dimensione testo') }}</label>
+              <NumberScrubber theme="dark" :modelValue="layer.fontSize" :min="8" :max="200" :step="1" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="t('Dimensione testo (px)')" @update:modelValue="up('fontSize', $event)" />
             </div>
             <div>
-              <label class="mps-label">{{ t('Peso font') }}</label>
+              <label class="mps-label">{{ t('Peso del carattere') }}</label>
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.fontWeight" :options="OPTS_FONT_WEIGHT" @update:model-value="up('fontWeight', $event)" />
             </div>
             <div>
-              <label class="mps-label">{{ t('Stile font') }}</label>
+              <label class="mps-label">{{ t('Stile del carattere') }}</label>
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.fontStyle || 'normal'" :options="OPTS_FONT_STYLE" @update:model-value="up('fontStyle', $event)" />
             </div>
             <div>
@@ -406,7 +406,7 @@
             </div>
             <template v-if="(layer.textStrokeWidth ?? 0) > 0">
               <div>
-                <label class="mps-label">{{ t('Colore stroke') }}</label>
+                <label class="mps-label">{{ t('Colore del tratto') }}</label>
                 <FieldColor :modelValue="layer.textStrokeColor || '#000000'" @update:modelValue="up('textStrokeColor', $event)" />
               </div>
             </template>
@@ -419,19 +419,19 @@
           <!-- ── Dimensione font (icon) ── -->
           <template v-if="layer.type === 'icon'">
             <div>
-              <label class="mps-label">{{ t('Dimensione icona (px)') }}</label>
+              <label class="mps-label">{{ t('Dimensione icona') }}</label>
               <NumberScrubber theme="dark" :modelValue="layer.fontSize" :min="8" :max="200" :step="1" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="t('Dimensione icona (px)')" @update:modelValue="up('fontSize', $event)" />
             </div>
             <div>
-              <label class="mps-label">{{ t('Colore fill') }}</label>
+              <label class="mps-label">{{ t('Colore di riempimento') }}</label>
               <FieldColor :modelValue="layer.color || '#ffffff'" @update:modelValue="up('color', $event)" />
             </div>
             <div>
-              <label class="mps-label">{{ t('Colore fill (override)') }}</label>
+              <label class="mps-label">{{ t('Colore di riempimento (al posto di quello del file)') }}</label>
               <FieldColor :modelValue="layer.iconFillColor || ''" @update:modelValue="up('iconFillColor', $event)" />
             </div>
             <div>
-              <label class="mps-label">{{ t('Colore stroke') }}</label>
+              <label class="mps-label">{{ t('Colore del tratto') }}</label>
               <FieldColor :modelValue="layer.iconStrokeColor || ''" @update:modelValue="up('iconStrokeColor', $event)" />
             </div>
             <div>
@@ -490,11 +490,11 @@
 
           <div>
             <div class="mb-flex mb-items-center mb-justify-between">
-              <label class="mps-label mb-mb-0">{{ t('Raggio bordo (px)') }}</label>
+              <label class="mps-label mb-mb-0">{{ t('Raggio (px)') }}</label>
               <button @click="up('borderRadiusLinked', !layer.borderRadiusLinked)" :class="['mb-text-[10px] mb-px-1.5 mb-rounded', layer.borderRadiusLinked !== false ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-400']" :title="t('Lega/slega angoli')">&#x1F517;</button>
             </div>
             <template v-if="layer.borderRadiusLinked !== false">
-              <NumberScrubber theme="dark" :modelValue="layer.borderRadius" :min="0" :max="200" :step="1" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="t('Raggio bordo (px)')" @update:modelValue="up('borderRadius', $event)" />
+              <NumberScrubber theme="dark" :modelValue="layer.borderRadius" :min="0" :max="200" :step="1" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="t('Raggio (px)')" @update:modelValue="up('borderRadius', $event)" />
             </template>
             <template v-else>
               <div class="mb-grid mb-grid-cols-2 mb-gap-2">
@@ -591,19 +591,19 @@
             <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
             <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Filtri') }}</p>
             <div>
-              <label class="mps-label">{{ t('Luminosita (%)') }}</label>
-              <NumberScrubber theme="dark" :modelValue="layer.filterBrightness ?? 100" :min="0" :max="200" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Luminosita (%)')" @update:modelValue="up('filterBrightness', $event)" />
+              <label class="mps-label">{{ t('Luminosità') }}</label>
+              <NumberScrubber theme="dark" :modelValue="layer.filterBrightness ?? 100" :min="0" :max="200" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Luminosità (%)')" @update:modelValue="up('filterBrightness', $event)" />
             </div>
             <div>
-              <label class="mps-label">{{ t('Contrasto (%)') }}</label>
+              <label class="mps-label">{{ t('Contrasto') }}</label>
               <NumberScrubber theme="dark" :modelValue="layer.filterContrast ?? 100" :min="0" :max="200" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Contrasto (%)')" @update:modelValue="up('filterContrast', $event)" />
             </div>
             <div>
-              <label class="mps-label">{{ t('Saturazione (%)') }}</label>
+              <label class="mps-label">{{ t('Saturazione') }}</label>
               <NumberScrubber theme="dark" :modelValue="layer.filterSaturate ?? 100" :min="0" :max="200" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Saturazione (%)')" @update:modelValue="up('filterSaturate', $event)" />
             </div>
             <div>
-              <label class="mps-label">{{ t('Scala di grigi (%)') }}</label>
+              <label class="mps-label">{{ t('Scala di grigi') }}</label>
               <NumberScrubber theme="dark" :modelValue="layer.filterGrayscale ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Scala di grigi (%)')" @update:modelValue="up('filterGrayscale', $event)" />
             </div>
             <div>
@@ -611,15 +611,15 @@
               <NumberScrubber theme="dark" :modelValue="layer.filterHueRotate ?? 0" :min="0" :max="360" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="°" :ariaLabel="t('Rotazione tinta')" @update:modelValue="up('filterHueRotate', $event)" />
             </div>
             <div>
-              <label class="mps-label">{{ t('Sfocatura (px)') }}</label>
+              <label class="mps-label">{{ t('Sfocatura') }}</label>
               <NumberScrubber theme="dark" :modelValue="layer.filterBlur ?? 0" :min="0" :max="20" :step="0.5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="t('Sfocatura (px)')" @update:modelValue="up('filterBlur', $event)" />
             </div>
             <div>
-              <label class="mps-label">{{ t('Seppia (%)') }}</label>
+              <label class="mps-label">{{ t('Seppia') }}</label>
               <NumberScrubber theme="dark" :modelValue="layer.filterSepia ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Seppia (%)')" @update:modelValue="up('filterSepia', $event)" />
             </div>
             <div>
-              <label class="mps-label">{{ t('Inverti (%)') }}</label>
+              <label class="mps-label">{{ t('Inverti') }}</label>
               <NumberScrubber theme="dark" :modelValue="layer.filterInvert ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Inverti (%)')" @update:modelValue="up('filterInvert', $event)" />
             </div>
           </template>
@@ -629,31 +629,31 @@
           <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Filtro sfondo') }}</p>
           <div>
             <label class="mps-label">{{ t('Sfocatura dietro') }}</label>
-            <NumberScrubber theme="dark" :modelValue="layer.backdropBlur ?? 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Backdrop blur (px)" @update:modelValue="up('backdropBlur', $event)" />
+            <NumberScrubber theme="dark" :modelValue="layer.backdropBlur ?? 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="t('Sfocatura dietro')" @update:modelValue="up('backdropBlur', $event)" />
           </div>
           <div>
-            <label class="mps-label">{{ t('Backdrop luminosita (%)') }}</label>
-            <NumberScrubber theme="dark" :modelValue="layer.backdropBrightness ?? 100" :min="0" :max="200" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Backdrop luminosita (%)')" @update:modelValue="up('backdropBrightness', $event)" />
+            <label class="mps-label">{{ t('Luminosità') }}</label>
+            <NumberScrubber theme="dark" :modelValue="layer.backdropBrightness ?? 100" :min="0" :max="200" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Luminosità (%)')" @update:modelValue="up('backdropBrightness', $event)" />
           </div>
           <div>
-            <label class="mps-label">{{ t('Backdrop scala grigi (%)') }}</label>
-            <NumberScrubber theme="dark" :modelValue="layer.backdropGrayscale ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Backdrop scala grigi (%)')" @update:modelValue="up('backdropGrayscale', $event)" />
+            <label class="mps-label">{{ t('Scala di grigi') }}</label>
+            <NumberScrubber theme="dark" :modelValue="layer.backdropGrayscale ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Scala di grigi (%)')" @update:modelValue="up('backdropGrayscale', $event)" />
           </div>
           <div>
-            <label class="mps-label">{{ t('Backdrop contrasto (%)') }}</label>
-            <NumberScrubber theme="dark" :modelValue="layer.backdropContrast ?? 100" :min="0" :max="300" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Backdrop contrasto (%)')" @update:modelValue="up('backdropContrast', $event)" />
+            <label class="mps-label">{{ t('Contrasto') }}</label>
+            <NumberScrubber theme="dark" :modelValue="layer.backdropContrast ?? 100" :min="0" :max="300" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Contrasto (%)')" @update:modelValue="up('backdropContrast', $event)" />
           </div>
           <div>
-            <label class="mps-label">{{ t('Backdrop saturazione (%)') }}</label>
-            <NumberScrubber theme="dark" :modelValue="layer.backdropSaturate ?? 100" :min="0" :max="300" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Backdrop saturazione (%)')" @update:modelValue="up('backdropSaturate', $event)" />
+            <label class="mps-label">{{ t('Saturazione') }}</label>
+            <NumberScrubber theme="dark" :modelValue="layer.backdropSaturate ?? 100" :min="0" :max="300" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Saturazione (%)')" @update:modelValue="up('backdropSaturate', $event)" />
           </div>
           <div>
-            <label class="mps-label">{{ t('Backdrop inverti (%)') }}</label>
-            <NumberScrubber theme="dark" :modelValue="layer.backdropInvert ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Backdrop inverti (%)')" @update:modelValue="up('backdropInvert', $event)" />
+            <label class="mps-label">{{ t('Inverti') }}</label>
+            <NumberScrubber theme="dark" :modelValue="layer.backdropInvert ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Inverti (%)')" @update:modelValue="up('backdropInvert', $event)" />
           </div>
           <div>
-            <label class="mps-label">{{ t('Backdrop rotazione tinta') }}</label>
-            <NumberScrubber theme="dark" :modelValue="layer.backdropHueRotate ?? 0" :min="0" :max="360" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="°" :ariaLabel="t('Backdrop rotazione tinta')" @update:modelValue="up('backdropHueRotate', $event)" />
+            <label class="mps-label">{{ t('Rotazione tinta') }}</label>
+            <NumberScrubber theme="dark" :modelValue="layer.backdropHueRotate ?? 0" :min="0" :max="360" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="°" :ariaLabel="t('Rotazione tinta')" @update:modelValue="up('backdropHueRotate', $event)" />
           </div>
 
           <!-- ── Ombre ── -->
@@ -722,8 +722,8 @@
           <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
           <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Effetti') }}</p>
           <div>
-            <label class="mps-label">{{ t('Opacita (%)') }}</label>
-            <NumberScrubber theme="dark" :modelValue="layer.opacity ?? 100" :min="0" :max="100" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Opacita (%)')" @update:modelValue="up('opacity', $event)" />
+            <label class="mps-label">{{ t('Opacità') }}</label>
+            <NumberScrubber theme="dark" :modelValue="layer.opacity ?? 100" :min="0" :max="100" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Opacità (%)')" @update:modelValue="up('opacity', $event)" />
           </div>
           <div>
             <label class="mps-label">{{ t('Fusione') }}</label>
@@ -748,7 +748,7 @@
               <FieldColor :modelValue="layer.sfx.color || '#ffffff'" @update:modelValue="upSfx('color', $event)" />
             </div>
             <div>
-              <label class="mps-label">{{ t('Durata (ms)') }}</label>
+              <label class="mps-label">{{ t('Durata') }}</label>
               <NumberScrubber theme="dark" :modelValue="layer.sfx.duration || 800" :min="200" :max="2000" :step="50" :defaultValue="800" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata (ms)')" @update:modelValue="upSfx('duration', $event)" />
             </div>
           </template>
@@ -804,13 +804,13 @@
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.animIn" :options="animationsInGroups" @update:model-value="up('animIn', $event)" />
             </div>
             <div>
-              <label class="mps-label">{{ t('Durata (ms)') }}</label>
+              <label class="mps-label">{{ t('Durata') }}</label>
               <div class="mb-flex mb-items-center mb-gap-2">
                 <NumberScrubber theme="dark" :modelValue="layer.animInDuration" :min="100" :max="3000" :step="50" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata (ms)')" @update:modelValue="up('animInDuration', $event)" />
               </div>
             </div>
             <div>
-              <label class="mps-label">{{ t('Ritardo (ms)') }}</label>
+              <label class="mps-label">{{ t('Ritardo') }}</label>
               <div class="mb-flex mb-items-center mb-gap-2">
                 <NumberScrubber theme="dark" :modelValue="layer.animInDelay" :min="0" :max="3000" :step="50" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Ritardo (ms)')" @update:modelValue="up('animInDelay', $event)" />
               </div>
@@ -823,29 +823,29 @@
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.animOut" :options="animationsOutGroups" @update:model-value="up('animOut', $event)" />
             </div>
             <div>
-              <label class="mps-label">{{ t('Durata (ms)') }}</label>
+              <label class="mps-label">{{ t('Durata') }}</label>
               <div class="mb-flex mb-items-center mb-gap-2">
                 <NumberScrubber theme="dark" :modelValue="layer.animOutDuration" :min="100" :max="3000" :step="50" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata (ms)')" @update:modelValue="up('animOutDuration', $event)" />
               </div>
             </div>
             <div>
-              <label class="mps-label">{{ t('Ritardo (ms)') }}</label>
+              <label class="mps-label">{{ t('Ritardo') }}</label>
               <div class="mb-flex mb-items-center mb-gap-2">
                 <NumberScrubber theme="dark" :modelValue="layer.animOutDelay" :min="0" :max="3000" :step="50" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Ritardo (ms)')" @update:modelValue="up('animOutDelay', $event)" />
               </div>
             </div>
             <div>
-              <label class="mps-label">{{ t('Curva di easing') }}</label>
-              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.animEasing" :options="EASING_GROUPS" @update:model-value="up('animEasing', $event)" />
+              <label class="mps-label">{{ t('Andamento') }}</label>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.animEasing" :options="OPTS_ANIM_EASING" @update:model-value="up('animEasing', $event)" />
             </div>
 
             <!-- Character Animation (solo per text) -->
             <template v-if="layer.type === 'text'">
               <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-              <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Animazione Testo') }}</p>
+              <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Animazione del testo') }}</p>
               <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
                 <input type="checkbox" :checked="!!layer.charAnim" @change="toggleCharAnim($event.target.checked)" class="mb-rounded" />
-                <span class="mb-text-[11px] mb-text-gray-400">{{ t('Anima caratteri/parole') }}</span>
+                <span class="mb-text-[11px] mb-text-gray-400">{{ t('Anima lettere o parole') }}</span>
               </label>
               <template v-if="layer.charAnim">
                 <div>
@@ -869,7 +869,7 @@
                   <NumberScrubber theme="dark" :modelValue="layer.charAnim.offsetY || 0" :min="-100" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Offset Y (px)" @update:modelValue="upCharAnim('offsetY', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">{{ t('Rotazione (deg)') }}</label>
+                  <label class="mps-label">{{ t('Rotazione') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.charAnim.rotation || 0" :min="-180" :max="180" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="°" :ariaLabel="t('Rotazione (deg)')" @update:modelValue="upCharAnim('rotation', $event)" />
                 </div>
                 <div>
@@ -877,16 +877,16 @@
                   <NumberScrubber theme="dark" :modelValue="layer.charAnim.scale ?? 1" :min="0" :max="3" :step="0.1" :defaultValue="1" emitAs="number" :sliderOnFocus="false" :ariaLabel="t('Scala iniziale')" @update:modelValue="upCharAnim('scale', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">{{ t('Opacità iniziale (%)') }}</label>
+                  <label class="mps-label">{{ t('Opacità iniziale') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.charAnim.opacity ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Opacità iniziale (%)')" @update:modelValue="upCharAnim('opacity', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">{{ t('Blur iniziale (px)') }}</label>
-                  <NumberScrubber theme="dark" :modelValue="layer.charAnim.blur || 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="t('Blur iniziale (px)')" @update:modelValue="upCharAnim('blur', $event)" />
+                  <label class="mps-label">{{ t('Sfocatura iniziale') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.charAnim.blur || 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="t('Sfocatura iniziale (px)')" @update:modelValue="upCharAnim('blur', $event)" />
                 </div>
                 <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
                   <input type="checkbox" :checked="layer.charAnim.yoyo" @change="upCharAnim('yoyo', $event.target.checked)" class="mb-rounded" />
-                  <span class="mb-text-[11px] mb-text-gray-400">{{ t('Yoyo (andata e ritorno)') }}</span>
+                  <span class="mb-text-[11px] mb-text-gray-400">{{ t('Andata e ritorno') }}</span>
                 </label>
               </template>
             </template>
@@ -900,7 +900,7 @@
             </div>
             <template v-if="layer.animLoop && layer.animLoop !== 'none'">
               <div>
-                <label class="mps-label">{{ t('Durata loop (ms)') }}</label>
+                <label class="mps-label">{{ t('Durata del ciclo') }}</label>
                 <NumberScrubber theme="dark" :modelValue="layer.animLoopDuration || 3000" :min="500" :max="10000" :step="100" :defaultValue="3000" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata loop (ms)')" @update:modelValue="up('animLoopDuration', $event)" />
               </div>
               <div>
@@ -914,7 +914,7 @@
             <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Al passaggio del mouse') }}</p>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="!!layer.hover" @change="toggleHover($event.target.checked)" class="mb-rounded" />
-              <span class="mb-text-[11px] mb-text-gray-400">{{ t('Effetto hover attivo') }}</span>
+              <span class="mb-text-[11px] mb-text-gray-400">{{ t('Cambia al passaggio del mouse') }}</span>
             </label>
             <template v-if="layer.hover">
               <!-- Transform -->
@@ -956,21 +956,21 @@
               <!-- Aspetto -->
               <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-2">{{ t('Aspetto') }}</p>
               <div>
-                <label class="mps-label">{{ t('Opacita (%)') }}</label>
-                <NumberScrubber theme="dark" :modelValue="layer.hover.opacity ?? 100" :min="0" :max="100" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Opacita (%)')" @update:modelValue="upHover('opacity', $event)" />
+                <label class="mps-label">{{ t('Opacità') }}</label>
+                <NumberScrubber theme="dark" :modelValue="layer.hover.opacity ?? 100" :min="0" :max="100" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Opacità (%)')" @update:modelValue="upHover('opacity', $event)" />
               </div>
               <template v-if="layer.type === 'text' || layer.type === 'button'">
                 <div>
-                  <label class="mps-label">{{ t('Colore testo hover') }}</label>
+                  <label class="mps-label">{{ t('Colore del testo') }}</label>
                   <FieldColor :modelValue="layer.hover.color || ''" @update:modelValue="upHover('color', $event)" />
                 </div>
               </template>
               <div>
-                <label class="mps-label">{{ t('Sfondo hover') }}</label>
+                <label class="mps-label">{{ t('Sfondo') }}</label>
                 <FieldColor :modelValue="layer.hover.bgColor || ''" @update:modelValue="upHover('bgColor', $event)" />
               </div>
               <div>
-                <label class="mps-label">{{ t('Bordo hover') }}</label>
+                <label class="mps-label">{{ t('Bordo') }}</label>
                 <FieldColor :modelValue="layer.hover.borderColor || ''" @update:modelValue="upHover('borderColor', $event)" />
               </div>
               <div>
@@ -978,25 +978,25 @@
                 <NumberScrubber theme="dark" :modelValue="layer.hover.borderRadius ?? ''" :min="0" :max="200" :step="1" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Border radius hover" @update:modelValue="upHover('borderRadius', $event)" />
               </div>
               <!-- Filtri hover -->
-              <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-2">{{ t('Filtri hover') }}</p>
+              <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-2">{{ t('Filtri') }}</p>
               <div class="mb-grid mb-grid-cols-2 mb-gap-2">
                 <div>
                   <label class="mps-label">{{ t('Sfocatura') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.hover.blur ?? 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Hover blur (px)" @update:modelValue="upHover('blur', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">{{ t('Luminosita (%)') }}</label>
-                  <NumberScrubber theme="dark" :modelValue="layer.hover.brightness ?? 100" :min="0" :max="200" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Luminosita (%)')" @update:modelValue="upHover('brightness', $event)" />
+                  <label class="mps-label">{{ t('Luminosità') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.brightness ?? 100" :min="0" :max="200" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Luminosità (%)')" @update:modelValue="upHover('brightness', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">{{ t('Scala grigi (%)') }}</label>
-                  <NumberScrubber theme="dark" :modelValue="layer.hover.grayscale ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Scala grigi (%)')" @update:modelValue="upHover('grayscale', $event)" />
+                  <label class="mps-label">{{ t('Scala di grigi') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.grayscale ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Scala di grigi (%)')" @update:modelValue="upHover('grayscale', $event)" />
                 </div>
               </div>
               <!-- Transizione -->
               <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-2">{{ t('Transizione') }}</p>
               <div>
-                <label class="mps-label">{{ t('Durata (ms)') }}</label>
+                <label class="mps-label">{{ t('Durata') }}</label>
                 <NumberScrubber theme="dark" :modelValue="layer.hover.duration ?? 300" :min="100" :max="1000" :step="50" :defaultValue="300" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata (ms)')" @update:modelValue="upHover('duration', $event)" />
               </div>
               <div>
@@ -1004,7 +1004,7 @@
                 <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.hover.easing || 'ease'" :options="OPTS_EASING" @update:model-value="upHover('easing', $event)" />
               </div>
               <div>
-                <label class="mps-label">{{ t('Cursore hover') }}</label>
+                <label class="mps-label">{{ t('Cursore') }}</label>
                 <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.hover.cursor || ''" :options="OPTS_HOVER_CURSOR" @update:model-value="upHover('cursor', $event)" />
               </div>
             </template>
@@ -1055,11 +1055,11 @@
                   <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.kenBurns.type || 'zoomIn'" :options="OPTS_KENBURNS_TYPE" @update:model-value="upKenBurns('type', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">{{ t('Intensita (%)') }}</label>
-                  <NumberScrubber theme="dark" :modelValue="layer.kenBurns.intensity ?? 20" :min="5" :max="50" :step="5" :defaultValue="20" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Intensita (%)')" @update:modelValue="upKenBurns('intensity', $event)" />
+                  <label class="mps-label">{{ t('Intensità') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.kenBurns.intensity ?? 20" :min="5" :max="50" :step="5" :defaultValue="20" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Intensità (%)')" @update:modelValue="upKenBurns('intensity', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">{{ t('Durata (ms)') }}</label>
+                  <label class="mps-label">{{ t('Durata') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.kenBurns.duration ?? 5000" :min="1000" :max="20000" :step="500" :defaultValue="5000" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata (ms)')" @update:modelValue="upKenBurns('duration', $event)" />
                 </div>
               </template>
@@ -1085,7 +1085,7 @@
                 </div>
               </template>
               <div>
-                <label class="mps-label">{{ t('Durata (ms)') }}</label>
+                <label class="mps-label">{{ t('Durata') }}</label>
                 <NumberScrubber theme="dark" :modelValue="layer.motionPath.duration ?? 3000" :min="500" :max="120000" :step="500" :defaultValue="3000" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata (ms)')" @update:modelValue="upMotionPath('duration', $event)" />
               </div>
               <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
@@ -1107,7 +1107,7 @@
             <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Parallasse') }}</p>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="!!layer.parallax" @change="toggleParallax($event.target.checked)" class="mb-rounded" />
-              <span class="mb-text-[11px] mb-text-gray-400">{{ t('Parallax attivo') }}</span>
+              <span class="mb-text-[11px] mb-text-gray-400">{{ t('Parallasse attiva') }}</span>
             </label>
             <template v-if="layer.parallax">
               <div>
@@ -1115,8 +1115,8 @@
                 <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.parallax.type || 'mouse'" :options="OPTS_PARALLAX_TYPE" @update:model-value="upParallax('type', $event)" />
               </div>
               <div>
-                <label class="mps-label">{{ t('Profondita (1-20)') }}</label>
-                <NumberScrubber theme="dark" :modelValue="layer.parallax.depth ?? 5" :min="1" :max="20" :step="1" :defaultValue="5" emitAs="number" :sliderOnFocus="false" :ariaLabel="t('Profondita (1-20)')" @update:modelValue="upParallax('depth', $event)" />
+                <label class="mps-label">{{ t('Profondità') }}</label>
+                <NumberScrubber theme="dark" :modelValue="layer.parallax.depth ?? 5" :min="1" :max="20" :step="1" :defaultValue="5" emitAs="number" :sliderOnFocus="false" :ariaLabel="t('Profondità')" @update:modelValue="upParallax('depth', $event)" />
               </div>
               <template v-if="layer.parallax.type === 'mouse' || layer.parallax.type === 'both'">
                 <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
@@ -1126,8 +1126,8 @@
               </template>
               <template v-if="layer.parallax.type === 'scroll' || layer.parallax.type === 'both'">
                 <div>
-                  <label class="mps-label">{{ t('Velocita scroll') }}</label>
-                  <NumberScrubber theme="dark" :modelValue="layer.parallax.scrollSpeed ?? 0.5" :min="0.1" :max="2" :step="0.1" :defaultValue="0.5" emitAs="number" :sliderOnFocus="false" :ariaLabel="t('Velocita scroll')" @update:modelValue="upParallax('scrollSpeed', $event)" />
+                  <label class="mps-label">{{ t('Velocità con lo scorrimento') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.parallax.scrollSpeed ?? 0.5" :min="0.1" :max="2" :step="0.1" :defaultValue="0.5" emitAs="number" :sliderOnFocus="false" :ariaLabel="t('Velocità con lo scorrimento')" @update:modelValue="upParallax('scrollSpeed', $event)" />
                 </div>
               </template>
             </template>
@@ -1196,7 +1196,7 @@
           <!-- Modo TIMELINE -->
           <template v-else>
             <p class="mb-text-[10px] mb-text-gray-500 mb-italic mb-mb-2">
-              {{ t('Usa la timeline sotto il canvas per aggiungere e spostare i keyframe.') }}
+              {{ t('Usa la linea del tempo sotto la tela per aggiungere e spostare i fotogrammi chiave.') }}
             </p>
             <KeyframeProperties
               :keyframe="selectedKeyframe"
@@ -1349,162 +1349,162 @@ function clearAllOverrides() {
 }
 
 const animationsInGroups = [
-  { label: 'Base', options: [
-    { value: 'none', label: 'Nessuna' },
-    { value: 'fadeIn', label: 'Fade In' },
+  { label: t('Base'), options: [
+    { value: 'none', label: t('Nessuna') },
+    { value: 'fadeIn', label: t('Dissolvenza') },
   ]},
-  { label: 'Fade', options: [
-    { value: 'fadeInUp', label: 'Fade In Up' },
-    { value: 'fadeInDown', label: 'Fade In Down' },
-    { value: 'fadeInLeft', label: 'Fade In Left' },
-    { value: 'fadeInRight', label: 'Fade In Right' },
+  { label: t('Dissolvenza'), options: [
+    { value: 'fadeInUp', label: t('Dissolvenza dal basso') },
+    { value: 'fadeInDown', label: t('Dissolvenza dall’alto') },
+    { value: 'fadeInLeft', label: t('Dissolvenza da sinistra') },
+    { value: 'fadeInRight', label: t('Dissolvenza da destra') },
   ]},
-  { label: 'Slide', options: [
-    { value: 'slideInLeft', label: 'Slide In Left' },
-    { value: 'slideInRight', label: 'Slide In Right' },
-    { value: 'slideInUp', label: 'Slide In Up' },
-    { value: 'slideInDown', label: 'Slide In Down' },
-    { value: 'slideShortFromTop', label: 'Slide Short Top' },
-    { value: 'slideShortFromBottom', label: 'Slide Short Bottom' },
-    { value: 'slideShortFromLeft', label: 'Slide Short Left' },
-    { value: 'slideShortFromRight', label: 'Slide Short Right' },
-    { value: 'smoothSlideFromBottom', label: 'Smooth Slide Bottom' },
-    { value: 'smoothSlideFromTop', label: 'Smooth Slide Top' },
-    { value: 'smoothSlideFromLeft', label: 'Smooth Slide Left' },
-    { value: 'smoothSlideFromRight', label: 'Smooth Slide Right' },
+  { label: t('Scivola'), options: [
+    { value: 'slideInLeft', label: t('Scivola da sinistra') },
+    { value: 'slideInRight', label: t('Scivola da destra') },
+    { value: 'slideInUp', label: t('Scivola dal basso') },
+    { value: 'slideInDown', label: t('Scivola dall’alto') },
+    { value: 'slideShortFromTop', label: t('Breve dall’alto') },
+    { value: 'slideShortFromBottom', label: t('Breve dal basso') },
+    { value: 'slideShortFromLeft', label: t('Breve da sinistra') },
+    { value: 'slideShortFromRight', label: t('Breve da destra') },
+    { value: 'smoothSlideFromBottom', label: t('Morbida dal basso') },
+    { value: 'smoothSlideFromTop', label: t('Morbida dall’alto') },
+    { value: 'smoothSlideFromLeft', label: t('Morbida da sinistra') },
+    { value: 'smoothSlideFromRight', label: t('Morbida da destra') },
   ]},
-  { label: 'Skew', options: [
-    { value: 'skewFromLeft', label: 'Skew From Left' },
-    { value: 'skewFromRight', label: 'Skew From Right' },
-    { value: 'skewShortFromLeft', label: 'Skew Short Left' },
-    { value: 'skewShortFromRight', label: 'Skew Short Right' },
+  { label: t('Inclinata'), options: [
+    { value: 'skewFromLeft', label: t('Inclinata da sinistra') },
+    { value: 'skewFromRight', label: t('Inclinata da destra') },
+    { value: 'skewShortFromLeft', label: t('Inclinata breve da sinistra') },
+    { value: 'skewShortFromRight', label: t('Inclinata breve da destra') },
   ]},
-  { label: 'Flip 3D', options: [
-    { value: 'flipFromTop', label: 'Flip From Top' },
-    { value: 'flipFromBottom', label: 'Flip From Bottom' },
-    { value: 'flipFromLeft', label: 'Flip From Left' },
-    { value: 'flipFromRight', label: 'Flip From Right' },
+  { label: t('Ribaltata 3D'), options: [
+    { value: 'flipFromTop', label: t('Ribaltata dall’alto') },
+    { value: 'flipFromBottom', label: t('Ribaltata dal basso') },
+    { value: 'flipFromLeft', label: t('Ribaltata da sinistra') },
+    { value: 'flipFromRight', label: t('Ribaltata da destra') },
   ]},
-  { label: 'Rotate', options: [
-    { value: 'rotateIn', label: 'Rotate In' },
-    { value: 'rotateInFromBottom', label: 'Rotate In Bottom' },
-    { value: 'rotate3D', label: 'Rotate 3D' },
-    { value: 'rotateInFromLeft', label: 'Rotate In Left' },
-    { value: 'rotateInFromRight', label: 'Rotate In Right' },
+  { label: t('Rotazione'), options: [
+    { value: 'rotateIn', label: t('Ruota entrando') },
+    { value: 'rotateInFromBottom', label: t('Ruota dal basso') },
+    { value: 'rotate3D', label: t('Ruota in 3D') },
+    { value: 'rotateInFromLeft', label: t('Ruota da sinistra') },
+    { value: 'rotateInFromRight', label: t('Ruota da destra') },
   ]},
-  { label: 'Pop/Bounce', options: [
-    { value: 'zoomIn', label: 'Zoom In' },
-    { value: 'bounceIn', label: 'Bounce In' },
-    { value: 'popUpSmooth', label: 'Pop Up Smooth' },
-    { value: 'popUpBack', label: 'Pop Up Back' },
-    { value: 'bounceInUp', label: 'Bounce In Up' },
-    { value: 'bounceInDown', label: 'Bounce In Down' },
+  { label: t('Zoom e rimbalzo'), options: [
+    { value: 'zoomIn', label: t('Si ingrandisce') },
+    { value: 'bounceIn', label: t('Rimbalzo') },
+    { value: 'popUpSmooth', label: t('Spunta morbida') },
+    { value: 'popUpBack', label: t('Spunta e torna indietro') },
+    { value: 'bounceInUp', label: t('Rimbalzo dal basso') },
+    { value: 'bounceInDown', label: t('Rimbalzo dall’alto') },
   ]},
-  { label: 'Mask/Reveal', options: [
-    { value: 'maskFromLeft', label: 'Mask From Left' },
-    { value: 'maskFromRight', label: 'Mask From Right' },
-    { value: 'maskFromTop', label: 'Mask From Top' },
-    { value: 'maskFromBottom', label: 'Mask From Bottom' },
-    { value: 'maskZoomOut', label: 'Mask Zoom Out' },
-    { value: 'maskCenter', label: 'Mask Center' },
+  { label: t('Maschera'), options: [
+    { value: 'maskFromLeft', label: t('Si scopre da sinistra') },
+    { value: 'maskFromRight', label: t('Si scopre da destra') },
+    { value: 'maskFromTop', label: t('Si scopre dall’alto') },
+    { value: 'maskFromBottom', label: t('Si scopre dal basso') },
+    { value: 'maskZoomOut', label: t('Si scopre dal centro con zoom') },
+    { value: 'maskCenter', label: t('Si scopre dal centro') },
   ]},
 ];
 
 const animationsOutGroups = [
-  { label: 'Base', options: [
-    { value: 'none', label: 'Nessuna' },
-    { value: 'fadeOut', label: 'Fade Out' },
+  { label: t('Base'), options: [
+    { value: 'none', label: t('Nessuna') },
+    { value: 'fadeOut', label: t('Dissolvenza') },
   ]},
-  { label: 'Fade', options: [
-    { value: 'fadeOutUp', label: 'Fade Out Up' },
-    { value: 'fadeOutDown', label: 'Fade Out Down' },
-    { value: 'fadeOutLeft', label: 'Fade Out Left' },
-    { value: 'fadeOutRight', label: 'Fade Out Right' },
+  { label: t('Dissolvenza'), options: [
+    { value: 'fadeOutUp', label: t('Dissolvenza verso l’alto') },
+    { value: 'fadeOutDown', label: t('Dissolvenza verso il basso') },
+    { value: 'fadeOutLeft', label: t('Dissolvenza verso sinistra') },
+    { value: 'fadeOutRight', label: t('Dissolvenza verso destra') },
   ]},
-  { label: 'Slide', options: [
-    { value: 'slideOutLeft', label: 'Slide Out Left' },
-    { value: 'slideOutRight', label: 'Slide Out Right' },
-    { value: 'slideOutUp', label: 'Slide Out Up' },
-    { value: 'slideOutDown', label: 'Slide Out Down' },
-    { value: 'slideShortOutTop', label: 'Slide Short Top' },
-    { value: 'slideShortOutBottom', label: 'Slide Short Bottom' },
-    { value: 'slideShortOutLeft', label: 'Slide Short Left' },
-    { value: 'slideShortOutRight', label: 'Slide Short Right' },
-    { value: 'smoothSlideOutBottom', label: 'Smooth Slide Bottom' },
-    { value: 'smoothSlideOutTop', label: 'Smooth Slide Top' },
-    { value: 'smoothSlideOutLeft', label: 'Smooth Slide Left' },
-    { value: 'smoothSlideOutRight', label: 'Smooth Slide Right' },
+  { label: t('Scivola'), options: [
+    { value: 'slideOutLeft', label: t('Scivola verso sinistra') },
+    { value: 'slideOutRight', label: t('Scivola verso destra') },
+    { value: 'slideOutUp', label: t('Scivola verso l’alto') },
+    { value: 'slideOutDown', label: t('Scivola verso il basso') },
+    { value: 'slideShortOutTop', label: t('Breve verso l’alto') },
+    { value: 'slideShortOutBottom', label: t('Breve verso il basso') },
+    { value: 'slideShortOutLeft', label: t('Breve verso sinistra') },
+    { value: 'slideShortOutRight', label: t('Breve verso destra') },
+    { value: 'smoothSlideOutBottom', label: t('Morbida verso il basso') },
+    { value: 'smoothSlideOutTop', label: t('Morbida verso l’alto') },
+    { value: 'smoothSlideOutLeft', label: t('Morbida verso sinistra') },
+    { value: 'smoothSlideOutRight', label: t('Morbida verso destra') },
   ]},
-  { label: 'Skew', options: [
-    { value: 'skewOutLeft', label: 'Skew Out Left' },
-    { value: 'skewOutRight', label: 'Skew Out Right' },
-    { value: 'skewShortOutLeft', label: 'Skew Short Left' },
-    { value: 'skewShortOutRight', label: 'Skew Short Right' },
+  { label: t('Inclinata'), options: [
+    { value: 'skewOutLeft', label: t('Inclinata verso sinistra') },
+    { value: 'skewOutRight', label: t('Inclinata verso destra') },
+    { value: 'skewShortOutLeft', label: t('Inclinata breve verso sinistra') },
+    { value: 'skewShortOutRight', label: t('Inclinata breve verso destra') },
   ]},
-  { label: 'Flip 3D', options: [
-    { value: 'flipOutTop', label: 'Flip Out Top' },
-    { value: 'flipOutBottom', label: 'Flip Out Bottom' },
-    { value: 'flipOutLeft', label: 'Flip Out Left' },
-    { value: 'flipOutRight', label: 'Flip Out Right' },
+  { label: t('Ribaltata 3D'), options: [
+    { value: 'flipOutTop', label: t('Ribaltata verso l’alto') },
+    { value: 'flipOutBottom', label: t('Ribaltata verso il basso') },
+    { value: 'flipOutLeft', label: t('Ribaltata verso sinistra') },
+    { value: 'flipOutRight', label: t('Ribaltata verso destra') },
   ]},
-  { label: 'Rotate', options: [
-    { value: 'rotateOut', label: 'Rotate Out' },
-    { value: 'rotateOutToBottom', label: 'Rotate Out Bottom' },
-    { value: 'rotateOut3D', label: 'Rotate Out 3D' },
-    { value: 'rotateOutToLeft', label: 'Rotate Out Left' },
-    { value: 'rotateOutToRight', label: 'Rotate Out Right' },
+  { label: t('Rotazione'), options: [
+    { value: 'rotateOut', label: t('Ruota uscendo') },
+    { value: 'rotateOutToBottom', label: t('Ruota verso il basso') },
+    { value: 'rotateOut3D', label: t('Ruota in 3D') },
+    { value: 'rotateOutToLeft', label: t('Ruota verso sinistra') },
+    { value: 'rotateOutToRight', label: t('Ruota verso destra') },
   ]},
-  { label: 'Pop/Bounce', options: [
-    { value: 'zoomOut', label: 'Zoom Out' },
-    { value: 'bounceOut', label: 'Bounce Out' },
-    { value: 'popOutSmooth', label: 'Pop Out Smooth' },
-    { value: 'popOutBack', label: 'Pop Out Back' },
-    { value: 'bounceOutUp', label: 'Bounce Out Up' },
-    { value: 'bounceOutDown', label: 'Bounce Out Down' },
+  { label: t('Zoom e rimbalzo'), options: [
+    { value: 'zoomOut', label: t('Si rimpicciolisce') },
+    { value: 'bounceOut', label: t('Rimbalzo') },
+    { value: 'popOutSmooth', label: t('Sparisce morbida') },
+    { value: 'popOutBack', label: t('Si gonfia e sparisce') },
+    { value: 'bounceOutUp', label: t('Rimbalzo verso l’alto') },
+    { value: 'bounceOutDown', label: t('Rimbalzo verso il basso') },
   ]},
-  { label: 'Mask/Reveal', options: [
-    { value: 'maskOutLeft', label: 'Mask Out Left' },
-    { value: 'maskOutRight', label: 'Mask Out Right' },
-    { value: 'maskOutTop', label: 'Mask Out Top' },
-    { value: 'maskOutBottom', label: 'Mask Out Bottom' },
-    { value: 'maskZoomIn', label: 'Mask Zoom In' },
-    { value: 'maskOutCenter', label: 'Mask Out Center' },
+  { label: t('Maschera'), options: [
+    { value: 'maskOutLeft', label: t('Si copre verso sinistra') },
+    { value: 'maskOutRight', label: t('Si copre verso destra') },
+    { value: 'maskOutTop', label: t('Si copre verso l’alto') },
+    { value: 'maskOutBottom', label: t('Si copre verso il basso') },
+    { value: 'maskZoomIn', label: t('Si chiude al centro con zoom') },
+    { value: 'maskOutCenter', label: t('Si chiude al centro') },
   ]},
 ];
 
 const loopAnimGroups = [
-  { label: 'Nessuno', options: [{ value: 'none', label: 'Nessun loop' }] },
-  { label: 'Pendolo', options: [
-    { value: 'pendulum', label: 'Pendolo' },
-    { value: 'pendulumBelow', label: 'Pendolo basso' },
-    { value: 'pendulumAbove', label: 'Pendolo alto' },
-    { value: 'pendulumLeft', label: 'Pendolo sinistra' },
-    { value: 'pendulumRight', label: 'Pendolo destra' },
+  { label: t('Nessuno'), options: [{ value: 'none', label: t('Nessuno') }] },
+  { label: t('Pendolo'), options: [
+    { value: 'pendulum', label: t('Pendolo') },
+    { value: 'pendulumBelow', label: t('Pendolo basso') },
+    { value: 'pendulumAbove', label: t('Pendolo alto') },
+    { value: 'pendulumLeft', label: t('Pendolo a sinistra') },
+    { value: 'pendulumRight', label: t('Pendolo a destra') },
   ]},
-  { label: 'Onda', options: [
-    { value: 'waveSmallLeft', label: 'Onda piccola SX' },
-    { value: 'waveSmallRight', label: 'Onda piccola DX' },
-    { value: 'waveBigLeft', label: 'Onda grande SX' },
-    { value: 'waveBigRight', label: 'Onda grande DX' },
+  { label: t('Onda'), options: [
+    { value: 'waveSmallLeft', label: t('Onda piccola a sinistra') },
+    { value: 'waveSmallRight', label: t('Onda piccola a destra') },
+    { value: 'waveBigLeft', label: t('Onda grande a sinistra') },
+    { value: 'waveBigRight', label: t('Onda grande a destra') },
   ]},
-  { label: 'Wiggle', options: [
-    { value: 'wiggleY', label: 'Wiggle Y' },
-    { value: 'wiggleX', label: 'Wiggle X' },
-    { value: 'wiggle3D', label: 'Wiggle 3D' },
-    { value: 'crazyWiggle', label: 'Crazy Wiggle' },
+  { label: t('Vibrazione'), options: [
+    { value: 'wiggleY', label: t('Vibrazione verticale') },
+    { value: 'wiggleX', label: t('Vibrazione orizzontale') },
+    { value: 'wiggle3D', label: t('Vibrazione 3D') },
+    { value: 'crazyWiggle', label: t('Vibrazione scatenata') },
   ]},
-  { label: 'Rotazione', options: [
-    { value: 'spinCW', label: 'Spin orario' },
-    { value: 'spinCCW', label: 'Spin antiorario' },
+  { label: t('Rotazione'), options: [
+    { value: 'spinCW', label: t('Gira in senso orario') },
+    { value: 'spinCCW', label: t('Gira in senso antiorario') },
   ]},
-  { label: 'Effetto', options: [
-    { value: 'blinkLoop', label: 'Lampeggio' },
-    { value: 'floatLoop', label: 'Galleggiamento' },
-    { value: 'pulseLoop', label: 'Pulsazione' },
-    { value: 'breathLoop', label: 'Respiro' },
-    { value: 'slideHLoop', label: 'Slide orizzontale' },
-    { value: 'windLoop', label: 'Vento (piega dal basso)' },
-    { value: 'hoverLoop', label: 'Hover dolce' },
+  { label: t('Effetto'), options: [
+    { value: 'blinkLoop', label: t('Lampeggio') },
+    { value: 'floatLoop', label: t('Galleggiamento') },
+    { value: 'pulseLoop', label: t('Pulsazione') },
+    { value: 'breathLoop', label: t('Respiro') },
+    { value: 'slideHLoop', label: t('Scivola avanti e indietro') },
+    { value: 'windLoop', label: t('Vento (piega dal basso)') },
+    { value: 'hoverLoop', label: t('Fluttua piano') },
   ]},
 ];
 
@@ -1594,16 +1594,16 @@ const blendModes = ['normal','multiply','screen','overlay','darken','lighten','c
 // Option arrays per FieldSelect (stessi value dei vecchi <option>: dati salvati invariati)
 const OPTS_TAG = ['h1','h2','h3','h4','h5','h6','p','span','div'].map(v => ({ value: v, label: v }));
 const OPTS_LINK_TARGET = [
-  { value: '_self', label: 'Stessa scheda' },
-  { value: '_blank', label: 'Nuova scheda' },
+  { value: '_self', label: t('Stessa scheda') },
+  { value: '_blank', label: t('Nuova scheda') },
 ];
 const OPTS_ACTION_TYPE = [
-  { value: 'none', label: 'Nessuna' },
-  { value: 'nextSlide', label: 'Slide successiva' },
-  { value: 'prevSlide', label: 'Slide precedente' },
-  { value: 'goToSlide', label: 'Vai a slide N' },
-  { value: 'openUrl', label: 'Apri URL' },
-  { value: 'scrollBelow', label: 'Scroll sotto slider' },
+  { value: 'none', label: t('Nessuna') },
+  { value: 'nextSlide', label: t('Slide successiva') },
+  { value: 'prevSlide', label: t('Slide precedente') },
+  { value: 'goToSlide', label: t('Vai alla slide…') },
+  { value: 'openUrl', label: t('Apri un indirizzo') },
+  { value: 'scrollBelow', label: t('Scorri sotto lo slider') },
   { value: 'toggleLayer', label: t('Mostra o nasconde un livello') },
   { value: 'setState', label: t('Imposta uno stato') },
   { value: 'cycleState', label: t('Stato successivo (a giro)') },
@@ -1619,109 +1619,112 @@ const OPTS_STATO_EFFETTO = [
 ];
 const OPTS_FONT_WEIGHT = ['300','400','500','600','700','800','900'].map(v => ({ value: v, label: v }));
 const OPTS_FONT_STYLE = [
-  { value: 'normal', label: 'Normale' },
-  { value: 'italic', label: 'Corsivo' },
+  { value: 'normal', label: t('Normale') },
+  { value: 'italic', label: t('Corsivo') },
 ];
 const OPTS_TEXT_TRANSFORM = [
-  { value: 'none', label: 'Nessuna' },
-  { value: 'uppercase', label: 'MAIUSCOLO' },
-  { value: 'lowercase', label: 'minuscolo' },
-  { value: 'capitalize', label: 'Capitalizzato' },
+  { value: 'none', label: t('Nessuna') },
+  { value: 'uppercase', label: t('MAIUSCOLO') },
+  { value: 'lowercase', label: t('minuscolo') },
+  { value: 'capitalize', label: t('Iniziali maiuscole') },
 ];
 const OPTS_TEXT_DECORATION = [
-  { value: 'none', label: 'Nessuna' },
-  { value: 'underline', label: 'Sottolineato' },
-  { value: 'line-through', label: 'Barrato' },
-  { value: 'overline', label: 'Sopralineato' },
+  { value: 'none', label: t('Nessuna') },
+  { value: 'underline', label: t('Sottolineato') },
+  { value: 'line-through', label: t('Barrato') },
+  { value: 'overline', label: t('Sopralineato') },
 ];
 const OPTS_BORDER_STYLE = [
-  { value: 'solid', label: 'Solido' },
-  { value: 'dashed', label: 'Tratteggiato' },
-  { value: 'dotted', label: 'Puntinato' },
-  { value: 'double', label: 'Doppio' },
+  { value: 'solid', label: t('Solido') },
+  { value: 'dashed', label: t('Tratteggiato') },
+  { value: 'dotted', label: t('Puntinato') },
+  { value: 'double', label: t('Doppio') },
 ];
 const OPTS_OBJECT_FIT = [
-  { value: 'cover', label: 'Copri (taglia)' },
-  { value: 'contain', label: 'Contieni (intera)' },
-  { value: 'fill', label: 'Riempi (deforma)' },
-  { value: 'none', label: 'Nessuno' },
+  { value: 'cover', label: t('Copri (taglia)') },
+  { value: 'contain', label: t('Contieni (intera)') },
+  { value: 'fill', label: t('Riempi (deforma)') },
+  { value: 'none', label: t('Nessuno') },
 ];
 const OPTS_OBJECT_POSITION = [
-  { value: 'center', label: 'Centro' },
-  { value: 'top', label: 'Alto' },
-  { value: 'bottom', label: 'Basso' },
-  { value: 'left', label: 'Sinistra' },
-  { value: 'right', label: 'Destra' },
-  { value: 'top left', label: 'Alto Sinistra' },
-  { value: 'top right', label: 'Alto Destra' },
-  { value: 'bottom left', label: 'Basso Sinistra' },
-  { value: 'bottom right', label: 'Basso Destra' },
+  { value: 'center', label: t('Centro') },
+  { value: 'top', label: t('Alto') },
+  { value: 'bottom', label: t('Basso') },
+  { value: 'left', label: t('Sinistra') },
+  { value: 'right', label: t('Destra') },
+  { value: 'top left', label: t('In alto a sinistra') },
+  { value: 'top right', label: t('In alto a destra') },
+  { value: 'bottom left', label: t('In basso a sinistra') },
+  { value: 'bottom right', label: t('In basso a destra') },
 ];
 const OPTS_BLEND_MODE = blendModes.map(v => ({ value: v, label: v }));
 const OPTS_SFX_EFFECT = [
-  { value: 'blockRight', label: 'Block da destra' },
-  { value: 'blockLeft', label: 'Block da sinistra' },
-  { value: 'blockDown', label: "Block dall'alto" },
-  { value: 'blockUp', label: 'Block dal basso' },
+  { value: 'blockRight', label: t('Blocco da destra') },
+  { value: 'blockLeft', label: t('Blocco da sinistra') },
+  { value: 'blockDown', label: t('Blocco dall’alto') },
+  { value: 'blockUp', label: t('Blocco dal basso') },
 ];
 const OPTS_CURSOR = [
-  { value: 'auto', label: 'Auto' },
-  { value: 'pointer', label: 'Pointer' },
-  { value: 'default', label: 'Default' },
-  { value: 'move', label: 'Move' },
-  { value: 'crosshair', label: 'Crosshair' },
-  { value: 'text', label: 'Text' },
-  { value: 'grab', label: 'Grab' },
-  { value: 'none', label: 'Nascosto' },
+  { value: 'auto', label: t('Automatico') },
+  { value: 'pointer', label: t('Manina') },
+  { value: 'default', label: t('Freccia') },
+  { value: 'move', label: t('Sposta') },
+  { value: 'crosshair', label: t('Mirino') },
+  { value: 'text', label: t('Testo') },
+  { value: 'grab', label: t('Mano aperta') },
+  { value: 'none', label: t('Nascosto') },
 ];
+// L'andamento delle entrate e uscite: i livelli nuovi e quelli dei temi hanno cubic-bezier(.22,1,.36,1), che il menu
+// degli andamenti non elencava e mostrava vuoto («—»).
+const OPTS_ANIM_EASING = [{ value: 'cubic-bezier(.22,1,.36,1)', label: t('Morbido, frena alla fine (predefinito)') }, ...EASING_GROUPS];
 const OPTS_EASING = ['ease','ease-in','ease-out','ease-in-out','linear'].map(v => ({ value: v, label: v }));
 const OPTS_CHAR_SPLIT = [
-  { value: 'chars', label: 'Caratteri' },
-  { value: 'words', label: 'Parole' },
-  { value: 'lines', label: 'Righe' },
+  { value: 'chars', label: t('Caratteri') },
+  { value: 'words', label: t('Parole') },
+  { value: 'lines', label: t('Righe') },
 ];
 const OPTS_CHAR_DIRECTION = [
-  { value: 'forward', label: 'Avanti' },
-  { value: 'backward', label: 'Indietro' },
-  { value: 'random', label: 'Casuale' },
-  { value: 'middletoedge', label: 'Centro → Bordi' },
-  { value: 'edgetomiddle', label: 'Bordi → Centro' },
+  { value: 'forward', label: t('Avanti') },
+  { value: 'backward', label: t('Indietro') },
+  { value: 'random', label: t('Casuale') },
+  { value: 'middletoedge', label: t('Centro → Bordi') },
+  { value: 'edgetomiddle', label: t('Bordi → Centro') },
 ];
 const OPTS_HOVER_CURSOR = [
-  { value: '', label: 'Nessun cambio' },
-  { value: 'pointer', label: 'Pointer' },
-  { value: 'default', label: 'Default' },
-  { value: 'grab', label: 'Grab' },
+  { value: '', label: t('Nessun cambio') },
+  { value: 'pointer', label: t('Manina') },
+  { value: 'default', label: t('Freccia') },
+  { value: 'grab', label: t('Mano aperta') },
 ];
 const OPTS_MASK_PRESET = [
-  { value: 'custom', label: 'Personalizzato' },
-  { value: 'revealRight', label: 'Reveal da destra' },
-  { value: 'revealLeft', label: 'Reveal da sinistra' },
-  { value: 'revealDown', label: "Reveal dall'alto" },
-  { value: 'revealUp', label: 'Reveal dal basso' },
-  { value: 'curtainH', label: 'Sipario orizzontale' },
-  { value: 'curtainV', label: 'Sipario verticale' },
+  { value: 'custom', label: t('Personalizzato') },
+  { value: 'revealRight', label: t('Si scopre da destra') },
+  { value: 'revealLeft', label: t('Si scopre da sinistra') },
+  { value: 'revealDown', label: t('Si scopre dall’alto') },
+  { value: 'revealUp', label: t('Si scopre dal basso') },
+  { value: 'curtainH', label: t('Sipario orizzontale') },
+  { value: 'curtainV', label: t('Sipario verticale') },
 ];
 const OPTS_KENBURNS_TYPE = [
-  { value: 'zoomIn', label: 'Zoom In' },
-  { value: 'zoomOut', label: 'Zoom Out' },
-  { value: 'panLeft', label: 'Pan Sinistra' },
-  { value: 'panRight', label: 'Pan Destra' },
-  { value: 'panUp', label: 'Pan Alto' },
-  { value: 'panDown', label: 'Pan Basso' },
+  { value: 'zoomIn', label: t('Si avvicina') },
+  { value: 'zoomOut', label: t('Si allontana') },
+  { value: 'panLeft', label: t('Scorre a sinistra') },
+  { value: 'panRight', label: t('Scorre a destra') },
+  { value: 'panUp', label: t('Scorre in alto') },
+  { value: 'panDown', label: t('Scorre in basso') },
 ];
 const OPTS_MOTION_PRESET = [
-  { value: 'circle', label: 'Cerchio' },
-  { value: 'figure8', label: 'Otto' },
-  { value: 'wave', label: 'Onda' },
-  { value: 'zigzag', label: 'Zigzag' },
-  { value: 'arc', label: 'Arco' },
-  { value: 'custom', label: 'SVG personalizzato' },
+  { value: 'circle', label: t('Cerchio') },
+  { value: 'figure8', label: t('Otto') },
+  { value: 'wave', label: t('Onda') },
+  { value: 'zigzag', label: t('Zigzag') },
+  { value: 'arc', label: t('Arco') },
+  { value: 'custom', label: t('SVG personalizzato') },
 ];
 const OPTS_PARALLAX_TYPE = [
-  { value: 'mouse', label: 'Mouse' },
-  { value: 'scroll', label: 'Scroll' },
-  { value: 'both', label: 'Mouse + Scroll' },
+  { value: 'mouse', label: t('Mouse') },
+  { value: 'scroll', label: t('Scorrimento') },
+  { value: 'both', label: t('Mouse e scorrimento') },
 ];
 
 // Font families
@@ -1730,7 +1733,7 @@ const fontsSerif = ['Playfair Display', 'Merriweather', 'Lora', 'PT Serif', 'Lib
 const fontsMono = ['JetBrains Mono', 'Fira Code', 'Source Code Pro', 'IBM Plex Mono', 'Space Mono'];
 const fontsDisplay = ['Bebas Neue', 'Oswald', 'Anton', 'Permanent Marker', 'Abril Fatface', 'Righteous', 'Pacifico', 'Dancing Script', 'Lobster', 'Satisfy'];
 const fontGroupOpts = [
-  { value: '', label: 'Default' },
+  { value: '', label: t('Predefinito') },
   { group: 'Sans-serif', options: fontsSans.map(f => ({ value: f, label: f })) },
   { group: 'Serif', options: fontsSerif.map(f => ({ value: f, label: f })) },
   { group: 'Mono', options: fontsMono.map(f => ({ value: f, label: f })) },

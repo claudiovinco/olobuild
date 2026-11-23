@@ -1335,8 +1335,9 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             't' => $tappe,
         ];
         // Andamento «costante»: velocità uniforme fra le tappe e scala che cresce in proporzione (uno zoom continuo);
-        // senza, «morbido» come prima (parte e arriva piano a ogni tappa).
-        if ( 'costante' === ( $sm['andamento'] ?? '' ) ) {
+        // senza, «morbido» come prima (parte e arriva piano a ogni tappa). I temi delle agenzie (Torchio, Diaframma,
+        // 20 nov 2026) l'avevano salvato come c: true: vale anche quello, finché l'editor non lo riscrive (1.4.1355).
+        if ( 'costante' === ( $sm['andamento'] ?? '' ) || ( ! isset( $sm['andamento'] ) && ! empty( $sm['c'] ) ) ) {
             $dati['c'] = 1;
         }
         return ' data-scroll-move="' . esc_attr( wp_json_encode( $dati ) ) . '"';

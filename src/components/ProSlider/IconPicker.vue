@@ -40,7 +40,7 @@
             <span class="mps-iconpicker-name">{{ name }}</span>
           </button>
           <div v-if="!filtered.length" class="mps-iconpicker-empty">
-            {{ tab === 'custom' ? t('Nessuna icona custom. Carica file SVG.') : t('Nessuna icona trovata') }}
+            {{ tab === 'custom' ? t('Nessuna icona tua: carica un file SVG.') : t('Nessuna icona trovata') }}
           </div>
           <!-- Caricamento progressivo allo scroll (sentinel informativo) -->
           <div v-if="hasMore" class="mps-iconpicker-loading">+{{ totalCount() - filtered.length }}</div>

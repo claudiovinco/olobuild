@@ -257,6 +257,18 @@ function diapositivaPartenza(foto, layers, sfondo = {}) {
 
 export default {
   type: 'proslider',
+  // L'andamento «Costante» del movimento con lo scorrimento si salva in scrollMove.andamento; i temi delle agenzie
+  // (Torchio, Diaframma, 20 nov 2026) l'avevano scritto come c: true, che l'editor non legge: passa nella chiave
+  // vera, così il menu «Andamento» lo mostra e scegliere «Morbido» lo toglie davvero (il PHP accetta ancora c).
+  migraAlCaricamento(s) {
+    const livelli = [...(s.globalLayers || []), ...(s.slides || []).flatMap((sl) => (sl && sl.layers) || [])];
+    for (const l of livelli) {
+      const sm = l && l.scrollMove;
+      if (!sm || typeof sm !== 'object' || !('c' in sm)) continue;
+      if (sm.c && !sm.andamento) sm.andamento = 'costante';
+      delete sm.c;
+    }
+  },
   name: t('Pro Slider'),
   icon: 'dashicons-slides',
   category: 'media',
@@ -360,17 +372,17 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'sizingMode', label: t('Modalita'), type: 'select', options: [
+    { key: 'sizingMode', label: t('Modalità'), type: 'select', options: [
       { value: 'auto', label: t('Auto') },
-      { value: 'fullwidth', label: t('Full Width') },
-      { value: 'fullscreen', label: t('Full Screen') },
+      { value: 'fullwidth', label: t('Tutta larghezza') },
+      { value: 'fullscreen', label: t('Tutto schermo') },
     ]},
 
     { type: 'separator', label: t('Riproduzione') },
     { key: 'autoplay', label: t('Riproduzione automatica'), type: 'toggle' },
-    { key: 'autoplaySpeed', label: t('Velocita'), type: 'number', min: 1000, max: 20000, step: 500,
+    { key: 'autoplaySpeed', label: t('Durata di ogni slide'), type: 'number', unit: 'ms', min: 1000, max: 20000, step: 500,
       condition: { field: 'autoplay', value: true } },
-    { key: 'pauseOnHover', label: t('Pausa al passaggio mouse'), type: 'toggle',
+    { key: 'pauseOnHover', label: t('Pausa al passaggio del mouse'), type: 'toggle',
       condition: { field: 'autoplay', value: true } },
     { key: 'loop', label: t('Ripeti'), type: 'toggle' },
 
@@ -380,47 +392,47 @@ export default {
       { value: 'fade', label: t('Dissolvenza') },
       { value: 'slide', label: t('Scorrimento') },
       { value: 'zoom', label: t('Zoom') },
-      { value: 'crossFade', label: t('Cross Fade') },
-      { value: 'slideOver', label: t('Slide Over') },
-      { value: 'fadeThroughDark', label: t('Fade Nero') },
-      { value: 'blur', label: t('Blur') },
-      { value: 'flipH', label: t('Flip Orizzontale') },
-      { value: 'flipV', label: t('Flip Verticale') },
-      { value: 'cubeH', label: t('Cubo Orizzontale') },
-      { value: 'cubeV', label: t('Cubo Verticale') },
-      { value: 'push', label: t('Push') },
-      { value: 'pushRight', label: t('Push verso destra') },
-      { value: 'pushDown', label: t('Push Giu') },
-      { value: 'stack', label: t('Stack') },
-      { value: 'paperCut', label: t('Paper Cut') },
-      { value: 'zoomFade', label: t('Zoom Fade') },
-      { value: 'rotateSlide', label: t('Rotate Slide') },
-      { value: 'curtain3D', label: t('Curtain 3D') },
-      { value: 'slideUp', label: t('Slide Up') },
-      { value: 'slideDown', label: t('Slide Down') },
+      { value: 'crossFade', label: t('Dissolvenza incrociata') },
+      { value: 'slideOver', label: t('Scivola sopra') },
+      { value: 'fadeThroughDark', label: t('Dissolvenza al nero') },
+      { value: 'blur', label: t('Sfocatura') },
+      { value: 'flipH', label: t('Ribaltamento orizzontale') },
+      { value: 'flipV', label: t('Ribaltamento verticale') },
+      { value: 'cubeH', label: t('Cubo orizzontale') },
+      { value: 'cubeV', label: t('Cubo verticale') },
+      { value: 'push', label: t('Spinta') },
+      { value: 'pushRight', label: t('Spinta verso destra') },
+      { value: 'pushDown', label: t('Spinta verso il basso') },
+      { value: 'stack', label: t('Pila') },
+      { value: 'paperCut', label: t('Carta tagliata') },
+      { value: 'zoomFade', label: t('Zoom e dissolvenza') },
+      { value: 'rotateSlide', label: t('Rotazione della slide') },
+      { value: 'curtain3D', label: t('Sipario 3D') },
+      { value: 'slideUp', label: t('Scivola verso l’alto') },
+      { value: 'slideDown', label: t('Scivola verso il basso') },
     ]},
 
     { type: 'separator', label: t('Navigazione') },
     { key: 'showArrows', label: t('Frecce'), type: 'toggle' },
     { key: 'showDots', label: t('Punti'), type: 'toggle' },
-    { key: 'showProgressBar', label: t('Barra progresso'), type: 'toggle' },
-    { key: 'keyboard', label: t('Navigazione tastiera'), type: 'toggle' },
-    { key: 'swipe', label: t('Swipe touch'), type: 'toggle' },
-    { key: 'mouseWheel', label: t('Rotella mouse'), type: 'toggle' },
+    { key: 'showProgressBar', label: t('Barra di avanzamento'), type: 'toggle' },
+    { key: 'keyboard', label: t('Navigazione con la tastiera'), type: 'toggle' },
+    { key: 'swipe', label: t('Scorrimento col dito'), type: 'toggle' },
+    { key: 'mouseWheel', label: t('Rotella del mouse'), type: 'toggle' },
 
-    { type: 'separator', label: t('Miniature e Tab') },
+    { type: 'separator', label: t('Miniature e schede') },
     { key: 'showThumbs', label: t('Miniature'), type: 'toggle' },
-    { key: 'showTabs', label: t('Tab'), type: 'toggle' },
+    { key: 'showTabs', label: t('Schede'), type: 'toggle' },
 
-    { type: 'separator', label: t('Parallax') },
-    { key: 'parallaxType', label: t('Tipo parallax'), type: 'select', options: [
+    { type: 'separator', label: t('Parallasse') },
+    { key: 'parallaxType', label: t('Tipo di parallasse'), type: 'select', options: [
       { value: 'mouse', label: t('Mouse') },
-      { value: 'scroll', label: t('Scroll') },
+      { value: 'scroll', label: t('Scorrimento') },
       { value: 'both', label: t('Entrambi') },
     ], condition: { field: 'parallax', value: true } },
 
     { type: 'separator', label: t('Carosello') },
-    { key: 'carousel', label: t('Modalita carosello'), type: 'toggle' },
+    { key: 'carousel', label: t('Modalità carosello'), type: 'toggle' },
     { key: 'carousel3D', label: t('Rotazione 3D'), type: 'toggle',
       condition: { field: 'carousel', value: true } },
 
@@ -430,9 +442,12 @@ export default {
         + 'stato (luce = accesa) e i livelli con «Visibile solo in uno stato» si mostrano o si nascondono. Qui il valore di '
         + 'partenza di ogni stato, nome=valore separati da punto e virgola; uno stato non scritto parte vuoto.') },
 
-    { type: 'separator', label: t('Scroll Timeline') },
-    { key: 'scrollTimeline', label: t('Scroll-fixed timeline'), type: 'toggle' },
-    { key: 'scrollTimelineDistance', label: t('Distanza scroll'), type: 'number', min: 500, max: 10000, step: 100,
+    { type: 'separator', label: t('Scorrimento della pagina') },
+    { key: 'scrollTimeline', label: t('Timeline a scorrimento'), type: 'toggle',
+      description: t('Lo slider resta fermo in cima alla finestra mentre la pagina scorre per la distanza scelta: in quel '
+        + 'tratto lo scorrimento fa avanzare le slide e muove i livelli che hanno il «Movimento con lo scorrimento» '
+        + '(Animazione nell’editor dello slider). Finito il tratto, la pagina riprende a scorrere.') },
+    { key: 'scrollTimelineDistance', label: t('Distanza di scorrimento'), type: 'number', unit: 'px', min: 500, max: 10000, step: 100,
       condition: { field: 'scrollTimeline', value: true } },
     { key: 'scrollStep', label: t('Una diapositiva per gesto'), type: 'toggle',
       description: t('Mentre lo slider è fermo in cima, ogni gesto della rotella o del trackpad porta alla diapositiva dopo '
@@ -466,14 +481,14 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'separator', label: t('Transizione — aspetto') },
-    { key: 'transitionDuration', label: t('Durata'), type: 'number', min: 200, max: 3000, step: 100 },
+    { key: 'transitionDuration', label: t('Durata'), type: 'number', unit: 'ms', min: 200, max: 3000, step: 100 },
 
     { type: 'separator', label: t('Navigazione — stile') },
     { key: 'arrowStyle', label: t('Stile frecce'), type: 'select', options: [
-      { value: 'minimal', label: t('Minimal') },
+      { value: 'minimal', label: t('Solo la freccia') },
       { value: 'rounded', label: t('Arrotondato') },
-      { value: 'boxed', label: t('Box') },
-      { value: 'outline', label: t('Outline') },
+      { value: 'boxed', label: t('Nel quadrato') },
+      { value: 'outline', label: t('Contorno') },
     ], condition: { field: 'showArrows', value: true } },
     { key: 'dotStyle', label: t('Stile punti'), type: 'select', options: [
       { value: 'circles', label: t('Cerchi') },
@@ -482,46 +497,46 @@ export default {
       { value: 'dash', label: t('Trattini') },
     ], condition: { field: 'showDots', value: true } },
     { key: 'navColor', label: t('Colore frecce e punti'), type: 'color',
-      description: t('Vuoto = bianco, per le foto scure. Sulle slide chiare scegli un colore scuro: frecce, contorni e punti lo prendono, e il fondo delle frecce Minimal e Box diventa chiaro da sé.'),
+      description: t('Vuoto = bianco, per le foto scure. Sulle slide chiare scegli un colore scuro: frecce, contorni e punti lo prendono, e il fondo delle frecce «Solo la freccia» e «Nel quadrato» diventa chiaro da sé.'),
       show: (s) => !!(s.showArrows || s.showDots) },
     { key: 'progressBarColor', label: t('Colore barra'), type: 'color',
       condition: { field: 'showProgressBar', value: true } },
-    { key: 'progressBarHeight', label: t('Altezza barra'), type: 'number', min: 1, max: 10,
+    { key: 'progressBarHeight', label: t('Altezza barra'), type: 'number', unit: 'px', min: 1, max: 10,
       condition: { field: 'showProgressBar', value: true } },
 
-    { type: 'separator', label: t('Miniature e Tab — posizione') },
+    { type: 'separator', label: t('Miniature e schede — posizione') },
     { key: 'thumbPosition', label: t('Posizione miniature'), type: 'select', options: [
       { value: 'bottom', label: t('Sotto') },
       { value: 'top', label: t('Sopra') },
       { value: 'left', label: t('Sinistra') },
       { value: 'right', label: t('Destra') },
     ], condition: { field: 'showThumbs', value: true } },
-    { key: 'tabPosition', label: t('Posizione tab'), type: 'select', options: [
+    { key: 'tabPosition', label: t('Posizione schede'), type: 'select', options: [
       { value: 'bottom', label: t('Sotto') },
       { value: 'top', label: t('Sopra') },
     ], condition: { field: 'showTabs', value: true } },
 
     { type: 'separator', label: t('Effetti') },
-    { key: 'scrollEffect', label: t('Effetto scroll'), type: 'select', options: [
+    { key: 'scrollEffect', label: t('Effetto allo scorrimento'), type: 'select', options: [
       { value: 'none', label: t('Nessuno') },
-      { value: 'fade', label: t('Fade') },
-      { value: 'blur', label: t('Blur') },
-      { value: 'fadeBlur', label: t('Fade + Blur') },
+      { value: 'fade', label: t('Dissolvenza') },
+      { value: 'blur', label: t('Sfocatura') },
+      { value: 'fadeBlur', label: t('Dissolvenza e sfocatura') },
     ]},
-    { key: 'parallaxIntensity', label: t('Intensita parallax'), type: 'number', min: 1, max: 20,
+    { key: 'parallaxIntensity', label: t('Intensità della parallasse'), type: 'number', min: 1, max: 20,
       condition: { field: 'parallax', value: true } },
 
     { type: 'separator', label: t('Carosello — dimensioni') },
-    { key: 'carouselWidth', label: t('Larghezza slide %'), type: 'number', min: 40, max: 95,
+    { key: 'carouselWidth', label: t('Larghezza slide'), type: 'number', unit: '%', min: 40, max: 95,
       condition: { field: 'carousel', value: true } },
-    { key: 'carouselGap', label: t('Gap'), type: 'number', min: 0, max: 60,
+    { key: 'carouselGap', label: t('Gap'), type: 'number', unit: 'px', min: 0, max: 60,
       condition: { field: 'carousel', value: true } },
     { key: 'carouselSideScale', label: t('Scala laterali'), type: 'number', min: 0.5, max: 1, step: 0.05,
       condition: { field: 'carousel', value: true } },
 
     ...borderFields(),
-    { type: 'separator', label: t('Parallax') },
-    { key: 'parallax', label: t('Parallax'), type: 'toggle' },
+    { type: 'separator', label: t('Parallasse') },
+    { key: 'parallax', label: t('Parallasse'), type: 'toggle' },
   ],
 
   // Helper esportati per l'editor

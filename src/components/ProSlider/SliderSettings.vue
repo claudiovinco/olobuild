@@ -25,9 +25,9 @@
           </div>
         </div>
         <div v-if="globalBg.type === 'video'">
-          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('URL Video') }}</label>
+          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('Indirizzo del video') }}</label>
           <div class="mb-flex mb-gap-1">
-            <input :value="globalBg.video" @input="updateGlobalBg('video', $event.target.value)" class="mps-num-input mb-w-52" :placeholder="t('mp4 o URL YouTube')" />
+            <input :value="globalBg.video" @input="updateGlobalBg('video', $event.target.value)" class="mps-num-input mb-w-52" :placeholder="t('mp4 o indirizzo YouTube')" />
             <button @click="pickGlobalBgVideo" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-500">{{ t('Sfoglia') }}</button>
           </div>
         </div>
@@ -75,10 +75,10 @@ import NumberScrubber from '../Builder/fields/NumberScrubber.vue';
 
 // Option array per FieldSelect (stessi value dei vecchi <option>: dati salvati invariati)
 const OPTS_BG_TYPE = [
-  { value: 'color', label: 'Colore' },
-  { value: 'image', label: 'Immagine' },
-  { value: 'video', label: 'Video' },
-  { value: 'gradient', label: 'Gradiente' },
+  { value: 'color', label: t('Colore') },
+  { value: 'image', label: t('Immagine') },
+  { value: 'video', label: t('Video') },
+  { value: 'gradient', label: t('Gradiente') },
 ];
 
 const props = defineProps({

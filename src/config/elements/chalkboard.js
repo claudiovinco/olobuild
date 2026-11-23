@@ -10,7 +10,7 @@ import { t } from '@/i18n';
  * in cache; nel builder si vedono tutte le voci, coi giorni accanto).
  *   fields[]      → intestazione · voci (nome, descrizione, prezzo, etichetta, giorni) · note · disegni (forma,
  *                   icona, immagine, profondità) · movimento
- *   styleFields[] → aspetto (lavagna, grana, aloni, cornice, chiodo, inclinazione, ombra) · gesso · voci (specchio:
+ *   styleFields[] → aspetto (lavagna, grana, aloni, cornice, chiodo, ombra) · gesso · voci (specchio:
  *                   evidenza) · disegni (specchio: posizione, dimensione, rotazione, colore, opacità) · testo
  *                   (tipografie) · forma · disposizione
  */
@@ -234,7 +234,6 @@ export default {
     { key: 'cornice_colore', label: t('Colore cornice'), type: 'color', condition: { field: 'cornice', operator: '!=', value: 'nessuna' } },
     { key: 'cornice_spessore', label: t('Spessore cornice'), type: 'range', min: 4, max: 60, step: 1, unit: 'px', condition: { field: 'cornice', operator: '!=', value: 'nessuna' } },
     { key: 'appesa', label: t('Appesa a un chiodo'), type: 'toggle' },
-    { key: 'inclinazione', label: t('Inclinazione'), type: 'range', min: -12, max: 12, step: 0.5, unit: '°' },
     ...shadowField,
 
     { type: 'separator', label: t('Gesso') },
@@ -300,6 +299,9 @@ export default {
     { key: 'larghezza', label: t('Larghezza massima'), type: 'range', min: 240, max: 1600, step: 10, unit: 'px', responsive: true },
     { key: 'padding', label: t('Padding'), type: 'spacing', responsive: true },
     { key: 'raggio', label: t('Raggio'), type: 'border-radius' },
+    // L'inclinazione è geometria della lavagna: sta in Forma, dove la si cerca (prima in Aspetto, 23 nov 2026).
+    { key: 'inclinazione', label: t('Inclinazione'), type: 'range', min: -12, max: 12, step: 0.5, unit: '°',
+      description: t('0° = lavagna dritta; con i gradi negativi gira in senso antiorario, con i positivi in senso orario. Con la parallasse accesa, scorrendo la pagina oscilla appena attorno a questo angolo.') },
 
     { type: 'separator', label: t('Disposizione') },
     { key: 'allineamento', label: t('Allineamento'), type: 'select', responsive: true, options: [

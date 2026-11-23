@@ -55552,3 +55552,757 @@ msgstr "Trayectoria"
 
 msgid "Percorso SVG (d=\"\")"
 msgstr "Trazado SVG (d=\"\")"
+
+#: licenza-1.4.1345
+msgid "Tutto schermo"
+msgstr "Pantalla completa"
+
+msgid "Durata di ogni slide (ms)"
+msgstr "Duración de cada diapositiva (ms)"
+
+msgid "Scivola sopra"
+msgstr "Deslizar encima"
+
+msgid "Dissolvenza al nero"
+msgstr "Fundido a negro"
+
+msgid "Ribaltamento orizzontale"
+msgstr "Volteo horizontal"
+
+msgid "Ribaltamento verticale"
+msgstr "Volteo vertical"
+
+msgid "Cubo orizzontale"
+msgstr "Cubo horizontal"
+
+msgid "Cubo verticale"
+msgstr "Cubo vertical"
+
+msgid "Spinta"
+msgstr "Empuje"
+
+msgid "Spinta verso destra"
+msgstr "Empuje hacia la derecha"
+
+msgid "Spinta verso il basso"
+msgstr "Empuje hacia abajo"
+
+msgid "Pila"
+msgstr "Pila"
+
+msgid "Carta tagliata"
+msgstr "Papel cortado"
+
+msgid "Zoom e dissolvenza"
+msgstr "Zoom y fundido"
+
+msgid "Rotazione della slide"
+msgstr "Rotación de la diapositiva"
+
+msgid "Sipario 3D"
+msgstr "Telón 3D"
+
+msgid "Scivola verso l’alto"
+msgstr "Deslizar hacia arriba"
+
+msgid "Scivola verso il basso"
+msgstr "Deslizar hacia abajo"
+
+msgid "Barra di avanzamento"
+msgstr "Barra de progreso"
+
+msgid "Navigazione con la tastiera"
+msgstr "Navegación con el teclado"
+
+msgid "Scorrimento col dito"
+msgstr "Deslizar con el dedo"
+
+msgid "Rotella del mouse"
+msgstr "Rueda del ratón"
+
+msgid "Miniature e schede"
+msgstr "Miniaturas y pestañas"
+
+msgid "Tipo di parallasse"
+msgstr "Tipo de paralaje"
+
+msgid "Modalità carosello"
+msgstr "Modo carrusel"
+
+msgid "Scorrimento della pagina"
+msgstr "Desplazamiento de la página"
+
+msgid "Timeline a scorrimento"
+msgstr "Línea de tiempo con el desplazamiento"
+
+msgid "Distanza di scorrimento (px)"
+msgstr "Distancia de desplazamiento (px)"
+
+msgid "Solo la freccia"
+msgstr "Solo la flecha"
+
+msgid "Nel quadrato"
+msgstr "En un cuadrado"
+
+msgid "Vuoto = bianco, per le foto scure. Sulle slide chiare scegli un colore scuro: frecce, contorni e punti lo prendono, e il fondo delle frecce «Solo la freccia» e «Nel quadrato» diventa chiaro da sé."
+msgstr "Vacío = blanco, para las fotos oscuras. En las diapositivas claras elige un color oscuro: flechas, contornos y puntos lo toman, y el fondo de las flechas «Solo la flecha» y «En un cuadrado» se vuelve claro solo."
+
+msgid "Miniature e schede — posizione"
+msgstr "Miniaturas y pestañas — posición"
+
+msgid "Posizione schede"
+msgstr "Posición de las pestañas"
+
+msgid "Effetto allo scorrimento"
+msgstr "Efecto al desplazarse"
+
+msgid "Dissolvenza e sfocatura"
+msgstr "Fundido y desenfoque"
+
+msgid "Intensità della parallasse"
+msgstr "Intensidad del paralaje"
+
+msgid "Larghezza slide (%)"
+msgstr "Ancho de la diapositiva (%)"
+
+msgid "Indirizzo dell’immagine"
+msgstr "Dirección de la imagen"
+
+msgid "Indirizzo del video"
+msgstr "Dirección del vídeo"
+
+msgid "Indirizzo dell’audio"
+msgstr "Dirección del audio"
+
+msgid "Azione al clic"
+msgstr "Acción al hacer clic"
+
+msgid "Nessun altro livello in questa slide"
+msgstr "Ninguna otra capa en esta diapositiva"
+
+msgid "Azzera tutti"
+msgstr "Restablecer todos"
+
+msgid "Stile del carattere"
+msgstr "Estilo de fuente"
+
+msgid "Colore del tratto"
+msgstr "Color del trazo"
+
+msgid "Colore di riempimento"
+msgstr "Color de relleno"
+
+msgid "Colore di riempimento (al posto di quello del file)"
+msgstr "Color de relleno (en lugar del del archivo)"
+
+msgid "Raggio (px)"
+msgstr "Radio (px)"
+
+msgid "Animazione del testo"
+msgstr "Animación del texto"
+
+msgid "Anima lettere o parole"
+msgstr "Animar letras o palabras"
+
+msgid "Andata e ritorno"
+msgstr "Ida y vuelta"
+
+msgid "Intensità (%)"
+msgstr "Intensidad (%)"
+
+msgid "Parallasse attiva"
+msgstr "Paralaje activo"
+
+msgid "Velocità con lo scorrimento"
+msgstr "Velocidad con el desplazamiento"
+
+msgid "Usa la linea del tempo sotto la tela per aggiungere e spostare i fotogrammi chiave."
+msgstr "Usa la línea de tiempo bajo el lienzo para añadir y mover fotogramas clave."
+
+msgid "Dissolvenza dall’alto"
+msgstr "Fundido desde arriba"
+
+msgid "Dissolvenza da sinistra"
+msgstr "Fundido desde la izquierda"
+
+msgid "Dissolvenza da destra"
+msgstr "Fundido desde la derecha"
+
+msgid "Scivola"
+msgstr "Deslizar"
+
+msgid "Scivola da sinistra"
+msgstr "Deslizar desde la izquierda"
+
+msgid "Scivola da destra"
+msgstr "Deslizar desde la derecha"
+
+msgid "Scivola dal basso"
+msgstr "Deslizar desde abajo"
+
+msgid "Scivola dall’alto"
+msgstr "Deslizar desde arriba"
+
+msgid "Breve dall’alto"
+msgstr "Deslizar corto desde arriba"
+
+msgid "Breve dal basso"
+msgstr "Deslizar corto desde abajo"
+
+msgid "Breve da sinistra"
+msgstr "Deslizar corto desde la izquierda"
+
+msgid "Breve da destra"
+msgstr "Deslizar corto desde la derecha"
+
+msgid "Morbida dal basso"
+msgstr "Deslizar suave desde abajo"
+
+msgid "Morbida dall’alto"
+msgstr "Deslizar suave desde arriba"
+
+msgid "Morbida da sinistra"
+msgstr "Deslizar suave desde la izquierda"
+
+msgid "Morbida da destra"
+msgstr "Deslizar suave desde la derecha"
+
+msgid "Inclinata da sinistra"
+msgstr "Inclinada desde la izquierda"
+
+msgid "Inclinata da destra"
+msgstr "Inclinada desde la derecha"
+
+msgid "Inclinata breve da sinistra"
+msgstr "Inclinación corta desde la izquierda"
+
+msgid "Inclinata breve da destra"
+msgstr "Inclinación corta desde la derecha"
+
+msgid "Ribaltata 3D"
+msgstr "Volteo 3D"
+
+msgid "Ribaltata dall’alto"
+msgstr "Volteo desde arriba"
+
+msgid "Ribaltata dal basso"
+msgstr "Volteo desde abajo"
+
+msgid "Ribaltata da sinistra"
+msgstr "Volteo desde la izquierda"
+
+msgid "Ribaltata da destra"
+msgstr "Volteo desde la derecha"
+
+msgid "Ruota entrando"
+msgstr "Entrar girando"
+
+msgid "Ruota dal basso"
+msgstr "Rotar desde abajo"
+
+msgid "Ruota in 3D"
+msgstr "Rotar en 3D"
+
+msgid "Ruota da sinistra"
+msgstr "Rotar desde la izquierda"
+
+msgid "Ruota da destra"
+msgstr "Rotar desde la derecha"
+
+msgid "Zoom e rimbalzo"
+msgstr "Zoom y rebote"
+
+msgid "Spunta morbida"
+msgstr "Aparición suave"
+
+msgid "Spunta e torna indietro"
+msgstr "Aparece y vuelve atrás"
+
+msgid "Rimbalzo dal basso"
+msgstr "Rebote desde abajo"
+
+msgid "Rimbalzo dall’alto"
+msgstr "Rebote desde arriba"
+
+msgid "Si scopre da sinistra"
+msgstr "Revelar desde la izquierda"
+
+msgid "Si scopre da destra"
+msgstr "Revelar desde la derecha"
+
+msgid "Si scopre dall’alto"
+msgstr "Revelar desde arriba"
+
+msgid "Si scopre dal basso"
+msgstr "Revelar desde abajo"
+
+msgid "Si scopre dal centro con zoom"
+msgstr "Revelar desde el centro con zoom"
+
+msgid "Si scopre dal centro"
+msgstr "Revelar desde el centro"
+
+msgid "Dissolvenza verso l’alto"
+msgstr "Fundido hacia arriba"
+
+msgid "Dissolvenza verso il basso"
+msgstr "Fundido hacia abajo"
+
+msgid "Dissolvenza verso sinistra"
+msgstr "Fundido hacia la izquierda"
+
+msgid "Dissolvenza verso destra"
+msgstr "Fundido hacia la derecha"
+
+msgid "Scivola verso sinistra"
+msgstr "Deslizar hacia la izquierda"
+
+msgid "Scivola verso destra"
+msgstr "Deslizar hacia la derecha"
+
+msgid "Breve verso l’alto"
+msgstr "Deslizar corto hacia arriba"
+
+msgid "Breve verso il basso"
+msgstr "Deslizar corto hacia abajo"
+
+msgid "Breve verso sinistra"
+msgstr "Deslizar corto hacia la izquierda"
+
+msgid "Breve verso destra"
+msgstr "Deslizar corto hacia la derecha"
+
+msgid "Morbida verso il basso"
+msgstr "Deslizar suave hacia abajo"
+
+msgid "Morbida verso l’alto"
+msgstr "Deslizar suave hacia arriba"
+
+msgid "Morbida verso sinistra"
+msgstr "Deslizar suave hacia la izquierda"
+
+msgid "Morbida verso destra"
+msgstr "Deslizar suave hacia la derecha"
+
+msgid "Inclinata verso sinistra"
+msgstr "Inclinada hacia la izquierda"
+
+msgid "Inclinata verso destra"
+msgstr "Inclinada hacia la derecha"
+
+msgid "Inclinata breve verso sinistra"
+msgstr "Inclinación corta hacia la izquierda"
+
+msgid "Inclinata breve verso destra"
+msgstr "Inclinación corta hacia la derecha"
+
+msgid "Ribaltata verso l’alto"
+msgstr "Volteo hacia arriba"
+
+msgid "Ribaltata verso il basso"
+msgstr "Volteo hacia abajo"
+
+msgid "Ribaltata verso sinistra"
+msgstr "Volteo hacia la izquierda"
+
+msgid "Ribaltata verso destra"
+msgstr "Volteo hacia la derecha"
+
+msgid "Ruota uscendo"
+msgstr "Salir girando"
+
+msgid "Ruota verso il basso"
+msgstr "Rotar hacia abajo"
+
+msgid "Ruota verso sinistra"
+msgstr "Rotar hacia la izquierda"
+
+msgid "Ruota verso destra"
+msgstr "Rotar hacia la derecha"
+
+msgid "Si rimpicciolisce"
+msgstr "Se encoge"
+
+msgid "Sparisce morbida"
+msgstr "Desaparece suave"
+
+msgid "Si gonfia e sparisce"
+msgstr "Se hincha y desaparece"
+
+msgid "Rimbalzo verso l’alto"
+msgstr "Rebote hacia arriba"
+
+msgid "Rimbalzo verso il basso"
+msgstr "Rebote hacia abajo"
+
+msgid "Si copre verso sinistra"
+msgstr "Ocultar hacia la izquierda"
+
+msgid "Si copre verso destra"
+msgstr "Ocultar hacia la derecha"
+
+msgid "Si copre verso l’alto"
+msgstr "Ocultar hacia arriba"
+
+msgid "Si copre verso il basso"
+msgstr "Ocultar hacia abajo"
+
+msgid "Si chiude al centro con zoom"
+msgstr "Cerrar al centro con zoom"
+
+msgid "Si chiude al centro"
+msgstr "Cerrar al centro"
+
+msgid "Pendolo basso"
+msgstr "Péndulo bajo"
+
+msgid "Pendolo alto"
+msgstr "Péndulo alto"
+
+msgid "Pendolo a sinistra"
+msgstr "Péndulo a la izquierda"
+
+msgid "Pendolo a destra"
+msgstr "Péndulo a la derecha"
+
+msgid "Onda piccola a sinistra"
+msgstr "Ola pequeña a la izquierda"
+
+msgid "Onda piccola a destra"
+msgstr "Ola pequeña a la derecha"
+
+msgid "Onda grande a sinistra"
+msgstr "Ola grande a la izquierda"
+
+msgid "Onda grande a destra"
+msgstr "Ola grande a la derecha"
+
+msgid "Vibrazione verticale"
+msgstr "Vibración vertical"
+
+msgid "Vibrazione orizzontale"
+msgstr "Vibración horizontal"
+
+msgid "Vibrazione 3D"
+msgstr "Vibración 3D"
+
+msgid "Vibrazione scatenata"
+msgstr "Vibración desatada"
+
+msgid "Gira in senso orario"
+msgstr "Gira en sentido horario"
+
+msgid "Gira in senso antiorario"
+msgstr "Gira en sentido antihorario"
+
+msgid "Lampeggio"
+msgstr "Parpadeo"
+
+msgid "Scivola avanti e indietro"
+msgstr "Se desliza adelante y atrás"
+
+msgid "Vento (piega dal basso)"
+msgstr "Viento (se dobla desde abajo)"
+
+msgid "Fluttua piano"
+msgstr "Flota suavemente"
+
+msgid "Slide successiva"
+msgstr "Diapositiva siguiente"
+
+msgid "Slide precedente"
+msgstr "Diapositiva anterior"
+
+msgid "Vai alla slide…"
+msgstr "Ir a la diapositiva…"
+
+msgid "Apri un indirizzo"
+msgstr "Abrir una dirección"
+
+msgid "Scorri sotto lo slider"
+msgstr "Desplazarse bajo el slider"
+
+msgid "Iniziali maiuscole"
+msgstr "Iniciales en mayúscula"
+
+msgid "Sopralineato"
+msgstr "Sobrerrayado"
+
+msgid "In alto a sinistra"
+msgstr "Arriba a la izquierda"
+
+msgid "In alto a destra"
+msgstr "Arriba a la derecha"
+
+msgid "In basso a sinistra"
+msgstr "Abajo a la izquierda"
+
+msgid "In basso a destra"
+msgstr "Abajo a la derecha"
+
+msgid "Blocco da destra"
+msgstr "Bloque desde la derecha"
+
+msgid "Blocco da sinistra"
+msgstr "Bloque desde la izquierda"
+
+msgid "Blocco dall’alto"
+msgstr "Bloque desde arriba"
+
+msgid "Blocco dal basso"
+msgstr "Bloque desde abajo"
+
+msgid "Manina"
+msgstr "Mano"
+
+msgid "Sposta"
+msgstr "Mover"
+
+msgid "Mano aperta"
+msgstr "Mano abierta"
+
+msgid "Parole"
+msgstr "Palabras"
+
+msgid "Centro → Bordi"
+msgstr "Centro → Bordes"
+
+msgid "Bordi → Centro"
+msgstr "Bordes → Centro"
+
+msgid "Nessun cambio"
+msgstr "Sin cambio"
+
+msgid "Sipario orizzontale"
+msgstr "Telón horizontal"
+
+msgid "Sipario verticale"
+msgstr "Telón vertical"
+
+msgid "Si avvicina"
+msgstr "Se acerca"
+
+msgid "Si allontana"
+msgstr "Se aleja"
+
+msgid "Scorre a sinistra"
+msgstr "Desplaza a la izquierda"
+
+msgid "Scorre a destra"
+msgstr "Desplaza a la derecha"
+
+msgid "Scorre in alto"
+msgstr "Desplaza hacia arriba"
+
+msgid "Scorre in basso"
+msgstr "Desplaza hacia abajo"
+
+msgid "Mouse e scorrimento"
+msgstr "Ratón y desplazamiento"
+
+msgid "Sfocatura all’inizio"
+msgstr "Desenfoque al inicio"
+
+msgid "Sfocatura alla fine"
+msgstr "Desenfoque al final"
+
+msgid "Notebook"
+msgstr "Portátil"
+
+msgid "Valori propri per"
+msgstr "Valores propios para"
+
+msgid "Ha valori propri su qualche schermo"
+msgstr "Tiene valores propios en algunas pantallas"
+
+msgid "Nessuna icona tua: carica un file SVG."
+msgstr "Aún no tienes iconos: sube un archivo SVG."
+
+msgid "Prendi la posizione dalla tela"
+msgstr "Tomar la posición del lienzo"
+
+msgid "Seleziona un fotogramma chiave nella linea del tempo"
+msgstr "Selecciona un fotograma clave en la línea de tiempo"
+
+msgid "Fotogramma chiave precedente"
+msgstr "Fotograma clave anterior"
+
+msgid "Fotogramma chiave successivo"
+msgstr "Fotograma clave siguiente"
+
+msgid "L’uscita aspetta la fine della slide"
+msgstr "La salida espera al final de la diapositiva"
+
+msgid "Aggiungi un fotogramma chiave a questo punto"
+msgstr "Añadir un fotograma clave en este punto"
+
+msgid "Seleziona un livello con la linea del tempo"
+msgstr "Selecciona una capa con línea de tiempo"
+
+msgid "Riduci la linea del tempo"
+msgstr "Reducir la línea de tiempo"
+
+msgid "Ingrandisci la linea del tempo"
+msgstr "Ampliar la línea de tiempo"
+
+msgid "La linea del tempo ("
+msgstr "La línea de tiempo ("
+
+msgid "Porta tutti i livelli alla durata più lunga"
+msgstr "Llevar todas las capas a la duración más larga"
+
+msgid "Resta visibile fino alla fine della slide"
+msgstr "Sigue visible hasta el final de la diapositiva"
+
+msgid "Duplica il fotogramma chiave"
+msgstr "Duplicar el fotograma clave"
+
+msgid "Elimina il fotogramma chiave"
+msgstr "Eliminar el fotograma clave"
+
+msgid "Semplici"
+msgstr "Simples"
+
+msgid "Accelera"
+msgstr "Acelera"
+
+msgid "Rallenta"
+msgstr "Frena"
+
+msgid "Accelera e rallenta"
+msgstr "Acelera y frena"
+
+msgid "Lo slider resta fermo in cima alla finestra mentre la pagina scorre per la distanza scelta: in quel tratto lo scorrimento fa avanzare le slide e muove i livelli che hanno il «Movimento con lo scorrimento» (Animazione nell’editor dello slider). Finito il tratto, la pagina riprende a scorrere."
+msgstr "El slider se queda fijo arriba en la ventana mientras la página se desplaza la distancia elegida: en ese tramo el desplazamiento hace avanzar las diapositivas y mueve las capas que tienen «Movimiento con el desplazamiento» (Animación en el editor del slider). Terminado el tramo, la página vuelve a desplazarse."
+
+#: licenza-1.4.1345
+msgid "Durata di ogni slide"
+msgstr "Duración de cada diapositiva"
+
+msgid "Distanza di scorrimento"
+msgstr "Distancia de desplazamiento"
+
+msgid "Larghezza slide"
+msgstr "Ancho de la diapositiva"
+
+#: licenza-1.4.1345
+msgid "Aspetta la fine"
+msgstr "Esperar al final"
+
+msgid "Altezza rispetto alla finestra"
+msgstr "Altura respecto a la ventana"
+
+#: licenza-1.4.1345
+msgid "Inverti"
+msgstr "Invertir"
+
+msgid "Cambia al passaggio del mouse"
+msgstr "Cambia al pasar el ratón"
+
+msgid "Morbido, frena alla fine (predefinito)"
+msgstr "Suave, frena al final (predeterminado)"
+
+msgid "Tempo"
+msgstr "Tiempo"
+
+#: licenza-1.4.1345
+msgid "0° = lavagna dritta; con i gradi negativi gira in senso antiorario, con i positivi in senso orario. Con la parallasse accesa, scorrendo la pagina oscilla appena attorno a questo angolo."
+msgstr "0° = pizarra recta; con grados negativos gira en sentido antihorario, con positivos en sentido horario. Con el paralaje activo, al desplazarte oscila un poco alrededor de este ángulo."
+
+#: licenza-1.4.1345
+msgid "Scena minigioco"
+msgstr "Escena minijuego"
+
+msgid "Quiz di verifica"
+msgstr "Cuestionario de comprobación"
+
+#: licenza-1.4.1345
+msgid "Testi sulle foto"
+msgstr "Textos en las fotos"
+
+msgid "Solo la didascalia al passaggio"
+msgstr "Solo el pie de foto al pasar"
+
+msgid "Sulla foto"
+msgstr "Sobre la foto"
+
+msgid "«Sotto la foto» vale per gli schemi Griglia e Masonry; negli altri i testi vanno sulla foto."
+msgstr "«Debajo de la foto» vale para los esquemas Cuadrícula y Masonry; en los demás, los textos van sobre la foto."
+
+msgid "Quando si vedono"
+msgstr "Cuándo se ven"
+
+msgid "Mostra il titolo"
+msgstr "Mostrar el título"
+
+msgid "Mostra il sottotitolo"
+msgstr "Mostrar el subtítulo"
+
+msgid "Mostra il testo"
+msgstr "Mostrar el texto"
+
+msgid "Mostra la miniatura"
+msgstr "Mostrar la miniatura"
+
+msgid "Sopra la galleria un pulsante per ogni categoria e «Tutti»: cliccando, restano le foto di quella categoria e la galleria si riordina. La categoria si scrive sotto ogni foto in «Media»; più categorie si separano con la virgola."
+msgstr "Encima de la galería, un botón por categoría y «Todos»: al hacer clic quedan las fotos de esa categoría y la galería se reordena. La categoría se escribe bajo cada foto en «Medios»; separa varias categorías con comas."
+
+msgid "Testo di «Tutti»"
+msgstr "Texto de «Todos»"
+
+msgid "Mostra quante foto"
+msgstr "Mostrar cuántas fotos"
+
+msgid "Colore di categoria e numero"
+msgstr "Color de categoría y número"
+
+msgid "Velo sotto i testi"
+msgstr "Velo bajo los textos"
+
+msgid "Sfondo dei testi"
+msgstr "Fondo de los textos"
+
+msgid "Padding testi"
+msgstr "Relleno de los textos"
+
+msgid "Stile dei filtri"
+msgstr "Estilo de los filtros"
+
+msgid "Colore del filtro attivo"
+msgstr "Color del filtro activo"
+
+msgid "Elenco a righe"
+msgstr "Lista en filas"
+
+msgid "Link della foto (facoltativo)"
+msgstr "Enlace de la foto (opcional)"
+
+msgid "Misura della foto"
+msgstr "Tamaño de la foto"
+
+msgid "Misura automatica"
+msgstr "Tamaño automático"
+
+msgid "Piccola (1 × 1)"
+msgstr "Pequeña (1 × 1)"
+
+msgid "Larga (2 × 1)"
+msgstr "Ancha (2 × 1)"
+
+msgid "Alta (1 × 2)"
+msgstr "Alta (1 × 2)"
+
+msgid "Grande (2 × 2)"
+msgstr "Grande (2 × 2)"
+
+msgid "Molto larga (3 × 2)"
+msgstr "Muy ancha (3 × 2)"
+
+msgid "Molto alta (2 × 3)"
+msgstr "Muy alta (2 × 3)"
+
+msgid "Filtra per categoria"
+msgstr "Filtrar por categoría"
+
+msgid "Ritardo fra le foto"
+msgstr "Retraso entre las fotos"

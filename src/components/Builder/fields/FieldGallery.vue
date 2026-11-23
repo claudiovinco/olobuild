@@ -109,6 +109,29 @@
               class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200 mb-placeholder-gray-500"
             />
             <!--
+              Il link della foto (Pro Gallery): con un indirizzo la foto porta lì invece di aprirsi
+              nella lightbox. Compare solo dove il tile lo chiede.
+            -->
+            <input
+              v-if="linkVoce"
+              type="url"
+              :value="img.link || ''"
+              @input="updateRiga(idx, 'link', $event.target.value)"
+              :placeholder="t('Link della foto (facoltativo)')"
+              class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200 mb-placeholder-gray-500"
+            />
+            <!-- La misura della foto nello schema Metro: quante colonne e righe occupa. -->
+            <select
+              v-if="misuraVoce"
+              :value="img.misura || ''"
+              @change="updateRiga(idx, 'misura', $event.target.value)"
+              :aria-label="t('Misura della foto')"
+              class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200"
+            >
+              <option value="">{{ t('Misura automatica') }}</option>
+              <option v-for="m in MISURE" :key="m.v" :value="m.v">{{ m.l }}</option>
+            </select>
+            <!--
               Il comando primario non sta dentro un hover: chi non sa che
               l'anteprima si clicca non ci passa sopra il mouse per scoprirlo.
             -->
@@ -374,6 +397,10 @@ const props = defineProps({
   righeExtra: { type: Boolean, default: false },
   /** Accende la categoria di ogni foto (filtro della Galleria). Lo chiede il tile. */
   categoria: { type: Boolean, default: false },
+  /** Accende il link di ogni foto (Pro Gallery: la foto porta a un indirizzo invece della lightbox). */
+  linkVoce: { type: Boolean, default: false },
+  /** Accende la misura di ogni foto (Pro Gallery, schema Metro: colonne × righe). */
+  misuraVoce: { type: Boolean, default: false },
   /*
    * L'inquadratura per singola foto.
    *
@@ -392,6 +419,16 @@ const props = defineProps({
   posizioneGalleria: { type: String, default: 'center center' },
 });
 const emit = defineEmits(['update:modelValue']);
+
+/** Le misure di una foto nello schema Metro (colonne × righe), come le legge il PHP (misura_voce()). */
+const MISURE = [
+  { v: '1x1', l: t('Piccola (1 × 1)') },
+  { v: '2x1', l: t('Larga (2 × 1)') },
+  { v: '1x2', l: t('Alta (1 × 2)') },
+  { v: '2x2', l: t('Grande (2 × 2)') },
+  { v: '3x2', l: t('Molto larga (3 × 2)') },
+  { v: '2x3', l: t('Molto alta (2 × 3)') },
+];
 
 const { openSingleImage, openGallery, openVideo, openPosterImage } = useMediaPicker();
 

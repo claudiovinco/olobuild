@@ -98,6 +98,30 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         'lightbox_thumbs'     => 'none',
         'lightbox_thumbs_rows' => '1',
         'show_caption'        => false,
+        // Testi sulle foto, elenco a righe e filtri (23 nov 2026): coi default la galleria è com'era.
+        'scheda'              => '',
+        'scheda_quando'       => 'sempre',
+        'scheda_categoria'    => true,
+        'scheda_numero'       => false,
+        'scheda_titolo'       => true,
+        'scheda_sottotitolo'  => true,
+        'scheda_testo'        => false,
+        'scheda_icona'        => 'piu',
+        'scheda_titolo_size'  => '',
+        'scheda_colore'       => '',
+        'scheda_font'         => '',
+        'scheda_peso'         => '',
+        'scheda_accento'      => '',
+        'scheda_velo'         => 55,
+        'scheda_sfondo'       => '',
+        'scheda_padding'      => 18,
+        'elenco_miniatura'    => true,
+        'filtri'              => false,
+        'filtri_tutti'        => '',
+        'filtri_conteggi'     => true,
+        'filtri_stile'        => 'pillole',
+        'filtri_allinea'      => 'left',
+        'filtri_colore'       => '',
         'more_bg'             => 'rgba(0,0,0,0.55)',
         'more_color'          => '#ffffff',
         'more_size'           => 28,
@@ -217,6 +241,29 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         $total       = count( $images );
         $max_visible = ( $rows > 0 ) ? $cols * $rows : $total;
         $extra       = max( 0, $total - $max_visible );
+
+        // Testi sulle foto, filtri e misure senza buchi (23 nov 2026)
+        $sk        = $this->scheda_opzioni( $s, $layout );
+        $filtri_on = ! empty( $s['filtri'] ) && in_array( $layout, self::SCHEMI_FILTRI, true );
+        $f_cats    = [];
+        $f_conti   = [];
+        if ( $filtri_on ) {
+            foreach ( array_slice( $images, 0, $max_visible ) as $img ) {
+                foreach ( $this->categorie_voce( $img ) as $slug => $nome ) {
+                    $f_cats[ $slug ]  = $nome;
+                    $f_conti[ $slug ] = ( $f_conti[ $slug ] ?? 0 ) + 1;
+                }
+            }
+            $filtri_on = ! empty( $f_cats );
+        }
+        $piastre_d = [];
+        $piastre_m = [];
+        if ( in_array( $layout, [ 'metro', 'mosaic', 'collage' ], true ) ) {
+            $vis_pz    = array_slice( $images, 0, $max_visible );
+            $desid     = $this->misure_desiderate( $layout, $vis_pz );
+            $piastre_d = $this->piastre( $desid, $cols );
+            $piastre_m = $this->piastre( $desid, $mob_cols );
+        }
 
         // Scattered grid dimensions (pre-computed for CSS aspect-ratio + item positioning)
         if ( $layout === 'scattered' ) {
@@ -404,10 +451,8 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             echo ".{$uid}{display:grid;grid-template-columns:repeat({$cols},1fr);grid-auto-rows:{$metro_cell_h}px;grid-auto-flow:dense;gap:{$gap}px}";
             echo ".{$uid} .olo-pg-item{position:relative;overflow:hidden;border-radius:{$radius}}";
             echo ".{$uid} .olo-pg-item img{width:100%;height:100%;object-fit:{$object_fit};display:block}";
-            // Pattern: certi item occupano 2x2, 2x1, 1x2
-            echo ".{$uid} .olo-pg-item:nth-child(7n+1){grid-column:span 2;grid-row:span 2}";
-            echo ".{$uid} .olo-pg-item:nth-child(7n+4){grid-column:span 2}";
-            echo ".{$uid} .olo-pg-item:nth-child(7n+6){grid-row:span 2}";
+            // Le misure (2×2, 2×1, 1×2 o scelte a mano) le porta ogni foto: piastre() le sceglie senza buchi
+            echo ".{$uid} .olo-pg-item{grid-column:span var(--pw,1);grid-row:span var(--ph,1)}";
         } elseif ( $is_coverflow ) {
             // COVERFLOW: la foto al centro di fronte, le altre ai lati tutte con lo stesso angolo
             // («Rotazione 3D laterali»), rivolte verso di lei, impilate a passo regolare e via via
@@ -482,6 +527,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         } elseif ( $layout === 'honeycomb' ) {
             echo ".{$uid}{display:flex;flex-wrap:wrap;gap:{$gap}px;justify-content:center}";
             echo ".{$uid} .olo-pg-item{width:180px;height:200px;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);overflow:hidden;position:relative}";
+            echo "@media(max-width:640px){.{$uid} .olo-pg-item{width:calc(50% - {$gap}px);height:auto;aspect-ratio:9/10}}";
             echo ".{$uid} .olo-pg-item img{width:100%;height:100%;object-fit:cover;display:block}";
         } elseif ( $layout === 'hexgrid' ) {
             // Tessellating hex grid — positions computed inline per item
@@ -495,16 +541,15 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             echo ".{$uid}{position:relative;width:100%;height:{$p_container_h}px;overflow:visible}";
             echo ".{$uid} .olo-pg-item{position:absolute}";
             echo ".{$uid} .olo-pg-item img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block}";
+            $p_mob_h = max( 120, (int) round( $p_h_px * 0.6 ) );
+            echo "@media(max-width:640px){.{$uid}{height:auto!important;display:grid;grid-template-columns:repeat({$mob_cols},1fr);gap:{$gap}px}.{$uid} .olo-pg-item{position:relative!important;left:auto!important;top:auto!important;width:auto!important;height:{$p_mob_h}px!important;clip-path:none!important;border-radius:{$radius};overflow:hidden}}";
         } elseif ( $layout === 'collage' ) {
-            echo ".{$uid}{display:grid;grid-template-columns:repeat({$cols},1fr);grid-auto-rows:{$img_height};gap:{$gap}px}";
-            echo ".{$uid} .olo-pg-item{position:relative;overflow:hidden;border-radius:{$radius}}";
-            echo ".{$uid} .olo-pg-item:first-child{grid-column:span 2;grid-row:span 2}";
+            echo ".{$uid}{display:grid;grid-template-columns:repeat({$cols},1fr);grid-auto-rows:{$img_height};grid-auto-flow:dense;gap:{$gap}px}";
+            echo ".{$uid} .olo-pg-item{position:relative;overflow:hidden;border-radius:{$radius};grid-column:span var(--pw,1);grid-row:span var(--ph,1)}";
             echo ".{$uid} .olo-pg-item img{width:100%;height:100%;object-fit:{$object_fit};display:block}";
         } elseif ( $layout === 'mosaic' ) {
-            echo ".{$uid}{display:grid;grid-template-columns:repeat({$cols},1fr);grid-auto-rows:{$img_height};gap:{$gap}px}";
-            echo ".{$uid} .olo-pg-item{position:relative;overflow:hidden;border-radius:{$radius}}";
-            echo ".{$uid} .olo-pg-item:nth-child(5n+1){grid-column:span 2;grid-row:span 2}";
-            echo ".{$uid} .olo-pg-item:nth-child(5n+4){grid-column:span 2}";
+            echo ".{$uid}{display:grid;grid-template-columns:repeat({$cols},1fr);grid-auto-rows:{$img_height};grid-auto-flow:dense;gap:{$gap}px}";
+            echo ".{$uid} .olo-pg-item{position:relative;overflow:hidden;border-radius:{$radius};grid-column:span var(--pw,1);grid-row:span var(--ph,1)}";
             echo ".{$uid} .olo-pg-item img{width:100%;height:100%;object-fit:{$object_fit};display:block}";
         } elseif ( $layout === 'diagonal' ) {
             echo ".{$uid}{display:grid;grid-template-columns:repeat({$cols},1fr);gap:{$gap}px}";
@@ -572,6 +617,9 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
                 echo ".{$uid} .olo-pg-dup{pointer-events:none}";
             }
             echo "@keyframes {$uid}-marquee{to{transform:translateX(-50%)}}";
+        } elseif ( $layout === 'elenco' ) {
+            // Elenco a righe: righe, colonne e miniatura le scrive schede_css()
+            echo '';
         } else {
             // Default: grid
             echo ".{$uid}{display:grid;grid-template-columns:repeat({$cols},1fr);gap:{$gap}px}";
@@ -953,12 +1001,12 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         // ─── Drift mobile ───
         if ( $layout === 'drift' ) {
             $mob_drift_h = max( 500, (int) round( $drift_height * 0.55 ) );
-            echo "@media(max-width:640px){.{$uid}{height:{$mob_drift_h}px}}";
+            echo "@media(max-width:640px){.{$uid}{height:{$mob_drift_h}px}.{$uid} .olo-pg-item{width:min(calc(var(--dw,20%) * 2),62%)!important}}";
         }
 
         // ─── Cascade mobile ───
         if ( $layout === 'cascade' ) {
-            echo "@media(max-width:640px){.{$uid}{height:auto;perspective:none}.{$uid} .olo-pg-item{position:relative;width:85%;left:auto;top:auto;margin:12px auto;transform:none!important}}";
+            echo "@media(max-width:640px){.{$uid}{height:auto!important;perspective:none}.{$uid} .olo-pg-item{position:relative!important;width:88%!important;height:auto!important;aspect-ratio:4/3;left:auto!important;top:auto!important;margin:.9rem auto!important;transform:none!important}.{$uid} .olo-pg-item:nth-child(odd){transform:rotate(-1.5deg)!important}.{$uid} .olo-pg-item:nth-child(even){transform:rotate(1.5deg)!important}}";
         }
 
         // ─── Strip mobile ─── (non il coverflow: la larghezza delle sue foto la decide lo script)
@@ -986,6 +1034,15 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         echo ".{$uid} .olo-pg-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:2}";
         echo ".{$uid} .olo-pg-play::before{content:'';width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.5) url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpolygon points='9,5 20,12 9,19'/%3E%3C/svg%3E\") center/20px 20px no-repeat}";
         echo ".{$uid} .olo-pg-no-poster{width:100%;height:100%;background:#1F2937;display:flex;align-items:center;justify-content:center}";
+
+        // Metro, Mosaico, Collage al telefono: le misure calcolate per le colonne del telefono
+        if ( $piastre_m ) {
+            echo "@media(max-width:640px){.{$uid} .olo-pg-item{grid-column:span var(--pwm,1);grid-row:span var(--phm,1)}}";
+        }
+        echo $this->schede_css( $uid, $sk, $s, $radius, $item_box, $layout );
+        if ( $filtri_on ) {
+            echo $this->filtri_css( $uid, $s );
+        }
 
         echo '</style>';
         // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -1055,7 +1112,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             $lb_json = wp_json_encode( [ 'position' => $lb_thumbs, 'rows' => $lb_rows ] );
             $lb_attr = ' data-olo-lb="' . esc_attr( $lb_json ) . '"';
         } elseif ( $lightbox ) {
-            $lb_attr = ' uk-lightbox="animation: ' . $lb_anim . '"';
+            $lb_attr = ' uk-lightbox="animation: ' . $lb_anim . '; toggle: a:not(.olo-pg-link)"';
         } else {
             $lb_attr = '';
         }
@@ -1311,6 +1368,10 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             return ob_get_clean();
         }
 
+        if ( $filtri_on ) {
+            $tutti = trim( (string) ( $s['filtri_tutti'] ?? '' ) );
+            echo $this->filtri_html( $uid, $f_cats, $f_conti, min( $max_visible, $total ), '' !== $tutti ? $tutti : olobuild_t( 'Tutti' ), ! empty( $s['filtri_conteggi'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- filtri_html() escapa ogni testo e attributo.
+        }
         echo '<div class="' . $container_class . '"' . $lb_attr . $data_attrs . $hex_inline . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class/$lb_attr are esc_attr()-built above; $data_attrs/$hex_inline hold numeric clamped values only.
 
         // ─── Render items ───
@@ -1398,9 +1459,9 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
                 $ox      = ( $this->seeded_random( $i + 11 ) - 0.5 ) * 18;
                 $oy      = ( $this->seeded_random( $i + 17 ) - 0.5 ) * 18;
                 $rot     = ( $this->seeded_random( $i + 23 ) - 0.5 ) * 10;
-                $left    = round( $col_i * $cw + $ox, 1 );
-                $top     = round( $row_i * $ch + $oy, 1 );
                 $w       = round( $cw * $size, 1 );
+                $left    = round( max( 1, min( 99 - $w, $col_i * $cw + $ox ) ), 1 );
+                $top     = round( max( 1, min( 90, $row_i * $ch + $oy ) ), 1 );
                 $shBlur  = (int) round( 4 + $depth * 18 );
                 $shHalf  = (int) round( $shBlur / 2 );
                 $shAlpha = round( 0.1 + $depth * 0.18, 2 );
@@ -1411,7 +1472,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
                 $speed_x = round( ( $this->seeded_random( $i + 31 ) - 0.5 ) * ( $drift_intensity / 100 ) * 0.7, 3 );
                 $speed_r = round( ( $this->seeded_random( $i + 37 ) - 0.5 ) * ( $drift_rotation / 10 ), 3 );
                 $rot_r   = round( $rot, 1 );
-                $inline_style = "left:{$left}%;top:{$top}%;width:{$w}%;transform:rotate({$rot_r}deg);box-shadow:0 {$shHalf}px {$shBlur}px rgba(0,0,0,{$shAlpha});opacity:{$op};z-index:{$zi}";
+                $inline_style = "--dw:{$w}%;left:{$left}%;top:{$top}%;width:{$w}%;transform:rotate({$rot_r}deg);box-shadow:0 {$shHalf}px {$shBlur}px rgba(0,0,0,{$shAlpha});opacity:{$op};z-index:{$zi}";
                 $plx_item_data = ' data-drift-sx="' . $speed_x . '" data-drift-sy="' . $speed_y . '" data-drift-sr="' . $speed_r . '" data-base-transform="rotate(' . $rot_r . 'deg)"';
             }
 
@@ -1828,15 +1889,39 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
                 }
             }
 
+            // Il link della foto: porta lì invece di aprire la lightbox
+            $link_voce = is_array( $img ) ? esc_url( trim( (string) ( $img['link'] ?? '' ) ) ) : '';
+            if ( $link_voce ) {
+                $tag          = 'a';
+                $href         = ' href="' . $link_voce . '"';
+                $item_class  .= ' olo-pg-link';
+                $caption_attr = '';
+                $thumb_attr   = '';
+            }
+            // Le categorie (filtri) e le misure senza buchi (Metro, Mosaico, Collage)
+            $cat_attr = '';
+            if ( $filtri_on ) {
+                $cat_attr = ' data-cat="' . esc_attr( implode( ' ', array_keys( $this->categorie_voce( $img ) ) ) ) . '"';
+            }
+            $pz_vars = '';
+            if ( $piastre_d && isset( $piastre_d[ $i - 1 ] ) ) {
+                $pz_vars = '--pw:' . (int) $piastre_d[ $i - 1 ][0] . ';--ph:' . (int) $piastre_d[ $i - 1 ][1]
+                    . ';--pwm:' . (int) $piastre_m[ $i - 1 ][0] . ';--phm:' . (int) $piastre_m[ $i - 1 ][1];
+            }
+
             if ( $is_visible ) {
                 $fp = $this->fuoco_css( $img );
                 $combined_style = implode( ';', array_filter( [
                     trim( $inline_style ),
                     $puzzle_clip ? trim( $puzzle_clip ) : '',
                     '' !== $fp ? '--olo-pg-fp:' . $fp : '',
+                    $pz_vars,
                 ] ) );
                 $style_attr = $combined_style ? ' style="' . esc_attr( $combined_style ) . '"' : '';
-                echo '<' . $tag . ' class="' . $item_class . '"' . $href . $caption_attr . $thumb_attr . $video_attrs . $plx_item_data . $style_attr . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tag/$item_class are fixed literals; attributes are esc_url()/esc_attr()-escaped or numeric-built above.
+                echo '<' . $tag . ' class="' . $item_class . '"' . $href . $caption_attr . $thumb_attr . $video_attrs . $plx_item_data . $cat_attr . $style_attr . '>';
+                if ( 'sotto' === $sk['modo'] ) {
+                    echo '<div class="olo-pg-media">';
+                } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tag/$item_class are fixed literals; attributes are esc_url()/esc_attr()-escaped or numeric-built above.
 
                 if ( $is_vid ) {
                     if ( $use_autoplay ) {
@@ -1859,8 +1944,15 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
                     echo Olobuild_Tile_Utils::img_srcset( $att_id, $url, esc_attr( $alt ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- img_srcset() returns an <img> tag escaped internally (esc_url/esc_attr/intval).
                 }
 
+                if ( 'sotto' === $sk['modo'] ) {
+                    echo '</div>';
+                }
+                // I testi sulle foto (o le colonne dell'elenco)
+                if ( '' !== $sk['modo'] ) {
+                    echo $this->scheda_html( $img, $i, $sk ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- scheda_html() escapa ogni testo.
+                }
                 // Hover caption, fino a tre righe (titolo, sottotitolo, testo).
-                if ( $hcaption !== 'none' ) {
+                if ( '' === $sk['modo'] && $hcaption !== 'none' ) {
                     echo $this->caption_html( $img ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- caption_html() esc_html() ogni riga e esc_attr() ogni classe.
                 }
 
@@ -1884,6 +1976,9 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         }
 
         echo '</div>';
+        if ( $filtri_on ) {
+            echo $this->filtri_js(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- script fisso, nessun dato.
+        }
 
         // Coverflow: frecce + indicatore + chiusura wrapper
         if ( $is_coverflow ) {
@@ -2462,5 +2557,490 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         echo 'document.addEventListener("olo:lazy-hydrated",function(ev){var t=ev.detail?ev.detail.target:null;if(!t)return;if(t.querySelector("script[data-olo-pg]"))return;init(t)});';
         echo '})();';
         echo '</script>';
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════════════════════════
+    // TESTI SULLE FOTO, ELENCO A RIGHE, FILTRI E MISURE SENZA BUCHI (23 nov 2026)
+    //
+    // Per fare con la Pro Gallery quello che fanno le griglie dei portfolio e delle riviste: su ogni foto
+    // categoria, numero, titolo e icona (o i testi sotto la foto), le foto in un elenco a righe, i filtri
+    // per categoria con la galleria che si riordina, e negli schemi a misure miste (Metro, Mosaico,
+    // Collage) le misure scelte in modo che la griglia si riempia senza buchi, anche al telefono.
+    // ═══════════════════════════════════════════════════════════════════════════════════════════════
+
+    /** Gli schemi che reggono i testi sulle foto (gemello SCHEMI_SCHEDE in progallery.js). */
+    const SCHEMI_SCHEDE = [ 'grid', 'justified', 'masonry', 'metro', 'mosaic', 'collage', 'diagonal', 'expand', 'elenco' ];
+    /** Gli schemi che reggono i filtri (gemello SCHEMI_FILTRI in progallery.js). */
+    const SCHEMI_FILTRI = [ 'grid', 'justified', 'masonry', 'metro', 'mosaic', 'collage', 'diagonal', 'elenco' ];
+
+    /**
+     * Le categorie di una foto, dalla riga «Categoria» (più categorie separate da virgole): [ slug => nome ].
+     *
+     * @param array|string $img la voce della galleria
+     * @return array
+     */
+    private function categorie_voce( $img ) {
+        $out = [];
+        if ( ! is_array( $img ) ) {
+            return $out;
+        }
+        foreach ( explode( ',', (string) ( $img['category'] ?? '' ) ) as $c ) {
+            $c = trim( $c );
+            if ( '' !== $c ) {
+                $out[ sanitize_title( $c ) ] = $c;
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * La misura scelta a mano per una foto nello schema Metro: «2x1» → [ 2, 1 ]; senza → null.
+     *
+     * @param array|string $img la voce della galleria
+     * @return array|null
+     */
+    private function misura_voce( $img ) {
+        $m = is_array( $img ) ? (string) ( $img['misura'] ?? '' ) : '';
+        if ( preg_match( '/^([1-4])x([1-4])$/', $m, $x ) ) {
+            return [ (int) $x[1], (int) $x[2] ];
+        }
+        return null;
+    }
+
+    /**
+     * Le misure che ogni foto vorrebbe nello schema (prima di togliere i buchi). Metro: una foto grande ogni
+     * sette, una larga e una alta, oppure la misura scelta a mano; Mosaico: una grande e una larga ogni cinque;
+     * Collage: la prima grande.
+     *
+     * @param string $layout schema
+     * @param array  $imgs   le foto visibili
+     * @return array [ [ colonne, righe ], … ]
+     */
+    private function misure_desiderate( $layout, $imgs ) {
+        $out = [];
+        foreach ( array_values( $imgs ) as $k => $img ) {
+            $m = [ 1, 1 ];
+            if ( 'metro' === $layout ) {
+                $q = $k % 7;
+                $m = 0 === $q ? [ 2, 2 ] : ( 3 === $q ? [ 2, 1 ] : ( 5 === $q ? [ 1, 2 ] : [ 1, 1 ] ) );
+                $scelta = $this->misura_voce( $img );
+                if ( $scelta ) {
+                    $m = $scelta;
+                }
+            } elseif ( 'mosaic' === $layout ) {
+                $q = $k % 5;
+                $m = 0 === $q ? [ 2, 2 ] : ( 3 === $q ? [ 2, 1 ] : [ 1, 1 ] );
+            } elseif ( 'collage' === $layout ) {
+                $m = 0 === $k ? [ 2, 2 ] : [ 1, 1 ];
+            }
+            $out[] = $m;
+        }
+        return $out;
+    }
+
+    /**
+     * Posa le piastre come la griglia «dense» del CSS (grid-auto-flow: row dense): ognuna al primo posto libero,
+     * riga per riga e da sinistra. Restituisce [ posizioni, occupazione, righe ].
+     */
+    private function piastre_posa( $mis, $cols ) {
+        $occ   = [];
+        $pos   = [];
+        $righe = 0;
+        foreach ( $mis as $k => $m ) {
+            $w = $m[0];
+            $h = $m[1];
+            $r = 0;
+            $c = 0;
+            for ( $r = 0; $r < 400; $r++ ) {
+                $posto = false;
+                for ( $c = 0; $c + $w <= $cols; $c++ ) {
+                    $libero = true;
+                    for ( $y = $r; $y < $r + $h && $libero; $y++ ) {
+                        for ( $x = $c; $x < $c + $w; $x++ ) {
+                            if ( isset( $occ[ $y ][ $x ] ) ) {
+                                $libero = false;
+                                break;
+                            }
+                        }
+                    }
+                    if ( $libero ) {
+                        $posto = true;
+                        break;
+                    }
+                }
+                if ( $posto ) {
+                    break;
+                }
+            }
+            for ( $y = $r; $y < $r + $h; $y++ ) {
+                for ( $x = $c; $x < $c + $w; $x++ ) {
+                    $occ[ $y ][ $x ] = $k;
+                }
+            }
+            $pos[ $k ] = [ $r, $c ];
+            $righe     = max( $righe, $r + $h );
+        }
+        return [ $pos, $occ, $righe ];
+    }
+
+    /** Quante caselle restano vuote fino all'ultima riga. */
+    private function piastre_buchi( $mis, $cols ) {
+        list( , $occ, $righe ) = $this->piastre_posa( $mis, $cols );
+        $b = 0;
+        for ( $r = 0; $r < $righe; $r++ ) {
+            for ( $c = 0; $c < $cols; $c++ ) {
+                if ( ! isset( $occ[ $r ][ $c ] ) ) {
+                    $b++;
+                }
+            }
+        }
+        return $b;
+    }
+
+    /**
+     * LE MISURE SENZA BUCHI.
+     *
+     * Metro, Mosaico e Collage davano le misure con regole fisse («la settima foto grande»): con un numero di
+     * foto qualsiasi, o al telefono con meno colonne, restavano caselle vuote in mezzo e in fondo. Qui si
+     * posano le foto come le posa il CSS e, finché c'è un buco, si allarga la foto alla sua sinistra o si
+     * allunga quella sopra; se non basta si rimpicciolisce l'ultima foto grande. Il CSS riceve solo le misure
+     * (span), e la griglia dense le mette negli stessi posti calcolati qui.
+     *
+     * @param array $desiderate [ [ colonne, righe ], … ]
+     * @param int   $cols       colonne della griglia
+     * @return array le misure finali, nello stesso ordine
+     */
+    private function piastre( $desiderate, $cols ) {
+        $n   = count( $desiderate );
+        $mis = [];
+        foreach ( $desiderate as $d ) {
+            $mis[] = [ max( 1, min( $cols, (int) $d[0] ) ), max( 1, min( 4, (int) $d[1] ) ) ];
+        }
+        if ( 1 === $cols ) {
+            // Una colonna sola: ogni foto è larga quanto la colonna, le «alte» restano alte due righe.
+            foreach ( $mis as $k => $m ) {
+                $mis[ $k ] = [ 1, min( 2, $m[1] ) ];
+            }
+            return $mis;
+        }
+        for ( $giro = 0; $giro < 120; $giro++ ) {
+            list( $pos, $occ, $righe ) = $this->piastre_posa( $mis, $cols );
+            $buco = null;
+            for ( $r = 0; $r < $righe && ! $buco; $r++ ) {
+                for ( $c = 0; $c < $cols; $c++ ) {
+                    if ( ! isset( $occ[ $r ][ $c ] ) ) {
+                        $buco = [ $r, $c ];
+                        break;
+                    }
+                }
+            }
+            if ( ! $buco ) {
+                return $mis;
+            }
+            list( $r, $c ) = $buco;
+            $prima = $this->piastre_buchi( $mis, $cols );
+            $fatto = false;
+            // 1) la foto a sinistra del buco, alta una riga che comincia lì: si allarga di una colonna
+            if ( $c > 0 && isset( $occ[ $r ][ $c - 1 ] ) ) {
+                $k = $occ[ $r ][ $c - 1 ];
+                if ( $pos[ $k ][0] === $r && 1 === $mis[ $k ][1] ) {
+                    $prova        = $mis;
+                    $prova[ $k ][0]++;
+                    if ( $this->piastre_buchi( $prova, $cols ) < $prima ) {
+                        $mis   = $prova;
+                        $fatto = true;
+                    }
+                }
+            }
+            // 2) la foto sopra il buco, larga una colonna che comincia lì: si allunga di una riga
+            if ( ! $fatto && $r > 0 && isset( $occ[ $r - 1 ][ $c ] ) ) {
+                $k = $occ[ $r - 1 ][ $c ];
+                if ( $pos[ $k ][1] === $c && 1 === $mis[ $k ][0] && $mis[ $k ][1] < 4 ) {
+                    $prova        = $mis;
+                    $prova[ $k ][1]++;
+                    if ( $this->piastre_buchi( $prova, $cols ) < $prima ) {
+                        $mis   = $prova;
+                        $fatto = true;
+                    }
+                }
+            }
+            // 3) altrimenti l'ultima foto grande si rimpicciolisce
+            if ( ! $fatto ) {
+                for ( $k = $n - 1; $k >= 0; $k-- ) {
+                    if ( $mis[ $k ][1] > 1 ) {
+                        $mis[ $k ][1]--;
+                        $fatto = true;
+                        break;
+                    }
+                    if ( $mis[ $k ][0] > 1 ) {
+                        $mis[ $k ][0]--;
+                        $fatto = true;
+                        break;
+                    }
+                }
+            }
+            if ( ! $fatto ) {
+                break;
+            }
+        }
+        return $mis;
+    }
+
+    /** Le opzioni dei testi sulle foto, già pulite. */
+    private function scheda_opzioni( $s, $layout ) {
+        $scheda = in_array( $s['scheda'] ?? '', [ 'sopra', 'sotto' ], true ) ? $s['scheda'] : '';
+        if ( 'elenco' === $layout ) {
+            $scheda = 'elenco';
+        } elseif ( ! in_array( $layout, self::SCHEMI_SCHEDE, true ) ) {
+            $scheda = '';
+        } elseif ( 'sotto' === $scheda && ! in_array( $layout, [ 'grid', 'masonry' ], true ) ) {
+            $scheda = 'sopra';
+        }
+        return [
+            'modo'        => $scheda,
+            'passaggio'   => 'sopra' === $scheda && 'passaggio' === ( $s['scheda_quando'] ?? '' ),
+            'categoria'   => ! empty( $s['scheda_categoria'] ),
+            'numero'      => ! empty( $s['scheda_numero'] ),
+            'titolo'      => ! empty( $s['scheda_titolo'] ),
+            'sottotitolo' => ! empty( $s['scheda_sottotitolo'] ),
+            'testo'       => ! empty( $s['scheda_testo'] ),
+            'icona'       => in_array( $s['scheda_icona'] ?? '', [ 'piu', 'freccia', 'lente' ], true ) ? $s['scheda_icona'] : '',
+            'miniatura'   => ! empty( $s['elenco_miniatura'] ),
+        ];
+    }
+
+    /** L'icona della scheda (set SVG, mai emoji). */
+    private function scheda_icona( $nome ) {
+        $d = [
+            'piu'     => '<path d="M12 6v12M6 12h12"/>',
+            'freccia' => '<path d="M8 16 16 8M9 8h7v7"/>',
+            'lente'   => '<circle cx="11" cy="11" r="5.5"/><path d="m15.5 15.5 3.5 3.5"/>',
+        ];
+        if ( empty( $d[ $nome ] ) ) {
+            return '';
+        }
+        return '<span class="olo-pg-sk-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' . $d[ $nome ] . '</svg></span>';
+    }
+
+    /**
+     * I testi di una foto: categoria e numero in alto, titolo, sottotitolo e testo in basso con l'icona.
+     * Nell'elenco a righe le stesse parti diventano le colonne della riga.
+     *
+     * @param array|string $img la voce
+     * @param int          $n   la posizione (1, 2, …)
+     * @param array        $o   scheda_opzioni()
+     * @return string HTML già escapato
+     */
+    private function scheda_html( $img, $n, $o ) {
+        $v   = is_array( $img ) ? $img : [];
+        $tit = trim( (string) ( $v['caption'] ?? '' ) );
+        $sot = trim( (string) ( $v['subtitle'] ?? '' ) );
+        $txt = trim( (string) ( $v['text'] ?? '' ) );
+        $cat = implode( ' · ', $this->categorie_voce( $v ) );
+        $num = str_pad( (string) $n, 2, '0', STR_PAD_LEFT );
+        if ( 'elenco' === $o['modo'] ) {
+            $h  = $o['numero'] ? '<span class="olo-pg-el-num">' . esc_html( $num ) . '</span>' : '';
+            $h .= '<span class="olo-pg-el-tit">' . ( $o['titolo'] ? esc_html( $tit ) : '' ) . '</span>';
+            $h .= '<span class="olo-pg-el-sot">' . ( $o['sottotitolo'] ? esc_html( $sot ) : '' ) . '</span>';
+            $h .= '<span class="olo-pg-el-cat">' . ( $o['categoria'] ? esc_html( $cat ) : '' ) . '</span>';
+            $h .= '<span class="olo-pg-el-txt">' . ( $o['testo'] ? esc_html( $txt ) : '' ) . '</span>';
+            return $h;
+        }
+        $alto = '';
+        if ( $o['categoria'] && '' !== $cat ) {
+            $alto .= '<span class="olo-pg-sk-cat">' . esc_html( $cat ) . '</span>';
+        }
+        if ( $o['numero'] ) {
+            $alto .= '<span class="olo-pg-sk-num">' . esc_html( $num ) . '</span>';
+        }
+        $testi = '';
+        if ( $o['titolo'] && '' !== $tit ) {
+            $testi .= '<span class="olo-pg-sk-tit">' . esc_html( $tit ) . '</span>';
+        }
+        if ( $o['sottotitolo'] && '' !== $sot ) {
+            $testi .= '<span class="olo-pg-sk-sot">' . esc_html( $sot ) . '</span>';
+        }
+        if ( $o['testo'] && '' !== $txt ) {
+            $testi .= '<span class="olo-pg-sk-txt">' . esc_html( $txt ) . '</span>';
+        }
+        $ico = $this->scheda_icona( $o['icona'] );
+        $h   = '' !== $alto ? '<div class="olo-pg-sk-alto">' . $alto . '</div>' : '';
+        if ( '' !== $testi || '' !== $ico ) {
+            $h .= '<div class="olo-pg-sk-basso"><div class="olo-pg-sk-testi">' . $testi . '</div>' . $ico . '</div>';
+        }
+        return '' === $h ? '' : '<div class="olo-pg-sk">' . $h . '</div>';
+    }
+
+    /**
+     * Il CSS dei testi sulle foto e dell'elenco a righe.
+     *
+     * @param string $uid      classe della galleria
+     * @param array  $o        scheda_opzioni()
+     * @param array  $s        impostazioni
+     * @param string $radius   raggio delle foto
+     * @param string $item_box altezza o proporzione delle foto nella griglia
+     * @param string $layout   schema
+     * @return string
+     */
+    private function schede_css( $uid, $o, $s, $radius, $item_box, $layout ) {
+        if ( '' === $o['modo'] ) {
+            return '';
+        }
+        $col    = $this->safe_color_css( $s['scheda_colore'] ?? '' );
+        $acc    = $this->safe_color_css( $s['scheda_accento'] ?? '' );
+        $sfondo = $this->safe_color_css( $s['scheda_sfondo'] ?? '' );
+        $pad    = Olobuild_Tile_Utils::sides_css( Olobuild_Tile_Utils::spacing_sides( $s['scheda_padding'] ?? 18, [], [ 18, 18, 18, 18 ] ) );
+        $velo   = max( 0, min( 100, absint( $s['scheda_velo'] ?? 55 ) ) ) / 100;
+        $size   = absint( $s['scheda_titolo_size'] ?? 0 );
+        $peso   = preg_match( '/^[1-9]00$/', (string) ( $s['scheda_peso'] ?? '' ) ) ? $s['scheda_peso'] : '';
+        $font   = $this->resolve_font_family( $s['scheda_font'] ?? '' );
+        $tit    = ( $size ? 'font-size:' . min( 72, max( 12, $size ) ) . 'px;' : '' ) . ( $peso ? 'font-weight:' . $peso . ';' : '' ) . ( $font ? 'font-family:' . $font . ';' : '' );
+        $u      = '.' . $uid;
+        $css    = '';
+        if ( 'elenco' === $o['modo'] ) {
+            $line  = 'color-mix(in srgb,currentColor 14%,transparent)';
+            $cols  = $o['miniatura'] ? '3.2em 96px minmax(0,1.5fr) minmax(0,1fr) minmax(0,.8fr) auto' : '3.2em minmax(0,1.5fr) minmax(0,1fr) minmax(0,.8fr) auto';
+            $aree  = $o['miniatura'] ? '"num img tit sot cat txt"' : '"num tit sot cat txt"';
+            $css  .= "{$u}{display:flex;flex-direction:column;border-top:1px solid {$line}}";
+            $css  .= "{$u} .olo-pg-item{display:grid;grid-template-columns:{$cols};grid-template-areas:{$aree};align-items:center;gap:0 1.5rem;padding:{$pad};border-bottom:1px solid {$line};color:inherit;text-decoration:none;position:relative;transition:background-color .25s ease}";
+            $css  .= "{$u} .olo-pg-item:hover,{$u} .olo-pg-item:focus-visible{background:color-mix(in srgb,currentColor 5%,transparent)}";
+            $css  .= "{$u} .olo-pg-item:hover,{$u} .olo-pg-item:focus{text-decoration:none;color:inherit}";
+            $css  .= "{$u} .olo-pg-item:focus-visible{outline:2px solid var(--olo-color-primary);outline-offset:2px}";
+            $css  .= $o['miniatura']
+                ? "{$u} .olo-pg-item img,{$u} .olo-pg-item video,{$u} .olo-pg-item .olo-pg-no-poster{grid-area:img;width:96px;height:64px;object-fit:cover;border-radius:{$radius};display:block}"
+                : "{$u} .olo-pg-item img,{$u} .olo-pg-item video,{$u} .olo-pg-item .olo-pg-no-poster,{$u} .olo-pg-item .olo-pg-play{display:none}";
+            $css  .= "{$u} .olo-pg-el-num{grid-area:num;font-size:.78em;font-variant-numeric:tabular-nums;opacity:.6" . ( $acc ? ";color:{$acc};opacity:1" : '' ) . "}";
+            $css  .= "{$u} .olo-pg-el-tit{grid-area:tit;font-size:clamp(18px,2vw,26px);line-height:1.2;{$tit}" . ( $col ? "color:{$col};" : '' ) . "}";
+            $css  .= "{$u} .olo-pg-el-sot{grid-area:sot;font-size:.85em;opacity:.7}";
+            $css  .= "{$u} .olo-pg-el-cat{grid-area:cat;font-size:.72em;letter-spacing:.12em;text-transform:uppercase;opacity:.75" . ( $acc ? ";color:{$acc};opacity:1" : '' ) . "}";
+            $css  .= "{$u} .olo-pg-el-txt{grid-area:txt;font-size:.85em;font-variant-numeric:tabular-nums;opacity:.7;text-align:right}";
+            $css  .= "{$u} .olo-pg-item:hover .olo-pg-el-tit{text-decoration:underline;text-underline-offset:.2em;text-decoration-thickness:1px}";
+            $mob   = $o['miniatura'] ? '2.4em 64px minmax(0,1fr)' : '2.4em minmax(0,1fr)';
+            $aree_m = $o['miniatura'] ? '"num img tit" "num img sot" "num img cat"' : '"num tit" "num sot" "num cat"';
+            $css  .= "@media(max-width:640px){{$u} .olo-pg-item{grid-template-columns:{$mob};grid-template-areas:{$aree_m};gap:.15rem .9rem}{$u} .olo-pg-item img,{$u} .olo-pg-item video{width:64px;height:64px}{$u} .olo-pg-el-txt{display:none}{$u} .olo-pg-el-tit{font-size:18px}}";
+            return $css;
+        }
+        // Sulla foto: i testi stanno su un velo che scurisce il basso (e l'alto, se c'è la categoria)
+        $bianco = '#fff';
+        $css   .= "{$u} .olo-pg-sk{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:space-between;gap:.6rem;padding:{$pad};color:" . ( $col ?: $bianco ) . ";pointer-events:none;text-align:left}";
+        $css   .= "{$u} .olo-pg-sk-alto{display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem}";
+        $css   .= "{$u} .olo-pg-sk-basso{display:flex;justify-content:space-between;align-items:flex-end;gap:.75rem;margin-top:auto}";
+        $css   .= "{$u} .olo-pg-sk-testi{display:flex;flex-direction:column;gap:.25rem;min-width:0}";
+        $css   .= "{$u} .olo-pg-sk-tit{font-size:clamp(16px,1.6vw,24px);font-weight:600;line-height:1.15;letter-spacing:-.01em;{$tit}}";
+        $css   .= "{$u} .olo-pg-sk-sot{font-size:13px;line-height:1.35;opacity:.85}";
+        $css   .= "{$u} .olo-pg-sk-txt{font-size:12px;line-height:1.45;opacity:.75}";
+        $css   .= "{$u} .olo-pg-sk-cat{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;line-height:1;padding:.45em .6em;border:1px solid currentColor;border-radius:.2rem" . ( $acc ? ";color:{$acc}" : '' ) . "}";
+        $css   .= "{$u} .olo-pg-sk-num{font-size:12px;font-variant-numeric:tabular-nums;letter-spacing:.06em;opacity:.85;margin-left:auto" . ( $acc ? ";color:{$acc};opacity:1" : '' ) . "}";
+        $css   .= "{$u} .olo-pg-sk-ico{flex:0 0 auto;width:32px;height:32px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;transition:transform .35s ease,background-color .35s ease}";
+        $css   .= "{$u} .olo-pg-item:hover .olo-pg-sk-ico{transform:rotate(90deg)}";
+        if ( 'sotto' === $o['modo'] ) {
+            // Sotto la foto: la foto tiene l'altezza della griglia, i testi le stanno sotto nel colore della pagina
+            $css .= "{$u} .olo-pg-item{height:auto!important;aspect-ratio:auto!important;overflow:visible!important;display:flex;flex-direction:column;color:inherit;text-decoration:none;" . ( $sfondo ? "background:{$sfondo};border-radius:{$radius};" : 'background:transparent;' ) . "}";
+            // Le foto sono link (lightbox): i testi non devono prendere colore e sottolineatura dei link del tema
+            $css .= "{$u} .olo-pg-item,{$u} .olo-pg-item:hover,{$u} .olo-pg-item:focus,{$u} .olo-pg-item .olo-pg-sk *{text-decoration:none}";
+            $css .= "{$u} .olo-pg-media{position:relative;overflow:hidden;border-radius:{$radius};" . ( 'grid' === $layout ? $item_box . ';' : '' ) . "}";
+            $css .= "{$u} .olo-pg-media img,{$u} .olo-pg-media video{width:100%;height:100%;object-fit:cover;display:block}";
+            $css .= "{$u} .olo-pg-sk{position:static;padding:" . ( $sfondo ? $pad : '.9rem .1rem .25rem' ) . ";color:" . ( $col ?: 'var(--olo-color-text,inherit)' ) . ";gap:.4rem;justify-content:flex-start;pointer-events:auto}";
+            $css .= "{$u} .olo-pg-item:hover .olo-pg-sk-tit{text-decoration:underline;text-underline-offset:.18em;text-decoration-thickness:1px}";
+            $css .= "{$u} .olo-pg-sk-alto{order:-1}";
+            $css .= "{$u} .olo-pg-sk-cat{border:0;padding:0;color:" . ( $acc ?: 'var(--olo-color-primary)' ) . "}";
+            $css .= "{$u} .olo-pg-sk-tit{font-size:clamp(18px,1.8vw,26px)}";
+            $css .= "{$u} .olo-pg-sk-ico{width:28px;height:28px}";
+            return $css;
+        }
+        if ( $velo > 0 ) {
+            $v1 = round( $velo, 2 );
+            $v2 = round( $velo * .45, 2 );
+            $v3 = round( $velo * .5, 2 );
+            $css .= "{$u} .olo-pg-sk::before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(to top,rgb(0 0 0 / {$v1}) 0%,rgb(0 0 0 / {$v2}) 34%,transparent 62%),linear-gradient(to bottom,rgb(0 0 0 / {$v3}) 0%,transparent 26%)}";
+        }
+        if ( $o['passaggio'] ) {
+            $css .= "{$u} .olo-pg-sk{opacity:0;transition:opacity .4s ease}";
+            $css .= "{$u} .olo-pg-sk-basso{transform:translateY(10px);transition:transform .45s cubic-bezier(.2,.8,.2,1)}";
+            $css .= "{$u} .olo-pg-item:hover .olo-pg-sk,{$u} .olo-pg-item:focus-visible .olo-pg-sk{opacity:1}";
+            $css .= "{$u} .olo-pg-item:hover .olo-pg-sk-basso,{$u} .olo-pg-item:focus-visible .olo-pg-sk-basso{transform:none}";
+            // Sui telefoni non c'è il passaggio del mouse: i testi restano visibili
+            $css .= "@media(hover:none){{$u} .olo-pg-sk{opacity:1}{$u} .olo-pg-sk-basso{transform:none}}";
+        }
+        return $css;
+    }
+
+    /**
+     * La barra dei filtri: «Tutti» e un pulsante per categoria, coi conteggi.
+     *
+     * @param string $uid       id della galleria
+     * @param array  $cats      [ slug => nome ]
+     * @param array  $conti     [ slug => quante foto ]
+     * @param int    $tot       foto in tutto
+     * @param string $tutti     testo di «Tutti»
+     * @param bool   $con_conti mostra i conteggi
+     * @return string
+     */
+    private function filtri_html( $uid, $cats, $conti, $tot, $tutti, $con_conti ) {
+        $sup = function ( $n ) use ( $con_conti ) {
+            return $con_conti ? '<sup>' . (int) $n . '</sup>' : '';
+        };
+        $h  = '<div class="olo-pg-filtri ' . esc_attr( $uid ) . '-filtri" data-per="' . esc_attr( $uid ) . '" role="group" aria-label="' . esc_attr( olobuild_t( 'Filtra per categoria' ) ) . '">';
+        $h .= '<button type="button" class="attivo" aria-pressed="true" data-filtro="*">' . esc_html( $tutti ) . $sup( $tot ) . '</button>';
+        foreach ( $cats as $slug => $nome ) {
+            $h .= '<button type="button" aria-pressed="false" data-filtro="' . esc_attr( $slug ) . '">' . esc_html( $nome ) . $sup( $conti[ $slug ] ?? 0 ) . '</button>';
+        }
+        return $h . '</div>';
+    }
+
+    /** Il CSS della barra dei filtri. */
+    private function filtri_css( $uid, $s ) {
+        $u     = '.' . $uid . '-filtri';
+        $stile = in_array( $s['filtri_stile'] ?? '', [ 'pillole', 'contorno', 'sottolineato' ], true ) ? $s['filtri_stile'] : 'pillole';
+        $all   = [ 'left' => 'flex-start', 'center' => 'center', 'right' => 'flex-end' ][ $s['filtri_allinea'] ?? 'left' ] ?? 'flex-start';
+        $acc   = $this->safe_color_css( $s['filtri_colore'] ?? '' ) ?: 'var(--olo-color-primary)';
+        $css   = "{$u}{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:{$all};margin:0 0 1.25rem}";
+        $css  .= "{$u} button{font:inherit;font-size:13px;line-height:1;cursor:pointer;padding:.6em 1em;border-radius:100vmax;border:1px solid transparent;background:transparent;color:inherit;transition:background-color .2s ease,color .2s ease,border-color .2s ease;-webkit-appearance:none;appearance:none}";
+        $css  .= "{$u} button sup{font-size:.7em;margin-left:.3em;opacity:.6;vertical-align:super;line-height:0}";
+        $css  .= "{$u} button:focus-visible{outline:2px solid {$acc};outline-offset:2px}";
+        if ( 'pillole' === $stile ) {
+            $css .= "{$u} button{background:color-mix(in srgb,currentColor 7%,transparent)}";
+            $css .= "{$u} button:hover{background:color-mix(in srgb,currentColor 13%,transparent)}";
+            $css .= "{$u} button.attivo{background:{$acc};color:#fff}";
+        } elseif ( 'contorno' === $stile ) {
+            $css .= "{$u} button{border-color:color-mix(in srgb,currentColor 25%,transparent);border-radius:.25rem;text-transform:uppercase;letter-spacing:.1em;font-size:11px}";
+            $css .= "{$u} button:hover{border-color:currentColor}";
+            $css .= "{$u} button.attivo{border-color:{$acc};background:{$acc};color:#fff}";
+        } else {
+            $css .= "{$u}{gap:.25rem 1.4rem;border-bottom:1px solid color-mix(in srgb,currentColor 14%,transparent);padding-bottom:0}";
+            $css .= "{$u} button{border-radius:0;padding:.7em 0;margin-bottom:-1px;border-bottom:2px solid transparent}";
+            $css .= "{$u} button:hover{border-bottom-color:color-mix(in srgb,currentColor 35%,transparent)}";
+            $css .= "{$u} button.attivo{border-bottom-color:{$acc};color:{$acc}}";
+        }
+        // Le foto tolte dal filtro
+        $css .= '.' . $uid . ' .olo-pg-via{display:none!important}';
+        return $css;
+    }
+
+    /**
+     * Lo script dei filtri, una volta per pagina: tiene le foto della categoria scelta e fa scivolare le
+     * altre al loro posto nuovo (FLIP: si misura prima e dopo, poi si anima la differenza).
+     */
+    private function filtri_js() {
+        static $fatto = false;
+        if ( $fatto ) {
+            return '';
+        }
+        $fatto = true;
+        return '<script>(function(){if(window.oloPgFiltri)return;window.oloPgFiltri=1;'
+            . 'document.addEventListener("click",function(e){var b=e.target.closest(".olo-pg-filtri button");if(!b)return;'
+            . 'var bar=b.parentNode,g=document.querySelector("."+bar.getAttribute("data-per"));if(!g)return;'
+            . 'var f=b.getAttribute("data-filtro");'
+            . 'bar.querySelectorAll("button").forEach(function(x){var on=x===b;x.classList.toggle("attivo",on);x.setAttribute("aria-pressed",on?"true":"false")});'
+            . 'var it=[].slice.call(g.querySelectorAll(".olo-pg-item"));var piano=window.matchMedia("(prefers-reduced-motion: reduce)").matches;'
+            . 'var prima=new Map();it.forEach(function(x){if(!x.classList.contains("olo-pg-via"))prima.set(x,x.getBoundingClientRect())});'
+            . 'it.forEach(function(x){var c=" "+(x.getAttribute("data-cat")||"")+" ";x.classList.toggle("olo-pg-via",!(f==="*"||c.indexOf(" "+f+" ")>-1))});'
+            . 'if(piano)return;'
+            . 'it.forEach(function(x){if(x.classList.contains("olo-pg-via"))return;var r=x.getBoundingClientRect(),p=prima.get(x);x.style.transition="none";'
+            . 'if(p){x.style.transform="translate("+(p.left-r.left)+"px,"+(p.top-r.top)+"px)"}else{x.style.opacity="0";x.style.transform="scale(.94)"}});'
+            . 'g.offsetWidth;'
+            . 'it.forEach(function(x){if(x.classList.contains("olo-pg-via"))return;x.style.transition="transform .5s cubic-bezier(.2,.8,.2,1),opacity .4s ease";x.style.transform="";x.style.opacity="";'
+            . 'setTimeout(function(){x.style.transition=""},550)})'
+            . '})})();</script>';
     }
 }

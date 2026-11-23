@@ -2,6 +2,7 @@
  * Timeline Keyframe Utilities
  * Funzioni pure per interpolazione, easing e generazione CSS @keyframes.
  */
+import { t } from '@/i18n';
 
 // --- Easing functions (per preview editor) ---
 // Approssimazioni delle curve CSS standard via cubic-bezier
@@ -118,12 +119,12 @@ export function easingToCSS(easingName) {
 
 /** Lista easing raggruppata per la UI */
 export const EASING_GROUPS = [
-  { label: 'CSS Standard', options: [
-    { value: 'linear', label: 'Linear' },
-    { value: 'ease', label: 'Ease' },
-    { value: 'ease-in', label: 'Ease In' },
-    { value: 'ease-out', label: 'Ease Out' },
-    { value: 'ease-in-out', label: 'Ease In-Out' },
+  { label: t('Semplici'), options: [
+    { value: 'linear', label: t('Costante') },
+    { value: 'ease', label: t('Morbido') },
+    { value: 'ease-in', label: t('Accelera') },
+    { value: 'ease-out', label: t('Rallenta') },
+    { value: 'ease-in-out', label: t('Accelera e rallenta') },
   ]},
   { label: 'Power', options: [
     { value: 'power1.in', label: 'Power1 In' },
