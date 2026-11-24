@@ -70,6 +70,12 @@ class Olobuild_Woo_Quickview_Tile extends Olobuild_Tile_Base {
 
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'olo-woo-qv-' . wp_rand( 10000, 99999 );
+        /*
+         * «Su richiesta» (23 nov 2026): la finestra la apre un'altra tile, con window.oloQvApri( id, elemento ) — la
+         * Pro Gallery coi prodotti di WooCommerce. In questo modo la tile non veste le card della tile Prodotti e non
+         * lascia l'ancora della sezione, così non toglie le card a una Quick View vera della pagina.
+         */
+        $solo = ! empty( $settings['_solo_su_richiesta'] );
 
         $accent    = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $text_col  = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
@@ -552,7 +558,9 @@ class Olobuild_Woo_Quickview_Tile extends Olobuild_Tile_Base {
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <?php // Resta nella tile anche quando la finestra va nel body: dice in quale sezione sta l'istanza. ?>
+        <?php if ( ! $solo ) : ?>
         <span class="<?php echo esc_attr( $uid ); ?>-ancora" data-olo-qv-ancora="<?php echo esc_attr( $uid ); ?>" hidden></span>
+        <?php endif; ?>
         <!-- Quick View Modal Shell -->
         <div class="<?php echo esc_attr( $uid ); ?>-overlay" data-olo-qv-overlay>
             <div class="<?php echo esc_attr( $uid ); ?>-modal" role="dialog" aria-modal="true" aria-label="<?php echo esc_attr( olobuild_t( 'Vista rapida prodotto' ) ); ?>" tabindex="-1" data-olo-qv-dialog>
@@ -765,6 +773,10 @@ class Olobuild_Woo_Quickview_Tile extends Olobuild_Tile_Base {
                 });
             }
 
+            <?php if ( $solo ) : ?>
+            /* Su richiesta: la apre chi la chiama (la Pro Gallery), le card non si vestono. */
+            window.oloQvApri = function(pid, trigger){ if(overlay.isConnected){ openQuickView(pid, trigger); } };
+            <?php else : ?>
             /*
              * Il pulsante «Vista rapida» sulle card prodotto ([data-product-id] con .olo-woo-card-img).
              * Prima le card si cercavano una volta sola, all'avvio: quelle arrivate dopo (una griglia
@@ -859,6 +871,7 @@ class Olobuild_Woo_Quickview_Tile extends Olobuild_Tile_Base {
                 });
                 mo.observe(document.body, { childList: true, subtree: true });
             }
+            <?php endif; ?>
         })();
         </script>
         <?php

@@ -46,6 +46,10 @@ const conZone = (s) => schedaAccesa(s) && schema(s) !== 'elenco'
   && (['sopra', 'riquadro'].includes(s.scheda) || (s.scheda === 'sotto' && ['grid', 'masonry', 'strip'].includes(schema(s))));
 // La galleria ha card di solo testo (citazioni, annunci)?
 const haTesti = (s) => Array.isArray(s.images) && s.images.some(i => i && i.type === 'testo');
+// La Vista rapida dei prodotti: solo dove c'è WooCommerce (i Prodotti fra i tipi pubblici) e negli schemi che la disegnano
+// (non nel nastro che scorre da solo né nell'alveare: hanno una resa loro, senza l'icona della card)
+const conNegozio = (s) => (window.oloData?.postTypes || []).some(p => p && p.value === 'product')
+  && !['strip_marquee', 'strip_split', 'hexgrid'].includes(schema(s));
 
 /**
  * Tile Pro Gallery — split CONTENUTO/STILE (regola universale Olobuild).
@@ -170,6 +174,7 @@ export default {
     scheda_sottotitolo: true,
     scheda_testo: false,
     scheda_icona: 'piu',
+    vista_rapida: false,
     scheda_titolo_size: '',
     scheda_colore: '',
     scheda_font: '',
@@ -324,6 +329,8 @@ export default {
         { key: 'subtitle', label: t('Sottotitolo'), type: 'text' },
         { key: 'text', label: t('Testo'), type: 'text' },
         { key: 'nota', label: t('Nota'), type: 'text' },
+        { key: 'category', label: t('Categoria'), type: 'text' },
+        { key: 'link', label: t('Link'), type: 'link' },
         { key: 'alt', label: t('Testo alternativo'), type: 'text' },
       ] },
     // ─── Foto da un social (al posto di quelle di Media) ───
@@ -451,6 +458,11 @@ export default {
     ], show: s => filtrabile(s) },
     { key: 'per_pagina', label: t('Foto per gruppo o pagina'), type: 'number', min: 2, max: 60, step: 1,
       show: s => filtrabile(s) && !!s.piu_foto },
+
+    // ─── Negozio (comportamento): la Vista rapida dei prodotti di WooCommerce (23 nov 2026) ───
+    { type: 'separator', label: t('Negozio'), show: s => conNegozio(s) },
+    { key: 'vista_rapida', label: t('Vista rapida dei prodotti'), type: 'toggle', show: s => conNegozio(s),
+      description: t('Sulle voci che sono prodotti di WooCommerce (dalla Sorgente dinamica coi Prodotti, o con il link a un prodotto) l’icona della card apre una finestra col prodotto: foto, prezzo, varianti, quantità e «Aggiungi al carrello». Il resto della card porta alla scheda del prodotto. Senza testi sulle foto l’icona compare nell’angolo della foto. Nel builder l’icona si vede ma non apre la finestra.') },
 
     // ─── Lightbox (comportamento) ───
     { type: 'separator', label: t('Lightbox') },
@@ -780,6 +792,9 @@ export default {
     { key: 'scheda_accento', label: t('Colore di categoria e numero'), type: 'color', show: s => schedaAccesa(s) },
     { key: 'scheda_velo', label: t('Velo sotto i testi'), type: 'range', min: 0, max: 100, step: 5, unit: '%',
       show: s => schedaAccesa(s) && schedaSopra(s) && schema(s) !== 'elenco' },
+    { key: 'scheda_velo_alto', label: t('Velo dietro i testi in alto'), type: 'range', min: 0, max: 100, step: 5, unit: '%',
+      description: t('Scurisce la foto dietro le parti in alto (numero, categoria, nota) fino al bordo, qualunque sia l’altezza della loro riga. Vuoto: metà del velo, sul primo quarto della foto.'),
+      show: s => schedaAccesa(s) && schedaSopra(s) && schema(s) !== 'elenco' },
     { key: 'scheda_sfondo', label: t('Sfondo dei testi'), type: 'color',
       show: s => schedaAccesa(s) && (s.scheda === 'riquadro' || (s.scheda === 'sotto' && ['grid', 'masonry', 'strip'].includes(schema(s))) || (s.scheda === 'biglietto' && ['grid', 'masonry'].includes(schema(s)))) },
     { key: 'scheda_sfondo_voce', label: t('Fondo nel colore della voce'), type: 'toggle',
@@ -885,7 +900,9 @@ export default {
       description: t('Quando stanno nella stessa zona, numero e categoria vanno in un riquadro sottile, col numero pieno nel colore della voce.') },
 
     // ─── Nota ───
-    { type: 'separator', label: t('Nota'), show: s => schedaAccesa(s) && Array.isArray(s.images) && s.images.some(i => i && i.nota) },
+    // Anche senza voci scritte a mano: con la «Sorgente dinamica» le voci (e le note, il prezzo dei prodotti) arrivano
+    // solo nel sito, e la sezione spariva proprio dove serviva (23 nov 2026).
+    { type: 'separator', label: t('Nota'), show: s => schedaAccesa(s) && (!Array.isArray(s.images) || !s.images.length || s.images.some(i => i && i.nota)) },
     { key: 'scheda_nota_stile', label: t('Stile della nota'), type: 'select', options: [
       { value: '', label: t('Solo testo') },
       { value: 'grande', label: t('Grande (un prezzo)') },
@@ -997,11 +1014,16 @@ export default {
     { type: 'typography', label: t('Testo dei filtri'), responsiveKeys: [],
       keys: { family: 'filtri_font_family', size: 'filtri_font_size', weight: 'filtri_font_weight', transform: 'filtri_text_transform', letterSpacing: 'filtri_letter_spacing' },
       sizeMin: 9, sizeMax: 22, show: s => filtrabile(s) && !!s.filtri && s.filtri_stile !== 'menu' },
+    { key: 'filtri_posizione', label: t('Posizione dei filtri'), type: 'select', options: [
+      { value: '', label: t('Sopra la galleria') },
+      { value: 'sinistra', label: t('A sinistra, in colonna') },
+    ], show: s => filtrabile(s) && !!s.filtri && !String(s.layout || '').startsWith('strip'),
+      description: t('In colonna i gruppi di filtri, la ricerca e l’ordinamento stanno uno sotto l’altro a sinistra della galleria e restano fermi mentre scorri. Sotto i 960 px tornano sopra la galleria.') },
     { key: 'filtri_allinea', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
-    ], show: s => filtrabile(s) && !!s.filtri },
+    ], show: s => filtrabile(s) && !!s.filtri && s.filtri_posizione !== 'sinistra' },
     { key: 'filtri_colore', label: t('Colore del filtro attivo'), type: 'color', show: s => filtrabile(s) && !!s.filtri },
     { key: 'filtri_colore_testo', label: t('Testo del filtro attivo'), type: 'color', show: s => filtrabile(s) && !!s.filtri,
       description: t('Vuoto = chiaro o scuro da sé, secondo il colore del filtro attivo.') },
@@ -1065,5 +1087,12 @@ export default {
     { key: 'griglia_linee', label: t('Linee fra le celle'), type: 'toggle', show: s => ['grid', 'metro', 'mosaic'].includes(s.layout || 'grid'),
       description: t('Le celle si toccano e le divide una linea sottile, dentro un riquadro: le pareti di loghi.') },
     { key: 'griglia_linee_colore', label: t('Colore delle linee'), type: 'color', show: s => !!s.griglia_linee },
+    { key: 'video_pausa_angolo', label: t('Posizione della pausa'), type: 'select', options: [
+      { value: '', label: t('In alto a sinistra') },
+      { value: 'ad', label: t('In alto a destra') },
+      { value: 'bs', label: t('In basso a sinistra') },
+      { value: 'bd', label: t('In basso a destra') },
+    ], show: s => !!s.video_pausa && s.video_preview === 'autoplay' && !!s.images?.some(i => i.type === 'video'),
+      description: t('L’angolo del video in cui sta il pulsante di pausa: spostalo dove non copre il numero, la categoria o i testi.') },
   ],
 };

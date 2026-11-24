@@ -22,7 +22,7 @@
           <template v-for="(field, fIdx) in section.fields" :key="field.key || ('tsf-' + section.idx + '-' + fIdx)">
             <InspectorField
               v-if="isFieldVisible(field, tileSettings)"
-              :field="field"
+              :field="conOpzioni(field, tileSettings)"
               :modelValue="tileSettings?.[field.key] ?? ''"
               :tileSettings="tileSettings"
               :tileType="tileType"
@@ -57,7 +57,7 @@
           <template v-for="(field, fIdx) in section.fields" :key="field.key || ('tsf0-' + fIdx)">
             <InspectorField
               v-if="isFieldVisible(field, tileSettings)"
-              :field="field"
+              :field="conOpzioni(field, tileSettings)"
               :modelValue="tileSettings?.[field.key] ?? ''"
               :tileSettings="tileSettings"
               :tileType="tileType"
@@ -289,6 +289,17 @@ function filterSectionsBySearch(sections) {
 // Le impostazioni della tile completate coi suoi predefiniti (23 nov 2026): una chiave che il tema non ha salvato non
 // nasconde un campo che sulla pagina agisce, come nel tab Contenuto.
 const conDefault = computed(() => ({ ...(getElementDefaults(props.tileType) || {}), ...(props.tileSettings || {}) }));
+/**
+ * Le opzioni calcolate (`optionsFn`) di un menu, come fa il tab Contenuto (BuilderInspector.resolveField): senza, nel tab
+ * Stile il menu restava vuoto e mostrava «—» (lo «Schema» della Pro Gallery, 23 nov 2026).
+ */
+function conOpzioni(field, settings) {
+  if (typeof field.optionsFn === 'function') {
+    try { return { ...field, options: field.optionsFn(settings || {}) }; } catch (e) { return field; }
+  }
+  return field;
+}
+
 function isFieldVisible(field, settings) {
   const s = !settings || settings === props.tileSettings ? conDefault.value : settings;
   return sharedIsFieldVisible(field, s);

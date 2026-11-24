@@ -19,6 +19,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         'images'              => [],
         'video_preview'       => 'poster',
         'video_pausa'         => false,
+        'video_pausa_angolo'  => '',
         'layout'              => 'grid',
         'layout_family'       => 'classic',
         'puzzle_style'        => 'classic',
@@ -111,12 +112,14 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         'scheda_sottotitolo'  => true,
         'scheda_testo'        => false,
         'scheda_icona'        => 'piu',
+        'vista_rapida'        => false,
         'scheda_titolo_size'  => '',
         'scheda_colore'       => '',
         'scheda_font'         => '',
         'scheda_peso'         => '',
         'scheda_accento'      => '',
         'scheda_velo'         => 55,
+        'scheda_velo_alto'    => '',
         'scheda_sfondo'       => '',
         'scheda_padding'      => 18,
         'elenco_miniatura'    => true,
@@ -125,6 +128,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         'filtri_conteggi'     => true,
         'filtri_stile'        => 'pillole',
         'filtri_allinea'      => 'left',
+        'filtri_posizione'    => '',
         'filtri_colore'       => '',
         'filtri_link'         => false,
         'filtri_multipli'     => false,
@@ -234,8 +238,24 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
 
     private static $script_output = false;
 
+    /*
+     * La Vista rapida dei prodotti (23 nov 2026, utente: «non si può mettere una sorta di "anteprima del prodotto"?»):
+     * sulle voci che sono prodotti di WooCommerce l'icona della card apre la finestra della tile Quick View WC (foto,
+     * prezzo, varianti, quantità, carrello); il resto della card porta alla scheda. Nel builder l'icona resta un segno.
+     */
+    private $qv_on      = false;
+    private $qv_attivo  = false;
+    private $qv_id      = 0;
+    private $qv_usata   = false;
+    private static $qv_finestra = false;
+
     public function render( $settings ) {
         $s = wp_parse_args( $settings, $this->defaults );
+
+        $this->qv_on     = ! empty( $s['vista_rapida'] ) && class_exists( 'WooCommerce' ) && class_exists( 'Olobuild_Woo_Quickview_Tile' );
+        $this->qv_attivo = $this->qv_on && empty( $settings['_builder_mode'] );
+        $this->qv_id     = 0;
+        $this->qv_usata  = false;
 
         // Le foto da un social (YouTube, Vimeo, Flickr, Pinterest, Instagram, RSS) al posto di quelle di «Media»
         $social = $this->feed_social( $s );
@@ -370,6 +390,8 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         }
         $bar      = $this->barra_opzioni( $s, $layout, $filtri_on );
         $barra_on = $bar['filtri'] || $bar['cerca'] || $bar['ordina'];
+        // Filtri in colonna a sinistra (le «faccette»): solo sugli schemi che non sono nastri
+        $filtri_lato = $bar['filtri'] && 'sinistra' === ( $s['filtri_posizione'] ?? '' ) && 0 !== strpos( (string) $layout, 'strip' ) && 'filmstrip' !== $layout;
         $dati_on  = $barra_on || '' !== $bar['piu'] || $bar['mescola'];
         $piastre_d = [];
         $piastre_m = [];
@@ -1256,7 +1278,12 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         }
         if ( $dati_on ) {
             echo $this->barra_css( $uid, $s, $bar );
-            echo ".{$uid} .olo-pg-via{display:none!important}";
+            if ( $filtri_lato ) {
+                echo $this->lato_css( $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS fisso costruito sull'uid interno.
+            }
+            // Classe ripetuta: il biglietto mette le card in display:grid!important (.uid .olo-pg-item:not(...)),
+            // che batteva .uid .olo-pg-via e il filtro non nascondeva niente (23 nov 2026, «qui il filtro non va»)
+            echo ".{$uid}.{$uid} .olo-pg-item.olo-pg-via,.{$uid}.{$uid} .olo-pg-via{display:none!important}";
         }
         // Colonne del tablet (Griglia, Diagonale, Masonry): fra il telefono e il computer
         // Schermi grandi (da 1400 px) e telefoni piccoli (sotto i 480 px): cinque misure in tutto
@@ -1616,8 +1643,15 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             return ob_get_clean();
         }
 
+        $filtri_lato = $filtri_lato && $barra_on && ! $barra_fatta;
+        if ( $filtri_lato ) {
+            echo '<div class="olo-pg-lato ' . esc_attr( $uid ) . '-lato"><div class="olo-pg-lato-filtri">';
+        }
         if ( $barra_on && ! $barra_fatta ) {
             echo $this->barra_html( $uid, $bar, $f_cats, $f_conti, min( $max_visible, $total ), $f_gruppi ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- barra_html() escapa ogni testo e attributo.
+        }
+        if ( $filtri_lato ) {
+            echo '</div><div class="olo-pg-lato-g">';
         }
         if ( $dati_on ) {
             $data_attrs .= ' data-pg-id="' . esc_attr( $uid ) . '"';
@@ -2172,6 +2206,8 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
                 $caption_attr = '';
                 $thumb_attr   = '';
             }
+            // La Vista rapida: se la voce è un prodotto di WooCommerce, l'icona della card apre la finestra del prodotto
+            $this->qv_id = $this->qv_on ? $this->prodotto_della_voce( $img ) : 0;
             // Categorie (filtri), testi per ricerca e ordinamento, misure senza buchi, colore della voce
             $va          = $this->voce_attr( $img, $i, $va_c );
             $cat_attr    = $va['attr'];
@@ -2200,7 +2236,8 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
                         if ( ! empty( $s['video_pausa'] ) ) {
                             // Il pulsante per fermare il video che parte da solo (chi visita deve poter fermare ciò che si muove).
                             // Sta dentro la foto, che può essere un link della lightbox: lo script ferma il clic lì.
-                            echo '<span class="olo-pg-pausa" role="button" tabindex="0" aria-pressed="false" aria-label="' . esc_attr( olobuild_t( 'Metti in pausa il video' ) ) . '" data-pausa="' . esc_attr( olobuild_t( 'Metti in pausa il video' ) ) . '" data-riprendi="' . esc_attr( olobuild_t( 'Riprendi il video' ) ) . '"></span>';
+                            $angolo = in_array( $s['video_pausa_angolo'] ?? '', [ 'ad', 'bs', 'bd' ], true ) ? ' olo-pg-pausa-' . $s['video_pausa_angolo'] : '';
+                            echo '<span class="olo-pg-pausa' . $angolo . '" role="button" tabindex="0" aria-pressed="false" aria-label="' . esc_attr( olobuild_t( 'Metti in pausa il video' ) ) . '" data-pausa="' . esc_attr( olobuild_t( 'Metti in pausa il video' ) ) . '" data-riprendi="' . esc_attr( olobuild_t( 'Riprendi il video' ) ) . '"></span>';
                             $ha_pausa = true;
                         }
                     } elseif ( $use_embed_autoplay ) {
@@ -2249,6 +2286,10 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
                 if ( '' !== $sk_html ) {
                     echo $sk_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- scheda_html() escapa ogni testo.
                 }
+                if ( $this->qv_id && '' === $sk['modo'] ) {
+                    // Senza testi sulle foto l'icona della Vista rapida sta nell'angolo della foto
+                    echo '<span class="olo-pg-qv-angolo">' . $this->qv_icona( 'piu', is_array( $img ) ? (string) ( $img['caption'] ?? '' ) : '' ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- qv_icona() escapa l'etichetta, l'SVG è fisso.
+                }
                 // Hover caption, fino a tre righe (titolo, sottotitolo, testo).
                 if ( '' === $sk['modo'] && $hcaption !== 'none' ) {
                     echo $this->caption_html( $img ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- caption_html() esc_html() ogni riga e esc_attr() ogni classe.
@@ -2281,6 +2322,9 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         if ( $dati_on ) {
             echo $this->piu_html( $uid, $bar, min( $max_visible, $total ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- piu_html() escapa ogni testo.
             echo $this->barra_js(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- script fisso, nessun dato.
+        }
+        if ( $filtri_lato ) {
+            echo '</div></div>'; // la galleria e la colonna dei filtri
         }
 
         if ( $anima_on ) {
@@ -2322,7 +2366,73 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by the shared Olobuild_Tile_Base::build_border_css() helper (sizes int-cast); $uid is a generated unique id.
             echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by the shared Olobuild_Tile_Base border helpers (build_border_hover_css/build_border_effect_css, sizes int-cast) on a generated uid selector.
         }
+        echo $this->qv_finestra( $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS fisso sull'uid interno + resa della tile Quick View WC.
         return ob_get_clean();
+    }
+
+    /** Il prodotto di WooCommerce di una voce: dalla Sorgente dinamica (id «dyn-123») o dal link a mano a un prodotto del sito. */
+    private function prodotto_della_voce( $img ) {
+        if ( ! is_array( $img ) ) {
+            return 0;
+        }
+        $id  = (string) ( $img['id'] ?? '' );
+        $pid = 0 === strpos( $id, 'dyn-' ) ? absint( substr( $id, 4 ) ) : 0;
+        if ( ! $pid ) {
+            $link = trim( (string) ( $img['link'] ?? '' ) );
+            if ( '' !== $link ) {
+                if ( 0 === strpos( $link, '/' ) || 0 === strpos( $link, home_url() ) ) {
+                    $pid = url_to_postid( $link );
+                }
+            }
+        }
+        return ( $pid && 'product' === get_post_type( $pid ) ) ? $pid : 0;
+    }
+
+    /** L'icona della card che apre la Vista rapida del prodotto (sul sito un pulsante; nel builder solo il segno). */
+    private function qv_icona( $nome, $titolo ) {
+        $ico = $this->scheda_icona( $nome ? $nome : 'piu' );
+        if ( '' === $ico ) {
+            $ico = $this->scheda_icona( 'piu' );
+        }
+        $this->qv_usata = true;
+        if ( ! $this->qv_attivo ) {
+            return $ico;
+        }
+        $titolo = trim( wp_strip_all_tags( str_replace( '*', '', $titolo ) ) );
+        $et     = '' !== $titolo ? olobuild_t( 'Vista rapida' ) . ': ' . $titolo : olobuild_t( 'Vista rapida' );
+        $ico    = preg_replace( '/ aria-hidden="true"/', '', $ico, 1 );
+        return str_replace( '<span class="olo-pg-sk-ico', '<span role="button" tabindex="0" aria-haspopup="dialog" aria-label="' . esc_attr( $et ) . '" title="' . esc_attr( olobuild_t( 'Vista rapida' ) ) . '" data-olo-qv-id="' . intval( $this->qv_id ) . '" class="olo-pg-qv olo-pg-sk-ico', $ico );
+    }
+
+    /**
+     * Il CSS dell'icona della Vista rapida e, una volta per pagina, la finestra (la tile Quick View WC «su richiesta») con
+     * lo script che la apre dal clic o da Invio/Spazio sull'icona: prima del link della card, che così non parte.
+     */
+    private function qv_finestra( $uid ) {
+        if ( ! $this->qv_usata ) {
+            return '';
+        }
+        $u = '.' . $uid;
+        $h = '<style>' . "{$u} .olo-pg-qv{cursor:pointer;pointer-events:auto}{$u} .olo-pg-qv:focus-visible{outline:2px solid currentColor;outline-offset:3px}"
+            . "{$u} .olo-pg-qv-angolo{position:absolute;top:.75rem;right:.75rem;z-index:4;color:var(--olo-color-text,#1f2937)}"
+            . "{$u} .olo-pg-qv-angolo .olo-pg-sk-ico{width:34px;height:34px;border-radius:50%;border:0;display:flex;align-items:center;justify-content:center;background:var(--olo-color-background,#fff);box-shadow:0 2px 10px rgb(0 0 0 / .2);transition:transform .35s ease}"
+            . "{$u} .olo-pg-item:hover .olo-pg-qv-angolo .olo-pg-ico-piu{transform:rotate(90deg)}"
+            . "@media (prefers-reduced-motion:reduce){{$u} .olo-pg-qv-angolo .olo-pg-sk-ico{transition:none}}</style>";
+        if ( $this->qv_attivo && ! self::$qv_finestra ) {
+            self::$qv_finestra = true;
+            $qv = class_exists( 'Olobuild_Tile_Manager' ) ? Olobuild_Tile_Manager::instance()->get_tile( 'woo_quickview' ) : null;
+            if ( ! $qv ) {
+                $qv = new Olobuild_Woo_Quickview_Tile();
+            }
+            $h .= $qv->render( [ '_solo_su_richiesta' => true ] );
+            // Niente e commerciale doppia negli script in linea (WordPress la riscrive in entità): condizioni annidate
+            $h .= '<script>(function(){if(window.oloPgQv)return;window.oloPgQv=1;'
+                . 'function apri(e){var b=e.target.closest?e.target.closest(".olo-pg-qv[data-olo-qv-id]"):null;if(!b)return;'
+                . 'if(e.type==="keydown"){if(e.key!=="Enter"){if(e.key!==" ")return}}'
+                . 'if(!window.oloQvApri)return;e.preventDefault();e.stopPropagation();window.oloQvApri(b.getAttribute("data-olo-qv-id"),b)}'
+                . 'document.addEventListener("click",apri,true);document.addEventListener("keydown",apri,true)})();</script>';
+        }
+        return $h;
     }
 
     /**
@@ -3295,10 +3405,21 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         $cats = $this->categorie_voce( $v );
         if ( '' !== ( $o['cat_gruppo'] ?? '' ) ) {
             // Solo i valori del gruppo scelto: con «Tipo: Guida, Livello: Base» e il gruppo «Tipo» resta «Guida»
-            $pre  = $o['cat_gruppo'] . '--';
-            $cats = array_filter( $cats, function ( $kk ) use ( $pre ) {
-                return 0 === strpos( (string) $kk, $pre );
-            }, ARRAY_FILTER_USE_KEY );
+            $pre = $o['cat_gruppo'] . '--';
+            $del = function ( $pre ) use ( $cats ) {
+                return array_filter( $cats, function ( $kk ) use ( $pre ) {
+                    return 0 === strpos( (string) $kk, $pre );
+                }, ARRAY_FILTER_USE_KEY );
+            };
+            $sel = $del( $pre );
+            if ( ! $sel && $cats ) {
+                // Il gruppo scelto non c'è nella voce (nella pagina tradotta «Tipo» è diventato «Type», o il gruppo è
+                // stato rinominato): vale il PRIMO gruppo della voce, invece di togliere la categoria
+                $k0  = (string) array_key_first( $cats );
+                $cut = strpos( $k0, '--' );
+                $sel = false !== $cut ? $del( substr( $k0, 0, $cut + 2 ) ) : [];
+            }
+            $cats = $sel;
         }
         $cat    = implode( ' · ', $cats );
         $num    = $this->numero_html( $n, $o );
@@ -3323,9 +3444,15 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         $nota_h  = '';
         if ( '' !== $nota ) {
             // «Grande»: la prima parola grande e il resto piccolo accanto («€3.40 330 ml»)
-            $nota_h = ( 'grande' === $o['nota_stile'] && preg_match( '/^(\S+)\s+(.+)$/u', $nota, $mm ) )
-                ? '<b>' . esc_html( $mm[1] ) . '</b><small>' . esc_html( $mm[2] ) . '</small>'
-                : esc_html( $nota );
+            // Una parola sola (il prezzo di un prodotto, «€14,00»): grande tutta. Prima restava piccola, e «Grande» non faceva
+            // niente proprio sui prezzi che arrivano dal negozio (23 nov 2026).
+            if ( 'grande' === $o['nota_stile'] && preg_match( '/^(\S+)\s+(.+)$/u', $nota, $mm ) ) {
+                $nota_h = '<b>' . esc_html( $mm[1] ) . '</b><small>' . esc_html( $mm[2] ) . '</small>';
+            } elseif ( 'grande' === $o['nota_stile'] ) {
+                $nota_h = '<b>' . esc_html( $nota ) . '</b>';
+            } else {
+                $nota_h = esc_html( $nota );
+            }
         }
         $nota_cl = 'olo-pg-sk-nota' . ( '' !== $o['nota_stile'] ? ' olo-pg-nota-' . $o['nota_stile'] : '' );
         $camp    = ! empty( $o['campione'] ) ? '<span class="olo-pg-sk-campione olo-pg-a" style="--k:0" aria-hidden="true"></span>' : '';
@@ -3381,7 +3508,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             $testi .= $a( $nota_cl, $nota_h );
         }
         $btn = '' !== $o['pulsante'] ? $a( 'olo-pg-sk-btn', esc_html( $o['pulsante'] ) ) : '';
-        $ico = $this->scheda_icona( $o['icona'] );
+        $ico = $this->qv_id ? $this->qv_icona( $o['icona'], $tit0 ) : $this->scheda_icona( $o['icona'] );
         if ( 'biglietto' === $o['modo'] ) {
             // La categoria va sulla foto, in un'etichetta; sul biglietto la data grande, i testi e il piede
             if ( '' !== $cat_h ) {
@@ -3532,8 +3659,12 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         $col    = $this->safe_color_css( $s['scheda_colore'] ?? '' );
         $acc    = $this->safe_color_css( $s['scheda_accento'] ?? '' );
         $sfondo = $this->safe_color_css( $s['scheda_sfondo'] ?? '' );
-        $pad    = Olobuild_Tile_Utils::sides_css( Olobuild_Tile_Utils::spacing_sides( $s['scheda_padding'] ?? 18, [], [ 18, 18, 18, 18 ] ) );
+        $lati   = Olobuild_Tile_Utils::spacing_sides( $s['scheda_padding'] ?? 18, [], [ 18, 18, 18, 18 ] );
+        $pad    = Olobuild_Tile_Utils::sides_css( $lati );
         $velo   = max( 0, min( 100, absint( $s['scheda_velo'] ?? 55 ) ) ) / 100;
+        // Velo in alto: vuoto = com'era (metà del velo, sfumato sul primo quarto della foto)
+        $velo_a = isset( $s['scheda_velo_alto'] ) && '' !== $s['scheda_velo_alto'] && is_numeric( $s['scheda_velo_alto'] )
+            ? max( 0, min( 100, absint( $s['scheda_velo_alto'] ) ) ) / 100 : null;
         $size   = absint( $s['scheda_titolo_size'] ?? 0 );
         $peso   = preg_match( '/^[1-9]00$/', (string) ( $s['scheda_peso'] ?? '' ) ) ? $s['scheda_peso'] : '';
         $font   = $this->resolve_font_family( $s['scheda_font'] ?? '' );
@@ -3688,7 +3819,19 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
                 $css .= "{$u} .olo-pg-sk-riq .olo-pg-sk-basso,{$u} .olo-pg-sk-riq .olo-pg-zb{align-self:flex-start;max-width:min(100%,20rem);padding:.6rem .8rem;border-radius:.125rem;box-shadow:none}";
             }
         }
-        if ( $velo > 0 ) {
+        if ( null !== $velo_a ) {
+            // Il velo in alto segue i testi che ci stanno (numero grande, categoria, nota): copre la loro riga fino al
+            // bordo della foto e sfuma 2,5rem più sotto, qualunque sia l'altezza della riga. Senza, su una foto chiara in
+            // alto le scritte piccole sparivano (il velo storico copre solo il primo quarto, a metà intensità).
+            if ( $velo > 0 && ! $riquadro ) {
+                $css .= "{$u} .olo-pg-sk::before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(to top,rgb(0 0 0 / " . round( $velo, 2 ) . ') 0%,rgb(0 0 0 / ' . round( $velo * .45, 2 ) . ') 34%,transparent 62%)}';
+            }
+            if ( $velo_a > 0 ) {
+                $va   = round( $velo_a, 2 );
+                $css .= "{$u} .olo-pg-sk-alto,{$u} .olo-pg-zr-a{position:relative}";
+                $css .= "{$u} .olo-pg-sk-alto::before,{$u} .olo-pg-zr-a:not(:empty)::before{content:'';position:absolute;z-index:-1;pointer-events:none;top:-" . intval( $lati['top'] ) . 'px;left:-' . intval( $lati['left'] ) . 'px;right:-' . intval( $lati['right'] ) . "px;bottom:-2.5rem;background:linear-gradient(to top,transparent 0,rgb(0 0 0 / {$va}) 2.5rem)}";
+            }
+        } elseif ( $velo > 0 ) {
             $v1 = round( $velo, 2 );
             $v2 = round( $velo * .45, 2 );
             $v3 = round( $velo * .5, 2 );
@@ -3762,7 +3905,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         if ( 'chiaro' === $sc ) {
             $css .= "{$cat}{display:inline-flex;align-items:center;gap:.45em;border:1px solid color-mix(in srgb,var(--olo-color-text,#222) 12%,transparent);padding:.5em .65em;border-radius:.25rem;background:color-mix(in srgb,var(--olo-color-background,#fff) 94%,transparent);color:var(--olo-color-text,#222)}";
         } elseif ( 'scuro' === $sc ) {
-            $css .= "{$cat}{display:inline-flex;align-items:center;gap:.45em;border:1px solid rgb(255 255 255 / .22);padding:.5em .8em;border-radius:100vmax;background:rgb(0 0 0 / .42);color:#fff;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}";
+            $css .= "{$cat}{display:inline-flex;align-items:center;gap:.45em;border:1px solid rgb(255 255 255 / .22);padding:.5em .8em;border-radius:100vmax;background:rgb(0 0 0 / .72);color:#fff;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}";
         }
         if ( ! empty( $s['scheda_categoria_punto'] ) ) {
             $css .= "{$cat}::before{content:'';flex:0 0 auto;display:inline-block;width:.6em;height:.6em;border-radius:50%;background:{$tinta};margin-right:.5em;vertical-align:.02em}";
@@ -3770,7 +3913,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         }
         $css .= "{$u} .olo-pg-cat-ico{display:inline-flex;margin-right:.4em}{$u} .olo-pg-cat-ico svg{width:1.1em;height:1.1em}";
         // Il numero: il totale attenuato, l'icona davanti, il riquadro con la categoria
-        $css .= "{$u} .olo-pg-num-tot{opacity:.55}{$u} .olo-pg-num-ico{display:inline-flex;vertical-align:-.15em;margin-right:.45em;color:{$tinta}}{$u} .olo-pg-num-ico svg{width:1.15em;height:1.15em}";
+        $css .= "{$u} .olo-pg-num-tot{opacity:.72}{$u} .olo-pg-num-ico{display:inline-flex;vertical-align:-.15em;margin-right:.45em;color:{$tinta}}{$u} .olo-pg-num-ico svg{width:1.15em;height:1.15em}";
         $css .= "{$u} .olo-pg-sk-box{display:inline-flex;align-items:center;gap:.6em;padding:.3em .55em .3em .3em;border:1px solid color-mix(in srgb,currentColor 28%,transparent);border-radius:.2rem;font-family:{$mono};font-size:10px;letter-spacing:.12em;text-transform:uppercase;line-height:1}";
         $css .= "{$u} .olo-pg-sk-box .olo-pg-sk-num{margin:0;padding:.35em .4em;border-radius:.15rem;background:{$tinta};color:var(--pg-cf,#fff);font-weight:700;opacity:1;font-size:inherit;letter-spacing:.04em}";
         $css .= "{$u} .olo-pg-sk-box .olo-pg-sk-cat{border:0;padding:0;background:none;color:inherit;font-size:inherit;letter-spacing:inherit}";
@@ -3912,11 +4055,11 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         $stile = in_array( $s['filtri_stile'] ?? '', [ 'pillole', 'contorno', 'sottolineato', 'bordate', 'semplice', 'caselle' ], true ) ? $s['filtri_stile'] : 'pillole';
         $all   = [ 'left' => 'flex-start', 'center' => 'center', 'right' => 'flex-end' ][ $s['filtri_allinea'] ?? 'left' ] ?? 'flex-start';
         $acc   = $this->safe_color_css( $s['filtri_colore'] ?? '' ) ?: 'var(--olo-color-primary)';
-        $acf   = $this->safe_color_css( $s['filtri_colore_testo'] ?? '' ) ?: $this->testo_su( $acc );
+        $acf   = $this->safe_color_css( $s['filtri_colore_testo'] ?? '' ) ?: $this->testo_su_dich( $acc );
         $linea = 'color-mix(in srgb,currentColor 22%,transparent)';
         $css   = "{$u}{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:{$all};align-items:center;margin:0 0 1.25rem}";
         $css  .= "{$u} button{font:inherit;font-size:13px;line-height:1;cursor:pointer;padding:.6em 1em;border-radius:100vmax;border:1px solid transparent;background:transparent;color:inherit;display:inline-flex;align-items:center;transition:background-color .2s ease,color .2s ease,border-color .2s ease;-webkit-appearance:none;appearance:none}";
-        $css  .= "{$u} button sup{font-size:.7em;margin-left:.3em;opacity:.6;vertical-align:super;line-height:0}";
+        $css  .= "{$u} button sup{font-size:.7em;margin-left:.3em;opacity:.85;vertical-align:super;line-height:0}";
         $css  .= "{$u} button:focus-visible{outline:2px solid {$acc};outline-offset:2px}";
         if ( 'pillole' === $stile ) {
             $css .= "{$u} button{background:color-mix(in srgb,currentColor 7%,transparent)}";
@@ -3969,8 +4112,8 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         $cs = (string) ( $s['filtri_conteggi_stile'] ?? '' );
         if ( in_array( $cs, [ 'accanto', 'punto' ], true ) ) {
             // I conteggi accanto al nome, piccoli e nel carattere a spaziatura fissa («Guida 10»)
-            $css .= "{$u} button sup,.{$uid}-barra .olo-pg-tutti sup{position:static;top:auto;vertical-align:baseline;line-height:inherit;font-size:.8em;margin-left:.6em;opacity:.55;font-family:" . $this->resolve_font_family( 'mono' ) . ";font-variant-numeric:tabular-nums}";
-            $css .= "{$u} button.attivo sup,.{$uid}-barra .olo-pg-tutti.attivo sup{opacity:.75}";
+            $css .= "{$u} button sup,.{$uid}-barra .olo-pg-tutti sup{position:static;top:auto;vertical-align:baseline;line-height:inherit;font-size:.8em;margin-left:.6em;opacity:.85;font-family:" . $this->resolve_font_family( 'mono' ) . ";font-variant-numeric:tabular-nums}";
+            $css .= "{$u} button.attivo sup,.{$uid}-barra .olo-pg-tutti.attivo sup{opacity:.95}";
             if ( 'punto' === $cs ) {
                 $css .= "{$u} button sup::before,.{$uid}-barra .olo-pg-tutti sup::before{content:'·';margin-right:.6em}";
             }
@@ -3983,7 +4126,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             $css .= "{$u} button,.{$uid}-barra .olo-pg-tutti{{$tipo}}";
         }
         // Le foto tolte dal filtro
-        $css .= '.' . $uid . ' .olo-pg-via{display:none!important}';
+        $css .= '.' . $uid . '.' . $uid . ' .olo-pg-item.olo-pg-via,.' . $uid . '.' . $uid . ' .olo-pg-via{display:none!important}';
         return $css;
     }
 
@@ -4067,6 +4210,28 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         return '' === $h ? '' : '<div class="olo-pg-barra ' . esc_attr( $uid ) . '-barra">' . $h . '</div>';
     }
 
+    /**
+     * I filtri in colonna a sinistra della galleria (le «faccette» dei negozi e degli archivi): dai 960 px in su i gruppi,
+     * la ricerca e l'ordinamento stanno uno sotto l'altro, ogni filtro su una riga con il conteggio in fondo, e la colonna
+     * resta ferma mentre la galleria scorre. Sotto i 960 px la barra torna sopra la galleria, com'era.
+     */
+    private function lato_css( $uid ) {
+        $u   = '.' . $uid;
+        $css = '@media(min-width:960px){';
+        $css .= "{$u}-lato{display:grid;grid-template-columns:minmax(11rem,15rem) minmax(0,1fr);gap:2.5rem;align-items:start}";
+        $css .= "{$u}-lato>.olo-pg-lato-filtri{position:sticky;top:6rem}";
+        $css .= "{$u}-lato {$u}-barra{flex-direction:column;flex-wrap:nowrap;align-items:stretch;justify-content:flex-start;gap:1.6rem;margin:0}";
+        $css .= "{$u}-lato {$u}-barra .olo-pg-gruppi,{$u}-lato {$u}-barra .olo-pg-gruppi-linea{flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:1.6rem}";
+        $css .= "{$u}-lato {$u}-filtri{flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:.3rem;margin:0;border:0;padding:0}";
+        $css .= "{$u}-lato {$u}-filtri .olo-pg-filtri-nome{min-width:0;margin:0 0 .4rem;align-self:flex-start}";
+        $css .= "{$u}-lato {$u}-filtri button,{$u}-lato {$u}-barra .olo-pg-tutti{width:100%;justify-content:flex-start;text-align:left}";
+        $css .= "{$u}-lato {$u}-filtri button sup,{$u}-lato {$u}-barra .olo-pg-tutti sup{margin-left:auto;padding-left:.75em}";
+        $css .= "{$u}-lato {$u}-barra .olo-pg-azzera:not(.olo-pg-tutti){align-self:flex-start}";
+        $css .= "{$u}-lato {$u}-barra .olo-pg-barra-destra{margin-left:0;width:100%;flex-direction:column;align-items:stretch}";
+        $css .= "{$u}-lato {$u}-barra .olo-pg-cerca{width:100%;min-width:0}{$u}-lato {$u}-barra .olo-pg-cerca-sopra{max-width:none}";
+        return $css . '}';
+    }
+
     /** Le opzioni della barra e del «carica altri», già pulite. */
     private function barra_opzioni( $s, $layout, $filtri_on ) {
         $ok    = in_array( $layout, self::SCHEMI_FILTRI, true );
@@ -4126,7 +4291,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         $css .= "{$u}-barra .olo-pg-cerca-sopra{position:relative;flex:1 1 100%;max-width:34rem;display:flex;align-items:center}";
         $css .= "{$u}-barra .olo-pg-cerca-sopra svg{position:absolute;left:1.1em;color:{$acc};pointer-events:none}";
         $css .= "{$u}-barra .olo-pg-cerca-sopra .olo-pg-cerca{width:100%;min-width:0;font-size:14px;padding:.95em 1em .95em 2.9em;border-radius:.5rem;background:var(--olo-color-background,transparent);color:var(--olo-color-text,inherit);border-color:color-mix(in srgb,currentColor 14%,transparent)}";
-        $css .= "{$u} .olo-pg-pag{display:none!important}";
+        $css .= "{$u}{$u} .olo-pg-item.olo-pg-pag,{$u}{$u} .olo-pg-pag{display:none!important}";
         $css .= "{$u}-piu{display:flex;justify-content:center;flex-wrap:wrap;gap:.4rem;margin:1.5rem 0 0}";
         $css .= "{$u}-piu button{font:inherit;font-size:13px;cursor:pointer;color:inherit;background:transparent;border:1px solid color-mix(in srgb,currentColor 22%,transparent);border-radius:100vmax;padding:.7em 1.4em;min-width:2.8em;display:inline-flex;align-items:center;justify-content:center;gap:.5em;transition:background-color .2s ease,color .2s ease,border-color .2s ease}";
         $css .= "{$u}-piu button svg{transition:transform .25s ease}{$u}-piu button:hover svg{transform:translateY(2px)}";
@@ -4139,7 +4304,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         $css .= "{$u}-barra .olo-pg-gruppi{display:flex;flex-direction:column;gap:.6rem;flex:1 1 100%;min-width:0}";
         $css .= "{$u}-barra .olo-pg-gruppi.olo-pg-gruppi-menu{flex-direction:row;flex-wrap:wrap;align-items:center;gap:.6rem 1.2rem}";
         $css .= "{$u}-barra .olo-pg-gruppi .olo-pg-filtri{margin:0}";
-        $css .= "{$u}-barra .olo-pg-filtri-nome{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.6;min-width:7.5em;align-self:center}";
+        $css .= "{$u}-barra .olo-pg-filtri-nome{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.78;min-width:7.5em;align-self:center}";
         $css .= "{$u}-barra .olo-pg-gruppo-menu{display:inline-flex;align-items:center;gap:.5rem}{$u}-barra .olo-pg-gruppo-menu .olo-pg-filtri-nome{min-width:0}";
         $css .= "{$u}-barra .olo-pg-azzera{align-self:flex-start;font:inherit;font-size:12px;background:none;border:0;padding:.2em 0;color:inherit;text-decoration:underline;text-underline-offset:.2em;cursor:pointer;opacity:.75}";
         $css .= "{$u}-barra .olo-pg-azzera:hover{opacity:1}{$u}-barra .olo-pg-azzera:focus-visible{outline:2px solid {$acc};outline-offset:2px}";
@@ -4148,7 +4313,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         $css .= "{$u}-barra .olo-pg-gruppi-linea .olo-pg-filtri{flex:0 1 auto}";
         $css .= "{$u}-barra .olo-pg-gruppi-linea .olo-pg-filtri-nome{min-width:0;margin-right:.35rem;font-family:" . $this->resolve_font_family( 'mono' ) . ";font-size:10px;font-weight:500}";
         $css .= "{$u}-barra .olo-pg-azzera.olo-pg-tutti{align-self:center;text-decoration:none;opacity:1;font-size:13px;font-weight:600;line-height:1;padding:.6em 1em;border:1px solid color-mix(in srgb,currentColor 22%,transparent);border-radius:.4rem;display:inline-flex;align-items:center}";
-        $css .= "{$u}-barra .olo-pg-azzera.olo-pg-tutti.attivo{background:{$acc};border-color:{$acc};color:" . ( $this->safe_color_css( $s['filtri_colore_testo'] ?? '' ) ?: $this->testo_su( $acc ) ) . "}";
+        $css .= "{$u}-barra .olo-pg-azzera.olo-pg-tutti.attivo{background:{$acc};border-color:{$acc};color:" . ( $this->safe_color_css( $s['filtri_colore_testo'] ?? '' ) ?: $this->testo_su_dich( $acc ) ) . "}";
         $css .= "@media(max-width:640px){{$u}-barra .olo-pg-filtri-nome{min-width:100%}{$u}-barra .olo-pg-gruppi-linea .olo-pg-filtri-nome{min-width:0}}";
         return $css;
     }
@@ -4340,6 +4505,18 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
     }
 
     /**
+     * Come testo_su(), da mettere dopo «color:» in fondo a una regola. Con un token del tema (var(--olo-color-text), il verde
+     * chiaro di un'aurora) il PHP non sa se il colore è chiaro: il bianco resta per i browser vecchi, poi il colore relativo
+     * sceglie da sé nero o bianco dalla luminosità vera (24 nov 2026: il filtro attivo «Tutta la tavolozza» era chiaro su chiaro).
+     */
+    private function testo_su_dich( $col ) {
+        if ( preg_match( '/^#([0-9a-f]{3}|[0-9a-f]{6})$/i', (string) $col ) ) {
+            return $this->testo_su( $col );
+        }
+        return '#fff;color:oklch(from ' . $col . ' clamp(0,(0.7 - l) * 100,1) 0 0)';
+    }
+
+    /**
      * LA CARD DI SOLO TESTO: categoria e numero in alto, il testo grande (una citazione, un annuncio), la firma e una
      * riga piccola. Con un link porta lì, con la freccia; senza resta un riquadro fra le foto.
      */
@@ -4456,6 +4633,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         return '<style>.olo-pg-pausa{position:absolute;top:.85rem;left:.85rem;z-index:6;width:2.25rem;height:2.25rem;border-radius:50%;'
             . 'border:2px solid #fff;background:rgb(0 0 0 / .45);cursor:pointer;display:flex;align-items:center;justify-content:center;'
             . '-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);transition:transform .2s ease}'
+            . '.olo-pg-pausa-ad{left:auto;right:.85rem}.olo-pg-pausa-bs{top:auto;bottom:.85rem}.olo-pg-pausa-bd{top:auto;bottom:.85rem;left:auto;right:.85rem}'
             . '.olo-pg-pausa:hover{transform:scale(1.06)}.olo-pg-pausa:focus-visible{outline:2px solid #fff;outline-offset:3px}'
             . '.olo-pg-pausa::before{content:"";width:.7rem;height:.8rem;border-left:.22rem solid #fff;border-right:.22rem solid #fff;box-sizing:border-box}'
             . '.olo-pg-pausa[aria-pressed="true"]::before{width:0;height:0;border:0;border-left:.62rem solid #fff;border-top:.4rem solid transparent;border-bottom:.4rem solid transparent;margin-left:.15rem}</style>'

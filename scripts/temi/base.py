@@ -243,6 +243,9 @@ def rinforza(tema, o, r):
 def write_theme(theme, builds, media):
     """theme: il dizionario di theme.json; builds: {file.json: nodi | page(nodi, …)}; media: nomi dei file della libreria usati."""
     out = os.path.join(THEMES, theme['id'])
+    # Le foto che la Pro Gallery su misura aggiunge al tema (gallerie_pro.py, secondo giro): fra i media, per check()
+    import gallerie_pro
+    media = list(media) + [m for m in gallerie_pro.media_di(theme['id']) if m not in media]
     r = json.load(open(RINFORZI, encoding='utf-8')).get(theme['id'], {}) if os.path.exists(RINFORZI) else {}
     for built in builds.values():
         niente_velati(built)
@@ -280,6 +283,7 @@ def write_theme(theme, builds, media):
     import linee_grafiche  # la linea grafica del tema (forme, colonne, disposizioni delle tile ripetute)
     import strutture  # le disposizioni delle sezioni ripetute (FAQ, contatti, mappa, foto, aperture, fasce video)
     import gallerie  # la regia delle Galleria pro (schema, entrata, passaggio, schermo intero)
+    import gallerie_pro  # la Pro Gallery su misura nei temi Pro (vecchie Galleria e due negozi coi prodotti veri)
     import titoli_stile  # la voce dei titoli di sezione del tema (occhiello, separatore, righe, seconda riga)
     import piedi  # la disposizione del piè di pagina (nome in fondo, in cima, a sinistra, al centro)
     for name, built in builds.items():
@@ -290,6 +294,7 @@ def write_theme(theme, builds, media):
         linee_grafiche.applica_tema(theme['id'], name, built)
         strutture.applica_tema(theme['id'], name, built)
         gallerie.applica_tema(theme['id'], name, built)
+        gallerie_pro.applica_tema(theme['id'], name, built)
         titoli_stile.applica_tema(theme['id'], name, built)
         piedi.applica_tema(theme['id'], name, built)
         nodes = built['content'] if isinstance(built, dict) else built

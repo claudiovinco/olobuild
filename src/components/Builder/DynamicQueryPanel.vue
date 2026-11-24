@@ -325,7 +325,10 @@ function opzioniCampoVoce(field) {
   const foto = WP_FIELD_OPTS.filter((o) => o.value === '' || o.value === 'featured_image');
   if (field?.type === 'image') return [...foto, ...campiDelGenere(['image'])];
   if (field?.type === 'media') return [...foto, ...campiDelGenere(['image', 'url'])];
-  return [...WP_FIELD_OPTS.filter((o) => o.value !== 'featured_image' && o.value !== 'permalink'), ...campiDelGenere(['text', 'html'])];
+  // Coi prodotti di WooCommerce anche il prezzo (adesso, col saldo se c'è, e pieno): la Pro Gallery che legge il negozio.
+  const negozio = localQuery.value.post_type === 'product'
+    ? [{ value: 'wc_price', label: t('Prezzo (WooCommerce)') }, { value: 'wc_regular_price', label: t('Prezzo pieno (WooCommerce)') }] : [];
+  return [...WP_FIELD_OPTS.filter((o) => o.value !== 'featured_image' && o.value !== 'permalink'), ...negozio, ...campiDelGenere(['text', 'html'])];
 }
 
 // ── Foto di un campo ──

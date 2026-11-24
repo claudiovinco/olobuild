@@ -168,6 +168,17 @@ class Olobuild_Dynamic_Content {
             case 'post_title':
                 return get_the_title( $post_id );
 
+            case 'wc_price':
+            case 'wc_regular_price':
+                // Il prezzo di un prodotto di WooCommerce nella valuta del negozio («€14,00»), senza tag: quello di
+                // adesso (col saldo, se c'è) o quello pieno. Per la Pro Gallery che legge il negozio (23 nov 2026).
+                if ( ! function_exists( 'wc_get_product' ) || ! function_exists( 'wc_price' ) ) return '';
+                $prodotto = wc_get_product( $post_id );
+                if ( ! $prodotto ) return '';
+                $prezzo = 'wc_price' === $field ? $prodotto->get_price() : $prodotto->get_regular_price();
+                if ( '' === (string) $prezzo ) return '';
+                return trim( html_entity_decode( wp_strip_all_tags( wc_price( (float) $prezzo ) ), ENT_QUOTES, 'UTF-8' ) );
+
             case 'post_excerpt':
                 $post = get_post( $post_id );
                 if ( $post ) {
