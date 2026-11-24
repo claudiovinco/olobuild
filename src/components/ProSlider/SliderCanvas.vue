@@ -56,9 +56,10 @@
         :class="[
           'mb-absolute mb-cursor-move mb-select-none',
           layer.id === selectedLayerId ? 'mb-ring-2 mb-ring-primary-400 mb-ring-offset-1 mb-ring-offset-transparent' : '',
+          layer.id !== selectedLayerId && selectedIds.has(layer.id) ? 'mps-canvas-insieme' : '',
           layer.initiallyHidden ? 'mps-canvas-initially-hidden' : ''
         ]"
-        :style="layerStyle(layer)"
+        :style="[layerStyle(layer), lockedIds.has(layer.id) ? { pointerEvents: 'none' } : null]"
         @pointerdown.stop="startDrag($event, layer)"
         @dblclick.stop="onDblClick(layer)"
       >
@@ -165,6 +166,10 @@ const props = defineProps({
   canvasMaxWidth: { type: Number, default: null },
   zoom: { type: Number, default: 1 },
   hiddenIds: { type: Set, default: () => new Set() },
+  // Bloccati nel pannello Livelli (1.4.1424): sulla tela non si prendono e i clic passano al livello sotto
+  lockedIds: { type: Set, default: () => new Set() },
+  // Più livelli scelti insieme (1.4.1428): si spostano insieme trascinandone uno
+  selectedIds: { type: Set, default: () => new Set() },
   // Anteprime (1.4.1352): lo scorrimento della pagina (0–100, null = vista ferma per modificare) e lo stato scelto
   // ({ nome: valore }, null = tutti i livelli), con i valori degli stati all'avvio (impostazione «Stati all'avvio»).
   scrollPreview: { type: Number, default: null },
@@ -172,7 +177,7 @@ const props = defineProps({
   initialStates: { type: Object, default: () => ({}) },
 });
 
-const emit = defineEmits(['deselect', 'select-layer', 'update-layer', 'update-keyframe', 'start-edit', 'stop-edit']);
+const emit = defineEmits(['deselect', 'select-layer', 'update-layer', 'update-layers', 'update-keyframe', 'start-edit', 'stop-edit']);
 
 // La sovrapposizione dello sfondo, uniforme o sfumata dall'alto e dal basso (gemella di class-proslider-tile.php).
 function velo(bg) {
@@ -555,15 +560,23 @@ function getIconSvg(name) {
 let dragState = null;
 
 function startDrag(e, layer) {
-  emit('select-layer', layer.id);
+  // Maiusc, Ctrl o Cmd + clic: aggiunge o toglie il livello dalla scelta (1.4.1428). Cliccando uno dei livelli già
+  // scelti insieme la scelta resta, così si trascinano tutti; se non lo si sposta, al rilascio resta solo lui.
+  const aggiungi = e.shiftKey || e.ctrlKey || e.metaKey;
+  const nelGruppo = !aggiungi && props.selectedIds.size > 1 && props.selectedIds.has(layer.id);
+  emit('select-layer', layer.id, { aggiungi, mantieni: nelGruppo });
+  if (aggiungi) return;
   if (props.editingLayerId === layer.id) return;
 
   const rect = canvasEl.value.getBoundingClientRect();
   const hasTimeline = layer.timeline?.keyframes?.length >= 2;
   const isTimelineActive = hasTimeline && props.timelinePlayhead != null && layer.id === props.selectedLayerId;
 
-  let origX = layer.x;
-  let origY = layer.y;
+  // la posizione di partenza è quella dello schermo che si sta guardando (prima quella del computer: su tablet e
+  // telefono il livello saltava al primo spostamento)
+  const vista = resolveLayerValues(layer);
+  let origX = Number(vista.x) || 0;
+  let origY = Number(vista.y) || 0;
   let timelineKfId = null;
 
   if (isTimelineActive) {
@@ -596,6 +609,13 @@ function startDrag(e, layer) {
     canvasH: rect.height / effectiveScale.value,
     mode: 'drag',
     timelineKfId,
+    mosso: false,
+    nelGruppo,
+    // gli altri livelli scelti insieme (non bloccati), ognuno dalla sua posizione su questo schermo
+    insieme: nelGruppo && !timelineKfId
+      ? layers.value.filter((l) => props.selectedIds.has(l.id) && l.id !== layer.id && !props.lockedIds.has(l.id))
+        .map((l) => { const v = resolveLayerValues(l); return { id: l.id, x: Number(v.x) || 0, y: Number(v.y) || 0 }; })
+      : [],
   };
   e.target.setPointerCapture?.(e.pointerId);
   window.addEventListener('pointermove', onPointerMove);
@@ -650,8 +670,13 @@ function onPointerMove(e) {
     const pctY = (dy / canvasH.value) * 100;
     const newX = round1(Math.max(0, Math.min(100, dragState.origX + pctX)));
     const newY = round1(Math.max(0, Math.min(100, dragState.origY + pctY)));
+    if (Math.abs(dx) + Math.abs(dy) > 2) dragState.mosso = true;
     if (dragState.timelineKfId) {
       emit('update-keyframe', dragState.timelineKfId, { props: { x: newX, y: newY } });
+    } else if (dragState.insieme.length) {
+      const sx = newX - dragState.origX, sy = newY - dragState.origY;
+      emit('update-layers', [{ id: dragState.layerId, x: newX, y: newY },
+        ...dragState.insieme.map((o) => ({ id: o.id, x: round1(o.x + sx), y: round1(o.y + sy) }))]);
     } else {
       emit('update-layer', dragState.layerId, { x: newX, y: newY });
     }
@@ -676,6 +701,8 @@ function onPointerMove(e) {
 }
 
 function onPointerUp() {
+  // cliccato (non trascinato) uno dei livelli scelti insieme: resta scelto solo lui
+  if (dragState && dragState.mode === 'drag' && dragState.nelGruppo && !dragState.mosso) emit('select-layer', dragState.layerId, {});
   dragState = null;
   window.removeEventListener('pointermove', onPointerMove);
   window.removeEventListener('pointerup', onPointerUp);
@@ -720,6 +747,8 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* Gli altri livelli scelti insieme (1.4.1428): contorno tratteggiato, il principale ha l'anello pieno */
+.mps-canvas-insieme { outline: 2px dashed #60a5fa; outline-offset: 2px; }
 .mps-canvas-initially-hidden {
   opacity: 0.4;
   outline: 1px dashed rgba(239, 68, 68, 0.6);

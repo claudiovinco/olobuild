@@ -13,60 +13,8 @@
       </button>
     </div>
 
-    <!-- Layer list (reversed: top of stack = left) -->
-    <div class="mb-flex mb-items-center mb-gap-1 mb-px-3 mb-py-2 mb-overflow-x-auto">
-      <span v-if="!layers.length" class="mb-text-[10px] mb-text-gray-500 mb-italic">{{ t('Nessun livello in questa slide') }}</span>
-      <div
-        v-for="(layer, idx) in reversedLayers"
-        :key="layer.id"
-        @click="$emit('select', layer.id)"
-        :class="[
-          'mb-flex mb-items-center mb-gap-1 mb-px-2 mb-py-1 mb-rounded mb-text-[11px] mb-cursor-pointer mb-transition-colors mb-shrink-0 mb-border',
-          layer.id === selectedId
-            ? 'mb-border-primary-400 mb-bg-primary-900/30 mb-text-primary-300'
-            : 'mb-border-gray-700 mb-bg-gray-800 mb-text-gray-400 hover:mb-border-gray-500'
-        ]"
-      >
-        <span class="mps-lb-ico mb-opacity-60" aria-hidden="true" v-html="svg(typeIcon(layer.type))"></span>
-        <span class="mb-max-w-32 mb-truncate" :title="layerLabel(layer)">{{ layerLabel(layer) }}</span>
-        <!-- Cosa fa il livello (1.4.1352): un bollino per animazione, la spiegazione nel suggerimento -->
-        <span v-for="a in animazioni(layer)" :key="a.k" :class="['mps-lb-anim', 'mps-lb-anim--' + a.k]" :title="a.titolo" :aria-label="a.titolo">{{ a.testo }}</span>
-        <span v-if="hasResponsiveOverride(layer)" class="mb-w-1.5 mb-h-1.5 mb-rounded-full mb-bg-yellow-400 mb-shrink-0" :title="t('Ha valori propri su qualche schermo')"></span>
-
-        <!-- Move up (toward front / higher z-index) -->
-        <button
-          @click.stop="$emit('move-up', layer.id)"
-          :disabled="idx === 0"
-          :class="['mps-move-btn', idx === 0 ? 'mps-move-disabled' : '']"
-          :title="t('Porta avanti')"
-        >&#9650;</button>
-
-        <!-- Move down (toward back / lower z-index) -->
-        <button
-          @click.stop="$emit('move-down', layer.id)"
-          :disabled="idx === reversedLayers.length - 1"
-          :class="['mps-move-btn', idx === reversedLayers.length - 1 ? 'mps-move-disabled' : '']"
-          :title="t('Manda indietro')"
-        >&#9660;</button>
-
-        <!-- Visibility toggle -->
-        <button
-          @click.stop="$emit('toggle-visibility', layer.id)"
-          :class="['mps-bar-btn mps-eye-btn', hiddenIds.has(layer.id) ? 'mps-eye-hidden' : '']"
-          :title="hiddenIds.has(layer.id) ? t('Mostra') : t('Nascondi')"
-        >
-          <svg v-if="!hiddenIds.has(layer.id)" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>
-          </svg>
-          <svg v-else width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/>
-          </svg>
-        </button>
-
-        <!-- Delete -->
-        <button @click.stop="$emit('remove', layer.id)" class="mps-bar-btn hover:mb-text-red-400" :title="t('Elimina')">&times;</button>
-      </div>
-    </div>
+    <!-- La fila orizzontale dei livelli è diventata il pannello Livelli a gruppi nella colonna di sinistra
+         (LayerTree.vue, 1.4.1424): qui restano i pulsanti per aggiungere un livello. -->
   </div>
 </template>
 

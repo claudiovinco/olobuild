@@ -57156,3 +57156,489 @@ msgstr "La etiqueta de la nota (y la línea interior, si la hay) toma los colore
 #: licenza-1.4.1345
 msgid "Tipo di sito"
 msgstr "Tipo de sitio"
+
+#: licenza-1.4.1345
+msgid "Colore del contorno"
+msgstr "Color del contorno"
+
+msgid "Il contorno attorno al livello quando lo si raggiunge con la tastiera e, con «Imposta uno stato», quando è quello scelto. Vuoto = bianco; trasparente = nessun contorno."
+msgstr "El contorno alrededor de la capa cuando se llega a ella con el teclado y, con «Fijar un estado», cuando es la elegida. Vacío = blanco; transparente = sin contorno."
+
+msgid "Quando si vede"
+msgstr "Cuándo se ve"
+
+msgid "Scegli il livello cliccabile a cui è legato questo: il nome e i valori dello stato qui sotto si scrivono da soli. «Prima di ogni scelta» lo mostra finché non si è cliccato niente."
+msgstr "Elige la capa clicable a la que está ligada esta: el nombre y los valores del estado de abajo se escriben solos. «Antes de cualquier elección» la muestra mientras no se haya hecho clic en nada."
+
+msgid "Come scritto qui sotto"
+msgstr "Como está escrito abajo"
+
+msgid "Quando si sceglie %s"
+msgstr "Cuando se elige %s"
+
+msgid "Finché non si sceglie %s"
+msgstr "Hasta que se elige %s"
+
+msgid "Prima di ogni scelta (%s)"
+msgstr "Antes de cualquier elección (%s)"
+
+msgid "questo livello"
+msgstr "esta capa"
+
+#: licenza-1.4.1345
+msgid "Scene dei temi"
+msgstr "Escenas de los temas"
+
+msgid "Parti da uno Slider Pro dei temi: poi cambi testi, foto e link."
+msgstr "Parte de un Slider Pro de los temas: luego cambias textos, fotos y enlaces."
+
+msgid "Cerca un tema o una parola"
+msgstr "Busca un tema o una palabra"
+
+msgid "Tipo di scena"
+msgstr "Tipo de escena"
+
+msgid "Carico le scene…"
+msgstr "Cargando las escenas…"
+
+msgid "Nessuna scena con questa ricerca."
+msgstr "Ninguna escena con esta búsqueda."
+
+msgid "1 slide"
+msgstr "1 diapositiva"
+
+msgid "%d slide"
+msgstr "%d diapositivas"
+
+msgid "con le schede"
+msgstr "con pestañas"
+
+msgid "Tutte le scene"
+msgstr "Todas las escenas"
+
+msgid "%d livelli"
+msgstr "%d capas"
+
+msgid "Video di fondo"
+msgstr "Vídeo de fondo"
+
+msgid "Con le schede: si passa da una slide all’altra dalle linguette"
+msgstr "Con pestañas: se pasa de una diapositiva a otra desde las pestañas"
+
+msgid "Le foto e i video si copiano nella tua Libreria media. I colori diventano quelli del tuo sito; i pulsanti portano a «#»: cambia il loro link."
+msgstr "Las fotos y los vídeos se copian en tu Biblioteca de medios. Los colores pasan a ser los de tu sitio; los botones llevan a «#»: cambia su enlace."
+
+msgid "Questa scena viene da un tema di OLObuild Pro: si usa con la licenza Pro."
+msgstr "Esta escena viene de un tema de OLObuild Pro: se usa con la licencia Pro."
+
+msgid "Scopri OLObuild Pro"
+msgstr "Descubre OLObuild Pro"
+
+msgid "La slide di adesso viene sostituita."
+msgstr "La diapositiva actual se sustituye."
+
+msgid "Le %d slide di adesso vengono sostituite."
+msgstr "Las %d diapositivas actuales se sustituyen."
+
+msgid "Finché non salvi, «Annulla» dell’editor rimette tutto com’era."
+msgstr "Mientras no guardes, «Cancelar» del editor lo deja todo como estaba."
+
+msgid "Usa questa scena"
+msgstr "Usar esta escena"
+
+msgid "Aggiungi le slide in fondo"
+msgstr "Añadir las diapositivas al final"
+
+msgid "«Aggiungi le slide in fondo» tiene le impostazioni del tuo slider: una scena che si muove scorrendo o che cambia con un clic si vede come nel tema solo con «Usa questa scena»."
+msgstr "«Añadir las diapositivas al final» mantiene los ajustes de tu slider: una escena que se mueve al desplazarse o que cambia con un clic solo se ve como en el tema con «Usar esta escena»."
+
+msgid "Copio foto e video nella Libreria media…"
+msgstr "Copiando fotos y vídeos en la Biblioteca de medios…"
+
+msgid "Apertura classica"
+msgstr "Apertura clásica"
+
+msgid "Foto o video di fondo, titolo, testo e pulsanti che entrano e restano."
+msgstr "Foto o vídeo de fondo, título, texto y botones que entran y se quedan."
+
+msgid "Racconto a scorrimento"
+msgstr "Relato al desplazarse"
+
+msgid "I livelli si muovono mentre si scorre la pagina: la scena si racconta scorrendo."
+msgstr "Las capas se mueven mientras se desplaza la página: la escena se cuenta al desplazarse."
+
+msgid "Scena animata"
+msgstr "Escena animada"
+
+msgid "Carte che girano, tende, pieghe e animazioni che si ripetono nel tempo."
+msgstr "Cartas que giran, cortinas, pliegues y animaciones que se repiten en el tiempo."
+
+msgid "Scelte e interruttori"
+msgstr "Elecciones e interruptores"
+
+msgid "Si tocca un elemento (una spia, una leva, un colore) e la scena cambia."
+msgstr "Se toca un elemento (un testigo, una palanca, un color) y la escena cambia."
+
+msgid "Con le schede"
+msgstr "Con pestañas"
+
+msgid "Più slide, con le linguette per passare dall’una all’altra."
+msgstr "Varias diapositivas, con pestañas para pasar de una a otra."
+
+msgid "Non riesco a leggere le scene:"
+msgstr "No puedo leer las escenas:"
+
+msgid "Non sono riuscito a usare la scena:"
+msgstr "No he podido usar la escena:"
+
+msgid "(%d file non copiati: restano all’indirizzo della libreria)"
+msgstr "(%d archivos no copiados: se quedan en la dirección de la biblioteca)"
+
+msgid "Scena di %s pronta: cambia testi, foto e link, poi «Salva e chiudi»."
+msgstr "Escena de %s lista: cambia textos, fotos y enlaces, luego «Guardar y cerrar»."
+
+msgid "Parti da una scena dei temi"
+msgstr "Parte de una escena de los temas"
+
+msgid "Questa scena non c’è più: aggiorna l’elenco."
+msgstr "Esta escena ya no existe: actualiza la lista."
+
+msgid "Non trovo questa scena nelle pagine del tema."
+msgstr "No encuentro esta escena en las páginas del tema."
+
+#: licenza-1.4.1345
+msgid "Aggiungi su tutte le slide:"
+msgstr "Añadir en todas las diapositivas:"
+
+msgid "Apri i gruppi"
+msgstr "Abrir los grupos"
+
+msgid "Chiudi i gruppi"
+msgstr "Cerrar los grupos"
+
+msgid "Blocca il gruppo: sulla tela non si sposta e i clic passano sotto"
+msgstr "Bloquear el grupo: en el lienzo no se mueve y los clics pasan a lo que hay debajo"
+
+msgid "Blocca: sulla tela non si sposta e i clic passano sotto"
+msgstr "Bloquear: en el lienzo no se mueve y los clics pasan a lo que hay debajo"
+
+msgid "Cerca un livello"
+msgstr "Busca una capa"
+
+msgid "Doppio clic per rinominare il gruppo"
+msgstr "Doble clic para cambiar el nombre del grupo"
+
+msgid "Ha valori propri su questo schermo"
+msgstr "Tiene valores propios en esta pantalla"
+
+msgid "Mostra di nuovo tutti i livelli"
+msgstr "Mostrar de nuevo todas las capas"
+
+msgid "Mostra il gruppo nell’editor"
+msgstr "Mostrar el grupo en el editor"
+
+msgid "Mostra nell’editor"
+msgstr "Mostrar en el editor"
+
+msgid "Mostra sulla tela come quando è scelto"
+msgstr "Mostrar en el lienzo como cuando está elegido"
+
+msgid "Nascondi il gruppo nell’editor (sul sito resta)"
+msgstr "Ocultar el grupo en el editor (en el sitio se queda)"
+
+msgid "Nascondi nell’editor (sul sito resta)"
+msgstr "Ocultar en el editor (en el sitio se queda)"
+
+msgid "Nessun livello con questo nome"
+msgstr "Ninguna capa con este nombre"
+
+msgid "Nome del gruppo"
+msgstr "Nombre del grupo"
+
+msgid "Sblocca"
+msgstr "Desbloquear"
+
+msgid "Sblocca il gruppo"
+msgstr "Desbloquear el grupo"
+
+msgid "Su tutte le slide"
+msgstr "En todas las diapositivas"
+
+msgid "Sulla tela solo questo gruppo"
+msgstr "En el lienzo solo este grupo"
+
+msgid "Torna a com’è all’avvio"
+msgstr "Volver a como está al inicio"
+
+msgid " o "
+msgstr " o "
+
+msgid "Finché %1 non è %2"
+msgstr "Mientras %1 no sea %2"
+
+msgid "Quando %1 è %2"
+msgstr "Cuando %1 es %2"
+
+msgid "Forme"
+msgstr "Formas"
+
+msgid "Foto, video e disegni"
+msgstr "Fotos, vídeos y dibujos"
+
+msgid "Prima di ogni scelta"
+msgstr "Antes de cualquier elección"
+
+msgid "Scelta: %s"
+msgstr "Elección: %s"
+
+msgid "Testi e pulsanti"
+msgstr "Textos y botones"
+
+msgid "Veli"
+msgstr "Velos"
+
+msgid "Il gruppo in cui il livello sta nel pannello Livelli. Vuoto, va da solo nel gruppo di quello che fa: una scelta, i veli, i testi e i pulsanti… Serve solo a te: sul sito non si vede."
+msgstr "El grupo en el que está la capa en el panel Capas. Vacío, va solo al grupo de lo que hace: una elección, los velos, los textos y botones… Solo sirve para ti: en el sitio no se ve."
+
+msgid "Serve solo a te, per riconoscere il livello nel pannello Livelli: sul sito non si vede. Vuoto, il livello prende il nome dal suo testo o dal file."
+msgstr "Solo sirve para ti, para reconocer la capa en el panel Capas: en el sitio no se ve. Vacío, la capa toma el nombre de su texto o de su archivo."
+
+msgid "Alcuni livelli si vedono solo in uno stato (◐ nel pannello Livelli), che cambia quando si clicca un altro livello. «Come all’avvio» mostra lo slider come lo vede chi apre la pagina; scegli uno stato per vedere solo i suoi livelli; «Tutti i livelli insieme» li mostra uno sopra l’altro, per modificarli."
+msgstr "Algunas capas solo se ven en un estado (◐ en el panel Capas), que cambia al hacer clic en otra capa. «Como al inicio» muestra el slider como lo ve quien abre la página; elige un estado para ver solo sus capas; «Todas las capas juntas» las muestra una encima de otra, para editarlas."
+
+msgid "Quanti livelli fanno qualcosa, e cosa. Nel pannello Livelli lo stesso bollino dice quali: ↕ scorrendo, ⏱ linea del tempo, Aa lettere, ◐ stato, ☝ clic, ∞ continuo, {} CSS, ▭ solo su alcuni schermi. Passa il puntatore su un bollino per leggerlo."
+msgstr "Cuántas capas hacen algo, y qué. En el panel Capas la misma insignia dice cuáles: ↕ al desplazar, ⏱ línea de tiempo, Aa letras, ◐ estado, ☝ clic, ∞ continuo, {} CSS, ▭ solo en algunas pantallas. Pasa el puntero por una insignia para leerla."
+
+#: licenza-1.4.1345
+msgid "%1 vale %2"
+msgstr "%1 vale %2"
+
+msgid "Aggiungi una scelta (copia «%s»)"
+msgstr "Añadir una elección (copia «%s»)"
+
+msgid "All’avvio"
+msgstr "Al inicio"
+
+msgid "Altre azioni"
+msgstr "Otras acciones"
+
+msgid "Clic su «%s»"
+msgstr "Clic en «%s»"
+
+msgid "Cosa succede quando chi guarda clicca. Clicca una riga per scegliere il livello che fa partire l’interazione: sotto ne vedi e cambi l’azione. Una scelta è un gruppo di livelli che compare col clic sul suo livello; «Aggiungi una scelta» copia l’ultima, poi cambi testi e immagini."
+msgstr "Qué pasa cuando quien mira hace clic. Haz clic en una fila para elegir la capa que inicia la interacción: debajo ves y cambias su acción. Una elección es un grupo de capas que aparece con el clic en su capa; «Añadir una elección» copia la última, luego cambias textos e imágenes."
+
+msgid "Interazioni della slide"
+msgstr "Interacciones de la diapositiva"
+
+msgid "Nessuna interazione in questa slide: scegli un livello e dagli un’azione al clic qui sotto."
+msgstr "Ninguna interacción en esta diapositiva: elige una capa y dale una acción al clic aquí debajo."
+
+msgid "Pulendo «%1» col puntatore → %2"
+msgstr "Limpiando «%1» con el puntero → %2"
+
+msgid "Scelta «%1» · %2 scelte"
+msgstr "Elección «%1» · %2 opciones"
+
+msgid "Togli %d livelli"
+msgstr "Quitar %d capas"
+
+msgid "Togli questa scelta"
+msgstr "Quitar esta elección"
+
+msgid "apre %s"
+msgstr "abre %s"
+
+msgid "imposta %1 = %2"
+msgstr "fija %1 = %2"
+
+msgid "mostra %s"
+msgstr "muestra %s"
+
+msgid "mostra o nasconde «%s»"
+msgstr "muestra u oculta «%s»"
+
+msgid "passa %1 al valore dopo: %2"
+msgstr "pasa %1 al valor siguiente: %2"
+
+msgid "scorre sotto lo slider"
+msgstr "desplaza debajo del slider"
+
+msgid "si scopre quello che c’è sotto"
+msgstr "aparece lo que hay debajo"
+
+msgid "si vede «%s»"
+msgstr "se ve «%s»"
+
+msgid "torna alla slide prima"
+msgstr "vuelve a la diapositiva anterior"
+
+msgid "va alla slide %d"
+msgstr "va a la diapositiva %d"
+
+msgid "va alla slide dopo"
+msgstr "va a la diapositiva siguiente"
+
+msgid "Cosa succede al clic: scelte, stati e azioni"
+msgstr "Qué pasa al hacer clic: elecciones, estados y acciones"
+
+msgid "Entrate, movimento con lo scorrimento e linea del tempo"
+msgstr "Entradas, movimiento al desplazarse y línea de tiempo"
+
+msgid "Modalità dell’editor"
+msgstr "Modo del editor"
+
+msgid "Testi, foto, posizione e stile dei livelli"
+msgstr "Textos, fotos, posición y estilo de las capas"
+
+#: licenza-1.4.1345
+msgid "mostra la sua scelta (%d livelli)"
+msgstr "muestra su elección (%d capas)"
+
+#: licenza-1.4.1345
+msgid "%d livelli scelti"
+msgstr "%d capas elegidas"
+
+msgid "Allinea a sinistra"
+msgstr "Alinear a la izquierda"
+
+msgid "Allinea in alto"
+msgstr "Alinear arriba"
+
+msgid "Annulla la scelta"
+msgstr "Quitar la selección"
+
+msgid "Applica alle scene"
+msgstr "Aplicar a las escenas"
+
+msgid "Applica dall’alto in basso"
+msgstr "Aplicar de arriba abajo"
+
+msgid "Come compaiono nella loro scena"
+msgstr "Cómo aparecen en su escena"
+
+msgid "Come i livelli «shy» di After Effects: spariscono dall’elenco dei livelli ma restano nella slide"
+msgstr "Como las capas «shy» de After Effects: desaparecen de la lista de capas pero se quedan en la diapositiva"
+
+msgid "Comincia dopo"
+msgstr "Empieza después de"
+
+msgid "Distanza uguale ↔"
+msgstr "Misma distancia ↔"
+
+msgid "Distanza uguale ↕"
+msgstr "Misma distancia ↕"
+
+msgid "Elimina %d livelli"
+msgstr "Eliminar %d capas"
+
+msgid "Entrata, a cascata"
+msgstr "Entrada, en cascada"
+
+msgid "Etichetta colorata"
+msgstr "Etiqueta de color"
+
+msgid "Metti da parte"
+msgstr "Apartar"
+
+msgid "Metti nel gruppo"
+msgstr "Poner en el grupo"
+
+msgid "Nessuna: già al suo posto"
+msgstr "Ninguna: ya en su sitio"
+
+msgid "Per i livelli che si vedono solo in uno stato (le scelte): l’effetto con cui compaiono quando lo stato cambia, la durata e la cascata. Come la transizione fra due varianti."
+msgstr "Para las capas que solo se ven en un estado (las elecciones): el efecto con que aparecen cuando cambia el estado, la duración y la cascada. Como la transición entre dos variantes."
+
+msgid "Rimetti nell’elenco"
+msgstr "Devolver a la lista"
+
+msgid "Stessa distanza in orizzontale (almeno tre livelli)"
+msgstr "Misma distancia en horizontal (al menos tres capas)"
+
+msgid "Stessa distanza in verticale (almeno tre livelli)"
+msgstr "Misma distancia en vertical (al menos tres capas)"
+
+msgid "Trascinane uno sulla tela per spostarli tutti; con le frecce della tastiera si spostano di poco (con Maiusc di più)."
+msgstr "Arrastra una en el lienzo para moverlas todas; con las flechas del teclado se mueven un poco (con Mayús más)."
+
+msgid "uno ogni"
+msgstr "uno cada"
+
+msgid "Passando su «%s»"
+msgstr "Pasando sobre «%s»"
+
+msgid "%d livelli messi da parte: mostrali"
+msgstr "%d capas apartadas: mostrarlas"
+
+msgid "Che fanno qualcosa al clic"
+msgstr "Que hacen algo al hacer clic"
+
+msgid "Che si muovono (scorrimento, linea del tempo, ciclo)"
+msgstr "Que se mueven (desplazamiento, línea de tiempo, ciclo)"
+
+msgid "Che si vedono solo in uno stato"
+msgstr "Que solo se ven en un estado"
+
+msgid "Clic per sceglierlo; Maiusc o Ctrl + clic per sceglierne più d’uno; trascinalo per cambiare ordine o gruppo"
+msgstr "Clic para elegirla; Mayús o Ctrl + clic para elegir varias; arrástrala para cambiar el orden o el grupo"
+
+msgid "Come sulla slide"
+msgstr "Como en la diapositiva"
+
+msgid "Etichetta: %s"
+msgstr "Etiqueta: %s"
+
+msgid "Foto, video e icone"
+msgstr "Fotos, vídeos e iconos"
+
+msgid "Metti da parte: sparisce dall’elenco, resta nella slide"
+msgstr "Apartar: desaparece de la lista, se queda en la diapositiva"
+
+msgid "Per nome"
+msgstr "Por nombre"
+
+msgid "Per tipo"
+msgstr "Por tipo"
+
+msgid "Scegli tutto il gruppo: si sposta e si modifica insieme"
+msgstr "Elegir todo el grupo: se mueve y se cambia junto"
+
+msgid "Togli dall’elenco i messi da parte"
+msgstr "Quitar de la lista las apartadas"
+
+msgid "Arancio"
+msgstr "Naranja"
+
+msgid "Azzurro"
+msgstr "Celeste"
+
+msgid "Giallo"
+msgstr "Amarillo"
+
+msgid "Grigio"
+msgstr "Gris"
+
+msgid "Serie «%s»"
+msgstr "Serie «%s»"
+
+msgid "Verde"
+msgstr "Verde"
+
+msgid "Viola"
+msgstr "Morado"
+
+msgid "(copia)"
+msgstr "(copia)"
+
+msgid "Quello che si vede sulla tela: all’avvio, dopo una scelta, in un altro stato, o tutti i livelli insieme per sistemarli. Anche l’elenco dei livelli e la linea del tempo seguono la scena."
+msgstr "Lo que se ve en el lienzo: al inicio, después de una elección, en otro estado, o todas las capas juntas para ordenarlas. También la lista de capas y la línea de tiempo siguen la escena."
+
+msgid "Scena da guardare"
+msgstr "Escena que mirar"
+
+msgid "Al passaggio del mouse (sul telefono al tocco)"
+msgstr "Al pasar el ratón (en el móvil al tocar)"
+
+msgid "Quando il mouse esce, torna com’era"
+msgstr "Cuando el ratón sale, vuelve a como estaba"

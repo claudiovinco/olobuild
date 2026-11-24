@@ -55781,3 +55781,489 @@ msgstr "The note label (and the inner line, if there is one) takes the shifting 
 #: licenza-1.4.1345
 msgid "Tipo di sito"
 msgstr "Type of site"
+
+#: licenza-1.4.1345
+msgid "Colore del contorno"
+msgstr "Outline colour"
+
+msgid "Il contorno attorno al livello quando lo si raggiunge con la tastiera e, con «Imposta uno stato», quando è quello scelto. Vuoto = bianco; trasparente = nessun contorno."
+msgstr "The outline around the layer when it is reached with the keyboard and, with “Set a state”, when it is the chosen one. Empty = white; transparent = no outline."
+
+msgid "Quando si vede"
+msgstr "When it shows"
+
+msgid "Scegli il livello cliccabile a cui è legato questo: il nome e i valori dello stato qui sotto si scrivono da soli. «Prima di ogni scelta» lo mostra finché non si è cliccato niente."
+msgstr "Pick the clickable layer this one is linked to: the state name and values below fill in by themselves. “Before any choice” shows it as long as nothing has been clicked."
+
+msgid "Come scritto qui sotto"
+msgstr "As written below"
+
+msgid "Quando si sceglie %s"
+msgstr "When %s is chosen"
+
+msgid "Finché non si sceglie %s"
+msgstr "Until %s is chosen"
+
+msgid "Prima di ogni scelta (%s)"
+msgstr "Before any choice (%s)"
+
+msgid "questo livello"
+msgstr "this layer"
+
+#: licenza-1.4.1345
+msgid "Scene dei temi"
+msgstr "Theme scenes"
+
+msgid "Parti da uno Slider Pro dei temi: poi cambi testi, foto e link."
+msgstr "Start from a Slider Pro from the themes: then change the texts, photos and links."
+
+msgid "Cerca un tema o una parola"
+msgstr "Search for a theme or a word"
+
+msgid "Tipo di scena"
+msgstr "Kind of scene"
+
+msgid "Carico le scene…"
+msgstr "Loading the scenes…"
+
+msgid "Nessuna scena con questa ricerca."
+msgstr "No scene matches this search."
+
+msgid "1 slide"
+msgstr "1 slide"
+
+msgid "%d slide"
+msgstr "%d slides"
+
+msgid "con le schede"
+msgstr "with tabs"
+
+msgid "Tutte le scene"
+msgstr "All scenes"
+
+msgid "%d livelli"
+msgstr "%d layers"
+
+msgid "Video di fondo"
+msgstr "Background video"
+
+msgid "Con le schede: si passa da una slide all’altra dalle linguette"
+msgstr "With tabs: you move from one slide to the next with the tabs"
+
+msgid "Le foto e i video si copiano nella tua Libreria media. I colori diventano quelli del tuo sito; i pulsanti portano a «#»: cambia il loro link."
+msgstr "The photos and videos are copied into your Media Library. The colours become your site’s; the buttons point to “#”: change their link."
+
+msgid "Questa scena viene da un tema di OLObuild Pro: si usa con la licenza Pro."
+msgstr "This scene comes from an OLObuild Pro theme: it is used with the Pro licence."
+
+msgid "Scopri OLObuild Pro"
+msgstr "Discover OLObuild Pro"
+
+msgid "La slide di adesso viene sostituita."
+msgstr "The current slide is replaced."
+
+msgid "Le %d slide di adesso vengono sostituite."
+msgstr "The %d current slides are replaced."
+
+msgid "Finché non salvi, «Annulla» dell’editor rimette tutto com’era."
+msgstr "Until you save, the editor’s “Cancel” puts everything back as it was."
+
+msgid "Usa questa scena"
+msgstr "Use this scene"
+
+msgid "Aggiungi le slide in fondo"
+msgstr "Add the slides at the end"
+
+msgid "«Aggiungi le slide in fondo» tiene le impostazioni del tuo slider: una scena che si muove scorrendo o che cambia con un clic si vede come nel tema solo con «Usa questa scena»."
+msgstr "“Add the slides at the end” keeps your slider’s settings: a scene that moves as you scroll or changes with a click only looks as it does in the theme with “Use this scene”."
+
+msgid "Copio foto e video nella Libreria media…"
+msgstr "Copying photos and videos into the Media Library…"
+
+msgid "Apertura classica"
+msgstr "Classic opening"
+
+msgid "Foto o video di fondo, titolo, testo e pulsanti che entrano e restano."
+msgstr "A background photo or video, title, text and buttons that come in and stay."
+
+msgid "Racconto a scorrimento"
+msgstr "Scrolling story"
+
+msgid "I livelli si muovono mentre si scorre la pagina: la scena si racconta scorrendo."
+msgstr "The layers move as the page scrolls: the scene tells itself as you scroll."
+
+msgid "Scena animata"
+msgstr "Animated scene"
+
+msgid "Carte che girano, tende, pieghe e animazioni che si ripetono nel tempo."
+msgstr "Cards that turn, curtains, folds and animations that repeat over time."
+
+msgid "Scelte e interruttori"
+msgstr "Choices and switches"
+
+msgid "Si tocca un elemento (una spia, una leva, un colore) e la scena cambia."
+msgstr "You touch an element (a warning light, a lever, a colour) and the scene changes."
+
+msgid "Con le schede"
+msgstr "With tabs"
+
+msgid "Più slide, con le linguette per passare dall’una all’altra."
+msgstr "Several slides, with tabs to move from one to the other."
+
+msgid "Non riesco a leggere le scene:"
+msgstr "I can’t read the scenes:"
+
+msgid "Non sono riuscito a usare la scena:"
+msgstr "I couldn’t use the scene:"
+
+msgid "(%d file non copiati: restano all’indirizzo della libreria)"
+msgstr "(%d files not copied: they stay at the library address)"
+
+msgid "Scena di %s pronta: cambia testi, foto e link, poi «Salva e chiudi»."
+msgstr "Scene from %s ready: change texts, photos and links, then “Save and close”."
+
+msgid "Parti da una scena dei temi"
+msgstr "Start from a theme scene"
+
+msgid "Questa scena non c’è più: aggiorna l’elenco."
+msgstr "This scene no longer exists: refresh the list."
+
+msgid "Non trovo questa scena nelle pagine del tema."
+msgstr "I can’t find this scene in the theme’s pages."
+
+#: licenza-1.4.1345
+msgid "Aggiungi su tutte le slide:"
+msgstr "Add on all slides:"
+
+msgid "Apri i gruppi"
+msgstr "Open the groups"
+
+msgid "Chiudi i gruppi"
+msgstr "Close the groups"
+
+msgid "Blocca il gruppo: sulla tela non si sposta e i clic passano sotto"
+msgstr "Lock the group: on the canvas it doesn’t move and clicks go through to what is below"
+
+msgid "Blocca: sulla tela non si sposta e i clic passano sotto"
+msgstr "Lock: on the canvas it doesn’t move and clicks go through to what is below"
+
+msgid "Cerca un livello"
+msgstr "Search for a layer"
+
+msgid "Doppio clic per rinominare il gruppo"
+msgstr "Double-click to rename the group"
+
+msgid "Ha valori propri su questo schermo"
+msgstr "Has its own values on this screen"
+
+msgid "Mostra di nuovo tutti i livelli"
+msgstr "Show all layers again"
+
+msgid "Mostra il gruppo nell’editor"
+msgstr "Show the group in the editor"
+
+msgid "Mostra nell’editor"
+msgstr "Show in the editor"
+
+msgid "Mostra sulla tela come quando è scelto"
+msgstr "Show on the canvas as when it is chosen"
+
+msgid "Nascondi il gruppo nell’editor (sul sito resta)"
+msgstr "Hide the group in the editor (it stays on the site)"
+
+msgid "Nascondi nell’editor (sul sito resta)"
+msgstr "Hide in the editor (it stays on the site)"
+
+msgid "Nessun livello con questo nome"
+msgstr "No layer with this name"
+
+msgid "Nome del gruppo"
+msgstr "Group name"
+
+msgid "Sblocca"
+msgstr "Unlock"
+
+msgid "Sblocca il gruppo"
+msgstr "Unlock the group"
+
+msgid "Su tutte le slide"
+msgstr "On all slides"
+
+msgid "Sulla tela solo questo gruppo"
+msgstr "Only this group on the canvas"
+
+msgid "Torna a com’è all’avvio"
+msgstr "Back to how it is at start"
+
+msgid " o "
+msgstr " or "
+
+msgid "Finché %1 non è %2"
+msgstr "Until %1 is %2"
+
+msgid "Quando %1 è %2"
+msgstr "When %1 is %2"
+
+msgid "Forme"
+msgstr "Shapes"
+
+msgid "Foto, video e disegni"
+msgstr "Photos, videos and drawings"
+
+msgid "Prima di ogni scelta"
+msgstr "Before any choice"
+
+msgid "Scelta: %s"
+msgstr "Choice: %s"
+
+msgid "Testi e pulsanti"
+msgstr "Texts and buttons"
+
+msgid "Veli"
+msgstr "Veils"
+
+msgid "Il gruppo in cui il livello sta nel pannello Livelli. Vuoto, va da solo nel gruppo di quello che fa: una scelta, i veli, i testi e i pulsanti… Serve solo a te: sul sito non si vede."
+msgstr "The group the layer sits in in the Layers panel. If empty, it goes by itself into the group of what it does: a choice, the veils, the texts and buttons… It is just for you: it doesn’t show on the site."
+
+msgid "Serve solo a te, per riconoscere il livello nel pannello Livelli: sul sito non si vede. Vuoto, il livello prende il nome dal suo testo o dal file."
+msgstr "It is just for you, to recognise the layer in the Layers panel: it doesn’t show on the site. If empty, the layer takes its name from its text or file."
+
+msgid "Alcuni livelli si vedono solo in uno stato (◐ nel pannello Livelli), che cambia quando si clicca un altro livello. «Come all’avvio» mostra lo slider come lo vede chi apre la pagina; scegli uno stato per vedere solo i suoi livelli; «Tutti i livelli insieme» li mostra uno sopra l’altro, per modificarli."
+msgstr "Some layers show only in one state (◐ in the Layers panel), which changes when another layer is clicked. «As at start» shows the slider the way visitors see it when they open the page; pick a state to see only its layers; «All layers together» shows them one on top of the other, to edit them."
+
+msgid "Quanti livelli fanno qualcosa, e cosa. Nel pannello Livelli lo stesso bollino dice quali: ↕ scorrendo, ⏱ linea del tempo, Aa lettere, ◐ stato, ☝ clic, ∞ continuo, {} CSS, ▭ solo su alcuni schermi. Passa il puntatore su un bollino per leggerlo."
+msgstr "How many layers do something, and what. In the Layers panel the same badge tells which ones: ↕ scrolling, ⏱ timeline, Aa letters, ◐ state, ☝ click, ∞ continuous, {} CSS, ▭ only on some screens. Hover over a badge to read it."
+
+#: licenza-1.4.1345
+msgid "%1 vale %2"
+msgstr "%1 is %2"
+
+msgid "Aggiungi una scelta (copia «%s»)"
+msgstr "Add a choice (copies “%s”)"
+
+msgid "All’avvio"
+msgstr "At start"
+
+msgid "Altre azioni"
+msgstr "Other actions"
+
+msgid "Clic su «%s»"
+msgstr "Click on “%s”"
+
+msgid "Cosa succede quando chi guarda clicca. Clicca una riga per scegliere il livello che fa partire l’interazione: sotto ne vedi e cambi l’azione. Una scelta è un gruppo di livelli che compare col clic sul suo livello; «Aggiungi una scelta» copia l’ultima, poi cambi testi e immagini."
+msgstr "What happens when visitors click. Click a row to pick the layer that starts the interaction: below you see and change its action. A choice is a group of layers that appears when its layer is clicked; “Add a choice” copies the last one, then you change texts and images."
+
+msgid "Interazioni della slide"
+msgstr "Slide interactions"
+
+msgid "Nessuna interazione in questa slide: scegli un livello e dagli un’azione al clic qui sotto."
+msgstr "No interactions on this slide: pick a layer and give it a click action below."
+
+msgid "Pulendo «%1» col puntatore → %2"
+msgstr "Wiping “%1” with the pointer → %2"
+
+msgid "Scelta «%1» · %2 scelte"
+msgstr "Choice “%1” · %2 choices"
+
+msgid "Togli %d livelli"
+msgstr "Remove %d layers"
+
+msgid "Togli questa scelta"
+msgstr "Remove this choice"
+
+msgid "apre %s"
+msgstr "opens %s"
+
+msgid "imposta %1 = %2"
+msgstr "sets %1 = %2"
+
+msgid "mostra %s"
+msgstr "shows %s"
+
+msgid "mostra o nasconde «%s»"
+msgstr "shows or hides “%s”"
+
+msgid "passa %1 al valore dopo: %2"
+msgstr "moves %1 to the next value: %2"
+
+msgid "scorre sotto lo slider"
+msgstr "scrolls below the slider"
+
+msgid "si scopre quello che c’è sotto"
+msgstr "what is underneath shows up"
+
+msgid "si vede «%s»"
+msgstr "“%s” shows"
+
+msgid "torna alla slide prima"
+msgstr "goes back to the previous slide"
+
+msgid "va alla slide %d"
+msgstr "goes to slide %d"
+
+msgid "va alla slide dopo"
+msgstr "goes to the next slide"
+
+msgid "Cosa succede al clic: scelte, stati e azioni"
+msgstr "What happens on click: choices, states and actions"
+
+msgid "Entrate, movimento con lo scorrimento e linea del tempo"
+msgstr "Entrances, movement on scroll and timeline"
+
+msgid "Modalità dell’editor"
+msgstr "Editor mode"
+
+msgid "Testi, foto, posizione e stile dei livelli"
+msgstr "Texts, photos, position and style of the layers"
+
+#: licenza-1.4.1345
+msgid "mostra la sua scelta (%d livelli)"
+msgstr "shows its choice (%d layers)"
+
+#: licenza-1.4.1345
+msgid "%d livelli scelti"
+msgstr "%d layers selected"
+
+msgid "Allinea a sinistra"
+msgstr "Align left"
+
+msgid "Allinea in alto"
+msgstr "Align top"
+
+msgid "Annulla la scelta"
+msgstr "Clear the selection"
+
+msgid "Applica alle scene"
+msgstr "Apply to the scenes"
+
+msgid "Applica dall’alto in basso"
+msgstr "Apply from top to bottom"
+
+msgid "Come compaiono nella loro scena"
+msgstr "How they appear in their scene"
+
+msgid "Come i livelli «shy» di After Effects: spariscono dall’elenco dei livelli ma restano nella slide"
+msgstr "Like After Effects “shy” layers: they disappear from the layer list but stay in the slide"
+
+msgid "Comincia dopo"
+msgstr "Starts after"
+
+msgid "Distanza uguale ↔"
+msgstr "Equal spacing ↔"
+
+msgid "Distanza uguale ↕"
+msgstr "Equal spacing ↕"
+
+msgid "Elimina %d livelli"
+msgstr "Delete %d layers"
+
+msgid "Entrata, a cascata"
+msgstr "Entrance, cascading"
+
+msgid "Etichetta colorata"
+msgstr "Colour label"
+
+msgid "Metti da parte"
+msgstr "Set aside"
+
+msgid "Metti nel gruppo"
+msgstr "Put in the group"
+
+msgid "Nessuna: già al suo posto"
+msgstr "None: already in place"
+
+msgid "Per i livelli che si vedono solo in uno stato (le scelte): l’effetto con cui compaiono quando lo stato cambia, la durata e la cascata. Come la transizione fra due varianti."
+msgstr "For the layers that show only in one state (the choices): the effect they appear with when the state changes, the duration and the cascade. Like the transition between two variants."
+
+msgid "Rimetti nell’elenco"
+msgstr "Put back in the list"
+
+msgid "Stessa distanza in orizzontale (almeno tre livelli)"
+msgstr "Same horizontal spacing (at least three layers)"
+
+msgid "Stessa distanza in verticale (almeno tre livelli)"
+msgstr "Same vertical spacing (at least three layers)"
+
+msgid "Trascinane uno sulla tela per spostarli tutti; con le frecce della tastiera si spostano di poco (con Maiusc di più)."
+msgstr "Drag one on the canvas to move them all; with the arrow keys they move a little (with Shift more)."
+
+msgid "uno ogni"
+msgstr "one every"
+
+msgid "Passando su «%s»"
+msgstr "Hovering over “%s”"
+
+msgid "%d livelli messi da parte: mostrali"
+msgstr "%d layers set aside: show them"
+
+msgid "Che fanno qualcosa al clic"
+msgstr "That do something on click"
+
+msgid "Che si muovono (scorrimento, linea del tempo, ciclo)"
+msgstr "That move (scroll, timeline, loop)"
+
+msgid "Che si vedono solo in uno stato"
+msgstr "That show only in one state"
+
+msgid "Clic per sceglierlo; Maiusc o Ctrl + clic per sceglierne più d’uno; trascinalo per cambiare ordine o gruppo"
+msgstr "Click to select it; Shift or Ctrl + click to select more than one; drag it to change order or group"
+
+msgid "Come sulla slide"
+msgstr "As on the slide"
+
+msgid "Etichetta: %s"
+msgstr "Label: %s"
+
+msgid "Foto, video e icone"
+msgstr "Photos, videos and icons"
+
+msgid "Metti da parte: sparisce dall’elenco, resta nella slide"
+msgstr "Set aside: it disappears from the list, stays in the slide"
+
+msgid "Per nome"
+msgstr "By name"
+
+msgid "Per tipo"
+msgstr "By type"
+
+msgid "Scegli tutto il gruppo: si sposta e si modifica insieme"
+msgstr "Select the whole group: it moves and changes together"
+
+msgid "Togli dall’elenco i messi da parte"
+msgstr "Remove the set-aside layers from the list"
+
+msgid "Arancio"
+msgstr "Orange"
+
+msgid "Azzurro"
+msgstr "Light blue"
+
+msgid "Giallo"
+msgstr "Yellow"
+
+msgid "Grigio"
+msgstr "Grey"
+
+msgid "Serie «%s»"
+msgstr "Series “%s”"
+
+msgid "Verde"
+msgstr "Green"
+
+msgid "Viola"
+msgstr "Purple"
+
+msgid "(copia)"
+msgstr "(copy)"
+
+msgid "Quello che si vede sulla tela: all’avvio, dopo una scelta, in un altro stato, o tutti i livelli insieme per sistemarli. Anche l’elenco dei livelli e la linea del tempo seguono la scena."
+msgstr "What you see on the canvas: at start, after a choice, in another state, or all layers together to arrange them. The layer list and the timeline follow the scene too."
+
+msgid "Scena da guardare"
+msgstr "Scene to view"
+
+msgid "Al passaggio del mouse (sul telefono al tocco)"
+msgstr "On mouse hover (on phones on tap)"
+
+msgid "Quando il mouse esce, torna com’era"
+msgstr "When the mouse leaves, back to how it was"

@@ -76,7 +76,7 @@ def apertura(t):
     RIPARATA = lambda rit=0, eff='fade', dur=700: {'nome': 'perdita', 'vale': 'riparata', 'effetto': eff, 'durata': dur, 'ritardo': rit}
     # si stringe il raccordo che perde (prima si girava il volantino della valvola: una perdita non si ripara così,
     # l'utente, 13 nov 2026)
-    gira = {'type': 'setState', 'target': 'perdita', 'value': 'riparata', 'label': 'Stringi il raccordo che perde'}
+    gira = {'type': 'setState', 'target': 'perdita', 'value': 'riparata', 'label': 'Stringi il raccordo che perde', 'segno': '#F2B48C'}
     # la striscia dei tubi (1600 × 420): sul computer larga quanto la tela, sul telefono più larga e spostata, così la
     # valvola e il raccordo che perde restano al centro
     banda = dict(x=0, y=45, w=100, h=46.7)
@@ -104,7 +104,7 @@ def apertura(t):
         pezzo('si-chiave', 'chiave', RIPARATA(0, 'nessuno'), 'La chiave che stringe il raccordo'),
         # dove si clicca: il raccordo che gocciola (x 424 / 1600, y 252 / 420 della striscia dei tubi), trasparente
         K.livello('si-presa', tipo='shape', bgColor='transparent', borderRadius=999, x=22.5, y=64, w=8, h=18, entra='fadeIn',
-                  ritardo=0, durata=300, esce='fadeOut', action=gira, stato=PERDE('nessuno'), customCSS='--mps-attivo:#F2B48C;',
+                  ritardo=0, durata=300, esce='fadeOut', action=gira, stato=PERDE('nessuno'),
                   responsive={'mobile': {'x': 10, 'y': 57, 'width': 14, 'height': 10.5}}),
         # prima: la domanda
         K.livello('si-o0', contenuto='Sifone · idraulici · Verona', x=6, y=12, w=40, size=13, peso='500', colore=mix(CHIARO, 82),

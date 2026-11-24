@@ -404,6 +404,18 @@ class Olobuild_Rest_Api {
             'callback'            => [ $this, 'import_theme' ],
             'permission_callback' => [ $this, 'check_permission_licenza' ],
         ] );
+        // Le scene dello Slider Pro (1.4.1422): l'elenco per l'editor e, con la chiave come per i temi, una scena
+        // pronta per questo sito (foto copiate nella Libreria media).
+        register_rest_route( $this->namespace, '/scene-slider', [
+            'methods'             => 'GET',
+            'callback'            => [ 'Olobuild_Scene_Slider', 'rest_elenco' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
+        register_rest_route( $this->namespace, '/scene-slider/usa', [
+            'methods'             => 'POST',
+            'callback'            => [ 'Olobuild_Scene_Slider', 'rest_usa' ],
+            'permission_callback' => [ $this, 'check_permission_licenza' ],
+        ] );
         // Il plugin che il tema richiede (WooCommerce), installato e attivato prima dell'import.
         register_rest_route( $this->namespace, '/themes/(?P<theme_id>[a-zA-Z0-9_-]+)/plugin-richiesto', [
             'methods'             => 'POST',

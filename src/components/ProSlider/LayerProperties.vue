@@ -4,15 +4,23 @@
       <!-- Header -->
       <div class="mb-p-2 mb-border-b mb-border-gray-700 mb-text-xs mb-font-semibold mb-text-gray-300">
         {{ t('Livello') }} {{ nomeTipo }}
-        <!-- Il nome del livello (1.4.1352): quello che compare nella barra dei livelli. Vuoto = il testo, il file o il tipo. -->
+        <!-- Il nome del livello (1.4.1352): quello che compare nel pannello Livelli. Vuoto = il testo, il file o il tipo. -->
         <div class="mb-mt-1.5 mb-font-normal">
-          <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Nome del livello') }}<InfoTip :testo="t('Serve solo a te, per riconoscere il livello nella barra dei livelli: sul sito non si vede. Vuoto, il livello prende il nome dal suo testo o dal file.')" :titolo="t('Nome del livello')" /></label>
+          <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Nome del livello') }}<InfoTip :testo="t('Serve solo a te, per riconoscere il livello nel pannello Livelli: sul sito non si vede. Vuoto, il livello prende il nome dal suo testo o dal file.')" :titolo="t('Nome del livello')" /></label>
           <input :value="layer.name || ''" @input="up('name', $event.target.value)" class="mps-input" :placeholder="nomeSuggerito" />
+        </div>
+        <!-- Il gruppo del pannello Livelli (1.4.1424): vuoto = quello che fa il livello (una scelta, i veli, i testi…) -->
+        <div class="mb-mt-1.5 mb-font-normal">
+          <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Gruppo') }}<InfoTip :testo="t('Il gruppo in cui il livello sta nel pannello Livelli. Vuoto, va da solo nel gruppo di quello che fa: una scelta, i veli, i testi e i pulsanti… Serve solo a te: sul sito non si vede.')" :titolo="t('Gruppo')" /></label>
+          <input :value="layer.gruppo || ''" @input="up('gruppo', $event.target.value)" class="mps-input" :placeholder="gruppoAutomatico" list="mps-nomi-gruppi" />
+          <datalist id="mps-nomi-gruppi">
+            <option v-for="n in nomiGruppi" :key="n" :value="n" />
+          </datalist>
         </div>
       </div>
 
       <!-- Tabs -->
-      <div class="mb-flex mb-bg-gray-800 mb-border-b mb-border-gray-700">
+      <div v-if="tabs.length > 1" class="mb-flex mb-bg-gray-800 mb-border-b mb-border-gray-700">
         <button
           v-for="tab in tabs"
           :key="tab"
@@ -21,7 +29,7 @@
             'mb-flex-1 mb-py-1.5 mb-text-[10px] mb-font-medium mb-transition-colors',
             activeTab === tab ? 'mb-text-primary-400 mb-border-b-2 mb-border-primary-400' : 'mb-text-gray-500 hover:mb-text-gray-300'
           ]"
-        >{{ tab }}</button>
+        >{{ NOMI_SCHEDE[tab] || tab }}</button>
       </div>
 
       <div class="mb-flex-1 mb-p-3 mb-space-y-3 mb-overflow-y-auto">
@@ -126,6 +134,11 @@
             </label>
           </template>
 
+        </template>
+
+        <!-- ===== INTERAZIONI (1.4.1426): azione al clic, visibilità negli stati, livello da pulire. Prima erano in
+             fondo al Contenuto, mescolate ai testi; ora stanno nella modalità «Interazioni» dell'editor. ===== -->
+        <template v-if="activeTab === 'Interazioni'">
           <!-- Stato iniziale (tutti i tipi) -->
           <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
           <div>
@@ -142,6 +155,15 @@
             <label class="mps-label">{{ t('Tipo azione') }}</label>
             <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.action?.type || 'none'" :options="OPTS_ACTION_TYPE" @update:model-value="setAction('type', $event)" />
           </div>
+          <!-- Quando parte (1.4.1428, come «click / mouse enter» di Slider Revolution): al clic o al passaggio del mouse -->
+          <div v-if="layer.action?.type && layer.action.type !== 'none'">
+            <label class="mps-label">{{ t('Quando') }}</label>
+            <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.action.trigger || 'click'" :options="OPTS_TRIGGER" @update:model-value="setAction('trigger', $event === 'click' ? '' : $event)" />
+          </div>
+          <label v-if="layer.action?.trigger === 'hover' && (layer.action.type === 'setState' || layer.action.type === 'cycleState')" class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+            <input type="checkbox" :checked="!!layer.action.ritorna" @change="setAction('ritorna', $event.target.checked)" class="mb-rounded" />
+            <span class="mb-text-[11px] mb-text-gray-400">{{ t('Quando il mouse esce, torna com’era') }}</span>
+          </label>
           <template v-if="layer.action?.type === 'goToSlide'">
             <div>
               <label class="mps-label">{{ t('Indice slide (da 0)') }}</label>
@@ -176,7 +198,7 @@
           <template v-if="layer.action?.type === 'setState' || layer.action?.type === 'cycleState'">
             <div>
               <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Nome dello stato') }}<InfoTip :testo="t('Uno stato è un nome con un valore (luce = accesa). I livelli con «Visibile solo in uno stato» si mostrano quando lo stato ha uno dei loro valori. Il valore all’avvio si scrive nelle impostazioni dello slider, «Stati all’avvio».')" :titolo="t('Stati')" /></label>
-              <input :value="layer.action.target || ''" @input="setAction('target', $event.target.value)" class="mps-input mb-w-full" placeholder="luce" />
+              <input :value="layer.action.target || ''" @input="setAction('target', $event.target.value)" class="mps-input mb-w-full" placeholder="luce" list="mps-nomi-stati" />
             </div>
             <div v-if="layer.action.type === 'setState'">
               <label class="mps-label">{{ t('Valore') }}</label>
@@ -199,6 +221,12 @@
               <input :value="layer.action.label || ''" @input="setAction('label', $event.target.value)" class="mps-input mb-w-full" :placeholder="t('Accendi la luce')" />
             </div>
           </template>
+          <!-- Il contorno del livello scelto e di quello raggiunto con la tastiera (1.4.1421): prima solo da CSS su misura.
+               Un pulsante che non imposta uno stato non ha contorno da colorare (ha il suo focus). -->
+          <div v-if="layer.action?.type && layer.action.type !== 'none' && (layer.type !== 'button' || layer.action.type === 'setState')">
+            <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Colore del contorno') }}<InfoTip :testo="t('Il contorno attorno al livello quando lo si raggiunge con la tastiera e, con «Imposta uno stato», quando è quello scelto. Vuoto = bianco; trasparente = nessun contorno.')" :titolo="t('Colore del contorno')" /></label>
+            <FieldColor :modelValue="layer.action.segno || ''" @update:modelValue="setAction('segno', $event)" />
+          </div>
 
           <!-- Visibile solo in uno stato -->
           <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
@@ -207,10 +235,15 @@
             <span class="mps-label mb-mb-0 mb-flex mb-items-center mb-gap-1">{{ t('Visibile solo in uno stato') }}<InfoTip :testo="t('Il livello si mostra quando lo stato ha uno dei valori scritti (separati da virgole) e si nasconde negli altri casi. Con il punto esclamativo davanti vale il contrario: «!accesa» = finché non è accesa. Lo stato lo cambiano i livelli con l’azione «Imposta uno stato» o «Stato successivo».')" :titolo="t('Visibile solo in uno stato')" /></span>
           </label>
           <template v-if="layer.stato">
+            <!-- Collegato a un livello cliccabile (1.4.1421): nome e valori si scrivono da soli, senza «!» né virgole. -->
+            <div v-if="opzioniQuando.length > 1">
+              <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Quando si vede') }}<InfoTip :testo="t('Scegli il livello cliccabile a cui è legato questo: il nome e i valori dello stato qui sotto si scrivono da soli. «Prima di ogni scelta» lo mostra finché non si è cliccato niente.')" :titolo="t('Quando si vede')" /></label>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="quandoScelto" :options="opzioniQuando" @update:model-value="scegliQuando" />
+            </div>
             <div class="mb-grid mb-grid-cols-2 mb-gap-2">
               <div>
                 <label class="mps-label">{{ t('Stato') }}</label>
-                <input :value="layer.stato.nome || ''" @input="upStato('nome', $event.target.value)" class="mps-input mb-w-full" placeholder="luce" />
+                <input :value="layer.stato.nome || ''" @input="upStato('nome', $event.target.value)" class="mps-input mb-w-full" placeholder="luce" list="mps-nomi-stati" />
               </div>
               <div>
                 <label class="mps-label">{{ t('Valori') }}</label>
@@ -232,6 +265,11 @@
               </div>
             </div>
           </template>
+
+          <!-- I nomi degli stati già usati nella slide, suggeriti mentre si scrive (1.4.1421) -->
+          <datalist id="mps-nomi-stati">
+            <option v-for="n in nomiStati" :key="n" :value="n" />
+          </datalist>
 
           <!-- Da pulire col puntatore (solo immagini) -->
           <template v-if="layer.type === 'image'">
@@ -262,12 +300,6 @@
             </template>
           </template>
 
-          <!-- Parallax depth -->
-          <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-          <div>
-            <label class="mps-label">{{ t('Profondità parallasse') }}</label>
-            <NumberScrubber theme="dark" :modelValue="layer.parallaxDepth || 0" :min="0" :max="10" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" :ariaLabel="t('Profondità parallasse')" @update:modelValue="up('parallaxDepth', $event)" />
-          </div>
         </template>
 
         <!-- ===== POSIZIONE ===== -->
@@ -782,6 +814,13 @@
 
         <!-- ===== ANIMAZIONE ===== -->
         <template v-if="activeTab === 'Animazione'">
+          <!-- La profondità della parallasse è movimento: dal Contenuto all'Animazione (1.4.1426) -->
+          <!-- Parallax depth -->
+          <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+          <div>
+            <label class="mps-label">{{ t('Profondità parallasse') }}</label>
+            <NumberScrubber theme="dark" :modelValue="layer.parallaxDepth || 0" :min="0" :max="10" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" :ariaLabel="t('Profondità parallasse')" @update:modelValue="up('parallaxDepth', $event)" />
+          </div>
           <!-- Toggle Semplice / Timeline -->
           <div class="mb-flex mb-bg-gray-800 mb-rounded mb-p-0.5 mb-mb-3">
             <button
@@ -1230,7 +1269,7 @@ import InfoTip from '../Builder/InfoTip.vue';
 // easing_to_css). La curva dell'hover resta fra le 5 di base, che il PHP accetta per l'hover.
 import { defaultTimeline, EASING_GROUPS } from './timelineUtils.js';
 import { t } from '@/i18n';
-import { nomeLivello, tappeDi, chiaviUsate, valoreSM, delLivello, dellaScena, SM_CHIAVI } from './livelloUtils.js';
+import { nomeLivello, tappeDi, chiaviUsate, valoreSM, delLivello, dellaScena, SM_CHIAVI, statiDellaSlide, gruppiLivelli, nomeGruppo } from './livelloUtils.js';
 
 const props = defineProps({
   layer: { type: Object, default: null },
@@ -1239,10 +1278,21 @@ const props = defineProps({
   slideLayers: { type: Array, default: () => [] },
   // Anteprima dello scorrimento dell'editor (0–100 o null): le tappe del movimento la leggono e la spostano.
   scrollPreview: { type: Number, default: null },
+  // La modalità dell'editor (1.4.1426): disegno · animazione · interazioni, decide le schede.
+  modo: { type: String, default: 'disegno' },
 });
 
 // Il nome che il livello avrebbe senza «Nome del livello» (testo, file, id parlante, tipo): segnaposto del campo.
 const nomeSuggerito = computed(() => (props.layer ? nomeLivello({ ...props.layer, name: '' }) : ''));
+
+// Il gruppo che il livello avrebbe da solo (segnaposto del campo «Gruppo») e i nomi dei gruppi della slide (1.4.1424)
+const gruppoAutomatico = computed(() => {
+  const id = props.layer?.id;
+  if (!id) return '';
+  const g = gruppiLivelli((props.slideLayers || []).map((l) => (l.id === id ? { ...l, gruppo: '' } : l))).find((x) => x.livelli.some((l) => l.id === id));
+  return g ? nomeGruppo(g) : '';
+});
+const nomiGruppi = computed(() => [...new Set(gruppiLivelli(props.slideLayers || []).map((g) => nomeGruppo(g)))]);
 
 const targetableLayers = computed(() => {
   const cur = props.layer?.id;
@@ -1306,7 +1356,13 @@ const NOMI_TIPO = { text: t('Testo'), button: t('Pulsante'), image: t('Immagine'
 const nomeTipo = computed(() => NOMI_TIPO[props.layer?.type] || (props.layer?.type || ''));
 const NOMI_SCHERMO = { desktop: 'Desktop', notebook: 'Notebook', tablet: 'Tablet', mobile: 'Mobile' };
 const nomeSchermo = computed(() => NOMI_SCHERMO[props.activeBreakpoint] || props.activeBreakpoint);
-const tabs = ['Contenuto', 'Posizione', 'Stile', 'Animazione'];
+// Le schede secondo la modalità dell'editor (1.4.1426, come Disegno/Animazione/Azioni di Slider Revolution 7):
+// Disegno = Contenuto, Posizione, Stile; Animazione e Interazioni = un pannello solo. Prima le quattro schede insieme,
+// con le interazioni in fondo al Contenuto.
+const SCHEDE = { disegno: ['Contenuto', 'Posizione', 'Stile'], animazione: ['Animazione'], interazioni: ['Interazioni'] };
+const tabs = computed(() => SCHEDE[props.modo] || SCHEDE.disegno);
+const NOMI_SCHEDE = { Contenuto: t('Contenuto'), Posizione: t('Posizione'), Stile: t('Stile'), Animazione: t('Animazione'), Interazioni: t('Interazioni') };
+watch(() => props.modo, () => { if (!tabs.value.includes(activeTab.value)) activeTab.value = tabs.value[0]; }, { immediate: true });
 
 // Responsive: risolve il valore effettivo per il breakpoint attivo
 function rv(key) {
@@ -1529,6 +1585,53 @@ function upStato(key, val) {
   up('stato', { ...(props.layer?.stato || {}), [key]: val });
 }
 
+// «Quando si vede» (1.4.1421, utente: «che cliccando su una spia cambi il testo collegato… ho seri dubbi che si possa
+// fare senza scomodare una programmazione»). Si sceglie il livello cliccabile e il pannello scrive nome e valori dello
+// stato: «Quando si sceglie X» = il valore di X; «Finché non si sceglie X» = «!valore» (la spia che si spegne);
+// «Prima di ogni scelta» = valore vuoto, quello di partenza di uno stato non scritto in «Stati all'avvio».
+const nomeStato = (n) => String(n || '').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '');
+const pulsantiStato = computed(() => (props.slideLayers || []).filter((l) => l?.id && l.action?.type === 'setState' && nomeStato(l.action.target)));
+const nomiStati = computed(() => Object.keys(statiDellaSlide(props.slideLayers || [])));
+const opzioniQuando = computed(() => {
+  const out = [{ value: '', label: t('Come scritto qui sotto') }];
+  const nomi = [];
+  for (const l of pulsantiStato.value) {
+    const chi = l.id === props.layer?.id ? t('questo livello') : '«' + nomeLivello(l) + '»';
+    out.push({ value: 'clic:' + l.id, label: t('Quando si sceglie %s').replace('%s', chi) });
+    out.push({ value: 'fino:' + l.id, label: t('Finché non si sceglie %s').replace('%s', chi) });
+    const n = nomeStato(l.action.target);
+    if (!nomi.includes(n)) nomi.push(n);
+  }
+  for (const n of nomi) out.push({ value: 'prima:' + n, label: t('Prima di ogni scelta (%s)').replace('%s', n) });
+  return out;
+});
+const quandoScelto = computed(() => {
+  const st = props.layer?.stato;
+  if (!st) return '';
+  const n = nomeStato(st.nome);
+  const v = String(st.vale ?? '').trim();
+  const stessi = pulsantiStato.value.filter((l) => nomeStato(l.action.target) === n);
+  for (const l of stessi) {
+    const val = String(l.action.value ?? '').trim();
+    if (v === val) return 'clic:' + l.id;
+    if (v === '!' + val) return 'fino:' + l.id;
+  }
+  return v === '' && stessi.length ? 'prima:' + n : '';
+});
+function scegliQuando(scelta) {
+  const i = String(scelta || '').indexOf(':');
+  if (i < 0) return;
+  const tipo = scelta.slice(0, i), chi = scelta.slice(i + 1);
+  if (tipo === 'prima') {
+    up('stato', { ...(props.layer?.stato || {}), nome: chi, vale: '' });
+    return;
+  }
+  const l = pulsantiStato.value.find((x) => x.id === chi);
+  if (!l) return;
+  const val = String(l.action.value ?? '').trim();
+  up('stato', { ...(props.layer?.stato || {}), nome: nomeStato(l.action.target), vale: (tipo === 'fino' ? '!' : '') + val });
+}
+
 function upPulisci(key, val) {
   up('pulisci', { ...(props.layer?.pulisci || { attivo: true }), [key]: val });
 }
@@ -1596,6 +1699,10 @@ const OPTS_TAG = ['h1','h2','h3','h4','h5','h6','p','span','div'].map(v => ({ va
 const OPTS_LINK_TARGET = [
   { value: '_self', label: t('Stessa scheda') },
   { value: '_blank', label: t('Nuova scheda') },
+];
+const OPTS_TRIGGER = [
+  { value: 'click', label: t('Al clic') },
+  { value: 'hover', label: t('Al passaggio del mouse (sul telefono al tocco)') },
 ];
 const OPTS_ACTION_TYPE = [
   { value: 'none', label: t('Nessuna') },
@@ -1695,6 +1802,7 @@ const OPTS_HOVER_CURSOR = [
   { value: 'pointer', label: t('Manina') },
   { value: 'default', label: t('Freccia') },
   { value: 'grab', label: t('Mano aperta') },
+  { value: 'crosshair', label: t('Mirino') },
 ];
 const OPTS_MASK_PRESET = [
   { value: 'custom', label: t('Personalizzato') },

@@ -1260,7 +1260,7 @@ function initSlider(container) {
       container.style.setProperty('--mps-clic-x-' + v, x + 'px');
       container.style.setProperty('--mps-clic-y-' + v, y + 'px');
     }
-    el.addEventListener('click', function (e) {
+    function esegui(e) {
       var action;
       try { action = JSON.parse(el.getAttribute('data-action')); } catch (_) { return; }
       if (!action) return;
@@ -1301,7 +1301,37 @@ function initSlider(container) {
           }
           break;
       }
-    });
+    }
+    el.addEventListener('click', esegui);
+    // Al passaggio del mouse (1.4.1428, come le azioni «mouse enter / leave» di Slider Revolution): l'azione parte
+    // quando il mouse entra; col tocco e con la tastiera resta il clic. «ritorna»: uscendo, lo stato torna com'era.
+    var az0; try { az0 = JSON.parse(el.getAttribute('data-action')); } catch (_) { az0 = null; }
+    if (az0 && az0.trigger === 'hover') {
+      // L'uscita si misura sulla ZONA del livello presa all'entrata, non sul livello: una spia che, scelta, si nasconde
+      // (Cric) farebbe «uscire» il mouse da sola, lo stato tornerebbe indietro, la spia riapparirebbe… e lampeggerebbe
+      // (prova su olo03 del 24 nov). Anche uscendo dallo slider lo stato torna com'era.
+      var nomeH = String(az0.target || '').toLowerCase().replace(/[^a-z0-9_-]/g, ''), primaH = null, zonaH = null;
+      var torna = function () {
+        document.removeEventListener('pointermove', controllaUscita);
+        container.removeEventListener('pointerleave', torna);
+        zonaH = null;
+        if (primaH !== null) impostaStato(nomeH, primaH);
+      };
+      var controllaUscita = function (ev) {
+        var r = zonaH;
+        if (r && (ev.clientX < r.left - 2 || ev.clientX > r.right + 2 || ev.clientY < r.top - 2 || ev.clientY > r.bottom + 2)) torna();
+      };
+      el.addEventListener('pointerenter', function (e) {
+        if ((e.pointerType && e.pointerType !== 'mouse') || zonaH) return;
+        primaH = (az0.type === 'setState' || az0.type === 'cycleState') ? valoreStato(nomeH) : null;
+        esegui(e);
+        if (az0.ritorna && primaH !== null) {
+          zonaH = el.getBoundingClientRect();
+          document.addEventListener('pointermove', controllaUscita, { passive: true });
+          container.addEventListener('pointerleave', torna);
+        }
+      });
+    }
   });
 
   /* ── Mouse Wheel Navigation ──────────────────────────── */

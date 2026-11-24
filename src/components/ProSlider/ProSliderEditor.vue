@@ -3,7 +3,15 @@
     <div class="mps-modal-overlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999999;background:#111827;display:flex;flex-direction:column;outline:none;" @keydown="onKeydown" tabindex="-1" ref="modalEl">
       <!-- Header bar -->
       <div class="mb-flex mb-items-center mb-justify-between mb-bg-gray-800 mb-border-b mb-border-gray-700 mb-px-4 mb-py-2 mb-shrink-0">
-        <h2 class="mb-text-sm mb-font-bold mb-text-gray-200">{{ t('Editor dello Slider Pro') }}</h2>
+        <div class="mb-flex mb-items-center mb-gap-3 mb-min-w-0">
+          <h2 class="mb-text-sm mb-font-bold mb-text-gray-200">{{ t('Editor dello Slider Pro') }}</h2>
+          <!-- Le modalità (1.4.1426, come Disegno/Animazione/Azioni di Slider Revolution 7): ognuna mostra solo i suoi comandi -->
+          <div class="mps-modi" role="group" :aria-label="t('Modalità dell’editor')">
+            <button v-for="m in MODI" :key="m.k" type="button" class="mps-modo" :class="{ 'is-on': modo === m.k }" :aria-pressed="modo === m.k ? 'true' : 'false'"
+                    @click="modo = m.k" :title="m.spiega">{{ m.nome }}</button>
+          </div>
+          <span v-if="avvisoScena" class="mb-text-xs mb-text-green-300 mb-truncate" role="status">{{ avvisoScena }}</span>
+        </div>
         <div class="mb-flex mb-items-center mb-gap-2">
           <button @click="save" class="mb-px-4 mb-py-1.5 mb-bg-primary-600 mb-text-white mb-text-xs mb-font-semibold mb-rounded hover:mb-bg-primary-500 mb-transition-colors">
             {{ t('Salva e chiudi') }}
@@ -16,9 +24,10 @@
 
       <!-- Main area: 3 columns -->
       <div class="mb-flex mb-flex-1 mb-overflow-hidden">
-        <!-- Left: Slide list + Global Layers -->
-        <div class="mb-flex mb-flex-col mb-shrink-0" :style="{ width: leftPanelWidth + 'px' }">
+        <!-- Left: le slide in alto, sotto il pannello Livelli a gruppi (1.4.1424) coi livelli di tutte le slide -->
+        <div class="mb-flex mb-flex-col mb-shrink-0 mb-min-h-0" :style="{ width: leftPanelWidth + 'px' }">
           <SlideList
+            class="mps-colonna-slide"
             :slides="data.slides"
             :activeIndex="activeSlideIndex"
             :globalBackground="data.globalBackground"
@@ -27,31 +36,36 @@
             @duplicate="duplicateSlide"
             @remove="removeSlide"
             @import-slides="importSlides"
+            @scene="mostraScene = true"
           />
 
-          <!-- Global Layers section -->
-          <div class="mb-border-t mb-border-gray-700 mb-px-2 mb-py-2 mb-bg-gray-800">
-            <div class="mb-flex mb-items-center mb-justify-between mb-mb-1">
-              <span class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Livelli globali') }}</span>
-              <div class="mb-flex mb-gap-1">
-                <button @click="addGlobalLayer('text')" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-white mb-px-1" :title="t('Testo')">T</button>
-                <button @click="addGlobalLayer('button')" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-white mb-px-1" :title="t('Pulsante')">B</button>
-                <button @click="addGlobalLayer('image')" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-white mb-px-1" :title="t('Immagine')">I</button>
-                <button @click="addGlobalLayer('icon')" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-white mb-px-1" :title="t('Icona')">Ic</button>
-              </div>
-            </div>
-            <div v-if="data.globalLayers && data.globalLayers.length" class="mb-space-y-0.5">
-              <div v-for="gl in data.globalLayers" :key="gl.id"
-                @click="selectGlobalLayer(gl.id)"
-                :class="['mb-flex mb-items-center mb-justify-between mb-px-2 mb-py-1 mb-rounded mb-text-[10px] mb-cursor-pointer mb-transition-colors',
-                  selectedLayerId === gl.id && editingGlobal ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-300 hover:mb-bg-gray-600']"
-              >
-                <span class="mb-truncate mb-flex-1">{{ gl.type === 'text' ? (gl.content || t('Testo')).substring(0, 16) : gl.type }} <span class="mb-text-gray-500">({{ gl.globalPosition === 'back' ? t('dietro') : t('davanti') }})</span></span>
-                <button @click.stop="removeGlobalLayer(gl.id)" class="mb-text-gray-400 hover:mb-text-red-400 mb-ml-1">&times;</button>
-              </div>
-            </div>
-            <div v-else class="mb-text-[9px] mb-text-gray-500 mb-italic">{{ t('Nessun livello globale') }}</div>
-          </div>
+          <LayerTree
+            :layers="activeSlide?.layers || []"
+            :globalLayers="data.globalLayers || []"
+            :selectedId="selectedLayerId"
+            :selectedIds="selezione"
+            :editingGlobal="editingGlobal"
+            :hiddenIds="hiddenLayerIds"
+            :lockedIds="lockedLayerIds"
+            :soloKey="soloKey"
+            :statePreview="statePreview"
+            :activeBreakpoint="activeBreakpoint"
+            @select="(id, agg) => scegliLivello(id, { aggiungi: agg })"
+            @select-many="scegliMolti"
+            @da-parte="mettiDaParte"
+            @sposta="spostaLivello"
+            @select-global="selectGlobalLayer"
+            @nascondi="nascondiLivelli"
+            @blocca="bloccaLivelli"
+            @solo="soloGruppo"
+            @guarda="guardaScena"
+            @rinomina="rinominaGruppo"
+            @move-up="moveLayerUp"
+            @move-down="moveLayerDown"
+            @remove="removeLayer"
+            @add-global="addGlobalLayer"
+            @remove-global="removeGlobalLayer"
+          />
         </div>
 
         <!-- Left resize handle -->
@@ -208,17 +222,19 @@
                 <span class="mb-text-[10px] mb-font-mono mb-w-9 mb-text-right" :class="scrollPreview == null ? 'mb-text-gray-500' : 'mb-text-blue-300'">{{ scrollPreview == null ? t('ferma') : Math.round(scrollPreview) + '%' }}</span>
                 <button v-if="scrollPreview != null" @click="chiudiAnteprimaScorrimento" class="mps-ant-btn" :title="t('Torna alla vista ferma')" :aria-label="t('Torna alla vista ferma')">&times;</button>
               </div>
-              <div v-if="opzioniStato.length > 2" class="mb-flex mb-items-center mb-gap-1.5">
-                <span class="mb-text-[10px] mb-text-gray-400 mb-flex mb-items-center mb-gap-1">{{ t('Stato dei livelli') }}<InfoTip :testo="t('Alcuni livelli si vedono solo in uno stato (◐ nella barra dei livelli), che cambia quando si clicca un altro livello. «Come all’avvio» mostra lo slider come lo vede chi apre la pagina; scegli uno stato per vedere solo i suoi livelli; «Tutti i livelli insieme» li mostra uno sopra l’altro, per modificarli.')" :titolo="t('Anteprima degli stati')" /></span>
-                <div class="mb-w-40">
-                  <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="valoreStatoScelto" :options="opzioniStato" @update:model-value="scegliStato" />
-                </div>
-              </div>
             </div>
           </div>
-          <!-- Cosa fa la slide, in numeri (i bollini della barra dei livelli dicono quale livello) -->
+          <!-- Le scene della slide (1.4.1428, come le scene di Slider Revolution 7 e le varianti di Framer): come la vede chi
+               apre la pagina, ogni scelta col suo nome, ogni altro stato, tutti i livelli insieme. Prima un menu «Stato dei
+               livelli» coi nomi tecnici («spia = olio»). -->
+          <div v-if="scene.length > 2" class="mps-scene-riga" role="group" :aria-label="t('Scena da guardare')">
+            <span class="mps-scene-et">{{ t('Scena') }}<InfoTip :testo="t('Quello che si vede sulla tela: all’avvio, dopo una scelta, in un altro stato, o tutti i livelli insieme per sistemarli. Anche l’elenco dei livelli e la linea del tempo seguono la scena.')" :titolo="t('Scena')" /></span>
+            <button v-for="s in scene" :key="s.v" type="button" class="mps-scena" :class="{ 'is-on': valoreStatoScelto === s.v, 'is-tutti': s.v === 'tutti' }"
+                    :aria-pressed="valoreStatoScelto === s.v ? 'true' : 'false'" @click="scegliStato(s.v)">{{ s.nome }}</button>
+          </div>
+          <!-- Cosa fa la slide, in numeri (i bollini del pannello Livelli dicono quale livello) -->
           <div v-if="riepilogoAnimazioni.length" class="mps-riepilogo mb-flex mb-flex-wrap mb-items-center mb-gap-x-3 mb-gap-y-1 mb-px-3 mb-py-1 mb-border-b mb-border-gray-700">
-            <span class="mb-text-[10px] mb-text-gray-500 mb-flex mb-items-center mb-gap-1">{{ t('In questa slide') }}<InfoTip :testo="t('Quanti livelli fanno qualcosa, e cosa. Nella barra dei livelli lo stesso bollino dice quali: ↕ scorrendo, ⏱ linea del tempo, Aa lettere, ◐ stato, ☝ clic, ∞ continuo, {} CSS, ▭ solo su alcuni schermi. Passa il puntatore su un bollino per leggerlo.')" :titolo="t('Cosa succede in questa slide')" />:</span>
+            <span class="mb-text-[10px] mb-text-gray-500 mb-flex mb-items-center mb-gap-1">{{ t('In questa slide') }}<InfoTip :testo="t('Quanti livelli fanno qualcosa, e cosa. Nel pannello Livelli lo stesso bollino dice quali: ↕ scorrendo, ⏱ linea del tempo, Aa lettere, ◐ stato, ☝ clic, ∞ continuo, {} CSS, ▭ solo su alcuni schermi. Passa il puntatore su un bollino per leggerlo.')" :titolo="t('Cosa succede in questa slide')" />:</span>
             <span v-for="r in riepilogoAnimazioni" :key="r.k" :class="['mps-riep', 'mps-riep--' + r.k]">{{ r.testo }}</span>
           </div>
 
@@ -235,12 +251,15 @@
               :activeBreakpoint="activeBreakpoint"
               :canvasMaxWidth="canvasDesignWidth"
               :zoom="canvasZoom"
-              :hiddenIds="hiddenLayerIds"
+              :hiddenIds="nascostiSullaTela"
+              :lockedIds="lockedLayerIds"
               :scrollPreview="scrollPreview"
               :statePreview="statePreview"
               :initialStates="statiIniziali"
               @deselect="selectedLayerId = null"
-              @select-layer="selectedLayerId = $event"
+              @select-layer="scegliLivello"
+              @update-layers="aggiornaLivelli"
+              :selectedIds="selezione"
               @update-layer="updateLayer"
               @update-keyframe="onCanvasKeyframeUpdate"
               @start-edit="editingLayerId = $event"
@@ -258,8 +277,8 @@
 
           <!-- Multi-track Keyframe Timeline (sempre visibile se ci sono layer con timeline) -->
           <KeyframeTimeline
-            v-if="hasAnyTimeline"
-            :layers="activeSlide?.layers || []"
+            v-if="hasAnyTimeline && modo === 'animazione'"
+            :layers="livelliInScena"
             :selectedLayerId="selectedLayerId"
             :selectedKeyframeId="selectedKeyframeId"
             :playhead="timelinePlayhead"
@@ -296,23 +315,59 @@
         <!-- Right resize handle -->
         <div class="mps-panel-resize-handle" @pointerdown="startResizeRight"></div>
 
-        <!-- Right: Layer properties -->
-        <LayerProperties
-          :layer="selectedLayer"
-          :selectedKeyframeId="selectedKeyframeId"
-          :activeBreakpoint="activeBreakpoint"
-          :slideLayers="activeSlide?.layers || []"
-          :scrollPreview="scrollPreview"
-          @set-scroll-preview="fermaScorrimento(); scrollPreview = $event"
-          @update="updateLayerProp"
-          @update-keyframe="onUpdateKeyframe"
-          @capture-from-canvas="captureLayerToKeyframe"
-          :style="{ width: rightPanelWidth + 'px', flexShrink: 0 }"
-        />
+        <!-- Right: le interazioni della slide (modalità Interazioni, 1.4.1426) e le proprietà del livello scelto -->
+        <div class="mb-flex mb-flex-col mb-min-h-0" :style="{ width: rightPanelWidth + 'px', flexShrink: 0 }">
+          <InteractionsPanel
+            v-if="modo === 'interazioni'"
+            class="mps-colonna-int"
+            :layers="activeSlide?.layers || []"
+            :selectedId="editingGlobal ? null : selectedLayerId"
+            :stati="data.stati || ''"
+            :statePreview="statePreview"
+            @select="(id) => scegliLivello(id)"
+            @guarda="guardaScena"
+            @aggiungi-scelta="aggiungiScelta"
+            @togli-scelta="togliScelta"
+          />
+          <MultiPanel
+            v-if="livelliScelti.length > 1"
+            :key="[...selezione].join(',')"
+            class="mps-colonna-prop"
+            :layers="livelliScelti"
+            :slideLayers="activeSlide?.layers || []"
+            @annulla="scegliMolti([])"
+            @allinea="allinea"
+            @distribuisci="distribuisci"
+            @entrata="entrataInsieme"
+            @transizione="transizioneInsieme"
+            @gruppo="gruppoScelti"
+            @etichetta="etichettaScelti"
+            @da-parte="(v) => mettiDaParte([...selezione], v)"
+            @duplica="duplicaScelti"
+            @elimina="eliminaScelti"
+          />
+          <LayerProperties
+            v-else
+            class="mps-colonna-prop"
+            :layer="selectedLayer"
+            :modo="modo"
+            :selectedKeyframeId="selectedKeyframeId"
+            :activeBreakpoint="activeBreakpoint"
+            :slideLayers="activeSlide?.layers || []"
+            :scrollPreview="scrollPreview"
+            @set-scroll-preview="fermaScorrimento(); scrollPreview = $event"
+            @update="updateLayerProp"
+            @update-keyframe="onUpdateKeyframe"
+            @capture-from-canvas="captureLayerToKeyframe"
+          />
+        </div>
       </div>
 
       <!-- Footer: Slider settings -->
       <SliderSettings :settings="data" @update="updateGlobal" />
+
+      <!-- Scene dei temi (1.4.1422) -->
+      <SceneLibrary v-if="mostraScene" :haContenuto="haContenuto" :numSlide="data.slides.length" @usa="usaScena" @chiudi="mostraScene = false" />
     </div>
   </Teleport>
 </template>
@@ -333,7 +388,11 @@ import FieldSelect from '../Builder/fields/FieldSelect.vue';
 import NumberScrubber from '../Builder/fields/NumberScrubber.vue';
 import { t } from '@/i18n';
 import InfoTip from '../Builder/InfoTip.vue';
-import { leggiStati, statiDellaSlide, animazioniLivello } from './livelloUtils.js';
+import { leggiStati, statiDellaSlide, animazioniLivello, nomeLivello, gruppiLivelli, statoVale } from './livelloUtils.js';
+import SceneLibrary from './SceneLibrary.vue';
+import LayerTree from './LayerTree.vue';
+import InteractionsPanel from './InteractionsPanel.vue';
+import MultiPanel from './MultiPanel.vue';
 
 // Option arrays per FieldSelect (stessi value dei vecchi <option>: dati salvati invariati)
 const OPTS_BG_TYPE = [
@@ -350,6 +409,8 @@ const OPTS_KENBURNS_DIR = [
 
 const props = defineProps({
   tileId: { type: String, required: true },
+  // Aperto da «Parti da una scena dei temi» dell'inspector: la libreria delle scene subito (1.4.1422).
+  apriScene: { type: Boolean, default: false },
 });
 
 const emit = defineEmits(['close']);
@@ -557,6 +618,72 @@ function removeSlide(idx) {
   selectedLayerId.value = null;
 }
 
+// --- Scene dei temi (1.4.1422) ---
+// Si parte da uno Slider Pro di un tema (Olobuild_Scene_Slider): «Usa questa scena» prende slide, livelli globali e
+// impostazioni che lo fanno funzionare (altezze, scorrimento, stati, schede…), non lo sfondo né il bordo della tile;
+// «Aggiungi le slide in fondo» solo le slide (e gli stati di partenza). Gli id dei livelli si rifanno: due copie
+// della stessa scena non si pestano i piedi (stati, CSS dei livelli), e i riferimenti «mostra o nasconde» seguono.
+const DEL_CONTENITORE = ['bg', 'border', 'border_hover', 'border_hover_duration', 'border_effect', 'border_effect_intensity',
+  'border_effect_color2', 'border_effect_angle', 'border_effect_speed', 'typography_preset'];
+const mostraScene = ref(!!props.apriScene);
+const avvisoScena = ref('');
+let timerAvviso = null;
+// Lo slider ha già del lavoro: le slide non sono quelle con cui arriva (le due d'esempio di quando si trascina, o
+// quella vuota). Prova su olo03 del 24 nov: lo slider appena trascinato chiedeva «2 slide vengono sostituite».
+const firmaSlide = (slides) => JSON.stringify((slides || []).map((s) => [s.background?.image || '', (s.layers || []).map((l) => l.content || l.imageSrc || l.type)]));
+const haContenuto = computed(() => {
+  const f = firmaSlide(data.slides);
+  return ![prosliderDef.partenza?.slides, prosliderDef.defaults?.slides, [defaultSlide()]].some((p) => p && firmaSlide(p) === f);
+});
+
+function rinnovaIds(livelli) {
+  const mappa = {};
+  const nuovi = (livelli || []).map((l) => {
+    const n = { ...l, id: makeId() };
+    mappa[l.id] = n.id;
+    // il nome parlante che veniva dall'id del tema («cr-velo» → «Velo») resta come nome del livello
+    if (!l.name) {
+      const daId = nomeLivello(l);
+      if (daId && daId !== nomeLivello({ ...l, id: '' })) n.name = daId;
+    }
+    return n;
+  });
+  nuovi.forEach((l) => {
+    if (l.action?.type === 'toggleLayer' && mappa[l.action.target]) l.action = { ...l.action, target: mappa[l.action.target] };
+  });
+  return nuovi;
+}
+
+function usaScena({ settings, nome, media, modo }) {
+  const s = JSON.parse(JSON.stringify(settings || {}));
+  if (!Array.isArray(s.slides) || !s.slides.length) return;
+  s.slides = s.slides.map((sl) => ({ ...sl, id: makeId(), layers: rinnovaIds(sl.layers) }));
+  if (Array.isArray(s.globalLayers)) s.globalLayers = rinnovaIds(s.globalLayers);
+  if (modo === 'aggiungi') {
+    const da = data.slides.length;
+    data.slides.push(...s.slides);
+    if (s.stati) data.stati = [data.stati, s.stati].filter((x) => String(x || '').trim()).join('; ');
+    activeSlideIndex.value = da;
+  } else {
+    const def = prosliderDef.defaults;
+    for (const k of new Set([...Object.keys(def), ...Object.keys(s)])) {
+      if (DEL_CONTENITORE.includes(k)) continue;
+      data[k] = k in s ? s[k] : JSON.parse(JSON.stringify(def[k]));
+    }
+    activeSlideIndex.value = 0;
+  }
+  selectedLayerId.value = null;
+  editingLayerId.value = null;
+  editingGlobal.value = false;
+  mostraScene.value = false;
+  // Solo le foto e i video che dovevano copiarsi e non ci sono riusciti: i disegni SVG restano apposta nella libreria
+  // (WordPress non li accetta nella Libreria media).
+  const fallite = media?.fallite ? ' ' + t('(%d file non copiati: restano all’indirizzo della libreria)').replace('%d', media.fallite) : '';
+  avvisoScena.value = t('Scena di %s pronta: cambia testi, foto e link, poi «Salva e chiudi».').replace('%s', nome || '') + fallite;
+  clearTimeout(timerAvviso);
+  timerAvviso = setTimeout(() => { avvisoScena.value = ''; }, 12000);
+}
+
 function importSlides(json) {
   data.slides = json.slides;
   if (json.globalBackground) {
@@ -684,6 +811,323 @@ function updateLayerProp(key, val) {
 function toggleLayerVisibility(id) {
   if (hiddenLayerIds.has(id)) hiddenLayerIds.delete(id);
   else hiddenLayerIds.add(id);
+}
+
+// --- Pannello Livelli a gruppi (1.4.1424) ---
+// Occhio, lucchetto e «solo» valgono solo nell'editor (come in Slider Revolution 7 e After Effects): il sito non li
+// vede e non si salvano. Bloccato = sulla tela non si prende né si sposta, i clic passano al livello sotto.
+const lockedLayerIds = reactive(new Set());
+const soloKey = ref(null);
+const soloIds = ref(null);
+function nascondiLivelli(ids, nascondi) {
+  (ids || []).forEach((id) => (nascondi ? hiddenLayerIds.add(id) : hiddenLayerIds.delete(id)));
+}
+function bloccaLivelli(ids, blocca) {
+  (ids || []).forEach((id) => (blocca ? lockedLayerIds.add(id) : lockedLayerIds.delete(id)));
+  if (blocca && ids?.includes(selectedLayerId.value)) selectedLayerId.value = null;
+}
+function soloGruppo(key, ids) {
+  soloKey.value = key;
+  soloIds.value = key ? new Set(ids) : null;
+}
+// Sulla tela: i nascosti con l'occhio e, col «solo», tutti quelli fuori dal gruppo
+const nascostiSullaTela = computed(() => {
+  if (!soloIds.value) return hiddenLayerIds;
+  const s = new Set(hiddenLayerIds);
+  (activeSlide.value?.layers || []).forEach((l) => { if (!soloIds.value.has(l.id)) s.add(l.id); });
+  return s;
+});
+watch(activeSlideIndex, () => soloGruppo(null, []));
+// «Mostra sulla tela» di una scelta: lo stato che la fa vedere (null = di nuovo com'è all'avvio)
+function guardaScena(v) {
+  statePreview.value = v ? { [v.stato]: v.valore } : {};
+}
+// --- Più livelli insieme (1.4.1428) ---
+// La scelta: il livello «principale» resta selectedLayerId (le sue proprietà, la sua linea del tempo); gli altri scelti
+// con Maiusc/Ctrl + clic sulla tela o nell'elenco, o con «Scegli tutto il gruppo», si spostano e si cambiano insieme.
+const selezione = ref(new Set());
+function scegliLivello(id, opz = {}) {
+  editingGlobal.value = false;
+  if (opz.aggiungi) {
+    const s = new Set(selezione.value);
+    if (selectedLayerId.value && !s.has(selectedLayerId.value)) s.add(selectedLayerId.value);
+    if (s.has(id) && s.size > 1) {
+      s.delete(id);
+      if (selectedLayerId.value === id) selectedLayerId.value = [...s][s.size - 1];
+    } else {
+      s.add(id);
+      selectedLayerId.value = id;
+    }
+    selezione.value = s;
+    return;
+  }
+  if (opz.mantieni && selezione.value.has(id)) { selectedLayerId.value = id; return; }
+  selezione.value = new Set([id]);
+  selectedLayerId.value = id;
+}
+function scegliMolti(ids) {
+  editingGlobal.value = false;
+  const s = new Set((ids || []).filter((id) => !lockedLayerIds.has(id)));
+  selezione.value = s;
+  selectedLayerId.value = s.size ? [...s][0] : null;
+}
+watch(selectedLayerId, (id) => {
+  if (!id) { if (selezione.value.size) selezione.value = new Set(); return; }
+  if (!selezione.value.has(id)) selezione.value = new Set([id]);
+});
+watch(activeSlideIndex, () => { selezione.value = new Set(); });
+const livelliScelti = computed(() => (editingGlobal.value ? [] : (activeSlide.value?.layers || []).filter((l) => selezione.value.has(l.id))));
+// La posizione di un livello sullo schermo che si sta guardando (come resolveLayerValues della tela)
+function posVista(l) {
+  const bp = activeBreakpoint.value;
+  const m = { x: l.x, y: l.y };
+  if (bp !== 'desktop' && l.responsive) {
+    const chain = ['notebook', 'tablet', 'mobile'];
+    for (let k = 0; k <= chain.indexOf(bp); k++) {
+      const ov = l.responsive?.[chain[k]];
+      if (ov && ov.x !== undefined) m.x = ov.x;
+      if (ov && ov.y !== undefined) m.y = ov.y;
+    }
+  }
+  return { x: Number(m.x) || 0, y: Number(m.y) || 0 };
+}
+const arrot = (v) => Math.round(Math.max(-50, Math.min(150, v)) * 10) / 10;
+function aggiornaLivelli(lista) { (lista || []).forEach((u) => updateLayer(u.id, { x: u.x, y: u.y })); }
+function spostaScelti(dx, dy) {
+  const ls = livelliScelti.value.length ? livelliScelti.value : (selectedLayer.value && !editingGlobal.value ? [selectedLayer.value] : []);
+  ls.filter((l) => !lockedLayerIds.has(l.id)).forEach((l) => { const p = posVista(l); updateLayer(l.id, { x: arrot(p.x + dx), y: arrot(p.y + dy) }); });
+}
+function allinea(dir) {
+  const ls = livelliScelti.value;
+  if (ls.length < 2) return;
+  const k = dir === 'sinistra' ? 'x' : 'y';
+  const m = Math.min(...ls.map((l) => posVista(l)[k]));
+  ls.forEach((l) => updateLayer(l.id, { [k]: m }));
+}
+function distribuisci(asse) {
+  const ls = livelliScelti.value.map((l) => ({ l, p: posVista(l) })).sort((a, b) => a.p[asse] - b.p[asse]);
+  if (ls.length < 3) return;
+  const a = ls[0].p[asse], z = ls[ls.length - 1].p[asse];
+  ls.forEach((o, i) => updateLayer(o.l.id, { [asse]: arrot(a + ((z - a) * i) / (ls.length - 1)) }));
+}
+// dall'alto in basso, poi da sinistra a destra, come si legge
+const inLettura = (ls) => ls.slice().sort((a, b) => posVista(a).y - posVista(b).y || posVista(a).x - posVista(b).x);
+function entrataInsieme({ animIn, base, cascata }) {
+  inLettura(livelliScelti.value).forEach((l, i) => updateLayer(l.id, { ...(animIn ? { animIn } : {}), animInDelay: Math.round((base || 0) + i * (cascata || 0)) }));
+}
+function transizioneInsieme({ effetto, durata, cascata }) {
+  inLettura(livelliScelti.value.filter((l) => l.stato?.nome)).forEach((l, i) => updateLayer(l.id, { stato: { ...l.stato, effetto, durata, ritardo: Math.round(i * (cascata || 0)) } }));
+}
+function cambiaScelti(fn) {
+  const layers = activeSlide.value?.layers;
+  if (!layers) return;
+  layers.forEach((l, i) => { if (selezione.value.has(l.id)) layers.splice(i, 1, fn({ ...l })); });
+}
+function gruppoScelti(nome) { cambiaScelti((l) => { if (nome) l.gruppo = nome; else delete l.gruppo; return l; }); }
+function etichettaScelti(k) { cambiaScelti((l) => { if (k) l.etichetta = k; else delete l.etichetta; return l; }); }
+function mettiDaParte(ids, si) {
+  const layers = activeSlide.value?.layers;
+  if (!layers) return;
+  const set = new Set(ids || []);
+  layers.forEach((l, i) => { if (set.has(l.id)) { const n = { ...l }; if (si) n.daParte = true; else delete n.daParte; layers.splice(i, 1, n); } });
+}
+function duplicaScelti() {
+  const layers = activeSlide.value?.layers;
+  if (!layers || !livelliScelti.value.length) return;
+  const dove = Math.max(...livelliScelti.value.map((l) => layers.indexOf(l)));
+  const copie = livelliScelti.value.map((l) => {
+    const c = JSON.parse(JSON.stringify(l));
+    c.id = makeId();
+    c.x = arrot((Number(c.x) || 0) + 2);
+    c.y = arrot((Number(c.y) || 0) + 2);
+    if (c.name) c.name = c.name + ' ' + t('(copia)');
+    return c;
+  });
+  layers.splice(dove + 1, 0, ...copie);
+  scegliMolti(copie.map((c) => c.id));
+}
+function eliminaScelti() {
+  const layers = activeSlide.value?.layers;
+  if (!layers) return;
+  for (let i = layers.length - 1; i >= 0; i--) if (selezione.value.has(layers[i].id)) layers.splice(i, 1);
+  selezione.value = new Set();
+  selectedLayerId.value = null;
+}
+// Trascinare un livello nell'elenco: ordine sulla slide e gruppo d'arrivo (1.4.1428)
+function spostaLivello({ id, su, dove, gruppo }) {
+  const layers = activeSlide.value?.layers;
+  if (!layers) return;
+  const i = layers.findIndex((l) => l.id === id);
+  if (i < 0) return;
+  const l = { ...layers[i] };
+  const cliccabileDiScelta = l.action?.type === 'setState';
+  const stessoGruppo = gruppo && gruppo.ids.includes(id);
+  if (gruppo && !stessoGruppo) {
+    if ((gruppo.tipo === 'scelta' || gruppo.tipo === 'prima' || gruppo.tipo === 'stato') && !cliccabileDiScelta) {
+      // in una scelta: compare con quella scelta (o finché non si è scelto niente, o in quello stato)
+      const fx = l.stato || {};
+      l.stato = { nome: gruppo.stato, vale: gruppo.tipo === 'stato' ? gruppo.vale : gruppo.valore, effetto: fx.effetto || 'fade', durata: fx.durata ?? 400, ritardo: fx.ritardo ?? 0 };
+      delete l.gruppo;
+    } else if (gruppo.tipo === 'manuale') {
+      if (!cliccabileDiScelta) delete l.stato;
+      l.gruppo = gruppo.nome;
+    } else if (!cliccabileDiScelta) {
+      // in un gruppo automatico (testi, forme, veli, serie…): fuori da scelte e stati; se lì non ci va da solo, il gruppo
+      // diventa manuale con lo stesso nome, così il livello ci resta
+      delete l.stato;
+      delete l.gruppo;
+    }
+  }
+  layers.splice(i, 1);
+  let j = su ? layers.findIndex((x) => x.id === su) : -1;
+  let dov = dove;
+  if (j < 0 && gruppo) {
+    j = Math.max(-1, ...gruppo.ids.filter((x) => x !== id).map((x) => layers.findIndex((y) => y.id === x)));
+    dov = 'sopra';
+  }
+  // l'elenco va dal davanti al dietro: «sopra» una riga = davanti = dopo di lei nella slide
+  layers.splice(j < 0 ? layers.length : (dov === 'sotto' ? j : j + 1), 0, l);
+  if (gruppo && !stessoGruppo && !['scelta', 'prima', 'stato', 'manuale'].includes(gruppo.tipo) && !cliccabileDiScelta) {
+    const dovè = gruppiLivelli(layers).find((g) => g.livelli.some((x) => x.id === id));
+    if (dovè && dovè.key !== gruppo.key) {
+      const tutti = new Set([...gruppo.ids, id]);
+      layers.forEach((x, k) => { if (tutti.has(x.id)) layers.splice(k, 1, { ...x, gruppo: gruppo.nome }); });
+    }
+  }
+  scegliLivello(id);
+}
+
+// --- Le scene (1.4.1428) ---
+const scene = computed(() => {
+  const nomi = {};
+  for (const g of gruppiLivelli(activeSlide.value?.layers || [])) if (g.tipo === 'scelta') nomi[g.stato + '=' + g.valore] = g.nomeManuale || g.nome || g.valore;
+  const out = [{ v: 'avvio', nome: t('All’avvio') }];
+  for (const [n, valori] of Object.entries(statiSlide.value)) {
+    for (const v of valori) out.push({ v: n + '=' + v, nome: nomi[n + '=' + v] || (n + ': ' + v) });
+  }
+  out.push({ v: 'tutti', nome: t('Tutti i livelli insieme') });
+  return out;
+});
+// I livelli che si vedono nella scena scelta (per la linea del tempo)
+const livelliInScena = computed(() => {
+  const ls = activeSlide.value?.layers || [];
+  const sp = statePreview.value;
+  if (!sp) return ls;
+  return ls.filter((l) => {
+    const n = String(l.stato?.nome || '').trim().toLowerCase();
+    if (!n) return true;
+    const v = Object.prototype.hasOwnProperty.call(sp, n) ? sp[n] : (statiIniziali.value[n] ?? '');
+    return statoVale(l.stato.vale, v);
+  });
+});
+
+// --- Modalità e interazioni (1.4.1426) ---
+const MODI = [
+  { k: 'disegno', nome: t('Disegno'), spiega: t('Testi, foto, posizione e stile dei livelli') },
+  { k: 'animazione', nome: t('Animazione'), spiega: t('Entrate, movimento con lo scorrimento e linea del tempo') },
+  { k: 'interazioni', nome: t('Interazioni'), spiega: t('Cosa succede al clic: scelte, stati e azioni') },
+];
+const modo = ref('disegno');
+const nomeStatoE = (n) => String(n || '').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '');
+function sostituisciValore(vale, vecchio, nuovo) {
+  const s = String(vale ?? '').trim();
+  const neg = s.startsWith('!');
+  return (neg ? '!' : '') + (neg ? s.slice(1) : s).split(',').map((x) => (x.trim() === vecchio ? nuovo : x.trim())).join(',');
+}
+// «Aggiungi una scelta»: copia il gruppo dell'ultima scelta della fila (il livello cliccabile e quelli che compaiono),
+// con un valore nuovo; il livello cliccabile e ciò che gli sta sopra (la spia spenta di Cric) scivolano di un passo sulla
+// fila, anche su notebook, tablet e telefono; il display resta dov'è. Poi la tela mostra la scelta nuova, da riempire.
+function aggiungiScelta(stato) {
+  const layers = activeSlide.value?.layers;
+  if (!layers) return;
+  const voci = gruppiLivelli(layers)
+    .filter((g) => g.tipo === 'scelta' && g.stato === stato)
+    .map((g) => ({ g, tr: g.livelli.find((l) => l.action?.type === 'setState') }))
+    .filter((v) => v.tr)
+    .sort((a, b) => (Number(a.tr.x) || 0) - (Number(b.tr.x) || 0));
+  if (!voci.length) return;
+  const ultimo = voci[voci.length - 1];
+  const prima = voci[voci.length - 2];
+  const usati = new Set(voci.map((v) => v.g.valore));
+  let n = voci.length + 1;
+  let nuovo = 'scelta-' + n;
+  while (usati.has(nuovo)) nuovo = 'scelta-' + (++n);
+  const vecchio = ultimo.g.valore;
+  const posto = (l, bp) => (bp ? l.responsive?.[bp] : l);
+  const passo = (bp) => {
+    const a = Number(posto(ultimo.tr, bp)?.x);
+    const b = prima ? Number(posto(prima.tr, bp)?.x) : NaN;
+    if (Number.isFinite(a) && Number.isFinite(b) && a !== b) return a - b;
+    if (bp) return null;
+    const w = Number(ultimo.tr.width);
+    return Number.isFinite(w) ? w + 2 : 6;
+  };
+  const stessoPosto = (l, bp) => {
+    const a = posto(l, bp), b = posto(ultimo.tr, bp);
+    return !!a && !!b && a.x !== undefined && Number(a.x) === Number(b.x) && Number(a.y) === Number(b.y);
+  };
+  const membri = layers.filter((l) => ultimo.g.livelli.includes(l));
+  const dove = Math.max(...membri.map((l) => layers.indexOf(l)));
+  const copie = membri.map((l) => {
+    const c = JSON.parse(JSON.stringify(l));
+    c.id = makeId();
+    if (c.action?.type === 'setState' && nomeStatoE(c.action.target) === stato) {
+      c.action.value = nuovo;
+      c.name = t('Nuova scelta') + ' ' + n;
+      if (c.action.label) c.action.label = c.name;
+    }
+    if (c.stato && nomeStatoE(c.stato.nome) === stato) c.stato = { ...c.stato, vale: sostituisciValore(c.stato.vale, vecchio, nuovo) };
+    if (stessoPosto(l, null)) c.x = Math.round(((Number(c.x) || 0) + passo(null)) * 100) / 100;
+    for (const bp of ['notebook', 'tablet', 'mobile']) {
+      const d = passo(bp);
+      if (d != null && stessoPosto(l, bp)) c.responsive[bp].x = Math.round((Number(c.responsive[bp].x) + d) * 100) / 100;
+    }
+    return c;
+  });
+  // i livelli «finché non si è scelto niente» scritti con l'elenco di tutti i valori (!a,b,c) prendono anche il nuovo
+  layers.forEach((l, i) => {
+    const v = String(l.stato?.vale ?? '').trim();
+    if (nomeStatoE(l.stato?.nome) !== stato || !v.startsWith('!')) return;
+    const lista = v.slice(1).split(',').map((x) => x.trim());
+    if ([...usati].every((x) => lista.includes(x))) layers.splice(i, 1, { ...l, stato: { ...l.stato, vale: v + ',' + nuovo } });
+  });
+  layers.splice(dove + 1, 0, ...copie);
+  editingGlobal.value = false;
+  // scelto il testo più grande della scelta nuova, da riscrivere subito (la spia, scelta, nella sua scena è nascosta:
+  // i riquadri di selezione finivano nell'angolo della tela; prova su olo03 del 24 nov)
+  const testi = copie.filter((c) => c.type === 'text' && c.stato?.nome);
+  const titolo = testi.sort((a, b) => (Number(b.fontSize) || 0) - (Number(a.fontSize) || 0))[0];
+  selectedLayerId.value = (titolo || copie.find((c) => c.action?.type === 'setState') || copie[0]).id;
+  statePreview.value = { [stato]: nuovo };
+}
+// «Togli questa scelta»: i suoi livelli, e il suo valore dagli elenchi «finché non è …» degli altri
+function togliScelta({ stato, valore }) {
+  const layers = activeSlide.value?.layers;
+  if (!layers) return;
+  const g = gruppiLivelli(layers).find((x) => x.tipo === 'scelta' && x.stato === stato && x.valore === valore);
+  if (!g) return;
+  const via = new Set(g.livelli.map((l) => l.id));
+  for (let i = layers.length - 1; i >= 0; i--) {
+    const l = layers[i];
+    if (via.has(l.id)) { layers.splice(i, 1); continue; }
+    const v = String(l.stato?.vale ?? '').trim();
+    if (nomeStatoE(l.stato?.nome) === stato && v.startsWith('!') && v.includes(',')) {
+      layers.splice(i, 1, { ...l, stato: { ...l.stato, vale: '!' + v.slice(1).split(',').map((x) => x.trim()).filter((x) => x !== valore).join(',') } });
+    }
+  }
+  if (via.has(selectedLayerId.value)) selectedLayerId.value = null;
+  if (statePreview.value && statePreview.value[stato] === valore) statePreview.value = {};
+}
+
+// Rinomina un gruppo: il nome va nei suoi livelli («gruppo»); vuoto = torna automatico
+function rinominaGruppo(ids, nome) {
+  const layers = activeSlide.value?.layers || [];
+  layers.forEach((l, i) => {
+    if (!ids.includes(l.id)) return;
+    const n = { ...l };
+    if (nome) n.gruppo = nome; else delete n.gruppo;
+    layers.splice(i, 1, n);
+  });
 }
 
 // Move layer toward front (higher z-index = later in array)
@@ -895,7 +1339,20 @@ function onKeydown(e) {
       cancel();
     }
   }
-  if (e.key === 'Delete' && selectedLayerId.value && !editingLayerId.value) {
+  // Canc in un campo cancella il testo, non il livello scelto (1.4.1422: prima toglieva il livello).
+  const campo = e.target?.closest?.('input, textarea, select, [contenteditable="true"]');
+  // Frecce: spostano i livelli scelti di mezzo punto (con Maiusc di 5), sullo schermo che si sta guardando (1.4.1428)
+  if (!campo && !editingLayerId.value && selectedLayerId.value && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+    e.preventDefault();
+    const d = e.shiftKey ? 5 : 0.5;
+    spostaScelti(e.key === 'ArrowLeft' ? -d : e.key === 'ArrowRight' ? d : 0, e.key === 'ArrowUp' ? -d : e.key === 'ArrowDown' ? d : 0);
+    return;
+  }
+  if (e.key === 'Delete' && !campo && selezione.value.size > 1 && !editingLayerId.value) {
+    eliminaScelti();
+    return;
+  }
+  if (e.key === 'Delete' && !campo && selectedLayerId.value && !editingLayerId.value) {
     removeLayer(selectedLayerId.value);
   }
 }
@@ -917,7 +1374,8 @@ function onCanvasWheel(e) {
 }
 
 // --- Resizable side panels ---
-const leftPanelWidth = ref(180);
+// 260: le slide e, sotto, il pannello Livelli coi nomi interi (1.4.1424; prima 180 per le sole miniature)
+const leftPanelWidth = ref(260);
 const rightPanelWidth = ref(256);
 let panelResizeState = null;
 
@@ -952,7 +1410,8 @@ function onPanelResizeUp() {
 }
 
 onMounted(() => {
-  nextTick(() => modalEl.value?.focus());
+  // Aperto con la libreria delle scene: il fuoco resta nella sua ricerca (l'editor si monta dopo e lo prendeva).
+  if (!mostraScene.value) nextTick(() => modalEl.value?.focus());
 });
 
 onUnmounted(() => {
@@ -964,6 +1423,24 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* Le slide in alto prendono al massimo un terzo abbondante: il resto è del pannello Livelli (1.4.1424) */
+.mps-colonna-slide { max-height: 38%; flex: none; }
+.mps-scene-riga { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 5px 12px; border-bottom: 1px solid #374151; background: #111827; }
+.mps-scene-et { display: inline-flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #fcd34d; margin-right: 4px; }
+.mps-scena { font: inherit; font-size: 11px; padding: 3px 9px; border-radius: 999px; border: 1px solid #374151; background: transparent; color: #d1d5db; cursor: pointer; }
+.mps-scena:hover { border-color: #6b7280; }
+.mps-scena.is-on { background: #facc15; border-color: #facc15; color: #1f2937; font-weight: 600; }
+.mps-scena.is-tutti { border-style: dashed; }
+.mps-scena:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
+/* Modalità Interazioni: le regole in alto (al massimo metà), sotto le proprietà del livello (1.4.1426) */
+.mps-colonna-int { max-height: 50%; flex: none; border-left: 1px solid #374151; }
+.mps-colonna-prop { flex: 1; min-height: 0; height: auto; }
+.mps-modi { display: inline-flex; border: 1px solid #374151; border-radius: 6px; overflow: hidden; }
+.mps-modo { font: inherit; font-size: 11px; font-weight: 600; padding: 4px 12px; color: #9ca3af; background: transparent; border: 0; cursor: pointer; }
+.mps-modo + .mps-modo { border-left: 1px solid #374151; }
+.mps-modo:hover { color: #f3f4f6; }
+.mps-modo.is-on { background: var(--olo-color-primary, #e1474f); color: var(--olo-color-primary-contrast, #fff); }
+.mps-modo:focus-visible { outline: 2px solid #fff; outline-offset: -2px; }
 .mb-bg-gray-850 {
   background: #1a2234;
 }

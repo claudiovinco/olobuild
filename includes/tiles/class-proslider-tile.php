@@ -701,7 +701,10 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             // Compose
             $hover_props = $h_transform . $h_opacity . $h_color_css . $h_filter_css . $h_cursor;
             if ( $hover_props ) {
-                $hover_css = '.mps-layer-' . $lay_id . '{transition:all ' . $h_dur . 'ms ' . $h_easing . ';} .mps-layer-' . $lay_id . ':hover{' . $hover_props . '}';
+                // Il solo cursore non ha niente da far scorrere (1.4.1421): niente «transition: all», che animerebbe
+                // anche il resto del livello.
+                $h_transizione = $hover_props !== $h_cursor ? '.mps-layer-' . $lay_id . '{transition:all ' . $h_dur . 'ms ' . $h_easing . ';} ' : '';
+                $hover_css     = $h_transizione . '.mps-layer-' . $lay_id . ':hover{' . $hover_props . '}';
             }
         }
 
@@ -979,6 +982,12 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         <?php
         $custom_class = sanitize_html_class( $layer['customClass'] ?? '' );
         $custom_id = sanitize_html_class( $layer['customId'] ?? '' );
+        // «Colore del contorno» dell'azione (1.4.1421): il contorno del livello scelto («Imposta uno stato») e di quello
+        // raggiunto con la tastiera. Prima si poteva cambiare solo dal CSS su misura (--mps-attivo).
+        if ( $action_attr ) {
+            $segno = $this->safe_color_css( (string) ( $layer['action']['segno'] ?? '' ) );
+            if ( '' !== $segno ) { $style .= '--mps-attivo:' . $segno . ';'; }
+        }
         $custom_css_inline = sanitize_text_field( $layer['customCSS'] ?? '' );
         if ( $custom_css_inline ) { $style .= $custom_css_inline; }
         ?>

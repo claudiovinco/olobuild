@@ -257,7 +257,8 @@ const searchResults = computed(() => {
   if (!q) return [];
   const all = tilesStore.paletteTiles || [];
   return all
-    .filter(t => (t.name || '').toLowerCase().includes(q) || (t.type || '').toLowerCase().includes(q))
+    // Le parole in qualsiasi ordine (prova su olo03, 24 nov: «Slider Pro» non trovava la tile «Pro Slider»).
+    .filter(t => { const dove = ((t.name || '') + ' ' + (t.type || '')).toLowerCase(); return q.split(/\s+/).every(w => dove.includes(w)); })
     .map(t => ({ ...t, cat: paletteCategoryOf(t.category) }));
 });
 

@@ -95,8 +95,8 @@ def nello_schermo(quota, fs_tel):
 
 def apertura(t):
     m = K.mob
-    tutte = ','.join(s[0] for s in SPIE)
-    VUOTO = {'nome': 'spia', 'vale': '!' + tutte, 'effetto': 'fade', 'durata': 400}
+    # il display prima di ogni scelta: lo stato «spia» parte vuoto (1.4.1421: prima «!olio,freni,batteria,motore»)
+    VUOTO = {'nome': 'spia', 'vale': '', 'effetto': 'fade', 'durata': 400}
     L = K.veli('cr-velo', 'alto', 26, 44, colore=C['nero'], forza=80, mobile_alto=22) + [
         # il cruscotto 3 (18 nov 2026, utente: «più basso e più piccolo, per fare spazio alla strada che scorre; più reale»):
         # la plancia a tutta larghezza poggia sul fondo, il quadro sta nella metà bassa e sopra si vede la strada
@@ -141,13 +141,14 @@ def apertura(t):
         spia_resp = {'mobile': geo_m, 'tablet': dict(geo_t), 'notebook': dict(geo_t)}
         D = SCHERMO['desk']
         L += [
+            # il contorno della spia scelta nel colore delle spie: «Colore del contorno» dell'azione (1.4.1421, prima CSS)
             K.livello('cr-sp-' + nome, tipo='image', imageSrc=K.img('cric-spia-%s.svg' % nome), imageAlt=titolo, objectFit='contain',
-                      entra='fadeIn', ritardo=1200 + k * 120, durata=400, stato=ACCESA,
-                      action={'type': 'setState', 'target': 'spia', 'value': nome, 'label': titolo + ': cos’è'},
-                      customCSS='--mps-attivo:#FFB020;', hover={'scale': 1.12, 'duration': 180},
+                      name='Spia ' + sistema.lower(), entra='fadeIn', ritardo=1200 + k * 120, durata=400, stato=ACCESA,
+                      action={'type': 'setState', 'target': 'spia', 'value': nome, 'label': titolo + ': cos’è', 'segno': C['acc']},
+                      hover={'scale': 1.12, 'duration': 180},
                       responsive=spia_resp, **geo),
             K.livello('cr-ok-' + nome, tipo='image', imageSrc=K.img('cric-spia-%s-ok.svg' % nome), imageAlt=titolo + ', sistemata',
-                      objectFit='contain', entra='fadeIn', ritardo=0, durata=300, stato={'nome': 'spia', 'vale': nome, 'effetto': 'nessuno'},
+                      name='Spia ' + sistema.lower() + ' spenta', objectFit='contain', entra='fadeIn', ritardo=0, durata=300, stato={'nome': 'spia', 'vale': nome, 'effetto': 'nessuno'},
                       responsive={c: dict(v) for c, v in spia_resp.items()}, **geo),
             # etichetta, titolo, prezzo e in fondo la descrizione: col carattere minimo è lei che si allunga
             K.livello('cr-n-' + nome, contenuto=sistema, x=D['x'], y=D['a'], w=D['w'], size=11, peso='500', colore=C['acc'], letterSpacing=2,

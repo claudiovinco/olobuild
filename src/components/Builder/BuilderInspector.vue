@@ -215,6 +215,14 @@
             >
               {{ t('Apri editor slider') }}
             </button>
+            <!-- Scene dei temi (1.4.1422): l'editor si apre con la libreria degli Slider Pro dei temi -->
+            <button
+              type="button"
+              @click="apriSceneSlider = true; showProSliderEditor = true"
+              class="mb-w-full mb-py-2 mb-bg-white mb-text-primary-600 mb-text-sm mb-font-semibold mb-rounded-lg mb-border mb-border-primary-600 hover:mb-bg-primary-50 mb-transition-colors"
+            >
+              {{ t('Parti da una scena dei temi') }}
+            </button>
             <p class="mb-text-[10px] mb-text-gray-400">{{ (selectedTile.settings?.slides || []).length }} {{ t('slide configurate') }}</p>
 
             <!-- Height mode selector -->
@@ -1493,7 +1501,8 @@
       <ProSliderEditor
         v-if="showProSliderEditor && selectedTile"
         :tileId="selectedTile.id"
-        @close="showProSliderEditor = false"
+        :apriScene="apriSceneSlider"
+        @close="showProSliderEditor = false; apriSceneSlider = false"
       />
 
       <!-- Stili tipografici globali: si aprono dal campo che li USA (il select
@@ -2417,6 +2426,7 @@ function navigateTab(dir) {
   });
 }
 const showProSliderEditor = ref(false);
+const apriSceneSlider = ref(false);
 const viewports = [
   { key: 'desktop', label: 'Desktop', svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>' },
   { key: 'tablet_landscape', label: t('Tablet orizzontale'), svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><line x1="12" x2="12.01" y1="12" y2="12"/></svg>' },

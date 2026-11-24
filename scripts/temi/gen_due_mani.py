@@ -152,7 +152,7 @@ def apertura(t):
         L.append(K.livello('dm-c%d' % k, tipo='shape', bgColor=hx, borderRadius=999, borderWidth=3, borderColor='#FFFFFF',
                            x=8 + k * 4.4, y=85, w=3.4, h=6.04, entra='zoomIn', ritardo=1000 + k * 90, durata=500,
                            action={'type': 'setState', 'target': 'tinta', 'value': val, 'color': hx, 'label': 'Tinta ' + nome},
-                           customCSS='--mps-attivo:#FFFFFF;box-shadow:0 6px 18px rgba(0,0,0,.35);',
+                           boxShadow={'x': 0, 'y': 6, 'blur': 18, 'spread': 0, 'color': 'rgba(0,0,0,.35)'},  # contorno: bianco di serie
                            hover={'scale': 1.12, 'duration': 200},
                            responsive={'mobile': {'x': 6 + k * 13, 'y': 80.5, 'width': 10, 'height': 4.57}}))
     M.veli_oltre(L)

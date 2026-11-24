@@ -3,11 +3,12 @@
  * nulla… migliorare la gestione degli slider pro in modo da poter gestire bene le animazioni… attualmente sono
  * ingestibili e sembrano trucchi di magia».
  *
- * Qui le regole in comune fra la tela dell'editor, la barra dei livelli e il pannello delle proprietà:
+ * Qui le regole in comune fra la tela dell'editor, il pannello Livelli e il pannello delle proprietà:
  *  - il movimento con lo scorrimento (scrollMove) calcolato COME sul sito (gemello di olo-proslider.js, «Livelli che si
  *    muovono con lo scorrimento»), per vederlo sulla tela trascinando il cursore «Scorrimento»;
  *  - gli stati (stato.vale «a,b» o «!a,b»), gemelli di stato_vale() del PHP;
- *  - il nome di un livello e le sue animazioni, per la barra dei livelli.
+ *  - il nome di un livello e le sue animazioni, per il pannello Livelli;
+ *  - i gruppi del pannello Livelli (1.4.1424).
  */
 import { t } from '@/i18n';
 
@@ -149,7 +150,7 @@ export function statiDellaSlide(layers, iniziali = {}) {
   return Object.fromEntries(Object.entries(st).map(([n, s]) => [n, [...s]]));
 }
 
-/* ── Nome e animazioni di un livello (barra dei livelli) ─────────────────── */
+/* ── Nome e animazioni di un livello (pannello Livelli) ─────────────────── */
 
 const TIPI = { text: 'Testo', image: 'Immagine', video: 'Video', button: 'Pulsante', icon: 'Icona', shape: 'Forma', audio: 'Audio' };
 
@@ -223,3 +224,159 @@ export function formatiVisibili(l) {
   }
   return out;
 }
+
+/* ── Gruppi dei livelli (1.4.1424) ─────────────────────────────────────── */
+// Utente, 24 nov 2026: «quando i livelli sono tanti come si fa a scorrerne 10-15 o più e capirci ancora qualche cosa?».
+// Il pannello Livelli li raccoglie in gruppi che si fanno da soli da ciò che i livelli FANNO (come i gruppi rientrati
+// del pannello Livelli di Slider Revolution 7): Cric passa da 34 livelli in fila a 8 gruppi, uno per spia.
+//  1. «gruppo» scritto nel livello (campo «Gruppo» del pannello o «Rinomina» del gruppo): vince sempre;
+//  2. una scelta: il livello che col clic imposta uno stato e quelli che si vedono quando è scelto;
+//  3. «Prima di ogni scelta»: visibili finché lo stato è vuoto;
+//  4. gli altri stati («Quando luce è accesa», «Finché luce non è accesa»);
+//  5. le serie coi nomi numerati (tp-anello1-0, -1, -2…: la cupola di Tepidario), almeno tre;
+//  6. i veli, i testi e i pulsanti, le forme, le foto e i disegni.
+// Nel salvataggio entra solo «gruppo», e solo quando l'utente lo scrive: il sito non lo legge.
+
+const nomeStatoG = (n) => String(n || '').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '');
+const baseSerie = (id) => {
+  const s = String(id || '');
+  if (/^ps-/.test(s)) return ''; // gli id fatti dall'editor (ps-<tempo><caso>) non sono serie
+  const m = s.match(/^(.*?)[-_]?\d+$/);
+  return m && m[1] ? m[1] : '';
+};
+// Il nome di una scelta: quello del livello, la sua etichetta per la tastiera («Tinta Terracotta»), il testo, il valore.
+function nomeScelta(l, valore) {
+  const nome = String(l?.name || '').trim() || String(l?.action?.label || '').trim();
+  if (nome) return nome;
+  if ((l?.type === 'text' || l?.type === 'button') && String(l.content || '').trim()) return nomeLivello(l);
+  return valore;
+}
+function nomeSerie(b) {
+  const p = String(b).replace(/^[a-z]{1,4}-/i, '').replace(/[-_]+/g, ' ').replace(/([a-zà-ù])(\d)/gi, '$1 $2').trim();
+  return p ? p.charAt(0).toUpperCase() + p.slice(1) : String(b);
+}
+
+/**
+ * I gruppi di un elenco di livelli: [{ key, tipo, nome, livelli: [dal più in alto], top }], in cima il gruppo col
+ * livello più in alto. tipo: manuale · scelta · prima · stato · serie · veli · testi · forme · media.
+ * Per scelta e prima: { stato, valore }; per stato: { stato, vale }.
+ */
+export function gruppiLivelli(layers) {
+  const L = (layers || []).filter(Boolean);
+  const scelte = new Map(); // «stato=valore» → il livello che la imposta
+  L.forEach((l) => {
+    const a = l.action;
+    if (a?.type === 'setState' && nomeStatoG(a.target)) {
+      const k = nomeStatoG(a.target) + '=' + String(a.value ?? '').trim();
+      if (!scelte.has(k)) scelte.set(k, l);
+    }
+  });
+  const agisce = (l) => !!(l.action && l.action.type && l.action.type !== 'none');
+  // le serie sono di forme, foto e icone: i testi numerati (to-n1, to-n2…) restano testi, ognuno col suo nome
+  const inSerie = (l) => l.type !== 'text' && l.type !== 'button' && !String(l.gruppo || '').trim() && !l.stato?.nome && !agisce(l);
+  const contaBase = {};
+  L.forEach((l) => {
+    const b = baseSerie(l.id);
+    if (b && inSerie(l)) contaBase[b] = (contaBase[b] || 0) + 1;
+  });
+  const gruppi = new Map();
+  const metti = (key, g, l, i) => {
+    if (!gruppi.has(key)) gruppi.set(key, { key, ...g, livelli: [], top: -1 });
+    const x = gruppi.get(key);
+    x.livelli.push(l);
+    x.top = Math.max(x.top, i);
+    // il nome scritto dall'utente su una scelta o uno stato ne cambia solo l'etichetta (1.4.1428): il gruppo resta
+    // la scelta, con «Mostra sulla tela» e la sua riga nelle Interazioni (prima la rinomina la faceva sparire)
+    const nm = String(l.gruppo || '').trim();
+    if (nm && g.tipo !== 'manuale' && !x.nomeManuale) x.nomeManuale = nm;
+  };
+  L.forEach((l, i) => {
+    const manuale = String(l.gruppo || '').trim();
+    const a = l.action || {};
+    const semantico = (a.type === 'setState' && nomeStatoG(a.target)) || nomeStatoG(l.stato?.nome);
+    if (manuale && !semantico) return metti('m:' + manuale.toLowerCase(), { tipo: 'manuale', nome: manuale }, l, i);
+    if (a.type === 'setState' && nomeStatoG(a.target)) {
+      const n = nomeStatoG(a.target), v = String(a.value ?? '').trim();
+      return metti('s:' + n + '=' + v, { tipo: 'scelta', nome: nomeScelta(scelte.get(n + '=' + v), v), stato: n, valore: v }, l, i);
+    }
+    const n = nomeStatoG(l.stato?.nome);
+    if (n) {
+      const v = String(l.stato.vale ?? '').trim();
+      if (v === '') return metti('p:' + n, { tipo: 'prima', nome: '', stato: n, valore: '' }, l, i);
+      if (!v.startsWith('!') && !v.includes(',') && scelte.has(n + '=' + v)) {
+        return metti('s:' + n + '=' + v, { tipo: 'scelta', nome: nomeScelta(scelte.get(n + '=' + v), v), stato: n, valore: v }, l, i);
+      }
+      return metti('st:' + n + '=' + v, { tipo: 'stato', nome: '', stato: n, vale: v }, l, i);
+    }
+    const b = baseSerie(l.id);
+    if (b && inSerie(l) && contaBase[b] >= 3) return metti('r:' + b, { tipo: 'serie', nome: nomeSerie(b) }, l, i);
+    if (l.shapeGradient) return metti('veli', { tipo: 'veli', nome: '' }, l, i);
+    if (l.type === 'text' || l.type === 'button') return metti('testi', { tipo: 'testi', nome: '' }, l, i);
+    if (l.type === 'shape') return metti('forme', { tipo: 'forme', nome: '' }, l, i);
+    return metti('media', { tipo: 'media', nome: '' }, l, i);
+  });
+  // I gruppi generici troppo lunghi (più di 10 forme o foto) si dividono per famiglia di nome (1.4.1428): in Fuorigiri le
+  // 25 forme diventano «pre», «g», «via»; in Strappo i tre fogli «1», «2», «3». Famiglia = le lettere (o le cifre) con
+  // cui comincia il nome dopo il prefisso del tema (fg-pre1x-1-0 → pre), almeno tre livelli per famiglia.
+  const famiglia = (id) => {
+    const r = String(id || '');
+    if (/^ps-/.test(r)) return '';
+    const s = r.replace(/^[a-z]{1,4}-/i, '');
+    const m = s.match(/^[a-zà-ù]+/i) || s.match(/^\d+/);
+    return m ? m[0].toLowerCase() : '';
+  };
+  for (const g of [...gruppi.values()]) {
+    // anche i «veli» troppi: in Vertebra le vertebre sono forme sfumate, non veli
+    if (!['forme', 'media', 'veli'].includes(g.tipo) || g.livelli.length <= 10) continue;
+    const per = {};
+    g.livelli.forEach((l) => { const f = famiglia(l.id); if (f) (per[f] = per[f] || []).push(l); });
+    const prefisso = (String(g.livelli[0]?.id || '').match(/^[a-z]{1,4}-/i) || [''])[0];
+    for (const [f, membri] of Object.entries(per)) {
+      if (membri.length < 3 || membri.length === g.livelli.length) continue;
+      const nuovo = { key: 'f:' + g.key + ':' + f, tipo: 'serie', nome: nomeSerie(prefisso + f), livelli: membri, top: Math.max(...membri.map((l) => L.indexOf(l))) };
+      gruppi.set(nuovo.key, nuovo);
+      g.livelli = g.livelli.filter((l) => !membri.includes(l));
+    }
+    if (!g.livelli.length) gruppi.delete(g.key);
+    else g.top = Math.max(...g.livelli.map((l) => L.indexOf(l)));
+  }
+  return [...gruppi.values()]
+    .map((g) => ({ ...g, livelli: g.livelli.slice().reverse() }))
+    .sort((a, b) => b.top - a.top);
+}
+
+/** Il nome di un gruppo da mostrare: «Scelta: Spia olio motore», «Quando luce è accesa», «Veli»… */
+export function nomeGruppo(g) {
+  if (!g) return '';
+  switch (g.tipo) {
+    case 'manuale': return g.nome;
+    default: break;
+  }
+  if (g.nomeManuale) return g.nomeManuale;
+  switch (g.tipo) {
+    case 'scelta': return t('Scelta: %s').replace('%s', g.nome || g.valore);
+    case 'prima': return t('Prima di ogni scelta');
+    case 'stato': {
+      const neg = String(g.vale).startsWith('!');
+      const valori = String(g.vale).replace(/^!/, '').split(',').map((x) => x.trim()).filter(Boolean).join(t(' o '));
+      return (neg ? t('Finché %1 non è %2') : t('Quando %1 è %2')).replace('%1', g.stato).replace('%2', valori);
+    }
+    // un nome di serie corto («Pre», «3», «D») da solo non dice niente: «Serie «Pre»»
+    case 'serie': return String(g.nome).length <= 3 ? t('Serie «%s»').replace('%s', g.nome) : g.nome;
+    case 'veli': return t('Veli');
+    case 'testi': return t('Testi e pulsanti');
+    case 'forme': return t('Forme');
+    default: return t('Foto, video e disegni');
+  }
+}
+
+/** Le etichette colorate dei livelli (1.4.1428, come le etichette di After Effects): solo nell'editor, nel campo «etichetta». */
+export const ETICHETTE = [
+  { k: 'rosso', nome: t('Rosso'), c: '#ef4444' },
+  { k: 'arancio', nome: t('Arancio'), c: '#f97316' },
+  { k: 'giallo', nome: t('Giallo'), c: '#eab308' },
+  { k: 'verde', nome: t('Verde'), c: '#22c55e' },
+  { k: 'azzurro', nome: t('Azzurro'), c: '#38bdf8' },
+  { k: 'viola', nome: t('Viola'), c: '#a855f7' },
+  { k: 'grigio', nome: t('Grigio'), c: '#9ca3af' },
+];

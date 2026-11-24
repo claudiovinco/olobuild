@@ -37,6 +37,8 @@ database/                   → schema.sql
 ```
 
 ## Note build
+- **Scene dei temi dello Slider Pro** (1.4.1422, pulsante «Scene dei temi» dell'editor): dopo aver aggiunto un tema o
+  cambiato un suo Slider Pro, rifare l'elenco con `python scripts/indice-scene-slider.py` (→ `assets/data/scene-slider.json`).
 - `npx` non funziona su questo sistema (node non nel PATH di cmd.exe)
 - Usare: `node node_modules/vite/bin/vite.js build`
 - **Due bundle**: oltre a `builder.js` esiste `assets/js/theme-picker.js` (selettore temi

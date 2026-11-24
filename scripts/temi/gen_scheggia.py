@@ -110,7 +110,7 @@ def apertura(t):
         # dove si colpisce: tutto il vetro (trasparente, sopra i disegni e sotto i testi)
         K.livello('sc-colpo', tipo='shape', bgColor='transparent', entra='fadeIn', ritardo=0, durata=200, stato=st('!nuovo'),
                   action={'type': 'cycleState', 'target': 'vetro', 'values': 'crepa1,crepa2,rotto,nuovo', 'loop': False,
-                          'label': 'Colpisci il vetro'}, customCSS='--mps-attivo:transparent;cursor:crosshair;',
+                          'label': 'Colpisci il vetro', 'segno': 'transparent'}, hover={'cursor': 'crosshair'},
                   responsive={'mobile': dict(piena_m)}, **piena),
         K.livello('sc-o', contenuto='Scheggia · vetreria · Treviso, dal 1968', x=6, y=56, w=50, size=13, peso='500',
                   colore=mix(CHIARO, 86), letterSpacing=3, textTransform='uppercase', fontFamily='Source Code Pro', ritardo=200,

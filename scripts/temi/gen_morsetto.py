@@ -74,7 +74,7 @@ def apertura(t):
     m = K.mob
     BUIO = {'nome': 'luce', 'vale': '!accesa', 'effetto': 'fade', 'durata': 1100}
     ACCESA = lambda rit=0, eff='fade', dur=700: {'nome': 'luce', 'vale': 'accesa', 'effetto': eff, 'durata': dur, 'ritardo': rit}
-    leva = {'type': 'cycleState', 'target': 'luce', 'values': 'accesa,spenta'}
+    leva = {'type': 'cycleState', 'target': 'luce', 'values': 'accesa,spenta', 'segno': C['acc']}  # contorno: «Colore del contorno»
     # il salvavita al centro: 13 % della tela, alto come le sue proporzioni (200 × 360)
     sv = dict(x=43.5, y=34, w=13, h=41.6)
     sv_m = {'x': 33, 'y': 36, 'width': 34, 'height': 28}
@@ -91,11 +91,11 @@ def apertura(t):
                   responsive={'mobile': {'x': 16.5, 'y': 0, 'width': 67, 'height': 36.5}}),
         K.livello('mo-giu', tipo='image', imageSrc=K.img(DISEGNI[0]), imageAlt='Il salvavita, con la leva giù',
                   objectFit='contain', entra='fadeIn', ritardo=300, durata=700, esce='fadeOut', action=dict(leva, label='Tira su la leva: riattacca la corrente'),
-                  stato={'nome': 'luce', 'vale': '!accesa', 'effetto': 'nessuno'}, customCSS='--mps-attivo:#FFD23F;',
+                  stato={'nome': 'luce', 'vale': '!accesa', 'effetto': 'nessuno'},
                   responsive={'mobile': sv_m}, **sv),
         K.livello('mo-su', tipo='image', imageSrc=K.img(DISEGNI[1]), imageAlt='Il salvavita, con la leva su',
                   objectFit='contain', entra='fadeIn', ritardo=0, durata=300, esce='fadeOut', action=dict(leva, label='Abbassa la leva: torna il buio'),
-                  stato={'nome': 'luce', 'vale': 'accesa', 'effetto': 'nessuno'}, customCSS='--mps-attivo:#FFD23F;',
+                  stato={'nome': 'luce', 'vale': 'accesa', 'effetto': 'nessuno'},
                   responsive={'mobile': sv_m}, **sv),
         K.livello('mo-lampo', tipo='image', imageSrc=K.img(DISEGNI[3]), imageAlt='', objectFit='contain', x=40, y=29, w=20, h=35.5,
                   entra='fadeIn', ritardo=0, durata=200, esce='fadeOut', stato=ACCESA(0, 'nessuno'),

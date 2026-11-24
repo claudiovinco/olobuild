@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-w-48 mb-bg-gray-900 mb-border-r mb-border-gray-700 mb-flex mb-flex-col mb-overflow-hidden">
+  <div class="mb-w-full mb-bg-gray-900 mb-border-r mb-border-gray-700 mb-flex mb-flex-col mb-overflow-hidden">
     <div class="mb-p-2 mb-border-b mb-border-gray-700 mb-text-xs mb-font-semibold mb-text-gray-300 mb-flex mb-items-center mb-justify-between">
       <span>{{ t('Slide') }} ({{ slides.length }})</span>
       <div class="mb-flex mb-items-center mb-gap-1">
@@ -8,6 +8,13 @@
         <button @click="$emit('add')" class="mb-text-primary-400 hover:mb-text-primary-300" :title="t('Aggiungi slide')">+</button>
       </div>
       <input ref="importInput" type="file" accept=".json" class="mb-hidden" @change="handleImport" />
+    </div>
+    <!-- Scene dei temi (1.4.1422): si parte da uno Slider Pro vero, poi si cambiano testi e foto -->
+    <div class="mb-px-2 mb-pt-2">
+      <button type="button" @click="$emit('scene')" class="mps-scene-apri">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M9 21V9" /></svg>
+        {{ t('Scene dei temi') }}
+      </button>
     </div>
     <div class="mb-flex-1 mb-overflow-y-auto mb-p-2 mb-space-y-2">
       <div
@@ -44,7 +51,7 @@ const props = defineProps({
   globalBackground: { type: Object, default: null },
 });
 
-const emit = defineEmits(['select', 'add', 'duplicate', 'remove', 'import-slides']);
+const emit = defineEmits(['select', 'add', 'duplicate', 'remove', 'import-slides', 'scene']);
 
 const importInput = ref(null);
 
@@ -103,3 +110,9 @@ function thumbStyle(slide) {
   return { background: bg.color || '#1e293b' };
 }
 </script>
+
+<style scoped>
+.mps-scene-apri { font: inherit; width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 8px; font-size: 12px; font-weight: 600; color: var(--olo-color-primary-contrast, #fff); background: var(--olo-color-primary, #e1474f); border: 0; border-radius: 6px; cursor: pointer; }
+.mps-scene-apri:hover { filter: brightness(1.08); }
+.mps-scene-apri:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+</style>
