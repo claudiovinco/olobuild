@@ -207,7 +207,7 @@ async function usa(modo) {
     });
     const d = await r.json().catch(() => null);
     if (!r.ok || !d || !d.settings) throw new Error((d && d.message) || ('HTTP ' + r.status));
-    emit('usa', { settings: d.settings, nome: d.nome || scelta.value.nome, media: d.media || {}, modo });
+    emit('usa', { settings: d.settings, nome: d.nome || scelta.value.nome, media: d.media || {}, colori: d.colori || 0, modo });
   } catch (e) {
     erroreUso.value = t('Non sono riuscito a usare la scena:') + ' ' + (e?.message || e);
   } finally {

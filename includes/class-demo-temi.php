@@ -284,7 +284,8 @@ class Olobuild_Demo_Temi {
 
         // Stile del tema al posto di quello del sito.
         add_filter( 'pre_option_olobuild_styles', [ __CLASS__, 'stili' ] );
-        add_filter( 'pre_option_olobuild_global_colors', [ __CLASS__, 'vuoto' ] );
+        // Al posto dei colori extra del sito, quelli propri del tema (1.4.1433: gli Slider Pro li usano come token)
+        add_filter( 'pre_option_olobuild_global_colors', [ __CLASS__, 'colori_extra' ] );
         add_filter( 'pre_option_olobuild_global_typography', [ __CLASS__, 'vuoto' ] );
         add_filter( 'pre_option_olobuild_magnetic_cursor', [ __CLASS__, 'cursore' ] );
         add_filter( 'pre_option_olobuild_cursor_hud', [ __CLASS__, 'hud' ] );
@@ -962,6 +963,12 @@ class Olobuild_Demo_Temi {
 
     public static function vuoto() {
         return [];
+    }
+
+    /** I colori propri del tema della demo (theme.json → colori_extra), al posto dei colori extra del sito. */
+    public static function colori_extra() {
+        $extra = self::$tema['json']['colori_extra'] ?? [];
+        return is_array( $extra ) ? array_values( array_filter( $extra, 'is_array' ) ) : [];
     }
 
     public static function cursore( $valore ) {

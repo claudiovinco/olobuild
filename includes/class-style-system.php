@@ -1181,6 +1181,84 @@ class Olobuild_Style_System {
     }
 
     /**
+     * Il valore di ogni --olo-color-<id>, nello stesso ordine di generate_css() (stile, ruoli derivati, colori
+     * globali, alias: l'ultimo vince). Per chi deve scrivere un colore della palette DENTRO un file che le
+     * variabili non raggiungono: i disegni SVG ricolorati dello Slider Pro (Olobuild_Disegni, 1.4.1433).
+     *
+     * @return array [ 'primary' => '#E1474F', 'text-muted' => '#6B7280', 'cerniera-argento' => '#C9CCD1', … ]
+     */
+    public function valori_colori() {
+        $s   = $this->get_styles();
+        $out = [];
+        foreach ( (array) ( $s['colors'] ?? [] ) as $k => $v ) {
+            $out[ str_replace( '_', '-', (string) $k ) ] = (string) $v;
+        }
+        $gc = $this->get_global_colors();
+        foreach ( self::ruoli_derivati_mancanti( $s['colors'] ?? [], $gc ) as $k => $v ) {
+            $out[ (string) $k ] = (string) $v;
+        }
+        foreach ( $gc as $g ) {
+            if ( is_array( $g ) && ! empty( $g['id'] ) && ! empty( $g['value'] ) ) {
+                $out[ sanitize_html_class( $g['id'] ) ] = (string) $g['value'];
+            }
+        }
+        foreach ( self::ALIAS_COLORI as $k => $v ) {
+            $out[ (string) $k ] = (string) $v;
+        }
+        return $out;
+    }
+
+    /**
+     * I colori propri di un tema (theme.json → colori_extra, 1.4.1433) fra i «Colori globali extra» della Palette.
+     * Utente, 24 nov 2026: «nessun CSS o cose hardcoded» negli Slider Pro dei temi. I colori che non sono un ruolo
+     * della palette (l'argento dei denti di Cerniera, i frutti di Carambola) ora sono var(--olo-color-<tema>-<nome>):
+     * chi importa il tema li ritrova in Configurazione › Palette col loro nome e li cambia da lì.
+     *
+     * @param array $extra       [ [ 'id' => 'cerniera-argento', 'label' => 'Cerniera · Argento', 'value' => '#C9CCD1' ], … ].
+     * @param bool  $sovrascrivi true (import del tema): valore e nome del tema anche se l'id c'è già;
+     *                           false (una scena copiata): un colore che il sito ha già resta com'è.
+     * @return int Colori aggiunti o aggiornati.
+     */
+    public static function aggiungi_colori_extra( $extra, $sovrascrivi = false ) {
+        $gc  = get_option( 'olobuild_global_colors', [] );
+        $gc  = is_array( $gc ) ? array_values( $gc ) : [];
+        $pos = [];
+        foreach ( $gc as $i => $c ) {
+            if ( is_array( $c ) && ! empty( $c['id'] ) && is_scalar( $c['id'] ) ) {
+                $pos[ (string) $c['id'] ] = $i;
+            }
+        }
+        $cambiati = 0;
+        foreach ( (array) $extra as $c ) {
+            if ( ! is_array( $c ) ) {
+                continue;
+            }
+            $id  = sanitize_key( (string) ( $c['id'] ?? '' ) );
+            $val = (string) ( $c['value'] ?? '' );
+            if ( '' === $id || ! preg_match( '/^#[0-9a-fA-F]{6}$/', $val ) ) {
+                continue;
+            }
+            $nome = sanitize_text_field( (string) ( $c['label'] ?? $id ) );
+            if ( isset( $pos[ $id ] ) ) {
+                if ( $sovrascrivi ) {
+                    $gc[ $pos[ $id ] ]['value'] = $val;
+                    $gc[ $pos[ $id ] ]['label'] = $nome;
+                    unset( $gc[ $pos[ $id ] ]['hidden'] );
+                    $cambiati++;
+                }
+                continue;
+            }
+            $gc[]       = [ 'id' => $id, 'label' => $nome, 'value' => $val ];
+            $pos[ $id ] = count( $gc ) - 1;
+            $cambiati++;
+        }
+        if ( $cambiati ) {
+            update_option( 'olobuild_global_colors', $gc, false );
+        }
+        return $cambiati;
+    }
+
+    /**
      * Alias che generate_css() emette SEMPRE nella regola .olo-template, in
      * quest'ordine: i nomi usati dalle tile, mappati sui token del tema (vedi
      * _olo-tokens.scss). Fonte unica anche per id_colori_dello_stile().

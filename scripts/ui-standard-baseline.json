@@ -1,5 +1,5 @@
 {
-  "aggiornato": "2026-10-06",
+  "aggiornato": "2026-11-24",
   "soglie": {
     "padding-spacing": 0,
     "margin-spacing": 0,
@@ -41,9 +41,10 @@
     "densita-doppia": 0,
     "densita-ds-senza-ripiego": 0,
     "densita-token-in-tile-esistenti": 0,
-    "densita-letterali": 1902,
+    "densita-letterali": 1901,
     "componente-orfano": 0,
     "campo-orfano": 0,
-    "fieldbox-celle": 0
+    "fieldbox-celle": 0,
+    "slider-pro-su-misura": 0
   }
 }

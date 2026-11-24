@@ -56267,3 +56267,248 @@ msgstr "On mouse hover (on phones on tap)"
 
 msgid "Quando il mouse esce, torna com’era"
 msgstr "When the mouse leaves, back to how it was"
+
+#: licenza-1.4.1345
+msgid "%d livelli copiati"
+msgstr "%d layers copied"
+
+msgid "1 livello copiato"
+msgstr "1 layer copied"
+
+msgid "Copia i livelli scelti (Ctrl+C)"
+msgstr "Copy the selected layers (Ctrl+C)"
+
+msgid "Ctrl+V per incollarli"
+msgstr "Ctrl+V to paste them"
+
+msgid "Incolla (Ctrl+V)"
+msgstr "Paste (Ctrl+V)"
+
+msgid "Modifiche"
+msgstr "Changes"
+
+msgid "Rifai il passo (Ctrl+Maiusc+Z)"
+msgstr "Redo the step (Ctrl+Shift+Z)"
+
+msgid "Torna indietro di un passo (Ctrl+Z)"
+msgstr "Go back one step (Ctrl+Z)"
+
+msgid "OLObuild Pro"
+msgstr "OLObuild Pro"
+
+msgid "Bordi sfumati"
+msgstr "Soft edges"
+
+msgid "Cambio di colore sfumato"
+msgstr "Smooth colour change"
+
+msgid "Colore sotto le sfumature"
+msgstr "Colour under the gradients"
+
+msgid "I clic passano attraverso"
+msgstr "Clicks pass through"
+
+msgid "Il livello si sposta nel punto in cui si è cliccato per dare allo stato quel valore: la crepa compare dove si colpisce il vetro. Con la tastiera nasce al centro. Mettilo al centro dello slider: lo spostamento parte da lì."
+msgstr "The layer moves to the point that was clicked to give the state that value: the crack appears where you hit the glass. With the keyboard it appears in the centre. Place it in the centre of the slider: the move starts from there."
+
+msgid "Il livello si vede solo dentro la figura fatta da questi punti, in percentuale del livello (0 0 = in alto a sinistra, 100% 100% = in basso a destra). Parti da una forma pronta e sposta i punti."
+msgstr "The layer is only visible inside the shape made by these points, as a percentage of the layer (0 0 = top left, 100% 100% = bottom right). Start from a ready-made shape and move the points."
+
+msgid "Il livello svanisce verso i bordi, come una foto con la vignetta al contrario: pieno al centro fino a questa percentuale, poi trasparente. 0 = bordi netti."
+msgstr "The layer fades towards the edges: solid in the centre up to this percentage, then transparent. 0 = sharp edges."
+
+msgid "Il punto attorno a cui il livello gira e si ingrandisce, nelle animazioni e nella rotazione: il centro, un angolo, un lato. Le carte che si girano come una porta ruotano su un lato."
+msgstr "The point the layer turns and scales around, in animations and in the rotation: the centre, a corner, a side. Cards that open like a door turn on one side."
+
+msgid "Immagine nella forma"
+msgstr "Image in the shape"
+
+msgid "Le sfumature si appoggiano sul colore Sfondo della forma (che può cambiare con uno stato). Senza, sotto le sfumature c’è il colore scelto qui."
+msgstr "The gradients sit on the shape’s Background colour (which can change with a state). Without it, the colour chosen here is under the gradients."
+
+msgid "L’ombra prende il contorno di quello che si vede (una forma ritagliata, un’immagine con parti trasparenti, un’icona) e non quello del riquadro."
+msgstr "The shadow follows the outline of what you see (a clipped shape, an image with transparent parts, an icon), not the box."
+
+msgid "Nasce dove si clicca"
+msgstr "Appears where you click"
+
+msgid "No, resta al suo posto"
+msgstr "No, stays in its place"
+
+msgid "Ombra che segue la forma"
+msgstr "Shadow that follows the shape"
+
+msgid "Punto di rotazione"
+msgstr "Pivot point"
+
+msgid "Punto di rotazione, in percentuale"
+msgstr "Pivot point, as a percentage"
+
+msgid "Quando %s diventa «%v»"
+msgstr "When %s becomes “%v”"
+
+msgid "Quando il colore di sfondo del livello cambia (per esempio con uno stato), il passaggio dura questo tempo invece di essere di colpo. 0 = di colpo."
+msgstr "When the layer’s background colour changes (for example with a state), the transition takes this long instead of being instant. 0 = instant."
+
+msgid "Quando il livello gira in 3D e mostra la schiena, sparisce: due livelli uno sull’altro, uno girato di 180°, fanno una carta con due facce."
+msgstr "When the layer turns in 3D and shows its back, it disappears: two layers on top of each other, one turned by 180°, make a two-sided card."
+
+msgid "Quello che sporge dal riquadro del livello (un testo lungo, un’immagine ingrandita) non si vede."
+msgstr "Whatever sticks out of the layer’s box (a long text, an enlarged image) is not shown."
+
+msgid "Retro nascosto"
+msgstr "Hidden back"
+
+msgid "Ripeti come una trama"
+msgstr "Repeat as a pattern"
+
+msgid "Ritaglio"
+msgstr "Clipping"
+
+msgid "Scegli le parole col mouse e premi un pulsante: grassetto, corsivo, colore, più piccole o più tenui. Invio va a capo."
+msgstr "Select the words with the mouse and press a button: bold, italic, colour, smaller or fainter. Enter starts a new line."
+
+msgid "Sfumature"
+msgstr "Gradients"
+
+msgid "Sopra il colore della forma"
+msgstr "Over the shape colour"
+
+msgid "Stringe o allarga le lettere senza deformarle: sotto 100 più strette, sopra più larghe. Funziona con i caratteri variabili che hanno la larghezza, come Anybody, Roboto Flex, Open Sans, Archivo."
+msgstr "Narrows or widens the letters without distorting them: below 100 narrower, above wider. Works with variable fonts that have a width axis, such as Anybody, Roboto Flex, Open Sans, Archivo."
+
+msgid "Su una riga sola (non va a capo)"
+msgstr "On a single line (no wrapping)"
+
+msgid "Sul sito il livello non prende il mouse: i clic e il passaggio arrivano ai livelli sotto. Serve per veli, luci e decori sopra i pulsanti. Nell’editor resta prendibile."
+msgstr "On the site the layer ignores the mouse: clicks and hovering reach the layers below. Useful for veils, lights and decorations over buttons. In the editor it can still be selected."
+
+msgid "Taglia quello che esce"
+msgstr "Clip what sticks out"
+
+msgid "Una foto o una trama che riempie la forma al posto del colore: un tessuto, una carta, una striscia di un disegno più grande (con Dimensione e Posizione si sceglie quale parte)."
+msgstr "A photo or pattern that fills the shape instead of the colour: a fabric, a paper, a strip of a larger picture (Size and Position choose which part)."
+
+msgid "Una o più sfumature una sopra l’altra: lineari o dal centro, anche ripetute per fare righe, quadretti, pois e trame. La prima della lista sta sopra. Ogni colore ha il punto dove comincia e, se vuoi, dove finisce (in percentuale o in px)."
+msgstr "One or more gradients on top of each other: linear or from the centre, also repeated to make stripes, checks, dots and patterns. The first in the list is on top. Each colour has the point where it starts and, if you like, where it ends (as a percentage or in px)."
+
+msgid "lo stato"
+msgstr "the state"
+
+msgid "A (percentuale o px)"
+msgstr "To (percentage or px)"
+
+msgid "Centro della sfumatura"
+msgstr "Centre of the gradient"
+
+msgid "Centro: 50% 50%"
+msgstr "Centre: 50% 50%"
+
+msgid "Da (percentuale o px)"
+msgstr "From (percentage or px)"
+
+msgid "Forma di serie"
+msgstr "Default shape"
+
+msgid "Grandezza"
+msgstr "Size"
+
+msgid "Più in alto"
+msgstr "Move up"
+
+msgid "Ripetuta"
+msgstr "Repeated"
+
+msgid "Sfumatura %d"
+msgstr "Gradient %d"
+
+msgid "Togli il colore"
+msgstr "Remove the colour"
+
+msgid "Togli la sfumatura"
+msgstr "Remove the gradient"
+
+msgid "Un’altra sfumatura sopra"
+msgstr "Another gradient on top"
+
+msgid "a"
+msgstr "to"
+
+msgid "da"
+msgstr "from"
+
+msgid "di serie: fino all’angolo più lontano"
+msgstr "default: to the farthest corner"
+
+msgid "Ombra %d"
+msgstr "Shadow %d"
+
+msgid "Ombre (anche più d’una, anche interne)"
+msgstr "Shadows (more than one too, inner too)"
+
+msgid "Togli l’ombra"
+msgstr "Remove the shadow"
+
+msgid "Un’altra ombra"
+msgstr "Another shadow"
+
+msgid "Fascio di luce"
+msgstr "Beam of light"
+
+msgid "Forme pronte…"
+msgstr "Ready-made shapes…"
+
+msgid "Metà destra"
+msgstr "Right half"
+
+msgid "Metà sinistra"
+msgstr "Left half"
+
+msgid "Nessun ritaglio"
+msgstr "No clipping"
+
+msgid "Togli il punto"
+msgstr "Remove the point"
+
+msgid "A capo (Maiusc+Invio)"
+msgstr "New line (Shift+Enter)"
+
+msgid "Colore delle parole scelte"
+msgstr "Colour of the selected words"
+
+msgid "Più piccole"
+msgstr "Smaller"
+
+msgid "Più tenui"
+msgstr "Fainter"
+
+msgid "Stile delle parole scelte"
+msgstr "Style of the selected words"
+
+msgid "Togli lo stile alle parole scelte"
+msgstr "Remove the style from the selected words"
+
+#: licenza-1.4.1345
+msgid "%d colori del tema sono entrati nella Palette."
+msgstr "%d theme colours are now in the Palette."
+
+msgid "1 colore del tema è entrato nella Palette."
+msgstr "1 theme colour is now in the Palette."
+
+msgid "Colori del disegno"
+msgstr "Drawing colours"
+
+msgid "I colori che il disegno ha nel file, dal più usato. Scegline uno della palette al posto di quello del file: il disegno segue i colori del sito. Vuoto = il colore del file."
+msgstr "The colours the drawing has in its file, most used first. Pick a palette colour instead of the file one: the drawing follows the site colours. Empty = the file colour."
+
+msgid "Leggo i colori del disegno…"
+msgstr "Reading the drawing colours…"
+
+msgid "Mostra tutti i colori (%d)"
+msgstr "Show all colours (%d)"
+
+msgid "Questo disegno non si può leggere: resta coi suoi colori."
+msgstr "This drawing cannot be read: it keeps its colours."
+
+msgid "Torna ai colori del file"
+msgstr "Back to the file colours"

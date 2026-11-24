@@ -1225,6 +1225,83 @@ const fieldBoxCelle = [];
 violazioni['fieldbox-celle'] = fieldBoxCelle;
 RULES.push({ id: 'fieldbox-celle', titolo: 'FieldBox: ogni cella scrive l\'angolo/lato che disegna, nella sua posizione' });
 
+// ─── Slider Pro dei temi: solo comandi, niente CSS su misura (1.4.1431) ─────
+// Utente, 24 nov 2026: «non devono esserci css personalizzati o hardcoded nelle cose
+// fatte con pro slider ma comandi usabili da chiunque». Nei livelli dei temi: niente
+// customCSS né customClass (una classe vive solo di CSS scritto altrove), e nei testi
+// solo quello che i pulsanti del campo Testo scrivono (FieldTestoLivello): colore della
+// palette, «Più piccole» (.78em), «Più tenui» (.7). I temi stanno in assets/data/themes
+// e, se c'è accanto, in olo-booking/themes.
+const sliderSuMisura = [];
+{
+  const cartelle = [path.join(ROOT, 'assets/data/themes'), path.join(ROOT, '../olo-booking/themes')].filter((d) => fs.existsSync(d));
+  const STILE_DEI_PULSANTI = /^(color:\s*var\(--olo-color-[a-z0-9_-]+\)|font-size:\s*0?\.78em|opacity:\s*0?\.7)$/i;
+  const livello = (o) => o && typeof o === 'object' && typeof o.type === 'string' && ('animIn' in o || ('x' in o && 'y' in o && 'width' in o));
+  // 1.4.1433 — colori solo dalla palette: un #hex o un rgb() in un campo di colore è un colore fisso, tranne la riserva
+  // di un token (var(--olo-color-tema-nome, #C9CCD1)) e le chiavi di «Colori del disegno» (sono i colori del file).
+  const CHIAVE_COLORE = /(colou?r|colore|^bgColor$|Color$|^from$|^to$|^segno$)/i;
+  const FISSO = /#(?:[0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{3})(?![0-9a-z])|rgba?\(/i;
+  const SENZA_RISERVE = (v) => String(v).replace(/var\(--olo-color-[a-z0-9_-]+,\s*[^()]*?\)/gi, '');
+  const NON_COLORI = new Set(['content', 'name', 'id', 'label', 'tabLabel', 'imageSrc', 'videoSrc', 'shapeImage', 'poster', 'buttonUrl', 'url', 'coloriDisegno']);
+  const PER_SCHERMO = new Set(['x', 'y', 'width', 'height', 'fontSize', 'visible', 'textAlign', 'letterSpacing']);
+  const colori = (o, tema, file, chi, via = '') => {
+    if (Array.isArray(o)) { o.forEach((v) => colori(v, tema, file, chi, via)); return; }
+    if (!o || typeof o !== 'object') return;
+    for (const [k, v] of Object.entries(o)) {
+      if (NON_COLORI.has(k)) continue;
+      if (typeof v === 'string' && CHIAVE_COLORE.test(k) && FISSO.test(SENZA_RISERVE(v))) sliderSuMisura.push({ file: tema, type: 'colore', key: `${file} · ${chi} · ${via}${k} = ${v}`, label: '' });
+      else if (v && typeof v === 'object' && k !== 'responsive') colori(v, tema, file, chi, via + k + '.');
+    }
+  };
+  const visita = (o, tema, file) => {
+    if (Array.isArray(o)) { o.forEach((v) => visita(v, tema, file)); return; }
+    if (!o || typeof o !== 'object') return;
+    if (livello(o)) {
+      const chi = `${o.name || o.id || o.type}`;
+      colori(o, tema, file, chi);
+      if (typeof o.alt === 'string') sliderSuMisura.push({ file: tema, type: 'non letto', key: `${file} · ${chi} · alt (il testo alternativo è imageAlt)`, label: '' });
+      if (o.shapeGradient && Array.isArray(o.shapeGradient.stops)) sliderSuMisura.push({ file: tema, type: 'non letto', key: `${file} · ${chi} · shapeGradient.stops (usare le Sfumature)`, label: '' });
+      for (const [bp, ov] of Object.entries(o.responsive || {})) for (const k of Object.keys(ov || {})) if (!PER_SCHERMO.has(k)) sliderSuMisura.push({ file: tema, type: 'schermo', key: `${file} · ${chi} · ${bp}.${k} (l'editor non lo mostra per schermo)`, label: '' });
+      if (typeof o.customCSS === 'string' && o.customCSS.trim()) sliderSuMisura.push({ file: tema, type: 'css', key: `${file} · ${chi}`, label: '' });
+      if (typeof o.customClass === 'string' && o.customClass.trim()) sliderSuMisura.push({ file: tema, type: 'classe', key: `${file} · ${chi} · ${o.customClass}`, label: '' });
+      if (typeof o.content === 'string') {
+        for (const m of o.content.matchAll(/style\s*=\s*"([^"]*)"/gi)) {
+          for (const d of m[1].split(';').map((x) => x.trim()).filter(Boolean)) {
+            if (!STILE_DEI_PULSANTI.test(d)) sliderSuMisura.push({ file: tema, type: 'testo', key: `${file} · ${chi} · ${d}`, label: '' });
+          }
+        }
+        if (/<(?!\/?(strong|b|em|i|br|span|a)\b)[a-z]/i.test(o.content)) sliderSuMisura.push({ file: tema, type: 'tag', key: `${file} · ${chi}`, label: '' });
+      }
+    }
+    for (const v of Object.values(o)) visita(v, tema, file);
+  };
+  for (const dir of cartelle) {
+    for (const tema of fs.readdirSync(dir, { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name)) {
+      for (const f of fs.readdirSync(path.join(dir, tema)).filter((n) => n.endsWith('.json'))) {
+        let dati;
+        try { dati = JSON.parse(fs.readFileSync(path.join(dir, tema, f), 'utf8')); } catch { continue; }
+        // solo dentro le tile Slider Pro (i livelli stanno in settings.slides[].layers e settings.globalLayers)
+        const tile = [];
+        const cerca = (o) => {
+          if (Array.isArray(o)) { o.forEach(cerca); return; }
+          if (!o || typeof o !== 'object') return;
+          if (o.type === 'proslider' && o.settings) { tile.push(o.settings); return; }
+          Object.values(o).forEach(cerca);
+        };
+        cerca(dati);
+        tile.forEach((s) => {
+          visita(s, tema, f);
+          // i colori dello slider e delle slide (barra di avanzamento, frecce, sfondi); non quelli del contenitore della tile
+          for (const k of ['progressBarColor', 'navColor', 'globalBackground']) if (s[k] !== undefined) colori({ [k]: s[k] }, tema, f, 'slider');
+          (s.slides || []).forEach((sl, i) => colori(Object.fromEntries(Object.entries(sl).filter(([k]) => k !== 'layers')), tema, f, `slide ${i + 1}`));
+        });
+      }
+    }
+  }
+}
+violazioni['slider-pro-su-misura'] = sliderSuMisura;
+RULES.push({ id: 'slider-pro-su-misura', titolo: 'Slider Pro dei temi: niente CSS, classi o colori fissi, nei testi solo gli stili dei pulsanti, niente dati che nessuno legge' });
+
 // ─── confronto con la baseline ──────────────────────────────────────────────
 const args = process.argv.slice(2);
 const conteggi = Object.fromEntries(Object.entries(violazioni).map(([k, v]) => [k, v.length]));

@@ -129,6 +129,16 @@ final class Olobuild_Scene_Slider {
         }
         $media  = Olobuild_Template_Library::instance()->import_file_media( [ 'settings' => $settings ], false );
         $fuori  = self::rimasti_nella_libreria( $media['dati']['settings'] );
+        // I colori propri del tema che la scena usa (1.4.1433) entrano nella Palette del sito, col loro nome: così si
+        // cambiano da Configurazione › Palette. Un colore che il sito ha già resta com'è.
+        $colori = 0;
+        if ( ! empty( $meta['colori_extra'] ) && is_array( $meta['colori_extra'] ) && class_exists( 'Olobuild_Style_System' ) ) {
+            $testo  = (string) wp_json_encode( $settings );
+            $usati  = array_values( array_filter( $meta['colori_extra'], function ( $c ) use ( $testo ) {
+                return is_array( $c ) && ! empty( $c['id'] ) && false !== strpos( $testo, '--olo-color-' . $c['id'] . ',' );
+            } ) );
+            $colori = Olobuild_Style_System::aggiungi_colori_extra( $usati, false );
+        }
         return rest_ensure_response( [
             'settings' => $media['dati']['settings'],
             'nome'     => (string) ( $t['name'] ?? $t['id'] ),
@@ -136,6 +146,7 @@ final class Olobuild_Scene_Slider {
             // Libreria media di WordPress non li accetta): contati a parte, non sono un errore (prova su olo03,
             // 24 nov: «9 file non copiati» erano il cruscotto e le spie di Cric).
             'media'    => [ 'copiate' => $media['copiate'], 'riusate' => $media['riusate'], 'fallite' => $fuori['file'], 'svg' => $fuori['svg'] ],
+            'colori'   => $colori,
         ] );
     }
 

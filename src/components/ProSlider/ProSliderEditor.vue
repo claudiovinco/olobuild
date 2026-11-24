@@ -10,6 +10,13 @@
             <button v-for="m in MODI" :key="m.k" type="button" class="mps-modo" :class="{ 'is-on': modo === m.k }" :aria-pressed="modo === m.k ? 'true' : 'false'"
                     @click="modo = m.k" :title="m.spiega">{{ m.nome }}</button>
           </div>
+          <!-- Annulla e ripeti, copia e incolla (1.4.1430): quello che ogni editor ha, e qui mancava -->
+          <div class="mps-attrezzi" role="group" :aria-label="t('Modifiche')">
+            <button type="button" class="mps-attrezzo" :disabled="!puoAnnullare" @click="indietro" :title="t('Torna indietro di un passo (Ctrl+Z)')" :aria-label="t('Torna indietro di un passo (Ctrl+Z)')"><span aria-hidden="true" v-html="ICO.indietro"></span></button>
+            <button type="button" class="mps-attrezzo" :disabled="!puoRipetere" @click="avanti" :title="t('Rifai il passo (Ctrl+Maiusc+Z)')" :aria-label="t('Rifai il passo (Ctrl+Maiusc+Z)')"><span aria-hidden="true" v-html="ICO.avanti"></span></button>
+            <button type="button" class="mps-attrezzo" :disabled="!selectedLayerId || editingGlobal" @click="copiaLivelli" :title="t('Copia i livelli scelti (Ctrl+C)')" :aria-label="t('Copia i livelli scelti (Ctrl+C)')"><span aria-hidden="true" v-html="ICO.copia"></span></button>
+            <button type="button" class="mps-attrezzo" :disabled="!appunti.length" @click="incollaLivelli" :title="t('Incolla (Ctrl+V)') + (appunti.length ? ' · ' + appunti.length : '')" :aria-label="t('Incolla (Ctrl+V)')"><span aria-hidden="true" v-html="ICO.incolla"></span><span v-if="appunti.length" class="mps-attrezzo-n">{{ appunti.length }}</span></button>
+          </div>
           <span v-if="avvisoScena" class="mb-text-xs mb-text-green-300 mb-truncate" role="status">{{ avvisoScena }}</span>
         </div>
         <div class="mb-flex mb-items-center mb-gap-2">
@@ -376,6 +383,7 @@
 import { ref, computed, onMounted, onUnmounted, reactive, nextTick, watch } from 'vue';
 import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
+import { useStylesStore } from '@/stores/styles';
 import prosliderDef, { normalizeHeight, resolveHeightPx } from '@/config/elements/proslider.js';
 import SlideList from './SlideList.vue';
 import SliderCanvas from './SliderCanvas.vue';
@@ -393,6 +401,7 @@ import SceneLibrary from './SceneLibrary.vue';
 import LayerTree from './LayerTree.vue';
 import InteractionsPanel from './InteractionsPanel.vue';
 import MultiPanel from './MultiPanel.vue';
+import lucideIcons from './lucideIconsSvg.js';
 
 // Option arrays per FieldSelect (stessi value dei vecchi <option>: dati salvati invariati)
 const OPTS_BG_TYPE = [
@@ -417,6 +426,7 @@ const emit = defineEmits(['close']);
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
+const stylesStore = useStylesStore();
 
 const { defaultSlide, defaultLayer, makeId } = prosliderDef.helpers;
 
@@ -654,7 +664,12 @@ function rinnovaIds(livelli) {
   return nuovi;
 }
 
-function usaScena({ settings, nome, media, modo }) {
+function usaScena({ settings, nome, media, colori, modo }) {
+  // I colori propri del tema entrati nella Palette (1.4.1433): si rileggono, così compaiono fra le tinte del selettore
+  if (colori) {
+    fetch(`${window.oloData?.restUrl}global-colors`, { headers: { 'X-WP-Nonce': window.oloData?.nonce }, credentials: 'same-origin' })
+      .then((r) => (r.ok ? r.json() : null)).then((l) => { if (Array.isArray(l)) stylesStore.globalColors = l; }).catch(() => {});
+  }
   const s = JSON.parse(JSON.stringify(settings || {}));
   if (!Array.isArray(s.slides) || !s.slides.length) return;
   s.slides = s.slides.map((sl) => ({ ...sl, id: makeId(), layers: rinnovaIds(sl.layers) }));
@@ -679,7 +694,8 @@ function usaScena({ settings, nome, media, modo }) {
   // Solo le foto e i video che dovevano copiarsi e non ci sono riusciti: i disegni SVG restano apposta nella libreria
   // (WordPress non li accetta nella Libreria media).
   const fallite = media?.fallite ? ' ' + t('(%d file non copiati: restano all’indirizzo della libreria)').replace('%d', media.fallite) : '';
-  avvisoScena.value = t('Scena di %s pronta: cambia testi, foto e link, poi «Salva e chiudi».').replace('%s', nome || '') + fallite;
+  const nuoviColori = colori ? ' ' + (colori === 1 ? t('1 colore del tema è entrato nella Palette.') : t('%d colori del tema sono entrati nella Palette.').replace('%d', colori)) : '';
+  avvisoScena.value = t('Scena di %s pronta: cambia testi, foto e link, poi «Salva e chiudi».').replace('%s', nome || '') + fallite + nuoviColori;
   clearTimeout(timerAvviso);
   timerAvviso = setTimeout(() => { avvisoScena.value = ''; }, 12000);
 }
@@ -752,7 +768,7 @@ function updateLayer(layerId, updates) {
   if (!layer) return;
 
   const bp = activeBreakpoint.value;
-  const responsiveKeys = ['x', 'y', 'width', 'height', 'fontSize', 'visible', 'textAlign'];
+  const responsiveKeys = ['x', 'y', 'width', 'height', 'fontSize', 'visible', 'textAlign', 'letterSpacing'];
 
   if (bp !== 'desktop') {
     // Salva in responsive override solo le chiavi responsive
@@ -795,7 +811,7 @@ function updateLayerProp(key, val) {
 
   // Se siamo su un breakpoint diverso da desktop, salva nel responsive override
   const bp = activeBreakpoint.value;
-  const responsiveKeys = ['x', 'y', 'width', 'height', 'fontSize', 'visible', 'textAlign'];
+  const responsiveKeys = ['x', 'y', 'width', 'height', 'fontSize', 'visible', 'textAlign', 'letterSpacing'];
   if (bp !== 'desktop' && responsiveKeys.includes(key)) {
     const resp = layer.responsive || { notebook: null, tablet: null, mobile: null };
     const bpOverride = resp[bp] || {};
@@ -842,6 +858,86 @@ watch(activeSlideIndex, () => soloGruppo(null, []));
 function guardaScena(v) {
   statePreview.value = v ? { [v.stato]: v.valore } : {};
 }
+// --- Annulla e ripeti (1.4.1430) ---
+// Una fotografia dei dati dopo ogni modifica (ferma da 350 ms: un trascinamento è un passo solo), fino a 100 passi.
+// Ctrl+Z / Cmd+Z indietro, Ctrl+Maiusc+Z o Ctrl+Y avanti; dentro un campo di testo restano quelli del campo.
+const ICO = { indietro: lucideIcons['undo-2'] || '↶', avanti: lucideIcons['redo-2'] || '↷', copia: lucideIcons['copy'] || '⧉', incolla: lucideIcons['clipboard-paste'] || '⎘' };
+const storia = [];
+let posStoria = -1;
+let applicando = false;
+let timerStoria = null;
+const puoAnnullare = ref(false);
+const puoRipetere = ref(false);
+function aggiornaStoria() { puoAnnullare.value = posStoria > 0; puoRipetere.value = posStoria < storia.length - 1; }
+function registraPasso() {
+  if (applicando) return;
+  const f = JSON.stringify(data);
+  if (posStoria >= 0 && storia[posStoria] === f) return;
+  storia.splice(posStoria + 1);
+  storia.push(f);
+  if (storia.length > 100) storia.shift();
+  posStoria = storia.length - 1;
+  aggiornaStoria();
+}
+function applicaPasso(f) {
+  applicando = true;
+  const o = JSON.parse(f);
+  for (const k of Object.keys(data)) if (!(k in o)) delete data[k];
+  Object.assign(data, o);
+  if (activeSlideIndex.value >= (data.slides || []).length) activeSlideIndex.value = Math.max(0, (data.slides || []).length - 1);
+  const esiste = (id) => (activeSlide.value?.layers || []).some((l) => l.id === id) || (data.globalLayers || []).some((l) => l.id === id);
+  if (selectedLayerId.value && !esiste(selectedLayerId.value)) selectedLayerId.value = null;
+  selezione.value = new Set([...selezione.value].filter(esiste));
+  nextTick(() => { applicando = false; aggiornaStoria(); });
+}
+function indietro() {
+  clearTimeout(timerStoria);
+  registraPasso();
+  if (posStoria <= 0) return;
+  posStoria--;
+  applicaPasso(storia[posStoria]);
+}
+function avanti() {
+  if (posStoria >= storia.length - 1) return;
+  posStoria++;
+  applicaPasso(storia[posStoria]);
+}
+watch(data, () => { if (applicando) return; clearTimeout(timerStoria); timerStoria = setTimeout(registraPasso, 350); }, { deep: true });
+onMounted(() => registraPasso());
+
+// --- Copia, incolla, duplica (1.4.1430) ---
+// Gli appunti restano finché l'editor è aperto e, se il browser lo lascia, anche per il prossimo slider (si incolla
+// l'apertura di un tema nello slider di un'altra pagina). Incollati: id nuovi, un passo più in là se sono nella stessa slide.
+const CHIAVE_APPUNTI = 'olo_mps_appunti';
+const appunti = ref((() => { try { const a = JSON.parse(localStorage.getItem(CHIAVE_APPUNTI) || '[]'); return Array.isArray(a) ? a : []; } catch (_) { return []; } })());
+function copiaLivelli() {
+  if (editingGlobal.value) return;
+  const ls = livelliScelti.value.length ? livelliScelti.value : (selectedLayer.value ? [selectedLayer.value] : []);
+  if (!ls.length) return;
+  appunti.value = JSON.parse(JSON.stringify(ls));
+  try { localStorage.setItem(CHIAVE_APPUNTI, JSON.stringify(appunti.value)); } catch (_) { /* senza memoria del browser restano solo qui */ }
+  avvisoScena.value = (ls.length === 1 ? t('1 livello copiato') : t('%d livelli copiati').replace('%d', ls.length)) + ' · ' + t('Ctrl+V per incollarli');
+  clearTimeout(timerAvviso);
+  timerAvviso = setTimeout(() => { avvisoScena.value = ''; }, 5000);
+}
+function incollaLivelli() {
+  const layers = activeSlide.value?.layers;
+  if (!layers || !appunti.value.length) return;
+  const stessi = appunti.value.some((a) => layers.some((l) => l.id === a.id));
+  const copie = rinnovaIds(JSON.parse(JSON.stringify(appunti.value))).map((c) => {
+    if (stessi) { c.x = arrot((Number(c.x) || 0) + 2); c.y = arrot((Number(c.y) || 0) + 2); }
+    return c;
+  });
+  layers.push(...copie);
+  scegliMolti(copie.map((c) => c.id));
+}
+function duplicaLivelli() {
+  if (livelliScelti.value.length > 1) { duplicaScelti(); return; }
+  if (!selectedLayer.value || editingGlobal.value) return;
+  selezione.value = new Set([selectedLayer.value.id]);
+  duplicaScelti();
+}
+
 // --- Più livelli insieme (1.4.1428) ---
 // La scelta: il livello «principale» resta selectedLayerId (le sue proprietà, la sua linea del tempo); gli altri scelti
 // con Maiusc/Ctrl + clic sulla tela o nell'elenco, o con «Scegli tutto il gruppo», si spostano e si cambiano insieme.
@@ -1341,6 +1437,15 @@ function onKeydown(e) {
   }
   // Canc in un campo cancella il testo, non il livello scelto (1.4.1422: prima toglieva il livello).
   const campo = e.target?.closest?.('input, textarea, select, [contenteditable="true"]');
+  // Annulla, ripeti, copia, incolla, duplica (1.4.1430): fuori dai campi di testo, che hanno i loro
+  if ((e.ctrlKey || e.metaKey) && !campo && !editingLayerId.value) {
+    const k = e.key.toLowerCase();
+    if (k === 'z' && !e.shiftKey) { e.preventDefault(); indietro(); return; }
+    if ((k === 'z' && e.shiftKey) || k === 'y') { e.preventDefault(); avanti(); return; }
+    if (k === 'c') { e.preventDefault(); copiaLivelli(); return; }
+    if (k === 'v') { e.preventDefault(); incollaLivelli(); return; }
+    if (k === 'd') { e.preventDefault(); duplicaLivelli(); return; }
+  }
   // Frecce: spostano i livelli scelti di mezzo punto (con Maiusc di 5), sullo schermo che si sta guardando (1.4.1428)
   if (!campo && !editingLayerId.value && selectedLayerId.value && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
     e.preventDefault();
@@ -1435,6 +1540,13 @@ onUnmounted(() => {
 /* Modalità Interazioni: le regole in alto (al massimo metà), sotto le proprietà del livello (1.4.1426) */
 .mps-colonna-int { max-height: 50%; flex: none; border-left: 1px solid #374151; }
 .mps-colonna-prop { flex: 1; min-height: 0; height: auto; }
+.mps-attrezzi { display: inline-flex; gap: 2px; }
+.mps-attrezzo { font: inherit; position: relative; display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 26px; padding: 0; color: #d1d5db; background: transparent; border: 1px solid transparent; border-radius: 5px; cursor: pointer; }
+.mps-attrezzo:hover:not(:disabled) { background: #374151; color: #fff; }
+.mps-attrezzo:disabled { opacity: .35; cursor: default; }
+.mps-attrezzo :deep(svg) { width: 15px; height: 15px; }
+.mps-attrezzo-n { position: absolute; top: -3px; right: -3px; min-width: 14px; height: 14px; padding: 0 3px; border-radius: 7px; font-size: 9px; line-height: 14px; background: var(--olo-color-primary, #e1474f); color: var(--olo-color-primary-contrast, #fff); }
+.mps-attrezzo:focus-visible { outline: 2px solid #fff; outline-offset: -2px; }
 .mps-modi { display: inline-flex; border: 1px solid #374151; border-radius: 6px; overflow: hidden; }
 .mps-modo { font: inherit; font-size: 11px; font-weight: 600; padding: 4px 12px; color: #9ca3af; background: transparent; border: 0; cursor: pointer; }
 .mps-modo + .mps-modo { border-left: 1px solid #374151; }

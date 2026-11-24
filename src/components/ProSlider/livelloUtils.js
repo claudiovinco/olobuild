@@ -171,7 +171,11 @@ function nomeFile(url) {
 export function nomeLivello(l) {
   if (!l) return '';
   if (l.name && String(l.name).trim()) return String(l.name).trim();
-  if ((l.type === 'text' || l.type === 'button') && String(l.content || '').trim()) return String(l.content).replace(/\s+/g, ' ').trim();
+  // il testo senza i segni delle parole colorate o in grassetto (<br>, <span …>): il nome è quello che si legge
+  if ((l.type === 'text' || l.type === 'button') && String(l.content || '').trim()) {
+    const leggibile = String(l.content).replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+    if (leggibile) return leggibile;
+  }
   if (l.type === 'icon' && l.iconName) return String(l.iconName);
   const f = nomeFile(l.type === 'video' ? l.videoSrc : l.imageSrc);
   if (f) return f;
@@ -380,3 +384,117 @@ export const ETICHETTE = [
   { k: 'viola', nome: t('Viola'), c: '#a855f7' },
   { k: 'grigio', nome: t('Grigio'), c: '#9ca3af' },
 ];
+
+/* ── I comandi che nei temi erano CSS su misura (1.4.1431): gemelli di comandi_ex_css() del PHP, per la tela ── */
+const MISURA_C = /^-?\d*\.?\d+(px|%|em|rem|vw|vh)?$/;
+const PAROLE_C = /^[a-z0-9.%\s-]{1,40}$/i;
+const COLORE_SICURO = (c) => (/^[#a-z0-9(),.%\s/-]+$/i.test(String(c || '')) && !/[;{}<>]/.test(String(c || '')) ? String(c).trim() : '');
+
+/** Una sfumatura dai comandi ({tipo, ripeti, angolo | forma, dimensione, posizione, tappe}) in CSS. */
+export function sfumaturaCss(g) {
+  const tappe = (g?.tappe || []).map((tp) => {
+    const c = COLORE_SICURO(tp?.colore);
+    if (!c) return '';
+    return [c, ...['da', 'a'].map((k) => String(tp[k] ?? '').trim()).filter((v) => v && MISURA_C.test(v))].join(' ');
+  }).filter(Boolean);
+  if (tappe.length < 2) return '';
+  const radiale = g.tipo === 'radiale';
+  let testa = '';
+  if (radiale) {
+    const forma = ['circle', 'ellipse'].includes(g.forma) ? g.forma : '';
+    const dim = PAROLE_C.test(String(g.dimensione || '')) ? String(g.dimensione).trim() : '';
+    const pos = PAROLE_C.test(String(g.posizione || '')) ? String(g.posizione).trim() : '';
+    testa = [forma, dim].filter(Boolean).join(' ');
+    if (pos) testa = (testa + ' at ' + pos).trim();
+  } else if (g.angolo !== undefined && g.angolo !== '' && !Number.isNaN(Number(g.angolo))) {
+    testa = Number(g.angolo) + 'deg';
+  }
+  return (g.ripeti ? 'repeating-' : '') + (radiale ? 'radial' : 'linear') + '-gradient(' + (testa ? testa + ',' : '') + tappe.join(',') + ')';
+}
+
+/** Lo stile dei comandi ex CSS di un livello, come oggetto per Vue. */
+export function stileComandi(l) {
+  const st = {};
+  if (!l) return st;
+  if (l.type === 'shape' && Array.isArray(l.sfondoForma) && l.sfondoForma.length) {
+    const parti = l.sfondoForma.map(sfumaturaCss).filter(Boolean);
+    if (parti.length) {
+      if (l.sfondoFormaSulColore) st.backgroundImage = parti.join(',');
+      else st.background = parti.join(',') + (COLORE_SICURO(l.sfondoFormaColore) ? ',' + COLORE_SICURO(l.sfondoFormaColore) : '');
+    }
+  }
+  if (Array.isArray(l.ombre) && l.ombre.length) {
+    st.boxShadow = l.ombre.map((o) => (o.inset ? 'inset ' : '') + `${parseInt(o.x, 10) || 0}px ${parseInt(o.y, 10) || 0}px ${Math.abs(parseInt(o.blur, 10) || 0)}px ${parseInt(o.spread, 10) || 0}px ${COLORE_SICURO(o.color) || 'rgba(0,0,0,.3)'}`).join(',');
+  }
+  if (l.ombraForma) {
+    const o = l.ombraForma;
+    st.filter = `drop-shadow(${parseInt(o.x, 10) || 0}px ${parseInt(o.y, 10) || 0}px ${Math.abs(parseInt(o.blur, 10) || 0)}px ${COLORE_SICURO(o.color) || 'rgba(0,0,0,.4)'})`;
+  }
+  if (Number(l.sfumaColori)) st.transition = `background-color ${Math.min(5000, Math.abs(parseInt(l.sfumaColori, 10)))}ms ease`;
+  if (Array.isArray(l.ritaglio) && l.ritaglio.length >= 3) {
+    const pt = l.ritaglio.filter((p) => Array.isArray(p) && p.length === 2 && MISURA_C.test(String(p[0])) && MISURA_C.test(String(p[1]))).map((p) => p[0] + ' ' + p[1]);
+    if (pt.length >= 3) st.clipPath = 'polygon(' + pt.join(',') + ')';
+  }
+  if (l.clicPassanti) st.pointerEvents = 'none';
+  if (l.ritaglia) st.overflow = 'hidden';
+  if (l.fontWdth !== undefined && l.fontWdth !== '' && !Number.isNaN(Number(l.fontWdth))) st.fontVariationSettings = `"wdth" ${Number(l.fontWdth)}`;
+  if (Number(l.bordiSfumati)) {
+    const m = `radial-gradient(closest-side,#000 ${Math.max(0, Math.min(99, parseInt(l.bordiSfumati, 10)))}%,transparent 100%)`;
+    st.WebkitMaskImage = m;
+    st.maskImage = m;
+  }
+  return st;
+}
+
+/* ── Il testo di un livello (1.4.1431) ───────────────────────────────────
+   Il testo può avere parole in grassetto, in corsivo, a capo, colorate, più piccole o più tenui: lo scrivono i pulsanti
+   del campo Testo (FieldTestoLivello), non più l'HTML a mano. Qui si tiene solo quello che quei pulsanti fanno (e i link),
+   per mostrarlo sulla tela dell'editor e salvarlo pulito. Il PHP lo ripassa da wp_kses_post. */
+const TAG_TESTO = new Set(['B', 'STRONG', 'I', 'EM', 'U', 'S', 'BR', 'SPAN', 'A', 'SMALL', 'SUP', 'SUB', 'MARK']);
+const STILI_TESTO = /^(color|opacity|font-size|font-weight|font-style|letter-spacing|text-decoration|background-color)$/;
+export function stileTestoPulito(stile) {
+  return String(stile || '').split(';').map((d) => {
+    const i = d.indexOf(':');
+    if (i < 0) return '';
+    const p = d.slice(0, i).trim().toLowerCase();
+    const v = d.slice(i + 1).trim();
+    if (!STILI_TESTO.test(p) || !v || /url\(|expression|javascript:|[<>{}]/i.test(v)) return '';
+    return p + ':' + v;
+  }).filter(Boolean).join(';');
+}
+export function testoSicuro(html) {
+  const s = String(html ?? '');
+  if (!/[<&]/.test(s) || typeof DOMParser === 'undefined') return s.replace(/</g, '&lt;');
+  const doc = new DOMParser().parseFromString('<div>' + s + '</div>', 'text/html');
+  const radice = doc.body.firstChild;
+  const pulisci = (el) => {
+    for (const n of [...el.childNodes]) {
+      if (n.nodeType === 3) continue;
+      if (n.nodeType !== 1) { n.remove(); continue; }
+      pulisci(n);
+      if (!TAG_TESTO.has(n.tagName)) {
+        if (/^(SCRIPT|STYLE|IFRAME|OBJECT|EMBED|TEMPLATE)$/.test(n.tagName)) { n.remove(); continue; }
+        // un blocco (div, p) diventa un a capo: è quello che il browser fa quando si preme Invio in un campo modificabile
+        const blocco = /^(DIV|P)$/.test(n.tagName) && n.previousSibling;
+        if (blocco) n.before(doc.createElement('br'));
+        n.replaceWith(...n.childNodes);
+        continue;
+      }
+      for (const a of [...n.attributes]) {
+        const nome = a.name.toLowerCase();
+        if (nome === 'style') {
+          const st = stileTestoPulito(a.value);
+          if (st) n.setAttribute('style', st); else n.removeAttribute('style');
+        } else if (n.tagName === 'A' && nome === 'href') {
+          if (!/^(https?:|#|\/|mailto:|tel:)/i.test(a.value.trim())) n.removeAttribute('href');
+        } else if (!(n.tagName === 'A' && (nome === 'target' || nome === 'rel'))) {
+          n.removeAttribute(a.name);
+        }
+      }
+      // uno span senza stile non serve
+      if (n.tagName === 'SPAN' && !n.attributes.length) n.replaceWith(...n.childNodes);
+    }
+  };
+  pulisci(radice);
+  return radice.innerHTML;
+}

@@ -57796,3 +57796,248 @@ msgstr "Beim Überfahren mit der Maus (auf dem Handy beim Tippen)"
 
 msgid "Quando il mouse esce, torna com’era"
 msgstr "Wenn die Maus weggeht, wie vorher"
+
+#: licenza-1.4.1345
+msgid "%d livelli copiati"
+msgstr "%d Ebenen kopiert"
+
+msgid "1 livello copiato"
+msgstr "1 Ebene kopiert"
+
+msgid "Copia i livelli scelti (Ctrl+C)"
+msgstr "Ausgewählte Ebenen kopieren (Strg+C)"
+
+msgid "Ctrl+V per incollarli"
+msgstr "Strg+V zum Einfügen"
+
+msgid "Incolla (Ctrl+V)"
+msgstr "Einfügen (Strg+V)"
+
+msgid "Modifiche"
+msgstr "Änderungen"
+
+msgid "Rifai il passo (Ctrl+Maiusc+Z)"
+msgstr "Schritt wiederholen (Strg+Umschalt+Z)"
+
+msgid "Torna indietro di un passo (Ctrl+Z)"
+msgstr "Einen Schritt zurück (Strg+Z)"
+
+msgid "OLObuild Pro"
+msgstr "OLObuild Pro"
+
+msgid "Bordi sfumati"
+msgstr "Weiche Ränder"
+
+msgid "Cambio di colore sfumato"
+msgstr "Weicher Farbwechsel"
+
+msgid "Colore sotto le sfumature"
+msgstr "Farbe unter den Verläufen"
+
+msgid "I clic passano attraverso"
+msgstr "Klicks gehen hindurch"
+
+msgid "Il livello si sposta nel punto in cui si è cliccato per dare allo stato quel valore: la crepa compare dove si colpisce il vetro. Con la tastiera nasce al centro. Mettilo al centro dello slider: lo spostamento parte da lì."
+msgstr "Die Ebene springt an die Stelle, an der geklickt wurde, um dem Zustand diesen Wert zu geben: Der Riss erscheint dort, wo man das Glas trifft. Mit der Tastatur entsteht sie in der Mitte. Setze sie in die Mitte des Sliders: Von dort aus wird verschoben."
+
+msgid "Il livello si vede solo dentro la figura fatta da questi punti, in percentuale del livello (0 0 = in alto a sinistra, 100% 100% = in basso a destra). Parti da una forma pronta e sposta i punti."
+msgstr "Die Ebene ist nur innerhalb der Figur aus diesen Punkten sichtbar, in Prozent der Ebene (0 0 = oben links, 100% 100% = unten rechts). Beginne mit einer fertigen Form und verschiebe die Punkte."
+
+msgid "Il livello svanisce verso i bordi, come una foto con la vignetta al contrario: pieno al centro fino a questa percentuale, poi trasparente. 0 = bordi netti."
+msgstr "Die Ebene blendet zu den Rändern hin aus: bis zu diesem Prozentsatz in der Mitte voll, dann transparent. 0 = scharfe Ränder."
+
+msgid "Il punto attorno a cui il livello gira e si ingrandisce, nelle animazioni e nella rotazione: il centro, un angolo, un lato. Le carte che si girano come una porta ruotano su un lato."
+msgstr "Der Punkt, um den sich die Ebene in Animationen und bei der Drehung dreht und vergrößert: die Mitte, eine Ecke, eine Seite. Karten, die sich wie eine Tür öffnen, drehen sich um eine Seite."
+
+msgid "Immagine nella forma"
+msgstr "Bild in der Form"
+
+msgid "Le sfumature si appoggiano sul colore Sfondo della forma (che può cambiare con uno stato). Senza, sotto le sfumature c’è il colore scelto qui."
+msgstr "Die Verläufe liegen auf der Hintergrundfarbe der Form (die sich mit einem Zustand ändern kann). Ohne diese Option liegt unter den Verläufen die hier gewählte Farbe."
+
+msgid "L’ombra prende il contorno di quello che si vede (una forma ritagliata, un’immagine con parti trasparenti, un’icona) e non quello del riquadro."
+msgstr "Der Schatten folgt dem Umriss dessen, was man sieht (eine ausgeschnittene Form, ein Bild mit transparenten Stellen, ein Icon), nicht dem des Rahmens."
+
+msgid "Nasce dove si clicca"
+msgstr "Erscheint dort, wo man klickt"
+
+msgid "No, resta al suo posto"
+msgstr "Nein, bleibt an seinem Platz"
+
+msgid "Ombra che segue la forma"
+msgstr "Schatten folgt der Form"
+
+msgid "Punto di rotazione"
+msgstr "Drehpunkt"
+
+msgid "Punto di rotazione, in percentuale"
+msgstr "Drehpunkt, in Prozent"
+
+msgid "Quando %s diventa «%v»"
+msgstr "Wenn %s zu «%v» wird"
+
+msgid "Quando il colore di sfondo del livello cambia (per esempio con uno stato), il passaggio dura questo tempo invece di essere di colpo. 0 = di colpo."
+msgstr "Wenn sich die Hintergrundfarbe der Ebene ändert (zum Beispiel mit einem Zustand), dauert der Übergang so lange, statt sofort zu geschehen. 0 = sofort."
+
+msgid "Quando il livello gira in 3D e mostra la schiena, sparisce: due livelli uno sull’altro, uno girato di 180°, fanno una carta con due facce."
+msgstr "Wenn sich die Ebene in 3D dreht und ihre Rückseite zeigt, verschwindet sie: Zwei Ebenen übereinander, eine um 180° gedreht, ergeben eine Karte mit zwei Seiten."
+
+msgid "Quello che sporge dal riquadro del livello (un testo lungo, un’immagine ingrandita) non si vede."
+msgstr "Was über den Rahmen der Ebene hinausragt (ein langer Text, ein vergrößertes Bild), ist nicht zu sehen."
+
+msgid "Retro nascosto"
+msgstr "Rückseite ausgeblendet"
+
+msgid "Ripeti come una trama"
+msgstr "Als Muster wiederholen"
+
+msgid "Ritaglio"
+msgstr "Zuschnitt"
+
+msgid "Scegli le parole col mouse e premi un pulsante: grassetto, corsivo, colore, più piccole o più tenui. Invio va a capo."
+msgstr "Wähle die Wörter mit der Maus aus und drücke einen Button: fett, kursiv, Farbe, kleiner oder blasser. Enter macht einen Zeilenumbruch."
+
+msgid "Sfumature"
+msgstr "Verläufe"
+
+msgid "Sopra il colore della forma"
+msgstr "Über der Farbe der Form"
+
+msgid "Stringe o allarga le lettere senza deformarle: sotto 100 più strette, sopra più larghe. Funziona con i caratteri variabili che hanno la larghezza, come Anybody, Roboto Flex, Open Sans, Archivo."
+msgstr "Macht die Buchstaben schmaler oder breiter, ohne sie zu verzerren: unter 100 schmaler, darüber breiter. Funktioniert mit variablen Schriften, die eine Breitenachse haben, wie Anybody, Roboto Flex, Open Sans, Archivo."
+
+msgid "Su una riga sola (non va a capo)"
+msgstr "In einer Zeile (kein Umbruch)"
+
+msgid "Sul sito il livello non prende il mouse: i clic e il passaggio arrivano ai livelli sotto. Serve per veli, luci e decori sopra i pulsanti. Nell’editor resta prendibile."
+msgstr "Auf der Website reagiert die Ebene nicht auf die Maus: Klicks und Überfahren erreichen die Ebenen darunter. Nützlich für Schleier, Lichter und Dekor über Buttons. Im Editor bleibt sie auswählbar."
+
+msgid "Taglia quello che esce"
+msgstr "Überstehendes abschneiden"
+
+msgid "Una foto o una trama che riempie la forma al posto del colore: un tessuto, una carta, una striscia di un disegno più grande (con Dimensione e Posizione si sceglie quale parte)."
+msgstr "Ein Foto oder Muster, das die Form statt der Farbe füllt: ein Stoff, ein Papier, ein Streifen eines größeren Bildes (mit Größe und Position wählst du den Ausschnitt)."
+
+msgid "Una o più sfumature una sopra l’altra: lineari o dal centro, anche ripetute per fare righe, quadretti, pois e trame. La prima della lista sta sopra. Ogni colore ha il punto dove comincia e, se vuoi, dove finisce (in percentuale o in px)."
+msgstr "Ein oder mehrere Verläufe übereinander: linear oder von der Mitte aus, auch wiederholt für Streifen, Karos, Punkte und Muster. Der erste in der Liste liegt oben. Jede Farbe hat den Punkt, an dem sie beginnt, und wenn du willst, wo sie endet (in Prozent oder px)."
+
+msgid "lo stato"
+msgstr "der Zustand"
+
+msgid "A (percentuale o px)"
+msgstr "Bis (Prozent oder px)"
+
+msgid "Centro della sfumatura"
+msgstr "Mitte des Verlaufs"
+
+msgid "Centro: 50% 50%"
+msgstr "Mitte: 50% 50%"
+
+msgid "Da (percentuale o px)"
+msgstr "Von (Prozent oder px)"
+
+msgid "Forma di serie"
+msgstr "Standardform"
+
+msgid "Grandezza"
+msgstr "Größe"
+
+msgid "Più in alto"
+msgstr "Nach oben"
+
+msgid "Ripetuta"
+msgstr "Wiederholt"
+
+msgid "Sfumatura %d"
+msgstr "Verlauf %d"
+
+msgid "Togli il colore"
+msgstr "Farbe entfernen"
+
+msgid "Togli la sfumatura"
+msgstr "Verlauf entfernen"
+
+msgid "Un’altra sfumatura sopra"
+msgstr "Noch ein Verlauf darüber"
+
+msgid "a"
+msgstr "bis"
+
+msgid "da"
+msgstr "von"
+
+msgid "di serie: fino all’angolo più lontano"
+msgstr "Standard: bis zur entferntesten Ecke"
+
+msgid "Ombra %d"
+msgstr "Schatten %d"
+
+msgid "Ombre (anche più d’una, anche interne)"
+msgstr "Schatten (auch mehrere, auch innen)"
+
+msgid "Togli l’ombra"
+msgstr "Schatten entfernen"
+
+msgid "Un’altra ombra"
+msgstr "Noch ein Schatten"
+
+msgid "Fascio di luce"
+msgstr "Lichtkegel"
+
+msgid "Forme pronte…"
+msgstr "Fertige Formen…"
+
+msgid "Metà destra"
+msgstr "Rechte Hälfte"
+
+msgid "Metà sinistra"
+msgstr "Linke Hälfte"
+
+msgid "Nessun ritaglio"
+msgstr "Kein Zuschnitt"
+
+msgid "Togli il punto"
+msgstr "Punkt entfernen"
+
+msgid "A capo (Maiusc+Invio)"
+msgstr "Zeilenumbruch (Umschalt+Enter)"
+
+msgid "Colore delle parole scelte"
+msgstr "Farbe der ausgewählten Wörter"
+
+msgid "Più piccole"
+msgstr "Kleiner"
+
+msgid "Più tenui"
+msgstr "Blasser"
+
+msgid "Stile delle parole scelte"
+msgstr "Stil der ausgewählten Wörter"
+
+msgid "Togli lo stile alle parole scelte"
+msgstr "Stil der ausgewählten Wörter entfernen"
+
+#: licenza-1.4.1345
+msgid "%d colori del tema sono entrati nella Palette."
+msgstr "%d Farben des Themes sind jetzt in der Palette."
+
+msgid "1 colore del tema è entrato nella Palette."
+msgstr "1 Farbe des Themes ist jetzt in der Palette."
+
+msgid "Colori del disegno"
+msgstr "Farben der Zeichnung"
+
+msgid "I colori che il disegno ha nel file, dal più usato. Scegline uno della palette al posto di quello del file: il disegno segue i colori del sito. Vuoto = il colore del file."
+msgstr "Die Farben, die die Zeichnung in der Datei hat, die häufigste zuerst. Wähle stattdessen eine Farbe aus der Palette: Die Zeichnung folgt den Farben der Website. Leer = die Farbe der Datei."
+
+msgid "Leggo i colori del disegno…"
+msgstr "Die Farben der Zeichnung werden gelesen…"
+
+msgid "Mostra tutti i colori (%d)"
+msgstr "Alle Farben zeigen (%d)"
+
+msgid "Questo disegno non si può leggere: resta coi suoi colori."
+msgstr "Diese Zeichnung kann nicht gelesen werden: Sie behält ihre Farben."
+
+msgid "Torna ai colori del file"
+msgstr "Zurück zu den Farben der Datei"

@@ -416,6 +416,13 @@ class Olobuild_Rest_Api {
             'callback'            => [ 'Olobuild_Scene_Slider', 'rest_usa' ],
             'permission_callback' => [ $this, 'check_permission_licenza' ],
         ] );
+        // «Colori del disegno» dello Slider Pro (1.4.1433): il disegno SVG pulito e i suoi colori
+        register_rest_route( $this->namespace, '/disegno', [
+            'methods'             => 'GET',
+            'callback'            => [ 'Olobuild_Disegni', 'rest' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+            'args'                => [ 'src' => [ 'type' => 'string', 'required' => true ] ],
+        ] );
         // Il plugin che il tema richiede (WooCommerce), installato e attivato prima dell'import.
         register_rest_route( $this->namespace, '/themes/(?P<theme_id>[a-zA-Z0-9_-]+)/plugin-richiesto', [
             'methods'             => 'POST',

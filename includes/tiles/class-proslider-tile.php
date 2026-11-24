@@ -843,23 +843,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
 
         // CSS filters (image/video)
         if ( in_array( $type, [ 'image', 'video' ], true ) ) {
-            $filter_parts = [];
-            $fb = floatval( $layer['filterBrightness'] ?? 100 );
-            $fc = floatval( $layer['filterContrast'] ?? 100 );
-            $fs = floatval( $layer['filterSaturate'] ?? 100 );
-            $fg = floatval( $layer['filterGrayscale'] ?? 0 );
-            $fh = floatval( $layer['filterHueRotate'] ?? 0 );
-            $fbl = floatval( $layer['filterBlur'] ?? 0 );
-            $fse = floatval( $layer['filterSepia'] ?? 0 );
-            $fin = floatval( $layer['filterInvert'] ?? 0 );
-            if ( $fb != 100 ) { $filter_parts[] = 'brightness(' . $fb . '%)'; }
-            if ( $fc != 100 ) { $filter_parts[] = 'contrast(' . $fc . '%)'; }
-            if ( $fs != 100 ) { $filter_parts[] = 'saturate(' . $fs . '%)'; }
-            if ( $fg > 0 ) { $filter_parts[] = 'grayscale(' . $fg . '%)'; }
-            if ( $fh > 0 ) { $filter_parts[] = 'hue-rotate(' . $fh . 'deg)'; }
-            if ( $fbl > 0 ) { $filter_parts[] = 'blur(' . $fbl . 'px)'; }
-            if ( $fse > 0 ) { $filter_parts[] = 'sepia(' . $fse . '%)'; }
-            if ( $fin > 0 ) { $filter_parts[] = 'invert(' . $fin . '%)'; }
+            $filter_parts = $this->filtri_immagine( $layer );
             if ( $filter_parts ) {
                 $style .= 'filter:' . implode( ' ', $filter_parts ) . ';';
             }
@@ -988,6 +972,25 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             $segno = $this->safe_color_css( (string) ( $layer['action']['segno'] ?? '' ) );
             if ( '' !== $segno ) { $style .= '--mps-attivo:' . $segno . ';'; }
         }
+        // I comandi che prima si scrivevano nel CSS su misura (1.4.1430, scripts/temi/css_comandi.py): nello stesso punto
+        // dello stile in cui stava il CSS, così la resa resta identica. L'immagine nella forma è scritta in forma breve
+        // («background:»), che come prima toglie il colore della forma.
+        $origine = trim( (string) ( $layer['origine'] ?? '' ) );
+        if ( '' !== $origine && preg_match( '/^[a-z0-9.%\s-]{1,40}$/i', $origine ) ) { $style .= 'transform-origin:' . $origine . ';'; }
+        if ( ! empty( $layer['retroNascosto'] ) ) { $style .= 'backface-visibility:hidden;-webkit-backface-visibility:hidden;'; }
+        if ( ! empty( $layer['unaRiga'] ) ) { $style .= 'white-space:nowrap;'; }
+        $rotazione = isset( $layer['rotazione'] ) && is_numeric( $layer['rotazione'] ) ? floatval( $layer['rotazione'] ) : 0;
+        if ( 0.0 !== $rotazione ) { $style .= 'rotate:' . $rotazione . 'deg;'; }
+        $forma_img = 'shape' === $type ? trim( (string) ( $layer['shapeImage'] ?? '' ) ) : '';
+        if ( '' !== $forma_img && ! preg_match( '/[\s"\'()\\\\<>]/', $forma_img ) ) {
+            $fi_pos = trim( (string) ( $layer['shapeImagePos'] ?? '' ) );
+            $fi_dim = trim( (string) ( $layer['shapeImageSize'] ?? '' ) );
+            $fi_rip = in_array( $layer['shapeImageRepeat'] ?? '', [ 'no-repeat', 'repeat', 'repeat-x', 'repeat-y' ], true ) ? $layer['shapeImageRepeat'] : '';
+            $fi_pos = preg_match( '/^[a-z0-9.%\s-]{1,40}$/i', $fi_pos ) ? $fi_pos : 'center';
+            $fi_dim = preg_match( '/^[a-z0-9.%\s-]{1,40}$/i', $fi_dim ) ? $fi_dim : 'cover';
+            $style .= 'background:url("' . esc_attr( $forma_img ) . '") ' . $fi_pos . ' / ' . $fi_dim . ( $fi_rip ? ' ' . $fi_rip : '' ) . ';';
+        }
+        $style .= $this->comandi_ex_css( $layer, $type );
         $custom_css_inline = sanitize_text_field( $layer['customCSS'] ?? '' );
         if ( $custom_css_inline ) { $style .= $custom_css_inline; }
         ?>
@@ -1016,6 +1019,129 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         </div>
         <?php
         return $this->avvolgi_stato( $layer, ob_get_clean() );
+    }
+
+    /**
+     * Il resto dei comandi che nei temi erano CSS su misura (1.4.1431, scripts/temi/css_comandi.py). Utente, 24 nov 2026:
+     * «non devono esserci css personalizzati o hardcoded nelle cose fatte con pro slider ma comandi usabili da chiunque».
+     * Ogni valore passa da un controllo (colori con safe_color_css, misure con una regola stretta); lo stile esce nello
+     * stesso punto in cui stava il CSS, così la resa dei temi resta identica.
+     */
+    private function comandi_ex_css( $layer, $type ) {
+        $out    = '';
+        $misura = '/^-?\d*\.?\d+(px|%|em|rem|vw|vh)?$/';
+        // Sfumature della forma: una o più, lineari o radiali, anche ripetute, col colore sotto o sul colore della forma
+        if ( 'shape' === $type && ! empty( $layer['sfondoForma'] ) && is_array( $layer['sfondoForma'] ) ) {
+            $parti = [];
+            foreach ( $layer['sfondoForma'] as $g ) {
+                $css = is_array( $g ) ? $this->sfumatura_css( $g, $misura ) : '';
+                if ( '' !== $css ) { $parti[] = $css; }
+            }
+            if ( $parti ) {
+                if ( ! empty( $layer['sfondoFormaSulColore'] ) ) {
+                    $out .= 'background-image:' . implode( ',', $parti ) . ';';
+                } else {
+                    $col  = $this->safe_color_css( (string) ( $layer['sfondoFormaColore'] ?? '' ) );
+                    $out .= 'background:' . implode( ',', $parti ) . ( $col ? ',' . $col : '' ) . ';';
+                }
+            }
+        }
+        // Più ombre, anche interne
+        if ( ! empty( $layer['ombre'] ) && is_array( $layer['ombre'] ) ) {
+            $om = [];
+            foreach ( $layer['ombre'] as $o ) {
+                if ( ! is_array( $o ) ) { continue; }
+                $c = $this->safe_color_css( (string) ( $o['color'] ?? '' ) ) ?: 'rgba(0,0,0,.3)';
+                $om[] = ( ! empty( $o['inset'] ) ? 'inset ' : '' ) . intval( $o['x'] ?? 0 ) . 'px ' . intval( $o['y'] ?? 0 ) . 'px ' . absint( $o['blur'] ?? 0 ) . 'px ' . intval( $o['spread'] ?? 0 ) . 'px ' . $c;
+            }
+            if ( $om ) { $out .= 'box-shadow:' . implode( ',', $om ) . ';'; }
+        }
+        // Ombra che segue la forma (drop-shadow: il contorno visibile, non il riquadro). Sulle immagini si aggiunge ai
+        // filtri (luminosità, contrasto…): in CSS vince un solo «filter», e da sola li cancellerebbe.
+        if ( ! empty( $layer['ombraForma'] ) && is_array( $layer['ombraForma'] ) ) {
+            $o     = $layer['ombraForma'];
+            $c     = $this->safe_color_css( (string) ( $o['color'] ?? '' ) ) ?: 'rgba(0,0,0,.4)';
+            $prima = in_array( $type, [ 'image', 'video' ], true ) ? $this->filtri_immagine( $layer ) : [];
+            $out  .= 'filter:' . ( $prima ? implode( ' ', $prima ) . ' ' : '' ) . 'drop-shadow(' . intval( $o['x'] ?? 0 ) . 'px ' . intval( $o['y'] ?? 0 ) . 'px ' . absint( $o['blur'] ?? 0 ) . 'px ' . $c . ');';
+        }
+        // Il colore che cambia sfumando (es. quando una scelta lo cambia)
+        if ( ! empty( $layer['sfumaColori'] ) ) {
+            $out .= 'transition:background-color ' . min( 5000, absint( $layer['sfumaColori'] ) ) . 'ms ease;';
+        }
+        // Ritaglio a punti
+        if ( ! empty( $layer['ritaglio'] ) && is_array( $layer['ritaglio'] ) && count( $layer['ritaglio'] ) >= 3 ) {
+            $pt = [];
+            foreach ( $layer['ritaglio'] as $p ) {
+                if ( is_array( $p ) && 2 === count( $p ) && preg_match( $misura, (string) $p[0] ) && preg_match( $misura, (string) $p[1] ) ) {
+                    $pt[] = $p[0] . ' ' . $p[1];
+                }
+            }
+            if ( count( $pt ) >= 3 ) { $out .= 'clip-path:polygon(' . implode( ',', $pt ) . ');'; }
+        }
+        // Nasce dove si clicca: segue il punto del clic che ha portato lo stato a quel valore
+        $segui = sanitize_key( (string) ( $layer['seguiClic'] ?? '' ) );
+        if ( '' !== $segui ) { $out .= 'translate:var(--mps-clic-x-' . $segui . ',0px) var(--mps-clic-y-' . $segui . ',0px);'; }
+        if ( ! empty( $layer['clicPassanti'] ) ) { $out .= 'pointer-events:none;'; }
+        if ( ! empty( $layer['ritaglia'] ) ) { $out .= 'overflow:hidden;'; }
+        if ( isset( $layer['fontWdth'] ) && is_numeric( $layer['fontWdth'] ) ) { $out .= 'font-variation-settings:"wdth" ' . floatval( $layer['fontWdth'] ) . ';'; }
+        // Bordi sfumati: il livello svanisce verso i bordi, pieno fino a quella percentuale
+        if ( ! empty( $layer['bordiSfumati'] ) ) {
+            $n    = max( 0, min( 99, absint( $layer['bordiSfumati'] ) ) );
+            $m    = 'radial-gradient(closest-side,#000 ' . $n . '%,transparent 100%)';
+            $out .= '-webkit-mask-image:' . $m . ';mask-image:' . $m . ';';
+        }
+        return $out;
+    }
+
+    /** I filtri di un'immagine o di un video (luminosità, contrasto, saturazione…), come parti di «filter». */
+    private function filtri_immagine( $layer ) {
+        $p   = [];
+        $fb  = floatval( $layer['filterBrightness'] ?? 100 );
+        $fc  = floatval( $layer['filterContrast'] ?? 100 );
+        $fs  = floatval( $layer['filterSaturate'] ?? 100 );
+        $fg  = floatval( $layer['filterGrayscale'] ?? 0 );
+        $fh  = floatval( $layer['filterHueRotate'] ?? 0 );
+        $fbl = floatval( $layer['filterBlur'] ?? 0 );
+        $fse = floatval( $layer['filterSepia'] ?? 0 );
+        $fin = floatval( $layer['filterInvert'] ?? 0 );
+        if ( $fb != 100 ) { $p[] = 'brightness(' . $fb . '%)'; }
+        if ( $fc != 100 ) { $p[] = 'contrast(' . $fc . '%)'; }
+        if ( $fs != 100 ) { $p[] = 'saturate(' . $fs . '%)'; }
+        if ( $fg > 0 ) { $p[] = 'grayscale(' . $fg . '%)'; }
+        if ( $fh > 0 ) { $p[] = 'hue-rotate(' . $fh . 'deg)'; }
+        if ( $fbl > 0 ) { $p[] = 'blur(' . $fbl . 'px)'; }
+        if ( $fse > 0 ) { $p[] = 'sepia(' . $fse . '%)'; }
+        if ( $fin > 0 ) { $p[] = 'invert(' . $fin . '%)'; }
+        return $p;
+    }
+
+    /** Una sfumatura dai comandi: {tipo, ripeti, angolo | forma, dimensione, posizione, tappe: [{colore, da, a}]}. */
+    private function sfumatura_css( $g, $misura ) {
+        $tappe = [];
+        foreach ( (array) ( $g['tappe'] ?? [] ) as $t ) {
+            $c = is_array( $t ) ? $this->safe_color_css( (string) ( $t['colore'] ?? '' ) ) : '';
+            if ( '' === $c ) { continue; }
+            foreach ( [ 'da', 'a' ] as $k ) {
+                $v = trim( (string) ( $t[ $k ] ?? '' ) );
+                if ( '' !== $v && preg_match( $misura, $v ) ) { $c .= ' ' . $v; }
+            }
+            $tappe[] = $c;
+        }
+        if ( count( $tappe ) < 2 ) { return ''; }
+        $radiale = 'radiale' === ( $g['tipo'] ?? '' );
+        $testa   = '';
+        if ( $radiale ) {
+            $forma = in_array( $g['forma'] ?? '', [ 'circle', 'ellipse' ], true ) ? $g['forma'] : '';
+            $dim   = trim( (string) ( $g['dimensione'] ?? '' ) );
+            $dim   = preg_match( '/^[a-z0-9.%\s-]{1,40}$/i', $dim ) ? $dim : '';
+            $pos   = trim( (string) ( $g['posizione'] ?? '' ) );
+            $pos   = preg_match( '/^[a-z0-9.%\s-]{1,40}$/i', $pos ) ? $pos : '';
+            $testa = trim( $forma . ' ' . $dim );
+            if ( '' !== $pos ) { $testa = trim( $testa . ' at ' . $pos ); }
+        } elseif ( isset( $g['angolo'] ) && is_numeric( $g['angolo'] ) ) {
+            $testa = ( floatval( $g['angolo'] ) + 0 ) . 'deg';
+        }
+        return ( ! empty( $g['ripeti'] ) ? 'repeating-' : '' ) . ( $radiale ? 'radial' : 'linear' ) . '-gradient(' . ( '' !== $testa ? $testa . ',' : '' ) . implode( ',', $tappe ) . ')';
     }
 
     /** Valori degli stati all'avvio: «luce=spenta; tinta=bianco» → [ 'luce' => 'spenta', 'tinta' => 'bianco' ]. */
@@ -1209,6 +1335,21 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                 // Il testo alternativo del livello (un logo che fa da titolo, una foto che dice qualcosa); senza, quello di sempre.
                 $alt = trim( (string) ( $layer['imageAlt'] ?? '' ) );
                 $alt = '' !== $alt ? $alt : 'Slide image';
+                // «Colori del disegno» (1.4.1433): un disegno SVG coi colori della palette al posto di quelli del file
+                if ( ! empty( $layer['coloriDisegno'] ) && is_array( $layer['coloriDisegno'] ) && class_exists( 'Olobuild_Disegni' ) && class_exists( 'Olobuild_Style_System' ) ) {
+                    $mappa = [];
+                    foreach ( $layer['coloriDisegno'] as $da => $a ) {
+                        $a = $this->safe_color_css( (string) $a );
+                        if ( preg_match( '/^#[0-9a-fA-F]{3,6}$/', (string) $da ) && '' !== $a ) {
+                            $mappa[ (string) $da ] = $a;
+                        }
+                    }
+                    $svg_txt = $mappa ? Olobuild_Disegni::testo( $layer['imageSrc'] ?? '' ) : '';
+                    $dato    = '' !== $svg_txt ? Olobuild_Disegni::immagine( $svg_txt, $mappa, Olobuild_Style_System::instance()->valori_colori() ) : '';
+                    if ( '' !== $dato ) {
+                        $src = esc_attr( $dato );
+                    }
+                }
                 return '<img src="' . $src . '" alt="' . esc_attr( $alt ) . '"' . $kb_cls . ' style="width:100%;height:100%;object-fit:' . $obj_fit . ';object-position:' . $obj_pos . ';' . $kb_st . '" draggable="false" loading="lazy" />';
 
             case 'button':
@@ -1357,21 +1498,30 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
      * l'intervallo che serve: [ 'wdth' => [ min, max ], … ]. Vuoto se il livello non li usa.
      */
     private function assi_carattere( $layer ) {
-        $sm = $layer['scrollMove'] ?? null;
-        if ( empty( $sm ) || ! is_array( $sm ) ) {
-            return [];
-        }
-        $tappe = ( ! empty( $sm['tappe'] ) && is_array( $sm['tappe'] ) ) ? $sm['tappe'] : [ $sm['da'] ?? [], $sm['a'] ?? [] ];
-        $assi  = [];
-        foreach ( [ 'wdth', 'wght' ] as $asse ) {
-            $vals = [];
-            foreach ( $tappe as $t ) {
-                if ( is_array( $t ) && isset( $t[ $asse ] ) && is_numeric( $t[ $asse ] ) ) {
-                    $vals[] = floatval( $t[ $asse ] );
+        $sm   = $layer['scrollMove'] ?? null;
+        $assi = [];
+        if ( ! empty( $sm ) && is_array( $sm ) ) {
+            $tappe = ( ! empty( $sm['tappe'] ) && is_array( $sm['tappe'] ) ) ? $sm['tappe'] : [ $sm['da'] ?? [], $sm['a'] ?? [] ];
+            foreach ( [ 'wdth', 'wght' ] as $asse ) {
+                $vals = [];
+                foreach ( $tappe as $t ) {
+                    if ( is_array( $t ) && isset( $t[ $asse ] ) && is_numeric( $t[ $asse ] ) ) {
+                        $vals[] = floatval( $t[ $asse ] );
+                    }
+                }
+                if ( $vals ) {
+                    $assi[ $asse ] = [ min( $vals ), max( $vals ) ];
                 }
             }
-            if ( $vals ) {
-                $assi[ $asse ] = [ min( $vals ), max( $vals ) ];
+        }
+        // «Larghezza del carattere» fissa (1.4.1431): serve il file variabile anche senza movimento, se no il comando
+        // non farebbe niente. Col peso del livello, perché il file con la sola larghezza avrebbe solo il peso normale.
+        if ( isset( $layer['fontWdth'] ) && is_numeric( $layer['fontWdth'] ) ) {
+            $w            = floatval( $layer['fontWdth'] );
+            $assi['wdth'] = isset( $assi['wdth'] ) ? [ min( $assi['wdth'][0], $w ), max( $assi['wdth'][1], $w ) ] : [ $w, $w ];
+            if ( ! isset( $assi['wght'] ) && is_numeric( $layer['fontWeight'] ?? '' ) ) {
+                $p            = floatval( $layer['fontWeight'] );
+                $assi['wght'] = [ $p, $p ];
             }
         }
         return $assi;
@@ -1811,6 +1961,13 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                     }
                     if ( $ta_ov ) {
                         $rules .= '#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . ',#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '>:is(h1,h2,h3,h4,h5,h6,p,span,div,a),#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '>.mps-mp>:is(h1,h2,h3,h4,h5,h6,p,span,div,a){text-align:' . $ta_ov . '!important}';
+                    }
+                    // Spaziatura delle lettere per dispositivo (1.4.1433): nei temi c'era già (un nome spaziato di 4 px sul
+                    // computer, di 1 sul telefono) ma nessuno la leggeva. Come quella di base: px, o scalata se il livello
+                    // sta fuori dalla tela (fusione diversa da «normal»).
+                    if ( isset( $ov['letterSpacing'] ) && is_numeric( $ov['letterSpacing'] ) && ! ( isset( $ov['visible'] ) && $ov['visible'] === false ) ) {
+                        $fuori_ls = ( $layer['blendMode'] ?? 'normal' ) !== 'normal';
+                        $rules   .= '#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '>:is(h1,h2,h3,h4,h5,h6,p,span,div,a),#' . $uid . ' .mps-layer-' . esc_attr( $layer_id ) . '>.mps-mp>:is(h1,h2,h3,h4,h5,h6,p,span,div,a){letter-spacing:' . $this->px_livello( floatval( $ov['letterSpacing'] ), $fuori_ls ) . '!important}';
                     }
                 }
             }

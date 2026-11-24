@@ -39,6 +39,10 @@ database/                   → schema.sql
 ## Note build
 - **Scene dei temi dello Slider Pro** (1.4.1422, pulsante «Scene dei temi» dell'editor): dopo aver aggiunto un tema o
   cambiato un suo Slider Pro, rifare l'elenco con `python scripts/indice-scene-slider.py` (→ `assets/data/scene-slider.json`).
+- **Slider Pro dei temi: solo comandi** (utente, 24 nov 2026): niente CSS su misura, classi, colori fissi, HTML scritto a
+  mano. Audit `slider-pro-su-misura` = 0. Un colore che non è un ruolo della palette diventa un **colore extra del tema**
+  (theme.json → `colori_extra`, importato fra i «Colori globali extra»; `scripts/temi/colori_palette.py`); i disegni SVG
+  si ricolorano con «Colori del disegno» (`includes/class-disegni.php`, `scripts/temi/colori_disegni.py`).
 - `npx` non funziona su questo sistema (node non nel PATH di cmd.exe)
 - Usare: `node node_modules/vite/bin/vite.js build`
 - **Due bundle**: oltre a `builder.js` esiste `assets/js/theme-picker.js` (selettore temi

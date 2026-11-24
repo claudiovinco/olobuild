@@ -11,6 +11,9 @@
         :style="canvasStyle"
         @click.self="$emit('deselect')"
       >
+      <!-- Guide magnetiche (1.4.1430): le linee dove il livello trascinato si è agganciato -->
+      <div v-for="(g, i) in guide.v" :key="'gv' + i" class="mps-guida mps-guida--v" :style="{ left: g + '%' }" aria-hidden="true"></div>
+      <div v-for="(g, i) in guide.h" :key="'gh' + i" class="mps-guida mps-guida--h" :style="{ top: g + '%' }" aria-hidden="true"></div>
       <!-- Global background (behind slide bg) -->
       <div v-if="globalBackground" class="mb-absolute mb-inset-0 mb-overflow-hidden mb-rounded" style="z-index:0;">
         <img v-if="globalBackground.type === 'image' && globalBackground.image" :src="globalBackground.image" class="mb-w-full mb-h-full mb-object-cover" draggable="false" />
@@ -59,6 +62,7 @@
           layer.id !== selectedLayerId && selectedIds.has(layer.id) ? 'mps-canvas-insieme' : '',
           layer.initiallyHidden ? 'mps-canvas-initially-hidden' : ''
         ]"
+        :data-mps-id="layer.id"
         :style="[layerStyle(layer), lockedIds.has(layer.id) ? { pointerEvents: 'none' } : null]"
         @pointerdown.stop="startDrag($event, layer)"
         @dblclick.stop="onDblClick(layer)"
@@ -72,13 +76,14 @@
           :style="textStyle(layer)"
           class="mb-m-0 mb-outline-none"
           @blur="onTextBlur($event, layer)"
-          @keydown.enter.prevent="$event.target.blur()"
-        >{{ layer.content }}</component>
+          @keydown.enter.exact.prevent="$event.target.blur()"
+          v-html="testoSicuro(layer.content)"
+        ></component>
 
         <!-- Image -->
         <img
           v-else-if="layer.type === 'image'"
-          :src="layer.imageSrc || 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%2280%22><rect fill=%22%23475569%22 width=%22120%22 height=%2280%22/><text x=%2260%22 y=%2244%22 text-anchor=%22middle%22 fill=%22%23cbd5e1%22 font-size=%2213%22>Immagine</text></svg>'"
+          :src="(layer.coloriDisegno && disegnoRicolorato(layer.imageSrc, layer.coloriDisegno, canvasWrap)) || layer.imageSrc || 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%2280%22><rect fill=%22%23475569%22 width=%22120%22 height=%2280%22/><text x=%2260%22 y=%2244%22 text-anchor=%22middle%22 fill=%22%23cbd5e1%22 font-size=%2213%22>Immagine</text></svg>'"
           class="mb-w-full mb-h-full mb-pointer-events-none"
           :style="{ objectFit: layer.objectFit || 'cover', objectPosition: layer.objectPosition || 'center', borderRadius: (layer.borderRadius || 0) + 'px' }"
           draggable="false"
@@ -152,7 +157,8 @@ import iconsSvg from './uikitIconsSvg.js';
 import { interpolateAtTime } from './timelineUtils.js';
 import { useStylesStore } from '@/stores/styles';
 import { t } from '@/i18n';
-import { statoSM, statoVale } from './livelloUtils.js';
+import { statoSM, statoVale, stileComandi, testoSicuro } from './livelloUtils.js';
+import { disegnoRicolorato } from './disegni.js';
 
 const props = defineProps({
   slide: { type: Object, required: true },
@@ -194,6 +200,10 @@ function velo(bg) {
 
 const canvasWrap = ref(null);
 const canvasEl = ref(null);
+// Guide magnetiche (1.4.1430): mentre si trascina, il livello si aggancia ai bordi e al centro della tela e degli altri
+// livelli visibili (sinistra, centro, destra; alto, metà, basso). Le linee si vedono finché si tiene premuto; Alt le spegne.
+const guide = ref({ v: [], h: [] });
+const SOGLIA_GUIDA = 0.8; // punti percentuali della tela
 const bgVideo = ref(null);
 
 // Lo sfondo video che «Segue lo scorrimento»: nell'anteprima avanza col cursore, come sul sito.
@@ -478,6 +488,20 @@ function layerStyleBase(l) {
   if (l.blendMode && l.blendMode !== 'normal') st.mixBlendMode = l.blendMode;
   // Cursor
   if (l.cursor && l.cursor !== 'auto') st.cursor = l.cursor;
+  // I comandi che prima erano CSS su misura (1.4.1430): ora si vedono anche sulla tela (il CSS su misura qui no)
+  if (l.origine && /^[a-z0-9.%\s-]{1,40}$/i.test(String(l.origine))) st.transformOrigin = l.origine;
+  if (l.retroNascosto) { st.backfaceVisibility = 'hidden'; st.WebkitBackfaceVisibility = 'hidden'; }
+  if (Number(l.rotazione)) st.rotate = Number(l.rotazione) + 'deg';
+  if (l.type === 'shape' && l.shapeImage && !/[\s"'()<>]/.test(String(l.shapeImage))) {
+    st.background = `url("${l.shapeImage}") ${l.shapeImagePos || 'center'} / ${l.shapeImageSize || 'cover'}${l.shapeImageRepeat ? ' ' + l.shapeImageRepeat : ''}`;
+  }
+  // il resto dei comandi ex CSS (1.4.1431): sfumature, ombre, ritaglio, bordi sfumati… (stileComandi in livelloUtils)
+  // il clic che passa attraverso vale solo sul sito: sulla tela il livello resta prendibile
+  const sc = stileComandi(l);
+  delete sc.pointerEvents;
+  // l'ombra che segue la forma si aggiunge ai filtri dell'immagine, come nel PHP (un solo «filter» vince)
+  if (sc.filter && st.filter && st.filter !== 'none' && (l.type === 'image' || l.type === 'video')) sc.filter = st.filter + ' ' + sc.filter;
+  Object.assign(st, sc);
   return st;
 }
 
@@ -489,12 +513,12 @@ function textStyle(l) {
     color: l.color || '#fff',
     textAlign: rl.textAlign || 'left',
     lineHeight: l.lineHeight ?? 1.2,
-    whiteSpace: 'pre-wrap',
+    whiteSpace: l.unaRiga ? 'nowrap' : 'pre-wrap',
     wordBreak: 'break-word',
   };
   if (l.fontStyle && l.fontStyle !== 'normal') st.fontStyle = l.fontStyle;
   if (l.fontFamily) st.fontFamily = l.fontFamily + ', sans-serif';
-  if (l.letterSpacing) st.letterSpacing = l.letterSpacing + 'px';
+  if (rl.letterSpacing) st.letterSpacing = rl.letterSpacing + 'px';
   if (l.textTransform && l.textTransform !== 'none') st.textTransform = l.textTransform;
   if (l.textDecoration && l.textDecoration !== 'none') st.textDecoration = l.textDecoration;
   if (l.textShadow) st.textShadow = `${l.textShadow.x ?? 2}px ${l.textShadow.y ?? 2}px ${l.textShadow.blur ?? 4}px ${l.textShadow.color || '#000'}`;
@@ -506,8 +530,10 @@ function textStyle(l) {
 }
 
 function buttonStyle(l) {
+  // la grandezza e la spaziatura dello schermo scelto (1.4.1433): prima i pulsanti restavano quelli del computer
+  const rl = resolveLayerValues(l);
   const st = {
-    fontSize: l.fontSize + 'px',
+    fontSize: rl.fontSize + 'px',
     fontWeight: l.fontWeight || '600',
     color: l.color || (l.bgColor ? '#fff' : 'var(--olo-color-primary-contrast, #ffffff)'),
     display: 'inline-block',
@@ -516,7 +542,7 @@ function buttonStyle(l) {
   };
   if (l.fontStyle && l.fontStyle !== 'normal') st.fontStyle = l.fontStyle;
   if (l.fontFamily) st.fontFamily = l.fontFamily + ', sans-serif';
-  if (l.letterSpacing) st.letterSpacing = l.letterSpacing + 'px';
+  if (rl.letterSpacing) st.letterSpacing = rl.letterSpacing + 'px';
   if (l.textTransform && l.textTransform !== 'none') st.textTransform = l.textTransform;
   if (l.textDecoration && l.textDecoration !== 'none') st.textDecoration = l.textDecoration;
   if (l.textShadow) st.textShadow = `${l.textShadow.x ?? 2}px ${l.textShadow.y ?? 2}px ${l.textShadow.blur ?? 4}px ${l.textShadow.color || '#000'}`;
@@ -599,12 +625,28 @@ function startDrag(e, layer) {
     }
   }
 
+  // le misure per le guide: il riquadro del livello e quelli degli altri livelli visibili, in % della tela
+  const cr = canvasEl.value.getBoundingClientRect();
+  const box = (r) => ({ l: ((r.left - cr.left) / cr.width) * 100, t: ((r.top - cr.top) / cr.height) * 100, w: (r.width / cr.width) * 100, h: (r.height / cr.height) * 100 });
+  const mio = box(e.currentTarget.getBoundingClientRect());
+  const muoviInsieme = new Set([layer.id, ...(nelGruppo ? [...props.selectedIds] : [])]);
+  const lineeX = [0, 50, 100], lineeY = [0, 50, 100];
+  canvasEl.value.querySelectorAll('[data-mps-id]').forEach((el) => {
+    if (muoviInsieme.has(el.getAttribute('data-mps-id')) || el.offsetParent === null) return;
+    const b2 = box(el.getBoundingClientRect());
+    if (b2.w <= 0 || b2.h <= 0 || b2.w > 98) return;
+    lineeX.push(b2.l, b2.l + b2.w / 2, b2.l + b2.w);
+    lineeY.push(b2.t, b2.t + b2.h / 2, b2.t + b2.h);
+  });
   dragState = {
     layerId: layer.id,
     startX: e.clientX,
     startY: e.clientY,
     origX,
     origY,
+    mio,
+    lineeX,
+    lineeY,
     canvasW: rect.width / effectiveScale.value,
     canvasH: rect.height / effectiveScale.value,
     mode: 'drag',
@@ -666,8 +708,28 @@ function onPointerMove(e) {
 
   const round1 = (v) => Math.round(v * 10) / 10;
   if (dragState.mode === 'drag') {
-    const pctX = (dx / CANVAS_W.value) * 100;
-    const pctY = (dy / canvasH.value) * 100;
+    let pctX = (dx / CANVAS_W.value) * 100;
+    let pctY = (dy / canvasH.value) * 100;
+    // aggancio alle guide (Alt per spostare libero)
+    const gv = [], gh = [];
+    if (!e.altKey && dragState.mio) {
+      const m = dragState.mio;
+      const aggancia = (inizio, misura, linee) => {
+        let meglio = null;
+        for (const punto of [inizio, inizio + misura / 2, inizio + misura]) {
+          for (const linea of linee) {
+            const d = linea - punto;
+            if (Math.abs(d) <= SOGLIA_GUIDA && (!meglio || Math.abs(d) < Math.abs(meglio.d))) meglio = { d, linea };
+          }
+        }
+        return meglio;
+      };
+      const ax = aggancia(m.l + pctX, m.w, dragState.lineeX);
+      if (ax) { pctX += ax.d; gv.push(Math.round(ax.linea * 100) / 100); }
+      const ay = aggancia(m.t + pctY, m.h, dragState.lineeY);
+      if (ay) { pctY += ay.d; gh.push(Math.round(ay.linea * 100) / 100); }
+    }
+    guide.value = { v: gv, h: gh };
     const newX = round1(Math.max(0, Math.min(100, dragState.origX + pctX)));
     const newY = round1(Math.max(0, Math.min(100, dragState.origY + pctY)));
     if (Math.abs(dx) + Math.abs(dy) > 2) dragState.mosso = true;
@@ -701,6 +763,7 @@ function onPointerMove(e) {
 }
 
 function onPointerUp() {
+  guide.value = { v: [], h: [] };
   // cliccato (non trascinato) uno dei livelli scelti insieme: resta scelto solo lui
   if (dragState && dragState.mode === 'drag' && dragState.nelGruppo && !dragState.mosso) emit('select-layer', dragState.layerId, {});
   dragState = null;
@@ -715,7 +778,10 @@ function onDblClick(layer) {
 }
 
 function onTextBlur(e, layer) {
-  emit('update-layer', layer.id, { content: e.target.textContent });
+  // Il testo con parole colorate, a capo, in grassetto (1.4.1431): si salva com'è, non solo le lettere. Prima la tela
+  // mostrava i segni HTML in chiaro e, modificando, li toglieva insieme ai colori.
+  const html = testoSicuro(e.target.innerHTML).replace(/(<br>)+$/, '');
+  if (html !== testoSicuro(layer.content)) emit('update-layer', layer.id, { content: html });
   emit('stop-edit');
 }
 
@@ -747,6 +813,10 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* Guide magnetiche (1.4.1430) */
+.mps-guida { position: absolute; z-index: 60; pointer-events: none; background: #f472b6; }
+.mps-guida--v { top: 0; bottom: 0; width: 1px; transform: translateX(-0.5px); }
+.mps-guida--h { left: 0; right: 0; height: 1px; transform: translateY(-0.5px); }
 /* Gli altri livelli scelti insieme (1.4.1428): contorno tratteggiato, il principale ha l'anello pieno */
 .mps-canvas-insieme { outline: 2px dashed #60a5fa; outline-offset: 2px; }
 .mps-canvas-initially-hidden {

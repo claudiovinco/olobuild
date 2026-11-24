@@ -361,6 +361,10 @@ class Kit:
              'animIn': entra, 'animInDuration': durata, 'animInDelay': ritardo, 'animOut': esce, 'animOutDuration': 500,
              'animOutDelay': 0, 'animEasing': 'cubic-bezier(.22,1,.36,1)'}
         L.update(extra)
+        # il CSS su misura che ha un comando nell'editor va nel comando (1.4.1430, css_comandi.py)
+        if L.get('customCSS'):
+            from css_comandi import converti
+            converti(L)
         return L
 
     @staticmethod
