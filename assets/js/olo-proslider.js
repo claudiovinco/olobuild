@@ -133,6 +133,9 @@ const LOOP_ANIM = {
   slideHLoop:     'mpsSlideHLoop',
   hoverLoop:      'mpsHoverLoop',
   windLoop:       'mpsWindLoop',
+  flickerLoop:    'mpsFlickerLoop',
+  wanderLoop:     'mpsWanderLoop',
+  driftLoop:      'mpsDriftLoop',
 };
 
 /* ── Helpers ───────────────────────────────────────────── */

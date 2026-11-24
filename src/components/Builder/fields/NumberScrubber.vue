@@ -60,6 +60,7 @@
         @dblclick="onReset"
         @wheel="onWheel"
         @keydown.esc="close"
+        @keydown="puntoDecimale"
       />
       <span v-if="unit" class="olo-ns-unit">{{ unit }}</span>
     </div>
@@ -95,6 +96,7 @@
 </template>
 
 <script setup>
+import { livelloPopup } from '@/utils/livelloPopup';
 import { ref, computed, nextTick, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 
@@ -202,6 +204,16 @@ function emitNumber(n) {
 // Un numero SOTTO il minimo mentre si scrive è quasi sempre un numero a metà («4» di «46»): applicarlo subito faceva
 // passare il titolo per 18 px prima di arrivare a 46 (16 nov 2026). Si tiene in sospeso e si applica all'uscita dal
 // campo o con Invio; se nel frattempo il numero cresce oltre il minimo, si applica subito quello.
+// Il punto scritto come decimale (1.4.1435): col browser in italiano il campo numerico prende il punto per il
+// separatore delle migliaia, e «0.9» diventava 9 (interlinea dell'apertura di Elastan rifatta a mano). Dove lo step
+// ha decimali, il punto diventa la virgola che il campo si aspetta.
+const VIRGOLA = (1.5).toLocaleString(navigator.language || undefined).includes(',');
+function puntoDecimale(e) {
+  if (e.key !== '.' || !VIRGOLA || stepNum.value >= 1) return;
+  e.preventDefault();
+  document.execCommand('insertText', false, ',');
+}
+
 let sospeso = null;
 function onNum(raw) {
   const n = parseFloat(raw);
@@ -314,7 +326,8 @@ function position() {
     position: 'fixed',
     left: `${left}px`,
     top: openUp ? `${Math.round(r.top - popH - 7)}px` : `${Math.round(r.bottom + 7)}px`,
-    zIndex: 100000,
+    // sopra la finestra che contiene il campo (1.4.1435: nell'editor dello Slider Pro il cursore finiva dietro)
+    zIndex: livelloPopup(trigger, 100000),
   };
 }
 

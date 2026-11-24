@@ -58054,3 +58054,61 @@ msgstr "Ce dessin ne peut pas être lu : il garde ses couleurs."
 
 msgid "Torna ai colori del file"
 msgstr "Revenir aux couleurs du fichier"
+
+#: licenza-1.4.1345
+msgid "Durata dello zoom lento"
+msgstr "Durée du zoom lent"
+
+msgid "400 normale, 700 grassetto, 900 nerissimo. Con i caratteri variabili valgono anche i pesi di mezzo, per esempio 880."
+msgstr "400 normal, 700 gras, 900 très gras. Avec les polices variables, les graisses intermédiaires fonctionnent aussi, par exemple 880."
+
+msgid "Deriva lenta"
+msgstr "Dérive lente"
+
+msgid "Dietro le slide"
+msgstr "Derrière les diapositives"
+
+msgid "Facoltativo: i livelli con «Segue il colore di uno stato» (Stile, sotto il colore) prendono questo colore quando lo stato cambia."
+msgstr "Facultatif : les calques avec « Suit la couleur d’un état » (Style, sous la couleur) prennent cette couleur quand l’état change."
+
+msgid "Il colore cambia quando cambia lo stato scelto: prende il «Colore dello stato» del livello cliccato (Interazioni). Finché lo stato non ha un colore, vale quello qui sopra."
+msgstr "La couleur change quand l’état choisi change : elle prend la « Couleur de l’état » du calque cliqué (Interactions). Tant que l’état n’a pas de couleur, celle du dessus s’applique."
+
+msgid "Lo stato «%s»"
+msgstr "L’état « %s »"
+
+msgid "No, resta fisso"
+msgstr "Non, reste fixe"
+
+msgid "Posizione, in percentuale"
+msgstr "Position, en pourcentage"
+
+msgid "Quale parte della foto resta in vista quando non entra tutta: un punto della griglia, oppure in percentuale (50% 30% = al centro, un po' in alto)."
+msgstr "Quelle partie de la photo reste visible quand elle n’entre pas entière : un point de la grille, ou en pourcentage (50% 30% = au centre, un peu en haut)."
+
+msgid "Segue il colore di uno stato"
+msgstr "Suit la couleur d’un état"
+
+msgid "Sfarfallio (come una fiamma)"
+msgstr "Scintillement (comme une flamme)"
+
+msgid "Un livello su tutte le slide sta davanti al loro contenuto; spuntato, sta dietro, come uno sfondo comune."
+msgstr "Un calque sur toutes les diapositives est devant leur contenu ; coché, il passe derrière, comme un fond commun."
+
+msgid "Vaga piano"
+msgstr "Erre doucement"
+
+msgid "Usa «%s» da Google Fonts"
+msgstr "Utiliser « %s » de Google Fonts"
+
+msgid "Mescola con"
+msgstr "Mélanger avec"
+
+msgid "Mescola con un altro colore…"
+msgstr "Mélanger avec une autre couleur…"
+
+msgid "Quanto"
+msgstr "Combien"
+
+msgid "Quanto del secondo colore"
+msgstr "Quelle part de la deuxième couleur"

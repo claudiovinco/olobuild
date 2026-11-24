@@ -118,6 +118,15 @@
                   <div class="mb-w-28">
                     <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="currentBg.kenBurnsDirection || 'in'" :options="OPTS_KENBURNS_DIR" @update:model-value="updateBg('kenBurnsDirection', $event)" />
                   </div>
+                  <!-- quanto ingrandisce e quanto dura (1.4.1435): il sito li leggeva, l'editor non li offriva -->
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <label class="mb-text-[10px] mb-text-gray-400">{{ t('Ingrandimento') }}</label>
+                    <NumberScrubber theme="dark" :modelValue="currentBg.kenBurnsScale ?? 1.2" :min="1" :max="2" :step="0.01" :defaultValue="1.2" emitAs="number" unit="×" :ariaLabel="t('Ingrandimento')" @update:modelValue="updateBg('kenBurnsScale', $event)" />
+                  </div>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <label class="mb-text-[10px] mb-text-gray-400">{{ t('Durata') }}</label>
+                    <NumberScrubber theme="dark" :modelValue="currentBg.kenBurnsDuration ?? 8000" :min="1000" :max="30000" :step="500" :defaultValue="8000" emitAs="number" unit="ms" :ariaLabel="t('Durata dello zoom lento')" @update:modelValue="updateBg('kenBurnsDuration', $event)" />
+                  </div>
                   <div class="mb-flex mb-items-center mb-gap-1">
                     <label class="mb-text-[10px] mb-text-gray-400">{{ t('Spostamento orizzontale') }}</label>
                     <NumberScrubber theme="dark" :modelValue="currentBg.kenBurnsPanX || 0" :min="-50" :max="50" :step="5" :defaultValue="0" emitAs="number" unit="%" :ariaLabel="t('Spostamento orizzontale')" @update:modelValue="updateBg('kenBurnsPanX', $event)" />

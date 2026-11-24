@@ -55,6 +55,7 @@
 </template>
 
 <script setup>
+import { livelloPopup } from '@/utils/livelloPopup';
 import { ref, computed, nextTick, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 
@@ -88,7 +89,8 @@ function posiziona() {
   left = Math.max(MARGINE, Math.min(left, vw - w - MARGINE));
   const sotto = vh - b.bottom;
   const sopra = b.top;
-  const st = { width: w + 'px', left: left + 'px' };
+  // sopra la finestra che contiene la (i): nell'editor dello Slider Pro il popup finiva dietro (1.4.1435)
+  const st = { width: w + 'px', left: left + 'px', zIndex: livelloPopup(btn.value, 100200) };
   if (sotto >= 180 || sotto >= sopra) {
     st.top = (b.bottom + 6) + 'px';
     st.maxHeight = Math.max(120, sotto - 16) + 'px';

@@ -1302,6 +1302,19 @@ const sliderSuMisura = [];
 violazioni['slider-pro-su-misura'] = sliderSuMisura;
 RULES.push({ id: 'slider-pro-su-misura', titolo: 'Slider Pro dei temi: niente CSS, classi o colori fissi, nei testi solo gli stili dei pulsanti, niente dati che nessuno legge' });
 
+// ─── Slider Pro dei temi: ognuno si costruisce DA ZERO coi soli comandi (1.4.1435) ───
+// Utente, 24 nov 2026: «costruire da ZERO OGNI pro slider usandolo senza trucchi css». scripts/slider-ricostruibile.mjs
+// rifà ogni livello dei 150 slider passando dai controlli dell'editor (letti dal suo codice) e conta quello che nessun
+// controllo sa scrivere o che il suo controllo non sa dare (menu, colori, limiti della linea del tempo…).
+{
+  const { execFileSync } = await import('node:child_process');
+  let righe = '';
+  try { righe = execFileSync(process.execPath, [path.join(HERE, 'slider-ricostruibile.mjs'), '--list'], { encoding: 'utf8' }); } catch (e) { righe = String(e.stdout || ''); }
+  violazioni['slider-pro-ricostruibile'] = righe.split('\n').filter((r) => /^ {9}\S/.test(r)).map((r) => ({ file: 'slider', type: 'comando', key: r.trim(), label: '' }));
+  if (!/da costruire coi comandi:/.test(righe)) violazioni['slider-pro-ricostruibile'].push({ file: 'slider', type: 'errore', key: 'scripts/slider-ricostruibile.mjs non ha risposto', label: '' });
+}
+RULES.push({ id: 'slider-pro-ricostruibile', titolo: 'Ogni Slider Pro dei temi si costruisce da zero coi soli comandi dell\'editor' });
+
 // ─── confronto con la baseline ──────────────────────────────────────────────
 const args = process.argv.slice(2);
 const conteggi = Object.fromEntries(Object.entries(violazioni).map(([k, v]) => [k, v.length]));

@@ -204,7 +204,7 @@
               <input :value="layer.action.value ?? ''" @input="setAction('value', $event.target.value)" class="mps-input mb-w-full" placeholder="accesa" />
             </div>
             <div v-if="layer.action.type === 'setState'">
-              <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Colore dello stato') }}<InfoTip :testo="t('Facoltativo: il colore va nella variabile --mps-st-nome, che i colori dei livelli possono usare, per esempio var(--mps-st-tinta, #ffffff). Il cambio di colore è sfumato.')" :titolo="t('Colore dello stato')" /></label>
+              <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Colore dello stato') }}<InfoTip :testo="t('Facoltativo: i livelli con «Segue il colore di uno stato» (Stile, sotto il colore) prendono questo colore quando lo stato cambia.')" :titolo="t('Colore dello stato')" /></label>
               <FieldColor :modelValue="layer.action.color || ''" @update:modelValue="setAction('color', $event)" />
             </div>
             <div v-if="layer.action.type === 'cycleState'">
@@ -399,6 +399,11 @@
             <input type="checkbox" :checked="!!layer.retroNascosto" @change="up('retroNascosto', $event.target.checked || '')" class="mb-rounded" />
             <span class="mps-label mb-mb-0 mb-flex mb-items-center mb-gap-1">{{ t('Retro nascosto') }}<InfoTip :testo="t('Quando il livello gira in 3D e mostra la schiena, sparisce: due livelli uno sull’altro, uno girato di 180°, fanno una carta con due facce.')" :titolo="t('Retro nascosto')" /></span>
           </label>
+          <!-- livelli su tutte le slide (1.4.1435): il sito li sa mettere dietro le slide, l'editor non lo offriva -->
+          <label v-if="layer.isGlobal" class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+            <input type="checkbox" :checked="layer.globalPosition === 'back'" @change="up('globalPosition', $event.target.checked ? 'back' : 'front')" class="mb-rounded" />
+            <span class="mps-label mb-mb-0 mb-flex mb-items-center mb-gap-1">{{ t('Dietro le slide') }}<InfoTip :testo="t('Un livello su tutte le slide sta davanti al loro contenuto; spuntato, sta dietro, come uno sfondo comune.')" :titolo="t('Dietro le slide')" /></span>
+          </label>
         </template>
 
         <!-- ===== STILE ===== -->
@@ -439,16 +444,20 @@
           <template v-if="layer.type === 'text' || layer.type === 'button'">
             <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Tipografia') }}</p>
             <div>
+              <!-- lo stesso selettore di tutte le tile (1.4.1435): ruoli del tema, caratteri del sito, Google Fonts e
+                   qualsiasi nome di Google. Prima un menu di 35 caratteri: i temi ne usano 109 -->
               <label class="mps-label">{{ t('Font') }}</label>
-              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.fontFamily || ''" :options="fontGroupOpts" @update:model-value="up('fontFamily', $event)" />
+              <FieldFontFamily :modelValue="layer.fontFamily || ''" @update:modelValue="up('fontFamily', $event)" />
             </div>
             <div>
               <label class="mps-label">{{ t('Dimensione testo') }}</label>
               <NumberScrubber theme="dark" :modelValue="rv('fontSize')" :min="4" :max="400" :step="1" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="t('Dimensione testo (px)')" @update:modelValue="up('fontSize', $event)" />
             </div>
             <div>
-              <label class="mps-label">{{ t('Peso del carattere') }}</label>
-              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.fontWeight" :options="OPTS_FONT_WEIGHT" @update:model-value="up('fontWeight', $event)" />
+              <!-- un numero (1.4.1435): i caratteri variabili hanno anche i pesi di mezzo (Elastan 880), che un menu
+                   400/700/900 non sapeva dare -->
+              <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Peso del carattere') }}<InfoTip :testo="t('400 normale, 700 grassetto, 900 nerissimo. Con i caratteri variabili valgono anche i pesi di mezzo, per esempio 880.')" :titolo="t('Peso del carattere')" /></label>
+              <NumberScrubber theme="dark" :modelValue="Number(layer.fontWeight) || 400" :min="100" :max="1000" :step="10" :defaultValue="400" emitAs="number" :sliderOnFocus="false" :ariaLabel="t('Peso del carattere')" @update:modelValue="up('fontWeight', String($event))" />
             </div>
             <div>
               <label class="mps-label">{{ t('Stile del carattere') }}</label>
@@ -456,7 +465,11 @@
             </div>
             <div>
               <label class="mps-label">{{ t('Colore') }}</label>
-              <FieldColor :modelValue="layer.color || '#ffffff'" @update:modelValue="up('color', $event)" />
+              <FieldColor :modelValue="baseColore('color') || '#ffffff'" @update:modelValue="upColore('color', $event)" />
+              <div v-if="statiConColore.length" class="mb-mt-1">
+                <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Segue il colore di uno stato') }}<InfoTip :testo="t('Il colore cambia quando cambia lo stato scelto: prende il «Colore dello stato» del livello cliccato (Interazioni). Finché lo stato non ha un colore, vale quello qui sopra.')" :titolo="t('Segue il colore di uno stato')" /></label>
+                <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="statoColore('color')" :options="opzStatiColore" @update:model-value="upStatoColore('color', $event)" />
+              </div>
             </div>
             <div>
               <label class="mps-label" :class="{ 'mb-text-yellow-400': isOverridden('textAlign') }">{{ t('Allineamento testo') }}</label>
@@ -527,7 +540,11 @@
             </div>
             <div>
               <label class="mps-label">{{ t('Colore di riempimento') }}</label>
-              <FieldColor :modelValue="layer.color || '#ffffff'" @update:modelValue="up('color', $event)" />
+              <FieldColor :modelValue="baseColore('color') || '#ffffff'" @update:modelValue="upColore('color', $event)" />
+              <div v-if="statiConColore.length" class="mb-mt-1">
+                <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Segue il colore di uno stato') }}<InfoTip :testo="t('Il colore cambia quando cambia lo stato scelto: prende il «Colore dello stato» del livello cliccato (Interazioni). Finché lo stato non ha un colore, vale quello qui sopra.')" :titolo="t('Segue il colore di uno stato')" /></label>
+                <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="statoColore('color')" :options="opzStatiColore" @update:model-value="upStatoColore('color', $event)" />
+              </div>
             </div>
             <div>
               <label class="mps-label">{{ t('Colore di riempimento (al posto di quello del file)') }}</label>
@@ -580,7 +597,11 @@
             <template v-else>
               <div>
                 <label class="mps-label">{{ t('Sfondo') }}</label>
-                <FieldColor :modelValue="layer.bgColor || '#3b82f6'" @update:modelValue="up('bgColor', $event)" />
+                <FieldColor :modelValue="baseColore('bgColor') || '#3b82f6'" @update:modelValue="upColore('bgColor', $event)" />
+                <div v-if="statiConColore.length" class="mb-mt-1">
+                  <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Segue il colore di uno stato') }}<InfoTip :testo="t('Il colore cambia quando cambia lo stato scelto: prende il «Colore dello stato» del livello cliccato (Interazioni). Finché lo stato non ha un colore, vale quello qui sopra.')" :titolo="t('Segue il colore di uno stato')" /></label>
+                  <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="statoColore('bgColor')" :options="opzStatiColore" @update:model-value="upStatoColore('bgColor', $event)" />
+                </div>
               </div>
             </template>
           </template>
@@ -604,7 +625,11 @@
           <template v-else-if="layer.type !== 'shape' && layer.type !== 'image' && layer.type !== 'video'">
             <div>
               <label class="mps-label">{{ t('Sfondo') }}</label>
-              <FieldColor :modelValue="layer.bgColor || '#000000'" @update:modelValue="up('bgColor', $event)" />
+              <FieldColor :modelValue="baseColore('bgColor') || '#000000'" @update:modelValue="upColore('bgColor', $event)" />
+              <div v-if="statiConColore.length" class="mb-mt-1">
+                <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Segue il colore di uno stato') }}<InfoTip :testo="t('Il colore cambia quando cambia lo stato scelto: prende il «Colore dello stato» del livello cliccato (Interazioni). Finché lo stato non ha un colore, vale quello qui sopra.')" :titolo="t('Segue il colore di uno stato')" /></label>
+                <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="statoColore('bgColor')" :options="opzStatiColore" @update:model-value="upStatoColore('bgColor', $event)" />
+              </div>
             </div>
           </template>
 
@@ -706,8 +731,15 @@
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.objectFit || 'cover'" :options="OPTS_OBJECT_FIT" @update:model-value="up('objectFit', $event)" />
             </div>
             <div>
-              <label class="mps-label">{{ t('Posizione') }}</label>
-              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.objectPosition || 'center'" :options="OPTS_OBJECT_POSITION" @update:model-value="up('objectPosition', $event)" />
+              <!-- griglia + valore libero (1.4.1435): i temi inquadrano le foto anche a «center 30%», «55% 50%» -->
+              <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Posizione') }}<InfoTip :testo="t('Quale parte della foto resta in vista quando non entra tutta: un punto della griglia, oppure in percentuale (50% 30% = al centro, un po\' in alto).')" :titolo="t('Posizione')" /></label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <div class="mps-origine" role="group" :aria-label="t('Posizione')">
+                  <button v-for="o in ORIGINI" :key="o.v" type="button" class="mps-origine-punto" :class="{ 'is-on': posizioneFoto === o.v }"
+                          :title="o.nome" :aria-label="o.nome" :aria-pressed="posizioneFoto === o.v ? 'true' : 'false'" @click="up('objectPosition', o.v === '50% 50%' ? 'center' : o.v)"></button>
+                </div>
+                <input :value="layer.objectPosition || 'center'" @change="up('objectPosition', $event.target.value.trim() || 'center')" class="mps-input mb-flex-1" placeholder="center" :aria-label="t('Posizione, in percentuale')" />
+              </div>
             </div>
           </template>
 
@@ -1379,6 +1411,7 @@ import FieldOmbre from './FieldOmbre.vue';
 import FieldRitaglio from './FieldRitaglio.vue';
 import FieldTestoLivello from './FieldTestoLivello.vue';
 import FieldColoriDisegno from './FieldColoriDisegno.vue';
+import FieldFontFamily from '../Builder/fields/FieldFontFamily.vue';
 import { eDisegno } from './disegni.js';
 // Curve di ingresso, uscita, loop e percorso: le stesse della timeline (il PHP le traduce in cubic-bezier,
 // easing_to_css). La curva dell'hover resta fra le 5 di base, che il PHP accetta per l'hover.
@@ -1676,12 +1709,27 @@ const loopAnimGroups = [
     { value: 'slideHLoop', label: t('Scivola avanti e indietro') },
     { value: 'windLoop', label: t('Vento (piega dal basso)') },
     { value: 'hoverLoop', label: t('Fluttua piano') },
+    // 1.4.1435: nei temi c'erano (scritti «flicker», «wander», «drift») ma il motore non li conosceva
+    { value: 'flickerLoop', label: t('Sfarfallio (come una fiamma)') },
+    { value: 'wanderLoop', label: t('Vaga piano') },
+    { value: 'driftLoop', label: t('Deriva lenta') },
   ]},
 ];
 
 function up(key, val) {
   emit('update', key, val);
 }
+
+// ── «Segue il colore di uno stato» (1.4.1435) ──
+// Il colore dello stato (Interazioni › «Colore dello stato») va nella variabile --mps-st-<nome>: un livello che lo segue
+// salva var(--mps-st-<nome>, <colore di partenza>). Prima si poteva solo scrivere a mano quella variabile (Due mani).
+const RE_STATO_COL = /^var\(\s*--mps-st-([a-z0-9_-]+)\s*,\s*(.+)\)$/i;
+const statiConColore = computed(() => [...new Set((props.slideLayers || []).filter((l) => l?.action?.type === 'setState' && l.action.color && l.action.target).map((l) => String(l.action.target).toLowerCase().replace(/[^a-z0-9_-]/g, '')))].filter(Boolean));
+const opzStatiColore = computed(() => [{ value: '', label: t('No, resta fisso') }, ...statiConColore.value.map((n) => ({ value: n, label: t('Lo stato «%s»').replace('%s', n) }))]);
+function baseColore(k) { const v = String(props.layer?.[k] || ''); const m = RE_STATO_COL.exec(v); return m ? m[2].trim() : v; }
+function statoColore(k) { const m = RE_STATO_COL.exec(String(props.layer?.[k] || '')); return m ? m[1].toLowerCase() : ''; }
+function upColore(k, base) { const s = statoColore(k); up(k, s ? `var(--mps-st-${s}, ${base || 'transparent'})` : base); }
+function upStatoColore(k, nome) { const base = baseColore(k); up(k, nome ? `var(--mps-st-${nome}, ${base || 'transparent'})` : base); }
 
 // ── Comandi che nei temi erano CSS su misura (1.4.1431) ──
 // Le sfumature senza «Sopra il colore della forma» coprono il colore e il gradiente semplice: quei due si nascondono.
@@ -1822,6 +1870,15 @@ function pickShapeImage() {
   frame.on('select', () => up('shapeImage', frame.state().get('selection').first().toJSON().url));
   frame.open();
 }
+// La posizione della foto letta come punto della griglia (center top → 50% 0%), per accendere il punto giusto
+const PAROLE_POS = { left: '0%', center: '50%', right: '100%', top: '0%', bottom: '100%' };
+const posizioneFoto = computed(() => {
+  const p = String(props.layer?.objectPosition || 'center').trim().toLowerCase().split(/\s+/);
+  if (p.length === 1) p.push('center');
+  let [a, b] = p;
+  if (a === 'top' || a === 'bottom') [a, b] = [b, a];
+  return (PAROLE_POS[a] || a) + ' ' + (PAROLE_POS[b] || b);
+});
 const ORIGINI = [
   { v: '0% 0%', nome: t('In alto a sinistra') }, { v: '50% 0%', nome: t('In alto al centro') }, { v: '100% 0%', nome: t('In alto a destra') },
   { v: '0% 50%', nome: t('A sinistra') }, { v: '50% 50%', nome: t('Al centro') }, { v: '100% 50%', nome: t('A destra') },

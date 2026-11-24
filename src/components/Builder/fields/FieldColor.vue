@@ -94,13 +94,36 @@
         :value="alphaPct"
         :disabled="!haColore"
         @input="onAlphaChange(parseInt($event.target.value))"
-        min="0" max="100" step="5"
+        min="0" max="100" step="1"
         class="fc-alpha-range"
         :style="haColore ? { '--fc-rgb': previewRgb } : null"
         :aria-label="t('Opacità colore')"
         :aria-valuetext="haColore ? alphaPct + '%' : t('Non applicabile')"
       />
       <span class="fc-alpha-val">{{ haColore ? alphaPct + '%' : '—' }}</span>
+    </div>
+    <!-- «Mescola con…» (1.4.1435): una tinta fra due colori della palette (il primario un po' più scuro, l'accento verso
+         il chiaro), che resta legata alla palette. I temi le usavano già (color-mix di due token), ma il campo non le
+         sapeva fare: si potevano solo lasciare com'erano. -->
+    <div v-if="baseMix" class="fc-mix">
+      <button v-if="!mix && !mostraMix" type="button" class="fc-mix-apri" @click="mostraMix = true">{{ t('Mescola con un altro colore…') }}</button>
+      <template v-else>
+        <div class="fc-mix-testa">
+          <span class="fc-alpha-label">{{ t('Mescola con') }}</span>
+          <button type="button" class="fc-mix-togli" @click="togliMix">{{ t('Togli') }}</button>
+        </div>
+        <div class="fc-global-swatches">
+          <button v-for="sc in swatchColors" :key="'mix-' + sc.id" type="button" class="fc-swatch"
+                  :class="{ 'fc-swatch--active': mix && tokenParts(mix.b)?.id === sc.id }" :style="{ background: sc.value }"
+                  :title="sc.label" :aria-label="t('Mescola con') + ' ' + sc.label" @click="scegliMix(sc.id)"></button>
+        </div>
+        <div v-if="mix" class="fc-alpha-row">
+          <span class="fc-alpha-label">{{ t('Quanto') }}</span>
+          <input type="range" min="1" max="99" step="1" :value="100 - mix.p" class="fc-alpha-range fc-mix-range"
+                 :aria-label="t('Quanto del secondo colore')" @input="cambiaMix(100 - parseInt($event.target.value))" />
+          <span class="fc-alpha-val">{{ 100 - mix.p }}%</span>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -224,6 +247,11 @@ const scrivendo = ref(false);
 const nomeToken = computed(() => tokenLabel(props.modelValue, stylesStore));
 const displayValue = computed(() => {
   if (!scrivendo.value && nomeToken.value) return nomeToken.value;
+  // una miscela si legge coi nomi: «Primario + Scuro 40%»
+  if (!scrivendo.value && mix.value) {
+    const nome = (x) => tokenLabel(x, stylesStore) || x;
+    return `${nome(mix.value.a)} + ${nome(mix.value.b)} ${100 - mix.value.p}%`;
+  }
   return props.modelValue || '';
 });
 
@@ -236,8 +264,46 @@ function onHexChange(hex) {
 
 function onAlphaChange(pct) {
   if (!haColore.value) return;
-  // Da un token si passa al colore risolto, con la nuova alfa.
+  // Un colore della palette resta della palette (1.4.1435): «color-mix(in srgb, var(--olo-color-x) 35%, transparent)»,
+  // come lo salvano i temi. Prima diventava il colore risolto in rgba, staccato dalla palette per sempre.
+  const tok = tokenConAlfa.value;
+  if (tok) {
+    emit('update:modelValue', pct >= 100 ? tok : `color-mix(in srgb, ${tok} ${pct}%, transparent)`);
+    return;
+  }
   emit('update:modelValue', toOutput(hexPart.value, pct / 100));
+}
+
+// Il token di un valore «token» o «token con la trasparenza» (var(--olo-color-x[, riserva]) [N%, transparent])
+const RE_TOKEN = String.raw`var\(\s*--olo-color-[a-z0-9_-]+\s*(?:,\s*#[0-9a-fA-F]{3,8}\s*)?\)`;
+const tokenConAlfa = computed(() => {
+  const v = String(props.modelValue || '').trim();
+  if (new RegExp('^' + RE_TOKEN + '$', 'i').test(v)) return v;
+  const m = new RegExp(String.raw`^color-mix\(\s*in\s+srgb\s*,\s*(` + RE_TOKEN + String.raw`)\s+[\d.]+%\s*,\s*transparent\s*\)$`, 'i').exec(v);
+  return m ? m[1] : '';
+});
+
+// «Mescola con»: color-mix(in srgb, A P%, B) con B diverso da transparent (A e B token della palette o #hex)
+const mostraMix = ref(false);
+const RE_PARTE = String.raw`(` + RE_TOKEN + String.raw`|#[0-9a-fA-F]{3,8})`;
+const mix = computed(() => {
+  const m = new RegExp(String.raw`^color-mix\(\s*in\s+srgb\s*,\s*` + RE_PARTE + String.raw`\s+([\d.]+)%\s*,\s*` + RE_PARTE + String.raw`\s*\)$`, 'i').exec(String(props.modelValue || '').trim());
+  return m ? { a: m[1], p: Math.round(parseFloat(m[2])), b: m[3] } : null;
+});
+// il colore di partenza della miscela: la parte A di una miscela, o il colore della palette scelto
+const baseMix = computed(() => mix.value?.a || tokenConAlfa.value || '');
+function scegliMix(id) {
+  const a = baseMix.value;
+  if (!a) return;
+  emit('update:modelValue', `color-mix(in srgb, ${a} ${mix.value?.p ?? 60}%, ${tokenDaSalvare(id, stylesStore)})`);
+}
+function cambiaMix(p) {
+  if (!mix.value) return;
+  emit('update:modelValue', `color-mix(in srgb, ${mix.value.a} ${Math.max(1, Math.min(99, p))}%, ${mix.value.b})`);
+}
+function togliMix() {
+  mostraMix.value = false;
+  if (mix.value) emit('update:modelValue', mix.value.a);
 }
 
 function onTextChange(val) {
@@ -643,4 +709,14 @@ async function hideQuickColor(colorId) {
 .fc-alpha-range:disabled::-moz-range-thumb {
   visibility: hidden;
 }
+</style>
+
+<style scoped>
+/* «Mescola con…» (1.4.1435) */
+.fc-mix { display: flex; flex-direction: column; gap: 4px; margin-top: 2px; }
+.fc-mix-apri { font: inherit; font-size: 10.5px; align-self: flex-start; padding: 2px 6px; border: 1px dashed #9ca3af; border-radius: 4px; background: transparent; color: inherit; opacity: .8; cursor: pointer; }
+.fc-mix-apri:hover { opacity: 1; border-color: var(--olo-color-primary, #e1474f); }
+.fc-mix-testa { display: flex; align-items: center; justify-content: space-between; }
+.fc-mix-togli { font: inherit; font-size: 10px; padding: 0 4px; border: 0; background: transparent; color: #9ca3af; cursor: pointer; text-decoration: underline; }
+.fc-mix-apri:focus-visible, .fc-mix-togli:focus-visible { outline: 2px solid var(--olo-color-primary, #e1474f); outline-offset: 1px; }
 </style>

@@ -56626,3 +56626,61 @@ msgstr "This drawing cannot be read: it keeps its colors."
 
 msgid "Torna ai colori del file"
 msgstr "Back to the file colors"
+
+#: licenza-1.4.1345
+msgid "Durata dello zoom lento"
+msgstr "Slow zoom duration"
+
+msgid "400 normale, 700 grassetto, 900 nerissimo. Con i caratteri variabili valgono anche i pesi di mezzo, per esempio 880."
+msgstr "400 regular, 700 bold, 900 black. With variable fonts the weights in between work too, for example 880."
+
+msgid "Deriva lenta"
+msgstr "Slow drift"
+
+msgid "Dietro le slide"
+msgstr "Behind the slides"
+
+msgid "Facoltativo: i livelli con «Segue il colore di uno stato» (Stile, sotto il colore) prendono questo colore quando lo stato cambia."
+msgstr "Optional: layers with “Follows the color of a state” (Style, under the color) take this color when the state changes."
+
+msgid "Il colore cambia quando cambia lo stato scelto: prende il «Colore dello stato» del livello cliccato (Interazioni). Finché lo stato non ha un colore, vale quello qui sopra."
+msgstr "The color changes when the chosen state changes: it takes the “State color” of the clicked layer (Interactions). Until the state has a color, the one above applies."
+
+msgid "Lo stato «%s»"
+msgstr "The state “%s”"
+
+msgid "No, resta fisso"
+msgstr "No, stays fixed"
+
+msgid "Posizione, in percentuale"
+msgstr "Position, as a percentage"
+
+msgid "Quale parte della foto resta in vista quando non entra tutta: un punto della griglia, oppure in percentuale (50% 30% = al centro, un po' in alto)."
+msgstr "Which part of the photo stays in view when it does not fit: a point of the grid, or as a percentage (50% 30% = center, a little higher)."
+
+msgid "Segue il colore di uno stato"
+msgstr "Follows the color of a state"
+
+msgid "Sfarfallio (come una fiamma)"
+msgstr "Flicker (like a flame)"
+
+msgid "Un livello su tutte le slide sta davanti al loro contenuto; spuntato, sta dietro, come uno sfondo comune."
+msgstr "A layer on all slides sits in front of their content; ticked, it sits behind, like a shared background."
+
+msgid "Vaga piano"
+msgstr "Wanders gently"
+
+msgid "Usa «%s» da Google Fonts"
+msgstr "Use “%s” from Google Fonts"
+
+msgid "Mescola con"
+msgstr "Mix with"
+
+msgid "Mescola con un altro colore…"
+msgstr "Mix with another color…"
+
+msgid "Quanto"
+msgstr "How much"
+
+msgid "Quanto del secondo colore"
+msgstr "How much of the second color"

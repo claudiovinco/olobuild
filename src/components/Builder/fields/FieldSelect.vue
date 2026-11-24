@@ -80,7 +80,7 @@
     </button>
 
     <Teleport to="body">
-      <div v-if="open" class="fsel-backdrop" @click="close()"></div>
+      <div v-if="open" class="fsel-backdrop" :style="sopraFinestra ? { zIndex: sopraFinestra - 1 } : null" @click="close()"></div>
       <div
         v-if="open"
         ref="popEl"
@@ -134,6 +134,7 @@
 </template>
 
 <script setup>
+import { livelloPopup } from '@/utils/livelloPopup';
 import { t } from '@/i18n';
 import { ref, computed, nextTick, onBeforeUnmount, watch } from 'vue';
 import { useStylesStore } from '@/stores/styles';
@@ -267,6 +268,8 @@ const highlight = ref(-1);
 const rootEl = ref(null);
 const popEl = ref(null);
 const popStyle = ref({});
+// il livello sopra la finestra che contiene il menu (0 = quello di sempre); vedi posiziona
+const sopraFinestra = ref(0);
 
 const displayLabel = computed(() => {
   const sel = flatOptions.value.find(o => isActive(o));
@@ -324,6 +327,10 @@ function position() {
   const openUp = below < popH + 8 && r.top > popH + 8;
   // I trigger compact possono essere molto stretti (es. 44px per "px"):
   // il popup ha comunque una larghezza leggibile, clampata nel viewport.
+  // Dentro una finestra che sta più in alto del builder (l'editor dello Slider Pro, z-index 999999) il menu si apre
+  // SOPRA di lei (1.4.1435): col suo 100090 fisso finiva dietro, e nell'editor nessun menu si poteva usare.
+  const z = livelloPopup(trigger, 100090);
+  sopraFinestra.value = z > 100090 ? z : 0;
   const popW = Math.max(Math.round(r.width), conAnteprime.value ? 300 : 110);
   const left = Math.max(8, Math.min(Math.round(r.left), window.innerWidth - popW - 8));
   popStyle.value = {
@@ -332,7 +339,7 @@ function position() {
     width: `${popW}px`,
     top: openUp ? `${Math.round(r.top - popH - 4)}px` : `${Math.round(r.bottom + 4)}px`,
     maxHeight: `${maxH}px`,
-    zIndex: 100090,
+    zIndex: sopraFinestra.value || 100090,
   };
 }
 

@@ -58041,3 +58041,61 @@ msgstr "Diese Zeichnung kann nicht gelesen werden: Sie behält ihre Farben."
 
 msgid "Torna ai colori del file"
 msgstr "Zurück zu den Farben der Datei"
+
+#: licenza-1.4.1345
+msgid "Durata dello zoom lento"
+msgstr "Dauer des langsamen Zooms"
+
+msgid "400 normale, 700 grassetto, 900 nerissimo. Con i caratteri variabili valgono anche i pesi di mezzo, per esempio 880."
+msgstr "400 normal, 700 fett, 900 sehr fett. Bei variablen Schriften gelten auch Zwischenwerte, zum Beispiel 880."
+
+msgid "Deriva lenta"
+msgstr "Langsames Treiben"
+
+msgid "Dietro le slide"
+msgstr "Hinter den Slides"
+
+msgid "Facoltativo: i livelli con «Segue il colore di uno stato» (Stile, sotto il colore) prendono questo colore quando lo stato cambia."
+msgstr "Optional: Ebenen mit «Folgt der Farbe eines Zustands» (Stil, unter der Farbe) übernehmen diese Farbe, wenn sich der Zustand ändert."
+
+msgid "Il colore cambia quando cambia lo stato scelto: prende il «Colore dello stato» del livello cliccato (Interazioni). Finché lo stato non ha un colore, vale quello qui sopra."
+msgstr "Die Farbe ändert sich, wenn sich der gewählte Zustand ändert: Sie übernimmt die «Farbe des Zustands» der angeklickten Ebene (Interaktionen). Solange der Zustand keine Farbe hat, gilt die obige."
+
+msgid "Lo stato «%s»"
+msgstr "Der Zustand «%s»"
+
+msgid "No, resta fisso"
+msgstr "Nein, bleibt fest"
+
+msgid "Posizione, in percentuale"
+msgstr "Position, in Prozent"
+
+msgid "Quale parte della foto resta in vista quando non entra tutta: un punto della griglia, oppure in percentuale (50% 30% = al centro, un po' in alto)."
+msgstr "Welcher Teil des Fotos sichtbar bleibt, wenn es nicht ganz hineinpasst: ein Punkt des Rasters oder in Prozent (50% 30% = Mitte, etwas oben)."
+
+msgid "Segue il colore di uno stato"
+msgstr "Folgt der Farbe eines Zustands"
+
+msgid "Sfarfallio (come una fiamma)"
+msgstr "Flackern (wie eine Flamme)"
+
+msgid "Un livello su tutte le slide sta davanti al loro contenuto; spuntato, sta dietro, come uno sfondo comune."
+msgstr "Eine Ebene auf allen Slides liegt vor deren Inhalt; angehakt liegt sie dahinter, wie ein gemeinsamer Hintergrund."
+
+msgid "Vaga piano"
+msgstr "Wandert sanft"
+
+msgid "Usa «%s» da Google Fonts"
+msgstr "«%s» von Google Fonts verwenden"
+
+msgid "Mescola con"
+msgstr "Mischen mit"
+
+msgid "Mescola con un altro colore…"
+msgstr "Mit einer anderen Farbe mischen…"
+
+msgid "Quanto"
+msgstr "Wie viel"
+
+msgid "Quanto del secondo colore"
+msgstr "Wie viel von der zweiten Farbe"

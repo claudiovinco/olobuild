@@ -137,7 +137,8 @@ function defaultLayer(type = 'text') {
     animOut: 'fadeOutDown',
     animOutDuration: 600,
     animOutDelay: 0,
-    animEasing: 'ease',
+    // quello che il menu chiama «predefinito» (1.4.1435): prima i livelli nuovi partivano da «ease»
+    animEasing: 'cubic-bezier(.22,1,.36,1)',
     // Character animation (solo per tipo text)
     charAnim: null,
     // Loop animation (continua dopo l'entrata)

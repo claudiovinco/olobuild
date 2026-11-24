@@ -199,6 +199,50 @@ function velo(bg) {
 }
 
 const canvasWrap = ref(null);
+
+// ── Il carattere variabile sulla tela (1.4.1435) ──
+// Il sito carica la versione variabile di un carattere quando il livello ne usa la larghezza (fontWdth) o muove larghezza
+// e peso con lo scorrimento (PHP assi_carattere / carattere_variabile). La tela usava il file fisso del builder e la
+// larghezza non si vedeva (Elastan rifatto a mano). Qui gli stessi assi, sotto un nome proprio («Anybody VF»).
+const facceVariabili = new Set();
+function assiCarattere(l) {
+  const assi = {};
+  const tappe = l.scrollMove ? (Array.isArray(l.scrollMove.tappe) && l.scrollMove.tappe.length ? l.scrollMove.tappe : [l.scrollMove.da || {}, l.scrollMove.a || {}]) : [];
+  for (const k of ['wdth', 'wght']) {
+    const v = tappe.map((t) => Number(t?.[k])).filter((n) => Number.isFinite(n));
+    if (v.length) assi[k] = [Math.min(...v), Math.max(...v)];
+  }
+  const w = Number(l.fontWdth);
+  if (l.fontWdth !== undefined && l.fontWdth !== '' && Number.isFinite(w)) {
+    assi.wdth = assi.wdth ? [Math.min(assi.wdth[0], w), Math.max(assi.wdth[1], w)] : [w, w];
+    const p = Number(l.fontWeight);
+    if (!assi.wght && Number.isFinite(p)) assi.wght = [p, p];
+  }
+  return assi;
+}
+function famigliaTela(l) {
+  const ff = String(l.fontFamily || '').trim().replace(/^['"]|['"]$/g, '');
+  if (!ff || ff.startsWith('var(')) return l.fontFamily + ', sans-serif';
+  const assi = assiCarattere(l);
+  const chiavi = Object.keys(assi).sort();
+  if (!chiavi.length) return `'${ff}', sans-serif`;
+  const alias = ff + ' VF';
+  const q = 'family=' + encodeURIComponent(ff) + ':' + chiavi.join(',') + '@' + chiavi.map((k) => (assi[k][0] === assi[k][1] ? assi[k][0] : assi[k][0] + '..' + assi[k][1])).join(',');
+  if (!facceVariabili.has(q)) {
+    facceVariabili.add(q);
+    fetch('https://fonts.googleapis.com/css2?' + q + '&display=swap')
+      .then((r) => (r.ok ? r.text() : ''))
+      .then((css) => {
+        if (!css) return;
+        const st = document.createElement('style');
+        st.dataset.mpsVf = q;
+        st.textContent = css.replace(/font-family:\s*['"]?[^;'"]+['"]?\s*;/g, `font-family: '${alias}';`);
+        document.head.appendChild(st);
+      })
+      .catch(() => {});
+  }
+  return `'${alias}', '${ff}', sans-serif`;
+}
 const canvasEl = ref(null);
 // Guide magnetiche (1.4.1430): mentre si trascina, il livello si aggancia ai bordi e al centro della tela e degli altri
 // livelli visibili (sinistra, centro, destra; alto, metà, basso). Le linee si vedono finché si tiene premuto; Alt le spegne.
@@ -517,7 +561,7 @@ function textStyle(l) {
     wordBreak: 'break-word',
   };
   if (l.fontStyle && l.fontStyle !== 'normal') st.fontStyle = l.fontStyle;
-  if (l.fontFamily) st.fontFamily = l.fontFamily + ', sans-serif';
+  if (l.fontFamily) st.fontFamily = famigliaTela(l);
   if (rl.letterSpacing) st.letterSpacing = rl.letterSpacing + 'px';
   if (l.textTransform && l.textTransform !== 'none') st.textTransform = l.textTransform;
   if (l.textDecoration && l.textDecoration !== 'none') st.textDecoration = l.textDecoration;
@@ -541,7 +585,7 @@ function buttonStyle(l) {
     lineHeight: l.lineHeight ?? 1.2,
   };
   if (l.fontStyle && l.fontStyle !== 'normal') st.fontStyle = l.fontStyle;
-  if (l.fontFamily) st.fontFamily = l.fontFamily + ', sans-serif';
+  if (l.fontFamily) st.fontFamily = famigliaTela(l);
   if (rl.letterSpacing) st.letterSpacing = rl.letterSpacing + 'px';
   if (l.textTransform && l.textTransform !== 'none') st.textTransform = l.textTransform;
   if (l.textDecoration && l.textDecoration !== 'none') st.textDecoration = l.textDecoration;

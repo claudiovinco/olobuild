@@ -167,19 +167,21 @@ export const EASING_GROUPS = [
 ];
 
 // --- Proprietà animabili con defaults ---
+// Limiti larghi (1.4.1435): i temi girano più volte (380°, 531°) e ruotano attorno a punti fuori dal livello (la catena di
+// Chiavistello, fino a ±31.000%): upProp() taglia ai limiti, e con 0–100 quei movimenti non si potevano rifare.
 export const ANIMATABLE_PROPS = {
   x:         { label: 'X (%)',         min: -100, max: 200,  step: 0.1,  default: 0 },
   y:         { label: 'Y (%)',         min: -100, max: 200,  step: 0.1,  default: 0 },
   opacity:   { label: 'Opacità',      min: 0,    max: 100,  step: 1,    default: 100 },
   scale:     { label: 'Scala',         min: 0,    max: 5,    step: 0.01, default: 1 },
-  rotation:  { label: 'Rotazione Z°', min: -360, max: 360,  step: 1,    default: 0 },
-  rotationX: { label: 'Rotazione X°', min: -180, max: 180,  step: 1,    default: 0 },
-  rotationY: { label: 'Rotazione Y°', min: -180, max: 180,  step: 1,    default: 0 },
+  rotation:  { label: 'Rotazione Z°', min: -3600, max: 3600, step: 1,    default: 0 },
+  rotationX: { label: 'Rotazione X°', min: -720, max: 720,  step: 1,    default: 0 },
+  rotationY: { label: 'Rotazione Y°', min: -720, max: 720,  step: 1,    default: 0 },
   skewX:     { label: 'Skew X°',      min: -60,  max: 60,   step: 1,    default: 0 },
   skewY:     { label: 'Skew Y°',      min: -60,  max: 60,   step: 1,    default: 0 },
   blur:      { label: 'Blur (px)',     min: 0,    max: 50,   step: 0.5,  default: 0 },
-  originX:   { label: 'Origin X (%)', min: 0,    max: 100,  step: 1,    default: 50 },
-  originY:   { label: 'Origin Y (%)', min: 0,    max: 100,  step: 1,    default: 50 },
+  originX:   { label: 'Origin X (%)', min: -40000, max: 40000, step: 1, default: 50 },
+  originY:   { label: 'Origin Y (%)', min: -40000, max: 40000, step: 1, default: 50 },
   // Mask (clip-path inset reveal)
   maskTop:    { label: 'Mask Top (%)',    min: 0, max: 100, step: 1, default: 0 },
   maskRight:  { label: 'Mask Right (%)',  min: 0, max: 100, step: 1, default: 0 },

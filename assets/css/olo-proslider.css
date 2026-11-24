@@ -723,6 +723,10 @@
 @keyframes mpsHoverLoop { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-10px) } }
 /* Vento: il livello si piega dal piede e torna, con un ritorno più lento della raffica (erba, fiori, una tenda leggera) */
 @keyframes mpsWindLoop { 0%,100% { transform:skewX(0deg) } 30% { transform:skewX(-5deg) } 55% { transform:skewX(-2deg) } 75% { transform:skewX(-3.5deg) } }
+/* 1.4.1435: sfarfallio, vagare, deriva (nei temi c'erano già, coi nomi che il motore non conosceva). Leggeri: effetti dosati. */
+@keyframes mpsFlickerLoop { 0%,100% { opacity:1 } 8% { opacity:.86 } 12% { opacity:.97 } 30% { opacity:.9 } 46% { opacity:1 } 61% { opacity:.82 } 66% { opacity:.95 } 84% { opacity:.88 } }
+@keyframes mpsWanderLoop { 0%,100% { transform:translate(0,0) } 25% { transform:translate(6px,-4px) } 50% { transform:translate(-3px,-8px) } 75% { transform:translate(-6px,-2px) } }
+@keyframes mpsDriftLoop { 0%,100% { transform:translateX(0) } 50% { transform:translateX(14px) } }
 .olo-proslider-layer[data-anim-loop="windLoop"] { transform-origin:50% 100%; }
 
 /* ═══════════════════════════════════════════════════════════

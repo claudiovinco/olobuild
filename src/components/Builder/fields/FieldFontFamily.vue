@@ -13,8 +13,8 @@
 
     <!-- Dropdown panel -->
     <Teleport to="body">
-      <div v-if="open" class="ff-backdrop" @click="open = false"></div>
-      <div v-if="open" class="ff-dropdown" ref="dropdownEl" :style="dropdownPos">
+      <div v-if="open" class="ff-backdrop" :style="livello > 100090 ? { zIndex: livello - 1 } : null" @click="open = false"></div>
+      <div v-if="open" class="ff-dropdown" ref="dropdownEl" :style="[dropdownPos, livello > 100090 ? { zIndex: livello } : null]">
         <!-- Search -->
         <div class="ff-search-wrap">
           <input
@@ -140,7 +140,19 @@
             </div>
           </template>
 
-          <div v-if="!filteredCustomFonts.length && !filteredWebSafe.length && !filteredGoogle.length && !filteredProjectFonts.length" class="ff-empty">
+          <!-- Qualsiasi carattere di Google Fonts (1.4.1435): l'elenco ha i più usati, ma i temi ne usano più di cento
+               (Fraunces, Bodoni Moda, Martian Mono…). Il nome scritto si usa così com'è; il server lo scarica da Google. -->
+          <div
+            v-if="nomeLibero"
+            class="ff-item"
+            :class="{ 'ff-item--active': modelValue === nomeLibero }"
+            @click="selectFont(nomeLibero, true)"
+          >
+            {{ t('Usa «%s» da Google Fonts').replace('%s', nomeLibero) }}
+            <span class="ff-badge ff-badge--g">G</span>
+          </div>
+
+          <div v-if="!nomeLibero && !filteredCustomFonts.length && !filteredWebSafe.length && !filteredGoogle.length && !filteredProjectFonts.length" class="ff-empty">
             {{ t('Nessun risultato') }}
           </div>
         </div>
@@ -150,6 +162,7 @@
 </template>
 
 <script setup>
+import { livelloPopup } from '@/utils/livelloPopup';
 import { t } from '@/i18n';
 import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import { useStylesStore } from '@/stores/styles';
@@ -195,6 +208,8 @@ const rootEl = ref(null);
 const dropdownEl = ref(null);
 const searchInput = ref(null);
 const dropdownPos = ref({});
+// il livello sopra la finestra che contiene il campo (vedi positionDropdown)
+const livello = ref(100090);
 
 // Focus trap per accessibilità dropdown
 const { activate: activateTrap, deactivate: deactivateTrap } = useFocusTrap(dropdownEl);
@@ -320,6 +335,16 @@ const filteredWebSafe = computed(() => {
   return webSafeFonts.filter(f => f.label.toLowerCase().includes(q));
 });
 
+// Il nome cercato, se non è già fra quelli in elenco: si può usare come carattere di Google Fonts (lettere, numeri,
+// spazi e trattini: i nomi delle famiglie di Google sono così).
+const nomeLibero = computed(() => {
+  const q = String(search.value || '').trim().replace(/\s+/g, ' ');
+  if (q.length < 3 || !/^[A-Za-z0-9][A-Za-z0-9 -]{1,58}$/.test(q)) return '';
+  const tutti = [...popularGoogleFonts, ...projectFonts.value, ...customFonts.value.map((f) => f.name), ...webSafeFonts.map((f) => f.label)];
+  if (tutti.some((f) => String(f).toLowerCase() === q.toLowerCase())) return '';
+  return q.split(' ').map((p) => (p.length > 3 || /^[a-z]/.test(p) ? p.charAt(0).toUpperCase() + p.slice(1) : p)).join(' ');
+});
+
 const filteredGoogle = computed(() => {
   // Exclude fonts already in project list
   const projSet = new Set(projectFonts.value.map(f => f.toLowerCase()));
@@ -381,20 +406,24 @@ function positionDropdown() {
   if (!rootEl.value) return;
   const rect = rootEl.value.getBoundingClientRect();
   const spaceBelow = window.innerHeight - rect.bottom;
+  // sopra la finestra che contiene il campo (1.4.1435: nell'editor dello Slider Pro l'elenco finiva dietro)
+  livello.value = livelloPopup(rootEl.value, 100090);
   const dropH = 360;
 
   if (spaceBelow >= dropH) {
     dropdownPos.value = {
       position: 'fixed',
       top: rect.bottom + 2 + 'px',
-      left: rect.left + 'px',
+      // dentro lo schermo (1.4.1435): in un pannello stretto a destra l'elenco largo 260 px usciva dal bordo
+      left: Math.max(8, Math.min(rect.left, window.innerWidth - Math.max(rect.width, 260) - 8)) + 'px',
       width: Math.max(rect.width, 260) + 'px',
     };
   } else {
     dropdownPos.value = {
       position: 'fixed',
       bottom: (window.innerHeight - rect.top + 2) + 'px',
-      left: rect.left + 'px',
+      // dentro lo schermo (1.4.1435): in un pannello stretto a destra l'elenco largo 260 px usciva dal bordo
+      left: Math.max(8, Math.min(rect.left, window.innerWidth - Math.max(rect.width, 260) - 8)) + 'px',
       width: Math.max(rect.width, 260) + 'px',
     };
   }
