@@ -625,7 +625,7 @@ THEME = tema(
     'biglietto e le quattro schede coi prodotti, il mega menu col negozio, le offerte e le novità; a metà pagina la lettera '
     'che si scrive col pennino mentre si scorre, scende nella busta e si chiude col sigillo di ceralacca; i corsi di calligrafia '
     'con la prenotazione, la guida per scegliere il pennino, la scheda con la punta a scelta e il video del pennino.',
-    [('Il negozio', P['negozio']), ('Offerte', P['offerte']), ('Novità', P['negozio']),
+    [('Il negozio', P['negozio']), ('Offerte', P['offerte']), ('Novità', P['negozio'] + '?orderby=date'),
      ('Stilografiche', '{{PAGINA:negozio}}?product_cat=stilografiche'), ('Carta', '{{PAGINA:negozio}}?product_cat=carta'),
      ('Sigilli', '{{PAGINA:negozio}}?product_cat=sigilli'), ('I corsi', P['calligrafia']), ('Il pennino', P['pennini'])],
     [('home', 'Home', None), ('negozio', 'Il negozio', 'negozio'), ('calligrafia', 'I corsi di calligrafia', 'corsi'),

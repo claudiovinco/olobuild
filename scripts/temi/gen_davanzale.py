@@ -521,7 +521,7 @@ THEME = tema(
     'scorre (la luce, le candele, le ceramiche) e le quattro schede coi prodotti, il mega menu coi pannelli; le stanze da '
     'comprare punto per punto, gli scaffali, la settimana della tavola col conto alla rovescia, la scheda prodotto col video '
     'nella galleria.',
-    [('Tutti gli oggetti', P['negozio']), ('Novità', P['negozio']),
+    [('Tutti gli oggetti', P['negozio']), ('Novità', P['negozio'] + '?orderby=date'),
      ('Illuminazione', '{{PAGINA:negozio}}?product_cat=illuminazione'),
      ('Ceramiche', '{{PAGINA:negozio}}?product_cat=ceramiche'), ('Tessili', '{{PAGINA:negozio}}?product_cat=tessili'),
      ('Le stanze', P['stanze']), ('Offerte', P['offerte']), ('Lo studio', P['studio'])],

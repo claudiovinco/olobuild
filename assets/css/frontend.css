@@ -3594,6 +3594,10 @@ html:has(.olo-frontend-grid) {
 /* Colonna «Prima quando le colonne vanno in pila» (13 nov 2026) */
 @media (max-width:959px){.olo-col-primo-m{order:-1}}
 @media (max-width:639px){.olo-col-primo-s{order:-1}}
+/* «Scroll fisso» della colonna: in pila (colonna a tutta larghezza) si spegne, se no resterebbe incollata in cima sopra
+   le colonne che le scorrono sotto. Le righe che non vanno in pila (olo-nostack-*) lo tengono. */
+@media (max-width:959px){:where(:not([class*="olo-nostack"])) > .olo-col-fissa-m{position:static !important;top:auto !important}}
+@media (max-width:639px){:where(:not([class*="olo-nostack"])) > .olo-col-fissa-s{position:static !important;top:auto !important}}
 
 /* La Grana dello Sfondo (1.4.1218): rumore fine sopra lo sfondo e sotto il contenuto, per ogni tipo di sfondo.
    L'intensità arriva da --olo-grana (Olobuild_CSS_Builder::grana_markup). Grigio con l'alfa del rumore: si vede sul
@@ -3855,3 +3859,245 @@ html:has(.olo-frontend-grid) {
   .olo-fila-mobile-center { text-align: center; }
   .olo-fila-mobile-right { text-align: right; }
 }
+
+/* ═══ WooCommerce dentro le tile (24 nov 2026) ═══
+   Avvisi, pulsanti, campi e mini carrello che WooCommerce disegna da sé (woocommerce_mini_cart(), il modulo del codice
+   promozionale, l'avviso «aggiunto al carrello») restavano col carattere del browser e coi colori di WooCommerce: i link
+   «Visualizza carrelloPagamento» attaccati, il pulsante grigio, l'avviso azzurro. Qui la base coi token del tema (colori e
+   pulsanti di Stile globale); le tile che li disegnano con le loro impostazioni hanno selettori più specifici e vincono. */
+
+/* Il carattere della pagina: pulsanti e campi del browser non lo ereditano. */
+.olo-frontend-tile :where(button, input, select, textarea, optgroup) { font-family: inherit; }
+
+/* Avvisi (blocchi di WooCommerce e avvisi classici) */
+.olo-frontend-tile .wc-block-components-notice-banner,
+.olo-frontend-tile .woocommerce-info,
+.olo-frontend-tile .woocommerce-message,
+.olo-frontend-tile .woocommerce-error {
+  --olo-avviso: var(--olo-color-primary, #e1474f);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin: 0 0 24px;
+  padding: 14px 18px;
+  border: 1px solid color-mix(in srgb, var(--olo-avviso) 32%, transparent);
+  border-radius: var(--olo-btn-border-radius, 8px);
+  background: color-mix(in srgb, var(--olo-avviso) 7%, var(--olo-color-background, #ffffff));
+  color: var(--olo-color-text, #1f2937);
+  font-size: 15px;
+  line-height: 1.5;
+  list-style: none;
+}
+/* WooCommerce dà al riquadro dei blocchi «padding: 16px !important» */
+.olo-frontend-tile .wc-block-components-notice-banner { padding: 14px 18px !important; }
+.olo-frontend-tile .wc-block-components-notice-banner.is-success,
+.olo-frontend-tile .woocommerce-message { --olo-avviso: var(--olo-color-success, #16a34a); }
+.olo-frontend-tile .wc-block-components-notice-banner.is-error,
+.olo-frontend-tile .woocommerce-error { --olo-avviso: var(--olo-color-danger, #dc2626); }
+.olo-frontend-tile .wc-block-components-notice-banner.is-warning { --olo-avviso: var(--olo-color-warning, #b45309); }
+.olo-frontend-tile .woocommerce-info::before,
+.olo-frontend-tile .woocommerce-message::before,
+.olo-frontend-tile .woocommerce-error::before { position: static; color: var(--olo-avviso); }
+.olo-frontend-tile .wc-block-components-notice-banner > svg {
+  flex: none;
+  padding: 2px;
+  border-radius: 50%;
+  background-color: var(--olo-avviso);
+  fill: #ffffff;
+}
+.olo-frontend-tile .wc-block-components-notice-banner__content {
+  flex: 1 1 240px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+.olo-frontend-tile :is(.wc-block-components-notice-banner, .woocommerce-info, .woocommerce-message, .woocommerce-error) a:not(.button) {
+  color: var(--olo-color-primary, #e1474f);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+/* «Visualizza carrello» dentro l'avviso: un pulsante a filo, in fondo alla riga */
+.olo-frontend-tile :is(.wc-block-components-notice-banner, .woocommerce-message, .woocommerce-info) .button {
+  order: 2;
+  float: none !important;
+  margin: 0 0 0 auto !important;
+  padding: 8px 16px !important;
+  border: 1px solid var(--olo-color-primary, #e1474f) !important;
+  border-radius: var(--olo-btn-border-radius, 6px);
+  background: transparent !important;
+  color: var(--olo-color-primary, #e1474f) !important;
+  opacity: 1 !important;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none !important;
+  white-space: nowrap;
+}
+.olo-frontend-tile :is(.wc-block-components-notice-banner, .woocommerce-message, .woocommerce-info) .button:hover,
+.olo-frontend-tile :is(.wc-block-components-notice-banner, .woocommerce-message, .woocommerce-info) .button:focus-visible {
+  background: var(--olo-color-primary, #e1474f) !important;
+  color: var(--olo-color-primary-contrast, #ffffff) !important;
+}
+
+/* Il modulo del codice promozionale della cassa: campo e pulsante in una riga. WooCommerce lo apre e chiude con lo stile
+   in linea (display: none / block): la riga flessibile vale solo quando è aperto. */
+.olo-frontend-tile form.checkout_coupon {
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 12px;
+  margin: 0 0 24px;
+  padding: 20px;
+  border: 1px solid var(--olo-color-border, #e5e7eb);
+  border-radius: var(--olo-btn-border-radius, 8px);
+}
+.olo-frontend-tile form.checkout_coupon[style*="display: none"],
+.olo-frontend-tile form.checkout_coupon[style*="display:none"] { display: none !important; }
+.olo-frontend-tile form.checkout_coupon > p:not(.form-row) { flex: 1 1 100%; margin: 0; }
+.olo-frontend-tile form.checkout_coupon .form-row { float: none; width: auto; margin: 0; padding: 0; }
+.olo-frontend-tile form.checkout_coupon .form-row-first { flex: 1 1 220px; }
+.olo-frontend-tile form.checkout_coupon .form-row-last { flex: 0 0 auto; }
+.olo-frontend-tile form.checkout_coupon .clear { display: none; }
+.olo-frontend-tile form.checkout_coupon .input-text {
+  width: 100%;
+  height: 100%;
+  min-height: 46px;
+  padding: 10px 14px;
+  border: 1px solid var(--olo-color-border, #e5e7eb);
+  border-radius: var(--olo-btn-border-radius, 6px);
+  background: var(--olo-color-background, #ffffff);
+  color: var(--olo-color-text, #1f2937);
+  box-sizing: border-box;
+}
+
+/* Pulsanti di WooCommerce che nessuna tile disegna: pieno (pagamento, codice promozionale) e a filo (vedi carrello) */
+.olo-frontend-tile form.checkout_coupon .button,
+.olo-woo-minicart-wrap .woocommerce-mini-cart__buttons .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: var(--olo-btn-padding, 12px 24px);
+  border: 1px solid var(--olo-color-primary, #e1474f);
+  border-radius: var(--olo-btn-border-radius, 6px);
+  background: var(--olo-color-primary, #e1474f);
+  color: var(--olo-color-primary-contrast, #ffffff);
+  font-size: var(--olo-btn-font-size, 15px);
+  font-weight: var(--olo-btn-font-weight, 600);
+  letter-spacing: var(--olo-btn-letter-spacing, normal);
+  text-transform: var(--olo-btn-text-transform, none);
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: filter .2s ease, background-color .2s ease, color .2s ease;
+}
+.olo-frontend-tile form.checkout_coupon .button:hover,
+.olo-woo-minicart-wrap .woocommerce-mini-cart__buttons .button:hover { filter: brightness(var(--olo-btn-hover-brightness, 0.92)); }
+.olo-frontend-tile form.checkout_coupon .button:focus-visible,
+.olo-woo-minicart-wrap .woocommerce-mini-cart__buttons .button:focus-visible,
+.olo-woo-minicart-wrap .woocommerce-mini-cart-item a:focus-visible {
+  outline: 2px solid var(--olo-color-primary, #e1474f);
+  outline-offset: 2px;
+}
+
+/* Mini carrello: foto piccola accanto al nome, quantità sotto, la × in alto a destra, i due pulsanti affiancati */
+.olo-woo-minicart-wrap .olo-mc-dropdown { color: var(--olo-color-text, #1f2937); text-align: left; font-size: 14px; line-height: 1.45; }
+.olo-woo-minicart-wrap .woocommerce-mini-cart { list-style: none; margin: 0; padding: 0; max-height: min(52vh, 420px); overflow-y: auto; }
+.olo-woo-minicart-wrap .woocommerce-mini-cart-item {
+  position: relative;
+  margin: 0;
+  padding: 12px 32px 12px 0;
+  border-bottom: 1px solid var(--olo-color-border, #e5e7eb);
+  list-style: none;
+}
+.olo-woo-minicart-wrap .woocommerce-mini-cart-item > a:not(.remove) {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: inherit;
+  font-weight: 600;
+  text-decoration: none;
+}
+.olo-woo-minicart-wrap .woocommerce-mini-cart-item > a:not(.remove):hover { color: var(--olo-color-primary, #e1474f); }
+.olo-woo-minicart-wrap .woocommerce-mini-cart-item img {
+  flex: none;
+  width: 56px !important;
+  height: 56px !important;
+  max-width: none;
+  margin: 0 !important;
+  float: none !important;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.olo-woo-minicart-wrap .woocommerce-mini-cart-item .quantity,
+.olo-woo-minicart-wrap .woocommerce-mini-cart-item dl.variation {
+  display: block;
+  margin: 4px 0 0 68px;
+  color: var(--olo-color-text-muted, #6b7280);
+  font-size: 13px;
+}
+.olo-woo-minicart-wrap .woocommerce-mini-cart-item dl.variation :is(dt, dd, p) { display: inline; margin: 0; padding: 0; }
+.olo-woo-minicart-wrap .woocommerce-mini-cart-item a.remove {
+  position: absolute;
+  top: 12px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: var(--olo-color-text-muted, #6b7280) !important;
+  font-size: 18px;
+  line-height: 1;
+  text-decoration: none;
+}
+.olo-woo-minicart-wrap .woocommerce-mini-cart-item a.remove:hover,
+.olo-woo-minicart-wrap .woocommerce-mini-cart-item a.remove:focus-visible {
+  background: color-mix(in srgb, var(--olo-color-danger, #dc2626) 12%, transparent) !important;
+  color: var(--olo-color-danger, #dc2626) !important;
+}
+.olo-woo-minicart-wrap .woocommerce-mini-cart__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin: 14px 0;
+  font-size: 15px;
+}
+.olo-woo-minicart-wrap .woocommerce-mini-cart__buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0; }
+.olo-woo-minicart-wrap .woocommerce-mini-cart__buttons .button { min-height: 42px; padding: 10px 12px; font-size: 14px; }
+.olo-woo-minicart-wrap .woocommerce-mini-cart__buttons .button:not(.checkout) { background: transparent; color: var(--olo-color-primary, #e1474f); }
+.olo-woo-minicart-wrap .woocommerce-mini-cart__empty-message { margin: 0; padding: 8px 0; text-align: center; color: var(--olo-color-text-muted, #6b7280); }
+
+/* Paginazione della griglia Prodotti WC: caselle coi colori e il raggio dei pulsanti del tema, la pagina corrente piena */
+.olo-woo-pagination { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; margin-top: 32px; }
+.olo-woo-pagination .page-numbers {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--olo-color-border, #e5e7eb);
+  border-radius: var(--olo-btn-border-radius, 6px);
+  background: var(--olo-color-background, #ffffff);
+  color: var(--olo-color-text, #1f2937);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  transition: border-color .2s ease, color .2s ease, background-color .2s ease;
+}
+.olo-woo-pagination a.page-numbers:hover { border-color: var(--olo-color-primary, #e1474f); color: var(--olo-color-primary, #e1474f); }
+.olo-woo-pagination a.page-numbers:focus-visible { outline: 2px solid var(--olo-color-primary, #e1474f); outline-offset: 2px; }
+.olo-woo-pagination .page-numbers.current {
+  border-color: var(--olo-color-primary, #e1474f);
+  background: var(--olo-color-primary, #e1474f);
+  color: var(--olo-color-primary-contrast, #ffffff);
+}
+.olo-woo-pagination .page-numbers.dots { min-width: auto; padding: 0 4px; border-color: transparent; background: transparent; }
+.olo-woo-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

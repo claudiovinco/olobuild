@@ -55777,3 +55777,7 @@ msgstr "Holographic sheen"
 
 msgid "L’etichetta della nota (e il filo interno, se c’è) prende i colori cangianti di una carta olografica, che scorrono piano."
 msgstr "The note label (and the inner line, if there is one) takes the shifting colours of a holographic card, flowing slowly."
+
+#: licenza-1.4.1345
+msgid "Tipo di sito"
+msgstr "Type of site"

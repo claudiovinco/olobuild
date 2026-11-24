@@ -240,6 +240,65 @@ def rinforza(tema, o, r):
             rinforza(tema, v, r)
 
 
+def controlla_negozio(theme, builds):
+    """Le regole dei negozi (24 nov 2026, dopo il giro dell'utente su Ristretto e Spiedo): si fermano qui, prima di
+    scrivere il tema. 1) Due voci del menu non portano allo stesso indirizzo, se no si accendono insieme: «Novità» va al
+    negozio con ?orderby=date, una categoria con ?product_cat=<slug>. 2) Il filtro del negozio offre l'ordinamento
+    (show_sort). 3) La griglia del negozio ha la paginazione, con meno prodotti per pagina di quelli del negozio (12),
+    se no non si vede mai. Il resto (grafica di WooCommerce, mini carrello, avvisi) si prova sulla demo con
+    scripts/temi/controllo-negozi.js."""
+    if not theme.get('woo'):
+        return
+    viste = {}
+    def voci(items):
+        for it in items or []:
+            u = it.get('url') or ''
+            if u and '#' not in u:
+                assert u not in viste, 'menu di %s: «%s» e «%s» portano entrambe a %s (si accenderebbero insieme)' % (
+                    theme['id'], viste[u], it.get('title'), u)
+                viste[u] = it.get('title')
+            voci(it.get('children'))
+    voci((theme.get('menu') or {}).get('items'))
+    pagina = (theme['woo'].get('product_archive') or '')
+    tpl = (theme.get('pages') or {}).get(pagina, {}).get('template') or pagina
+    built = builds.get(tpl + '.json') or builds.get(pagina + '.json')
+    if built is None:
+        return
+    trovati = {}
+    def giro(n):
+        if isinstance(n, dict):
+            if n.get('type') in ('woo_product_filter', 'woo_products'):
+                trovati.setdefault(n['type'], []).append(n.get('settings') or {})
+            for c in n.get('children') or []:
+                giro(c)
+        elif isinstance(n, list):
+            for c in n:
+                giro(c)
+    giro(built['content'] if isinstance(built, dict) else built)
+    for f in trovati.get('woo_product_filter', []):
+        assert f.get('show_sort'), 'negozio di %s: il filtro non offre l\'ordinamento (show_sort)' % theme['id']
+    griglie = trovati.get('woo_products', [])
+    assert any(g.get('pagination') and int(g.get('posts_per_page') or 0) <= 12 for g in griglie), \
+        'negozio di %s: la griglia non ha la paginazione da 12 prodotti per pagina' % theme['id']
+    # 4) Nella scheda prodotto la colonna delle foto ha lo scroll fisso: resta ferma finché la colonna dei dettagli
+    # non arriva al suo livello (utente, 24 nov 2026). Il renderer lo spegne da sé quando le colonne vanno in pila.
+    scheda = (theme.get('singles') or {}).get('product')
+    sb = builds.get((scheda or '') + '.json')
+    if sb is not None:
+        colonne = []
+        def cerca(n):
+            if isinstance(n, dict):
+                if n.get('type') == 'column' and any(isinstance(c, dict) and c.get('type') in ('woo_product_gallery_slider', 'woo_product_image') for c in n.get('children') or []):
+                    colonne.append(n.get('settings') or {})
+                for c in n.get('children') or []:
+                    cerca(c)
+            elif isinstance(n, list):
+                for c in n:
+                    cerca(c)
+        cerca(sb['content'] if isinstance(sb, dict) else sb)
+        assert all(c.get('sticky') for c in colonne), 'scheda prodotto di %s: la colonna delle foto non ha lo scroll fisso' % theme['id']
+
+
 def write_theme(theme, builds, media):
     """theme: il dizionario di theme.json; builds: {file.json: nodi | page(nodi, …)}; media: nomi dei file della libreria usati."""
     out = os.path.join(THEMES, theme['id'])
@@ -327,6 +386,7 @@ def write_theme(theme, builds, media):
                 theme['filtri'] = prima['filtri']
         except (ValueError, OSError):
             pass
+    controlla_negozio(theme, builds)
     with open(p_tema, 'w', encoding='utf-8', newline='\n') as fh:
         fh.write(json.dumps(theme, ensure_ascii=False, separators=(',', ':')))
     sys.stdout.reconfigure(encoding='utf-8')

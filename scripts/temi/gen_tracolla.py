@@ -553,7 +553,7 @@ THEME = tema(
     'delle offerte che scorre e le quattro schede coi prodotti, il mega menu con le borse per forma, le offerte e le novità; '
     'a metà pagina la giornata in borse, con la lancetta che gira e una borsa per ogni ora; le misure di ogni forma, il '
     'laboratorio, la scheda prodotto col video e i colori.',
-    [('Le borse', P['negozio']), ('Offerte', P['offerte']), ('Novità', P['negozio']),
+    [('Le borse', P['negozio']), ('Offerte', P['offerte']), ('Novità', P['negozio'] + '?orderby=date'),
      ('Borse a mano', '{{PAGINA:negozio}}?product_cat=borse-a-mano'), ('Tracolle', '{{PAGINA:negozio}}?product_cat=tracolle'),
      ('Pochette', '{{PAGINA:negozio}}?product_cat=pochette'), ('Il laboratorio', P['laboratorio']), ('Le misure', P['misure'])],
     [('home', 'Home', None), ('negozio', 'Le borse', 'borse'), ('laboratorio', 'Il laboratorio', 'laboratorio'),

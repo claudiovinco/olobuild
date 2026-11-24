@@ -335,6 +335,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         $uid = 'olo-mm-' . wp_rand( 10000, 99999 );
 
         ob_start();
+        $this->calcola_piu_precisa( $tree, $children, $grandchildren );
         $this->render_css( $s, $uid );
         $this->render_html( $tree, $children, $grandchildren, $s, $uid );
         $this->render_js( $s, $uid );
@@ -3114,6 +3115,36 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
      * Non sono «correnti» le ancore (#…), mailto:/tel: e i link verso un altro sito.
      */
     private function e_pagina_corrente( $url ) {
+        $precisione = $this->precisione_voce( $url );
+        if ( $precisione < 0 ) return false;
+        // Fra le voci della stessa pagina si accende la più precisa (24 nov 2026): su «/caffe/?product_cat=capsule»
+        // «Capsule» sì, «Il caffè» (/caffe/) no. Prima si accendevano tutte e due, e ogni altra voce verso /caffe/.
+        return null === $this->piu_precisa || $precisione >= $this->piu_precisa;
+    }
+
+    /** @var int|null Quanti parametri dell'indirizzo combaciano nella voce più precisa del menu (null: non calcolato). */
+    private $piu_precisa = null;
+
+    /** La voce più precisa fra voci, sottovoci e sotto-sottovoci del menu, prima di disegnarlo. */
+    private function calcola_piu_precisa( $tree, $children, $grandchildren ) {
+        $max = -1;
+        $tutte = (array) $tree;
+        foreach ( array_merge( array_values( (array) $children ), array_values( (array) $grandchildren ) ) as $gruppo ) {
+            $tutte = array_merge( $tutte, (array) $gruppo );
+        }
+        foreach ( $tutte as $voce ) {
+            if ( is_object( $voce ) ) {
+                $max = max( $max, $this->precisione_voce( $voce->url ?? '' ) );
+            }
+        }
+        $this->piu_precisa = $max >= 0 ? $max : null;
+    }
+
+    /**
+     * -1 se la voce non porta alla pagina che si sta guardando, altrimenti quanti parametri del suo indirizzo
+     * (lingua esclusa) combaciano con quelli della richiesta: 0 per «/caffe/», 1 per «/caffe/?product_cat=capsule».
+     */
+    private function precisione_voce( $url ) {
         static $corrente = null;
         if ( $corrente === null ) {
             $req = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '/'; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- only parsed and compared, never output
@@ -3125,16 +3156,16 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             $corrente = [ 'path' => $this->percorso_normale( is_array( $p ) ? ( $p['path'] ?? '/' ) : '/' ), 'query' => $q ];
         }
         $url = trim( (string) $url );
-        if ( $url === '' || $url[0] === '#' ) return false;
+        if ( $url === '' || $url[0] === '#' ) return -1;
         $v = wp_parse_url( $url );
-        if ( ! is_array( $v ) ) return false;
+        if ( ! is_array( $v ) ) return -1;
         // «/pagina/#sezione» porta a una sezione, come «#sezione»: la voce non si accende sulla pagina
         // (nella home le voci delle ancore risultavano tutte attive appena aperta).
-        if ( isset( $v['fragment'] ) && $v['fragment'] !== '' ) return false;
-        if ( ! empty( $v['scheme'] ) && ! in_array( strtolower( $v['scheme'] ), [ 'http', 'https' ], true ) ) return false;
+        if ( isset( $v['fragment'] ) && $v['fragment'] !== '' ) return -1;
+        if ( ! empty( $v['scheme'] ) && ! in_array( strtolower( $v['scheme'] ), [ 'http', 'https' ], true ) ) return -1;
         if ( ! empty( $v['host'] ) ) {
             $casa = (string) wp_parse_url( home_url( '/' ), PHP_URL_HOST );
-            if ( strcasecmp( $v['host'], $casa ) !== 0 ) return false;
+            if ( strcasecmp( $v['host'], $casa ) !== 0 ) return -1;
         }
         $path = (string) ( $v['path'] ?? '/' );
         if ( $path === '' ) $path = '/';
@@ -3142,7 +3173,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             // Relativo alla home («pagina/»): si risolve sotto la cartella del sito.
             $path = trailingslashit( (string) ( wp_parse_url( home_url( '/' ), PHP_URL_PATH ) ?: '/' ) ) . $path;
         }
-        if ( $this->percorso_normale( $path ) !== $corrente['path'] ) return false;
+        if ( $this->percorso_normale( $path ) !== $corrente['path'] ) return -1;
         // ?page_id=73 e simili: i parametri della voce (tranne la lingua) devono esserci uguali,
         // e un parametro che sceglie la pagina presente solo nella richiesta esclude la voce
         // (con i permalink semplici «/» non è anche la pagina ?page_id=73).
@@ -3151,13 +3182,13 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
             wp_parse_str( $v['query'], $vq );
             unset( $vq['lang'] );
             foreach ( $vq as $k => $val ) {
-                if ( ! isset( $corrente['query'][ $k ] ) || (string) $corrente['query'][ $k ] !== (string) $val ) return false;
+                if ( ! isset( $corrente['query'][ $k ] ) || (string) $corrente['query'][ $k ] !== (string) $val ) return -1;
             }
         }
         foreach ( [ 'page_id', 'p', 'cat', 'tag', 's', 'author', 'post_type', 'name', 'pagename', 'm' ] as $k ) {
-            if ( isset( $corrente['query'][ $k ] ) && ! isset( $vq[ $k ] ) ) return false;
+            if ( isset( $corrente['query'][ $k ] ) && ! isset( $vq[ $k ] ) ) return -1;
         }
-        return true;
+        return count( $vq );
     }
 
     /** Percorso confrontabile: decodificato, con una sola barra in testa e in coda. */

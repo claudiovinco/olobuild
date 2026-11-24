@@ -523,14 +523,14 @@ def build_opere():
         'price_min': 0, 'price_max': 40000, 'price_step': 500, 'attributes': 'pa_artista', 'collapsed': False,
         'heading_color': INK, 'text_color': INK, 'accent_color': BRONZO, 'bg_color': 'transparent', 'border_color': FILO,
         'border_radius': 0, 'button_text': 'Mostra le opere', 'reset_text': 'Tutte',
-        'show_price_range': True, 'show_count': True, 'apply_button': True, 'filter_style': 'sidebar', 'collapsible': False,
+        'show_price_range': True, 'show_count': True, 'show_sort': True, 'apply_button': True, 'filter_style': 'sidebar', 'collapsible': False,
         'active_color': BRONZO, 'button_color': FONDO, 'button_bg': INK,
     })
     out = [intro(t, 'Catalogo · N. 001 — 020', 'Le opere', '<p>Alcune hanno un prezzo, altre si chiedono. Tutte hanno una scheda '
                                                            'tecnica e un pedigree.</p>')]
     out.append(t.section([
         t.row([t.col([filtro], wm='1-4', ws='1-1'),
-               t.col([opere(t, posts_per_page=30, columns=3, columns_tablet=2)], wm='3-4', ws='1-1')],
+               t.col([opere(t, posts_per_page=12, columns=3, columns_tablet=2, pagination=True)], wm='3-4', ws='1-1')],
               layout='custom', custom='22,78', gap=56, valign='start', anim=None),
     ], padding='default', width='large', style={'padding_top': 24, 'padding_bottom': 120}))
     out.append(t.section([
@@ -697,7 +697,7 @@ def build_opera():
         garanzie(t),
     ]
     out = [t.section([
-        t.row([t.col([galleria], wm='3-5', ws='1-1'), t.col(destra, wm='2-5', ws='1-1')],
+        t.row([t.col([galleria], wm='3-5', ws='1-1', sticky=True, sticky_offset=24), t.col(destra, wm='2-5', ws='1-1')],
               layout='custom', custom='60,40', gap=64, valign='start', anim=None),
     ], padding='default', width='large', style={'padding_top': 130, 'padding_bottom': 90})]
 
@@ -818,7 +818,7 @@ THEME = {
                    'il prezzo o «Prezzo riservato», i materiali, gli artisti, e una scheda dell’opera dinamica con la scheda '
                    'tecnica per l’installazione (misure, peso, appoggio, luce, cassa), il pedigree delle mostre e la richiesta '
                    'di visione privata col titolo già scritto.',
-    'menu': {'name': 'Tacet — menu', 'items': [{'title': 'Opere', 'url': OPERE}, {'title': 'Novità', 'url': OPERE},
+    'menu': {'name': 'Tacet — menu', 'items': [{'title': 'Opere', 'url': OPERE}, {'title': 'Novità', 'url': OPERE + '?orderby=date'},
                                               {'title': 'Artisti', 'url': ARTISTI},
                                               {'title': 'La galleria', 'url': GALLERIA}, {'title': 'Carrello', 'url': CARRELLO},
                                               {'title': 'Visione privata', 'url': VISIONE}]},

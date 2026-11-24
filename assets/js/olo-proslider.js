@@ -393,7 +393,113 @@ function initSlider(container) {
     // quanto lo slider del computer più la distanza, e dove lo slider era più basso restava fermo più a lungo.
     if (scenaFissa) scenaFissa.style.height = (container.offsetHeight + (cfg.scrollTimelineDistance || 2000)) + 'px';
     if (cubo) profonditaCubo();
+    distanziaPulsanti(scaleX);
   }
+
+  // Pulsanti e link di una slide mai attaccati né accavallati (24 nov 2026, Torchio: il riquadro rosso di «La stamperia»
+  // copriva il bordo di «Sfoglia il campionario»). Stanno a percentuale ma sono larghi quanto la scritta, e la scritta
+  // cambia: il carattere del tema, la traduzione (in tedesco è più lunga), il carattere minimo leggibile di tablet e
+  // telefono. Sulla tela già composta, quello a destra (in una fila) o sotto (in una pila) si sposta quanto basta a
+  // lasciare uno spazio; a ogni ricomposizione si riparte dalla posizione del progetto. Solo livelli con un link: due
+  // scritte o due forme sovrapposte di proposito restano come sono.
+  var _mpsScalaPulsanti = 1;
+  // Un livello con un link, figlio della tela o di uno «stato» della tela (gruppi di livelli che compaiono a comando).
+  function pulsanteDellaTela(el, w) {
+    var p = el.parentElement;
+    return (p === w || (p && p.parentElement === w && p.classList.contains('mps-stato'))) &&
+      !el.hasAttribute('data-timeline-name') && !!el.querySelector(':scope > a, :scope > .mps-mp > a');
+  }
+  // Ogni coppia troppo vicina si separa dove costa meno: a destra (in fila) o in basso (in pila). Mai più di quanto è
+  // grande il pulsante (oltre, la sovrapposizione è voluta); se a destra uscirebbe dalla tela, va indietro l'altro.
+  function separaGruppo(ls, tela, spazio) {
+    for (var giro = 0; giro < 3; giro++) {
+      var mosso = false;
+      for (var i = 0; i < ls.length; i++) {
+        for (var j = 0; j < ls.length; j++) {
+          if (i === j) continue;
+          var a = ls[i], b = ls[j];
+          var aL = a.x + a.dx, aT = a.y + a.dy, bL = b.x + b.dx, bT = b.y + b.dy;
+          var vx = Math.min(aL + a.w, bL + b.w) - Math.max(aL, bL);
+          var vy = Math.min(aT + a.h, bT + b.h) - Math.max(aT, bT);
+          if (vx <= 0.5 - spazio || vy <= 0.5 - spazio || (vx <= 0 && vy <= 0)) continue;
+          var nx = vy > 0 && bL >= aL ? aL + a.w + spazio - bL : Infinity;
+          var ny = vx > 0 && bT >= aT ? aT + a.h + spazio - bT : Infinity;
+          if (nx === Infinity && ny === Infinity) continue;
+          if (nx <= ny) {
+            if (nx <= 0.5 || nx > Math.min(a.w, b.w)) continue;
+            if (bL + nx + b.w > tela - 8) {
+              if (aL - nx < 8) continue;
+              a.dx -= nx;
+            } else {
+              b.dx += nx;
+            }
+          } else {
+            if (ny <= 0.5 || ny > Math.min(a.h, b.h) + spazio) continue;
+            b.dy += ny;
+          }
+          mosso = true;
+        }
+      }
+      if (!mosso) break;
+    }
+  }
+  function distanziaPulsanti(scala) {
+    if (scala) _mpsScalaPulsanti = scala;
+    var spazio = Math.max(16, 12 / (_mpsScalaPulsanti || 1));
+    layerWraps.forEach(function (w) {
+      var tela = w.offsetWidth;
+      var gruppi = [], fermi = [];
+      // I pulsanti hanno la transizione dell'effetto al passaggio (spesso «all»): animerebbe anche il margine, e la
+      // misura cadrebbe a metà strada. Ferma durante misura e spostamento, poi torna com'era.
+      qsa(w, '.olo-proslider-layer').forEach(function (el) {
+        var candidato = pulsanteDellaTela(el, w);
+        if (!candidato && !el.hasAttribute('data-mps-sp')) return;
+        fermi.push([el, el.style.transition]);
+        el.style.transition = 'none';
+        if (el.hasAttribute('data-mps-sp')) { el.style.marginLeft = ''; el.style.marginTop = ''; el.removeAttribute('data-mps-sp'); }
+        if (!candidato || el.offsetWidth < 2 || el.offsetHeight < 2) return;
+        // Un gruppo per ciò che si vede insieme: i livelli della tela fra loro, quelli dello stesso stato (nome e valore:
+        // ogni livello ha il suo involucro) fra loro.
+        var p = el.parentElement;
+        var chiave = p === w ? '' : (p.getAttribute('data-stato') || '') + '=' + (p.getAttribute('data-stato-vale') || '');
+        var g = gruppi.filter(function (x) { return x.k === chiave; })[0];
+        if (!g) { g = { k: chiave, ls: [] }; gruppi.push(g); }
+        g.ls.push({ el: el, x: el.offsetLeft, y: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight, dx: 0, dy: 0 });
+      });
+      gruppi.forEach(function (g) {
+        if (g.ls.length < 2) return;
+        separaGruppo(g.ls, tela, spazio);
+        g.ls.forEach(function (l) {
+          if (!l.dx && !l.dy) return;
+          l.el.setAttribute('data-mps-sp', '1');
+          if (l.dx) l.el.style.marginLeft = Math.round(l.dx) + 'px';
+          if (l.dy) l.el.style.marginTop = Math.round(l.dy) + 'px';
+        });
+      });
+      if (fermi.length) {
+        void w.offsetWidth;
+        fermi.forEach(function (f) { f[0].style.transition = f[1]; });
+      }
+    });
+  }
+  // I caratteri del tema arrivano dopo e le scritte si allargano: si rifà quando un pulsante cambia misura (lo
+  // spostamento è un margine, non cambia la misura: niente giri a vuoto), oltre che a caratteri pronti e a pagina caricata.
+  // (un timer, non requestAnimationFrame: in una scheda in secondo piano il fotogramma non arriva e lo spostamento
+  // restava quello calcolato col carattere di riserva, più stretto)
+  if ('ResizeObserver' in window) {
+    var _mpsSpT = null;
+    var _mpsSpRo = new ResizeObserver(function () {
+      if (_mpsSpT) return;
+      _mpsSpT = setTimeout(function () { _mpsSpT = null; distanziaPulsanti(); }, 40);
+    });
+    layerWraps.forEach(function (w) {
+      qsa(w, '.olo-proslider-layer').forEach(function (el) {
+        if (pulsanteDellaTela(el, w)) _mpsSpRo.observe(el);
+      });
+    });
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { distanziaPulsanti(); });
+  window.addEventListener('load', function () { distanziaPulsanti(); });
 
   updateLayerScale();
   // Anche quando cambia solo la larghezza del contenitore (una colonna che si allarga al passaggio): la tela

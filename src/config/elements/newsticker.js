@@ -36,6 +36,7 @@ export default {
     bg_angle: 90,
     text_color: '',
     height: '42',
+    vertical_align: 'center',
     separator: '|',
     font_size: 14,
     font_weight: '400',
@@ -224,8 +225,6 @@ export default {
       condition: { field: 'animation_type', op: 'in', value: ['slide-up', 'slide-down', 'fade'] } },
     { key: 'marquee_duration', label: t('Durata loop marquee'), type: 'range', min: 5, max: 120, step: 1,
       condition: { field: 'animation_type', value: 'marquee' } },
-    { key: 'marquee_gap', label: t('Gap notizie'), type: 'range', min: 0, max: 200, step: 5,
-      condition: { field: 'animation_type', value: 'marquee' } },
 
     { type: 'separator', label: t('Loghi') },
     { key: 'logo_height', label: t('Altezza logo'), type: 'range', min: 16, max: 60, step: 2,
@@ -245,6 +244,19 @@ export default {
     ]},
 
     ...borderFields(),
+
+    // Disposizione: dove stanno le notizie nella fascia. Il centro è il predefinito (prima del 1.4.1413 il
+    // nastro dello scorrimento continuo restava in cima); in verticale la fascia non ha un'altezza fissa.
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'vertical_align', label: t('Allineamento verticale'), type: 'select',
+      condition: { field: 'direction', op: 'neq', value: 'vertical' }, options: [
+      { value: 'start',  label: t('In alto') },
+      { value: 'center', label: t('Centro') },
+      { value: 'end',    label: t('In basso') },
+    ]},
+    { key: 'marquee_gap', label: t('Gap notizie'), type: 'range', min: 0, max: 200, step: 5,
+      condition: { field: 'animation_type', value: 'marquee' } },
+
     { type: 'separator', label: t('Notizie') },
     { key: 'items', type: 'content-items', label: t('Notizie'), itemLabel: 'Notizia', etichettaDa: 'title', miniaturaDa: 'logo', itemFields: [
         { key: 'badge_bg', label: t('Colore badge (override)'), type: 'color' },

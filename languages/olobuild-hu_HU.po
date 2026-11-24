@@ -4413,3 +4413,7 @@ msgstr "Holografikus csillogás"
 
 msgid "L’etichetta della nota (e il filo interno, se c’è) prende i colori cangianti di una carta olografica, che scorrono piano."
 msgstr "A megjegyzés címkéje (és a belső vonal, ha van) egy hologramos kártya változó színeit kapja, amelyek lassan áramlanak."
+
+#: licenza-1.4.1345
+msgid "Tipo di sito"
+msgstr "Webhely típusa"

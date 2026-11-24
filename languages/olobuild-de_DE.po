@@ -57306,3 +57306,7 @@ msgstr "Holografischer Schimmer"
 
 msgid "L’etichetta della nota (e il filo interno, se c’è) prende i colori cangianti di una carta olografica, che scorrono piano."
 msgstr "Das Etikett der Notiz (und die innere Linie, falls vorhanden) nimmt die schillernden Farben einer Hologrammkarte an, die langsam fließen."
+
+#: licenza-1.4.1345
+msgid "Tipo di sito"
+msgstr "Art der Website"

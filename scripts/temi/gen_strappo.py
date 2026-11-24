@@ -176,7 +176,7 @@ def apertura(t):
                   textTransform='uppercase', letterSpacing=2, scrollMove=A.appare(80, 88),
                   hover={'bgColor': NERO, 'duration': 250},
                   responsive={'mobile': {'x': 6, 'y': 82, 'width': 'auto', 'fontSize': m(13)}}),
-        K.livello('st-b2', tipo='button', contenuto='Scrivici', x=16, y=78, w='auto', size=14, peso='700', colore=NERO,
+        K.livello('st-b2', tipo='button', contenuto='Scrivici', x=18.5, y=78, w='auto', size=14, peso='700', colore=NERO,
                   bgColor=NASTRO, padding=18, borderRadius=0, buttonUrl=CONTATTI, entra='fadeIn', ritardo=0,
                   textTransform='uppercase', letterSpacing=2, scrollMove=A.appare(80, 88),
                   hover={'bgColor': '#FFFFFF', 'duration': 250},

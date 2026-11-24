@@ -18896,3 +18896,7 @@ msgstr "Holografische glans"
 
 msgid "L’etichetta della nota (e il filo interno, se c’è) prende i colori cangianti di una carta olografica, che scorrono piano."
 msgstr "Het label van de notitie (en de binnenlijn, als die er is) krijgt de wisselende kleuren van een holografische kaart, die langzaam stromen."
+
+#: licenza-1.4.1345
+msgid "Tipo di sito"
+msgstr "Soort website"

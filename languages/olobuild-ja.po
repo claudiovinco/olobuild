@@ -18896,3 +18896,7 @@ msgstr "ホログラムの輝き"
 
 msgid "L’etichetta della nota (e il filo interno, se c’è) prende i colori cangianti di una carta olografica, che scorrono piano."
 msgstr "メモのラベル（内側のラインがあればそれも）が、ゆっくり流れるホログラムカードの虹色になります。"
+
+#: licenza-1.4.1345
+msgid "Tipo di sito"
+msgstr "サイトの種類"

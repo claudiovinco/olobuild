@@ -570,7 +570,7 @@ THEME = tema(
     'prodotti, il mega menu col negozio, le offerte e le novità; a metà pagina i cubi che cadono uno alla volta mentre si '
     'scorre, finché si legge TROTTOLA, con la trottola che gira e la palla che arriva rotolando; i giochi per età, le liste di '
     'nascita e dei compleanni, la scheda con l’incarto a scelta e il video del gioco.',
-    [('Il negozio', P['negozio']), ('Offerte', P['offerte']), ('Novità', P['negozio']),
+    [('Il negozio', P['negozio']), ('Offerte', P['offerte']), ('Novità', P['negozio'] + '?orderby=date'),
      ('0–3 anni', '{{PAGINA:negozio}}?product_cat=primi-anni'), ('Legno', '{{PAGINA:negozio}}?product_cat=legno'),
      ('Peluche', '{{PAGINA:negozio}}?product_cat=peluche'), ('Per età', P['eta']), ('Le liste', P['liste'])],
     [('home', 'Home', None), ('negozio', 'Il negozio', 'negozio'), ('eta', 'Per età', 'per-eta'),

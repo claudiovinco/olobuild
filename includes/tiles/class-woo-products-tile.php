@@ -314,8 +314,7 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
 
         // Pagination
         if ( ! empty( $s['pagination'] ) ) {
-            $paged = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
-            $query_args['paged'] = $paged;
+            $query_args['paged'] = $this->pagina_corrente();
         }
 
         $products = new WP_Query( $query_args );
@@ -1092,16 +1091,21 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
         <?php endif; ?>
         <?php
         // Pagination
-        if ( ! empty( $s['pagination'] ) ) {
-            $big = 999999999;
-            echo '<div style="text-align:center;margin-top:20px;">';
-            echo paginate_links( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- paginate_links() returns escaped pagination HTML built by WordPress core
-                'base'    => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
-                'format'  => '?paged=%#%',
-                'current' => max( 1, get_query_var( 'paged' ) ),
-                'total'   => $products->max_num_pages,
+        if ( ! empty( $s['pagination'] ) && $products->max_num_pages > 1 ) {
+            // ?product-page=N, come lo shortcode [products] di WooCommerce (24 nov 2026): «/pagina/page/2/» nelle demo
+            // dei temi dava 404, e i filtri dell'indirizzo restano. Prima era testo semplice, senza grafica.
+            $freccia = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polyline points="%s"/></svg>';
+            echo '<nav class="olo-woo-pagination" aria-label="' . esc_attr( olobuild_t( 'Pagine dei prodotti' ) ) . '">';
+            echo paginate_links( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- paginate_links() returns escaped pagination HTML built by WordPress core; prev/next are a fixed SVG plus esc_html() text
+                'base'      => esc_url_raw( add_query_arg( 'product-page', '%#%' ) ),
+                'format'    => '',
+                'current'   => $this->pagina_corrente(),
+                'total'     => (int) $products->max_num_pages,
+                'mid_size'  => 1,
+                'prev_text' => sprintf( $freccia, '15 18 9 12 15 6' ) . '<span class="olo-woo-sr">' . esc_html( olobuild_t( 'Pagina precedente' ) ) . '</span>',
+                'next_text' => '<span class="olo-woo-sr">' . esc_html( olobuild_t( 'Pagina successiva' ) ) . '</span>' . sprintf( $freccia, '9 18 15 12 9 6' ),
             ] );
-            echo '</div>';
+            echo '</nav>';
         }
 
         if ( $wish ) :
@@ -1145,6 +1149,15 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
 
         wp_reset_postdata();
         return ob_get_clean();
+    }
+
+    /** La pagina della griglia da mostrare: ?product-page=N, o /page/N/ dove WordPress la riconosce. */
+    private function pagina_corrente() {
+        $n = absint( $this->filtro_url( 'product-page' ) );
+        if ( ! $n ) {
+            $n = absint( get_query_var( 'paged' ) );
+        }
+        return max( 1, $n );
     }
 
     /** Un parametro dell'indirizzo come testo pulito ('' se assente o non scalare). */

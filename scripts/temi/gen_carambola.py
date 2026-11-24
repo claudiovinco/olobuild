@@ -512,7 +512,7 @@ THEME = tema(
     'schede, il mega menu con la sala, le offerte e le novità; a metà pagina il colpo d’apertura, con la stecca che tira, la '
     'bianca che apre il triangolo e le palle che si sparpagliano; i tavoli a ore con la fascia, le serate, i corsi e il torneo, '
     'il negozio delle stecche.',
-    [('Carambola', P['negozio']), ('Offerte', P['offerte']), ('Novità', P['negozio']),
+    [('Carambola', P['negozio']), ('Offerte', P['offerte']), ('Novità', P['negozio'] + '?orderby=date'),
      ('Tavoli', '{{PAGINA:negozio}}?product_cat=tavoli'), ('Serate', '{{PAGINA:negozio}}?product_cat=serate'),
      ('Stecche', '{{PAGINA:negozio}}?product_cat=stecche'), ('La sala', P['sala']), ('I corsi', P['corsi'])],
     [('home', 'Home', None), ('negozio', 'Carambola', 'prenota'), ('sala', 'La sala', 'la-sala'), ('corsi', 'Corsi e tornei', 'corsi'),

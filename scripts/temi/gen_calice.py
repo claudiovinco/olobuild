@@ -617,7 +617,7 @@ THEME = tema(
     'mentre si scorre, dalla Vernaccia al Brunello, ognuno col suo colore, il naso e il piatto; le cantine, le degustazioni del '
     'giovedì con la prenotazione, la scheda con l’astuccio a scelta e il video del vino versato. Vendita riservata ai '
     'maggiorenni.',
-    [('La cantina', P['negozio']), ('Offerte', P['offerte']), ('Novità', P['negozio']),
+    [('La cantina', P['negozio']), ('Offerte', P['offerte']), ('Novità', P['negozio'] + '?orderby=date'),
      ('Rossi', '{{PAGINA:negozio}}?product_cat=rossi'), ('Bianchi', '{{PAGINA:negozio}}?product_cat=bianchi'),
      ('Bollicine', '{{PAGINA:negozio}}?product_cat=bollicine'), ('Le cantine', P['cantine']), ('Il giovedì', P['degustazioni'])],
     [('home', 'Home', None), ('negozio', 'La cantina', 'cantina'), ('cantine', 'Le cantine', 'cantine'),

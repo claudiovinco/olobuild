@@ -578,7 +578,7 @@ def build_negozio():
     t = Tpl(ID, 'negozio')
     filtro = t.bare('woo_product_filter', {
         'show_price': True, 'show_categories': True, 'show_attributes': True, 'show_stock': True, 'show_active': True,
-        'price_min': 0, 'price_max': 2500, 'price_step': 50, 'attributes': 'pa_marca', 'collapsed': False,
+        'show_sort': True, 'price_min': 0, 'price_max': 2500, 'price_step': 50, 'attributes': 'pa_marca', 'collapsed': False,
         'heading_color': TESTO, 'text_color': TESTO, 'accent_color': BLU, 'bg_color': BIANCO, 'border_color': FILO,
         'border_radius': 12, 'button_text': 'Mostra i prodotti', 'reset_text': 'Azzera i filtri',
     })
@@ -586,7 +586,7 @@ def build_negozio():
                                                              'preferiti, «Confronta» li mette fianco a fianco.')]
     out.append(t.section([
         t.row([t.col([filtro, button(t, 'Vai al confronto', CONFRONTA, kind='filo', pad_top=16)], wm='1-4', ws='1-1'),
-               t.col([anteprima(t), prodotti(t, posts_per_page=30, columns=3, columns_tablet=2, show_compare=True)],
+               t.col([anteprima(t), prodotti(t, posts_per_page=12, columns=3, columns_tablet=2, show_compare=True, pagination=True)],
                      wm='3-4', ws='1-1')],
               layout='custom', custom='25,75', gap=28, valign='start', anim=None),
     ], padding='default', width='large', style={'padding_top': 32, 'padding_bottom': 64}))
@@ -666,7 +666,7 @@ def build_prodotto():
                       t.one([avvisi], anim=None)], padding='remove-vertical', width='large',
                      style={'padding_top': 18, 'padding_bottom': 8})]
     out.append(t.section([
-        t.row([t.col([galleria], wm='7-12', ws='1-1'), t.col(destra, wm='5-12', ws='1-1')],
+        t.row([t.col([galleria], wm='7-12', ws='1-1', sticky=True, sticky_offset=24), t.col(destra, wm='5-12', ws='1-1')],
               layout='custom', custom='58,42', gap=40, valign='start', anim=None),
     ], padding='default', width='large', style={'padding_top': 8, 'padding_bottom': 40}))
     out.append(t.section([
@@ -857,7 +857,7 @@ THEME = {
                    'la scheda prodotto, il carrello e la cassa a passi.',
     'menu': {'name': 'Fulmine — categorie', 'items': [{'title': 'Tutti i prodotti', 'url': NEGOZIO},
                                                       {'title': 'Offerte lampo', 'url': OFFERTE},
-                                                      {'title': 'Novità', 'url': NEGOZIO}]
+                                                      {'title': 'Novità', 'url': NEGOZIO + '?orderby=date'}]
              + [{'title': n, 'url': cat_url(s)} for n, s in CATEGORIE[:6]] + [{'title': 'Assistenza', 'url': ASSISTENZA}]},
     'templates': {
         '404': {'file': '404.json', 'type': '404', 'title': 'Fulmine — Pagina 404'},

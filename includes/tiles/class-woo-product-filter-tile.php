@@ -87,19 +87,24 @@ class Olobuild_Woo_Product_Filter_Tile extends Olobuild_Tile_Base {
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $radius_raw    = Olobuild_Tile_Utils::radius_int( $s['border_radius'] ?? 0 );
 
-        // Auto-detect price range from DB
+        // Il cursore va dal prezzo più basso al più alto dei prodotti che chi visita può trovare (fascia_prezzi()),
+        // arrotondati al passo: «€10 – €490», non «€14 – €487». Senza prodotti con un prezzo, i valori salvati.
         $price_min  = floatval( $s['price_min'] );
         $price_max  = floatval( $s['price_max'] );
-        if ( function_exists( 'wc_get_min_max_price_meta_query' ) ) {
-            global $wpdb;
-            // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- aggregati MIN/MAX su {$wpdb->postmeta} (tabella core WP); nessun valore utente interpolato (solo il nome tabella da $wpdb e il literal '_price'); risultato range prezzi non cacheabile qui (varia col catalogo).
-            $actual_min = $wpdb->get_var( "SELECT MIN(CAST(meta_value AS DECIMAL(10,2))) FROM {$wpdb->postmeta} WHERE meta_key = '_price' AND meta_value > 0" );
-            $actual_max = $wpdb->get_var( "SELECT MAX(CAST(meta_value AS DECIMAL(10,2))) FROM {$wpdb->postmeta} WHERE meta_key = '_price'" );
-            // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-            if ( $actual_min ) { $price_min = floor( floatval( $actual_min ) ); }
-            if ( $actual_max ) { $price_max = ceil( floatval( $actual_max ) ); }
-        }
         $price_step = max( 1, absint( $s['price_step'] ) );
+        $fascia     = $this->fascia_prezzi();
+        if ( $fascia ) {
+            list( $piu_basso, $piu_alto ) = $fascia;
+            // Un passo che lascerebbe meno di 5 posizioni (passo 10 in un negozio da 3 a 18 euro) si stringe a uno tondo.
+            if ( $piu_alto > $piu_basso && ( $piu_alto - $piu_basso ) / $price_step < 5 ) {
+                $price_step = $this->passo_tondo( ( $piu_alto - $piu_basso ) / 20 );
+            }
+            $price_min = floor( $piu_basso / $price_step ) * $price_step;
+            $price_max = ceil( $piu_alto / $price_step ) * $price_step;
+            if ( $price_max <= $price_min ) {
+                $price_max = $price_min + $price_step;
+            }
+        }
 
         $currency = function_exists( 'get_woocommerce_currency_symbol' ) ? get_woocommerce_currency_symbol() : '&euro;';
 
@@ -665,6 +670,9 @@ class Olobuild_Woo_Product_Filter_Tile extends Olobuild_Tile_Base {
                 return null;
             }
             function go(params){
+                /* Filtri nuovi, si riparte dalla prima pagina della griglia (pagina 2 di 18 prodotti è vuota su 7). */
+                params.delete('product-page');
+                params.delete('paged');
                 var q   = params.toString();
                 var url = window.location.pathname + (q ? '?' + q : '');
                 var gs  = ajax ? griglie() : [];
@@ -838,11 +846,24 @@ class Olobuild_Woo_Product_Filter_Tile extends Olobuild_Tile_Base {
                 var tags = [];
                 if(sp.get('min_price')){ tags.push(L.min + ': ' + sp.get('min_price')); }
                 if(sp.get('max_price')){ tags.push(L.max + ': ' + sp.get('max_price')); }
-                if(catParam){ tags.push(L.cat + ': ' + catParam); }
+                /* Il nome scritto accanto alla casella («Capsule»), non lo slug dell'indirizzo («capsule»). */
+                function nomi(sel, valore){
+                    return String(valore).split(',').map(function(slug){
+                        var box = Array.prototype.find.call(root.querySelectorAll(sel), function(b){ return b.value === slug; });
+                        var nome = box && box.parentNode.querySelector('span:not(.olo-pf-count)');
+                        return nome ? nome.textContent.trim() : slug;
+                    }).join(', ');
+                }
+                if(catParam){ tags.push(L.cat + ': ' + nomi('.olo-pf-cat', catParam)); }
                 if(sp.get('in_stock')){ tags.push(L.stock); }
                 if(sp.get('on_sale')){ tags.push(L.sale); }
                 sp.forEach(function(v, k){
-                    if(k.indexOf('filter_') === 0){ tags.push(k.replace('filter_','') + ': ' + v); }
+                    if(k.indexOf('filter_') === 0){
+                        var tassonomia = 'pa_' + k.replace('filter_', '');
+                        var sezione = root.querySelector('.olo-pf-attr[data-taxonomy="' + tassonomia + '"]');
+                        var titolo = sezione && sezione.closest('.olo-pf-section') && sezione.closest('.olo-pf-section').querySelector('.olo-pf-heading span');
+                        tags.push((titolo ? titolo.textContent.trim() : k.replace('filter_', '')) + ': ' + nomi('.olo-pf-attr[data-taxonomy="' + tassonomia + '"]', v));
+                    }
                 });
                 activeWrap.style.display = tags.length > 0 ? 'block' : 'none';
                 if(activeTags){
@@ -970,5 +991,87 @@ class Olobuild_Woo_Product_Filter_Tile extends Olobuild_Tile_Base {
             . '<span>' . esc_html( $testo ) . '</span>'
             . '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><polyline points="6 9 12 15 18 9"/></svg>'
             . '</button>';
+    }
+
+    /**
+     * Il prezzo più basso e più alto dei prodotti che chi visita può trovare, [min, max] o null (24 nov 2026): solo i
+     * prodotti pubblicati e visibili nel catalogo (senza gli esauriti, se il negozio li nasconde), della categoria
+     * aperta quando la pagina è una categoria del negozio. La ricerca passa da WP_Query, così valgono i filtri del sito:
+     * nella demo di un tema solo i suoi prodotti, con una lingua solo i prodotti di quella lingua. Prima si leggeva ogni
+     * _price del database (varianti, bozze, cestino e i negozi delle altre demo) e in un negozio di borse il cursore
+     * andava da 2 a 37992 euro.
+     */
+    private function fascia_prezzi() {
+        if ( ! function_exists( 'wc_get_product_visibility_term_ids' ) ) {
+            return null;
+        }
+        $nascosti = [];
+        $termini  = wc_get_product_visibility_term_ids();
+        if ( ! empty( $termini['exclude-from-catalog'] ) ) {
+            $nascosti[] = (int) $termini['exclude-from-catalog'];
+        }
+        if ( 'yes' === get_option( 'woocommerce_hide_out_of_stock_items' ) && ! empty( $termini['outofstock'] ) ) {
+            $nascosti[] = (int) $termini['outofstock'];
+        }
+        $tax = [];
+        if ( $nascosti ) {
+            $tax[] = [ 'taxonomy' => 'product_visibility', 'field' => 'term_taxonomy_id', 'terms' => $nascosti, 'operator' => 'NOT IN' ];
+        }
+        if ( function_exists( 'is_product_taxonomy' ) && is_product_taxonomy() ) {
+            $aperta = get_queried_object();
+            if ( $aperta instanceof WP_Term ) {
+                $tax[] = [ 'taxonomy' => $aperta->taxonomy, 'field' => 'term_id', 'terms' => [ (int) $aperta->term_id ] ];
+            }
+        }
+        $args = [
+            'post_type'              => 'product',
+            'post_status'            => 'publish',
+            'fields'                 => 'ids',
+            'posts_per_page'         => -1,
+            'orderby'                => 'none',
+            'no_found_rows'          => true,
+            'ignore_sticky_posts'    => true,
+            'update_post_meta_cache' => false,
+            'update_post_term_cache' => false,
+        ];
+        if ( $tax ) {
+            $args['tax_query'] = $tax; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- visibilità del catalogo e categoria aperta, come la griglia del negozio
+        }
+        static $gia = [];
+        $chiave = md5( wp_json_encode( $args ) );
+        if ( array_key_exists( $chiave, $gia ) ) {
+            return $gia[ $chiave ];
+        }
+        $ids = array_filter( array_map( 'intval', ( new WP_Query( $args ) )->posts ) );
+        $gia[ $chiave ] = null;
+        if ( ! $ids ) {
+            return null;
+        }
+        global $wpdb;
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- MIN/MAX di _price sui soli prodotti trovati sopra: gli id sono interi (intval), il resto è testo fisso; tenuto per la richiesta in $gia.
+        $riga = $wpdb->get_row(
+            "SELECT MIN(CAST(meta_value AS DECIMAL(12,2))) AS piu_basso, MAX(CAST(meta_value AS DECIMAL(12,2))) AS piu_alto
+             FROM {$wpdb->postmeta} WHERE meta_key = '_price' AND meta_value <> '' AND post_id IN (" . implode( ',', $ids ) . ')'
+        );
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        if ( ! $riga || null === $riga->piu_alto ) {
+            return null;
+        }
+        $gia[ $chiave ] = [ (float) $riga->piu_basso, (float) $riga->piu_alto ];
+        return $gia[ $chiave ];
+    }
+
+    /** Un passo tondo (1, 2, 5, 10, 20, 50…) non più piccolo di $voluto, mai sotto 1. */
+    private function passo_tondo( $voluto ) {
+        if ( $voluto <= 1 ) {
+            return 1;
+        }
+        $potenza = pow( 10, floor( log10( $voluto ) ) );
+        foreach ( [ 1, 2, 5, 10 ] as $m ) {
+            if ( $m * $potenza >= $voluto ) {
+                return (int) ( $m * $potenza );
+            }
+        }
+        return (int) ( 10 * $potenza );
     }
 }

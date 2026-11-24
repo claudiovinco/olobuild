@@ -18896,3 +18896,7 @@ msgstr "Reflexo holográfico"
 
 msgid "L’etichetta della nota (e il filo interno, se c’è) prende i colori cangianti di una carta olografica, che scorrono piano."
 msgstr "A etiqueta da nota (e a linha interna, se houver) ganha as cores furta-cor de uma carta holográfica, que correm devagar."
+
+#: licenza-1.4.1345
+msgid "Tipo di sito"
+msgstr "Tipo de site"

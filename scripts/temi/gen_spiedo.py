@@ -526,7 +526,7 @@ THEME = tema(
     'delle offerte che scorre e le quattro schede coi piatti, il mega menu col menù, le offerte e le novità; a metà pagina il '
     'dürüm che si compone sulla piadina mentre lo scontrino si allunga fino al totale; la consegna con le zone e i tempi, la '
     'cucina, la scheda del piatto con la carne a scelta e il video dello spiedo.',
-    [('Il menù', P['negozio']), ('Offerte', P['offerte']), ('Novità', P['negozio']),
+    [('Il menù', P['negozio']), ('Offerte', P['offerte']), ('Novità', P['negozio'] + '?orderby=date'),
      ('Kebab', '{{PAGINA:negozio}}?product_cat=kebab'), ('Falafel', '{{PAGINA:negozio}}?product_cat=vegetariano'),
      ('Brace', '{{PAGINA:negozio}}?product_cat=griglia'), ('La consegna', P['consegna']), ('La cucina', P['cucina'])],
     [('home', 'Home', None), ('negozio', 'Il menù', 'menu'), ('consegna', 'Asporto e consegna', 'consegna'),

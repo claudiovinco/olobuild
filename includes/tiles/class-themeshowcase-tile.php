@@ -413,6 +413,24 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ovt-affina-sel.is-on{border-color:var(--ovt-acc);box-shadow:0 0 0 1px var(--ovt-acc) inset;}
             .<?php echo $uid; ?> .ovt-affina-sel:focus-visible{outline:2px solid var(--ovt-acc);outline-offset:2px;}
             .<?php echo $uid; ?> .ovt-affina-sel option{color:#111;background:#fff;}
+            /* Edizione: due interruttori (1.4.1411). La scritta è il bollino delle card: Free chiaro, Pro nel primario. */
+            .<?php echo $uid; ?> .ovt-switch{font:inherit;font-size:14px;font-weight:600;line-height:1.2;display:inline-flex;align-items:center;gap:var(--olo-space-sm);padding:var(--olo-space-xs) var(--olo-space-sm) var(--olo-space-xs) var(--olo-space-xs);color:inherit;background:transparent;border:1px solid color-mix(in srgb,currentColor 22%,transparent);border-radius:100vmax;cursor:pointer;transition:border-color .2s ease;}
+            .<?php echo $uid; ?> .ovt-switch:hover,.<?php echo $uid; ?> .ovt-switch[aria-checked="true"]{border-color:var(--ovt-acc);}
+            .<?php echo $uid; ?> .ovt-switch .ovt-n{font-size:12px;font-weight:500;opacity:.6;}
+            .<?php echo $uid; ?> .ovt-switch-traccia{position:relative;flex:none;width:32px;height:20px;border-radius:100vmax;background:color-mix(in srgb,currentColor 22%,transparent);transition:background-color .2s ease;}
+            .<?php echo $uid; ?> .ovt-switch-traccia::after{content:"";position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:var(--olo-color-light);box-shadow:0 1px 2px color-mix(in srgb,var(--olo-color-dark) 35%,transparent);transition:transform .2s ease;}
+            .<?php echo $uid; ?> .ovt-switch[aria-checked="true"] .ovt-switch-traccia{background:var(--ovt-acc);}
+            .<?php echo $uid; ?> .ovt-switch[aria-checked="true"] .ovt-switch-traccia::after{transform:translateX(12px);}
+            .<?php echo $uid; ?> .ovt-switch-ed{padding:calc(var(--olo-space-xs) / 2) var(--olo-space-sm);border-radius:var(--olo-btn-border-radius);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;line-height:1.3;}
+            .<?php echo $uid; ?> .ovt-switch.is-free .ovt-switch-ed{background:var(--olo-color-light);color:var(--olo-color-dark);box-shadow:0 0 0 1px color-mix(in srgb,var(--olo-color-dark) 16%,transparent);}
+            .<?php echo $uid; ?> .ovt-switch.is-pro .ovt-switch-ed{background:var(--olo-color-primary);color:var(--olo-color-primary-contrast, var(--olo-color-light));}
+            /* Colore: pallini da premere, nella tinta media dei temi di quella famiglia; il premuto ha l'anello. */
+            .<?php echo $uid; ?> .ovt-pallini{display:inline-flex;flex-wrap:wrap;align-items:center;gap:var(--olo-space-sm);}
+            .<?php echo $uid; ?> .ovt-pallino{width:24px;height:24px;padding:0;border:0;border-radius:50%;background:var(--ovt-p);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--olo-color-dark) 18%,transparent);cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;}
+            .<?php echo $uid; ?> .ovt-pallino:hover{transform:scale(1.12);}
+            .<?php echo $uid; ?> .ovt-pallino[aria-pressed="true"]{box-shadow:0 0 0 2px var(--olo-color-light),0 0 0 4px currentColor;}
+            .<?php echo $uid; ?> .ovt-switch:focus-visible,.<?php echo $uid; ?> .ovt-pallino:focus-visible{outline:2px solid var(--ovt-acc);outline-offset:3px;}
+            @media (prefers-reduced-motion:reduce){.<?php echo $uid; ?> .ovt-pallino,.<?php echo $uid; ?> .ovt-switch-traccia,.<?php echo $uid; ?> .ovt-switch-traccia::after{transition:none;}}
             @media (prefers-reduced-motion:reduce){.<?php echo $uid; ?> .ovt-card,.<?php echo $uid; ?> .ovt-anteprima img,.<?php echo $uid; ?> .ovt-schermo,.<?php echo $uid; ?> .ovt-pal i{transition:none;}
                 .<?php echo $uid; ?> .ovt-card:hover .ovt-anteprima img{object-position:top center;}}
         </style>
@@ -432,7 +450,14 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 </label>
             </div>
             <?php endif; ?>
-            <?php if ( ! empty( $s['refine_bar'] ) ) :
+            <?php
+            // Una sola barra compatta (1.4.1411, utente: «sistemi in modo più compatto i filtri? evidenzia free e pro con due
+            // tasti switch, il colore come pallini colorati da premere, le tipologie in un menu a discesa, tranne la
+            // categoria extra OLObooking e WooCommerce»): Tipologia (tendina) · Edizione (due interruttori) · Effetto, Fondo,
+            // Carattere (tendine) · Colore (pallini) · «Con WooCommerce», «Con OLObooking» (pulsanti).
+            $con_affina = ! empty( $s['refine_bar'] );
+            $con_filtri = ! empty( $s['filter_bar'] ) && ( count( $categorie ) > 1 || ! empty( $requisiti ) );
+            if ( $con_affina || $con_filtri ) :
                 // «Affina» (1.4.1218): gesto, fondo, carattere e colore, come i filtri delle gallerie di siti (Land-book).
                 $assi = [
                     'edizione'  => [ olobuild_t( 'Edizione' ), olobuild_t( 'Free e Pro' ), [ 'free' => 'OLObuild Free', 'pro' => 'OLObuild Pro' ] ],
@@ -442,9 +467,40 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                     'colore'    => [ olobuild_t( 'Colore' ), olobuild_t( 'Tutti i colori' ), [ 'rosso' => olobuild_t( 'Rosso' ), 'arancio' => olobuild_t( 'Arancio' ), 'giallo' => olobuild_t( 'Giallo' ), 'verde' => olobuild_t( 'Verde' ), 'azzurro' => olobuild_t( 'Azzurro' ), 'blu' => olobuild_t( 'Blu' ), 'viola' => olobuild_t( 'Viola' ), 'rosa' => olobuild_t( 'Rosa' ), 'neutro' => olobuild_t( 'Neutro' ) ] ],
                 ];
                 $chiave_tema = [ 'edizione' => 'edizione', 'gesto' => 'gesto', 'fondo' => null, 'carattere' => 'carattere', 'colore' => 'famiglia' ];
+                // La tinta di ogni pallino: la media degli accenti dei temi di quella famiglia (i colori veri dei temi).
+                $tinte = [];
+                foreach ( $temi as $t ) {
+                    if ( '' !== $t['famiglia'] && '' !== $t['colore'] ) {
+                        $rgb = sscanf( strlen( $t['colore'] ) === 4 ? '#' . $t['colore'][1] . $t['colore'][1] . $t['colore'][2] . $t['colore'][2] . $t['colore'][3] . $t['colore'][3] : $t['colore'], '#%02x%02x%02x' );
+                        $tinte[ $t['famiglia'] ][] = $rgb;
+                    }
+                }
+                $tinta = function ( $famiglia ) use ( $tinte ) {
+                    if ( empty( $tinte[ $famiglia ] ) ) {
+                        return '';
+                    }
+                    $n = count( $tinte[ $famiglia ] );
+                    $m = [ 0, 0, 0 ];
+                    foreach ( $tinte[ $famiglia ] as $c ) {
+                        for ( $k = 0; $k < 3; $k++ ) {
+                            $m[ $k ] += (int) $c[ $k ];
+                        }
+                    }
+                    return sprintf( '#%02x%02x%02x', (int) round( $m[0] / $n ), (int) round( $m[1] / $n ), (int) round( $m[2] / $n ) );
+                };
                 ?>
             <div class="ovt-affina" role="group" aria-label="<?php echo esc_attr( olobuild_t( 'Affina la ricerca' ) ); ?>" data-olo-interactive>
-                <?php foreach ( $assi as $asse => $a ) :
+                <?php if ( $con_filtri && count( $categorie ) > 1 ) : ?>
+                <label class="ovt-affina-voce"><span class="ovt-affina-nome"><?php echo esc_html( olobuild_t( 'Tipo di sito' ) ); ?></span>
+                    <select class="ovt-affina-sel ovt-cat-sel">
+                        <option value="" data-nome="<?php echo esc_attr( (string) $s['filter_all_label'] ); ?>"><?php echo esc_html( (string) $s['filter_all_label'] . ' (' . count( $temi ) . ')' ); ?></option>
+                        <?php foreach ( $categorie as $nome_cat => $cat ) : ?>
+                        <option value="<?php echo esc_attr( $nome_cat ); ?>" data-nome="<?php echo esc_attr( $cat[0] ); ?>"><?php echo esc_html( $cat[0] . ' (' . (int) $cat[1] . ')' ); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+                <?php endif; ?>
+                <?php if ( $con_affina ) : foreach ( $assi as $asse => $a ) :
                     $ci = [];
                     foreach ( $temi as $t ) {
                         $val = null === $chiave_tema[ $asse ] ? ( $t['scuro'] ? 'scuro' : 'chiaro' ) : $t[ $chiave_tema[ $asse ] ];
@@ -455,7 +511,21 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                     if ( count( $ci ) < 2 ) {
                         continue;
                     }
-                    ?>
+                    if ( 'edizione' === $asse ) : ?>
+                <div class="ovt-affina-voce" role="group" aria-label="<?php echo esc_attr( $a[0] ); ?>"><span class="ovt-affina-nome" aria-hidden="true"><?php echo esc_html( $a[0] ); ?></span>
+                    <?php foreach ( [ 'free' => 'Free', 'pro' => 'Pro' ] as $v => $nome_ed ) : if ( empty( $ci[ $v ] ) ) { continue; } ?>
+                    <button type="button" class="ovt-switch is-<?php echo esc_attr( $v ); ?>" role="switch" aria-checked="false" data-edizione="<?php echo esc_attr( $v ); ?>" title="<?php echo esc_attr( $a[2][ $v ] . ' (' . $ci[ $v ] . ')' ); ?>"><span class="ovt-switch-traccia" aria-hidden="true"></span><span class="ovt-switch-ed"><?php echo esc_html( $nome_ed ); ?></span><span class="ovt-n"><?php echo (int) $ci[ $v ]; ?></span></button>
+                    <?php endforeach; ?>
+                </div>
+                    <?php elseif ( 'colore' === $asse ) : ?>
+                <div class="ovt-affina-voce" role="group" aria-label="<?php echo esc_attr( $a[0] ); ?>"><span class="ovt-affina-nome" aria-hidden="true"><?php echo esc_html( $a[0] ); ?></span>
+                    <span class="ovt-pallini">
+                    <?php foreach ( $a[2] as $v => $etichetta ) : if ( empty( $ci[ $v ] ) || '' === $tinta( $v ) ) { continue; } ?>
+                        <button type="button" class="ovt-pallino" aria-pressed="false" data-colore="<?php echo esc_attr( $v ); ?>" style="--ovt-p:<?php echo esc_attr( $tinta( $v ) ); ?>" aria-label="<?php echo esc_attr( $etichetta . ' (' . $ci[ $v ] . ')' ); ?>" title="<?php echo esc_attr( $etichetta . ' (' . $ci[ $v ] . ')' ); ?>"></button>
+                    <?php endforeach; ?>
+                    </span>
+                </div>
+                    <?php else : ?>
                 <label class="ovt-affina-voce"><span class="ovt-affina-nome"><?php echo esc_html( $a[0] ); ?></span>
                     <select class="ovt-affina-sel" data-asse="<?php echo esc_attr( $asse ); ?>">
                         <option value=""><?php echo esc_html( $a[1] ); ?></option>
@@ -464,16 +534,9 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                         <?php endforeach; ?>
                     </select>
                 </label>
-                <?php endforeach; ?>
-            </div>
-            <?php endif; ?>
-            <?php if ( ! empty( $s['filter_bar'] ) && ( count( $categorie ) > 1 || ! empty( $requisiti ) ) ) : ?>
-            <div class="ovt-filtri" role="group" aria-label="<?php echo esc_attr( olobuild_t( 'Categorie' ) ); ?>" data-olo-interactive>
-                <button type="button" class="ovt-filtro is-on" aria-pressed="true" data-cat=""><?php echo esc_html( (string) $s['filter_all_label'] ); ?><span class="ovt-n"><?php echo (int) count( $temi ); ?></span></button>
-                <?php if ( count( $categorie ) > 1 ) : foreach ( $categorie as $nome_cat => $cat ) : ?>
-                <button type="button" class="ovt-filtro" aria-pressed="false" data-cat="<?php echo esc_attr( $nome_cat ); ?>"><?php echo esc_html( $cat[0] ); ?><span class="ovt-n"><?php echo (int) $cat[1]; ?></span></button>
+                    <?php endif; ?>
                 <?php endforeach; endif; ?>
-                <?php if ( $requisiti ) : ?>
+                <?php if ( $con_filtri && $requisiti ) : ?>
                 <span class="ovt-sep" aria-hidden="true"></span>
                 <?php foreach ( $requisiti as $chiave_req => $r ) : ?>
                 <button type="button" class="ovt-filtro" aria-pressed="false" data-req="<?php echo esc_attr( $chiave_req ); ?>"><?php echo esc_html( sprintf( olobuild_t( 'Con %s' ), $r[0] ) ); ?><span class="ovt-n"><?php echo (int) $r[1]; ?></span></button>
@@ -570,13 +633,19 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
             var root = document.querySelector('[data-ovt="<?php echo esc_js( $uid ); ?>"]');
             if (!root) { return; }
             var voci = [].slice.call(root.querySelectorAll('.ovt-voce'));
-            var filtri = [].slice.call(root.querySelectorAll('.ovt-filtri .ovt-filtro'));
+            // «Con WooCommerce», «Con OLObooking»: i pulsanti rimasti; la tipologia è una tendina, l'edizione due
+            // interruttori (Free, Pro: acceso = solo quella; tutti e due = tutte e due; spenti = tutti i temi), il colore
+            // pallini da premere (uno alla volta, ripremuto si spegne) (1.4.1411).
+            var filtri = [].slice.call(root.querySelectorAll('.ovt-affina .ovt-filtro[data-req]'));
+            var catSel = root.querySelector('.ovt-cat-sel');
+            var interruttori = [].slice.call(root.querySelectorAll('.ovt-switch[data-edizione]'));
+            var pallini = [].slice.call(root.querySelectorAll('.ovt-pallino[data-colore]'));
             // Due gruppi che si sommano: la categoria (uno alla volta, «Tutti» = nessuna) e il plugin
             // richiesto («Con OLObooking»: un clic lo accende, un altro lo spegne). I numeri contano
             // i temi che si vedrebbero scegliendo quel filtro, con l'altro gruppo com'è.
             // La ricerca si somma ai due gruppi: ogni parola scritta deve stare nel testo del tema (data-cerca,
             // già minuscolo e senza accenti dal PHP), in qualsiasi ordine.
-            var stato = { cat: '', req: '', q: [], assi: {} };
+            var stato = { cat: '', req: '', q: [], assi: {}, ed: [] };
             var affina = [].slice.call(root.querySelectorAll('.ovt-affina-sel'));
             var cerca = root.querySelector('.ovt-cerca-in'), azzera = root.querySelector('.ovt-cerca-x');
             var vuoto = root.querySelector('.ovt-vuoto');
@@ -593,6 +662,7 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                 if (ok) {
                     ok = Object.keys(stato.assi).every(function (a) { return !stato.assi[a] || v.getAttribute('data-' + a) === stato.assi[a]; });
                 }
+                if (ok && stato.ed.length) { ok = stato.ed.indexOf(v.getAttribute('data-edizione')) !== -1; }
                 return ok;
             }
             function conta(cat, req) {
@@ -609,6 +679,11 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                     b.setAttribute('aria-pressed', on ? 'true' : 'false');
                     if (n) { n.textContent = perReq ? conta(stato.cat, b.getAttribute('data-req')) : conta(b.getAttribute('data-cat'), stato.req); }
                 });
+                if (catSel) {
+                    [].forEach.call(catSel.options, function (o) { o.textContent = o.getAttribute('data-nome') + ' (' + conta(o.value, stato.req) + ')'; });
+                    catSel.value = stato.cat;
+                    catSel.classList.toggle('is-on', stato.cat !== '');
+                }
                 var visti = 0;
                 voci.forEach(function (v) { v.hidden = !passa(v, stato.cat, stato.req); if (!v.hidden) { visti++; } });
                 if (vuoto) {
@@ -636,11 +711,32 @@ class Olobuild_ThemeShowcase_Tile extends Olobuild_Tile_Base {
                     if (cerca) { cerca.value = ''; if (azzera) { azzera.hidden = true; } }
                     stato.q = [];
                     stato.assi = {};
+                    stato.ed = [];
                     affina.forEach(function (sel) { sel.value = ''; sel.classList.remove('is-on'); });
+                    interruttori.forEach(function (b) { b.setAttribute('aria-checked', 'false'); });
+                    pallini.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
                     filtra('', '');
                 });
             }
-            affina.forEach(function (sel) {
+            if (catSel) {
+                catSel.addEventListener('change', function () { filtra(catSel.value, stato.req); });
+            }
+            interruttori.forEach(function (b) {
+                b.addEventListener('click', function () {
+                    b.setAttribute('aria-checked', b.getAttribute('aria-checked') === 'true' ? 'false' : 'true');
+                    stato.ed = interruttori.filter(function (x) { return x.getAttribute('aria-checked') === 'true'; }).map(function (x) { return x.getAttribute('data-edizione'); });
+                    filtra(stato.cat, stato.req);
+                });
+            });
+            pallini.forEach(function (b) {
+                b.addEventListener('click', function () {
+                    var c = b.getAttribute('data-colore');
+                    stato.assi.colore = stato.assi.colore === c ? '' : c;
+                    pallini.forEach(function (x) { x.setAttribute('aria-pressed', x.getAttribute('data-colore') === stato.assi.colore ? 'true' : 'false'); });
+                    filtra(stato.cat, stato.req);
+                });
+            });
+            affina.filter(function (sel) { return sel !== catSel; }).forEach(function (sel) {
                 sel.addEventListener('change', function () {
                     stato.assi[sel.getAttribute('data-asse')] = sel.value;
                     sel.classList.toggle('is-on', sel.value !== '');

@@ -1994,6 +1994,11 @@ trait Olobuild_Renderer_Structure_Trait {
             $inline_styles[] = 'align-self: start';
             $inline_styles[] = 'z-index: 5';
             self::$needs_sticky_offset_script = true;
+            // In pila la colonna fissa resterebbe incollata in cima sopra le altre che le scorrono sotto (la foto del
+            // prodotto sopra prezzo e pulsanti, 24 nov 2026): si spegne sotto il punto in cui va a tutta larghezza,
+            // 640 px se ha una larghezza per il tablet diversa da 1-1, se no 960 px (come «Prima quando… in pila»).
+            $ws        = (string) ( $s['width_small'] ?? '' );
+            $classes[] = ( '' !== $ws && '1-1' !== $ws && empty( $s['width_custom'] ) ) ? 'olo-col-fissa-s' : 'olo-col-fissa-m';
         }
 
         // ID for hover CSS support

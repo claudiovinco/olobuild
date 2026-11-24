@@ -553,7 +553,7 @@ THEME = tema(
     'La bottega online dei piccoli produttori, color farina: in apertura la fascia delle offerte che '
     'scorre (il tagliere, l’olio e le conserve, la pasta) e le quattro schede coi prodotti, il mega menu coi pannelli; gli scaffali, la box in abbonamento coi listini, i produttori, le '
     'offerte che cambiano il giovedì col conto alla rovescia, la scheda prodotto col video nella galleria.',
-    [('La dispensa', P['negozio']), ('Novità', P['negozio']), ('Pasta e riso', '{{PAGINA:negozio}}?product_cat=pasta-e-riso'),
+    [('La dispensa', P['negozio']), ('Novità', P['negozio'] + '?orderby=date'), ('Pasta e riso', '{{PAGINA:negozio}}?product_cat=pasta-e-riso'),
      ('Formaggi e salumi', '{{PAGINA:negozio}}?product_cat=formaggi-e-salumi'), ('La box del mese', P['box']),
      ('I produttori', P['produttori']), ('Offerte', P['offerte'])],
     [('home', 'Home', None), ('negozio', 'La dispensa', 'dispensa'), ('box', 'La box del mese', 'box-del-mese'),

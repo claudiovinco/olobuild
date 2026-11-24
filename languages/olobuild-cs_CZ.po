@@ -4413,3 +4413,7 @@ msgstr "Holografický lesk"
 
 msgid "L’etichetta della nota (e il filo interno, se c’è) prende i colori cangianti di una carta olografica, che scorrono piano."
 msgstr "Štítek poznámky (a vnitřní linka, pokud je) dostane měňavé barvy holografické karty, které pomalu plynou."
+
+#: licenza-1.4.1345
+msgid "Tipo di sito"
+msgstr "Typ webu"

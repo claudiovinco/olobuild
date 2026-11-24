@@ -634,7 +634,7 @@ THEME = tema(
     'come col vento e le quattro schede coi prodotti, il mega menu col negozio, le offerte e le novità; a metà pagina il '
     'barometro: scorrendo l’ago passa da sole a bora, pioggia e neve, il cielo cambia e accanto arriva il cappello giusto; la '
     'guida alla misura, la bottega con la prenotazione, la scheda con la misura a scelta e il video della bottega.',
-    [('Il negozio', P['negozio']), ('Offerte', P['offerte']), ('Novità', P['negozio']),
+    [('Il negozio', P['negozio']), ('Offerte', P['offerte']), ('Novità', P['negozio'] + '?orderby=date'),
      ('Feltri', '{{PAGINA:negozio}}?product_cat=feltri'), ('Coppole', '{{PAGINA:negozio}}?product_cat=coppole'),
      ('Ombrelli', '{{PAGINA:negozio}}?product_cat=ombrelli'), ('La misura', P['misure']), ('La bottega', P['bottega'])],
     [('home', 'Home', None), ('negozio', 'Il negozio', 'negozio'), ('misure', 'Prendere la misura', 'misura'),

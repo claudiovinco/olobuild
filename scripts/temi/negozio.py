@@ -693,7 +693,7 @@ class Negozio:
         c = self.c
         return t.bare('woo_product_filter', {
             'show_price': True, 'show_price_range': True, 'show_categories': True, 'show_attributes': bool(attributi),
-            'show_stock': True, 'show_active': True, 'show_count': True, 'price_min': 0, 'price_max': 500, 'price_step': 10,
+            'show_stock': True, 'show_active': True, 'show_count': True, 'show_sort': True, 'price_min': 0, 'price_max': 500, 'price_step': 10,
             'attributes': attributi, 'collapsed': False, 'filter_style': 'sidebar', 'collapsible': True,
             'heading_color': c['testo'], 'text_color': c['testo'], 'accent_color': c['acc'], 'active_color': c['acc'],
             'bg_color': c['chiaro'], 'border_color': c['filo'], 'border_radius': max(self.r, 4), 'apply_button': True,
@@ -701,7 +701,7 @@ class Negozio:
 
     def pagina_negozio(self, t, eyebrow, titolo, sotto, attributi='', colonne=3, banner=None, bg=None):
         out = [self.intestazione(t, eyebrow, titolo, sotto, bg=bg)]
-        destra = [self.anteprima(t), self.prodotti(t, posts_per_page=24, columns=colonne, columns_tablet=2, pagination=True)]
+        destra = [self.anteprima(t), self.prodotti(t, posts_per_page=12, columns=colonne, columns_tablet=2, pagination=True)]
         out.append(t.section([
             t.row([t.col([self.filtro(t, attributi)], wm='1-4', ws='1-1'), t.col(destra, wm='3-4', ws='1-1')],
                   layout='custom', custom='25,75', gap=32, valign='start', anim=None),
@@ -771,7 +771,7 @@ class Negozio:
                                 layout='custom', custom='62,38', gap=16, valign='center', anim=None),
                           t.one([avvisi], anim=None)], padding='remove-vertical', width='large',
                          style={'padding_top': 20, 'padding_bottom': 8})]
-        out.append(t.section([t.row([t.col([galleria], wm='7-12', ws='1-1'), t.col(destra, wm='5-12', ws='1-1')],
+        out.append(t.section([t.row([t.col([galleria], wm='7-12', ws='1-1', sticky=True, sticky_offset=24), t.col(destra, wm='5-12', ws='1-1')],
                                     layout='custom', custom='58,42', gap=44, valign='start', anim=None)],
                              padding='default', width='large', style={'padding_top': 8, 'padding_bottom': 48}))
         if bundle:

@@ -542,7 +542,7 @@ THEME = tema(
     'fascia delle offerte che scorre e le quattro schede coi prodotti, il mega menu coi reparti, le offerte e le novità; a '
     'metà pagina il passo, con le impronte che camminano e il metro dei numeri che scorre; la guida ai numeri, il calzolaio, '
     'la scheda prodotto coi numeri e il video della scarpa.',
-    [('Le scarpe', P['negozio']), ('Offerte', P['offerte']), ('Novità', P['negozio']),
+    [('Le scarpe', P['negozio']), ('Offerte', P['offerte']), ('Novità', P['negozio'] + '?orderby=date'),
      ('Sneakers', '{{PAGINA:negozio}}?product_cat=sneakers'), ('Donna', '{{PAGINA:negozio}}?product_cat=decollete'),
      ('Uomo', '{{PAGINA:negozio}}?product_cat=uomo'), ('I numeri', P['numeri']), ('Il calzolaio', P['calzolaio'])],
     [('home', 'Home', None), ('negozio', 'Le scarpe', 'scarpe'), ('numeri', 'La guida ai numeri', 'guida-ai-numeri'),

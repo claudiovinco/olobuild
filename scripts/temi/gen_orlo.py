@@ -215,7 +215,7 @@ def build_header():
 def build_footer():
     return N.piede(Tpl(ID, 'footer'), 'orlo', '', 'Abiti che durano: lino, lana e seta cuciti in sei laboratori italiani, '
                    'quarantadue capi a stagione e un atelier a Milano dove si accorciano gli orli.',
-                   [('Negozio', [('Nuovi arrivi', P['negozio']), ('Abiti', N.cat_url('abiti')),
+                   [('Negozio', [('Nuovi arrivi', P['negozio'] + '?orderby=date'), ('Abiti', N.cat_url('abiti')),
                                  ('Maglieria', N.cat_url('maglieria')), ('Capispalla', N.cat_url('capispalla')),
                                  ('L’Archivio', P['offerte'])]),
                     ('Orlo', [('Lookbook', P['lookbook']), ('L’atelier', P['atelier']), ('I preferiti', P['preferiti']),
@@ -672,7 +672,7 @@ THEME = tema(
     '(capispalla, abiti, maglieria) e le quattro schede coi prodotti, il mega menu coi pannelli della collezione, delle '
     'novità e delle offerte; le categorie, i nuovi arrivi, compra il look sulla foto, l’Archivio fino al −28% col conto alla rovescia, il lookbook che compone il look, la guida alle '
     'taglie; la scheda prodotto con le taglie e il video del capo nella galleria.',
-    [('Collezione', P['negozio']), ('Nuovi arrivi', P['negozio']), ('Abiti', '{{PAGINA:negozio}}?product_cat=abiti'),
+    [('Collezione', P['negozio']), ('Nuovi arrivi', P['negozio'] + '?orderby=date'), ('Abiti', '{{PAGINA:negozio}}?product_cat=abiti'),
      ('Maglieria', '{{PAGINA:negozio}}?product_cat=maglieria'), ('Capispalla', '{{PAGINA:negozio}}?product_cat=capispalla'),
      ('Lookbook', P['lookbook']), ('Offerte', P['offerte']), ('L’atelier', P['atelier'])],
     [('home', 'Home', None), ('negozio', 'La collezione', 'collezione'), ('lookbook', 'Lookbook', 'lookbook'),

@@ -57316,3 +57316,7 @@ msgstr "Reflet holographique"
 
 msgid "L’etichetta della nota (e il filo interno, se c’è) prende i colori cangianti di una carta olografica, che scorrono piano."
 msgstr "L’étiquette de la note (et le filet intérieur, s’il y en a un) prend les couleurs changeantes d’une carte holographique, qui défilent lentement."
+
+#: licenza-1.4.1345
+msgid "Tipo di sito"
+msgstr "Type de site"

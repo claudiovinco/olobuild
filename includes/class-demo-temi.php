@@ -82,6 +82,7 @@ class Olobuild_Demo_Temi {
         if ( ! $richiesta ) {
             self::woo_dalla_demo();
             add_action( 'template_redirect', [ __CLASS__, 'prodotto_nella_demo' ] );
+            add_action( 'template_redirect', [ __CLASS__, 'categoria_nella_demo' ] );
             // Un tema che vive in un plugin (olobuild_external_theme_dirs) si trova solo quando i plugin sono tutti
             // inclusi: si riprova a plugins_loaded, prima che partano (e prima che OLOlang scelga la lingua).
             if ( self::$riprova ) {
@@ -186,6 +187,37 @@ class Olobuild_Demo_Temi {
             wp_safe_redirect( $url, 302 );
             exit;
         }
+    }
+
+    /**
+     * Fuori dalle demo: una categoria dei prodotti di prova di un tema (meta _olo_demo del termine), aperta dal suo
+     * indirizzo di sempre, porta alla pagina del negozio del tema dentro la demo (theme.json → woo → product_category),
+     * filtrata su quella categoria: ?product_cat=<slug>, che la griglia e il filtro del negozio leggono. Come
+     * all'import, dove la stessa pagina fa da template delle categorie. Prima si apriva la pagina generica di
+     * WooCommerce, senza la grafica del tema: ordinamento attaccato alla griglia, pulsanti senza margini (24 nov 2026).
+     */
+    public static function categoria_nella_demo() {
+        if ( ! is_tax( 'product_cat' ) ) {
+            return;
+        }
+        $termine = get_queried_object();
+        if ( ! ( $termine instanceof WP_Term ) ) {
+            return;
+        }
+        $tema = (string) get_term_meta( $termine->term_id, '_olo_demo', true );
+        if ( '' === $tema || ! self::acceso( $tema ) ) {
+            return;
+        }
+        $dir    = self::cartella( $tema );
+        $json   = '' !== $dir ? json_decode( (string) file_get_contents( $dir . '/theme.json' ), true ) : null; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- file del tema
+        $chiave = is_array( $json ) ? (string) ( $json['woo']['product_category'] ?? '' ) : '';
+        $pagina = '' !== $chiave ? ( $json['pages'][ $chiave ] ?? null ) : null;
+        if ( ! is_array( $pagina ) ) {
+            return;
+        }
+        $pezzo = empty( $pagina['set_as_homepage'] ) ? self::slug( $chiave, $pagina ) . '/' : '';
+        wp_safe_redirect( add_query_arg( 'product_cat', $termine->slug, home_url( '/' . self::BASE . '/' . $tema . '/' . $pezzo ) ), 302 );
+        exit;
     }
 
     /**

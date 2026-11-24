@@ -536,7 +536,7 @@ THEME = tema(
     '(il kit del mattino, il siero, la crema mani) e le quattro schede coi prodotti, il mega menu coi pannelli; la routine da '
     'comporre che somma il totale, gli ingredienti spiegati, i kit in offerta col conto alla rovescia, la scheda prodotto col '
     'video della texture nella galleria.',
-    [('Tutti i prodotti', P['negozio']), ('Novità', P['negozio']), ('Sieri', '{{PAGINA:negozio}}?product_cat=sieri'),
+    [('Tutti i prodotti', P['negozio']), ('Novità', P['negozio'] + '?orderby=date'), ('Sieri', '{{PAGINA:negozio}}?product_cat=sieri'),
      ('Creme', '{{PAGINA:negozio}}?product_cat=creme'), ('Componi la routine', P['routine']),
      ('Gli ingredienti', P['ingredienti']), ('Offerte', P['offerte'])],
     [('home', 'Home', None), ('negozio', 'Il negozio', 'negozio'), ('routine', 'La routine', 'routine'),

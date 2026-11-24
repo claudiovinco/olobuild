@@ -18896,3 +18896,7 @@ msgstr "Holograficzny połysk"
 
 msgid "L’etichetta della nota (e il filo interno, se c’è) prende i colori cangianti di una carta olografica, che scorrono piano."
 msgstr "Etykieta notatki (i wewnętrzna linia, jeśli jest) przyjmuje opalizujące kolory karty holograficznej, które powoli płyną."
+
+#: licenza-1.4.1345
+msgid "Tipo di sito"
+msgstr "Rodzaj strony"

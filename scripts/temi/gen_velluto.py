@@ -544,7 +544,7 @@ THEME = tema(
     'schede coi capi, il mega menu con le collezioni, l’archivio di sartoria e le novità; a metà pagina il sipario di velluto '
     'che si apre sulla passerella e il programma della sfilata; la prova in atelier da prenotare, la collezione, la scheda '
     'prodotto con le taglie e il video della passerella.',
-    [('Le collezioni', P['negozio']), ('Archivio', P['offerte']), ('Novità', P['negozio']),
+    [('Le collezioni', P['negozio']), ('Archivio', P['offerte']), ('Novità', P['negozio'] + '?orderby=date'),
      ('Sera', '{{PAGINA:negozio}}?product_cat=abiti-da-sera'), ('Sposa', '{{PAGINA:negozio}}?product_cat=sposa'),
      ('Uomo', '{{PAGINA:negozio}}?product_cat=uomo'), ('L’atelier', P['atelier']), ('La collezione', P['collezione'])],
     [('home', 'Home', None), ('negozio', 'Le collezioni', 'collezioni'), ('atelier', 'L’atelier', 'atelier'),

@@ -155,7 +155,7 @@ def apertura(t):
                   textTransform='uppercase', letterSpacing=2, scrollMove=A.appare(80, 87),
                   hover={'bgColor': NERO, 'duration': 250},
                   responsive={'mobile': {'x': 6, 'y': 60, 'width': 'auto', 'fontSize': m(13)}}),
-        K.livello('to-b2', tipo='button', contenuto='Sfoglia il campionario', x=38.5, y=78, w='auto', size=14, peso='600',
+        K.livello('to-b2', tipo='button', contenuto='Sfoglia il campionario', x=41, y=78, w='auto', size=14, peso='600',
                   colore=NERO, bgColor='transparent', padding=18, borderRadius=0, borderWidth=1, borderColor=NERO,
                   buttonUrl=LAVORI + '#campionario', entra='fadeIn', ritardo=0, textTransform='uppercase', letterSpacing=2,
                   scrollMove=A.appare(80, 87), hover={'bgColor': mix(NERO, 10), 'duration': 250},

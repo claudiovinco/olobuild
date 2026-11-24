@@ -118,7 +118,7 @@ def apertura(t):
         K.livello('cr-b1', tipo='button', contenuto='Prenota', x=72, y=16, w='auto', size=13, peso='700', colore=C['on_acc'], bgColor=C['acc'],
                   padding=18, borderRadius=6, letterSpacing=2, textTransform='uppercase', buttonUrl=PRENOTA, entra='fadeIn', ritardo=800,
                   hover={'bgColor': '#FFFFFF', 'duration': 250}, responsive={'mobile': {'x': 6, 'y': 31, 'fontSize': m(12)}, 'tablet': {'y': 19.8}, 'notebook': {'y': 18.6}}),
-        K.livello('cr-b2', tipo='button', contenuto='I servizi', x=82, y=16, w='auto', size=13, peso='700', colore=C['chiaro'],
+        K.livello('cr-b2', tipo='button', contenuto='I servizi', x=83.5, y=16, w='auto', size=13, peso='700', colore=C['chiaro'],
                   bgColor='transparent', padding=18, borderRadius=6, borderWidth=1, borderColor=mix(C['chiaro'], 55), letterSpacing=2,
                   textTransform='uppercase', buttonUrl=SERVIZI, entra='fadeIn', ritardo=900,
                   hover={'bgColor': mix(C['chiaro'], 14), 'duration': 250}, responsive={'mobile': {'x': 44, 'y': 31, 'fontSize': m(12)}, 'tablet': {'y': 19.8}, 'notebook': {'y': 18.6}}),

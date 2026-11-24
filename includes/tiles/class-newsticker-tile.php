@@ -32,6 +32,7 @@ class Olobuild_Newsticker_Tile extends Olobuild_Tile_Base {
         'bg_angle'          => 90,
         'text_color'        => '#f3f4f6',
         'height'            => '42',
+        'vertical_align'    => 'center',
         'separator'         => '|',
         'font_size'         => 14,
         'font_weight'       => '400',
@@ -128,6 +129,10 @@ class Olobuild_Newsticker_Tile extends Olobuild_Tile_Base {
         $speed       = max( 1500, intval( $s['speed'] ) );
         $trans_dur   = max( 100, min( 1500, intval( $s['transition_duration'] ) ) );
         $height      = max( 30, min( 120, intval( $s['height'] ) ) );
+        // Allineamento verticale del contenuto nella fascia orizzontale (notizie, testo dell'etichetta, frecce):
+        // 'start' | 'center' | 'end'. Le tile salvate prima della 1.4.1413 non hanno la chiave → centro.
+        $va_salvato  = isset( $s['vertical_align'] ) && is_string( $s['vertical_align'] ) ? $s['vertical_align'] : '';
+        $valign      = [ 'start' => 'flex-start', 'center' => 'center', 'end' => 'flex-end' ][ $va_salvato ] ?? 'center';
         $auto        = ! empty( $s['auto_scroll'] );
         $pause       = ! empty( $s['pause_on_hover'] );
         $loop        = ! empty( $s['loop'] );
@@ -190,7 +195,7 @@ class Olobuild_Newsticker_Tile extends Olobuild_Tile_Base {
                 <?php if ( $is_vertical ) : ?>
                 flex-direction: column;
                 <?php else : ?>
-                align-items: center;
+                align-items: <?php echo $valign; ?>;
                 <?php endif; ?>
                 background: <?php echo $bg_css; ?>;
                 <?php if ( ! $is_vertical ) : ?>
@@ -215,7 +220,7 @@ class Olobuild_Newsticker_Tile extends Olobuild_Tile_Base {
                 padding: 6px 14px;
                 <?php endif; ?>
                 display: flex;
-                align-items: center;
+                align-items: <?php echo $is_vertical ? 'center' : $valign; ?>;
                 gap: 6px;
                 font-weight: 700;
                 font-size: 12px;
@@ -284,6 +289,15 @@ class Olobuild_Newsticker_Tile extends Olobuild_Tile_Base {
 
             <?php if ( $is_marquee ) : ?>
             <?php // ─── MARQUEE ─── ?>
+            <?php if ( ! $is_vertical ) : ?>
+            <?php /* Orizzontale: il nastro segue «Allineamento verticale» (centro di serie), come l'etichetta e
+                      le notizie delle altre animazioni. Prima stava sempre in cima (24 nov 2026: 14–16 px sopra il
+                      centro in Affisso, Crocevia, Lanterna, Onde corte, Riga di comando). */ ?>
+            .<?php echo $uid; ?> .olo-nt-viewport {
+                display: flex;
+                align-items: <?php echo $valign; ?>;
+            }
+            <?php endif; ?>
             .<?php echo $uid; ?> .olo-nt-marquee {
                 display: flex;
                 gap: <?php echo $mq_gap; ?>px;
@@ -291,6 +305,8 @@ class Olobuild_Newsticker_Tile extends Olobuild_Tile_Base {
                 flex-direction: column;
                 animation: olo-nt-mq-v-<?php echo $uid; ?> <?php echo $mq_duration; ?>s linear infinite;
                 <?php else : ?>
+                align-items: center;
+                flex-shrink: 0;
                 animation: olo-nt-mq-h-<?php echo $uid; ?> <?php echo $mq_duration; ?>s linear infinite;
                 animation-direction: <?php echo $mq_dir === 'right' ? 'reverse' : 'normal'; ?>;
                 <?php endif; ?>
@@ -339,7 +355,7 @@ class Olobuild_Newsticker_Tile extends Olobuild_Tile_Base {
                 right: 0;
                 bottom: 0;
                 display: flex;
-                align-items: center;
+                align-items: <?php echo $is_vertical ? 'center' : $valign; ?>;
                 gap: 8px;
                 padding: 0 14px;
                 color: <?php echo $text_clr; ?>;

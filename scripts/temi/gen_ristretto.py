@@ -531,7 +531,7 @@ THEME = tema(
     'prodotti, il mega menu col caffè, le offerte e le novità; a metà pagina la scala dell’intensità, con le tredici capsule '
     'che si accendono e la tacca che dice il gusto; la torrefazione, la guida alle capsule e alla macchina, la scheda prodotto '
     'con la macinatura e il video dell’estrazione.',
-    [('Il caffè', P['negozio']), ('Offerte', P['offerte']), ('Novità', P['negozio']),
+    [('Il caffè', P['negozio']), ('Offerte', P['offerte']), ('Novità', P['negozio'] + '?orderby=date'),
      ('Capsule', '{{PAGINA:negozio}}?product_cat=capsule'), ('Grani', '{{PAGINA:negozio}}?product_cat=grani'),
      ('Abbonamenti', '{{PAGINA:negozio}}?product_cat=abbonamenti'), ('La torrefazione', P['torrefazione']),
      ('L’intensità', P['intensita'])],
