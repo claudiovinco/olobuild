@@ -108,7 +108,7 @@ class Olobuild_Button_Tile extends Olobuild_Tile_Base {
             // Sovrapposizione del componente Sfondo: sopra lo sfondo, sotto il testo (z-index 2).
             $ov = intval( $bg_obj['overlay_opacity'] ?? 0 );
             if ( $ov > 0 ) {
-                $ov_c = $this->safe_color_css( $bg_obj['overlay_color'] ?? '' ) ?: '#000000';
+                $ov_c = $this->safe_color_css( $bg_obj['overlay_color'] ?? '' ) ?: 'var(--olo-color-dark, #000000)';
                 $bg_creative_html .= '<span aria-hidden="true" style="position:absolute;inset:0;z-index:1;pointer-events:none;background-color:' . esc_attr( $ov_c ) . ';opacity:' . ( min( 100, $ov ) / 100 ) . '"></span>';
             }
         }

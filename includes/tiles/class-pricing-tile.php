@@ -111,11 +111,11 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
 
         // CTA
         $cta_bg  = $this->safe_color_css( $s['cta_bg_color'] ) ?: $accent;
-        $cta_fg  = $this->safe_color_css( $s['cta_text_color'] ) ?: '#FFFFFF';
+        $cta_fg  = $this->safe_color_css( $s['cta_text_color'] ) ?: 'var(--olo-color-light, #ffffff)';
         $cta_r   = Olobuild_Tile_Utils::border_radius( $s['cta_radius'] ?? 0 );
         $cta_r_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['cta_radius_hover'] ?? null );
         $cta_bw  = intval( $s['cta_border_width'] );
-        $cta_bc  = $this->safe_color_css( $s['cta_border_color'] ) ?: '#FFFFFF';
+        $cta_bc  = $this->safe_color_css( $s['cta_border_color'] ) ?: 'var(--olo-color-border, #ffffff)';
         $hover   = $s['cta_hover_effect'] ?: 'none';
         $cta_w   = intval( $s['cta_width'] ) ?: 100;
         $h_bg    = $this->safe_color_css( $s['cta_hover_bg_color'] ) ?: '';
@@ -153,7 +153,7 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
 
         // Badge
         $badge_bg  = $this->safe_color_css( $s['badge_bg_color'] ) ?: $accent;
-        $badge_fg  = $this->safe_color_css( $s['badge_text_color'] ) ?: '#FFFFFF';
+        $badge_fg  = $this->safe_color_css( $s['badge_text_color'] ) ?: 'var(--olo-color-light, #ffffff)';
         $badge_r   = Olobuild_Tile_Utils::border_radius( $s['badge_radius'] ?? 0 );
         $badge_r_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['badge_radius_hover'] ?? null );
         $badge_st  = $s['badge_style'] ?: 'pill';
@@ -249,7 +249,7 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
             <?php if ( filter_var( $s['overlay'], FILTER_VALIDATE_BOOLEAN ) && $has_media ) : ?>
             .<?php echo $uid; ?> .olo-price-overlay {
                 position: absolute; inset: 0; z-index: 1;
-                background: <?php echo $this->safe_color_css( $s['overlay_color'] ) ?: '#000'; ?>;
+                background: <?php echo $this->safe_color_css( $s['overlay_color'] ) ?: 'var(--olo-color-dark, #000)'; ?>;
                 opacity: <?php echo ( intval( $s['overlay_opacity'] ) ?: 50 ) / 100; ?>;
             }
             <?php endif; ?>

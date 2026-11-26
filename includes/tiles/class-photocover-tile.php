@@ -64,10 +64,10 @@ class Olobuild_PhotoCover_Tile extends Olobuild_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'opc-' . wp_rand( 10000, 99999 );
 
-        $mediaBg  = $this->safe_color_css( $s['media_bg'] ?? '' ) ?: '#1a1a1a';
+        $mediaBg  = $this->safe_color_css( $s['media_bg'] ?? '' ) ?: 'var(--olo-color-dark, #1a1a1a)';
         $kicker   = $this->safe_color_css( $s['kicker_color'] ?? '' ) ?: 'var(--olo-color-primary, #ff4438)';
-        $headline = $this->safe_color_css( $s['headline_color'] ?? '' ) ?: '#ffffff';
-        $meta     = $this->safe_color_css( $s['meta_color'] ?? '' ) ?: '#e8e8e8';
+        $headline = $this->safe_color_css( $s['headline_color'] ?? '' ) ?: 'var(--olo-color-primary, #ffffff)';
+        $meta     = $this->safe_color_css( $s['meta_color'] ?? '' ) ?: 'var(--olo-color-light, #e8e8e8)';
 
         $aTop = is_numeric( $s['overlay_top'] ) ? max( 0, min( 1, floatval( $s['overlay_top'] ) ) ) : 0.3;
         $aBot = is_numeric( $s['overlay_bottom'] ) ? max( 0, min( 1, floatval( $s['overlay_bottom'] ) ) ) : 0.85;

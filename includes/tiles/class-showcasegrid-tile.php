@@ -89,17 +89,17 @@ class Olobuild_ShowcaseGrid_Tile extends Olobuild_Tile_Base {
         $card_pad = ( $cpt === $cpr && $cpr === $cpb && $cpb === $cpl )
             ? "{$cpt}px"
             : "{$cpt}px {$cpr}px {$cpb}px {$cpl}px";
-        $mbg    = $this->safe_color_css( $s['media_bg'] ?? '' ) ?: '#0f3a2a';
+        $mbg    = $this->safe_color_css( $s['media_bg'] ?? '' ) ?: 'var(--olo-color-dark, #0f3a2a)';
         // Velo: il colore così com'è, sfumato con color-mix(). Prima una terna r,g,b calcolata
         // sul server (hex_rgb(), tolta): non seguiva una palette ridefinita nel CSS e perdeva
         // la trasparenza di un velo rgba() o color-mix(… transparent).
         $veil   = $this->safe_color_css( $s['veil_color'] ?? '' ) ?: 'var(--olo-color-dark, #0a2a1e)';
         $kick   = $this->safe_color_css( $s['kicker_color'] ?? '' ) ?: 'var(--olo-color-primary, #c8ff3c)';
-        $tcol   = $this->safe_color_css( $s['title_color'] ?? '' ) ?: '#ffffff';
+        $tcol   = $this->safe_color_css( $s['title_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
         $arrbg  = $this->safe_color_css( $s['arrow_bg'] ?? '' ) ?: 'rgba(255,255,255,0.14)';
-        $arrcol = $this->safe_color_css( $s['arrow_color'] ?? '' ) ?: '#ffffff';
+        $arrcol = $this->safe_color_css( $s['arrow_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
         $arrhbg = $this->safe_color_css( $s['arrow_hover_bg'] ?? '' ) ?: 'var(--olo-color-primary, #c8ff3c)';
-        $arrhc  = $this->safe_color_css( $s['arrow_hover_color'] ?? '' ) ?: '#0a2a1e';
+        $arrhc  = $this->safe_color_css( $s['arrow_hover_color'] ?? '' ) ?: 'var(--olo-color-text, #0a2a1e)';
         // «Durata» del Cerchio e della Freccia in hover (senza chiave .25s come sempre)
         $arr_bg_dur  = Olobuild_Tile_Utils::durata_hover( $s, 'arrow_bg_hover_duration', '.25s' );
         $arr_clr_dur = Olobuild_Tile_Utils::durata_hover( $s, 'arrow_color_hover_duration', '.25s' );

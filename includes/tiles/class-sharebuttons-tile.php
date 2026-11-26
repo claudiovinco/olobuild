@@ -86,8 +86,8 @@ class Olobuild_Sharebuttons_Tile extends Olobuild_Tile_Base {
         $style     = $s['style'] ?: 'icon-only';
         $size      = absint( $s['size'] ) ?: 36;
         $gap       = absint( $s['gap'] );
-        $icon_clr  = $this->safe_color_css( $s['icon_color'] ) ?: '#ffffff';
-        $hover_clr = $this->safe_color_css( $s['icon_hover_color'] ) ?: '#ffffff';
+        $icon_clr  = $this->safe_color_css( $s['icon_color'] ) ?: 'var(--olo-color-light, #ffffff)';
+        $hover_clr = $this->safe_color_css( $s['icon_hover_color'] ) ?: 'var(--olo-color-light, #ffffff)';
         // «Durata» del Colore icona in hover: senza chiave il colore cambia di scatto, come sempre
         $icon_dur  = Olobuild_Tile_Utils::durata_hover( $s, 'icon_color_hover_duration', '' );
         $bg_clr    = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-primary, #e1474f)';

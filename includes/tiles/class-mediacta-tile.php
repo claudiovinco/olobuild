@@ -71,8 +71,8 @@ class Olobuild_MediaCTA_Tile extends Olobuild_Tile_Base {
         $uid = 'omc-' . wp_rand( 10000, 99999 );
 
         $accent = $this->safe_color_css( $s['accent'] ?? '' ) ?: 'var(--olo-color-primary, #c8ff3c)';
-        $accOn  = $this->safe_color_css( $s['accent_on'] ?? '' ) ?: '#0a2a1e';
-        $txt    = $this->safe_color_css( $s['text_color'] ?? '' ) ?: '#ffffff';
+        $accOn  = $this->safe_color_css( $s['accent_on'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #0a2a1e)';
+        $txt    = $this->safe_color_css( $s['text_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
         $eyec   = $this->safe_color_css( $s['eyebrow_color'] ?? '' ) ?: $accent;
         $subc   = $this->safe_color_css( $s['subhead_color'] ?? '' ) ?: 'rgba(255,255,255,0.78)';
         // Colore overlay: hex → rgba() classico (invariato); var()/token del tema o altri
@@ -144,7 +144,7 @@ class Olobuild_MediaCTA_Tile extends Olobuild_Tile_Base {
         <style>
             <?php echo Olobuild_CSS_Builder::pattern_layer_css( $bg_decl, '.' . $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- regole fisse di pattern_layer_css(): il selettore è l'uid della tile, i valori sono variabili CSS ?>
             .<?php echo $uid; ?>{position:relative;overflow:hidden;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;text-align:<?php echo $center ? 'center' : 'left'; ?>;<?php echo $root_pad; ?><?php echo $kit_decl; ?>}
-            .<?php echo $uid; ?> .omc-media{position:absolute;inset:0;z-index:0;<?php echo ( $mb['has'] && $mb['css'] !== '' ) ? $mb['css'] : ( 'background:' . ( $this->safe_color_css( $s['overlay_color'] ?? '' ) ?: '#0a2a1e' ) . ';background-image:' . $mediabg . ';background-size:cover;background-position:' . esc_attr( Olobuild_Tile_Utils::focal_pos( $s, 'bg_image' ) ) . ';' ); ?>}
+            .<?php echo $uid; ?> .omc-media{position:absolute;inset:0;z-index:0;<?php echo ( $mb['has'] && $mb['css'] !== '' ) ? $mb['css'] : ( 'background:' . ( $this->safe_color_css( $s['overlay_color'] ?? '' ) ?: 'var(--olo-color-dark, #0a2a1e)' ) . ';background-image:' . $mediabg . ';background-size:cover;background-position:' . esc_attr( Olobuild_Tile_Utils::focal_pos( $s, 'bg_image' ) ) . ';' ); ?>}
             .<?php echo $uid; ?> .omc-medialabel{position:absolute;left:18px;bottom:14px;z-index:1;font-size:11px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;color:rgba(255,255,255,.4);}
             .<?php echo $uid; ?> .omc-grad{position:absolute;inset:0;z-index:1;background:<?php echo $otype === 'radial' ? 'radial-gradient(120% 100% at 50% 100%, ' . $ostop_bot . ', ' . $ostop_top . ')' : 'linear-gradient(180deg, ' . $ostop_top . ', ' . $ostop_bot . ')'; ?>;}
             .<?php echo $uid; ?> .omc-in{position:relative;z-index:2;max-width:1240px;margin:0 auto;padding:<?php echo $in_pad; ?>;}

@@ -361,7 +361,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         $strip_arrows   = $is_strip && ! $is_coverflow && ! empty( $s['strip_arrows'] );
         $sa_style       = in_array( $s['strip_arrows_style'] ?? '', [ 'chevron', 'arrow', 'circle', 'square', 'pill', 'minimal' ], true ) ? ( $s['strip_arrows_style'] ?? '' ) : 'chevron';
         $sa_size        = max( 24, min( 60, absint( $s['strip_arrows_size'] ) ) );
-        $sa_color       = $this->safe_color_css( $s['strip_arrows_color'] ) ?: '#ffffff';
+        $sa_color       = $this->safe_color_css( $s['strip_arrows_color'] ) ?: 'var(--olo-color-light, #ffffff)';
         $sa_bg          = $this->safe_color_css( $s['strip_arrows_bg'] ) ?: 'rgba(0,0,0,0.4)';
         $uid            = 'olo-pg-' . wp_unique_id();
 
@@ -469,7 +469,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         $glow_spread = max( 8, min( 50, absint( $s['hover_glow_spread'] ) ) );
         $hcaption    = $s['hover_caption'] ?: 'none';
         $hcap_bg     = $this->safe_color_css( $s['hover_caption_bg'] ) ?: 'rgba(0,0,0,0.6)';
-        $hcap_color  = $this->safe_color_css( $s['hover_caption_color'] ) ?: '#ffffff';
+        $hcap_color  = $this->safe_color_css( $s['hover_caption_color'] ) ?: 'var(--olo-color-light, #ffffff)';
         $frame_inset = max( 4, min( 40, absint( $s['hover_frame_inset'] ) ) );
 
         // Continuous (multi — comma-separated string 'float,drift' or legacy array)
@@ -509,14 +509,14 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
 
         // Frame
         $frame       = $s['frame'] ?: 'none';
-        $frame_color = $this->safe_color_css( $s['frame_color'] ) ?: '#ffffff';
+        $frame_color = $this->safe_color_css( $s['frame_color'] ) ?: 'var(--olo-color-background, #ffffff)';
 
         // Animated border (backward compat: old hover_frame_in toggle → frame-in)
         $anim_border = $s['anim_border'] ?: 'none';
         if ( $anim_border === 'none' && ! empty( $s['hover_frame_in'] ) ) {
             $anim_border = 'frame-in';
         }
-        $ab_color    = $this->safe_color_css( $s['anim_border_color'] ) ?: '#ffffff';
+        $ab_color    = $this->safe_color_css( $s['anim_border_color'] ) ?: 'var(--olo-color-border, #ffffff)';
         $ab_thick    = max( 1, min( 6, absint( $s['anim_border_thickness'] ) ) );
         $ab_inset    = max( 4, min( 50, absint( $s['anim_border_inset'] ) ) );
         $ab_speed    = max( 1, min( 10, floatval( $s['anim_border_speed'] ) ) );
@@ -531,7 +531,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
 
         // +N
         $more_bg     = $this->safe_color_css( $s['more_bg'] ?: 'rgba(0,0,0,0.55)' );
-        $more_color  = $this->safe_color_css( $s['more_color'] ?: '#ffffff' );
+        $more_color  = $this->safe_color_css( $s['more_color'] ?: 'var(--olo-color-light, #ffffff)' );
         $more_size   = max( 16, min( 48, absint( $s['more_size'] ) ) );
 
         // Shadow / border

@@ -85,7 +85,7 @@ class Olobuild_ImgCompare_Tile extends Olobuild_Tile_Base {
         $fit         = in_array( $s['object_fit'], [ 'cover', 'contain', 'fill', 'none', 'scale-down' ], true ) ? $s['object_fit'] : 'cover';
         $obj_pos     = trim( (string) ( $s['object_position'] ?? 'center center' ) );
         if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
-        $handle_c    = $this->safe_color_css( $s['handle_color'] ) ?: '#FFFFFF';
+        $handle_c    = $this->safe_color_css( $s['handle_color'] ) ?: 'var(--olo-color-light, #ffffff)';
         // Etichette: sfondo e tipografia dallo Stile (vuoti = bianco su nero al 75%, 12 px, maiuscolo)
         $label_bg    = $this->safe_color_css( $s['label_bg'] ?? '' ) ?: 'rgba(0,0,0,0.75)';
         $label_tipo  = $this->tipografia_css( $s, 'label' );

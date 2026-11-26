@@ -63,8 +63,8 @@ class Olobuild_Mobilebar_Tile extends Olobuild_Tile_Base {
         $logo_w      = intval( $s['logo_width'] ) ?: 120;
         $logo_link   = $s['logo_link'] ? esc_url( $s['logo_link'] ) : esc_url( home_url( '/' ) );
         $menu_id     = intval( $s['menu_id'] );
-        $p_bg        = $this->safe_color_css( $s['panel_bg'] ) ?: '#ffffff';
-        $p_color     = $this->safe_color_css( $s['panel_text_color'] ) ?: '#222';
+        $p_bg        = $this->safe_color_css( $s['panel_bg'] ) ?: 'var(--olo-color-background, #ffffff)';
+        $p_color     = $this->safe_color_css( $s['panel_text_color'] ) ?: 'var(--olo-color-text, #222)';
         $p_active    = $this->safe_color_css( $s['panel_active_color'] ) ?: 'var(--olo-color-primary, #e74c3c)';
         $p_fs        = intval( $s['panel_font_size'] ) ?: 17;
         // Dual-format: oggetto spacing {top,right,bottom,left} (standard) O scalare legacy.

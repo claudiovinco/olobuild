@@ -67,7 +67,7 @@ class Olobuild_Search_Tile extends Olobuild_Tile_Base {
         $alignment   = in_array( $s['alignment'], [ 'left', 'center', 'right' ], true ) ? $s['alignment'] : 'center';
 
         // TOKEN-FIRST: neutri → token tema; accento/focus → primary (era #e1474f off-brand)
-        $bg_c          = $this->safe_color_css( $s['bg_color'] ) ?: '#FFFFFF';
+        $bg_c          = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-background, #ffffff)';
         $text_c        = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
         $ph_c          = $this->safe_color_css( $s['placeholder_color'] ) ?: 'var(--olo-color-text-faint, #94a3b8)';
         $icon_c        = $this->safe_color_css( $s['icon_color'] ) ?: 'var(--olo-color-text-soft, #6b7280)';
@@ -75,7 +75,7 @@ class Olobuild_Search_Tile extends Olobuild_Tile_Base {
         $border_w      = absint( $s['border_width'] ) . 'px';
         $focus_c       = $this->safe_color_css( $s['focus_border_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $btn_bg        = $this->safe_color_css( $s['button_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
-        $btn_color     = $this->safe_color_css( $s['button_color'] ) ?: '#FFFFFF';
+        $btn_color     = $this->safe_color_css( $s['button_color'] ) ?: 'var(--olo-color-light, #ffffff)';
         $btn_radius    = $this->build_border_radius_css( $s["button_radius"] );
         $btn_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['button_radius_hover'] ?? null );
         $input_shadow  = ! empty( $s['input_shadow'] );

@@ -85,10 +85,10 @@ class Olobuild_HoursStrip_Tile extends Olobuild_Tile_Base {
         $t_wt   = preg_match( '/^\d+$/', (string) $s['time_weight'] ) ? $s['time_weight'] : '500';
         $n_size = max( 10, min( 18, absint( $s['note_size'] ) ) );
 
-        $line    = $this->safe_color_css( $s['divider_color'] ) ?: '#d7d1c2';
-        $d_color = $this->safe_color_css( $s['day_color'] ) ?: '#8d8a82';
-        $t_color = $this->safe_color_css( $s['time_color'] ) ?: '#18181a';
-        $n_color = $this->safe_color_css( $s['note_color'] ) ?: '#8d8a82';
+        $line    = $this->safe_color_css( $s['divider_color'] ) ?: 'var(--olo-color-border, #d7d1c2)';
+        $d_color = $this->safe_color_css( $s['day_color'] ) ?: 'var(--olo-color-text-muted, #8d8a82)';
+        $t_color = $this->safe_color_css( $s['time_color'] ) ?: 'var(--olo-color-text, #18181a)';
+        $n_color = $this->safe_color_css( $s['note_color'] ) ?: 'var(--olo-color-text-muted, #8d8a82)';
 
         $dividers = ! empty( $s['show_dividers'] );
         $band_brd = ! empty( $s['band_border'] );

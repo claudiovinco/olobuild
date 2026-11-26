@@ -96,7 +96,7 @@ class Olobuild_Textmask_Tile extends Olobuild_Tile_Base {
         $va         = $s['vertical_align'] ?: 'center';
         $mode       = $s['mask_mode'] ?: 'text_reveals_video';
         $blend      = esc_attr( $s['blend_mode'] ) ?: 'normal';
-        $text_fill  = $this->safe_color_css( $s['text_fill'] ) ?: '#ffffff';
+        $text_fill  = $this->safe_color_css( $s['text_fill'] ) ?: 'var(--olo-color-light, #ffffff)';
         $vid_url    = esc_url( $s['video_url'] );
         $vid_poster = $s['video_poster'] ? esc_url( $s['video_poster'] ) : '';
         $vid_opacity = intval( $s['video_opacity'] ) ?: 100;

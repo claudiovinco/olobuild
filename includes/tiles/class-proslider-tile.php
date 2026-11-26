@@ -1093,7 +1093,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         if ( ! empty( $layer['sfx'] ) && is_array( $layer['sfx'] ) ) {
             $sfx        = $layer['sfx'];
             $sfx_effect = $sfx['effect'] ?? 'blockRight';
-            $sfx_color  = $this->safe_color_css( $sfx['color'] ?? '#ffffff' ) ?: '#ffffff';
+            $sfx_color  = $this->safe_color_css( $sfx['color'] ?? '#ffffff' ) ?: 'var(--olo-color-light, #ffffff)';
             $sfx_dur    = absint( $sfx['duration'] ?? 800 );
             $sfx_class  = ' mps-sfx-block';
             $sfx_style  = '--mps-sfx-color:' . $sfx_color . ';--mps-sfx-dur:' . $sfx_dur . 'ms;--mps-sfx-effect:' . esc_attr( $sfx_effect ) . ';';

@@ -67,7 +67,7 @@ class Olobuild_TripFinder_Tile extends Olobuild_Tile_Base {
         $uid = 'otf-' . wp_rand( 10000, 99999 );
 
         $accent = $this->safe_color_css( $s['accent'] ) ?: 'var(--olo-color-primary, #e1474f)';
-        $on     = $this->safe_color_css( $s['accent_on'] ?? '' ) ?: '#ffffff';
+        $on     = $this->safe_color_css( $s['accent_on'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #ffffff)';
         $barbg  = $this->safe_color_css( $s['bar_bg'] ?? '' ) ?: 'var(--olo-color-surface, #ffffff)';
         $fbg    = $this->safe_color_css( $s['field_bg'] ?? '' ) ?: 'transparent';
         $fbd    = Olobuild_Tile_Utils::border_color( $s['field_border'] ?? null, 'var(--olo-color-border, #e5e7eb)' );

@@ -249,9 +249,9 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
         $offset    = max( 0, intval( $s['bar_top_offset'] ) );
         $radius    = max( 0, min( 100, Olobuild_Tile_Utils::radius_int( $s['bar_radius'] ?? 100 ) ) );
         $shadow    = $this->shadow_css( $s['bar_shadow'] ?? 'md' );
-        $bg        = $this->safe_color_css( $s['bar_bg'] ) ?: '#FFFFFF';
-        $text      = $this->safe_color_css( $s['bar_text'] ) ?: '#5A6076';
-        $text_h    = $this->safe_color_css( $s['bar_text_hover'] ) ?: '#1F2330';
+        $bg        = $this->safe_color_css( $s['bar_bg'] ) ?: 'var(--olo-color-background, #ffffff)';
+        $text      = $this->safe_color_css( $s['bar_text'] ) ?: 'var(--olo-color-text-muted, #5a6076)';
+        $text_h    = $this->safe_color_css( $s['bar_text_hover'] ) ?: 'var(--olo-color-text, #1f2330)';
         // Barra scura: le pillole al passaggio sulla barra (voci, icone, lingua) sono un velo del suo testo e
         // il testo resta quello hover scelto. Erano #F0F2F6 fisse, pensate per la barra chiara: sul fondo
         // scuro col testo chiaro, al passaggio il testo spariva (catalogo, 6 ott 2026). Barra chiara: com'era.

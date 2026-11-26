@@ -489,7 +489,7 @@ class Olobuild_ShatteredImage_Tile extends Olobuild_Tile_Base {
         $kb_dur     = max( 10, min( 40, intval( $s['kenburns_duration'] ) ) );
         $kb_int     = max( 1.10, min( 1.40, floatval( $s['kenburns_intensity'] ) ) );
         $ov_on      = ! empty( $s['overlay'] );
-        $ov_color   = $this->safe_color_css( $s['overlay_color'] ) ?: '#000000';
+        $ov_color   = $this->safe_color_css( $s['overlay_color'] ) ?: 'var(--olo-color-dark, #000000)';
         $ov_opacity = max( 5, min( 90, intval( $s['overlay_opacity'] ) ) ) / 100;
 
         $shadow_map = [

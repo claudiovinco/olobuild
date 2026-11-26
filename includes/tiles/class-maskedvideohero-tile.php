@@ -55,10 +55,10 @@ class Olobuild_MaskedVideoHero_Tile extends Olobuild_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'omvh-' . wp_rand( 10000, 99999 );
 
-        $bg     = $this->safe_color_css( $s['bg_color'] ) ?: '#0a2a1e';
+        $bg     = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-dark, #0a2a1e)';
         $accent = $this->safe_color_css( $s['accent'] ) ?: 'var(--olo-color-primary, #c8ff3c)';
-        $accOn  = $this->safe_color_css( $s['accent_on'] ?? '' ) ?: '#0a2a1e';
-        $txt    = $this->safe_color_css( $s['text_color'] ?? '' ) ?: '#ffffff';
+        $accOn  = $this->safe_color_css( $s['accent_on'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #0a2a1e)';
+        $txt    = $this->safe_color_css( $s['text_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
         $sub    = $this->safe_color_css( $s['sub_color'] ?? '' ) ?: 'rgba(255,255,255,0.72)';
         $dot    = $this->safe_color_css( $s['tag_dot_color'] ?? '' ) ?: $accent;
         $wm     = $this->safe_color_css( $s['watermark_color'] ?? '' ) ?: 'rgba(255,255,255,0.055)';

@@ -60,13 +60,13 @@ class Olobuild_SmearHero_Tile extends Olobuild_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'oshero-' . wp_rand( 10000, 99999 );
 
-        $bg      = $this->safe_color_css( $s['bg_color'] ) ?: '#1c1a17';
+        $bg      = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-dark, #1c1a17)';
         $glow    = $this->safe_color_css( $s['glow_color'] ) ?: 'rgba(224,177,58,0.08)';
         $eyebrow = $this->safe_color_css( $s['eyebrow_color'] ) ?: 'var(--olo-color-primary, #e0b13a)';
-        $txt     = $this->safe_color_css( $s['text_color'] ) ?: '#f0ebe1';
+        $txt     = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-light, #f0ebe1)';
         $accent  = $this->safe_color_css( $s['accent_color'] ?? '' ) ?: 'var(--olo-color-primary, #e0b13a)';
-        $sub     = $this->safe_color_css( $s['sub_color'] ) ?: '#f0ebe1';
-        $hint    = $this->safe_color_css( $s['hint_color'] ) ?: '#857c6d';
+        $sub     = $this->safe_color_css( $s['sub_color'] ) ?: 'var(--olo-color-light, #f0ebe1)';
+        $hint    = $this->safe_color_css( $s['hint_color'] ) ?: 'var(--olo-color-text-muted, #857c6d)';
         $mh      = max( 40, min( 100, intval( $s['min_height'] ) ) );
         $smear   = ! empty( $s['smear_enabled'] );
 

@@ -645,7 +645,7 @@ abstract class Olobuild_Tile_Base {
         $livelli = $p['markup'];
         $op = intval( $bg['overlay_opacity'] ?? 0 );
         if ( $op > 0 ) {
-            $oc = $this->safe_color_css( $bg['overlay_color'] ?? '' ) ?: '#000000';
+            $oc = $this->safe_color_css( $bg['overlay_color'] ?? '' ) ?: 'var(--olo-color-dark, #000000)';
             $livelli .= '<span style="position:absolute;inset:0;background-color:' . esc_attr( $oc ) . ';opacity:' . ( min( 100, $op ) / 100 ) . '"></span>';
         }
         if ( ! $p['has'] && $livelli === '' ) {
@@ -827,7 +827,7 @@ abstract class Olobuild_Tile_Base {
         if ( ! $d && ! in_array( $effect, [ 'gradient', 'gradient-spin' ], true ) ) return '';
 
         $color1 = $d['color'] ?? '#e1474f';
-        $color2 = trim( $settings['border_effect_color2'] ?? '' ) ?: '#f4a23b';
+        $color2 = trim( $settings['border_effect_color2'] ?? '' ) ?: 'var(--olo-color-primary, #f4a23b)';
 
         switch ( $effect ) {
 

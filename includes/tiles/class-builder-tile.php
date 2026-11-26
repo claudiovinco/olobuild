@@ -104,7 +104,7 @@ class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
         $uid = 'obd-' . wp_rand( 10000, 99999 );
 
         $accent = $this->safe_color_css( $s['zone_accent'] ) ?: 'var(--olo-color-primary, #e1474f)';
-        $on     = $this->safe_color_css( $s['zone_on'] ?? '' ) ?: '#ffffff';
+        $on     = $this->safe_color_css( $s['zone_on'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #ffffff)';
         $cardbg = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #f6f7f9)';
         $cardbd = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
         $center = ( ( $s['align'] ?? 'left' ) === 'center' );

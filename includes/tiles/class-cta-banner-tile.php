@@ -87,13 +87,13 @@ class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
         $h_family = $this->resolve_font_family( $s['headline_font_family'] ?? '', $legacy ) ?: $serif;
         $h_size   = max( 18, min( 80, absint( $s['headline_size'] ) ) );
         $h_weight = preg_match( '/^\d+$/', (string) $s['headline_weight'] ) ? $s['headline_weight'] : '400';
-        $text_c   = $this->safe_color_css( $s['text_color'] ) ?: '#ffffff';
+        $text_c   = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-light, #ffffff)';
         $accent_c = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $sub_size = max( 11, min( 22, absint( $s['subtitle_size'] ) ) );
-        $sub_c    = $this->safe_color_css( $s['subtitle_color'] ) ?: '#9ca3af';
+        $sub_c    = $this->safe_color_css( $s['subtitle_color'] ) ?: 'var(--olo-color-text-muted, #9ca3af)';
 
         $cta_bg   = $this->safe_color_css( $s['cta_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
-        $cta_c    = $this->safe_color_css( $s['cta_color'] ) ?: '#ffffff';
+        $cta_c    = $this->safe_color_css( $s['cta_color'] ) ?: 'var(--olo-color-light, #ffffff)';
         $cta_size = max( 12, min( 22, absint( $s['cta_size'] ) ) );
         // Padding bottoni: FieldSpacing 4 lati; le chiavi legacy cta_padding_y/x
         // (template salvati prima della 1.4.430) restano valide come fallback.
@@ -108,7 +108,7 @@ class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
         $cta_tgt  = $s['cta_target'] === '_blank' ? ' target="_blank" rel="noopener"' : '';
 
         $cta2_bg   = $this->safe_color_css( $s['cta2_bg'] ?? '' ) ?: 'transparent';
-        $cta2_c    = $this->safe_color_css( $s['cta2_color'] ?? '' ) ?: '#ffffff';
+        $cta2_c    = $this->safe_color_css( $s['cta2_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
         $cta2_bord = $this->safe_color_css( $s['cta2_border'] ?? '' );
         $cta2_tgt  = ( ( $s['cta2_target'] ?? '' ) === '_blank' ) ? ' target="_blank" rel="noopener"' : '';
 

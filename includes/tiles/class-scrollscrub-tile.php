@@ -257,11 +257,11 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
         // ma text_color_default impostato lo sovrascrive; il colore per-item (inline
         // sull'item) vince su entrambi perché il body ora EREDITA, non forza #fff.
         $item_txt_css = $overlay
-            ? ( $this->safe_color_css( $s['text_color_default'] ) ?: '#fff' )
+            ? ( $this->safe_color_css( $s['text_color_default'] ) ?: 'var(--olo-color-light, #fff)' )
             : $txt_def;
 
         // Scrim overlay: colore + intensità + altezza, tutti dall'inspector.
-        $scrim_c = $this->safe_color_css( $s['overlay_scrim_color'] ?? '' ) ?: '#000000';
+        $scrim_c = $this->safe_color_css( $s['overlay_scrim_color'] ?? '' ) ?: 'var(--olo-color-dark, #000000)';
         $scrim_o = max( 0, min( 100, intval( $s['overlay_scrim_opacity'] ?? 78 ) ) );
         $scrim_h = max( 20, min( 100, intval( $s['overlay_scrim_height'] ?? 62 ) ) );
 

@@ -398,7 +398,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         $gap         = intval( $s['item_gap'] ) ?: 15;
 
         // Panel
-        $p_bg        = $this->safe_color( $s['panel_bg'] ) ?: '#FFFFFF';
+        $p_bg        = $this->safe_color( $s['panel_bg'] ) ?: 'var(--olo-color-background, #ffffff)';
         $p_cols      = max( 2, min( 6, intval( $s['panel_columns'] ) ) );
         $p_radius    = Olobuild_Tile_Utils::radius_int( $s['panel_radius'] );
         $p_pad       = $this->pad_int( $s['panel_padding'] ?? null, 32 ) ?: 32;
@@ -459,7 +459,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         $mob_side    = $s['mobile_side'] === 'right' ? 'right' : 'left';
         $ham_color   = $this->safe_color( $s['hamburger_color'] ) ?: $tc;
         $mob_bg      = $this->safe_color( $s['mobile_bg'] ) ?: 'var(--olo-color-dark, #1e1e2e)';
-        $mob_tc      = $this->safe_color( $s['mobile_text_color'] ) ?: '#FFFFFF';
+        $mob_tc      = $this->safe_color( $s['mobile_text_color'] ) ?: 'var(--olo-color-light, #ffffff)';
         $mob_hc      = $this->safe_color( $s['mobile_heading_color'] ) ?: 'rgba(255,255,255,.5)';
         $mob_acc     = $this->safe_color( $s['mobile_accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $mob_logo_h  = intval( $s['mobile_logo_height'] ) ?: 36;
@@ -1664,8 +1664,8 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         <?php
         $mob_ip  = $this->pad_int( $s['mobile_item_padding'] ?? null, 16 ) ?: 16;
         $mob_sep = ! empty( $s['mobile_separator'] ?? true );
-        $mob_drop_bg = $this->safe_color_css( $s['panel_bg'] ?? '' ) ?: '#ffffff';
-        $mob_drop_tc = $this->safe_color_css( $s['mobile_text_color'] ?? '' ) ?: '#222';
+        $mob_drop_bg = $this->safe_color_css( $s['panel_bg'] ?? '' ) ?: 'var(--olo-color-background, #ffffff)';
+        $mob_drop_tc = $this->safe_color_css( $s['mobile_text_color'] ?? '' ) ?: 'var(--olo-color-text, #222)';
         ?>
         .<?php echo $uid; ?> .olo-mm-dropdown-panel {
             display: none;
@@ -1716,7 +1716,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-mm-dp-chevron {
             background: none; border: none; cursor: pointer;
             padding: <?php echo $mob_ip; ?>px;
-            color: <?php echo $tgl_color ?: '#999'; ?>;
+            color: <?php echo $tgl_color ?: 'var(--olo-color-text-muted, #999)'; ?>;
             display: flex; align-items: center; flex-shrink: 0;
             -webkit-appearance: none; outline: none;
             <?php if ( $tgl_pos === 'left' ) : ?>order: -1;<?php endif; ?>
@@ -3366,8 +3366,8 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
                             <span class="olo-mm-topbar-search" onclick="var f=this.nextElementSibling;if(f){if(f.style.display==='flex'){f.style.display='none'}else{f.style.display='flex';f.querySelector('input').focus()}}" title="<?php echo esc_attr( olobuild_t( 'Cerca' ) ); ?>" style="cursor:pointer;display:flex">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
                             </span>
-                            <form class="olo-mm-topbar-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>" method="get" style="display:none;position:absolute;right:0;top:100%;margin-top:8px;z-index:999;background:<?php echo esc_attr($s['topbar_bg'] ?: '#1F2937'); ?>;padding:8px;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.2)">
-                                <input type="search" name="s" placeholder="<?php echo esc_attr( olobuild_t( 'Cerca...' ) ); ?>" style="width:220px;padding:8px 12px;border:1px solid rgba(255,255,255,.2);border-radius:4px;background:rgba(255,255,255,.1);color:<?php echo esc_attr($s['topbar_link_color'] ?: '#fff'); ?>;font-size:13px;outline:none" />
+                            <form class="olo-mm-topbar-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>" method="get" style="display:none;position:absolute;right:0;top:100%;margin-top:8px;z-index:999;background:<?php echo esc_attr($s['topbar_bg'] ?: 'var(--olo-color-dark, #1f2937)'); ?>;padding:8px;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.2)">
+                                <input type="search" name="s" placeholder="<?php echo esc_attr( olobuild_t( 'Cerca...' ) ); ?>" style="width:220px;padding:8px 12px;border:1px solid rgba(255,255,255,.2);border-radius:4px;background:rgba(255,255,255,.1);color:<?php echo esc_attr($s['topbar_link_color'] ?: 'var(--olo-color-light, #fff)'); ?>;font-size:13px;outline:none" />
                             </form>
                         </div>
                     <?php endif; ?>

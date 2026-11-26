@@ -91,13 +91,13 @@ class Olobuild_NorthVideoHero_Tile extends Olobuild_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'nvh-' . wp_rand( 10000, 99999 );
 
-        $bg       = $this->safe_color_css( $s['bg_color'] ?? '' )     ?: '#062C22';
-        $txt      = $this->safe_color_css( $s['text_color'] ?? '' )   ?: '#ffffff';
+        $bg       = $this->safe_color_css( $s['bg_color'] ?? '' )     ?: 'var(--olo-color-dark, #062c22)';
+        $txt      = $this->safe_color_css( $s['text_color'] ?? '' )   ?: 'var(--olo-color-light, #ffffff)';
         $eyeCol   = $this->safe_color_css( $s['eyebrow_color'] ?? '' ) ?: 'rgba(255,255,255,0.78)';
         $sub      = $this->safe_color_css( $s['sub_color'] ?? '' )    ?: 'rgba(255,255,255,0.72)';
         $accent   = $this->safe_color_css( $s['accent'] ?? '' )       ?: 'var(--olo-color-primary, #ff7759)';
         $crestC   = $this->safe_color_css( $s['crest_color'] ?? '' )  ?: 'rgba(255,255,255,0.5)';
-        $frameBg  = $this->safe_color_css( $s['frame_bg'] ?? '' )     ?: '#0a201a';
+        $frameBg  = $this->safe_color_css( $s['frame_bg'] ?? '' )     ?: 'var(--olo-color-dark, #0a201a)';
         $frameBd  = Olobuild_Tile_Utils::border_color( $s['frame_border'] ?? null, 'rgba(255,255,255,0.12)' );
 
         $disp = "var(--olo-font-family-heading, 'Space Grotesk',-apple-system,sans-serif)";

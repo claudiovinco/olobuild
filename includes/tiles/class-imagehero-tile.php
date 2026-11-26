@@ -101,11 +101,11 @@ class Olobuild_ImageHero_Tile extends Olobuild_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'oimh-' . wp_rand( 10000, 99999 );
 
-        $bg      = $this->safe_color_css( $s['bg_color'] ) ?: '#0c0c0c';
+        $bg      = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-dark, #0c0c0c)';
         $accent  = $this->safe_color_css( $s['accent'] ) ?: 'var(--olo-color-primary, #c9a86a)';
-        $accOn   = $this->safe_color_css( $s['accent_on'] ?? '' ) ?: '#0c0c0c';
-        $txt     = $this->safe_color_css( $s['text_color'] ?? '' ) ?: '#ffffff';
-        $sub     = $this->safe_color_css( $s['sub_color'] ?? '' ) ?: '#efe9de';
+        $accOn   = $this->safe_color_css( $s['accent_on'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #0c0c0c)';
+        $txt     = $this->safe_color_css( $s['text_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
+        $sub     = $this->safe_color_css( $s['sub_color'] ?? '' ) ?: 'var(--olo-color-light, #efe9de)';
         $eyeCol  = $this->safe_color_css( $s['eyebrow_color'] ?? '' ) ?: $accent;
 
         $orgb    = $this->hex_rgb( $s['overlay_color'] ?? '#0c0c0c' );

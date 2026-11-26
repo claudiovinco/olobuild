@@ -235,14 +235,14 @@ class Olobuild_SwitcherPanel_Tile extends Olobuild_Tile_Base {
         // ── Color helpers ──
         $nav_cont_bg     = $this->safe_color_css( $s['nav_container_bg'] ?? 'transparent' );
         $nav_active_bg   = $this->safe_color_css( $s['nav_active_bg'] ?? 'transparent' );
-        $nav_active_clr  = $this->safe_color_css( $s['nav_active_color'] ?? '#ffffff' ) ?: '#ffffff';
+        $nav_active_clr  = $this->safe_color_css( $s['nav_active_color'] ?? '#ffffff' ) ?: 'var(--olo-color-light, #ffffff)';
         $nav_inactive    = $this->safe_color_css( $s['nav_inactive_color'] ?? 'rgba(255,255,255,0.65)' ) ?: 'rgba(255,255,255,0.65)';
         $nav_hover_bg    = $this->safe_color_css( $s['nav_hover_bg'] ?? 'transparent' );
-        $nav_ind_color   = $this->safe_color_css( $s['nav_indicator_color'] ?? '#ffffff' ) ?: '#ffffff';
+        $nav_ind_color   = $this->safe_color_css( $s['nav_indicator_color'] ?? '#ffffff' ) ?: 'var(--olo-color-light, #ffffff)';
         $hero_overlay    = $this->safe_color_css( $s['hero_overlay_color'] ?? 'rgba(0,0,0,0.35)' );
-        $panel_bg        = $this->safe_color_css( $s['panel_bg'] ?? '#ffffff' ) ?: '#ffffff';
-        $panel_text_clr  = $this->safe_color_css( $s['panel_text_color'] ?? '#1e293b' ) ?: '#1e293b';
-        $panel_title_clr = $this->safe_color_css( $s['panel_title_color'] ?? '#0f172a' ) ?: '#0f172a';
+        $panel_bg        = $this->safe_color_css( $s['panel_bg'] ?? '#ffffff' ) ?: 'var(--olo-color-background, #ffffff)';
+        $panel_text_clr  = $this->safe_color_css( $s['panel_text_color'] ?? '#1e293b' ) ?: 'var(--olo-color-text, #1e293b)';
+        $panel_title_clr = $this->safe_color_css( $s['panel_title_color'] ?? '#0f172a' ) ?: 'var(--olo-color-text, #0f172a)';
 
         $ind_type        = $s['nav_indicator_type'] ?? 'underline';
         $hero_grad_on    = ! empty( $s['hero_overlay_gradient'] );

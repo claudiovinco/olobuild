@@ -137,7 +137,7 @@ class Olobuild_Marquee_Tile extends Olobuild_Tile_Base {
                 $fondo_testo = $this->safe_color_css( $bg_obj['color'] ?? '' );
             }
         } else {
-            $color       = $this->safe_color_css( $s['bg_color'] ) ?: '#1F2937';
+            $color       = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-dark, #1f2937)';
             $bg_decl     = 'background: ' . $color;
             $fondo_testo = $color;
         }

@@ -150,8 +150,8 @@ class Olobuild_ThemeDemos_Tile extends Olobuild_Tile_Base {
                     $name  = isset( $it['name'] ) ? trim( (string) $it['name'] ) : '';
                     $cat   = isset( $it['category'] ) ? trim( (string) $it['category'] ) : '';
                     $zone  = isset( $it['zone_label'] ) ? trim( (string) $it['zone_label'] ) : '';
-                    $ibg   = $this->safe_color_css( $it['bg'] ?? '' ) ?: '#121212';
-                    $iink  = $this->safe_color_css( $it['ink'] ?? '' ) ?: '#f4f4f4';
+                    $ibg   = $this->safe_color_css( $it['bg'] ?? '' ) ?: 'var(--olo-color-dark, #121212)';
+                    $iink  = $this->safe_color_css( $it['ink'] ?? '' ) ?: 'var(--olo-color-light, #f4f4f4)';
                     $iacc  = $this->safe_color_css( $it['accent'] ?? '' ) ?: $acc;
                     // Nome font item (contenuto: rappresenta il TEMA, non i ruoli del sito).
                     $font    = $this->nome_font( $it['font_label'] ?? '' );

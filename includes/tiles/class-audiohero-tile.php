@@ -67,14 +67,14 @@ class Olobuild_AudioHero_Tile extends Olobuild_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'oah-' . wp_rand( 10000, 99999 );
 
-        $bg      = $this->safe_color_css( $s['bg_color'] ) ?: '#0c0c10';
-        $panel   = $this->safe_color_css( $s['panel_color'] ?? '' ) ?: '#16161d';
+        $bg      = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-dark, #0c0c10)';
+        $panel   = $this->safe_color_css( $s['panel_color'] ?? '' ) ?: 'var(--olo-color-dark, #16161d)';
         $accent  = $this->safe_color_css( $s['accent'] ) ?: 'var(--olo-color-primary, #27e0a3)';
-        $accent2 = $this->safe_color_css( $s['accent_2'] ?? '' ) ?: '#ff5d9e';
-        $accOn   = $this->safe_color_css( $s['accent_on'] ?? '' ) ?: '#060608';
-        $txt     = $this->safe_color_css( $s['text_color'] ?? '' ) ?: '#ffffff';
-        $sub     = $this->safe_color_css( $s['sub_color'] ?? '' ) ?: '#b6b6c2';
-        $meta    = $this->safe_color_css( $s['meta_color'] ?? '' ) ?: '#74747f';
+        $accent2 = $this->safe_color_css( $s['accent_2'] ?? '' ) ?: 'var(--olo-color-secondary, #ff5d9e)';
+        $accOn   = $this->safe_color_css( $s['accent_on'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #060608)';
+        $txt     = $this->safe_color_css( $s['text_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
+        $sub     = $this->safe_color_css( $s['sub_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #b6b6c2)';
+        $meta    = $this->safe_color_css( $s['meta_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #74747f)';
 
         $ratio   = trim( (string) ( $s['split_ratio'] ?? '1.1fr .9fr' ) ) ?: '1.1fr .9fr';
         $showpl  = ! empty( $s['show_player'] );

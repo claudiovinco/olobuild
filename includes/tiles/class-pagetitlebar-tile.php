@@ -76,7 +76,7 @@ class Olobuild_Pagetitlebar_Tile extends Olobuild_Tile_Base {
         $bg_c       = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-dark, #1F2937)';
         $bg_img     = esc_url( $s['bg_image'] ?? '' );
         $overlay    = max( 0, min( 100, intval( $s['bg_overlay'] ) ) );
-        $overlay_c  = $this->safe_color_css( $s['bg_overlay_color'] ) ?: '#000000';
+        $overlay_c  = $this->safe_color_css( $s['bg_overlay_color'] ) ?: 'var(--olo-color-dark, #000000)';
         $min_h      = max( 0, intval( $s['min_height'] ) );
 
         // Sfondo unificato: pannello media_bg (immagine/video/gradiente/colore/pattern…)

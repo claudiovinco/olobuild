@@ -88,12 +88,12 @@ class Olobuild_LookbookMixer_Tile extends Olobuild_Tile_Base {
         $mono    = $mono_fam !== '' ? $mono_fam : $mono_fb;
         $nfam    = $this->resolve_font_family( $s['name_font_family'] ?? '', [ 'heading' => $heading, 'body' => $body ] ) ?: $heading;
 
-        $panel  = $this->safe_color_css( $s['panel_bg'] ) ?: '#4d2f40';
-        $slotbg = $this->safe_color_css( $s['slot_bg'] ) ?: '#432838';
-        $acc    = $this->safe_color_css( $s['accent'] ) ?: '#e7a0b4';
-        $accink = $this->safe_color_css( $s['accent_ink'] ) ?: '#23131d';
-        $namec  = $this->safe_color_css( $s['name_color'] ) ?: '#f6e9ec';
-        $pricec = $this->safe_color_css( $s['price_color'] ) ?: '#9c7e8c';
+        $panel  = $this->safe_color_css( $s['panel_bg'] ) ?: 'var(--olo-color-dark, #4d2f40)';
+        $slotbg = $this->safe_color_css( $s['slot_bg'] ) ?: 'var(--olo-color-dark, #432838)';
+        $acc    = $this->safe_color_css( $s['accent'] ) ?: 'var(--olo-color-primary, #e7a0b4)';
+        $accink = $this->safe_color_css( $s['accent_ink'] ) ?: 'var(--olo-color-primary-contrast, #23131d)';
+        $namec  = $this->safe_color_css( $s['name_color'] ) ?: 'var(--olo-color-light, #f6e9ec)';
+        $pricec = $this->safe_color_css( $s['price_color'] ) ?: 'var(--olo-color-text-muted, #9c7e8c)';
         $line   = $this->safe_color_css( $s['line_color'] ) ?: 'rgba(246,233,236,.13)';
         $cur    = sanitize_text_field( $s['currency'] ?? '€' );
         // Pastiglia del colore: spenta, la riga dà il suo posto al nome (in Orto Vivo erano tutte uguali).

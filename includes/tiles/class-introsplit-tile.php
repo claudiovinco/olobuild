@@ -65,7 +65,7 @@ class Olobuild_IntroSplit_Tile extends Olobuild_Tile_Base {
         $snc   = $this->safe_color_css( $s['stat_number_color'] ?? '' ) ?: 'var(--olo-color-text, #142019)';
         $slc   = $this->safe_color_css( $s['stat_label_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #8a948d)';
         $ctabg = $this->safe_color_css( $s['cta_bg'] ?? '' ) ?: 'var(--olo-color-text, #0a2a1e)';
-        $ctac  = $this->safe_color_css( $s['cta_color'] ?? '' ) ?: '#ffffff';
+        $ctac  = $this->safe_color_css( $s['cta_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
         $bbg   = $this->safe_color_css( $s['badge_bg'] ?? '' ) ?: 'var(--olo-color-primary, #c8ff3c)';
         $bcol  = $this->safe_color_css( $s['badge_color'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #0a2a1e)';
         $asp   = preg_replace( '/[^0-9.\/]/', '', $s['media_aspect'] ?: '4/4.4' ) ?: '4/4.4';

@@ -65,12 +65,12 @@ class Olobuild_Masthead_Tile extends Olobuild_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'omst-' . wp_rand( 10000, 99999 );
 
-        $bg     = $this->safe_color_css( $s['bg_color'] ) ?: '#f4f1ea';
-        $ink    = $this->safe_color_css( $s['ink_color'] ?? '' ) ?: '#16161a';
-        $inkS   = $this->safe_color_css( $s['ink_soft_color'] ?? '' ) ?: '#44444c';
-        $inkF   = $this->safe_color_css( $s['ink_faint_color'] ?? '' ) ?: '#86848c';
+        $bg     = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-background, #f4f1ea)';
+        $ink    = $this->safe_color_css( $s['ink_color'] ?? '' ) ?: 'var(--olo-color-text, #16161a)';
+        $inkS   = $this->safe_color_css( $s['ink_soft_color'] ?? '' ) ?: 'var(--olo-color-text, #44444c)';
+        $inkF   = $this->safe_color_css( $s['ink_faint_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #86848c)';
         $accent = $this->safe_color_css( $s['accent'] ?? '' ) ?: 'var(--olo-color-primary, #cf2e2e)';
-        $rule   = $this->safe_color_css( $s['rule_color'] ?? '' ) ?: '#ddd8cc';
+        $rule   = $this->safe_color_css( $s['rule_color'] ?? '' ) ?: 'var(--olo-color-border, #ddd8cc)';
 
         $npSize = max( 24, min( 96, intval( $s['nameplate_size'] ) ) );
         $hSize  = max( 24, min( 96, intval( $s['headline_size'] ) ) );

@@ -83,8 +83,8 @@ class Olobuild_BeforeAfter_Tile extends Olobuild_Tile_Base {
         $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
         if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
         $accent = $this->safe_color_css( $s['accent'] ) ?: 'var(--olo-color-primary, #e1474f)';
-        $blc    = $this->safe_color_css( $s['before_label_color'] ?? '' ) ?: '#ffffff';
-        $alc    = $this->safe_color_css( $s['after_label_color'] ?? '' ) ?: '#ffffff';
+        $blc    = $this->safe_color_css( $s['before_label_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
+        $alc    = $this->safe_color_css( $s['after_label_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
         $tc     = $this->safe_color_css( $s['title_color'] ?? '' ) ?: 'var(--olo-color-text, #111827)';
         $xc     = $this->safe_color_css( $s['text_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #6b7280)';
         $cbg    = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'transparent';

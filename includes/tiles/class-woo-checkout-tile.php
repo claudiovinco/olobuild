@@ -79,7 +79,7 @@ class Olobuild_Woo_Checkout_Tile extends Olobuild_Tile_Base {
         $input_padding = ( $form_style === 'modern' ) ? '12px 16px' : '8px 12px';
 
         // Campi/pannelli — fallback = resa storica (input bianchi, pannelli muted)
-        $input_bg     = $this->safe_color_css( $s['input_bg'] ?? '' ) ?: '#ffffff';
+        $input_bg     = $this->safe_color_css( $s['input_bg'] ?? '' ) ?: 'var(--olo-color-background, #ffffff)';
         $input_text   = $this->safe_color_css( $s['input_text_color'] ?? '' ) ?: ( $text_color ?: 'inherit' );
         // Controllo standard a 4 angoli: border_radius() accetta scalare e oggetto.
         $input_radius = Olobuild_Tile_Utils::border_radius( $s['input_radius'] ?? '' ) ?: $border_radius;

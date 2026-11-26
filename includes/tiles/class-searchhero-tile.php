@@ -61,14 +61,14 @@ class Olobuild_SearchHero_Tile extends Olobuild_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'osh-' . wp_rand( 10000, 99999 );
 
-        $bg      = $this->safe_color_css( $s['bg_color'] ) ?: '#1a1a22';
-        $panel   = $this->safe_color_css( $s['panel_color'] ) ?: '#26262f';
+        $bg      = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-dark, #1a1a22)';
+        $panel   = $this->safe_color_css( $s['panel_color'] ) ?: 'var(--olo-color-dark, #26262f)';
         $accent  = $this->safe_color_css( $s['accent'] ) ?: 'var(--olo-color-primary, #ff5a5f)';
-        $accOn   = $this->safe_color_css( $s['accent_on'] ?? '' ) ?: '#ffffff';
+        $accOn   = $this->safe_color_css( $s['accent_on'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #ffffff)';
         $glow    = $this->safe_color_css( $s['glow_color'] ?? '' ) ?: 'rgba(255,90,95,0.22)';
-        $txt     = $this->safe_color_css( $s['text_color'] ?? '' ) ?: '#ffffff';
-        $sub     = $this->safe_color_css( $s['sub_color'] ?? '' ) ?: '#6c6c7c';
-        $chipCol = $this->safe_color_css( $s['chip_color'] ?? '' ) ?: '#a6a6b4';
+        $txt     = $this->safe_color_css( $s['text_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
+        $sub     = $this->safe_color_css( $s['sub_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #6c6c7c)';
+        $chipCol = $this->safe_color_css( $s['chip_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #a6a6b4)';
         $line    = $this->safe_color_css( $s['border_color'] ?? '' ) ?: 'rgba(255,255,255,0.09)';
         $sline   = Olobuild_Tile_Utils::border_color( $s['search_border'] ?? null, 'rgba(255,90,95,0.4)' );
         $mh      = max( 0, min( 100, intval( $s['min_height'] ) ) );

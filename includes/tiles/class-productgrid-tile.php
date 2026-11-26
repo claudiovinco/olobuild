@@ -195,7 +195,7 @@ class Olobuild_ProductGrid_Tile extends Olobuild_Tile_Base {
         $tagbg  = $this->safe_color_css( $s['tag_bg'] ?? '' ) ?: 'var(--olo-color-text, #0c0c0c)';
         $tagcol = $this->safe_color_css( $s['tag_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
         $qabg   = $this->safe_color_css( $s['quick_add_bg'] ?? '' ) ?: 'rgba(255,255,255,0.95)';
-        $qacol  = $this->safe_color_css( $s['quick_add_color'] ?? '' ) ?: '#111111';
+        $qacol  = $this->safe_color_css( $s['quick_add_color'] ?? '' ) ?: 'var(--olo-color-text, #111111)';
         $catcol = $this->safe_color_css( $s['category_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #7c776e)';
         $tcol   = $this->safe_color_css( $s['title_color'] ?? '' ) ?: 'var(--olo-color-text, #111827)';
         $pcol   = $this->safe_color_css( $s['price_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
@@ -263,7 +263,7 @@ class Olobuild_ProductGrid_Tile extends Olobuild_Tile_Base {
         $f_txt  = $this->safe_color_css( $s['filter_text_color'] ?? '' ) ?: 'var(--olo-color-text, #111827)';
         $f_bd   = Olobuild_Tile_Utils::border_color( $s['filter_border_color'] ?? null, 'var(--olo-color-border, rgba(0,0,0,.14))' );
         $f_abg  = $this->safe_color_css( $s['filter_active_bg'] ?? '' ) ?: $pcol;
-        $f_acol = $this->safe_color_css( $s['filter_active_color'] ?? '' ) ?: '#ffffff';
+        $f_acol = $this->safe_color_css( $s['filter_active_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
 
         // ── KIT standard OLObuild (contenitore) ──
         $bg_obj  = $s['bg'] ?? null;

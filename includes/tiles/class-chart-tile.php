@@ -121,8 +121,8 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
         $num_format    = ! empty( $s['number_format'] );
         $chart_height = max( 100, intval( $s['chart_height'] ) );
         $bg_color     = $this->safe_color_css( $s['bg_color'] );
-        $text_color   = $this->safe_color_css( $s['text_color'] ) ?: '#9CA3AF';
-        $grid_color   = $this->safe_color_css( $s['grid_color'] ) ?: '#374151';
+        $text_color   = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text-muted, #9ca3af)';
+        $grid_color   = $this->safe_color_css( $s['grid_color'] ) ?: 'var(--olo-color-border, #374151)';
         $axis_color   = $this->safe_color_css( $s['axis_color'] ) ?: $grid_color;
 
         $border_override = $this->safe_color_css( $s['border_color_override'] );
@@ -206,8 +206,8 @@ class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
 
         // Tooltip
         $tt_enabled   = $s['tooltip_enabled'] !== false;
-        $tt_bg        = $this->safe_color_css( $s['tooltip_bg'] ) ?: '#000000';
-        $tt_text      = $this->safe_color_css( $s['tooltip_text_color'] ) ?: '#ffffff';
+        $tt_bg        = $this->safe_color_css( $s['tooltip_bg'] ) ?: 'var(--olo-color-dark, #000000)';
+        $tt_text      = $this->safe_color_css( $s['tooltip_text_color'] ) ?: 'var(--olo-color-light, #ffffff)';
         $tt_bc        = $this->safe_color_css( $s['tooltip_border_color'] ) ?: 'transparent';
         $tt_bw        = max( 0, intval( $s['tooltip_border_width'] ) );
         $tt_cr        = max( 0, Olobuild_Tile_Utils::radius_int( $s['tooltip_corner_radius'] ) );

@@ -81,11 +81,11 @@ class Olobuild_Carousel_Tile extends Olobuild_Tile_Base {
             $obj_pos = 'center center';
         }
 
-        $arrow_col  = $this->safe_color_css( $s['arrow_color'] ) ?: '#FFFFFF';
+        $arrow_col  = $this->safe_color_css( $s['arrow_color'] ) ?: 'var(--olo-color-light, #ffffff)';
         $arrow_bg   = $this->safe_color_css( $s['arrow_bg'] ) ?: 'rgba(0,0,0,0.5)';
         $dot_col    = $this->safe_color_css( $s['dot_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $dot_inact  = $this->safe_color_css( $s['dot_inactive_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
-        $cap_col    = $this->safe_color_css( $s['caption_color'] ) ?: '#FFFFFF';
+        $cap_col    = $this->safe_color_css( $s['caption_color'] ) ?: 'var(--olo-color-light, #ffffff)';
         $cap_bg     = $this->safe_color_css( $s['caption_bg'] ) ?: 'rgba(0,0,0,0.6)';
 
         $height_mode = $s['slide_height'] === 'fixed' ? 'fixed' : 'auto';

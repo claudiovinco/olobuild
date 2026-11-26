@@ -218,7 +218,7 @@ class Olobuild_Counter_Tile extends Olobuild_Tile_Base {
             <?php if ( filter_var( $s['overlay'], FILTER_VALIDATE_BOOLEAN ) && $has_media ) : ?>
             .<?php echo $uid; ?> .olo-cnt-overlay {
                 position: absolute; inset: 0; z-index: 1;
-                background: <?php echo $this->safe_color_css( $s['overlay_color'] ) ?: '#000'; ?>;
+                background: <?php echo $this->safe_color_css( $s['overlay_color'] ) ?: 'var(--olo-color-dark, #000)'; ?>;
                 opacity: <?php echo ( intval( $s['overlay_opacity'] ) ?: 50 ) / 100; ?>;
             }
             <?php endif; ?>

@@ -78,13 +78,13 @@ class Olobuild_GlowGallery_Tile extends Olobuild_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'oevh-' . wp_rand( 10000, 99999 );
 
-        $bg     = $this->safe_color_css( $s['bg_color'] ) ?: '#241430';
+        $bg     = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-dark, #241430)';
         $accent = $this->safe_color_css( $s['accent'] ) ?: 'var(--olo-color-primary, #e0afca)';
-        $accOn  = $this->safe_color_css( $s['accent_on'] ?? '' ) ?: '#170c1f';
-        $txt    = $this->safe_color_css( $s['text_color'] ?? '' ) ?: '#f3e9ef';
-        $sub    = $this->safe_color_css( $s['sub_color'] ?? '' ) ?: '#c8b3c6';
-        $eyc    = $this->safe_color_css( $s['eyebrow_color'] ?? '' ) ?: '#e0afca';
-        $mbg    = $this->safe_color_css( $s['media_bg'] ?? '' ) ?: '#33203f';
+        $accOn  = $this->safe_color_css( $s['accent_on'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #170c1f)';
+        $txt    = $this->safe_color_css( $s['text_color'] ?? '' ) ?: 'var(--olo-color-light, #f3e9ef)';
+        $sub    = $this->safe_color_css( $s['sub_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #c8b3c6)';
+        $eyc    = $this->safe_color_css( $s['eyebrow_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #e0afca)';
+        $mbg    = $this->safe_color_css( $s['media_bg'] ?? '' ) ?: 'var(--olo-color-dark, #33203f)';
         $glow   = $this->safe_color_css( $s['glow_color'] ?? '' ) ?: 'rgba(224,175,202,0.22)';
 
         $gw     = max( 100, intval( $s['glow_w'] ) );

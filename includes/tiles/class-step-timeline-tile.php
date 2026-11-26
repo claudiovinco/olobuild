@@ -210,7 +210,7 @@ class Olobuild_StepTimeline_Tile extends Olobuild_Tile_Base {
                     $m_type       = $it['media_type'] ?? 'placeholder';
                     $m_content    = $it['media_content'] ?? '';
                     $m_image      = $it['media_image'] ?? '';
-                    $m_bg         = $this->safe_color_css( $it['media_bg'] ?? '' ) ?: '#f5efe7';
+                    $m_bg         = $this->safe_color_css( $it['media_bg'] ?? '' ) ?: 'var(--olo-color-background, #f5efe7)';
                     $m_color      = $this->safe_color_css( $it['media_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
                     $pre_title    = $it['pre_title'] ?? '';
                     $title        = $it['title'] ?? '';

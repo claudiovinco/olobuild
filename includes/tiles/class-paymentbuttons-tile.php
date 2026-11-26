@@ -20,7 +20,7 @@ class Olobuild_Paymentbuttons_Tile extends Olobuild_Tile_Base {
         $cancel_url  = esc_url( $settings['cancel_url'] ?? '' );
         $alignment   = esc_attr( $settings['alignment'] ?? 'center' );
         $bg_color    = ( $settings['bg_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
-        $text_color  = ( $settings['text_color'] ?? '' ) ?: '#ffffff';
+        $text_color  = ( $settings['text_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
         $radius      = Olobuild_Tile_Utils::border_radius( $settings['border_radius'] ?? 8 );
         $font_size   = intval( $settings['font_size'] ?? 16 );
         $full_width  = ! empty( $settings['full_width'] );

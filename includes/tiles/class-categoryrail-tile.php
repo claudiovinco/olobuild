@@ -76,7 +76,7 @@ class Olobuild_CategoryRail_Tile extends Olobuild_Tile_Base {
         $gap   = intval( $s['gap'] ) . 'px';
         $mbg   = $this->safe_color_css( $s['media_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #eceff3)';
         $ov    = $this->safe_color_css( $s['overlay_color'] ?? '' ) ?: 'rgba(16,16,21,0.5)';
-        $tc    = $this->safe_color_css( $s['title_color'] ?? '' ) ?: '#ffffff';
+        $tc    = $this->safe_color_css( $s['title_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
         $sc    = $this->safe_color_css( $s['subtitle_color'] ?? '' ) ?: 'rgba(255,255,255,0.8)';
         $rad   = Olobuild_Tile_Utils::border_radius( $s['radius'] ?? 14 ) ?: '0';
         $hint  = $this->safe_color_css( $s['hint_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #6b7280)';

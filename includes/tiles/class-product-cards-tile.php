@@ -200,7 +200,7 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
                         <?php
                         $ov_op = intval( $it['top_bg']['overlay_opacity'] ?? 0 );
                         if ( ( $it['top_bg']['type'] ?? 'none' ) !== 'none' && $ov_op > 0 ) :
-                            $ov_clr = $this->safe_color_css( $it['top_bg']['overlay_color'] ?? '#000000' ) ?: '#000000';
+                            $ov_clr = $this->safe_color_css( $it['top_bg']['overlay_color'] ?? '#000000' ) ?: 'var(--olo-color-dark, #000000)';
                         ?>
                             <div class="olo-pcards__overlay" style="position:absolute;inset:0;background-color:<?php echo esc_attr( $ov_clr ); ?>;opacity:<?php echo esc_attr( min( 100, $ov_op ) / 100 ); ?>;pointer-events:none;z-index:1" aria-hidden="true"></div>
                         <?php endif; ?>

@@ -83,13 +83,13 @@ class Olobuild_WorkList_Tile extends Olobuild_Tile_Base {
         $cat_size    = max( 10, min( 18, absint( $s['category_size'] ) ) );
         $year_size   = max( 10, min( 20, absint( $s['year_size'] ) ) );
 
-        $line     = $this->safe_color_css( $s['divider_color'] ) ?: '#d7d1c2';
+        $line     = $this->safe_color_css( $s['divider_color'] ) ?: 'var(--olo-color-border, #d7d1c2)';
         $hover_bg = $this->safe_color_css( $s['row_hover_bg'] ) ?: 'transparent';
-        $num_c    = $this->safe_color_css( $s['number_color'] ) ?: '#8d8a82';
-        $title_c  = $this->safe_color_css( $s['title_color'] ) ?: '#18181a';
-        $cat_c    = $this->safe_color_css( $s['category_color'] ) ?: '#8d8a82';
-        $year_c   = $this->safe_color_css( $s['year_color'] ) ?: '#18181a';
-        $arrow_c  = $this->safe_color_css( $s['arrow_color'] ) ?: '#18181a';
+        $num_c    = $this->safe_color_css( $s['number_color'] ) ?: 'var(--olo-color-text-muted, #8d8a82)';
+        $title_c  = $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-text, #18181a)';
+        $cat_c    = $this->safe_color_css( $s['category_color'] ) ?: 'var(--olo-color-text-muted, #8d8a82)';
+        $year_c   = $this->safe_color_css( $s['year_color'] ) ?: 'var(--olo-color-text, #18181a)';
+        $arrow_c  = $this->safe_color_css( $s['arrow_color'] ) ?: 'var(--olo-color-text, #18181a)';
 
         $show_cat   = ! empty( $s['show_category'] );
         $show_year  = ! empty( $s['show_year'] );

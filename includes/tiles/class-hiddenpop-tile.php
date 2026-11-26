@@ -172,12 +172,12 @@ class Olobuild_Hiddenpop_Tile extends Olobuild_Tile_Base {
 
         // ── Modal styling ──
         $max_w       = max( 300, min( 900, intval( $s['modal_max_width'] ) ) );
-        $bg_color    = $this->safe_color_css( $s['modal_bg_color'] ?? '' ) ?: '#ffffff';
+        $bg_color    = $this->safe_color_css( $s['modal_bg_color'] ?? '' ) ?: 'var(--olo-color-background, #ffffff)';
         $shadow      = Olobuild_Tile_Utils::shadow( $s['modal_shadow'] ?? 'lg' );
         $radius      = Olobuild_Tile_Utils::border_radius( $s['modal_radius'] ?? 16 );
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['modal_radius_hover'] ?? null );
         $border_w    = max( 0, intval( $s['modal_border_width'] ?? 0 ) );
-        $border_c    = $this->safe_color_css( $s['modal_border_color'] ?? '' ) ?: '#e5e7eb';
+        $border_c    = $this->safe_color_css( $s['modal_border_color'] ?? '' ) ?: 'var(--olo-color-border, #e5e7eb)';
         $modal_border_decl = Olobuild_Tile_Utils::border_css(
             $s['modal_border'] ?? null,
             [ 'width' => $border_w, 'color' => $border_c ]
@@ -186,9 +186,9 @@ class Olobuild_Hiddenpop_Tile extends Olobuild_Tile_Base {
         $overlay_a   = round( $overlay_pct / 100, 2 );
         $blur        = max( 0, min( 20, intval( $s['popup_overlay_blur'] ?? 0 ) ) );
 
-        $title_color = $this->safe_color_css( $s['title_color'] ?? '' ) ?: '#111827';
+        $title_color = $this->safe_color_css( $s['title_color'] ?? '' ) ?: 'var(--olo-color-text, #111827)';
         $title_size  = max( 14, min( 48, intval( $s['title_size'] ?? 24 ) ) );
-        $text_color  = $this->safe_color_css( $s['text_color'] ?? '' ) ?: '#4b5563';
+        $text_color  = $this->safe_color_css( $s['text_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #4b5563)';
 
         // ── Modal opts ──
         $modal_opts = [];

@@ -353,7 +353,7 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
         $anim     = in_array( $s['animation'], [ 'fade', 'scale', 'slide' ], true ) ? $s['animation'] : 'fade';
         $filter_style = in_array( $s['filter_style'], [ 'buttons', 'pills', 'underline', 'dropdown' ], true ) ? $s['filter_style'] : 'buttons';
 
-        $ov_color = $this->safe_color_css( $s['overlay_color'] ) ?: '#000000';
+        $ov_color = $this->safe_color_css( $s['overlay_color'] ) ?: 'var(--olo-color-dark, #000000)';
         $ov_opa   = max( 0, min( 100, absint( $s['overlay_opacity'] ) ) );
         $title_c  = $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-text, #374151)';
         $text_c   = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text-soft, #6b7280)';

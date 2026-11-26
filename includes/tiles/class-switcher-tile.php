@@ -108,7 +108,7 @@ class Olobuild_Switcher_Tile extends Olobuild_Tile_Base {
         // ── Color helpers ──
         $tab_bg_active   = $this->safe_color_css( $s['active_bg'] ) ?: '';
         $tab_color_act   = $this->safe_color_css( $s['active_color'] ) ?: 'var(--olo-color-text, #1e293b)';
-        $tab_color_inact = $this->safe_color_css( $s['inactive_color'] ) ?: '#64748b';
+        $tab_color_inact = $this->safe_color_css( $s['inactive_color'] ) ?: 'var(--olo-color-text-muted, #64748b)';
         $tab_hover_bg    = $this->safe_color_css( $s['hover_bg'] ) ?: '';
         $container_bg    = $this->safe_color_css( $s['container_bg'] ) ?: '';
         $indicator_clr   = $this->safe_color_css( $s['indicator_color'] ) ?: 'var(--olo-color-primary, #e1474f)';

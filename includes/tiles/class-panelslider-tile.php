@@ -273,7 +273,7 @@ class Olobuild_PanelSlider_Tile extends Olobuild_Tile_Base {
         $radius_css       = $radius ? 'border-radius:' . $radius . ';' : '';
 
         // Card colors
-        $card_bg     = $this->safe_color_css( $s['card_bg'] ?? '#ffffff' ) ?: '#ffffff';
+        $card_bg     = $this->safe_color_css( $s['card_bg'] ?? '#ffffff' ) ?: 'var(--olo-color-background, #ffffff)';
         $card_bcol   = $this->safe_color_css( $s['card_border_color'] ?? 'transparent' );
         $card_bw     = max( 0, intval( $s['card_border_width'] ?? 0 ) );
         $card_bs     = in_array( $s['card_border_style'] ?? 'solid', [ 'solid', 'dashed', 'dotted', 'double' ], true ) ? ( $s['card_border_style'] ?? 'solid' ) : 'solid';

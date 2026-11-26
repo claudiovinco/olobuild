@@ -117,9 +117,9 @@ class Olobuild_StatStrip_Tile extends Olobuild_Tile_Base {
         $l_wt    = $this->font_weight_css( $s['label_weight'] ?? '' );
         $l_size  = max( 10, min( 22, absint( $s['label_size'] ) ) );
 
-        $line    = $this->safe_color_css( $s['divider_color'] ) ?: '#d7d1c2';
-        $v_color = $this->safe_color_css( $s['value_color'] ) ?: '#18181a';
-        $l_color = $this->safe_color_css( $s['label_color'] ) ?: '#8d8a82';
+        $line    = $this->safe_color_css( $s['divider_color'] ) ?: 'var(--olo-color-border, #d7d1c2)';
+        $v_color = $this->safe_color_css( $s['value_color'] ) ?: 'var(--olo-color-text, #18181a)';
+        $l_color = $this->safe_color_css( $s['label_color'] ) ?: 'var(--olo-color-text-muted, #8d8a82)';
 
         $dividers = ! empty( $s['show_dividers'] );
         $band_brd = ! empty( $s['band_border'] );

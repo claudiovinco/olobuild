@@ -82,15 +82,15 @@ class Olobuild_ChatHero_Tile extends Olobuild_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'ocht-' . wp_rand( 10000, 99999 );
 
-        $bg     = $this->safe_color_css( $s['bg_color'] ) ?: '#140e22';
-        $panel  = $this->safe_color_css( $s['panel_color'] ?? '' ) ?: '#1e1633';
-        $panel2 = $this->safe_color_css( $s['panel2_color'] ?? '' ) ?: '#271d42';
+        $bg     = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-dark, #140e22)';
+        $panel  = $this->safe_color_css( $s['panel_color'] ?? '' ) ?: 'var(--olo-color-dark, #1e1633)';
+        $panel2 = $this->safe_color_css( $s['panel2_color'] ?? '' ) ?: 'var(--olo-color-dark, #271d42)';
         $accent = $this->safe_color_css( $s['accent'] ) ?: 'var(--olo-color-primary, #a06bff)';
         $acc2   = $this->safe_color_css( $s['accent2'] ?? '' ) ?: 'var(--olo-color-secondary, #ff7ad1)';
-        $accOn  = $this->safe_color_css( $s['accent_on'] ?? '' ) ?: '#ffffff';
-        $txt    = $this->safe_color_css( $s['text_color'] ?? '' ) ?: '#ffffff';
-        $sub    = $this->safe_color_css( $s['sub_color'] ?? '' ) ?: '#776e92';
-        $msgtxt = $this->safe_color_css( $s['msg_text_color'] ?? '' ) ?: '#b3a9cc';
+        $accOn  = $this->safe_color_css( $s['accent_on'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #ffffff)';
+        $txt    = $this->safe_color_css( $s['text_color'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
+        $sub    = $this->safe_color_css( $s['sub_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #776e92)';
+        $msgtxt = $this->safe_color_css( $s['msg_text_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #b3a9cc)';
         $pillc  = $this->safe_color_css( $s['pill_color'] ?? '' ) ?: $accent;
         $glow   = $this->safe_color_css( $s['glow_color'] ?? '' ) ?: 'rgba(160,107,255,0.3)';
 

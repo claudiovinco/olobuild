@@ -287,7 +287,7 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
                 <div class="olo-hsplit__left"<?php echo $plx_left; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- uk-parallax attribute built above from fixed numbers, esc_attr()'d ?>>
                     <?php if ( ! empty( $s['eyebrow_text'] ) ) : ?>
                         <div class="olo-hsplit__eyebrow" style="display:inline-flex;align-items:center;gap:10px;font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $this->safe_color_css( $s['eyebrow_color'] ) ?: 'var(--olo-color-text, #1f2937)' ); ?>;margin-bottom:32px;<?php echo esc_attr( $this->tipografia_css( $s, 'eyebrow', [ 'color' => 'eyebrow_no_color' ] ) ); ?>">
-                            <span style="width:10px;height:10px;border-radius:50%;background:<?php echo esc_attr( $this->safe_color_css( $s['eyebrow_dot_color'] ) ?: '#10b981' ); ?>"></span>
+                            <span style="width:10px;height:10px;border-radius:50%;background:<?php echo esc_attr( $this->safe_color_css( $s['eyebrow_dot_color'] ) ?: 'var(--olo-color-primary, #10b981)' ); ?>"></span>
                             <span data-olo-editable="eyebrow_text"><?php echo esc_html( $s['eyebrow_text'] ); ?></span>
                         </div>
                     <?php endif; ?>
@@ -304,7 +304,7 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
                             <?php foreach ( $headlines as $idx => $line ) :
                                 $line_text = $line['text'] ?? '';
                                 if ( $line_text === '' ) continue;
-                                $color  = $this->safe_color_css( $line['color'] ?? '' ) ?: '#0f172a';
+                                $color  = $this->safe_color_css( $line['color'] ?? '' ) ?: 'var(--olo-color-text, #0f172a)';
                                 $italic = ! empty( $line['italic'] ) ? 'font-style:italic;' : '';
                             ?>
                                 <span style="display:block;color:<?php echo esc_attr( $color ); ?>;<?php echo esc_attr( $italic ); ?>" data-olo-editable="<?php echo 'headline_lines.' . intval( $idx ) . '.text'; ?>"><?php echo esc_html( $line_text ); ?></span>
@@ -330,8 +330,8 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
                     <?php if ( ! empty( $s['cta1_text'] ) || ! empty( $s['cta2_text'] ) ) : ?>
                         <div class="olo-hsplit__ctas" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:60px">
                             <?php if ( ! empty( $s['cta1_text'] ) ) :
-                                $c1_bg  = $this->safe_color_css( $s['cta1_bg'] ) ?: '#0f172a';
-                                $c1_clr = $this->safe_color_css( $s['cta1_color'] ) ?: '#ffffff';
+                                $c1_bg  = $this->safe_color_css( $s['cta1_bg'] ) ?: 'var(--olo-color-dark, #0f172a)';
+                                $c1_clr = $this->safe_color_css( $s['cta1_color'] ) ?: 'var(--olo-color-light, #ffffff)';
                                 $c1_tgt = $s['cta1_target'] === '_blank' ? ' target="_blank" rel="noopener"' : '';
                                 // «Durata» dello Sfondo (che in hover colora anche il bordo) e del Colore testo
                                 $c1_bg_dur  = Olobuild_Tile_Utils::durata_hover( $s, 'cta1_bg_hover_duration', '.2s' );
@@ -341,8 +341,8 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
                             <?php endif; ?>
                             <?php if ( ! empty( $s['cta2_text'] ) ) :
                                 $c2_bg    = $s['cta2_bg'] === 'transparent' ? 'transparent' : ( $this->safe_color_css( $s['cta2_bg'] ) ?: 'transparent' );
-                                $c2_clr   = $this->safe_color_css( $s['cta2_color'] ) ?: '#0f172a';
-                                $c2_bord  = $this->safe_color_css( $s['cta2_border'] ) ?: '#0f172a';
+                                $c2_clr   = $this->safe_color_css( $s['cta2_color'] ) ?: 'var(--olo-color-text, #0f172a)';
+                                $c2_bord  = $this->safe_color_css( $s['cta2_border'] ) ?: 'var(--olo-color-border, #0f172a)';
                                 $c2_tgt   = $s['cta2_target'] === '_blank' ? ' target="_blank" rel="noopener"' : '';
                                 $c2_bg_dur  = Olobuild_Tile_Utils::durata_hover( $s, 'cta2_bg_hover_duration', '.2s' );
                                 $c2_clr_dur = Olobuild_Tile_Utils::durata_hover( $s, 'cta2_color_hover_duration', '.2s' );
@@ -359,7 +359,7 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
                         <div class="olo-hsplit__stats" style="display:grid;grid-template-columns:repeat(<?php echo count( $stats ); ?>,1fr);gap:32px;padding-top:32px;border-top:1px solid <?php echo esc_attr( $mixp( 14 ) ); ?>">
                             <?php foreach ( $stats as $sidx => $st ) :
                                 $val       = $st['value'] ?? '';
-                                $val_color = $this->safe_color_css( $st['value_color'] ?? '' ) ?: '#0f172a';
+                                $val_color = $this->safe_color_css( $st['value_color'] ?? '' ) ?: 'var(--olo-color-text, #0f172a)';
                                 $lbl       = $st['label'] ?? '';
                                 // Corsivo per voce (Stile → Statistiche). Le voci salvate prima del controllo
                                 // non hanno la chiave e tengono la regola di allora: corsivo solo su «Gratis».
@@ -409,9 +409,9 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
                         <?php endif; ?>
                     </div>
                 <?php elseif ( $panel_visible ) :
-                    $sc_badge_dot = $this->safe_color_css( $s['showcase_badge_dot'] ) ?: '#dc2626';
-                    $sc_badge_bg  = $this->safe_color_css( $s['showcase_badge_bg'] ) ?: '#ffffff';
-                    $sc_badge_col = $this->safe_color_css( $s['showcase_badge_color'] ?? '' ) ?: '#0f172a';
+                    $sc_badge_dot = $this->safe_color_css( $s['showcase_badge_dot'] ) ?: 'var(--olo-color-primary, #dc2626)';
+                    $sc_badge_bg  = $this->safe_color_css( $s['showcase_badge_bg'] ) ?: 'var(--olo-color-background, #ffffff)';
+                    $sc_badge_col = $this->safe_color_css( $s['showcase_badge_color'] ?? '' ) ?: 'var(--olo-color-text, #0f172a)';
                     $items        = is_array( $s['showcase_items'] ) ? array_slice( $s['showcase_items'], 0, 4 ) : [];
                     // Didascalie sotto le card: il grigio tenue del tema (--olo-color-text-faint) è per i fondi
                     // chiari, ma il pannello di serie è scuro e lì stava a 2,6:1. Decide il fondo del pannello;
@@ -440,7 +440,7 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
                                 <?php foreach ( $items as $idx => $it ) :
                                     $num     = $it['number'] ?? '';
                                     $txt     = $it['text'] ?? '';
-                                    $txt_clr = $this->safe_color_css( $it['text_color'] ?? '' ) ?: '#0f172a';
+                                    $txt_clr = $this->safe_color_css( $it['text_color'] ?? '' ) ?: 'var(--olo-color-text, #0f172a)';
                                     $italic  = ! empty( $it['italic'] ) ? 'font-style:italic;' : '';
 
                                     // Card bg via Olobuild_CSS_Builder (background creativo unificato)

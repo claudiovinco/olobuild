@@ -76,7 +76,7 @@ class Olobuild_Mixer_Tile extends Olobuild_Tile_Base {
             <div class="omx-panel">
                 <div class="omx-swatches">
                     <?php foreach ( $items as $it ) :
-                        $c = $this->safe_color_css( $it['color'] ?? '' ) ?: '#cccccc';
+                        $c = $this->safe_color_css( $it['color'] ?? '' ) ?: 'var(--olo-color-light, #cccccc)';
                     ?>
                         <button type="button" class="omx-sw" data-mx="<?php echo esc_attr( $c ); ?>" data-mx-name="<?php echo esc_attr( $it['name'] ?? '' ); ?>" style="background:<?php echo esc_attr( $c ); ?>" aria-label="<?php echo esc_attr( $it['name'] ?? '' ); ?>"></button>
                     <?php endforeach; ?>

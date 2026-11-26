@@ -109,18 +109,18 @@ class Olobuild_ProductHero_Tile extends Olobuild_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'oph-' . wp_rand( 10000, 99999 );
 
-        $bg     = $this->safe_color_css( $s['bg_color'] ?? '' )      ?: '#0b0d18';
-        $panel  = $this->safe_color_css( $s['panel_color'] ?? '' )   ?: '#141a2e';
-        $panel2 = $this->safe_color_css( $s['panel2_color'] ?? '' )  ?: '#1b2238';
-        $cell   = $this->safe_color_css( $s['cell_color'] ?? '' )    ?: '#11142270';
+        $bg     = $this->safe_color_css( $s['bg_color'] ?? '' )      ?: 'var(--olo-color-dark, #0b0d18)';
+        $panel  = $this->safe_color_css( $s['panel_color'] ?? '' )   ?: 'var(--olo-color-dark, #141a2e)';
+        $panel2 = $this->safe_color_css( $s['panel2_color'] ?? '' )  ?: 'var(--olo-color-dark, #1b2238)';
+        $cell   = $this->safe_color_css( $s['cell_color'] ?? '' )    ?: 'var(--olo-color-dark, #11142270)';
         $accent = $this->safe_color_css( $s['accent'] ?? '' )        ?: 'var(--olo-color-primary, #6c8cff)';
         $acc2   = $this->safe_color_css( $s['accent2'] ?? '' )       ?: '#b08bff';
-        $accOn  = $this->safe_color_css( $s['accent_on'] ?? '' )     ?: '#ffffff';
+        $accOn  = $this->safe_color_css( $s['accent_on'] ?? '' )     ?: 'var(--olo-color-primary-contrast, #ffffff)';
         $downC  = $this->safe_color_css( $s['down_color'] ?? '' )    ?: $acc2;
         $pillBg = $this->safe_color_css( $s['pill_bg'] ?? '' )       ?: 'rgba(255,255,255,0.05)';
-        $txt    = $this->safe_color_css( $s['text_color'] ?? '' )    ?: '#ffffff';
-        $sub    = $this->safe_color_css( $s['sub_color'] ?? '' )     ?: '#8a90a8';
-        $pillC  = $this->safe_color_css( $s['pill_text_color'] ?? '' ) ?: '#c9cde0';
+        $txt    = $this->safe_color_css( $s['text_color'] ?? '' )    ?: 'var(--olo-color-light, #ffffff)';
+        $sub    = $this->safe_color_css( $s['sub_color'] ?? '' )     ?: 'var(--olo-color-text-muted, #8a90a8)';
+        $pillC  = $this->safe_color_css( $s['pill_text_color'] ?? '' ) ?: 'var(--olo-color-light, #c9cde0)';
         $line   = $this->safe_color_css( $s['line_color'] ?? '' )    ?: 'rgba(255,255,255,0.09)';
         $glowC  = $this->safe_color_css( $s['glow_color'] ?? '' )    ?: '#6c8cff';
         $gridC  = $this->safe_color_css( $s['grid_color'] ?? '' )    ?: 'rgba(255,255,255,0.04)';

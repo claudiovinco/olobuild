@@ -175,7 +175,7 @@ class Olobuild_Pellicole_Tile extends Olobuild_Tile_Base {
         $grana    = max( 0, min( 100, (int) $s['grana'] ) );
         $prop     = preg_match( '#^\d{1,2}/\d{1,2}$#', (string) $s['proporzione'] ) ? (string) $s['proporzione'] : '3/2';
         $acc      = $this->safe_color_css( $s['colore_accento'] ) ?: 'var(--olo-color-primary)';
-        $col_div  = $this->safe_color_css( $s['colore_divisore'] ) ?: '#ffffff';
+        $col_div  = $this->safe_color_css( $s['colore_divisore'] ) ?: 'var(--olo-color-light, #ffffff)';
         $sf_rul   = $this->safe_color_css( $s['sfondo_rullino'] ) ?: 'color-mix(in srgb, currentColor 6%, transparent)';
         $raggio   = Olobuild_Tile_Utils::border_radius( $s['raggio'] ) ?: '0';
         $r_rul    = Olobuild_Tile_Utils::border_radius( $s['raggio_rullino'] ) ?: '0';

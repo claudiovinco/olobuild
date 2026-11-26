@@ -146,7 +146,7 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
         $overlay_clr  = $this->safe_color_css( $s['overlay_color'] ?? 'rgba(0,0,0,0.45)' );
         $overlay_grad = ! empty( $s['overlay_gradient'] );
 
-        $title_clr    = $this->safe_color_css( $s['title_color'] ?? '#ffffff' ) ?: '#ffffff';
+        $title_clr    = $this->safe_color_css( $s['title_color'] ?? '#ffffff' ) ?: 'var(--olo-color-light, #ffffff)';
         $title_w      = preg_match( '/^[1-9]00$/', (string) ($s['title_weight'] ?? '700') ) ? $s['title_weight'] : '700';
         $title_ls     = floatval( $s['title_letter_spacing'] ?? 0 );
         $title_upper  = ! empty( $s['title_uppercase'] );

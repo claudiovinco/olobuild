@@ -1063,7 +1063,7 @@ JS;
                                 <?php endif; ?>
                                 <div style="display:flex;align-items:center;gap:10px">
                                     <input type="color" id="<?php echo esc_attr( $field_id ); ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" value="<?php echo esc_attr( $fplaceholder ?: '#e1474f' ); ?>" style="width:48px;height:40px;padding:2px;border:<?php echo $bw; ?>px <?php echo $in_tratto; ?> <?php echo $input_bc; ?>;border-radius:<?php echo $radius; ?>;background:<?php echo $input_bg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style values sanitized above via absint()/safe_color_css()/build_border_radius_css(), stroke from the $in_tratto whitelist ?>;cursor:pointer" oninput="this.nextElementSibling.textContent=this.value" />
-                                    <span style="font-size:14px;color:<?php echo $label_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized via safe_color_css() whitelist above ?>;font-family:monospace"><?php echo esc_html( $fplaceholder ?: '#e1474f' ); ?></span>
+                                    <span style="font-size:14px;color:<?php echo $label_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized via safe_color_css() whitelist above ?>;font-family:monospace"><?php echo esc_html( $fplaceholder ?: 'var(--olo-color-text-muted, #e1474f)' ); ?></span>
                                 </div>
 
                             <?php elseif ( $ftype === 'calculation' ) :

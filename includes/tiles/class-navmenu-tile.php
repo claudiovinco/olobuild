@@ -1222,11 +1222,11 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
             'show_thumbnail'       => true,
             'input_height'         => $height,
             'input_font_size'      => max( 12, $height - 22 ),
-            'input_bg'             => $s['search_input_bg'] ?: '#ffffff',
+            'input_bg'             => $s['search_input_bg'] ?: 'var(--olo-color-background, #ffffff)',
             'input_color'          => $s['search_input_color'] ?: 'var(--olo-color-text, #374151)',
             'icon_color'           => $s['search_icon_color'] ?: 'var(--olo-color-text-muted, #9CA3AF)',
             'results_border_color' => $s['search_border_color'] ?: 'var(--olo-color-border, #E5E7EB)',
-            'results_bg'           => $s['search_results_bg'] ?: '#ffffff',
+            'results_bg'           => $s['search_results_bg'] ?: 'var(--olo-color-background, #ffffff)',
             'item_hover_bg'        => $s['search_hover_bg'] ?: 'var(--olo-color-muted, #F3F4F6)',
         ];
 
@@ -1254,11 +1254,11 @@ class Olobuild_NavMenu_Tile extends Olobuild_Tile_Base {
             'show_thumbnail'       => true,
             'input_height'         => $height,
             'input_font_size'      => max( 12, $height - 22 ),
-            'input_bg'             => $s['search_input_bg'] ?: '#ffffff',
+            'input_bg'             => $s['search_input_bg'] ?: 'var(--olo-color-background, #ffffff)',
             'input_color'          => $s['search_input_color'] ?: 'var(--olo-color-text, #374151)',
             'icon_color'           => $s['search_icon_color'] ?: 'var(--olo-color-text-muted, #9CA3AF)',
             'results_border_color' => $s['search_border_color'] ?: 'var(--olo-color-border, #E5E7EB)',
-            'results_bg'           => $s['search_results_bg'] ?: '#ffffff',
+            'results_bg'           => $s['search_results_bg'] ?: 'var(--olo-color-background, #ffffff)',
             'item_hover_bg'        => $s['search_hover_bg'] ?: 'var(--olo-color-muted, #F3F4F6)',
         ];
 

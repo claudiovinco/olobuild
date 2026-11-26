@@ -82,15 +82,15 @@ class Olobuild_NorthQuoteSlider_Tile extends Olobuild_Tile_Base {
             $items = [ [ 'quote' => '', 'author_name' => '', 'author_role' => '', 'logo_text' => '' ] ];
         }
 
-        $bgCol    = $this->safe_color_css( $s['bg_color'] ?? '' )           ?: '#ffffff';
-        $headCol  = $this->safe_color_css( $s['heading_color'] ?? '' )      ?: '#212121';
-        $quoteCol = $this->safe_color_css( $s['quote_color'] ?? '' )        ?: '#212121';
-        $authCol  = $this->safe_color_css( $s['author_color'] ?? '' )       ?: '#212121';
-        $roleCol  = $this->safe_color_css( $s['role_color'] ?? '' )         ?: '#6B7280';
-        $logoCol  = $this->safe_color_css( $s['logo_color'] ?? '' )         ?: '#062C22';
-        $arrCol   = $this->safe_color_css( $s['arrow_color'] ?? '' )        ?: '#212121';
-        $grCol    = $this->safe_color_css( $s['graphic_color'] ?? '' )      ?: '#0A2E22';
-        $lineCol  = $this->safe_color_css( $s['graphic_line_color'] ?? '' ) ?: '#9DF5D6';
+        $bgCol    = $this->safe_color_css( $s['bg_color'] ?? '' )           ?: 'var(--olo-color-background, #ffffff)';
+        $headCol  = $this->safe_color_css( $s['heading_color'] ?? '' )      ?: 'var(--olo-color-text, #212121)';
+        $quoteCol = $this->safe_color_css( $s['quote_color'] ?? '' )        ?: 'var(--olo-color-text, #212121)';
+        $authCol  = $this->safe_color_css( $s['author_color'] ?? '' )       ?: 'var(--olo-color-text, #212121)';
+        $roleCol  = $this->safe_color_css( $s['role_color'] ?? '' )         ?: 'var(--olo-color-text-muted, #6b7280)';
+        $logoCol  = $this->safe_color_css( $s['logo_color'] ?? '' )         ?: 'var(--olo-color-primary, #062c22)';
+        $arrCol   = $this->safe_color_css( $s['arrow_color'] ?? '' )        ?: 'var(--olo-color-text, #212121)';
+        $grCol    = $this->safe_color_css( $s['graphic_color'] ?? '' )      ?: 'var(--olo-color-primary, #0a2e22)';
+        $lineCol  = $this->safe_color_css( $s['graphic_line_color'] ?? '' ) ?: 'var(--olo-color-primary, #9df5d6)';
         $qSize    = max( 16, min( 56, intval( $s['quote_size'] ?? 26 ) ) );
 
         $disp = "var(--olo-font-family-heading, 'Space Grotesk',-apple-system,sans-serif)";

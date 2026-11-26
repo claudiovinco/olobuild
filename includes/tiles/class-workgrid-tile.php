@@ -81,11 +81,11 @@ class Olobuild_WorkGrid_Tile extends Olobuild_Tile_Base {
         $aspect       = in_array( $s['media_aspect'] ?? '4/3', $aspect_allow, true ) ? ( $s['media_aspect'] ?? '4/3' ) : '4/3';
         $tall_aspect  = in_array( $s['media_tall_aspect'] ?? '4/5', $aspect_allow, true ) ? ( $s['media_tall_aspect'] ?? '4/5' ) : '4/5';
 
-        $media_bg   = $this->safe_color_css( $s['media_bg'] ) ?: '#ebe7dc';
-        $label_c    = $this->safe_color_css( $s['media_label_color'] ) ?: '#18181a';
-        $title_c    = $this->safe_color_css( $s['title_color'] ) ?: '#18181a';
-        $meta_c     = $this->safe_color_css( $s['meta_color'] ) ?: '#8d8a82';
-        $desc_c     = $this->safe_color_css( $s['desc_color'] ) ?: '#8d8a82';
+        $media_bg   = $this->safe_color_css( $s['media_bg'] ) ?: 'var(--olo-color-background, #ebe7dc)';
+        $label_c    = $this->safe_color_css( $s['media_label_color'] ) ?: 'var(--olo-color-dark, #18181a)';
+        $title_c    = $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-text, #18181a)';
+        $meta_c     = $this->safe_color_css( $s['meta_color'] ) ?: 'var(--olo-color-text-muted, #8d8a82)';
+        $desc_c     = $this->safe_color_css( $s['desc_color'] ) ?: 'var(--olo-color-text-muted, #8d8a82)';
         $stripe     = $this->_hex_alpha( $label_c, '0d' );
         $label_dim  = $this->_hex_alpha( $label_c, '66' );
         $hover_zoom = ! empty( $s['hover_zoom'] );

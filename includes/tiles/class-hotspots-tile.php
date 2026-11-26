@@ -43,7 +43,7 @@ class Olobuild_Hotspots_Tile extends Olobuild_Tile_Base {
         $uid = 'osp-' . wp_rand( 10000, 99999 );
 
         $accent  = $this->safe_color_css( $s['zone_accent'] ) ?: 'var(--olo-color-primary, #e1474f)';
-        $on      = $this->safe_color_css( $s['zone_on'] ?? '' ) ?: '#ffffff';
+        $on      = $this->safe_color_css( $s['zone_on'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #ffffff)';
         $panelbg = $this->safe_color_css( $s['panel_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #f1f1f1)';
         $cardbg  = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-surface, #ffffff)';
         $line    = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, 'var(--olo-color-border, #e5e7eb)' );

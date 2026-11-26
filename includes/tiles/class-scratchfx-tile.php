@@ -147,8 +147,8 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
 
         // ── Copertura (dipinta dal canvas via JS; qui solo i parametri) ──
         $cover_type  = in_array( $s['cover_type'], [ 'solid', 'gradient', 'image' ], true ) ? $s['cover_type'] : 'gradient';
-        $cover_c1    = $this->safe_color_css( $s['cover_color'] )      ?: '#C9C2CC';
-        $cover_c2    = $this->safe_color_css( $s['cover_color2'] )     ?: '#9A93A0';
+        $cover_c1    = $this->safe_color_css( $s['cover_color'] )      ?: 'var(--olo-color-text-muted, #c9c2cc)';
+        $cover_c2    = $this->safe_color_css( $s['cover_color2'] )     ?: 'var(--olo-color-text-muted, #9a93a0)';
         $cover_angle = max( 0, min( 360, intval( $s['cover_angle'] ) ) );
         $cover_img   = esc_url( $s['cover_image'] );
         $cover_text  = trim( (string) $s['cover_text'] );
