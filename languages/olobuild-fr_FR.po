@@ -58252,3 +58252,179 @@ msgstr "Pivot à l’horizontale"
 
 msgid "Perno in verticale"
 msgstr "Pivot à la verticale"
+
+#: 1.4.1478
+msgid "Affina la ricerca"
+msgstr "Affiner la recherche"
+
+#: 1.4.1478
+msgid "Tutti gli effetti"
+msgstr "Tous les effets"
+
+#: 1.4.1478
+msgid "Si muove scorrendo"
+msgstr "Bouge au défilement"
+
+#: 1.4.1478
+msgid "Cambia al clic"
+msgstr "Change au clic"
+
+#: 1.4.1478
+msgid "Si muove da solo"
+msgstr "Bouge tout seul"
+
+#: 1.4.1478
+msgid "Fondo"
+msgstr "Fond"
+
+#: 1.4.1478
+msgid "Chiaro e scuro"
+msgstr "Clair et sombre"
+
+#: 1.4.1478
+msgid "Tutti i caratteri"
+msgstr "Toutes les polices"
+
+#: 1.4.1478
+msgid "Con le grazie"
+msgstr "Avec empattements"
+
+#: 1.4.1478
+msgid "Senza grazie"
+msgstr "Sans empattements"
+
+#: 1.4.1478
+msgid "Decorativo"
+msgstr "Décoratif"
+
+#: 1.4.1478
+msgid "Tutti i colori"
+msgstr "Toutes les couleurs"
+
+#: 1.4.1478
+msgid "Blu"
+msgstr "Bleu"
+
+#: 1.4.1478
+msgid "Rosa"
+msgstr "Rose"
+
+#: 1.4.1478
+msgid "Neutro"
+msgstr "Neutre"
+
+#: 1.4.1478
+msgid "Salute e cura"
+msgstr "Santé et soins"
+
+#: 1.4.1478
+msgid "Immobiliare"
+msgstr "Immobilier"
+
+#: 1.4.1478
+msgid "Noleggio"
+msgstr "Location"
+
+#: 1.4.1478
+msgid "Il sito che si stampa"
+msgstr "Le site qui s’imprime"
+
+#: 1.4.1478
+msgid "Il sito-manifesto"
+msgstr "Le site-affiche"
+
+#: 1.4.1478
+msgid "Il sito-telefono"
+msgstr "Le site-téléphone"
+
+#: 1.4.1478
+msgid "Il sito-obiettivo"
+msgstr "Le site-objectif"
+
+#: 1.4.1478
+msgid "Il sito-cartellone"
+msgstr "Le site-panneau"
+
+#: 1.4.1478
+msgid "Il sito-ascensore"
+msgstr "Le site-ascenseur"
+
+#: 1.4.1478
+msgid "Il sito che cambia canale"
+msgstr "Le site qui change de chaîne"
+
+#: 1.4.1478
+msgid "Il sito al buio"
+msgstr "Le site dans le noir"
+
+#: 1.4.1478
+msgid "Il sito che si sfoglia"
+msgstr "Le site qui se feuillette"
+
+#: 1.4.1478
+msgid "Il sito nei due sensi"
+msgstr "Le site à double sens"
+
+#: 1.4.1478
+msgid "Lo zoom che non finisce"
+msgstr "Le zoom sans fin"
+
+#: 1.4.1478
+msgid "La facciata che si perde"
+msgstr "La façade qui se perd"
+
+#: 1.4.1478
+msgid "Il sito che gira"
+msgstr "Le site qui tourne"
+
+#: 1.4.1478
+msgid "Il sito a tornanti"
+msgstr "Le site en lacets"
+
+#: 1.4.1478
+msgid "La parola che parte"
+msgstr "Le mot qui s’envole"
+
+#: 1.4.1478
+msgid "Si legge solo da qui"
+msgstr "Lisible seulement d’ici"
+
+#: 1.4.1478
+msgid "Il mondo a testa in giù"
+msgstr "Le monde à l’envers"
+
+#: 1.4.1478
+msgid "Tagliata sottile"
+msgstr "Tranché finement"
+
+#: 1.4.1478
+msgid "Le visite prenotabili"
+msgstr "Les consultations à réserver"
+
+#: 1.4.1478
+msgid "I corsi prenotabili"
+msgstr "Les cours à réserver"
+
+#: 1.4.1478
+msgid "Auto a noleggio"
+msgstr "Location de voitures"
+
+#: 1.4.1478
+msgid "Il cielo in calendario"
+msgstr "Le ciel au calendrier"
+
+#: 1.4.1478
+msgid "Il tavolo, dal vivo"
+msgstr "La table, en direct"
+
+#: 1.4.1478
+msgid "Case in vendita e in affitto"
+msgstr "Maisons à vendre et à louer"
+
+#: 1.4.1478
+msgid "La poltrona libera, dal vivo"
+msgstr "Le fauteuil libre, en direct"
+
+#: 1.4.1478
+msgid "Video e parole che cambiano"
+msgstr "Vidéo et mots qui changent"

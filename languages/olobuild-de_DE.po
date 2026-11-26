@@ -58239,3 +58239,179 @@ msgstr "Drehpunkt horizontal"
 
 msgid "Perno in verticale"
 msgstr "Drehpunkt vertikal"
+
+#: 1.4.1478
+msgid "Affina la ricerca"
+msgstr "Suche verfeinern"
+
+#: 1.4.1478
+msgid "Tutti gli effetti"
+msgstr "Alle Effekte"
+
+#: 1.4.1478
+msgid "Si muove scorrendo"
+msgstr "Bewegt sich beim Scrollen"
+
+#: 1.4.1478
+msgid "Cambia al clic"
+msgstr "Ändert sich per Klick"
+
+#: 1.4.1478
+msgid "Si muove da solo"
+msgstr "Bewegt sich von selbst"
+
+#: 1.4.1478
+msgid "Fondo"
+msgstr "Hintergrund"
+
+#: 1.4.1478
+msgid "Chiaro e scuro"
+msgstr "Hell und dunkel"
+
+#: 1.4.1478
+msgid "Tutti i caratteri"
+msgstr "Alle Schriften"
+
+#: 1.4.1478
+msgid "Con le grazie"
+msgstr "Mit Serifen"
+
+#: 1.4.1478
+msgid "Senza grazie"
+msgstr "Ohne Serifen"
+
+#: 1.4.1478
+msgid "Decorativo"
+msgstr "Dekorativ"
+
+#: 1.4.1478
+msgid "Tutti i colori"
+msgstr "Alle Farben"
+
+#: 1.4.1478
+msgid "Blu"
+msgstr "Blau"
+
+#: 1.4.1478
+msgid "Rosa"
+msgstr "Rosa"
+
+#: 1.4.1478
+msgid "Neutro"
+msgstr "Neutral"
+
+#: 1.4.1478
+msgid "Salute e cura"
+msgstr "Gesundheit & Pflege"
+
+#: 1.4.1478
+msgid "Immobiliare"
+msgstr "Immobilien"
+
+#: 1.4.1478
+msgid "Noleggio"
+msgstr "Vermietung"
+
+#: 1.4.1478
+msgid "Il sito che si stampa"
+msgstr "Die Website, die sich selbst druckt"
+
+#: 1.4.1478
+msgid "Il sito-manifesto"
+msgstr "Die Plakat-Website"
+
+#: 1.4.1478
+msgid "Il sito-telefono"
+msgstr "Die Handy-Website"
+
+#: 1.4.1478
+msgid "Il sito-obiettivo"
+msgstr "Die Objektiv-Website"
+
+#: 1.4.1478
+msgid "Il sito-cartellone"
+msgstr "Die Plakatwand-Website"
+
+#: 1.4.1478
+msgid "Il sito-ascensore"
+msgstr "Die Aufzug-Website"
+
+#: 1.4.1478
+msgid "Il sito che cambia canale"
+msgstr "Die Website, die den Kanal wechselt"
+
+#: 1.4.1478
+msgid "Il sito al buio"
+msgstr "Die Website im Dunkeln"
+
+#: 1.4.1478
+msgid "Il sito che si sfoglia"
+msgstr "Die Website zum Durchblättern"
+
+#: 1.4.1478
+msgid "Il sito nei due sensi"
+msgstr "Die Website in beide Richtungen"
+
+#: 1.4.1478
+msgid "Lo zoom che non finisce"
+msgstr "Der Zoom ohne Ende"
+
+#: 1.4.1478
+msgid "La facciata che si perde"
+msgstr "Die Fassade, die sich verliert"
+
+#: 1.4.1478
+msgid "Il sito che gira"
+msgstr "Die Website, die sich dreht"
+
+#: 1.4.1478
+msgid "Il sito a tornanti"
+msgstr "Die Serpentinen-Website"
+
+#: 1.4.1478
+msgid "La parola che parte"
+msgstr "Das Wort, das losfliegt"
+
+#: 1.4.1478
+msgid "Si legge solo da qui"
+msgstr "Nur von hier aus lesbar"
+
+#: 1.4.1478
+msgid "Il mondo a testa in giù"
+msgstr "Die Welt steht kopf"
+
+#: 1.4.1478
+msgid "Tagliata sottile"
+msgstr "Hauchdünn geschnitten"
+
+#: 1.4.1478
+msgid "Le visite prenotabili"
+msgstr "Untersuchungen online buchen"
+
+#: 1.4.1478
+msgid "I corsi prenotabili"
+msgstr "Kurse online buchen"
+
+#: 1.4.1478
+msgid "Auto a noleggio"
+msgstr "Autovermietung"
+
+#: 1.4.1478
+msgid "Il cielo in calendario"
+msgstr "Der Himmel im Kalender"
+
+#: 1.4.1478
+msgid "Il tavolo, dal vivo"
+msgstr "Der Tisch, live"
+
+#: 1.4.1478
+msgid "Case in vendita e in affitto"
+msgstr "Häuser zum Kauf und zur Miete"
+
+#: 1.4.1478
+msgid "La poltrona libera, dal vivo"
+msgstr "Der freie Stuhl, live"
+
+#: 1.4.1478
+msgid "Video e parole che cambiano"
+msgstr "Video und Worte, die sich ändern"
