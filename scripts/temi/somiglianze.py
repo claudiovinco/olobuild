@@ -83,7 +83,7 @@ def tono(hexc):
 
 
 def apertura(tid, home):
-    """La disposizione del testo nell'apertura: tile, e per lo Slider Pro dove stanno occhiello, titolo, pulsanti."""
+    """La disposizione del testo nell'apertura: tile, e per il Pro Slider dove stanno occhiello, titolo, pulsanti."""
     if not home:
         return 'vuota'
     s0 = home[0]

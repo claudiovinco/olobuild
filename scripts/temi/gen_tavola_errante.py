@@ -6,7 +6,7 @@ tavola, un menu che nasce dal luogo. Il calendario delle tappe, il menu della st
 Tema scuro, il nero della brace, la luce delle candele (ambra) e il verderame; titoli in Vollkorn col corsivo, testo in
 Karla, dati in DM Mono.
 
-Apertura: Slider Pro «le tappe», alto 16:9, una diapositiva per tappa col suo video pieno (la vigna, la spiaggia al
+Apertura: Pro Slider «le tappe», alto 16:9, una diapositiva per tappa col suo video pieno (la vigna, la spiaggia al
 tramonto, il fuoco nel bosco, le luci nel cortile) e un velo scuro solo a sinistra. A destra il biglietto della cena,
 col bordo tratteggiato: la data enorme, il luogo, i posti rimasti, il prezzo; si inclina verso il puntatore. Le tappe si
 girano come le pagine di un taccuino (flipH). Cursore: l'etichetta «Prenota» sui link.

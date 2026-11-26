@@ -20,7 +20,7 @@ def testa(K, t, occhiello, titolo, testo=None, size=64, align='left', colore=Non
 
 
 def scorri(tappe, inizio=0, fine=100, costante=False):
-    """Il movimento a scorrimento di un livello dello Slider Pro: tappe = [(p, {proprietà})]."""
+    """Il movimento a scorrimento di un livello del Pro Slider: tappe = [(p, {proprietà})]."""
     o = {'inizio': inizio, 'fine': fine, 'tappe': [dict(p=p, **v) for p, v in tappe]}
     if costante:
         o['andamento'] = 'costante'  # la chiave che leggono editor e PHP (c: true non la leggeva nessuno)

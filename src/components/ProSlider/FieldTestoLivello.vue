@@ -6,7 +6,7 @@
     <div class="mps-tl-barra" role="toolbar" :aria-label="t('Stile delle parole scelte')">
       <button type="button" class="mps-tl-btn" :title="t('Grassetto')" :aria-label="t('Grassetto')" @mousedown.prevent @click="avvolgi('strong')"><strong>B</strong></button>
       <button type="button" class="mps-tl-btn" :title="t('Corsivo')" :aria-label="t('Corsivo')" @mousedown.prevent @click="avvolgi('em')"><em>I</em></button>
-      <button type="button" class="mps-tl-btn" :title="t('A capo (Maiusc+Invio)')" :aria-label="t('A capo')" @mousedown.prevent @click="aCapo">↵</button>
+      <button type="button" class="mps-tl-btn" :title="t('A capo (Invio)')" :aria-label="t('A capo')" @mousedown.prevent @click="aCapo">↵</button>
       <span class="mps-tl-sep" aria-hidden="true"></span>
       <button type="button" class="mps-tl-btn" :class="{ 'is-on': coloreAperto }" :title="t('Colore delle parole scelte')" :aria-label="t('Colore delle parole scelte')" :aria-expanded="coloreAperto ? 'true' : 'false'" @mousedown.prevent @click="apriColore">
         <span class="mps-tl-a">A</span>

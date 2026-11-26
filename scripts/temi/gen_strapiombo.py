@@ -5,7 +5,7 @@ strapiombanti, le vie cambiate ogni settimana, corsi per adulti e bambini e le u
 Tema chiaro e grafico: cemento chiaro, nero, il rosso segnale e i colori delle prese. Titoli in Schibsted Grotesk
 nero pieno, dati in JetBrains Mono.
 
-Apertura divisa in due metà quasi indipendenti, ognuna col suo Slider Pro: Dentro (il boulder, i corsi, i bambini)
+Apertura divisa in due metà quasi indipendenti, ognuna col suo Pro Slider: Dentro (il boulder, i corsi, i bambini)
 scorre dall'alto ogni 7 secondi, Fuori (la falesia, il materiale) sfuma ogni 9 e mezzo. I video si vedono pieni, il
 testo sta in basso su una sfumatura scura; la metà sotto il puntatore si allarga. Sotto i 1200 px una sotto l'altra.
 """
@@ -71,7 +71,7 @@ def build_footer():
 
 
 # ── L'apertura: due metà, Dentro e Fuori ──
-# Ogni metà è uno Slider Pro con la sua tela: sul computer la metà è larga circa metà della tela da 1440, quindi le
+# Ogni metà è un Pro Slider con la sua tela: sul computer la metà è larga circa metà della tela da 1440, quindi le
 # misure sul computer sono il doppio di quelle che si vedono (128 = un titolo da 64). Tablet e telefono le hanno una
 # sotto l'altra, a tutta larghezza, con le loro misure.
 DENTRO = [  # linguetta, occhiello, riga 1, riga 2, testo, video, pulsante, link

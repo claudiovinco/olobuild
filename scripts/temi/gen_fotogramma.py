@@ -5,7 +5,7 @@ rossi e il proiettore a pellicola, che fa anche una scuola di cinema per ragazzi
 Nero di sala, il giallo dei sottotitoli, il rosso del velluto e il ciano del fascio del proiettore. Titoli in Big
 Shoulders Display, testo in IBM Plex Sans, dati in IBM Plex Mono.
 
-Apertura: Slider Pro a tutto schermo con le bande nere del cinemascope sopra e sotto (livelli globali), il contatore
+Apertura: Pro Slider a tutto schermo con le bande nere del cinemascope sopra e sotto (livelli globali), il contatore
 del fotogramma che tremola, i titoli che entrano lettera per lettera e i sottotitoli gialli che si scrivono a macchina;
 fra una scena e l'altra il taglio passa dal nero (fadeThroughDark). Poi i titoli della rassegna che scorrono (Marquee),
 il cartellone dei giovedì (Cartellone), la sala da trascinare come una pellicola (Film reel), una domanda da cineclub

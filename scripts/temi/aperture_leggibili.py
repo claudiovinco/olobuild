@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Le aperture (Slider Pro della home) di tutte le demo del sottosito a una larghezza da telefono: per ogni slide, i
+"""Le aperture (Pro Slider della home) di tutte le demo del sottosito a una larghezza da telefono: per ogni slide, i
 livelli di testo e i pulsanti visibili con il carattere reale (calcolato × scala della tela, letta dalla sua trasformazione: una diapositiva a metà animazione non conta), la posizione rispetto alla
 testata che sta sopra lo slider e la distanza dai bordi. Segnala: testo sotto la testata, paragrafi sotto i 14 px reali
-(altri testi e scritte in maiuscolo sotto gli 11, come il minimo dello Slider Pro), pulsanti o testi a meno di 6 px dal bordo.
+(altri testi e scritte in maiuscolo sotto gli 11, come il minimo del Pro Slider), pulsanti o testi a meno di 6 px dal bordo.
 uso: python aperture_leggibili.py uscita.json [larghezza] [tema …]"""
 import glob
 import json

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Le caselle delle lettere di un'apertura fatta di lettere separate (Abbaglio, Girandola): la larghezza vera di ogni lettera
-nel carattere del tema, misurata in Chrome, in % della tela dello Slider Pro (computer 1440, telefono 640), con la parola
+nel carattere del tema, misurata in Chrome, in % della tela del Pro Slider (computer 1440, telefono 640), con la parola
 centrata. Stampa le righe da incollare nel generatore.
 uso: python misura_lettere.py "Famiglia" peso PAROLA corpo_computer corpo_telefono [spaziatura_em]
 """

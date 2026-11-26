@@ -3464,7 +3464,7 @@ msgid "Pro Gallery"
 msgstr "Galeria Pro"
 
 msgid "Pro Slider"
-msgstr "Slider Pro"
+msgstr "Pro Slider"
 
 msgid "Prodotti Correlati"
 msgstr "Powiązane produkty"

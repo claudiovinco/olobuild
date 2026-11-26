@@ -3,7 +3,7 @@
 «Passate su una pianta: la foto si affaccia»). L'utente, 13 nov 2026: «nei temi hai messo indicazioni ovunque, anche
 troppe, togli la sorpresa a chi visita, eliminale».
 
-Dove: i testi editoriali (occhielli e sottotitoli dei Section header, Text block, i livelli di testo dello Slider Pro,
+Dove: i testi editoriali (occhielli e sottotitoli dei Section header, Text block, i livelli di testo del Pro Slider,
 sottotitolo e invito a scorrere della Hero, sottotitolo della barra del titolo, didascalie delle Carte da girare, piede
 delle tappe). Restano i suggerimenti DENTRO le tile (la lente, il gratta e scopri, il tour, la ghiera): servono a usarle.
 Una frase d'istruzione si toglie intera; se sta dopo i due punti si toglie solo quella parte («Un soggiorno arredato
@@ -78,7 +78,7 @@ def tratta(nodo, cambi, togli):
 def applica(j, cambi, tid=None):
     def togli(x):
         tipo = x.get('type')
-        # livelli di testo dello Slider Pro (hanno «content» e niente settings)
+        # livelli di testo del Pro Slider (hanno «content» e niente settings)
         if tipo == 'text' and 'settings' not in x and isinstance(x.get('content'), str):
             n = pulisci(x['content'])
             if n != x['content']:
@@ -206,7 +206,7 @@ FRASI = {
     'passa o tocca un settore della sala per vedere i prezzi e la vista da lì.': 'per ogni settore della sala i prezzi e la vista da lì.',
     'Ogni maniglia si trascina: a sinistra': 'A sinistra',
 }
-# testi interi (un livello dello Slider Pro con una parola sola): solo se il campo è esattamente questo
+# testi interi (un livello del Pro Slider con una parola sola): solo se il campo è esattamente questo
 INTERI = {'scorrendo.': 'al buio.'}
 CAMPI_TESTO = ('content', 'text', 'subtitle', 'tagline_text', 'heading', 'front_description', 'description')
 

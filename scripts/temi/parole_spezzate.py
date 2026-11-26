@@ -2,7 +2,7 @@
 """Cerca le PAROLE SPEZZATE a metà (una parola più larga della sua colonna: il browser la manda a capo dentro, «Faccia|mo»),
 nelle pagine dei temi alla larghezza data. Per ogni parola di almeno 4 lettere guarda le righe che occupa: se sono due
 o più, è spezzata (le parole col trattino sono escluse: lì andare a capo è giusto). Scorre la pagina per far comparire
-tutto, e misura anche le diapositive non attive dello Slider Pro (le rende visibili per un attimo).
+tutto, e misura anche le diapositive non attive del Pro Slider (le rende visibili per un attimo).
 uso: python parole_spezzate.py larghezza [processi] tema[/pagina] …    (senza temi: le home di tutti)
 Esempio del 13 nov 2026: Cromo e Casa Scogliera, titolo dell'apertura a 390 px."""
 import json

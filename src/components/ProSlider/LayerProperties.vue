@@ -86,7 +86,7 @@
             <div>
               <label class="mps-label">{{ t('Nome icona') }}</label>
               <div class="mb-flex mb-gap-1 mb-items-center">
-                <span v-if="layer.iconName && iconsSvg[layer.iconName]" class="mps-icon-preview" v-html="iconsSvg[layer.iconName]"></span>
+                <span v-if="layer.iconName && svgIcona(layer.iconName, iconsSvg)" class="mps-icon-preview" v-html="svgIcona(layer.iconName, iconsSvg)"></span>
                 <input :value="layer.iconName" @input="up('iconName', $event.target.value)" class="mps-input mb-flex-1" placeholder="star" />
                 <button @click="showIconPicker = true" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-xs mb-text-gray-300 hover:mb-bg-gray-500">{{ t('Sfoglia') }}</button>
               </div>
@@ -169,9 +169,10 @@
             <span class="mb-text-[11px] mb-text-gray-400">{{ t('Quando il mouse esce, torna com’era') }}</span>
           </label>
           <template v-if="layer.action?.type === 'goToSlide'">
+            <!-- 1.4.1475: il numero parte da 1, come nelle frasi delle Interazioni («va alla slide 2»); si salva da 0 -->
             <div>
-              <label class="mps-label">{{ t('Indice slide (da 0)') }}</label>
-              <NumberScrubber theme="dark" :modelValue="layer.action.target || 0" :min="0" :max="null" :step="1" :defaultValue="0" emitAs="number" :ariaLabel="t('Indice slide (da 0)')" @update:modelValue="setAction('target', $event)" />
+              <label class="mps-label">{{ t('Numero della slide') }}</label>
+              <NumberScrubber theme="dark" :modelValue="(Number(layer.action.target) || 0) + 1" :min="1" :max="Math.max(1, (tutteLeSlide || []).length)" :step="1" :defaultValue="1" emitAs="number" :ariaLabel="t('Numero della slide')" @update:modelValue="setAction('target', Math.max(0, Math.round($event) - 1))" />
             </div>
           </template>
           <template v-if="layer.action?.type === 'openUrl'">
@@ -188,15 +189,26 @@
           <template v-if="layer.action?.type === 'toggleLayer'">
             <div>
               <label class="mps-label">{{ t('Livello da mostrare o nascondere') }}</label>
+              <!-- 1.4.1475: da tutte le slide e dai livelli su tutte le slide (il sito li trova ovunque nello slider), coi
+                   nomi del pannello Livelli. Prima solo la slide, con emoji e segni HTML nel nome. -->
               <FieldSelect
-                v-if="targetableLayers.length"
+                v-if="targetLayerOptions.length > 1"
                 ui="dropdown" size="compact" theme="dark"
                 :model-value="layer.action.target || ''"
                 :options="targetLayerOptions"
                 @update:model-value="setAction('target', $event)"
               />
-              <p v-else class="mb-text-[10px] mb-text-gray-500 mb-italic">{{ t('Nessun altro livello in questa slide') }}</p>
-              <p v-if="layer.action.target" class="mb-text-[9px] mb-text-gray-500 mb-mt-1 mb-font-mono">id: {{ layer.action.target }}</p>
+              <p v-else class="mb-text-[10px] mb-text-gray-500 mb-italic">{{ t('Nessun altro livello nello slider') }}</p>
+            </div>
+            <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+              <div>
+                <label class="mps-label">{{ t('Come compare') }}</label>
+                <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.action.effetto || 'nessuno'" :options="OPTS_MOSTRA_EFFETTO" @update:model-value="setAction('effetto', $event === 'nessuno' ? undefined : $event)" />
+              </div>
+              <div v-if="layer.action.effetto === 'fade'">
+                <label class="mps-label">{{ t('Durata') }}</label>
+                <NumberScrubber theme="dark" :modelValue="layer.action.durata ?? 400" :min="50" :max="4000" :step="50" :defaultValue="400" emitAs="number" :sliderOnFocus="true" unit="ms" :ariaLabel="t('Durata')" @update:modelValue="setAction('durata', $event)" />
+              </div>
             </div>
           </template>
 
@@ -338,8 +350,8 @@
               >{{ t('Azzera tutti') }}</button>
             </div>
           </div>
-          <!-- Visibility toggle per breakpoint (anche Desktop: un livello solo per il telefono si nasconde qui e si
-               rimette «Visibile su Mobile»; gli schermi senza valore ereditano dal più grande, come sul sito) -->
+          <!-- Visibility toggle per breakpoint (anche sul Computer: un livello solo per il telefono si nasconde qui e si
+               rimette «Visibile su Telefono»; gli schermi senza valore ereditano dal più grande, come sul sito) -->
           <div class="mb-mb-2">
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="rv('visible') !== false" @change="up('visible', $event.target.checked)" class="mb-rounded" />
@@ -955,13 +967,16 @@
           </div>
 
           <!-- ── Attributi personalizzati ── -->
+          <!-- 1.4.1475: ID e classi solo dove un livello salvato prima li ha (per leggerli e toglierli), come il CSS su
+               misura: il Pro Slider si costruisce coi comandi, e un nome di classe senza un CSS che lo usi non fa niente -->
+          <template v-if="layer.customId || layer.customClass || layer.customCSS">
           <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
           <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Attributi') }}</p>
-          <div>
+          <div v-if="layer.customId">
             <label class="mps-label">{{ t('ID personalizzato') }}</label>
             <input :value="layer.customId || ''" @input="up('customId', $event.target.value)" class="mps-input" placeholder="es. hero-title" />
           </div>
-          <div>
+          <div v-if="layer.customClass">
             <label class="mps-label">{{ t('Classi CSS') }}</label>
             <input :value="layer.customClass || ''" @input="up('customClass', $event.target.value)" class="mps-input" placeholder="es. my-class another-class" />
           </div>
@@ -972,17 +987,11 @@
             <textarea :value="layer.customCSS || ''" @input="up('customCSS', $event.target.value)" rows="3"
               class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-[10px] mb-text-gray-900 mb-resize-y mb-font-mono" placeholder="color: red; transform: rotate(5deg);"></textarea>
           </div>
+          </template>
         </template>
 
         <!-- ===== ANIMAZIONE ===== -->
         <template v-if="activeTab === 'Animazione'">
-          <!-- La profondità della parallasse è movimento: dal Contenuto all'Animazione (1.4.1426) -->
-          <!-- Parallax depth -->
-          <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-          <div>
-            <label class="mps-label">{{ t('Profondità parallasse') }}</label>
-            <NumberScrubber theme="dark" :modelValue="layer.parallaxDepth || 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" :ariaLabel="t('Profondità parallasse')" @update:modelValue="up('parallaxDepth', $event)" />
-          </div>
           <!-- Toggle Semplice / Timeline -->
           <div class="mb-flex mb-bg-gray-800 mb-rounded mb-p-0.5 mb-mb-3">
             <button
@@ -995,6 +1004,14 @@
               :class="['mb-flex-1 mb-py-1 mb-rounded mb-text-[10px] mb-font-medium mb-transition-colors',
                 hasTimeline ? 'mb-bg-primary-600 mb-text-white' : 'mb-text-gray-400 hover:mb-text-gray-300']"
             >{{ t('Linea del tempo') }}</button>
+          </div>
+          <!-- 1.4.1472: tornare a «Semplice» cancellava la linea del tempo senza chiedere -->
+          <div v-if="chiediSemplice" class="mps-conferma" role="alert">
+            <span>{{ t('La linea del tempo di questo livello si perde.') }}</span>
+            <div class="mps-conferma-fila">
+              <button type="button" class="mps-conferma-si" @click="confermaSemplice">{{ t('Torna a Semplice') }}</button>
+              <button type="button" class="mps-conferma-no" @click="chiediSemplice = false">{{ t('Annulla') }}</button>
+            </div>
           </div>
 
           <!-- Modo SEMPLICE -->
@@ -1035,8 +1052,10 @@
                 <NumberScrubber theme="dark" :modelValue="layer.animOutDelay" :min="0" :max="3000" :step="50" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Ritardo (ms)')" @update:modelValue="up('animOutDelay', $event)" />
               </div>
             </div>
+            <!-- 1.4.1472: stava sotto «Uscita» ma vale anche per l'entrata -->
+            <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
             <div>
-              <label class="mps-label">{{ t('Andamento') }}</label>
+              <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Andamento di entrata e uscita') }}<InfoTip :testo="t('Come il livello si muove mentre entra e mentre esce: costante, morbido, che frena alla fine, che rimbalza… Lo stesso andamento vale per tutte e due.')" :titolo="t('Andamento di entrata e uscita')" /></label>
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.animEasing" :options="OPTS_ANIM_EASING" @update:model-value="up('animEasing', $event)" />
             </div>
 
@@ -1110,9 +1129,45 @@
               </div>
             </template>
 
-            <!-- Hover Effects -->
+          </template>
+
+          <!-- Modo TIMELINE -->
+          <template v-else>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase mb-flex mb-items-center mb-gap-1">{{ t('Fotogramma chiave') }}<InfoTip :testo="t('Usa la linea del tempo sotto la tela per aggiungere e spostare i fotogrammi chiave. Clicca un fotogramma: la tela va a quel momento, e trascinando il livello lo sposti in quel fotogramma.')" :titolo="t('Fotogramma chiave')" /></p>
+            <KeyframeProperties
+              :keyframe="selectedKeyframe"
+              :timeline="layer.timeline"
+              @update-keyframe="(id, updates) => $emit('update-keyframe', id, updates)"
+            />
+
+            <!-- L'Uscita vale anche con la linea del tempo (1.4.1472): prima era sempre una dissolvenza di 400 ms -->
             <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Al passaggio del mouse') }}</p>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase mb-flex mb-items-center mb-gap-1">{{ t('Uscita') }}<InfoTip :testo="t('Come il livello esce quando la slide cambia (o alla fine della linea del tempo, con «Aspetta la fine» spento). Parte dal punto in cui la linea del tempo è arrivata. Finché non la cambi è una dissolvenza rapida.')" :titolo="t('Uscita')" /></p>
+            <div>
+              <label class="mps-label">{{ t('Animazione uscita') }}</label>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="uscitaTl.effetto" :options="animationsOutGroups" @update:model-value="upUscitaTl('effetto', $event)" />
+            </div>
+            <!-- uno per riga come nell'animazione semplice (1.4.1479): affiancati non ci stavano e il pannello scorreva di lato -->
+            <div v-if="uscitaTl.effetto !== 'none'" class="mb-grid mb-grid-cols-1 mb-gap-2">
+              <div>
+                <label class="mps-label">{{ t('Durata') }}</label>
+                <NumberScrubber theme="dark" :modelValue="uscitaTl.durata" :min="0" :max="3000" :step="50" :defaultValue="400" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata dell’uscita')" @update:modelValue="upUscitaTl('durata', $event)" />
+              </div>
+              <div>
+                <label class="mps-label">{{ t('Ritardo') }}</label>
+                <NumberScrubber theme="dark" :modelValue="uscitaTl.ritardo" :min="0" :max="3000" :step="50" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Ritardo dell’uscita')" @update:modelValue="upUscitaTl('ritardo', $event)" />
+              </div>
+            </div>
+            <div v-if="uscitaTl.effetto !== 'none'">
+              <label class="mps-label">{{ t('Andamento dell’uscita') }}</label>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="uscitaTl.andamento" :options="OPTS_ANIM_EASING" @update:model-value="upUscitaTl('andamento', $event)" />
+            </div>
+            <p class="mb-text-[10px] mb-text-gray-500 mb-flex mb-items-center mb-gap-1 mb-mt-1">{{ t('Cosa non vale con la linea del tempo') }}<InfoTip :testo="t('L’entrata, l’animazione del testo, il movimento continuo e la maschera qui non agiscono: li fanno i fotogrammi chiave (posizione, opacità, scala, rotazione, maschera, sfocatura). Restano salvati e valgono di nuovo tornando a «Semplice».')" :titolo="t('Cosa non vale con la linea del tempo')" /></p>
+          </template>
+
+            <!-- Hover Effects (valgono anche con la linea del tempo: 1.4.1472, prima la sezione spariva ma il sito la rendeva) -->
+            <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase mb-flex mb-items-center mb-gap-1">{{ t('Al passaggio del mouse') }}<InfoTip v-if="hasTimeline && layer.hover" :testo="t('Con la linea del tempo cambiano colori, bordo, raggio, cursore, scala, rotazione e spostamento. Inclinazioni, rotazioni 3D, opacità e filtri li comanda la linea del tempo, e qui non ci sono.')" :titolo="t('Al passaggio del mouse')" /></p>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="!!layer.hover" @change="toggleHover($event.target.checked)" class="mb-rounded" />
               <span class="mb-text-[11px] mb-text-gray-400">{{ t('Cambia al passaggio del mouse') }}</span>
@@ -1129,19 +1184,19 @@
                   <label class="mps-label">{{ t('Rotazione Z') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.hover.rotation ?? 0" :min="-45" :max="45" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="°" :ariaLabel="t('Rotazione Z')" @update:modelValue="upHover('rotation', $event)" />
                 </div>
-                <div>
+                <div v-if="!hasTimeline">
                   <label class="mps-label">{{ t('Rotazione X') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.hover.rotateX ?? 0" :min="-90" :max="90" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="°" :ariaLabel="t('Rotazione X')" @update:modelValue="upHover('rotateX', $event)" />
                 </div>
-                <div>
+                <div v-if="!hasTimeline">
                   <label class="mps-label">{{ t('Rotazione Y') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.hover.rotateY ?? 0" :min="-90" :max="90" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="°" :ariaLabel="t('Rotazione Y')" @update:modelValue="upHover('rotateY', $event)" />
                 </div>
-                <div>
+                <div v-if="!hasTimeline">
                   <label class="mps-label">{{ t('Inclinazione orizzontale') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.hover.skewX ?? 0" :min="-30" :max="30" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="°" :ariaLabel="t('Inclinazione orizzontale')" @update:modelValue="upHover('skewX', $event)" />
                 </div>
-                <div>
+                <div v-if="!hasTimeline">
                   <label class="mps-label">{{ t('Inclinazione verticale') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.hover.skewY ?? 0" :min="-30" :max="30" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="°" :ariaLabel="t('Inclinazione verticale')" @update:modelValue="upHover('skewY', $event)" />
                 </div>
@@ -1156,7 +1211,7 @@
               </div>
               <!-- Aspetto -->
               <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-2">{{ t('Aspetto') }}</p>
-              <div>
+              <div v-if="!hasTimeline">
                 <label class="mps-label">{{ t('Opacità') }}</label>
                 <NumberScrubber theme="dark" :modelValue="layer.hover.opacity ?? 100" :min="0" :max="100" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Opacità (%)')" @update:modelValue="upHover('opacity', $event)" />
               </div>
@@ -1179,8 +1234,8 @@
                 <NumberScrubber theme="dark" :modelValue="layer.hover.borderRadius ?? ''" :min="0" :max="200" :step="1" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="t('Raggio al passaggio')" @update:modelValue="upHover('borderRadius', $event)" />
               </div>
               <!-- Filtri hover -->
-              <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-2">{{ t('Filtri') }}</p>
-              <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+              <p v-if="!hasTimeline" class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-2">{{ t('Filtri') }}</p>
+              <div v-if="!hasTimeline" class="mb-grid mb-grid-cols-2 mb-gap-2">
                 <div>
                   <label class="mps-label">{{ t('Sfocatura') }}</label>
                   <NumberScrubber theme="dark" :modelValue="layer.hover.blur ?? 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="px" :ariaLabel="t('Sfocatura al passaggio')" @update:modelValue="upHover('blur', $event)" />
@@ -1210,7 +1265,8 @@
               </div>
             </template>
 
-            <!-- Mask / Clip-Path -->
+            <!-- Mask / Clip-Path: solo senza linea del tempo (lì la maschera sta nei fotogrammi chiave) -->
+            <template v-if="!hasTimeline">
             <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
             <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Maschera') }}</p>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
@@ -1241,6 +1297,7 @@
                 </div>
               </div>
             </template>
+            </template>
 
             <!-- Ken Burns per Layer -->
             <template v-if="layer.type === 'image'">
@@ -1268,26 +1325,49 @@
 
             <!-- Motion Path -->
             <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Percorso') }}</p>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase mb-flex mb-items-center mb-gap-1">{{ t('Percorso') }}<InfoTip :testo="t('Il livello corre lungo un tracciato partendo da dove è posato. Sulla tela il tracciato si vede tratteggiato quando il livello è scelto: disegnalo coi clic, poi trascina i punti per correggerlo.')" :titolo="t('Percorso')" /></p>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="!!layer.motionPath" @change="toggleMotionPath($event.target.checked)" class="mb-rounded" />
               <span class="mb-text-[11px] mb-text-gray-400">{{ t('Anima lungo percorso') }}</span>
             </label>
             <template v-if="layer.motionPath">
+              <!-- 1.4.1473: il tracciato si disegna sulla tela e si prova lì (prima cinque forme fisse o un «d» SVG a mano) -->
+              <div class="mps-percorso-azioni">
+                <button type="button" class="mps-percorso-btn" :class="{ 'is-on': disegnoPercorso }" :aria-pressed="disegnoPercorso ? 'true' : 'false'" @click="$emit('disegna-percorso')"><span aria-hidden="true" v-html="ICO_MATITA"></span>{{ t('Disegna sulla tela') }}</button>
+                <button type="button" class="mps-percorso-btn" :disabled="!layer.motionPath.path" @click="$emit('prova-percorso')"><span aria-hidden="true" v-html="ICO_PLAY"></span>{{ t('Prova il percorso') }}</button>
+              </div>
               <div>
-                <label class="mps-label">{{ t('Preset percorso') }}</label>
+                <label class="mps-label">{{ t('Forma del percorso') }}</label>
                 <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.motionPath.preset || 'circle'" :options="OPTS_MOTION_PRESET" @update:model-value="applyMotionPreset($event)" />
               </div>
+              <label v-if="Array.isArray(layer.motionPath.punti) && layer.motionPath.punti.length > 2" class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                <input type="checkbox" :checked="!!layer.motionPath.dritte" @change="upDritte($event.target.checked)" class="mb-rounded" />
+                <span class="mb-text-[11px] mb-text-gray-400">{{ t('Linee dritte') }}</span>
+              </label>
               <template v-if="layer.motionPath.preset === 'custom'">
                 <div>
-                  <label class="mps-label">{{ t('Percorso SVG (d="")') }}</label>
+                  <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Tracciato SVG') }}<InfoTip :testo="t('Il tracciato scritto come l’attributo «d» di un percorso SVG, in pixel della tela del Computer (per esempio M0,0 C50,0 50,100 100,100). Più semplice disegnarlo sulla tela.')" :titolo="t('Tracciato SVG')" /></label>
                   <textarea :value="layer.motionPath.path" @input="upMotionPath('path', $event.target.value)" rows="2"
                     class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-[10px] mb-text-gray-900 mb-resize-y mb-font-mono" placeholder="M0,0 C50,0 50,100 100,100"></textarea>
                 </div>
               </template>
               <div>
-                <label class="mps-label">{{ t('Durata') }}</label>
-                <NumberScrubber theme="dark" :modelValue="layer.motionPath.duration ?? 3000" :min="500" :max="120000" :step="500" :defaultValue="3000" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata (ms)')" @update:modelValue="upMotionPath('duration', $event)" />
+                <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Dimensione del percorso') }}<InfoTip :testo="t('Ingrandisce o rimpicciolisce il tracciato: 100% è com’è disegnato, 200% il doppio.')" :titolo="t('Dimensione del percorso')" /></label>
+                <NumberScrubber theme="dark" :modelValue="layer.motionPath.scala ?? 100" :min="10" :max="400" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Dimensione del percorso')" @update:modelValue="upMotionPath('scala', $event === 100 ? undefined : $event)" />
+              </div>
+              <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                <input type="checkbox" :checked="!!layer.motionPath.adatta" @change="upMotionPath('adatta', $event.target.checked || undefined)" class="mb-rounded" />
+                <span class="mps-label mb-mb-0 mb-flex mb-items-center mb-gap-1">{{ t('Segue la larghezza dello slider') }}<InfoTip :testo="t('Il tracciato si allarga e si stringe con lo slider: sul telefono resta in proporzione a come lo vedi sul Computer. Spento, ha sempre gli stessi pixel della tela e sugli schermi stretti sembra più grande.')" :titolo="t('Segue la larghezza dello slider')" /></span>
+              </label>
+              <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+                <div>
+                  <label class="mps-label">{{ t('Durata') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.motionPath.duration ?? 3000" :min="500" :max="120000" :step="500" :defaultValue="3000" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata (ms)')" @update:modelValue="upMotionPath('duration', $event)" />
+                </div>
+                <div>
+                  <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Ritardo') }}<InfoTip :testo="t('Quanto aspetta il percorso prima di partire, dopo l’ingresso del livello.')" :titolo="t('Ritardo del percorso')" /></label>
+                  <NumberScrubber theme="dark" :modelValue="layer.motionPath.ritardo ?? 0" :min="0" :max="60000" :step="100" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Ritardo del percorso')" @update:modelValue="upMotionPath('ritardo', $event || undefined)" />
+                </div>
               </div>
               <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
                 <input type="checkbox" :checked="layer.motionPath.autoRotate" @change="upMotionPath('autoRotate', $event.target.checked)" class="mb-rounded" />
@@ -1310,6 +1390,11 @@
               <input type="checkbox" :checked="!!layer.parallax" @change="toggleParallax($event.target.checked)" class="mb-rounded" />
               <span class="mb-text-[11px] mb-text-gray-400">{{ t('Parallasse attiva') }}</span>
             </label>
+            <!-- 1.4.1472: stava in cima alla scheda e non diceva che agisce solo con la Parallasse dello slider accesa -->
+            <div v-if="!layer.parallax && (parallasseSlider || layer.parallaxDepth > 0)">
+              <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Profondità con la parallasse dello slider') }}<InfoTip :testo="parallasseSlider ? t('Con la Parallasse dello slider accesa (Stile della tile) il livello si muove col tipo e l’intensità dello slider, di più quanto più è profondo. 0 = fermo. Con «Parallasse attiva» qui sopra vale invece la parallasse propria del livello.') : t('Non agisce: la Parallasse dello slider è spenta (Stile della tile, «Parallasse»). Accendila, o usa «Parallasse attiva» qui sopra, che agisce da sola.')" :titolo="t('Profondità con la parallasse dello slider')" /></label>
+              <NumberScrubber theme="dark" :modelValue="layer.parallaxDepth || 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" :ariaLabel="t('Profondità con la parallasse dello slider')" @update:modelValue="up('parallaxDepth', $event)" />
+            </div>
             <template v-if="layer.parallax">
               <div>
                 <label class="mps-label">{{ t('Tipo') }}</label>
@@ -1393,20 +1478,6 @@
                 </template>
               </div>
             </template>
-          </template>
-
-          <!-- Modo TIMELINE -->
-          <template v-else>
-            <p class="mb-text-[10px] mb-text-gray-500 mb-italic mb-mb-2">
-              {{ t('Usa la linea del tempo sotto la tela per aggiungere e spostare i fotogrammi chiave.') }}
-            </p>
-            <KeyframeProperties
-              :keyframe="selectedKeyframe"
-              :timeline="layer.timeline"
-              @update-keyframe="(id, updates) => $emit('update-keyframe', id, updates)"
-              @capture-from-canvas="$emit('capture-from-canvas')"
-            />
-          </template>
         </template>
 
       </div>
@@ -1423,6 +1494,7 @@
 import { ref, computed, watch } from 'vue';
 import IconPicker from './IconPicker.vue';
 import iconsSvg from './uikitIconsSvg.js';
+import { svgIcona } from './iconeMie.js';
 import FieldColor from '@/components/Builder/fields/FieldColor.vue';
 import FieldSelect from '../Builder/fields/FieldSelect.vue';
 import NumberScrubber from '../Builder/fields/NumberScrubber.vue';
@@ -1440,6 +1512,8 @@ import { eDisegno } from './disegni.js';
 // Curve di ingresso, uscita, loop e percorso: le stesse della timeline (il PHP le traduce in cubic-bezier,
 // easing_to_css). La curva dell'hover resta fra le 5 di base, che il PHP accetta per l'hover.
 import { defaultTimeline, EASING_GROUPS } from './timelineUtils.js';
+import { dDaPunti } from './percorso.js';
+import lucideIconsLP from './lucideIconsSvg.js';
 import { t } from '@/i18n';
 import { nomeLivello, tappeDi, chiaviUsate, valoreSM, delLivello, dellaScena, SM_CHIAVI, statiDellaSlide, gruppiLivelli, nomeGruppo } from './livelloUtils.js';
 
@@ -1458,6 +1532,15 @@ const props = defineProps({
   scrollPreview: { type: Number, default: null },
   // La modalità dell'editor (1.4.1426): disegno · animazione · interazioni, decide le schede.
   modo: { type: String, default: 'disegno' },
+  // La Parallasse dello slider è accesa (1.4.1472): la profondità numerica del livello agisce solo con lei
+  parallasseSlider: { type: Boolean, default: false },
+  // Il percorso si sta disegnando sulla tela (1.4.1473)
+  disegnoPercorso: { type: Boolean, default: false },
+  // Tutte le slide, quella scelta e i livelli su tutte le slide (1.4.1475): bersagli di «Mostra o nasconde un livello»
+  // e numero massimo di «Vai alla slide…»
+  tutteLeSlide: { type: Array, default: () => [] },
+  indiceSlide: { type: Number, default: 0 },
+  livelliGlobali: { type: Array, default: () => [] },
 });
 
 // Il nome che il livello avrebbe senza «Nome del livello» (testo, file, id parlante, tipo): segnaposto del campo.
@@ -1472,15 +1555,24 @@ const gruppoAutomatico = computed(() => {
 });
 const nomiGruppi = computed(() => [...new Set(gruppiLivelli(props.slideLayers || []).map((g) => nomeGruppo(g)))]);
 
-const targetableLayers = computed(() => {
+// «Mostra o nasconde un livello» (1.4.1475): i livelli di questa slide, poi delle altre, poi quelli su tutte le slide
+const targetLayerOptions = computed(() => {
   const cur = props.layer?.id;
-  return (props.slideLayers || []).filter(l => l && l.id && l.id !== cur);
+  const voce = (l) => ({ value: l.id, label: targetLayerLabel(l) });
+  const gruppi = [];
+  const slide = props.tutteLeSlide && props.tutteLeSlide.length ? props.tutteLeSlide : [{ layers: props.slideLayers || [] }];
+  const ordine = slide.map((s, i) => i).sort((a, b) => (a === props.indiceSlide ? -1 : b === props.indiceSlide ? 1 : a - b));
+  for (const i of ordine) {
+    const opts = (slide[i].layers || []).filter((l) => l?.id && l.id !== cur).map(voce);
+    if (opts.length) gruppi.push({ label: i === props.indiceSlide ? t('Questa slide (%d)').replace('%d', i + 1) : t('Slide %d').replace('%d', i + 1), options: opts });
+  }
+  const glob = (props.livelliGlobali || []).filter((l) => l?.id && l.id !== cur).map(voce);
+  if (glob.length) gruppi.push({ label: t('Su tutte le slide'), options: glob });
+  // un bersaglio che non c'è più resta leggibile, per cambiarlo
+  const t0 = props.layer?.action?.target;
+  const presente = !t0 || gruppi.some((g) => g.options.some((o) => o.value === t0));
+  return [{ value: '', label: t('— Scegli un livello —') }, ...gruppi, ...(presente ? [] : [{ value: t0, label: t('Livello che non c’è più') }])];
 });
-
-const targetLayerOptions = computed(() => [
-  { value: '', label: '— Seleziona un layer —' },
-  ...targetableLayers.value.map(l => ({ value: l.id, label: targetLayerLabel(l) })),
-]);
 
 function fmt(v) {
   if (v === 'auto' || v === undefined || v === null) return v ?? '';
@@ -1489,21 +1581,15 @@ function fmt(v) {
   return (Math.round(n * 10) / 10).toString();
 }
 
+// il nome del pannello Livelli (testo senza segni HTML, nome del file, nome dato), col tipo fra parentesi
 function targetLayerLabel(l) {
-  const icons = { text: 'T', image: '🖼', video: '▶', button: '▢', icon: '★', shape: '◆', audio: '♫' };
-  const ico = icons[l.type] || '?';
-  let name = l.type;
-  if (l.type === 'text' || l.type === 'button') name = l.content || l.type;
-  else if (l.type === 'icon') name = l.iconName || 'icona';
-  else if (l.type === 'image') name = 'Immagine';
-  else if (l.type === 'video') name = 'Video';
-  else if (l.type === 'shape') name = 'Forma';
-  const trimmed = String(name).replace(/\s+/g, ' ').trim();
-  const short = trimmed.length > 40 ? trimmed.slice(0, 40) + '…' : trimmed;
-  return `${ico} ${short}`;
+  const nome = nomeLivello(l);
+  const corto = nome.length > 40 ? nome.slice(0, 40) + '…' : nome;
+  const tipo = NOMI_TIPO[l.type] || '';
+  return tipo && tipo !== corto ? `${corto} (${tipo.toLowerCase()})` : corto;
 }
 
-const emit = defineEmits(['update', 'update-keyframe', 'capture-from-canvas', 'set-scroll-preview']);
+const emit = defineEmits(['update', 'update-keyframe', 'set-scroll-preview', 'disegna-percorso', 'prova-percorso']);
 
 const hasTimeline = computed(() => {
   return !!(props.layer?.timeline?.keyframes?.length);
@@ -1515,13 +1601,41 @@ const selectedKeyframe = computed(() => {
 });
 
 function setAnimMode(mode) {
+  chiediSemplice.value = false;
   if (mode === 'timeline' && !hasTimeline.value) {
     // Attiva timeline con valori default basati sulla posizione corrente del layer
     up('timeline', defaultTimeline(props.layer));
   } else if (mode === 'simple' && hasTimeline.value) {
-    // Disattiva timeline
-    up('timeline', null);
+    // 1.4.1472: prima la toglieva senza chiedere, coi suoi fotogrammi chiave
+    chiediSemplice.value = true;
   }
+}
+const chiediSemplice = ref(false);
+function confermaSemplice() {
+  chiediSemplice.value = false;
+  up('timeline', null);
+}
+watch(() => props.layer?.id, () => { chiediSemplice.value = false; });
+
+// L'Uscita con la linea del tempo (1.4.1472): finché non si cambia è la dissolvenza rapida di sempre (400 ms); al primo
+// cambio si accende «timeline.uscita» e si scrivono effetto, durata, ritardo e andamento del livello (le chiavi di sempre
+// dell'Uscita), partendo da quello che si vedeva.
+const uscitaTl = computed(() => {
+  const l = props.layer;
+  if (l?.timeline?.uscita) {
+    return { effetto: l.animOut || 'fadeOutDown', durata: l.animOutDuration ?? 600, ritardo: l.animOutDelay ?? 0, andamento: l.animEasing || 'ease' };
+  }
+  return { effetto: 'fadeOut', durata: 400, ritardo: 0, andamento: 'ease' };
+});
+function upUscitaTl(k, v) {
+  const l = props.layer;
+  if (!l?.timeline) return;
+  const u = { ...uscitaTl.value, [k]: v };
+  if (!l.timeline.uscita) up('timeline', { ...l.timeline, uscita: true });
+  up('animOut', u.effetto);
+  up('animOutDuration', u.durata);
+  up('animOutDelay', u.ritardo);
+  up('animEasing', u.andamento);
 }
 
 const showIconPicker = ref(false);
@@ -1532,7 +1646,8 @@ const activeTab = ref('Contenuto');
 const NOMI_TIPO = { text: t('Testo'), button: t('Pulsante'), image: t('Immagine'), video: t('Video'), icon: t('Icona'),
   shape: t('Forma'), audio: t('Audio') };
 const nomeTipo = computed(() => NOMI_TIPO[props.layer?.type] || (props.layer?.type || ''));
-const NOMI_SCHERMO = { desktop: 'Desktop', notebook: 'Notebook', tablet: 'Tablet', mobile: 'Mobile' };
+// 1.4.1475: i nomi della barra degli schermi (prima «Visibile su Desktop / Mobile»)
+const NOMI_SCHERMO = { desktop: t('Computer'), notebook: t('Notebook'), tablet: t('Tablet'), mobile: t('Telefono') };
 const nomeSchermo = computed(() => NOMI_SCHERMO[props.activeBreakpoint] || props.activeBreakpoint);
 // Le schede secondo la modalità dell'editor (1.4.1426, come Disegno/Animazione/Azioni di Slider Revolution 7):
 // Disegno = Contenuto, Posizione, Stile; Animazione e Interazioni = un pannello solo. Prima le quattro schede insieme,
@@ -1973,6 +2088,11 @@ const OPTS_ACTION_TYPE = [
   { value: 'setState', label: t('Imposta uno stato') },
   { value: 'cycleState', label: t('Stato successivo (a giro)') },
 ];
+// Come compare (e sparisce) il livello di «Mostra o nasconde un livello» (1.4.1475: prima sempre di colpo)
+const OPTS_MOSTRA_EFFETTO = [
+  { value: 'nessuno', label: t('Subito, senza effetto') },
+  { value: 'fade', label: t('Dissolvenza') },
+];
 const OPTS_STATO_EFFETTO = [
   { value: 'fade', label: t('Dissolvenza') },
   { value: 'su', label: t('Sale dal basso') },
@@ -2075,10 +2195,12 @@ const OPTS_HOVER_CURSOR = [
 ];
 const OPTS_MASK_PRESET = [
   { value: 'custom', label: t('Personalizzato') },
-  { value: 'revealRight', label: t('Si scopre da destra') },
-  { value: 'revealLeft', label: t('Si scopre da sinistra') },
-  { value: 'revealDown', label: t('Si scopre dall’alto') },
-  { value: 'revealUp', label: t('Si scopre dal basso') },
+  // 1.4.1477: nomi giusti (erano rovesciati): coperto a destra (right 100) = si scopre da sinistra, come l'entrata
+  // «Si scopre da sinistra» (mpsMaskFromLeft); i valori dei modelli non cambiano
+  { value: 'revealRight', label: t('Si scopre da sinistra') },
+  { value: 'revealLeft', label: t('Si scopre da destra') },
+  { value: 'revealDown', label: t('Si scopre dal basso') },
+  { value: 'revealUp', label: t('Si scopre dall’alto') },
   { value: 'curtainH', label: t('Sipario orizzontale') },
   { value: 'curtainV', label: t('Sipario verticale') },
 ];
@@ -2096,8 +2218,11 @@ const OPTS_MOTION_PRESET = [
   { value: 'wave', label: t('Onda') },
   { value: 'zigzag', label: t('Zigzag') },
   { value: 'arc', label: t('Arco') },
-  { value: 'custom', label: t('SVG personalizzato') },
+  { value: 'disegnato', label: t('Disegnato sulla tela') },
+  { value: 'custom', label: t('Tracciato SVG scritto a mano') },
 ];
+const ICO_MATITA = lucideIconsLP.pencil || '';
+const ICO_PLAY = lucideIconsLP.play || '';
 const OPTS_PARALLAX_TYPE = [
   { value: 'mouse', label: t('Mouse') },
   { value: 'scroll', label: t('Scorrimento') },
@@ -2200,8 +2325,23 @@ function toggleMotionPath(enabled) {
 }
 function applyMotionPreset(preset) {
   if (!props.layer?.motionPath) return;
-  const path = MOTION_PRESETS[preset] || props.layer.motionPath.path || '';
-  up('motionPath', { ...props.layer.motionPath, preset, path });
+  const mp = props.layer.motionPath;
+  // «Disegnato sulla tela»: si torna ai punti disegnati (se ci sono), se no si comincia a disegnare
+  if (preset === 'disegnato') {
+    if (Array.isArray(mp.punti) && mp.punti.length > 1) up('motionPath', { ...mp, preset, path: dDaPunti(mp.punti, mp.dritte) });
+    else emit('disegna-percorso');
+    return;
+  }
+  const path = MOTION_PRESETS[preset] || mp.path || '';
+  up('motionPath', { ...mp, preset, path });
+}
+// «Linee dritte»: lo stesso disegno coi segmenti dritti invece della curva morbida
+function upDritte(si) {
+  const mp = props.layer?.motionPath;
+  if (!mp) return;
+  const n = { ...mp, dritte: si || undefined };
+  if (Array.isArray(mp.punti) && mp.punti.length > 1 && (mp.preset === 'disegnato' || !mp.preset)) n.path = dDaPunti(mp.punti, si);
+  up('motionPath', n);
 }
 function upMotionPath(key, val) {
   if (!props.layer?.motionPath) return;
@@ -2385,6 +2525,21 @@ function upParallax(key, val) {
 .mps-dato:hover { background: #374151; color: #fff; }
 .mps-dato.is-on { border-color: var(--olo-color-primary, #e1474f); color: #fff; }
 .mps-dato:focus-visible { outline: 2px solid var(--olo-color-primary, #e1474f); outline-offset: 1px; }
+/* Percorso: disegna e prova (1.4.1473) */
+.mps-percorso-azioni { display: flex; flex-wrap: wrap; gap: 4px; }
+.mps-percorso-btn { font: inherit; display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; padding: 3px 8px; border-radius: 4px; border: 1px solid #4b5563; background: #374151; color: #e5e7eb; cursor: pointer; }
+.mps-percorso-btn :deep(svg) { width: 12px; height: 12px; }
+.mps-percorso-btn:hover:not(:disabled) { background: #4b5563; }
+.mps-percorso-btn:disabled { opacity: .4; cursor: default; }
+.mps-percorso-btn.is-on { border-color: rgb(var(--olo-primary-rgb, 129 140 248)); color: #fff; }
+.mps-percorso-btn:focus-visible { outline: 2px solid #93c5fd; outline-offset: 1px; }
+/* Conferma in linea (1.4.1472): tornare a «Semplice» con la linea del tempo, togliere un percorso disegnato */
+.mps-conferma { display: flex; flex-direction: column; gap: 6px; padding: 8px; margin-bottom: 8px; border: 1px solid #92400e; border-radius: 6px; background: #451a03; font-size: 11px; color: #fde68a; }
+.mps-conferma-fila { display: flex; gap: 6px; }
+.mps-conferma-si, .mps-conferma-no { font: inherit; font-size: 11px; padding: 3px 10px; border-radius: 4px; cursor: pointer; border: 1px solid #4b5563; }
+.mps-conferma-si { background: #b91c1c; border-color: #b91c1c; color: #fff; font-weight: 600; }
+.mps-conferma-no { background: #374151; color: #e5e7eb; }
+.mps-conferma-si:focus-visible, .mps-conferma-no:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
 /* Le tappe del percorso (1.4.1352) */
 .mps-tappe { display: flex; flex-direction: column; gap: 6px; padding: 8px; border: 1px solid #374151; border-radius: 6px; background: #111827; }
 .mps-tappe-barra { position: relative; height: 18px; margin: 2px 6px; }

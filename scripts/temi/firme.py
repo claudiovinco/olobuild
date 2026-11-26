@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Gli effetti «firma» dei quindici temi scuri con lo Slider Pro (30 ottobre 2026): oltre all'apertura, ogni tema ha i
+"""Gli effetti «firma» dei quindici temi scuri con il Pro Slider (30 ottobre 2026): oltre all'apertura, ogni tema ha i
 suoi effetti che lo fanno riconoscere, tutti con i controlli nativi di OLObuild (niente CSS a mano):
 
 - ingresso: l'animazione d'ingresso delle righe (al posto del «slide-up» comune);

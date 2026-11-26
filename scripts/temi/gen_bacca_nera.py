@@ -5,7 +5,7 @@ duemila metri, quattordici botaniche, tre distillazioni in un alambicco di rame,
 Tema scuro: verde bosco, ottone, il blu viola delle bacche di ginepro e la salvia. Titoli in Brygada 1918 (anche
 corsivo), testo in Afacad, dati in Sometype Mono.
 
-Apertura: Slider Pro «il giro delle botaniche», alto 16:9 perché i cerchi restino cerchi. Il bicchiere in una finestra
+Apertura: Pro Slider «il giro delle botaniche», alto 16:9 perché i cerchi restino cerchi. Il bicchiere in una finestra
 ad arco e, attorno, cinque botaniche (ginepro, anice stellato, cardamomo, limone, cannella) in tondi che girano su
 un'orbita ellittica inclinata, ognuna partita da un punto diverso del giro (percorsi di movimento). Una diapositiva per
 gin, a linguette: cambia il bicchiere, le botaniche continuano a girare.

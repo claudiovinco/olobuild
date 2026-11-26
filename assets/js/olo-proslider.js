@@ -142,6 +142,42 @@ const LOOP_ANIM = {
 function qsa(parent, sel) { return Array.from(parent.querySelectorAll(sel)); }
 function qs(parent, sel)  { return parent.querySelector(sel); }
 
+// I fotogrammi di un'animazione del foglio di stile (@keyframes mpsFadeOutDown…), letti una volta: servono all'uscita dei
+// livelli con la linea del tempo, che si compone col transform del momento (1.4.1472). null se il foglio non si legge.
+var _mpsFotogrammi = {};
+function fotogrammiCss(nome) {
+  if (Object.prototype.hasOwnProperty.call(_mpsFotogrammi, nome)) return _mpsFotogrammi[nome];
+  var regola = null;
+  var fogli = document.styleSheets || [];
+  for (var i = 0; i < fogli.length && !regola; i++) {
+    var regole;
+    try { regole = fogli[i].cssRules; } catch (_) { continue; } // foglio di un altro dominio
+    if (!regole) continue;
+    for (var j = 0; j < regole.length; j++) {
+      if (regole[j].type === 7 && regole[j].name === nome) { regola = regole[j]; break; }
+    }
+  }
+  var out = null;
+  if (regola) {
+    out = [];
+    for (var k = 0; k < regola.cssRules.length; k++) {
+      var kf = regola.cssRules[k];
+      kf.keyText.split(',').forEach(function (p) {
+        p = p.trim();
+        out.push({
+          offset: p === 'from' ? 0 : (p === 'to' ? 1 : parseFloat(p) / 100),
+          transform: kf.style.transform || '', opacity: kf.style.opacity || '',
+          clipPath: kf.style.clipPath || '', filter: kf.style.filter || '',
+        });
+      });
+    }
+    out = out.filter(function (f) { return f.offset >= 0 && f.offset <= 1; }).sort(function (a, b) { return a.offset - b.offset; });
+    if (out.length < 2) out = null;
+  }
+  _mpsFotogrammi[nome] = out;
+  return out;
+}
+
 /* ── Init all sliders on the page ─────────────────────── */
 export function initAll() {
   qsa(document, '.olo-proslider').forEach(initSlider);
@@ -532,7 +568,15 @@ function initSlider(container) {
   // Percorso di movimento (data-mp sul contenitore .mps-mp): il tracciato SVG si campiona in 64 punti che
   // diventano keyframe di translate dal primo punto (il livello parte da dove è posato), con la rotazione lungo
   // il percorso se chiesta. Web Animations sul contenitore interno: l'ingresso resta sul livello.
-  function puntiPercorso(d, ruota) {
+  // 1.4.1473: «Dimensione del percorso» (k, 1 = 100%) e «Segue la larghezza dello slider» (a: lo spostamento si
+  // allarga e si stringe con la tela del formato rispetto a quella del Computer, 1440) moltiplicano lo spostamento;
+  // «Ritardo» proprio del percorso (w, ms) si somma a quello dell'ingresso. Gemello: percorso.js dell'editor.
+  function fattorePercorso(c) {
+    var k = Number(c.k) > 0 ? Number(c.k) : 1;
+    return c.a ? k * (formatoCorrente().w || 1440) / 1440 : k;
+  }
+  function puntiPercorso(d, ruota, fattore) {
+    fattore = fattore || 1;
     var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     svg.setAttribute('width', '0');
@@ -550,7 +594,7 @@ function initSlider(container) {
         for (var i = 0; i <= N; i++) {
           var l = len * i / N;
           var p = path.getPointAtLength(l);
-          var t = 'translate(' + (p.x - p0.x).toFixed(2) + 'px,' + (p.y - p0.y).toFixed(2) + 'px)';
+          var t = 'translate(' + ((p.x - p0.x) * fattore).toFixed(2) + 'px,' + ((p.y - p0.y) * fattore).toFixed(2) + 'px)';
           if (ruota) {
             var a = path.getPointAtLength(Math.max(0, l - 0.5));
             var b = path.getPointAtLength(Math.min(len, l + 0.5));
@@ -570,13 +614,14 @@ function initSlider(container) {
       if (!mp.animate) return;
       var c;
       try { c = JSON.parse(mp.getAttribute('data-mp') || '{}'); } catch (_) { return; }
-      if (!mp._mpsFrames) mp._mpsFrames = puntiPercorso(c.p || '', !!c.r);
+      var fattore = fattorePercorso(c);
+      if (!mp._mpsFrames || mp._mpsFattore !== fattore) { mp._mpsFrames = puntiPercorso(c.p || '', !!c.r, fattore); mp._mpsFattore = fattore; }
       if (mp._mpsFrames.length < 2) return;
       mp._mpsAnim = mp.animate(mp._mpsFrames, {
         duration: c.d || 3000,
         iterations: c.l ? Infinity : 1,
         easing: c.e || 'linear',
-        delay: parseInt(delay, 10) || 0,
+        delay: (parseInt(delay, 10) || 0) + (parseInt(c.w, 10) || 0),
         fill: 'both',
       });
     });
@@ -603,6 +648,8 @@ function initSlider(container) {
       // Timeline keyframe layer
       var tlName = el.getAttribute('data-timeline-name');
       if (tlName) {
+        if (el._mpsUscita) { try { el._mpsUscita.cancel(); } catch (_) {} el._mpsUscita = null; }
+        el.style.animationPlayState = '';
         el.style.animation = 'none';
         el.classList.remove('mps-anim-visible');
         void el.offsetWidth;
@@ -617,8 +664,7 @@ function initSlider(container) {
         if (el._mpsFine) { clearTimeout(el._mpsFine); el._mpsFine = null; }
         if (el.getAttribute('data-timeline-end') === '0' && tlLoop !== 'infinite') {
           el._mpsFine = setTimeout(function () {
-            el.style.animation = 'mpsFadeOut 400ms ease both';
-            el.classList.remove('mps-anim-visible');
+            esceTimeline(el);
           }, (parseInt(tlDur, 10) || 3000) + (parseInt(tlDelay, 10) || 0));
         }
         avviaPercorso(el, 0);
@@ -698,6 +744,56 @@ function initSlider(container) {
     });
   }
 
+  // L'uscita di un livello con la linea del tempo (1.4.1472). Con la sua «Uscita» (data-anim-out: effetto, durata, ritardo,
+  // andamento) esce con quella; senza, con la dissolvenza rapida di sempre. La linea del tempo si ferma dov'è (in pausa
+  // tiene posizione, scala, filtri, maschera) e l'uscita parte da lì: i fotogrammi dell'effetto si compongono col transform
+  // del momento, se no un «Dissolvenza verso il basso» riporterebbe il livello in alto a sinistra (la sua posizione sta
+  // nell'animazione della linea del tempo). Restituisce quanto dura.
+  function esceTimeline(el) {
+    var chiave = el.getAttribute('data-anim-out');
+    if (!chiave) {
+      el.style.animation = 'mpsFadeOut 400ms ease both';
+      el.classList.remove('mps-anim-visible');
+      return 400;
+    }
+    if (chiave === 'none') {
+      el.style.animation = 'none';
+      el.classList.remove('mps-anim-visible');
+      return 0;
+    }
+    var dur = parseInt(el.getAttribute('data-anim-out-duration'), 10);
+    if (isNaN(dur)) dur = 600;
+    var rit = parseInt(el.getAttribute('data-anim-out-delay'), 10) || 0;
+    var curva = el.getAttribute('data-anim-easing') || 'ease';
+    var fot = el.animate ? fotogrammiCss(ANIM[chiave] || 'mpsFadeOut') : null;
+    if (!fot) {
+      el.style.animation = 'mpsFadeOut ' + dur + 'ms ' + curva + ' ' + rit + 'ms both';
+      el.classList.remove('mps-anim-visible');
+      return dur + rit;
+    }
+    var cs = getComputedStyle(el);
+    var base = cs.transform && cs.transform !== 'none' ? cs.transform + ' ' : '';
+    var op = parseFloat(cs.opacity);
+    if (isNaN(op)) op = 1;
+    el.style.animationPlayState = 'paused';
+    var frames = fot.map(function (f) {
+      var o = { offset: f.offset, transform: (base + f.transform).trim() || 'none', opacity: f.opacity !== '' ? op * parseFloat(f.opacity) : op };
+      if (f.clipPath) o.clipPath = f.clipPath;
+      if (f.filter) o.filter = f.filter;
+      return o;
+    });
+    if (el._mpsUscita) { try { el._mpsUscita.cancel(); } catch (_) {} }
+    try {
+      el._mpsUscita = el.animate(frames, { duration: dur, delay: rit, easing: curva, fill: 'both' });
+    } catch (_) {
+      el._mpsUscita = null;
+      el.style.animationPlayState = '';
+      el.style.animation = 'mpsFadeOut ' + dur + 'ms ease ' + rit + 'ms both';
+    }
+    el.classList.remove('mps-anim-visible');
+    return dur + rit;
+  }
+
   function animateLayersOut(slide, callback) {
     var layers = qsa(slide, '.olo-proslider-layer');
     // il percorso si ferma dov'è mentre il livello esce (riparte da capo al prossimo ingresso)
@@ -707,11 +803,10 @@ function initSlider(container) {
 
     var maxEnd = 0;
     layers.forEach(function (el) {
-      // Timeline layer: quick fadeout
+      // Timeline layer: la sua Uscita o la dissolvenza rapida (esceTimeline)
       if (el.getAttribute('data-timeline-name')) {
-        el.style.animation = 'mpsFadeOut 400ms ease both';
-        el.classList.remove('mps-anim-visible');
-        if (400 > maxEnd) maxEnd = 400;
+        var fineTl = esceTimeline(el);
+        if (fineTl > maxEnd) maxEnd = fineTl;
         return;
       }
 
@@ -1311,7 +1406,7 @@ function initSlider(container) {
         case 'toggleLayer':
           if (action.target) {
             var tgt = qs(container, '.mps-layer-' + action.target);
-            if (tgt) { tgt.style.display = tgt.style.display === 'none' ? '' : 'none'; }
+            if (tgt) mostraNascondi(tgt, action.effetto === 'fade' ? (parseInt(action.durata, 10) || 400) : 0);
           }
           break;
       }
@@ -1324,12 +1419,18 @@ function initSlider(container) {
       // L'uscita si misura sulla ZONA del livello presa all'entrata, non sul livello: una spia che, scelta, si nasconde
       // (Cric) farebbe «uscire» il mouse da sola, lo stato tornerebbe indietro, la spia riapparirebbe… e lampeggerebbe
       // (prova su olo03 del 24 nov). Anche uscendo dallo slider lo stato torna com'era.
-      var nomeH = String(az0.target || '').toLowerCase().replace(/[^a-z0-9_-]/g, ''), primaH = null, zonaH = null;
+      var nomeH = String(az0.target || '').toLowerCase().replace(/[^a-z0-9_-]/g, ''), primaH = null, zonaH = null, coloreH = '';
       var torna = function () {
         document.removeEventListener('pointermove', controllaUscita);
         container.removeEventListener('pointerleave', torna);
         zonaH = null;
-        if (primaH !== null) impostaStato(nomeH, primaH);
+        if (primaH !== null) {
+          impostaStato(nomeH, primaH);
+          // 1.4.1477: torna anche il colore dello stato (--mps-st-<stato>), se no restava quello dell'ultima spia passata
+          // e il display mostrava il testo di prima col colore di un'altra scelta
+          if (coloreH) container.style.setProperty('--mps-st-' + nomeH, coloreH);
+          else container.style.removeProperty('--mps-st-' + nomeH);
+        }
       };
       var controllaUscita = function (ev) {
         var r = zonaH;
@@ -1338,6 +1439,7 @@ function initSlider(container) {
       el.addEventListener('pointerenter', function (e) {
         if ((e.pointerType && e.pointerType !== 'mouse') || zonaH) return;
         primaH = (az0.type === 'setState' || az0.type === 'cycleState') ? valoreStato(nomeH) : null;
+        coloreH = container.style.getPropertyValue('--mps-st-' + nomeH);
         esegui(e);
         if (az0.ritorna && primaH !== null) {
           zonaH = el.getBoundingClientRect();
@@ -1347,6 +1449,25 @@ function initSlider(container) {
       });
     }
   });
+
+  // «Mostra o nasconde un livello» (1.4.1475): di colpo come prima o, con «Come compare: Dissolvenza», sfumando. Il livello
+  // va e viene come sempre con display; la dissolvenza va dall'opacità che ha (la sua entrata, se riparte) a zero e
+  // ritorno, senza toccare le sue animazioni (un fotogramma solo: l'altro capo è il valore del momento).
+  function mostraNascondi(el, durata) {
+    var nascosto = el.style.display === 'none';
+    if (el._mpsMn) { try { el._mpsMn.cancel(); } catch (_) {} el._mpsMn = null; }
+    if (!durata || !el.animate || menoMoto) { el.style.display = nascosto ? '' : 'none'; return; }
+    try {
+      if (nascosto) {
+        el.style.display = '';
+        el._mpsMn = el.animate([{ opacity: 0, offset: 0 }], { duration: durata, easing: 'ease' });
+      } else {
+        var a = el.animate([{ opacity: 0, offset: 1 }], { duration: durata, easing: 'ease', fill: 'forwards' });
+        el._mpsMn = a;
+        a.onfinish = function () { el.style.display = 'none'; try { a.cancel(); } catch (_) {} if (el._mpsMn === a) el._mpsMn = null; };
+      }
+    } catch (_) { el.style.display = nascosto ? '' : 'none'; }
+  }
 
   /* ── Mouse Wheel Navigation ──────────────────────────── */
   if (cfg.mouseWheel) {
@@ -1370,18 +1491,33 @@ function initSlider(container) {
     var og = null;
     var grezzo = pl.getAttribute('data-lpx');
     if (grezzo) { try { og = JSON.parse(grezzo); } catch (_) { og = null; } }
+    var conTl = pl.hasAttribute('data-timeline-name');
     if (og) {
-      pLivelli.push({ el: pl, tipo: og.t || 'mouse', prof: og.d || 5, k: 4, tilt: !!og.r, vel: og.s || 0.5, mx: 0, my: 0, sy: 0, rx: 0, ry: 0 });
+      pLivelli.push({ el: pl, tl: conTl, tipo: og.t || 'mouse', prof: og.d || 5, k: 4, tilt: !!og.r, vel: og.s || 0.5, mx: 0, my: 0, sy: 0, rx: 0, ry: 0 });
     } else if (cfg.parallax) {
       var prof = parseInt(pl.getAttribute('data-parallax-depth'), 10) || 0;
-      if (prof > 0) pLivelli.push({ el: pl, tipo: cfg.parallaxType || 'mouse', prof: prof, k: cfg.parallaxIntensity || 5, tilt: false, vel: 1, mx: 0, my: 0, sy: 0, rx: 0, ry: 0 });
+      if (prof > 0) pLivelli.push({ el: pl, tl: conTl, tipo: cfg.parallaxType || 'mouse', prof: prof, k: cfg.parallaxIntensity || 5, tilt: false, vel: 1, mx: 0, my: 0, sy: 0, rx: 0, ry: 0 });
     }
   });
   if (pLivelli.length) {
-    var scriviLivello = function (st) {
+    // Coi livelli con la linea del tempo il transform in linea non si vedrebbe (lo tiene la loro animazione): la
+    // parallasse si SOMMA all'animazione (Web Animations, composite «add»). 1.4.1472: prima lì non agiva.
+    var parallasseSopra = function (st, t, durata) {
+      if (!st.el.animate) return;
+      var da = st.ultimo || 'none';
+      st.ultimo = t || 'none';
+      try {
+        if (st.anim && !durata) { st.anim.effect.setKeyframes([{ transform: st.ultimo }]); return; }
+        if (st.anim) st.anim.cancel();
+        st.anim = st.el.animate(durata ? [{ transform: da }, { transform: st.ultimo }] : [{ transform: st.ultimo }],
+          { duration: durata || 1, easing: 'ease-out', fill: 'forwards', composite: 'add' });
+      } catch (_) { st.anim = null; }
+    };
+    var scriviLivello = function (st, durata) {
       var x = st.mx, y = st.my + st.sy;
       var t = (x || y) ? 'translate(' + x.toFixed(1) + 'px, ' + y.toFixed(1) + 'px)' : '';
       if (st.tilt && (st.rx || st.ry)) t += ' perspective(900px) rotateX(' + st.rx.toFixed(2) + 'deg) rotateY(' + st.ry.toFixed(2) + 'deg)';
+      if (st.tl) { parallasseSopra(st, t, durata); return; }
       st.el.style.transform = t;
     };
     var colMouse = pLivelli.filter(function (st) { return st.tipo === 'mouse' || st.tipo === 'both'; });
@@ -1406,6 +1542,7 @@ function initSlider(container) {
       container.addEventListener('mouseleave', function () {
         colMouse.forEach(function (st) {
           st.mx = 0; st.my = 0; st.rx = 0; st.ry = 0;
+          if (st.tl) { scriviLivello(st, 500); return; }
           st.el.style.transition = 'transform 0.5s ease-out';
           scriviLivello(st);
           setTimeout(function () { st.el.style.transition = ''; }, 500);

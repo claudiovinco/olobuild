@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Kit comune dei generatori dei temi «scuri e creativi» (ottobre 2026): i pezzi ricorrenti (titoli di sezione, testi,
 pulsanti, immagini, schede, domande, moduli, testata, piede) con i colori del tema passati come token, e i costruttori
-delle diapositive e dei livelli dello Slider Pro (proslider) per le aperture.
+delle diapositive e dei livelli del Pro Slider (proslider) per le aperture.
 
 Uso in un generatore:
     K = Kit(ID, colori={'testo': 'var(--olo-color-text)', ...}, raggio=0, media=MEDIA)
@@ -345,7 +345,7 @@ class Kit:
         return [t.section([top, t.one([brand], anim='fade', style={'margin_top': 64}), bottom], bg=solid(fondo or c['nero']), padding='large',
                           style={'border': {'top': 1, 'right': 0, 'bottom': 0, 'left': 0, 'style': 'solid', 'color': c['filo']}})]
 
-    # ── Slider Pro ──
+    # ── Pro Slider ──
     @staticmethod
     def mob(px):
         """Dimensione di un livello sul telefono: sotto i 640 px la tela dello slider è larga 640 e si scala sulla
@@ -398,7 +398,7 @@ class Kit:
             # testi in alto sul telefono: il velo scende dall'alto fin poco sotto l'ultimo testo
             ha = min(100, mobile_alto + 12)
             # il velo del telefono è nascosto al computer (visible False) e torna sul telefono: prima era grande
-            # 0,1 × 0,1 % nell'angolo, e lo Slider Pro non sapeva nascondere un livello al computer (1.4.1243)
+            # 0,1 × 0,1 % nell'angolo, e il Pro Slider non sapeva nascondere un livello al computer (1.4.1243)
             return [desk, self.livello(lid + 'm', tipo='shape', x=0, y=0, w=100, h=ha, visible=False,
                                        shapeGradient=g(180, round(mobile_alto / ha * 100)), entra='fadeIn', ritardo=0,
                                        durata=600, esce='fadeOut',
@@ -579,7 +579,7 @@ class Kit:
         for l in [l for s in slides for l in (s.get('layers') or [])] + list(globali or []):
             n = str(l.get('id', ''))
             if n and n in visti:
-                raise SystemExit('Slider Pro: due livelli si chiamano «%s»' % n)
+                raise SystemExit('Pro Slider: due livelli si chiamano «%s»' % n)
             visti.add(n)
         self.chiaro_su_scuro(slides, globali, opz)
         for s in slides:

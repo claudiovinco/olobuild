@@ -5,7 +5,7 @@ mieli monoflora e l'adozione di un alveare (si adotta un'arnia, si ricevono le f
 Tema chiaro, cera e miele: crema di cera, ambra, giallo polline e verde bosco. Titoli in Besley (anche corsivo), testo in
 Work Sans, dati in Azeret Mono.
 
-Apertura: Slider Pro «il favo», alto 16:9, una diapositiva per miele col suo video pieno (l'ape sui fiori, gli apicoltori
+Apertura: Pro Slider «il favo», alto 16:9, una diapositiva per miele col suo video pieno (l'ape sui fiori, gli apicoltori
 fra le arnie, i telaini del favo, il miele che cola nel vasetto) e un velo scuro solo dal lato del testo. A destra un favo
 di sette celle tonde: al centro la foto del favo di quel miele, attorno le sei tinte della scala Pfund, dal bianco
 all'ambra scura; la tinta del miele della diapositiva si accende e pulsa piano. Le diapositive scendono dall'alto

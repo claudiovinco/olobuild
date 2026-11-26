@@ -6,7 +6,7 @@ una strada bagnata di notte.
 Nero d'asfalto, il rosso del filo sulla bacheca delle prove, l'ambra dei lampioni al sodio e il grigio acciaio. Titoli
 in Spectral, testo in Public Sans, fascicoli e timbri in Special Elite (la macchina da scrivere).
 
-Apertura: Slider Pro coi video veri (le sagome nella nebbia sotto i lampioni, il fumo controluce), ogni diapositiva è
+Apertura: Pro Slider coi video veri (le sagome nella nebbia sotto i lampioni, il fumo controluce), ogni diapositiva è
 un fascicolo; il timbro «RISERVATO» arriva come un colpo di tampone, e in alto, fisso, l'ora di una telecamera di
 sorveglianza che tremola (livello globale). Poi la frase che si legge solo con la torcia (Blend text «spotlight»), i
 servizi sulle carte da girare (Flip card), il metodo in quattro passi (Process steps), il lucchetto da aprire con

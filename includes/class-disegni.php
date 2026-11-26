@@ -1,6 +1,6 @@
 <?php
 /**
- * I colori dei disegni SVG dello Slider Pro (1.4.1433).
+ * I colori dei disegni SVG del Pro Slider (1.4.1433).
  *
  * Utente, 24 nov 2026: «nessun CSS o cose hardcoded… amplia il software per gestire tutte le eccezioni che trovi».
  * 85 disegni dei temi (il cruscotto e le spie di Cric, la cassaforte di Combinazione, i cartamodelli di Sbieco) avevano i

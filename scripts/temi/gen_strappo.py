@@ -3,7 +3,7 @@
 e set per marchi che hanno qualcosa da dire.
 
 La trovata (20 nov 2026): il sito si strappa. Nell'apertura tre manifesti incollati uno sull'altro sopra piazza del
-Duomo; scorrendo ognuno si strappa in due (due livelli dello Slider Pro col bordo frastagliato e l'anima bianca della
+Duomo; scorrendo ognuno si strappa in due (due livelli del Pro Slider col bordo frastagliato e l'anima bianca della
 carta, che volano via ruotando nel movimento a scorrimento) e scopre quello sotto: «Strappo» · «Prima si imparano,» ·
 «poi si strappano.» — e alla fine Milano. Poi i progetti sono sezioni col passaggio «Strappo» (Sezioni → Effetto
 sticky → «Strappo»): la sezione si strappa come un manifesto e il lembo si ripiega. Cursore: il taglierino.

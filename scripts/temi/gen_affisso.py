@@ -4,7 +4,7 @@
 
 La trovata (20 nov 2026; utente: «altri 5 temi, tutti strani, per agenzie di comunicazione… stupisci tutti»): il sito è
 un cartellone a prismi. Nell'apertura, sopra Napoli di notte, il cartellone ha otto prismi che girano uno dopo l'altro
-mentre scorri e mostrano tre manifesti (livelli dello Slider Pro con la rotazione 3D nel movimento a scorrimento);
+mentre scorri e mostrano tre manifesti (livelli del Pro Slider con la rotazione 3D nel movimento a scorrimento);
 poi i formati sono sezioni col passaggio «Prismi» (Sezioni → Effetto sticky → «Prismi»): la sezione si divide in
 strisce che girano e scoprono la successiva. Cursore: il pennello della colla.
 

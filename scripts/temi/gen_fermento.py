@@ -5,7 +5,7 @@ Dodici birre l’anno, sei sempre in spina, la cucina della sera e le visite al 
 Tema scuro, nero di tostatura con l’ambra della birra, il verde del luppolo e il bianco della schiuma. Titoli in Big
 Shoulders Display nero, testo in Barlow, numeri in JetBrains Mono.
 
-Apertura: Slider Pro «le spine». Una diapositiva per birra, col suo video (le bolle, il luppolo, la spillatura): dietro,
+Apertura: Pro Slider «le spine». Una diapositiva per birra, col suo video (le bolle, il luppolo, la spillatura): dietro,
 enorme e solo contornato, lo stile (BLANCHE, IPA, AMBER, STOUT) che sale da sotto; davanti il nome, il racconto, e tre
 barre che si riempiono di ambra per alcol, amaro e colore. Sopra tutte le diapositive salgono bolle vere, ognuna col
 suo tempo. I numeri in basso sono le spine.

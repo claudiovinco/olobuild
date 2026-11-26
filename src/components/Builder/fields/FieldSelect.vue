@@ -327,7 +327,7 @@ function position() {
   const openUp = below < popH + 8 && r.top > popH + 8;
   // I trigger compact possono essere molto stretti (es. 44px per "px"):
   // il popup ha comunque una larghezza leggibile, clampata nel viewport.
-  // Dentro una finestra che sta più in alto del builder (l'editor dello Slider Pro, z-index 999999) il menu si apre
+  // Dentro una finestra che sta più in alto del builder (l'editor del Pro Slider, z-index 999999) il menu si apre
   // SOPRA di lei (1.4.1435): col suo 100090 fisso finiva dietro, e nell'editor nessun menu si poteva usare.
   const z = livelloPopup(trigger, 100090);
   sopraFinestra.value = z > 100090 ? z : 0;

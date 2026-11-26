@@ -5,7 +5,7 @@ delle Torri. Si gioca tutte le sere, si impara il martedì, il venerdì c'è il 
 Ebano, avorio dei pezzi bianchi, il verde del panno da torneo e il rosso cuoio delle sedie. Titoli in Libre Caslon
 Display, testo in Karla, la notazione delle mosse in Courier Prime (come sui formulari di gara).
 
-Apertura: Slider Pro con la transizione a cubo verticale, ogni diapositiva è una mossa (1. e4 · 14… Dxd4 · 22. Tf1 ·
+Apertura: Pro Slider con la transizione a cubo verticale, ogni diapositiva è una mossa (1. e4 · 14… Dxd4 · 22. Tf1 ·
 31. Dh7#) scritta enorme e solo in contorno; attorno, come una scacchiera, le coordinate a–h in basso e 8–1 sul lato
 (livelli globali). Poi la lavagna della settimana (Chalkboard), la classifica Elo dei soci (Leaderboard), il torneo
 di Natale (Countdown), i corsi che si impilano scorrendo (Stack scroll), la storia del circolo (Timeline) e le quote

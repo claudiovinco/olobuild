@@ -6,7 +6,7 @@ per imparare a stenderli. Scuro come un muro di sera, coi colori delle terre.
 Carbone, l'ocra gialla, il rosso ossido e la terra verde di Verona. Titoli in DM Serif Display, testo in Instrument
 Sans, sigle dei pigmenti in Martian Mono.
 
-Apertura: Slider Pro sulle quattro cose della bottega (i pigmenti, la calce, il tadelakt, la luce radente), coi video
+Apertura: Pro Slider sulle quattro cose della bottega (i pigmenti, la calce, il tadelakt, la luce radente), coi video
 veri; a destra un campione di pigmento rotondo che respira, con la sigla del Colour Index come su un barattolo (PY43,
 PR101…); il cambio ruota la scena (rotateSlide). Poi le finiture da guardare con la lente (Prova materiale), i
 pigmenti che si mescolano seguendo il mouse (Goo), la tavolozza delle terre (Hover list a campioni), il muro grezzo e

@@ -3,7 +3,7 @@
 pubblicità sui social per chi ha un negozio, un ristorante, uno studio.
 
 La trovata (20 nov 2026): il sito è un telefono che non smette di vibrare. Nell'apertura, sopra Bologna al tramonto, un
-telefono gira un reel e intorno spuntano le notifiche (livelli dello Slider Pro che si ingrandiscono nel movimento a
+telefono gira un reel e intorno spuntano le notifiche (livelli del Pro Slider che si ingrandiscono nel movimento a
 scorrimento), salgono i cuori; poi i servizi sono sezioni col passaggio «Mazzo di carte», con «Arriva da: Sotto»: ogni
 sezione vola via verso l'alto come una storia scartata col pollice. Cursore: il cuore.
 

@@ -5,7 +5,7 @@ per l'osservazione della Terra e ne vende i dati: campi, ghiacciai, coste, citt�
 Tema scuro: il nero dello spazio, il bianco ghiaccio e l'arancio di segnalazione delle tute e dei razzi. Titoli in Radio
 Canada Big, testo in Atkinson Hyperlegible Next, dati in Ubuntu Sans Mono.
 
-Apertura: Slider Pro «la costellazione», alto 16:9 perché i cerchi restino cerchi. La Terra che gira davvero (un video
+Apertura: Pro Slider «la costellazione», alto 16:9 perché i cerchi restino cerchi. La Terra che gira davvero (un video
 in una finestra rotonda), due orbite ellittiche inclinate e i satelliti che ci corrono sopra a velocità diverse
 (percorsi di movimento); a ogni diapositiva una scheda di vetro col dato raccolto (campi, ghiacciai, coste), con la
 foto dall'alto e il numero. La Terra, le orbite e i satelliti restano fra una diapositiva e l'altra.

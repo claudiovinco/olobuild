@@ -5,7 +5,7 @@ cappelli con le finestre sull’Adige. Al massimo dodici persone per lezione, da
 Tema chiaro, sabbia e lino, col cotto e la salvia. Titoli in Petrona leggero (anche corsivo), testo in Onest, orari in
 Spline Sans Mono.
 
-Apertura: Slider Pro che respira. Quattro momenti della giornata (l’alba, la pausa pranzo, il tardo pomeriggio, la
+Apertura: Pro Slider che respira. Quattro momenti della giornata (l’alba, la pausa pranzo, il tardo pomeriggio, la
 sera), ognuno col suo video chiaro e un velo di lino a sinistra che tiene il testo; a destra, fisso su tutte le
 diapositive, un cerchio che si gonfia e si sgonfia in otto secondi, con «Inspira» ed «Espira» che si danno il cambio:
 si può respirare con lui. Le linguette in basso sono gli orari delle lezioni; allo scorrimento l’apertura sfuma.

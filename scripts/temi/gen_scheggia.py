@@ -4,7 +4,7 @@ misura, specchi, parapetti e vetrate; il vetro rotto sostituito in giornata.
 
 La trovata: «rompilo pure». L'apertura è dietro una lastra di vetro (riflessi, un filo di sfocatura): ogni clic la
 colpisce. Al primo una stella di crepe, al secondo le crepe si allargano, al terzo la lastra va in frantumi e i pezzi
-cadono; al quarto scende la lastra nuova, pulita: «In giornata». È lo «Stato successivo» dello Slider Pro (vetro =
+cadono; al quarto scende la lastra nuova, pulita: «In giornata». È lo «Stato successivo» del Pro Slider (vetro =
 crepa1, crepa2, rotto, nuovo), coi disegni delle crepe e dei frantumi che ripartono a ogni colpo.
 
 Tema chiaro e freddo: bianco vetro, il petrolio dei vetri spessi, il rosso del bollino «fragile». Titoli in Sora, testo in
@@ -98,7 +98,7 @@ def apertura(t):
         K.livello('sc-lastra', stato=st('!rotto,nuovo'), **lastra),
         disegno('sc-riflessi', 'riflessi', st('!rotto,nuovo')),
         # le crepe nascono dove si colpisce (15 nov 2026): ogni colpo ha la sua stella, su una tela doppia centrata che
-        # si sposta nel punto del clic (--mps-clic-x/y-<stato> dello Slider Pro); la prima resta quando arriva la seconda
+        # si sposta nel punto del clic (--mps-clic-x/y-<stato> del Pro Slider); la prima resta quando arriva la seconda
         colpo('sc-crepa1', 'colpo-1', 'crepa1', st('crepa1,crepa2')),
         colpo('sc-crepa2', 'colpo-2', 'crepa2', st('crepa2')),
         disegno('sc-lampo1', 'lampo', st('crepa1')),

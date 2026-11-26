@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-"""I JSON dei temi: il CSS su misura dei livelli dello Slider Pro passa nei comandi (css_comandi.converti, 1.4.1430).
+"""I JSON dei temi: il CSS su misura dei livelli del Pro Slider passa nei comandi (css_comandi.converti, 1.4.1430).
 
-Cambia solo i livelli degli Slider Pro, scrive i JSON nello stesso formato (ensure_ascii=False, separatori compatti,
+Cambia solo i livelli dei Pro Slider, scrive i JSON nello stesso formato (ensure_ascii=False, separatori compatti,
 senza a capo finale). Mai rigenerare i temi coi gen_*.py per questo: i JSON hanno ritocchi fatti dopo.
 
     python scripts/temi/migra_css_comandi.py          → mostra cosa cambierebbe

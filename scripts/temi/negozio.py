@@ -258,14 +258,14 @@ class Negozio:
                                bgColor=bollino_fondo or c['sec'], borderRadius=999, align='center', textValign='center',
                                lineHeight=1, letterSpacing=-1, entra='zoomIn', ritardo=800, durata=700,
                                **({'fontFamily': bollino_font} if bollino_font else fam),
-                               # inclinato: lo Slider Pro non ha la rotazione fissa, la dà il movimento tenuto fermo
+                               # inclinato: il Pro Slider non ha la rotazione fissa, la dà il movimento tenuto fermo
                                **({'scrollMove': {'inizio': 0, 'fine': 100, 'da': {'r': bollino_giro}, 'a': {'r': bollino_giro}}}
                                   if bollino_giro else {}),
                                responsive={'mobile': {'x': 72, 'y': 5, 'width': 22, 'height': 22, 'fontSize': m(24)}}))
         return K.diapositiva(sid, sfondo, L, durata=6500)
 
     def vetrina(self, t, slides, transizione='fade', **opz):
-        """La fascia delle offerte: lo Slider Pro basso, largo quanto la finestra, che scorre da solo."""
+        """La fascia delle offerte: il Pro Slider basso, largo quanto la finestra, che scorre da solo."""
         o = dict(altezza={'mode': 'px', 'value': int(self.VETRINA_H)}, transizione=transizione, durata_trans=1000,
                  heightTablet={'mode': 'px', 'value': 500}, heightMobile={'mode': 'px', 'value': int(self.VETRINA_HM)},
                  autoplay=True, autoplaySpeed=6500, pauseOnHover=True, showArrows=True, arrowStyle='minimal', showDots=True,

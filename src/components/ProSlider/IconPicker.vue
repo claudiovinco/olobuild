@@ -51,6 +51,7 @@
 </template>
 
 <script setup>
+import { aggiungiIconaMia } from './iconeMie.js';
 import { ref, computed, onMounted, nextTick } from 'vue';
 import iconsSvg from './iconsLibrary.js';
 import { t } from '@/i18n';
@@ -116,12 +117,14 @@ function totalCount() {
 async function loadCustomIcons() {
   if (customLoaded.value) return;
   try {
-    const res = await fetch(`${window.oloData?.restUrl || '/wp-json/'}olobuild/v1/custom-icons`, {
+    // 1.4.1475: restUrl finisce già con «olobuild/v1/» (prima l'indirizzo lo ripeteva due volte e la scheda restava vuota)
+    const res = await fetch(`${window.oloData?.restUrl || '/wp-json/olobuild/v1/'}custom-icons`, {
       headers: { 'X-WP-Nonce': window.oloData?.nonce || '' },
     });
     if (res.ok) {
       customIcons.value = await res.json();
       customLoaded.value = true;
+      for (const [n, svg] of Object.entries(customIcons.value || {})) aggiungiIconaMia(n, svg);
     }
   } catch (e) { /* silently fail */ }
 }
@@ -136,7 +139,7 @@ async function uploadIcons(event) {
     formData.append('svg_file', file);
     formData.append('name', file.name.replace('.svg', ''));
     try {
-      const res = await fetch(`${window.oloData?.restUrl || '/wp-json/'}olobuild/v1/custom-icons`, {
+      const res = await fetch(`${window.oloData?.restUrl || '/wp-json/olobuild/v1/'}custom-icons`, {
         method: 'POST',
         headers: { 'X-WP-Nonce': window.oloData?.nonce || '' },
         body: formData,
@@ -144,6 +147,7 @@ async function uploadIcons(event) {
       if (res.ok) {
         const data = await res.json();
         customIcons.value = { ...customIcons.value, [data.name]: data.svg };
+        aggiungiIconaMia(data.name, data.svg);
       }
     } catch (e) { /* silently fail */ }
   }

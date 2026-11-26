@@ -1183,7 +1183,7 @@ class Olobuild_Style_System {
     /**
      * Il valore di ogni --olo-color-<id>, nello stesso ordine di generate_css() (stile, ruoli derivati, colori
      * globali, alias: l'ultimo vince). Per chi deve scrivere un colore della palette DENTRO un file che le
-     * variabili non raggiungono: i disegni SVG ricolorati dello Slider Pro (Olobuild_Disegni, 1.4.1433).
+     * variabili non raggiungono: i disegni SVG ricolorati del Pro Slider (Olobuild_Disegni, 1.4.1433).
      *
      * @return array [ 'primary' => '#E1474F', 'text-muted' => '#6B7280', 'cerniera-argento' => '#C9CCD1', … ]
      */
@@ -1210,7 +1210,7 @@ class Olobuild_Style_System {
 
     /**
      * I colori propri di un tema (theme.json → colori_extra, 1.4.1433) fra i «Colori globali extra» della Palette.
-     * Utente, 24 nov 2026: «nessun CSS o cose hardcoded» negli Slider Pro dei temi. I colori che non sono un ruolo
+     * Utente, 24 nov 2026: «nessun CSS o cose hardcoded» nei Pro Slider dei temi. I colori che non sono un ruolo
      * della palette (l'argento dei denti di Cerniera, i frutti di Carambola) ora sono var(--olo-color-<tema>-<nome>):
      * chi importa il tema li ritrova in Configurazione › Palette col loro nome e li cambia da lì.
      *

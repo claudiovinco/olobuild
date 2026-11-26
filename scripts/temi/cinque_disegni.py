@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """I disegni SVG dei cinque temi «pazzi» del 18 nov 2026. Le misure dei disegni dell'apertura coincidono col riquadro del
-livello dello Slider Pro che li mostra (stessa proporzione): così le tappe del movimento a scorrimento, scritte in px della
+livello del Pro Slider che li mostra (stessa proporzione): così le tappe del movimento a scorrimento, scritte in px della
 tela, cadono sopra il disegno.
 uso: python cinque_disegni.py <cartella dei media>"""
 import os

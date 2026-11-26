@@ -5,7 +5,7 @@ per adulti e bambini, tornei del venerdì e la terrazza per dopo la partita.
 Tema chiaro e sportivo: bianco, blu campo e il giallo lime della pallina. Titoli in Funnel Display, testo in Funnel
 Sans, dati e punteggi in Kode Mono.
 
-Apertura: Slider Pro «la partita», alto 16:9. Il campo visto dall'alto (un video vero, ripreso col drone) è inclinato
+Apertura: Pro Slider «la partita», alto 16:9. Il campo visto dall'alto (un video vero, ripreso col drone) è inclinato
 in 3D come un pavimento in prospettiva, e sopra la pallina gioca uno scambio: parabola, rimbalzo dall'altra parte,
 ritorno, con la sua ombra che corre sul campo. Una diapositiva per servizio del circolo (campi, corsi, tornei,
 terrazza) con la foto che si inclina verso il puntatore.

@@ -4,7 +4,7 @@
 Ardesia quasi nera, il rosso del soccorso e il giallo dei segnali. Titoli in Barlow Condensed, testo in Barlow, orari
 e numeri in JetBrains Mono.
 
-Apertura: Slider Pro a schede (112 · Di notte · Il volo · Volontari) con transizione a cubo, il «112» enorme solo
+Apertura: Pro Slider a schede (112 · Di notte · Il volo · Volontari) con transizione a cubo, il «112» enorme solo
 contornato, i video della notte con le frontali e dell'elicottero, il titolo che entra dal blocco rosso. Poi i numeri
 dell'anno nei cerchi che si riempiono, la catena del soccorso minuto per minuto (Step timeline), lo zaino con le carte
 da girare, la raccolta per il fuoristrada nuovo, le regole prima di partire.

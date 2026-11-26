@@ -66,6 +66,8 @@ import lucideIcons from './lucideIconsSvg.js';
 import { nomeLivello, gruppiLivelli, nomeGruppo, leggiStati } from './livelloUtils.js';
 
 const props = defineProps({
+  // tutti i livelli dello slider (1.4.1475): il bersaglio di «mostra o nasconde» può stare in un'altra slide
+  tuttiLivelli: { type: Array, default: () => [] },
   layers: { type: Array, default: () => [] },
   slides: { type: Array, default: () => [] },
   selectedId: { type: String, default: null },
@@ -113,7 +115,7 @@ const regole = computed(() => {
       const clic = (a.trigger === 'hover' ? t('Passando su «%s»') : t('Clic su «%s»')).replace('%s', chi) + ' → ';
       if (a.type === 'cycleState') frase = clic + t('passa %1 al valore dopo: %2').replace('%1', nomeSt(a.target)).replace('%2', String(a.values || '').split(',').map((x) => x.trim()).filter(Boolean).join(' → '));
       else if (a.type === 'toggleLayer') {
-        const bers = (props.layers || []).find((x) => x.id === a.target);
+        const bers = [...(props.tuttiLivelli || []), ...(props.layers || [])].find((x) => x.id === a.target);
         frase = clic + t('mostra o nasconde «%s»').replace('%s', bers ? nomeLivello(bers) : '?');
       } else if (a.type === 'nextSlide') frase = clic + t('va alla slide dopo');
       else if (a.type === 'prevSlide') frase = clic + t('torna alla slide prima');

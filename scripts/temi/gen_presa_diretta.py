@@ -5,7 +5,7 @@ analogica e un registratore a nastro da due pollici; registrazione, mix, masteri
 Tema scuro: nero di sala, l'ambra delle lancette dei VU-metri, il rosso della spia REC e il verde acqua dei led.
 Titoli in SUSE, testo in Golos Text, dati in Reddit Mono.
 
-Apertura: Slider Pro «la consolle», alto 16:9 perché i cerchi restino cerchi. Le due bobine del registratore che
+Apertura: Pro Slider «la consolle», alto 16:9 perché i cerchi restino cerchi. Le due bobine del registratore che
 girano insieme col nastro teso fra loro, due VU-metri con le lancette che ballano a tempo (timeline con l'origine in
 basso) e la spia REC che lampeggia. Una diapositiva per servizio, a linguette: registrazione, mix, mastering, sala prove.
 """

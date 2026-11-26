@@ -5,7 +5,7 @@ Venezia, pensato per chi vive di notte (la reception non chiude, la colazione ar
 Nero vinaccia, oro delle candele, bordeaux e il verde acqua della laguna di notte. Titoli in Bodoni Moda (corsivo per
 l'accento), testo in Jost, dati in DM Mono.
 
-Apertura: Slider Pro con la transizione a sipario (curtain3D) e le miniature delle quattro ore della notte; il titolo si
+Apertura: Pro Slider con la transizione a sipario (curtain3D) e le miniature delle quattro ore della notte; il titolo si
 scopre dietro una lama d'oro, e accanto a ogni ora una «cartolina» incorniciata col dettaglio che si muove col mouse. Poi
 il nome che scorre sull'onda del canale (Text path), le stanze in una lista con l'anteprima che segue il cursore
 (Hover list), la colazione, il bagno e la porta d'acqua in riquadri che si svelano (Reveal box), il libro degli ospiti

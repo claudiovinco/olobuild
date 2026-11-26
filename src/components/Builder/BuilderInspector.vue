@@ -215,7 +215,7 @@
             >
               {{ t('Apri editor slider') }}
             </button>
-            <!-- Scene dei temi (1.4.1422): l'editor si apre con la libreria degli Slider Pro dei temi -->
+            <!-- Scene dei temi (1.4.1422): l'editor si apre con la libreria dei Pro Slider dei temi -->
             <button
               type="button"
               @click="apriSceneSlider = true; showProSliderEditor = true"

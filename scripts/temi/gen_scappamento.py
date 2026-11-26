@@ -4,7 +4,7 @@ orologi meccanici, da tasca e da polso, e orologi d'epoca in vendita con la loro
 
 Tema scuro: blu notte, champagne e argento. Titoli in Playfair (anche corsivo), testo in Mona Sans, dati in Chivo Mono.
 
-Apertura: Slider Pro «il movimento a vista», alto 16:9 perché i cerchi restino cerchi. A destra due ruote (foto di
+Apertura: Pro Slider «il movimento a vista», alto 16:9 perché i cerchi restino cerchi. A destra due ruote (foto di
 movimenti in finestre rotonde) che girano in versi opposti, a velocità diverse, come ingranate; il bilanciere che
 oscilla avanti e indietro; un anello tratteggiato col punto che fa il giro in un minuto esatto, come la lancetta dei
 secondi. Una diapositiva per lavoro della bottega (revisione, restauro, orologi d'epoca, su misura), a linguette: la

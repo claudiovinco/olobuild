@@ -5,7 +5,7 @@ condiviso, il volo privato per due, il buono regalo, il brindisi all'atterraggio
 Tema chiaro, il cielo dell'alba: crema, arancio bruciato del pallone, oro del bruciatore e azzurro. Titoli in DM Serif
 Display (anche corsivo), testo in Figtree, dati in Fira Code.
 
-Apertura: Slider Pro «l'altimetro», alto 16:9, un momento del volo per diapositiva col suo video pieno (il gonfiaggio, il
+Apertura: Pro Slider «l'altimetro», alto 16:9, un momento del volo per diapositiva col suo video pieno (il gonfiaggio, il
 bruciatore, il cielo pieno di palloni, il volo sul prato) e un velo scuro solo dal lato del testo. A destra la scala
 dell'altimetro, da zero a millecinquecento metri: il pallone sale (o scende) alla quota di quel momento, con la quota e
 l'ora accanto. Le diapositive salgono dal basso (slideUp). Cursore: la scia.

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Controlla i livelli dell'apertura Slider Pro della home di ogni demo mentre la pagina scorre (la timeline a
+"""Controlla i livelli dell'apertura Pro Slider della home di ogni demo mentre la pagina scorre (la timeline a
 scorrimento fa comparire testi e pulsanti a metà strada) e in ogni diapositiva: pulsanti che si toccano o si coprono,
 testi sopra un pulsante, testi sopra altri testi. A differenza di aperture_sovrapposte.py guarda anche il riquadro dei
 pulsanti (sfondo e bordo), non solo le lettere: due pulsanti affiancati con le scritte staccate ma i riquadri uno

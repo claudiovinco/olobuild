@@ -5,7 +5,7 @@ chef che decide il percorso della sera e lo serve un pezzo alla volta.
 Tema scuro e silenzioso: nero d'inchiostro, avorio, il rosso lacca e l'oro opaco delle ceramiche. Titoli in Cormorant
 (anche corsivo), testo in Instrument Sans, dati in Xanh Mono.
 
-Apertura: Slider Pro «il banco», alto 16:9 perché i cerchi restino cerchi. Una diapositiva per momento del percorso
+Apertura: Pro Slider «il banco», alto 16:9 perché i cerchi restino cerchi. Una diapositiva per momento del percorso
 (Sakizuke, Sashimi, Nigiri, Aburi, Wagashi) con le linguette in basso: il piatto visto dall'alto in una finestra
 rotonda che si inclina in 3D verso il puntatore, un anello tratteggiato d'oro che gira piano attorno e un punto che
 ci corre sopra (percorso di movimento), il nome del momento enorme e contornato, il titolo che entra lettera per

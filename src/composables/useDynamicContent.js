@@ -169,7 +169,7 @@ export function useDynamicContent() {
   }
 
   /**
-   * Slide dagli articoli dello Slider Pro (1.4.1457): i valori dei segnaposto del primo contenuto della ricerca
+   * Slide dagli articoli del Pro Slider (1.4.1457): i valori dei segnaposto del primo contenuto della ricerca
    * ({ post_title, featured_image, … }), o null se la ricerca non trova niente.
    */
   async function segnapostoEsempio(query) {

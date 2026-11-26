@@ -787,7 +787,7 @@ class Olobuild_Theme_Importer {
         }
 
         // ── Step 5a: I colori propri del tema (1.4.1433) fra i «Colori globali extra» della Palette ──
-        // Gli Slider Pro dei temi li usano come var(--olo-color-<tema>-<nome>): senza, cadrebbero sul colore di riserva.
+        // I Pro Slider dei temi li usano come var(--olo-color-<tema>-<nome>): senza, cadrebbero sul colore di riserva.
         if ( ! empty( $theme_json['colori_extra'] ) && is_array( $theme_json['colori_extra'] ) && class_exists( 'Olobuild_Style_System' ) ) {
             $results['colori_extra'] = Olobuild_Style_System::aggiungi_colori_extra( $theme_json['colori_extra'], true );
         }

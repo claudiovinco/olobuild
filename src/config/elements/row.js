@@ -149,7 +149,7 @@ export default {
     { key: 'stack_tablet', label: t('Impila su tablet'), type: 'toggle' },
     { key: 'espandi_hover', label: t('Le colonne si allargano al passaggio'), type: 'toggle',
       description: t('Da 1200 px le colonne si dividono lo spazio in parti uguali e quella sotto il puntatore se ne prende di '
-        + 'più. Per le aperture divise in due metà, ognuna col suo Slider Pro (con «Impila su tablet» sotto i 1200 px '
+        + 'più. Per le aperture divise in due metà, ognuna col suo Pro Slider (con «Impila su tablet» sotto i 1200 px '
         + 'stanno una sotto l’altra).') },
 
     { key: '_grid_sep', label: t('Controlli CSS Grid'), type: 'separator', condition: { field: 'layout_mode', value: 'grid' } },

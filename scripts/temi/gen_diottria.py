@@ -5,7 +5,7 @@ produttori, occhiali da sole, occhiali per bambini e l'esame della vista su appu
 Tema chiaro e nitido: bianco ottico, blu oltremare e un giallo sole per i bollini. Titoli e testo in Geist, dati in
 Geist Mono: una sola famiglia, come una montatura ben fatta.
 
-Apertura: Slider Pro «la vetrina», alto 16:9. Nelle prime tre diapositive la montatura della stagione gira su sé stessa
+Apertura: Pro Slider «la vetrina», alto 16:9. Nelle prime tre diapositive la montatura della stagione gira su sé stessa
 in 3D (rotazione sull'asse verticale, avanti e indietro, come sul piatto girevole di una vetrina), con il tondo di chi
 la porta; nell'ultima la tavola dell'esame della vista, con le righe di lettere che passano da sfocate a nitide una
 dopo l'altra, come quando l'optometrista trova la lente giusta.

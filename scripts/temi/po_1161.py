@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Traduzioni della 1.4.1161 (17 nov 2026): l'editor dello Slider Pro in italiano («Slide», «Livelli globali»,
+"""Traduzioni della 1.4.1161 (17 nov 2026): l'editor del Pro Slider in italiano («Slide», «Livelli globali»,
 «Schermo:», il nome del livello e dello schermo, «Profondità parallasse», «Visibile su …»).
 Aggiunge le voci che mancano ai .po di de_DE, en_GB, en_US, es_ES, fr_FR e ricompila i .mo. Si può rilanciare.
 uso: python po_1161.py
@@ -18,7 +18,7 @@ V = {
     'Slide': ('Folien', 'Slides', 'Diapositivas', 'Diapositives'),
     'Esporta le slide': ('Folien exportieren', 'Export slides', 'Exportar las diapositivas', 'Exporter les diapositives'),
     'Importa le slide': ('Folien importieren', 'Import slides', 'Importar las diapositivas', 'Importer les diapositives'),
-    'Editor dello Slider Pro': ('Slider-Pro-Editor', 'Slider Pro editor', 'Editor del Slider Pro', 'Éditeur du Slider Pro'),
+    'Editor del Pro Slider': ('Slider-Pro-Editor', 'Pro Slider editor', 'Editor del Pro Slider', 'Éditeur du Pro Slider'),
     'Livelli globali': ('Globale Ebenen', 'Global layers', 'Capas globales', 'Calques globaux'),
     'Nessun livello globale': ('Keine globale Ebene', 'No global layers', 'Ninguna capa global', 'Aucun calque global'),
     'Schermo:': ('Bildschirm:', 'Screen:', 'Pantalla:', 'Écran :'),

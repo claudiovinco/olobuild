@@ -51,9 +51,10 @@
         ></div>
       </div>
 
-      <!-- Layers -->
+      <!-- Layers: quelli della slide e, dalla 1.4.1475, quelli su tutte le slide (dietro: sotto lo sfondo della slide, come
+           sul sito; davanti: sopra i livelli della slide). Si scelgono e si trascinano come gli altri. -->
       <div
-        v-for="layer in layers"
+        v-for="layer in livelliTela"
         v-show="!hiddenIds.has(layer.id)"
         :key="layer.id"
         :class="[
@@ -67,7 +68,7 @@
         @pointerdown.stop="startDrag($event, layer)"
         @dblclick.stop="onDblClick(layer)"
       >
-        <span v-if="layer.initiallyHidden" class="mps-canvas-hidden-badge" :title="t(&quot;Questo layer parte nascosto. Sarà mostrato solo se un altro layer con azione 'Toggle visibilità' lo prende come target.&quot;)">{{ t("nascosto all'avvio") }}</span>
+        <span v-if="layer.initiallyHidden" class="mps-canvas-hidden-badge" :title="t('Questo livello parte nascosto: lo mostra un altro livello con l’azione «Mostra o nasconde un livello».')">{{ t("nascosto all'avvio") }}</span>
         <!-- Text -->
         <component
           v-if="layer.type === 'text'"
@@ -146,15 +147,39 @@
           ></div>
         </template>
       </div>
+
+      <!-- Il percorso del livello scelto (1.4.1473): tratteggiato, dal livello, coi punti disegnati da trascinare -->
+      <svg v-if="percorsoVisto" class="mps-percorso" :width="CANVAS_W" :height="canvasH" :viewBox="'0 0 ' + CANVAS_W + ' ' + canvasH" aria-hidden="true">
+        <path :d="percorsoVisto.d" :transform="percorsoVisto.transform" class="mps-percorso-linea" :stroke-width="2 / effectiveScale" vector-effect="non-scaling-stroke" />
+        <circle :cx="ancora.x" :cy="ancora.y" :r="5 / effectiveScale" class="mps-percorso-inizio" />
+        <circle v-for="(p, i) in percorsoVisto.punti" :key="'pp' + i" :cx="p[0]" :cy="p[1]" :r="6 / effectiveScale" class="mps-percorso-punto" @pointerdown.stop.prevent="trascinaPunto($event, i + 1)" />
+      </svg>
+      <!-- Disegno del percorso: ogni clic un punto, doppio clic o Invio finisce, Esc annulla -->
+      <div v-if="disegnando" class="mps-disegno" @pointerdown.stop @click.stop="aggiungiPunto" @dblclick.stop.prevent="finisciDisegno" @pointermove="cursoreDisegno = puntoDa($event)">
+        <svg :width="CANVAS_W" :height="canvasH" :viewBox="'0 0 ' + CANVAS_W + ' ' + canvasH" aria-hidden="true">
+          <path :d="dDisegno" class="mps-percorso-linea" :stroke-width="2 / effectiveScale" />
+          <circle v-for="(p, i) in puntiDisegno" :key="'pd' + i" :cx="p[0]" :cy="p[1]" :r="(i ? 5 : 6) / effectiveScale" :class="i ? 'mps-percorso-punto' : 'mps-percorso-inizio'" />
+        </svg>
       </div>
+      </div>
+    </div>
+    <!-- La barra del disegno (fuori dalla tela scalata, sopra) -->
+    <div v-if="disegnando" class="mps-disegno-barra" role="status">
+      <span>{{ t('Disegno del percorso') }} · {{ puntiDisegno.length - 1 === 1 ? t('1 punto') : t('%d punti').replace('%d', puntiDisegno.length - 1) }}</span>
+      <InfoTip :testo="t('Clicca sulla tela per aggiungere i punti: il primo è il livello. Doppio clic o Invio per finire, Esc per annullare. Dopo puoi trascinare i punti per correggere il percorso.')" :titolo="t('Disegno del percorso')" />
+      <button type="button" class="mps-disegno-btn is-si" :disabled="puntiDisegno.length < 2" @click.stop="finisciDisegno">{{ t('Fine') }}</button>
+      <button type="button" class="mps-disegno-btn" @click.stop="chiudiDisegno">{{ t('Annulla') }}</button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { ref, computed, onMounted, onUnmounted, onUpdated, watch, nextTick } from 'vue';
 import iconsSvg from './uikitIconsSvg.js';
-import { interpolateAtTime } from './timelineUtils.js';
+import { interpolateAtTime, easingToCSS } from './timelineUtils.js';
+import { fattorePercorso, puntoIniziale, dDaPunti, fotogrammiPercorso } from './percorso.js';
+import { svgIcona } from './iconeMie.js';
+import InfoTip from '../Builder/InfoTip.vue';
 import { useStylesStore } from '@/stores/styles';
 import { t } from '@/i18n';
 import { statoSM, statoVale, stileComandi, testoSicuro } from './livelloUtils.js';
@@ -183,9 +208,19 @@ const props = defineProps({
   scrollPreview: { type: Number, default: null },
   statePreview: { type: Object, default: null },
   initialStates: { type: Object, default: () => ({}) },
+  // I livelli su tutte le slide (1.4.1475): sulla tela insieme a quelli della slide. Si prendono col mouse solo quando
+  // si sta modificando un globale (1.4.1477): davanti com'è, un globale grande (una cornice, un velo) copriva i livelli
+  // della slide e un clic sulla tela sceglieva lui.
+  globalLayers: { type: Array, default: () => [] },
+  editingGlobal: { type: Boolean, default: false },
+  // Il percorso (1.4.1473): la tela del formato che si guarda (1440, 1240, 1024, 640), il disegno coi clic acceso,
+  // la prova (un numero che cresce a ogni «Prova il percorso»)
+  larghezzaFormato: { type: Number, default: 1440 },
+  disegnoPercorso: { type: Boolean, default: false },
+  provaPercorso: { type: Number, default: 0 },
 });
 
-const emit = defineEmits(['deselect', 'select-layer', 'update-layer', 'update-layers', 'update-keyframe', 'start-edit', 'stop-edit']);
+const emit = defineEmits(['deselect', 'select-layer', 'update-layer', 'update-layers', 'update-keyframe', 'start-edit', 'stop-edit', 'fine-disegno']);
 
 // La sovrapposizione dello sfondo, uniforme o sfumata dall'alto e dal basso (gemella di class-proslider-tile.php).
 function velo(bg) {
@@ -222,9 +257,35 @@ function assiCarattere(l) {
   }
   return assi;
 }
+// ── Il carattere Google sulla tela (1.4.1479) ──
+// Il sito serve ogni famiglia dei livelli dai file salvati sul server (PHP Olobuild_Font_Host: pesi da 300 a 900, e i
+// corsivi veri se il livello è in corsivo). La tela contava sul carattere già presente nel builder, che lo carica solo
+// aprendo l'elenco dei caratteri e col solo peso normale: Cormorant Garamond usciva col carattere di riserva. Qui un
+// <link> per famiglia (Google rifiuta tutta la richiesta se una famiglia non esiste) con gli stessi pesi del sito.
+const PESI_SITO = [300, 400, 500, 600, 700, 800, 900];
+const famiglieTela = new Set();
+function inCorsivo(l) {
+  return l.fontStyle === 'italic' || l.fontStyle === 'oblique' || /<(em|i)[\s>]/i.test(String(l.content || ''));
+}
+function caricaCarattereTela(ff, corsivo) {
+  // solo i nomi delle famiglie di Google (lettere, numeri, spazi, trattini): le pile di sistema hanno virgole e apici
+  if (!/^[A-Za-z0-9][A-Za-z0-9 -]*$/.test(ff)) return;
+  const chiave = ff + (corsivo ? '|corsivo' : '');
+  if (famiglieTela.has(chiave)) return;
+  famiglieTela.add(chiave);
+  const assi = corsivo
+    ? 'ital,wght@' + [...PESI_SITO.map((p) => '0,' + p), ...PESI_SITO.map((p) => '1,' + p)].join(';')
+    : 'wght@' + PESI_SITO.join(';');
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.dataset.mpsCarattere = chiave;
+  link.href = 'https://fonts.googleapis.com/css2?family=' + encodeURIComponent(ff).replace(/%20/g, '+') + ':' + assi + '&display=swap';
+  document.head.appendChild(link);
+}
 function famigliaTela(l) {
   const ff = String(l.fontFamily || '').trim().replace(/^['"]|['"]$/g, '');
   if (!ff || ff.startsWith('var(')) return l.fontFamily + ', sans-serif';
+  caricaCarattereTela(ff, inCorsivo(l));
   const assi = assiCarattere(l);
   const chiavi = Object.keys(assi).sort();
   if (!chiavi.length) return `'${ff}', sans-serif`;
@@ -271,6 +332,12 @@ const scale = ref(1);
 const resizeHandles = ['nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w'];
 
 const layers = computed(() => props.slide?.layers || []);
+// sulla tela: prima i globali dietro, poi la slide, poi i globali davanti (lo z-index li mette al loro posto)
+const idGlobali = computed(() => new Set((props.globalLayers || []).map((l) => l.id)));
+const livelliTela = computed(() => {
+  const g = props.globalLayers || [];
+  return [...g.filter((l) => l.globalPosition === 'back'), ...layers.value, ...g.filter((l) => l.globalPosition !== 'back')];
+});
 // Slide dagli articoli (1.4.1457): le foto con un segnaposto mostrano quella del primo contenuto trovato
 const contenuti = useContenutiSlider();
 const slideBg = computed(() => props.slide?.background || { type: 'color', color: 'var(--olo-color-dark)' });
@@ -366,6 +433,15 @@ function resolveLayerValues(l) {
 // Lo stile di un livello con le anteprime (1.4.1352): nello stato scelto i livelli degli altri valori spariscono, e
 // col cursore «Scorrimento» il livello si muove come sul sito (translate/scale/rotate si sommano al suo transform).
 function layerStyle(l) {
+  const st0 = layerStyleStato(l);
+  // i globali: dietro le slide (sotto lo sfondo della slide, z 1) o davanti ai loro livelli (z 2)
+  if (idGlobali.value.has(l.id) && st0.display !== 'none') {
+    st0.zIndex = l.globalPosition === 'back' ? 0 : 3;
+    if (!props.editingGlobal) st0.pointerEvents = 'none';
+  }
+  return st0;
+}
+function layerStyleStato(l) {
   if (props.statePreview && l.stato?.nome) {
     const nome = String(l.stato.nome).toLowerCase();
     const v = Object.prototype.hasOwnProperty.call(props.statePreview, nome) ? props.statePreview[nome] : (props.initialStates?.[nome] ?? '');
@@ -396,8 +472,10 @@ function layerStyleBase(l) {
 
   if (hasTimeline) {
     // Usa il playhead globale per tutti i layer con timeline quando è attivo, altrimenti time=0
+    // il punto della SUA linea del tempo: la testina meno il ritardo del livello (1.4.1472), come sul sito, dove nel
+    // ritardo il livello resta al primo fotogramma
     const playhead = props.timelinePlayhead != null ? props.timelinePlayhead : 0;
-    const interp = interpolateAtTime(l.timeline, playhead);
+    const interp = interpolateAtTime(l.timeline, Math.max(0, playhead - (l.timeline.delay || 0)));
     if (interp) {
       const w = rl.width === 'auto' ? 'auto' : rl.width + '%';
       const h = rl.height === 'auto' ? 'auto' : rl.height + '%';
@@ -623,7 +701,8 @@ function shapeStyle(l) {
 }
 
 function iconStyle(l) {
-  const size = Math.max(24, l.fontSize || 24);
+  // 1.4.1475: la grandezza esatta e quella dello schermo scelto, come il sito (prima almeno 24 e sempre quella del Computer)
+  const size = Math.max(4, Number(resolveLayerValues(l).fontSize) || 24);
   const st = {
     display: 'inline-flex',
     alignItems: 'center',
@@ -640,8 +719,9 @@ function iconStyle(l) {
   return st;
 }
 
+// le icone del set e, dalla 1.4.1475, quelle caricate dall'utente («custom:…», prima una stella al loro posto)
 function getIconSvg(name) {
-  return iconsSvg[name] || iconsSvg['star'] || '';
+  return svgIcona(name, iconsSvg) || (String(name || '').startsWith('custom:') ? '' : iconsSvg['star']) || '';
 }
 
 // --- Dragging ---
@@ -650,9 +730,11 @@ let dragState = null;
 function startDrag(e, layer) {
   // Maiusc, Ctrl o Cmd + clic: aggiunge o toglie il livello dalla scelta (1.4.1428). Cliccando uno dei livelli già
   // scelti insieme la scelta resta, così si trascinano tutti; se non lo si sposta, al rilascio resta solo lui.
-  const aggiungi = e.shiftKey || e.ctrlKey || e.metaKey;
-  const nelGruppo = !aggiungi && props.selectedIds.size > 1 && props.selectedIds.has(layer.id);
-  emit('select-layer', layer.id, { aggiungi, mantieni: nelGruppo });
+  // Un livello su tutte le slide si sceglie da solo (1.4.1475): si apre come globale.
+  const globale = idGlobali.value.has(layer.id);
+  const aggiungi = !globale && (e.shiftKey || e.ctrlKey || e.metaKey);
+  const nelGruppo = !globale && !aggiungi && props.selectedIds.size > 1 && props.selectedIds.has(layer.id);
+  emit('select-layer', layer.id, globale ? { globale: true } : { aggiungi, mantieni: nelGruppo });
   if (aggiungi) return;
   if (props.editingLayerId === layer.id) return;
 
@@ -669,7 +751,7 @@ function startDrag(e, layer) {
 
   if (isTimelineActive) {
     // Usa i valori interpolati come punto di partenza
-    const interp = interpolateAtTime(layer.timeline, props.timelinePlayhead);
+    const interp = interpolateAtTime(layer.timeline, Math.max(0, props.timelinePlayhead - (layer.timeline.delay || 0)));
     if (interp) {
       origX = interp.x;
       origY = interp.y;
@@ -679,8 +761,9 @@ function startDrag(e, layer) {
     if (!timelineKfId) {
       let closest = null;
       let minDist = Infinity;
+      const ora = props.timelinePlayhead - (layer.timeline.delay || 0);
       for (const kf of layer.timeline.keyframes) {
-        const d = Math.abs(kf.time - props.timelinePlayhead);
+        const d = Math.abs(kf.time - ora);
         if (d < minDist) { minDist = d; closest = kf; }
       }
       if (closest) timelineKfId = closest.id;
@@ -833,6 +916,136 @@ function onPointerUp() {
   window.removeEventListener('pointerup', onPointerUp);
 }
 
+// ── Il percorso del livello scelto (1.4.1473) ──
+// Sulla tela si vede il tracciato che il livello percorrerà, che parte dal centro del livello (il sito sposta tutto il
+// livello lungo il tracciato, dal primo punto). Si disegna coi clic e i punti disegnati si trascinano.
+const r1 = (v) => Math.round(v * 10) / 10;
+const livelloScelto = computed(() => (props.selectedLayerId ? livelliTela.value.find((l) => l.id === props.selectedLayerId) || null : null));
+const ancora = ref({ x: 0, y: 0 });
+let provaInCorso = null;
+function elLivello(id) {
+  const c = canvasEl.value;
+  if (!c || !id) return null;
+  return [...c.querySelectorAll('[data-mps-id]')].find((e) => e.getAttribute('data-mps-id') === id) || null;
+}
+function misuraAncora() {
+  const l = livelloScelto.value;
+  const c = canvasEl.value;
+  if (!l || !c || (provaInCorso && provaInCorso.playState === 'running')) return;
+  const el = elLivello(l.id);
+  if (!el) return;
+  const r = el.getBoundingClientRect();
+  if (!r.width && !r.height) return;
+  const cr = c.getBoundingClientRect();
+  const s = effectiveScale.value || 1;
+  const x = (r.left + r.width / 2 - cr.left) / s;
+  const y = (r.top + r.height / 2 - cr.top) / s;
+  if (Math.abs(x - ancora.value.x) > 0.05 || Math.abs(y - ancora.value.y) > 0.05) ancora.value = { x, y };
+}
+onUpdated(() => { if (livelloScelto.value?.motionPath || disegnando.value) misuraAncora(); });
+watch([() => props.selectedLayerId, effectiveScale, () => props.activeBreakpoint], () => nextTick(misuraAncora));
+const percorsoVisto = computed(() => {
+  const l = livelloScelto.value;
+  const mp = l?.motionPath;
+  if (!mp || !mp.path || disegnando.value || hiddenIdsHas(l.id)) return null;
+  const f = fattorePercorso(mp, props.larghezzaFormato);
+  const p0 = puntoIniziale(mp.path);
+  const a = ancora.value;
+  const out = { d: mp.path, transform: `translate(${a.x - p0[0] * f} ${a.y - p0[1] * f}) scale(${f})`, punti: [] };
+  if (mp.preset === 'disegnato' && Array.isArray(mp.punti) && mp.punti.length > 1) {
+    const q0 = mp.punti[0];
+    out.punti = mp.punti.slice(1).map((q) => [a.x + (q[0] - q0[0]) * f, a.y + (q[1] - q0[1]) * f]);
+  }
+  return out;
+});
+function hiddenIdsHas(id) { return props.hiddenIds && props.hiddenIds.has(id); }
+// un punto trascinato: lo spostamento sulla tela diviso per la grandezza del percorso
+function trascinaPunto(e, k) {
+  const l = livelloScelto.value;
+  if (!l?.motionPath?.punti) return;
+  const f = fattorePercorso(l.motionPath, props.larghezzaFormato);
+  const da = puntoDa(e);
+  const prima = l.motionPath.punti.map((q) => [...q]);
+  const muovi = (ev) => {
+    const ora = livelloScelto.value;
+    if (!ora?.motionPath) return;
+    const p = puntoDa(ev);
+    const dx = (p[0] - da[0]) / f, dy = (p[1] - da[1]) / f;
+    const punti = prima.map((q, j) => (j === k ? [r1(q[0] + dx), r1(q[1] + dy)] : q));
+    emit('update-layer', ora.id, { motionPath: { ...ora.motionPath, punti, path: dDaPunti(punti, ora.motionPath.dritte) } });
+  };
+  const fine = () => { window.removeEventListener('pointermove', muovi); window.removeEventListener('pointerup', fine); };
+  window.addEventListener('pointermove', muovi);
+  window.addEventListener('pointerup', fine);
+}
+// il punto della tela (px del formato) sotto il puntatore
+function puntoDa(e) {
+  const r = canvasEl.value.getBoundingClientRect();
+  const s = effectiveScale.value || 1;
+  return [r1((e.clientX - r.left) / s), r1((e.clientY - r.top) / s)];
+}
+// Il disegno: il primo punto è il centro del livello, poi un punto per clic (due clic quasi nello stesso posto, come
+// quelli del doppio clic, contano uno)
+const disegnando = ref(false);
+const puntiDisegno = ref([]);
+const cursoreDisegno = ref(null);
+const dDisegno = computed(() => {
+  const pts = cursoreDisegno.value ? [...puntiDisegno.value, cursoreDisegno.value] : puntiDisegno.value;
+  return dDaPunti(pts, !!livelloScelto.value?.motionPath?.dritte);
+});
+function iniziaDisegno() {
+  const l = livelloScelto.value;
+  if (!l) { emit('fine-disegno'); return; }
+  misuraAncora();
+  puntiDisegno.value = [[r1(ancora.value.x), r1(ancora.value.y)]];
+  cursoreDisegno.value = null;
+  disegnando.value = true;
+  window.addEventListener('keydown', tastiDisegno, true);
+}
+function aggiungiPunto(e) {
+  const p = puntoDa(e);
+  const u = puntiDisegno.value[puntiDisegno.value.length - 1];
+  if (u && Math.hypot(p[0] - u[0], p[1] - u[1]) < 4) return;
+  puntiDisegno.value = [...puntiDisegno.value, p];
+}
+function chiudiDisegno() {
+  disegnando.value = false;
+  puntiDisegno.value = [];
+  cursoreDisegno.value = null;
+  window.removeEventListener('keydown', tastiDisegno, true);
+  emit('fine-disegno');
+}
+function finisciDisegno() {
+  const l = livelloScelto.value;
+  const pts = puntiDisegno.value.slice();
+  chiudiDisegno();
+  if (!l || pts.length < 2) return;
+  const mp = l.motionPath || {};
+  const f = fattorePercorso(mp, props.larghezzaFormato);
+  const a = pts[0];
+  const punti = pts.map((p) => [r1((p[0] - a[0]) / f), r1((p[1] - a[1]) / f)]);
+  emit('update-layer', l.id, { motionPath: { duration: 3000, autoRotate: false, loop: true, easing: 'linear', ...mp, preset: 'disegnato', punti, path: dDaPunti(punti, mp.dritte) } });
+}
+function tastiDisegno(e) {
+  if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); chiudiDisegno(); }
+  else if (e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); finisciDisegno(); }
+}
+watch(() => props.disegnoPercorso, (si) => { if (si && !disegnando.value) iniziaDisegno(); else if (!si && disegnando.value) chiudiDisegno(); });
+watch(() => props.selectedLayerId, () => { if (disegnando.value) chiudiDisegno(); });
+// «Prova il percorso»: il livello lo percorre una volta sulla tela, come sul sito (si somma alla sua posizione)
+watch(() => props.provaPercorso, () => {
+  const l = livelloScelto.value;
+  const mp = l?.motionPath;
+  const el = l && elLivello(l.id);
+  if (!mp?.path || !el?.animate) return;
+  const frames = fotogrammiPercorso(mp.path, fattorePercorso(mp, props.larghezzaFormato), !!mp.autoRotate);
+  if (frames.length < 2) return;
+  if (provaInCorso) { try { provaInCorso.cancel(); } catch (_) { /* già finita */ } }
+  try {
+    provaInCorso = el.animate(frames, { duration: Number(mp.duration) || 3000, easing: easingToCSS(mp.easing || 'linear'), iterations: 1, composite: 'add' });
+  } catch (_) { provaInCorso = null; }
+});
+
 function onDblClick(layer) {
   if (layer.type === 'text') {
     emit('start-edit', layer.id);
@@ -868,6 +1081,7 @@ watch(() => props.activeBreakpoint, () => {
 });
 
 onUnmounted(() => {
+  window.removeEventListener('keydown', tastiDisegno, true);
   resizeObs?.disconnect();
   window.removeEventListener('pointermove', onPointerMove);
   window.removeEventListener('pointerup', onPointerUp);
@@ -875,6 +1089,18 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* Il percorso del livello scelto e il disegno (1.4.1473): il colore d'accento dell'editor */
+.mps-percorso { position: absolute; inset: 0; z-index: 150; pointer-events: none; overflow: visible; }
+.mps-percorso-linea { fill: none; stroke: rgb(var(--olo-primary-rgb, 129 140 248)); stroke-dasharray: 6 5; stroke-linecap: round; }
+.mps-percorso-inizio { fill: rgb(var(--olo-primary-rgb, 129 140 248)); stroke: #fff; stroke-width: 1.5; }
+.mps-percorso-punto { fill: #fff; stroke: rgb(var(--olo-primary-rgb, 129 140 248)); stroke-width: 2; pointer-events: auto; cursor: move; }
+.mps-disegno { position: absolute; inset: 0; z-index: 160; cursor: crosshair; }
+.mps-disegno svg { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+.mps-disegno-barra { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 20; display: flex; align-items: center; gap: 8px; padding: 5px 10px; border-radius: 6px; background: #1f2937; border: 1px solid rgb(var(--olo-primary-rgb, 129 140 248)); color: #e5e7eb; font-size: 11px; white-space: nowrap; }
+.mps-disegno-btn { font: inherit; font-size: 11px; padding: 2px 10px; border-radius: 4px; border: 1px solid #4b5563; background: #374151; color: #e5e7eb; cursor: pointer; }
+.mps-disegno-btn.is-si { background: rgb(var(--olo-primary-rgb, 129 140 248)); border-color: transparent; color: #fff; font-weight: 600; }
+.mps-disegno-btn:disabled { opacity: .45; cursor: default; }
+.mps-disegno-btn:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
 /* Guide magnetiche (1.4.1430) */
 .mps-guida { position: absolute; z-index: 60; pointer-events: none; background: #f472b6; }
 .mps-guida--v { top: 0; bottom: 0; width: 1px; transform: translateX(-0.5px); }

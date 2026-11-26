@@ -6,7 +6,7 @@ ordinazione.
 Tema chiaro, panna e lampone, col verde pistacchio e il giallo del burro. Titoli in Castoro (anche corsivo), testo in
 Outfit, prezzi in Azeret Mono.
 
-Apertura: Slider Pro a vetrina che cambia colore: ogni dolce ha il suo fondo pastello, la foto in una cornice ad arco
+Apertura: Pro Slider a vetrina che cambia colore: ogni dolce ha il suo fondo pastello, la foto in una cornice ad arco
 che si svela dal basso (nella prima il video dello zucchero a velo che cade dal setaccio), il particolare in un
 tondo che galleggia, il prezzo su un cartellino. In basso, fissi, i quattro tondi della vetrina: toccandoli si passa a
 quel dolce. Sopra, granelli di zucchero che scendono piano.

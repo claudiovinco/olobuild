@@ -126,6 +126,10 @@ const props = defineProps({
   // 'light' (default, chrome chiara) | 'dark' (pannelli scuri: editor ProSlider, ecc.).
   // Stesso pattern di FieldSelect. L'accento arancio resta in entrambi.
   theme: { type: String, default: 'light' },
+  // (1.4.1479) Il numero SCRITTO si applica solo con Invio o uscendo dal campo: per i valori che, applicati a metà,
+  // cambiano altro (la Durata della linea del tempo riporta indietro i fotogrammi oltre la durata: scrivendo 6000, al
+  // «60» il fotogramma a 6 s finiva a 60 ms). Frecce, rotella e cursore restano immediati.
+  aConferma: { type: Boolean, default: false },
 });
 
 const emit = defineEmits(['update:modelValue', 'reset']);
@@ -232,6 +236,7 @@ function onNum(raw) {
   // badInput. Mandarlo azzerava il valore e il campo, così il «-» spariva e restava 200 (X della lastra di Fuliggine
   // rifatta a mano). Si aspetta il carattere dopo.
   if (raw === '' && numEl.value?.validity?.badInput) return;
+  if (props.aConferma) { sospeso = raw; return; }
   const n = parseFloat(raw);
   if (raw !== '' && isFinite(n) && minN.value != null && isFinite(minN.value) && minN.value > 0 && n < minN.value) {
     sospeso = raw;
@@ -342,7 +347,7 @@ function position() {
     position: 'fixed',
     left: `${left}px`,
     top: openUp ? `${Math.round(r.top - popH - 7)}px` : `${Math.round(r.bottom + 7)}px`,
-    // sopra la finestra che contiene il campo (1.4.1435: nell'editor dello Slider Pro il cursore finiva dietro)
+    // sopra la finestra che contiene il campo (1.4.1435: nell'editor del Pro Slider il cursore finiva dietro)
     zIndex: livelloPopup(trigger, 100000),
   };
 }

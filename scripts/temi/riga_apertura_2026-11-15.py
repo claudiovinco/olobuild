@@ -3,7 +3,7 @@
 rimanere interessante ma decisamente più elegante. stravolgilo pure».
 
 Prima: la Hero con un video di anelli grigi concentrici (un tunnel ipnotico), il bagliore verde e tre archi di foto.
-Ora: lo Slider Pro su un video caldo e calmo (una mano che scrive su una tastiera, la lampada accesa dietro: Pexels
+Ora: il Pro Slider su un video caldo e calmo (una mano che scrive su una tastiera, la lampada accesa dietro: Pexels
 36392564), tutto il resto è una riga.
 - In alto a sinistra, dove il video è già scuro: occhiello, «Pubblica il sito / con una riga.», due righe e i pulsanti.
 - In basso, a tutta larghezza, il terminale: «~/il-mio-sito $» e la riga «riga deploy --prod» che si scrive da sola col

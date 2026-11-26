@@ -4,7 +4,7 @@ tinte scelte coi campioni sul muro; la casa coperta e pulita alla fine di ogni g
 
 La trovata: «due mani». Scorrendo, un rullo alto quanto lo schermo attraversa l'apertura e dà la prima mano: il colore
 copre il video ma lo si intravede ancora, come un muro vecchio sotto una mano sola. Poi torna indietro con la seconda, e
-la parete è piena. Quattro barattoli in basso cambiano la tinta in ogni momento (lo stato «tinta» dello Slider Pro, col
+la parete è piena. Quattro barattoli in basso cambiano la tinta in ogni momento (lo stato «tinta» del Pro Slider, col
 suo colore nella variabile --mps-st-tinta: il rullo e le due mani la usano).
 
 Tema chiaro, caldo: carta, terracotta, salvia e ocra. Titoli in Fraunces, testo in Work Sans, dati in Spline Sans Mono.

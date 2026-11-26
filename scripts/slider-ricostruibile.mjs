@@ -1,4 +1,4 @@
-// Ogni Slider Pro dei temi si costruisce DA ZERO coi soli comandi dell'editor? (1.4.1435)
+// Ogni Pro Slider dei temi si costruisce DA ZERO coi soli comandi dell'editor? (1.4.1435)
 //
 // Utente, 24 nov 2026: «costruire da ZERO OGNI pro slider usandolo senza trucchi css». Per ognuno dei 150 slider si
 // riparte da uno slider vuoto e si rifà ogni livello passando SOLO dai controlli dell'editor: ogni proprietà deve avere
@@ -85,6 +85,7 @@ for (const m of LP.matchAll(/<FieldSelect[^>]*?:model-value="(?:props\.)?layer\.
 // ── 3. ricostruzione di ogni slider ───────────────────────────────────────────
 const casi = [];
 let livelliSlide = [];
+let livelliSlider = [];
 // FieldColor: vuoto, trasparente, un #hex o rgba() scritto, un token della palette (anche con la riserva), un token o
 // un #hex con la trasparenza della sua barra (color-mix(in srgb, X N%, transparent)). Non sa mescolare due colori.
 const CHIAVE_COLORE = /(colou?r|colore|^bgColor$|Color$|^from$|^to$|^segno$)/i;
@@ -105,7 +106,8 @@ function livello(l, tema, file) {
   const chi = `${tema} · ${l.name || l.id}`;
   // i menu dinamici: il livello da mostrare o nascondere deve esistere nella slide; «Nasce dove si clicca» deve
   // nominare un valore che un livello cliccabile della slide dà a uno stato
-  if (l.action?.type === 'toggleLayer' && l.action.target && !livelliSlide.some((x) => x.id === l.action.target)) casi.push({ chi, file, cosa: `action.target = ${l.action.target}`, perche: 'il livello bersaglio non è nella slide' });
+  // dalla 1.4.1475 il menu offre i livelli di tutte le slide e quelli su tutte le slide (il sito li trova in tutto lo slider)
+  if (l.action?.type === 'toggleLayer' && l.action.target && !livelliSlider.some((x) => x.id === l.action.target)) casi.push({ chi, file, cosa: `action.target = ${l.action.target}`, perche: 'il livello bersaglio non è nello slider' });
   if (l.seguiClic) {
     const valoriClic = new Set(livelliSlide.flatMap((x) => (x.action?.type === 'setState' ? [x.action.value] : x.action?.type === 'cycleState' ? String(x.action.values || '').split(',') : [])).map((v) => String(v || '').toLowerCase().replace(/[^a-z0-9_-]/g, '')));
     if (!valoriClic.has(String(l.seguiClic))) casi.push({ chi, file, cosa: `seguiClic = ${l.seguiClic}`, perche: 'nessun livello della slide dà quel valore' });
@@ -206,6 +208,7 @@ for (const t of fs.readdirSync(temi)) {
       if (o.type === 'proslider' && o.settings) {
         nSlider++;
         (o.settings.slides || []).forEach((s, i) => slide(s, t, f, i + 1));
+        livelliSlider = [...(o.settings.slides || []).flatMap((s) => s.layers || []), ...(o.settings.globalLayers || [])];
         for (const s of o.settings.slides || []) { livelliSlide = [...(s.layers || []), ...(o.settings.globalLayers || [])]; for (const l of s.layers || []) { nLiv++; livello(l, t, f); precisione(l, t, f); } }
         livelliSlide = o.settings.globalLayers || [];
         for (const l of o.settings.globalLayers || []) { nLiv++; livello(l, t, f); precisione(l, t, f); }

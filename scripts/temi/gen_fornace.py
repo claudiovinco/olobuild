@@ -5,7 +5,7 @@ lampadari; la fornace si visita e si può provare a lume a fare una perla.
 Tema scuro: il nero della fornace, l'arancio del vetro fuso, il blu di Murano e l'acquamarina. Titoli in Fraunces (anche
 corsivo), testo in Spline Sans, dati in Spline Sans Mono.
 
-Apertura: Slider Pro «la fornace», alto 16:9. Il vetro fuso in una finestra rotonda (un video a lume); ai lati due
+Apertura: Pro Slider «la fornace», alto 16:9. Il vetro fuso in una finestra rotonda (un video a lume); ai lati due
 murrine che ruotano piano. (I tre dischi di vetro liquido che giravano in 3D sono stati tolti il 31 ottobre: la
 sfocatura dietro restava un riquadro e di taglio diventavano una lama.) Una diapositiva per lavoro della vetreria, a linguette.
 """

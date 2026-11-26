@@ -4,7 +4,7 @@ ringhiere, inferriate e parapetti forgiati a mano, lampade e attrezzi, il restau
 
 La trovata: «un colpo per gesto». Lo slider resta fermo e ogni gesto della rotella (o del dito) è un colpo di martello: il
 ferro passa dalla forgia (1.100 gradi, dritto e giallo) alla punta tirata, alla piega, al ricciolo che si raffredda
-grigio. Quattro diapositive col «Una diapositiva per gesto» dello Slider Pro, la transizione a scatto (zoom), le
+grigio. Quattro diapositive col «Una diapositiva per gesto» del Pro Slider, la transizione a scatto (zoom), le
 scintille a ogni colpo e la temperatura che scende, grande, dietro il ferro.
 
 Tema scuro: carbone, il ferro rovente, l'acciaio. Titoli in Zilla Slab, testo in Libre Franklin, dati in Azeret Mono.

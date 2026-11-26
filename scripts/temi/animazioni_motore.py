@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Le animazioni degli Slider Pro dei temi coi nomi che il motore conosce (1.4.1435). Rilanciabile.
+Le animazioni dei Pro Slider dei temi coi nomi che il motore conosce (1.4.1435). Rilanciabile.
 
 - animazioni continue scritte coi nomi sbagliati (non partivano mai): float → floatLoop, pulse → pulseLoop,
   breathe → breathLoop, flicker → flickerLoop, wander → wanderLoop, drift → driftLoop (le ultime tre nuove nel motore);

@@ -378,7 +378,10 @@ function valoriPropri(l) {
 .mps-lt-btn.is-on, .mps-lt-btn.is-spento, .mps-lt-globali .mps-lt-gt .mps-lt-btn { visibility: visible; }
 .mps-lt-gt:not(:hover):not(:focus-within) .mps-lt-btn:not(.is-on):not(.is-spento) { width: 0; overflow: hidden; }
 .mps-lt-l:not(:hover):not(:focus-within) > .mps-lt-btn:not(.is-on):not(.is-spento) { width: 0; overflow: hidden; }
-.mps-lt-globali .mps-lt-gt .mps-lt-btn { width: 22px; }
+/* 1.4.1479: la regola qui sopra (sei classi) vinceva su «.mps-lt-globali .mps-lt-gt .mps-lt-btn» e i pulsanti di «Su tutte
+   le slide» restavano larghi 0 finché il puntatore non passava sulla riga: ora la stessa regola, col gruppo davanti */
+.mps-lt-globali .mps-lt-gt .mps-lt-btn,
+.mps-lt-globali .mps-lt-gt:not(:hover):not(:focus-within) .mps-lt-btn:not(.is-on):not(.is-spento) { width: 22px; overflow: visible; }
 .mps-lt-az { display: none; }
 .mps-lt-strumenti { display: flex; gap: 4px; margin: 0 8px 6px; }
 .mps-lt-sel { flex: 1; min-width: 0; display: flex; align-items: center; gap: 3px; padding: 0 4px; height: 24px; border: 1px solid #374151; border-radius: 5px; background: #0b1220; color: #6b7280; }

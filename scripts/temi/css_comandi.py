@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Il CSS su misura dei livelli dello Slider Pro diventa comandi dell'editor (1.4.1430).
+"""Il CSS su misura dei livelli del Pro Slider diventa comandi dell'editor (1.4.1430).
 
 Utente, 24 nov 2026: «devi fare in modo che il pro slider possa gestirle tutte in modo facile… vai OLTRE». Nei temi
 456 dichiarazioni stavano nel «CSS su misura» dei livelli (Avanzate), che un cliente non sa leggere. Qui quelle che hanno

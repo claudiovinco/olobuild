@@ -12,9 +12,16 @@
 
     <section class="mps-mp-sez">
       <p class="mps-mp-sotto">{{ t('Posizione') }}</p>
-      <div class="mps-mp-fila">
+      <!-- 1.4.1475: anche al centro e a destra, al centro e in basso (prima solo a sinistra e in alto) -->
+      <div class="mps-mp-fila mps-mp-fila--3" role="group" :aria-label="t('Allinea in orizzontale')">
         <button type="button" class="mps-mp-btn" @click="$emit('allinea', 'sinistra')" :title="t('Allinea a sinistra')"><span class="mps-mp-ico" aria-hidden="true" v-html="ico('align-start-vertical')"></span>{{ t('A sinistra') }}</button>
+        <button type="button" class="mps-mp-btn" @click="$emit('allinea', 'centro-o')" :title="t('Allinea al centro in orizzontale')"><span class="mps-mp-ico" aria-hidden="true" v-html="ico('align-center-vertical')"></span>{{ t('Al centro') }}</button>
+        <button type="button" class="mps-mp-btn" @click="$emit('allinea', 'destra')" :title="t('Allinea a destra')"><span class="mps-mp-ico" aria-hidden="true" v-html="ico('align-end-vertical')"></span>{{ t('A destra') }}</button>
+      </div>
+      <div class="mps-mp-fila mps-mp-fila--3" role="group" :aria-label="t('Allinea in verticale')">
         <button type="button" class="mps-mp-btn" @click="$emit('allinea', 'alto')" :title="t('Allinea in alto')"><span class="mps-mp-ico" aria-hidden="true" v-html="ico('align-start-horizontal')"></span>{{ t('In alto') }}</button>
+        <button type="button" class="mps-mp-btn" @click="$emit('allinea', 'centro-v')" :title="t('Allinea al centro in verticale')"><span class="mps-mp-ico" aria-hidden="true" v-html="ico('align-center-horizontal')"></span>{{ t('Al centro') }}</button>
+        <button type="button" class="mps-mp-btn" @click="$emit('allinea', 'basso')" :title="t('Allinea in basso')"><span class="mps-mp-ico" aria-hidden="true" v-html="ico('align-end-horizontal')"></span>{{ t('In basso') }}</button>
       </div>
       <div class="mps-mp-fila">
         <button type="button" class="mps-mp-btn" :disabled="layers.length < 3" @click="$emit('distribuisci', 'x')" :title="t('Stessa distanza in orizzontale (almeno tre livelli)')"><span class="mps-mp-ico" aria-hidden="true" v-html="ico('align-horizontal-space-between')"></span>{{ t('Distanza uguale ↔') }}</button>
@@ -151,6 +158,9 @@ const OPTS_EFFETTO = [
 /* 1.4.1446: numeri compatti (cursore al clic) e a capo se non ci stanno: coi cursori sempre aperti la riga
    sbordava, i cursori coprivano «Comincia dopo» e il secondo valore finiva fuori dal pannello */
 .mps-mp-fila--num { flex-wrap: wrap; row-gap: 4px; }
+/* 1.4.1475: tre pulsanti d'allineamento per riga, stretti */
+.mps-mp-fila--3 { flex-wrap: nowrap; gap: 4px; }
+.mps-mp-fila--3 > .mps-mp-btn { flex: 1 1 0; min-width: 0; justify-content: center; padding: 5px 3px; font-size: 10.5px; gap: 3px; white-space: nowrap; }
 .mps-mp-fila--num > * { min-width: 0; }
 .mps-mp-et { font-size: 10.5px; color: #9ca3af; white-space: nowrap; }
 .mps-mp-btn { font: inherit; display: inline-flex; align-items: center; gap: 5px; padding: 5px 8px; font-size: 11px; color: #e5e7eb; background: #1f2937; border: 1px solid #374151; border-radius: 5px; cursor: pointer; }

@@ -51,7 +51,7 @@
   // allargato per lei oltre la tile (una casella di griglia o di flex è larga almeno quanto la sua parola più lunga).
   // 18 nov 2026: «Ti richiamiamo» di Capriola, 72 px in Unbounded in una colonna del 40%, copriva il modulo accanto.
   // La misura è quella di impaginazione (divisa per la scala di eventuali trasformazioni), non quella disegnata.
-  // Fuori i livelli dello Slider Pro (tela in scala, posizioni volute) e i testi su una riga sola (nastri, ticker).
+  // Fuori i livelli del Pro Slider (tela in scala, posizioni volute) e i testi su una riga sola (nastri, ticker).
   function largo(el) {
     var cs = getComputedStyle(el);
     return el.clientWidth - (parseFloat(cs.paddingLeft) || 0) - (parseFloat(cs.paddingRight) || 0);
@@ -112,7 +112,7 @@
     }), n, blocchi = [];
     while ((n = w.nextNode())) {
       var p = n.parentElement;
-      // Livelli dello Slider Pro: finché il suo script non ha messo la tela alla larghezza di progetto (stile in linea
+      // Livelli del Pro Slider: finché il suo script non ha messo la tela alla larghezza di progetto (stile in linea
       // «width») i titoli grandi non ci stanno e vanno a capo a metà; misurati lì finivano tutti al 55% e restavano
       // così (17 nov 2026: l'apertura di Scroscio al telefono con testi da 7 px). Si riprova al controllo dopo.
       var tela = p.closest('.mps-layers-wrap');

@@ -407,7 +407,7 @@ function positionDropdown() {
   if (!rootEl.value) return;
   const rect = rootEl.value.getBoundingClientRect();
   const spaceBelow = window.innerHeight - rect.bottom;
-  // sopra la finestra che contiene il campo (1.4.1435: nell'editor dello Slider Pro l'elenco finiva dietro)
+  // sopra la finestra che contiene il campo (1.4.1435: nell'editor del Pro Slider l'elenco finiva dietro)
   livello.value = livelloPopup(rootEl.value, 100090);
   const dropH = 360;
 

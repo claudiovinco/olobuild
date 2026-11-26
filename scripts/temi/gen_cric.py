@@ -5,7 +5,7 @@ climatizzatori; l'auto di cortesia, il preventivo prima di mettere mano.
 La trovata: «la spia». L'apertura è il posto di guida, di notte: la strada scorre davanti e sotto c'è il cruscotto, coi
 due quadranti e quattro spie accese che lampeggiano (olio, freni, batteria, motore). Toccandone una (o col tasto Invio)
 la spia si spegne col segno verde e il display al centro dice cos'è, quanto costa e quanto ci vuole. Lo stato «spia»
-dello Slider Pro sceglie che cosa mostra il display.
+del Pro Slider sceglie che cosa mostra il display.
 
 Tema scuro: asfalto, l'ambra delle spie, il verde acqua del cruscotto. Titoli in Space Grotesk, testo in Onest, dati in
 Martian Mono. Cursore: bullone (si avvita sui link).

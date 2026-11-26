@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Controlla l'apertura Slider Pro della home di ogni demo, diapositiva per diapositiva, alle larghezze date: testi di
+"""Controlla l'apertura Pro Slider della home di ogni demo, diapositiva per diapositiva, alle larghezze date: testi di
 livelli diversi che si coprono (anche con la testata sopra lo slider) e testi che escono dallo slider. Per ogni caso
 salva il ritaglio dello slider. uso: python aperture_sovrapposte.py uscita.json 390,820,1024,1440 [tema …]"""
 import asyncio

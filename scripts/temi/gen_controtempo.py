@@ -6,7 +6,7 @@ Teatro Verdi.
 Tema scuro, nero di palcoscenico col fucsia e il viola delle luci di scena e il caldo dell’occhio di bue. Titoli in Bricolage Grotesque,
 testo in Plus Jakarta Sans, orari in Martian Mono.
 
-Apertura: Slider Pro che balla. Quattro corsi in video (le ballerine di luce, le ombre viola, il tango sul palco, l’hip
+Apertura: Pro Slider che balla. Quattro corsi in video (le ballerine di luce, le ombre viola, il tango sul palco, l’hip
 hop al neon); il nome del corso è enorme e le sue lettere non smettono di muoversi, avanti e indietro, sopra la loro
 ombra contornata. Un occhio di bue segue il mouse sulla scena, e in un angolo l’insegnante conta: cinque, sei, sette,
 otto. Si passa da un corso all’altro girando, come in una piroetta.

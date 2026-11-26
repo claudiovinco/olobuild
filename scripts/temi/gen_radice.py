@@ -5,7 +5,7 @@ cene a domicilio, consulenze per i ristoranti che vogliono un menu vegetale vero
 Tema chiaro, carta di riso, verde foglia, rosso barbabietola e giallo tuorlo. Titoli in Literata (anche corsivo), testo in
 Albert Sans, dati in IBM Plex Mono.
 
-Apertura: Slider Pro «l'orologio delle stagioni», alto 16:9, una diapositiva per stagione col suo video pieno (l'orto,
+Apertura: Pro Slider «l'orologio delle stagioni», alto 16:9, una diapositiva per stagione col suo video pieno (l'orto,
 il raccolto, il mercato, la padella). A destra un quadrante scuro coi dodici mesi attorno al piatto della stagione: i tre
 mesi della stagione si accendono e la lancetta avanza di un quarto a ogni diapositiva, sempre in senso orario. Le stagioni
 si danno il cambio con lo zoom (zoomFade). Cursore: il pennello.

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Il contrasto di ogni testo dell'apertura Slider Pro, diapositiva per diapositiva, misurato sui pixel (video e foto
+"""Il contrasto di ogni testo dell'apertura Pro Slider, diapositiva per diapositiva, misurato sui pixel (video e foto
 compresi): per ogni livello di testo visibile si legge il colore, si nasconde il livello, si fotografa e si prende nel suo
 riquadro il punto più chiaro (90° percentile) per un testo chiaro o il più scuro (10°) per un testo scuro. I pulsanti
 con un fondo pieno si misurano sul loro fondo. Soglie WCAG AA: 4,5, oppure 3 dai 24 px (18,66 in grassetto).

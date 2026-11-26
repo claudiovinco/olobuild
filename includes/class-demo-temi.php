@@ -284,7 +284,7 @@ class Olobuild_Demo_Temi {
 
         // Stile del tema al posto di quello del sito.
         add_filter( 'pre_option_olobuild_styles', [ __CLASS__, 'stili' ] );
-        // Al posto dei colori extra del sito, quelli propri del tema (1.4.1433: gli Slider Pro li usano come token)
+        // Al posto dei colori extra del sito, quelli propri del tema (1.4.1433: i Pro Slider li usano come token)
         add_filter( 'pre_option_olobuild_global_colors', [ __CLASS__, 'colori_extra' ] );
         add_filter( 'pre_option_olobuild_global_typography', [ __CLASS__, 'vuoto' ] );
         add_filter( 'pre_option_olobuild_magnetic_cursor', [ __CLASS__, 'cursore' ] );

@@ -3,7 +3,7 @@
 regala con ogni abito un ventaglio della stessa stoffa.
 
 La trovata: «il ventaglio che si apre». In apertura, sopra il mare di Cefalù, c'è un ventaglio chiuso: scorrendo i suoi
-quattordici spicchi di stoffa stampata si aprono a mezzaluna attorno al perno (livelli dello Slider Pro che ruotano
+quattordici spicchi di stoffa stampata si aprono a mezzaluna attorno al perno (livelli del Pro Slider che ruotano
 attorno al punto in basso), la stampa si ricompone intera e il ventaglio fa aria (dal 15 nov 2026; prima le stecche
 erano le foto degli abiti). Più giù le stoffe in una galleria a ventaglio 3D (Galleria pro,
 coverflow).

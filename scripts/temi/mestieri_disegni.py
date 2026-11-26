@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """I disegni delle aperture dei dieci temi dei mestieri (10 nov 2026): SVG (alcuni animati dentro, con CSS: partono
-quando il livello si mostra, perché lo Slider Pro li fa ripartire cambiando stato) e qualche PNG/JPG fatto a mano con
+quando il livello si mostra, perché il Pro Slider li fa ripartire cambiando stato) e qualche PNG/JPG fatto a mano con
 PIL (mattoni, erba, fuliggine, lastra di legno).
 
 Uso: python mestieri_disegni.py <cartella dei media>

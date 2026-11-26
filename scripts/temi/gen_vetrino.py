@@ -3,7 +3,7 @@
 
 La trovata: lo zoom che non finisce. Nell'apertura lo scorrimento entra nel volto di una persona: si apre una lente sulla
 pelle, dentro la pelle una lente sulle cellule, poi sulla molecola, poi sul DNA, e alla fine il DNA si spegne e dietro c'è
-il laboratorio, con la ricercatrice al microscopio. Lo Slider Pro fermo durante lo scorrimento e cinque livelli che
+il laboratorio, con la ricercatrice al microscopio. Il Pro Slider fermo durante lo scorrimento e cinque livelli che
 crescono a velocità costante (andamento «costante»: la scala sale in proporzione, come in un video «potenze di dieci»).
 Le lenti sono riquadri quadrati con gli angoli tondi al massimo: a scala 1,2 coprono la tela, al computer e al telefono.
 

@@ -5,7 +5,7 @@ monorigine, praline, cioccolata calda e scatole regalo da comporre, con il negoz
 Tema scuro e caldo: cacao, caramello, il rosa della polvere di cacao e la crema. Titoli in Gloock, testo in Readex
 Pro, dati in DM Mono.
 
-Apertura: Slider Pro «la vetrina», alto 16:9. Il prodotto in una finestra ad arco che si inclina in 3D verso il
+Apertura: Pro Slider «la vetrina», alto 16:9. Il prodotto in una finestra ad arco che si inclina in 3D verso il
 puntatore; sotto, cinque praline in fila che girano su sé stesse in 3D una dopo l'altra, come un'onda, e ogni tanto
 mostrano il rovescio. Una diapositiva per famiglia, a linguette: tavolette, praline, cacao, cioccolata calda.
 """

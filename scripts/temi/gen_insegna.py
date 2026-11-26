@@ -6,7 +6,7 @@ la custodia tecnica, con il dominio registrato a nome del cliente, l'hosting, la
 Rifatto il 31 ottobre 2026 (la prima versione, chiara col violetto, «non si poteva vedere»): tema scuro, nero, avorio e un
 rosso segnale usato poco; titoli in Noto Serif Display leggero col corsivo, testo in Instrument Sans, dati in IBM Plex Mono.
 
-Apertura: il cubo dei mestieri. Uno Slider Pro alto quanto lo schermo che resta fermo in cima mentre si scorre, e il cubo
+Apertura: il cubo dei mestieri. Un Pro Slider alto quanto lo schermo che resta fermo in cima mentre si scorre, e il cubo
 gira insieme alla pagina (si ferma a metà se ci si ferma, torna indietro risalendo): quattro facce, Strategia, Identità,
 Piattaforme e Custodia tecnica, ognuna col suo video pieno, un velo scuro solo dal lato del testo e un collegamento a
 una parte diversa del sito. Un solo effetto forte per pagina: nella pagina dei Lavori le sezioni salgono piegate da

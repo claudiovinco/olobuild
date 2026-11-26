@@ -3,7 +3,7 @@
 chiaro o sotto un velo scuro che li spegne; o il media si vede, o non si mette).
 
 Guarda gli Sfondi (sezioni, righe, colonne, tile: foto, video, gallerie) con la Sovrapposizione, le diapositive dello
-Slider Pro e i livelli-velo (forme sfumate grandi sopra lo sfondo della diapositiva). Un velo è «chiaro» se il suo colore
+Pro Slider e i livelli-velo (forme sfumate grandi sopra lo sfondo della diapositiva). Un velo è «chiaro» se il suo colore
 ha luminanza > 0,5, «pesante» se scuro e piatto oltre la soglia. Una Sovrapposizione sfumata da un lato (overlay_fade)
 non conta: vela solo dove c'è il testo.
 
@@ -99,7 +99,7 @@ def scansiona(tema):
                 tipo, eff = giudica(colore(o.get('overlay_color') or '#000000', pal), float(o.get('overlay_opacity') or 0))
                 if tipo:
                     trovati.append((dove, 'sfondo ' + o['type'], tipo, round(eff)))
-            # diapositive dello Slider Pro
+            # diapositive del Pro Slider
             if isinstance(o.get('slides'), list) and 'transition' in o:
                 for k, sl in enumerate(o['slides']):
                     b = sl.get('background') or {}

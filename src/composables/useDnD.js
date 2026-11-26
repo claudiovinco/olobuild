@@ -85,11 +85,15 @@ function installGlobalListeners() {
 //
 // NOTA: non blocca drag esterni dall'OS (file upload drag-drop) — quelli
 // non firano dragstart locale ma arrivano con dragover/drop diretti.
+// 1.4.1476: tranne i trascinamenti voluti dell'editor del Pro Slider (le miniature delle slide e le righe del pannello
+// Livelli, `draggable="true"` dentro .mps-modal-overlay): bloccati qui, partiva solo il dragstart e il resto non arrivava
+// mai, così riordinare trascinando non faceva niente.
 if (typeof document !== 'undefined') {
-  document.addEventListener('dragstart', (e) => e.preventDefault(), true);
+  const voluto = (e) => !!(e.target && e.target.closest && e.target.closest('.mps-modal-overlay [draggable="true"]'));
+  document.addEventListener('dragstart', (e) => { if (!voluto(e)) e.preventDefault(); }, true);
   // Doppio cinturino: anche dragover/drop a livello document, così se qualche
   // listener attivo prima del nostro fa partire il drag, il cursor torna normale.
-  document.addEventListener('drag', (e) => e.preventDefault(), true);
+  document.addEventListener('drag', (e) => { if (!voluto(e)) e.preventDefault(); }, true);
 }
 
 // RAF-throttle dell'hit-test: i pointermove possono firare ben oltre i 60Hz

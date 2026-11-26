@@ -6,7 +6,7 @@ l'ambra.
 Nero tabacco, l'ambra delle resine, il rosso vino delle rose e il verde salvia del bergamotto. Titoli in Gloock, testo
 in Figtree, note e formati in Red Hat Mono.
 
-Apertura: Slider Pro sulla piramide olfattiva (note di testa, di cuore, di fondo) coi video veri (il fumo, le rose
+Apertura: Pro Slider sulla piramide olfattiva (note di testa, di cuore, di fondo) coi video veri (il fumo, le rose
 bagnate, l'ambra versata); accanto al titolo un tondo con l'ingrediente che galleggia e, a lato, la piramide che si
 tocca per saltare da una nota all'altra (livelli globali con «vai alla diapositiva»); il cambio è a strati (stack).
 Poi la parola che dà il nome al laboratorio col fumo dentro le lettere (Text mask), le famiglie da scegliere girando

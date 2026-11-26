@@ -7,10 +7,10 @@ Tema chiaro ed elegante, carta avorio d’archivio, inchiostro, l’Arancio Hirs
 targhette. Titoli in Playfair Display (anche corsivo), testo in Libre Franklin, dati in DM Mono. Niente marchi veri:
 le auto intere sono in corsa, in bianco e nero d’epoca o lontane; il resto sono dettagli (fari, cruscotti, griglie).
 
-Apertura: Slider Pro «l’archivio». Una diapositiva per tappa della Casa (1949, 1957, 1965, 1973, 1995), con le
+Apertura: Pro Slider «l’archivio». Una diapositiva per tappa della Casa (1949, 1957, 1965, 1973, 1995), con le
 linguette degli anni in basso: l’anno enorme in corsivo contornato d’oro, il titolo, la targhetta coi dati della
 vettura che si batte lettera per lettera e il pulsante «Lo sapevi?», che apre la scheda con la curiosità di
-quell’auto (azione «mostra livello» dello Slider Pro).
+quell’auto (azione «mostra livello» del Pro Slider).
 """
 import os
 import sys

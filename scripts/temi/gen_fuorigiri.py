@@ -4,7 +4,7 @@ tracker costruiti su motori usati, una moto alla volta, nove settimane per moto.
 
 Tema scuro, nero officina, ambra delle spie e verde del via. Titoli e testo in Archivo, dati in Chivo Mono.
 
-Apertura: Slider Pro «il semaforo», alto 16:9, una moto per diapositiva col suo video pieno (l'officina, il meccanico al
+Apertura: Pro Slider «il semaforo», alto 16:9, una moto per diapositiva col suo video pieno (l'officina, il meccanico al
 lavoro, la curva in montagna, la notte in città) e un velo scuro solo dal lato del testo. A destra il semaforo delle gare
 di accelerazione: si accendono le luci bianche di preparazione, poi le tre gialle una dopo l'altra, poi il verde, e sotto
 compare il tempo di reazione. Le diapositive si spingono di lato (push). Cursore: il mirino.

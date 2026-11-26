@@ -26,7 +26,8 @@ function defaultLayer(type = 'text') {
     id: makeId(),
     type,
     // Contenuto (varia per tipo)
-    content: type === 'text' ? 'Testo intestazione' : (type === 'button' ? 'Clicca qui' : ''),
+    // 1.4.1475: il testo di partenza passa dalla traduzione (un livello aggiunto nel builder in inglese nasceva in italiano)
+    content: type === 'text' ? t('Testo intestazione') : (type === 'button' ? t('Clicca qui') : ''),
     tag: 'h2',
     imageSrc: '',
     imageAlt: '',

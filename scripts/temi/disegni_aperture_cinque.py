@@ -196,7 +196,7 @@ def pieghe():
 # ───────────────────────── SCHEGGIA: le crepe dove si colpisce ─────────────────────────
 # Le crepe del primo e del secondo colpo, ognuna con la sua stella al centro di una tela doppia (3200 × 1800, gli stessi
 # px di prima su 1600 × 900): il livello è grande il doppio dello slider, centrato, e si sposta dove si è cliccato
-# (--mps-clic-x/y dello Slider Pro). La seconda crepa è solo quella nuova: la prima resta dov'era.
+# (--mps-clic-x/y del Pro Slider). La seconda crepa è solo quella nuova: la prima resta dov'era.
 def crepe_colpi():
     import random
     VB = '0 0 3200 1800'

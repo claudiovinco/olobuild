@@ -4,7 +4,7 @@ per le aziende, videoclip; la troupe, il montaggio e il colore in casa.
 
 La trovata (20 nov 2026): il sito si guarda dentro un obiettivo. Nell'apertura le sette lamelle del diaframma coprono
 tutto, tranne un foro al centro da cui si vede il set; scorrendo il diaframma si apre (il livello delle lamelle si
-ingrandisce e gira, nel movimento a scorrimento dello Slider Pro), il numero f scende da f/22 a f/1.4 e la luce entra.
+ingrandisce e gira, nel movimento a scorrimento del Pro Slider), il numero f scende da f/22 a f/1.4 e la luce entra.
 Poi i servizi sono sezioni col passaggio «Diaframma» (Sezioni → Effetto sticky → «Diaframma»): le lamelle si chiudono
 sulla sezione e si riaprono sulla successiva. Cursore: il ciak.
 

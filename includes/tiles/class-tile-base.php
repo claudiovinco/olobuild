@@ -210,7 +210,7 @@ abstract class Olobuild_Tile_Base {
         if ( $v === '' ) return '';
         // Allow: #hex, rgb(), rgba(), hsl(), hsla(), CSS variables, color-mix(), named colors, transparent/inherit/initial/currentColor
         // 1.4.1435: anche una variabile con un'altra variabile di riserva, var(--mps-st-tinta, var(--olo-color-primary)) —
-        // il «colore dello stato» dello Slider Pro: prima veniva scartata e il livello restava senza colore (Due mani).
+        // il «colore dello stato» del Pro Slider: prima veniva scartata e il livello restava senza colore (Due mani).
         if ( preg_match( '/^(#[0-9a-fA-F]{3,8}|rgba?\(\s*[\d\s,.%\/]+\)|hsla?\(\s*[\d\s,.%\/deg]+\)|var\(\s*--[\w-]+(?:\s*,\s*[^();{}<>\"\']+)?\)|var\(\s*--[\w-]+\s*,\s*var\(\s*--[\w-]+(?:\s*,\s*[^();{}<>\"\']+)?\)\s*\)|color-mix\([^;{}<>]*\)|transparent|inherit|initial|currentColor|[a-zA-Z]{3,20})$/', $v ) ) {
             return $v;
         }

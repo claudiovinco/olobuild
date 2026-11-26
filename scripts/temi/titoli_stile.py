@@ -74,7 +74,7 @@ def corsivo_vero(tid):
 
 
 def occhiello_apertura(tid, built, v):
-    """L'occhiello dell'apertura (Slider Pro della prima sezione: il testo piccolo in maiuscolo in alto) prende la voce del
+    """L'occhiello dell'apertura (Pro Slider della prima sezione: il testo piccolo in maiuscolo in alto) prende la voce del
     tema: nei temi che non usano il monospazio, il carattere del testo o dei titoli."""
     if v['font'] == 'mono':
         return

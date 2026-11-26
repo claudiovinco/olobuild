@@ -165,7 +165,8 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             return '';
         }
         if ( empty( $slides ) ) {
-            return '<div class="olo-proslider" style="padding:60px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);">No slides configured — open the Slider Editor</div>';
+            // 1.4.1475: in italiano e tradotta (era «No slides configured — open the Slider Editor»)
+            return '<div class="olo-proslider" style="padding:60px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);">' . esc_html__( 'Nessuna slide ancora: aggiungile con «Apri editor slider».', 'olobuilder' ) . '</div>';
         }
 
         $uid        = 'mps-' . wp_unique_id();
@@ -221,20 +222,27 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         $responsive_css = $this->generate_responsive_css( $uid, $s, $slides, $height );
         $all_css = $timeline_css . $responsive_css;
         // Icon SVG: custom properties per fill/stroke + evita doppia ombra con drop-shadow
-        $all_css .= '.mps-icon-wrap svg polygon,.mps-icon-wrap svg path,.mps-icon-wrap svg circle,.mps-icon-wrap svg rect,.mps-icon-wrap svg ellipse,.mps-icon-wrap svg polyline,.mps-icon-wrap svg line{fill:var(--icon-fill,currentColor);stroke:var(--icon-stroke,currentColor);stroke-width:var(--icon-stroke-width,inherit);stroke-dasharray:var(--icon-stroke-dash,none)}';
+        $all_css .= '.mps-icon-wrap svg polygon,.mps-icon-wrap svg path,.mps-icon-wrap svg circle,.mps-icon-wrap svg rect,.mps-icon-wrap svg ellipse,.mps-icon-wrap svg polyline,.mps-icon-wrap svg line{fill:var(--icon-fill,currentColor);stroke:var(--icon-stroke,currentColor);stroke-width:var(--icon-stroke-width,inherit);stroke-dasharray:var(--icon-stroke-dash,none)}.mps-icon-wrap>svg,.mps-icon-wrap.olo-custom-icon{width:1em!important;height:1em!important}.mps-icon-wrap.olo-custom-icon>svg{width:100%;height:100%}';
         echo '<style>' . $all_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS assembled internally: timeline keyframes from floatval()/absint() values and regex-cleaned layer ids, responsive rules from absint()/floatval() clamps and esc_attr()'d ids, plus a fixed icon-CSS literal
 
         // Collect and load Google Fonts used by layers
-        $google_fonts = [];
+        // Le famiglie in corsivo (1.4.1479): «Stile» corsivo o inclinato, oppure parole in corsivo nel testo. Senza i
+        // corsivi veri il browser inclina il tondo (Olobuild_Font_Host::get_font_face_css(), terzo argomento).
+        $google_fonts  = [];
+        $google_italic = [];
+        $livelli_font  = $global_layers_arr;
         foreach ( $slides as $sl ) {
-            foreach ( ( $sl['layers'] ?? [] ) as $lay ) {
-                $ff = sanitize_text_field( $lay['fontFamily'] ?? '' );
-                if ( $ff && false === strpos( $ff, 'var(' ) ) { $google_fonts[ $ff ] = true; }
-            }
+            foreach ( ( $sl['layers'] ?? [] ) as $lay ) { $livelli_font[] = $lay; }
         }
-        foreach ( $global_layers_arr as $lay ) {
+        foreach ( $livelli_font as $lay ) {
+            if ( ! is_array( $lay ) ) { continue; }
             $ff = sanitize_text_field( $lay['fontFamily'] ?? '' );
-            if ( $ff && false === strpos( $ff, 'var(' ) ) { $google_fonts[ $ff ] = true; }
+            if ( ! $ff || false !== strpos( $ff, 'var(' ) ) { continue; }
+            $google_fonts[ $ff ] = true;
+            $stile_ff = strtolower( (string) ( $lay['fontStyle'] ?? '' ) );
+            if ( 'italic' === $stile_ff || 'oblique' === $stile_ff || preg_match( '/<(em|i)[\s>]/i', (string) ( $lay['content'] ?? '' ) ) ) {
+                $google_italic[ $ff ] = true;
+            }
         }
         // I livelli che muovono gli assi del carattere con lo scorrimento: la versione variabile, sotto un nome proprio
         $vf_css = [];
@@ -249,7 +257,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         }
         if ( $google_fonts && class_exists( 'Olobuild_Font_Host' ) ) {
             // Self-hosted (Olobuild_Font_Host): nessuna richiesta del visitatore a Google.
-            $ff_css = Olobuild_Font_Host::get_font_face_css( array_keys( $google_fonts ), '300;400;500;600;700;800;900' );
+            $ff_css = Olobuild_Font_Host::get_font_face_css( array_keys( $google_fonts ), '300;400;500;600;700;800;900', array_keys( $google_italic ) );
             if ( $ff_css ) {
                 echo '<style id="olo-proslider-fonts">' . $ff_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS @font-face generato internamente con URL locali
             }
@@ -637,7 +645,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                     $kb_style = '--mps-kb-scale:' . $scale . ';--mps-kb-dur:' . $dur . 'ms;';
                 }
             }
-            return '<img src="' . esc_url( $bg['image'] ) . '" alt="Slide background" class="olo-proslider-bg-img' . $kb_class . '" style="' . esc_attr( $kb_style ) . '" draggable="false" loading="lazy" />';
+            return '<img src="' . esc_url( $bg['image'] ) . '" alt="' . esc_attr__( 'Sfondo della slide', 'olobuilder' ) . '" class="olo-proslider-bg-img' . $kb_class . '" style="' . esc_attr( $kb_style ) . '" draggable="false" loading="lazy" />';
         }
 
         // Video — self hosted
@@ -711,6 +719,14 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             if ( isset( $tl['endWithSlide'] ) && false === $tl['endWithSlide'] ) {
                 $anim_attrs .= ' data-timeline-end="0"';
             }
+            // L'Uscita del livello anche con la linea del tempo (1.4.1472, «Uscita» nella scheda Animazione): effetto,
+            // durata, ritardo e andamento. Senza (tutti i livelli fatti prima) esce con la dissolvenza rapida di sempre.
+            if ( ! empty( $tl['uscita'] ) ) {
+                $anim_attrs .= ' data-anim-out="' . esc_attr( $layer['animOut'] ?? 'fadeOutDown' ) . '"';
+                $anim_attrs .= ' data-anim-out-duration="' . absint( $layer['animOutDuration'] ?? 600 ) . '"';
+                $anim_attrs .= ' data-anim-out-delay="' . absint( $layer['animOutDelay'] ?? 0 ) . '"';
+                $anim_attrs .= ' data-anim-easing="' . esc_attr( $this->easing_to_css( $layer['animEasing'] ?? 'ease' ) ) . '"';
+            }
         } else {
             $anim_attrs .= ' data-anim-in="' . esc_attr( $layer['animIn'] ?? 'fadeInUp' ) . '"';
             $anim_attrs .= ' data-anim-in-duration="' . absint( $layer['animInDuration'] ?? 800 ) . '"';
@@ -756,17 +772,39 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             $h         = $layer['hover'];
             $h_dur     = absint( $h['duration'] ?? 300 );
             $h_easing  = in_array( $h['easing'] ?? 'ease', ['ease','ease-in','ease-out','ease-in-out','linear'], true ) ? ( $h['easing'] ?? 'ease' ) : 'ease';
-            // Transform
+            // Transform. Con la linea del tempo il transform del livello è della sua animazione, che vince sul :hover: scala,
+            // rotazione e spostamento vanno sulle proprietà singole (scale, rotate, translate), che si sommano al transform
+            // (1.4.1472). Inclinazioni, rotazioni 3D, opacità e filtri lì non agiscono, e l'editor non li mostra.
             $h_parts   = [];
-            if ( ( $h['scale'] ?? 1 ) != 1 ) { $h_parts[] = 'scale(' . floatval( $h['scale'] ) . ')'; }
-            if ( ( $h['rotation'] ?? 0 ) != 0 ) { $h_parts[] = 'rotateZ(' . floatval( $h['rotation'] ) . 'deg)'; }
-            if ( ( $h['rotateX'] ?? 0 ) != 0 ) { $h_parts[] = 'rotateX(' . floatval( $h['rotateX'] ) . 'deg)'; }
-            if ( ( $h['rotateY'] ?? 0 ) != 0 ) { $h_parts[] = 'rotateY(' . floatval( $h['rotateY'] ) . 'deg)'; }
-            if ( ( $h['skewX'] ?? 0 ) != 0 ) { $h_parts[] = 'skewX(' . floatval( $h['skewX'] ) . 'deg)'; }
-            if ( ( $h['skewY'] ?? 0 ) != 0 ) { $h_parts[] = 'skewY(' . floatval( $h['skewY'] ) . 'deg)'; }
-            if ( ( $h['x'] ?? 0 ) != 0 ) { $h_parts[] = 'translateX(' . floatval( $h['x'] ) . '%)'; }
-            if ( ( $h['y'] ?? 0 ) != 0 ) { $h_parts[] = 'translateY(' . floatval( $h['y'] ) . '%)'; }
-            $h_transform = $h_parts ? 'transform:' . implode( ' ', $h_parts ) . ';' : '';
+            if ( $has_timeline ) {
+                $h_singole = '';
+                if ( ( $h['scale'] ?? 1 ) != 1 ) { $h_singole .= 'scale:' . floatval( $h['scale'] ) . ';'; }
+                $h_rot = floatval( $h['rotation'] ?? 0 );
+                if ( 0.0 !== $h_rot ) {
+                    // la «Rotazione» del livello sta già in rotate (in linea, vince sul foglio): si sommano
+                    $rot_l = isset( $layer['rotazione'] ) && is_numeric( $layer['rotazione'] ) ? floatval( $layer['rotazione'] ) : 0;
+                    $h_singole .= 'rotate:' . ( $rot_l + $h_rot ) . 'deg' . ( 0.0 !== $rot_l ? ' !important' : '' ) . ';';
+                }
+                if ( ( $h['x'] ?? 0 ) != 0 || ( $h['y'] ?? 0 ) != 0 ) { $h_singole .= 'translate:' . floatval( $h['x'] ?? 0 ) . '% ' . floatval( $h['y'] ?? 0 ) . '%;'; }
+                $h_transform = $h_singole;
+                $h           = array_merge( $h, [ 'opacity' => 100, 'blur' => 0, 'brightness' => 100, 'grayscale' => 0 ] );
+            }
+            if ( ! $has_timeline && ( $h['scale'] ?? 1 ) != 1 ) { $h_parts[] = 'scale(' . floatval( $h['scale'] ) . ')'; }
+            if ( ! $has_timeline ) {
+                if ( ( $h['rotation'] ?? 0 ) != 0 ) { $h_parts[] = 'rotateZ(' . floatval( $h['rotation'] ) . 'deg)'; }
+                if ( ( $h['rotateX'] ?? 0 ) != 0 ) { $h_parts[] = 'rotateX(' . floatval( $h['rotateX'] ) . 'deg)'; }
+                if ( ( $h['rotateY'] ?? 0 ) != 0 ) { $h_parts[] = 'rotateY(' . floatval( $h['rotateY'] ) . 'deg)'; }
+                if ( ( $h['skewX'] ?? 0 ) != 0 ) { $h_parts[] = 'skewX(' . floatval( $h['skewX'] ) . 'deg)'; }
+                if ( ( $h['skewY'] ?? 0 ) != 0 ) { $h_parts[] = 'skewY(' . floatval( $h['skewY'] ) . 'deg)'; }
+                if ( ( $h['x'] ?? 0 ) != 0 ) { $h_parts[] = 'translateX(' . floatval( $h['x'] ) . '%)'; }
+                if ( ( $h['y'] ?? 0 ) != 0 ) { $h_parts[] = 'translateY(' . floatval( $h['y'] ) . '%)'; }
+                // 1.4.1477: con una rotazione 3D la prospettiva della linea del tempo (perspective(800px)): senza, la card si
+                // stringeva e basta (m34 = 0)
+                if ( $h_parts && ( ( $h['rotateX'] ?? 0 ) != 0 || ( $h['rotateY'] ?? 0 ) != 0 ) ) {
+                    array_unshift( $h_parts, 'perspective(800px)' );
+                }
+                $h_transform = $h_parts ? 'transform:' . implode( ' ', $h_parts ) . ';' : '';
+            }
             // Opacity
             $h_opacity = ( $h['opacity'] ?? 100 ) != 100 ? 'opacity:' . ( floatval( $h['opacity'] ) / 100 ) . ';' : '';
             // Colors
@@ -1025,6 +1063,20 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                     'l' => ( isset( $layer['motionPath']['loop'] ) && false === $layer['motionPath']['loop'] ) ? 0 : 1,
                     'e' => $this->easing_to_css( $layer['motionPath']['easing'] ?? 'linear' ),
                 ];
+                // 1.4.1473: dimensione (k, 10–400 % → 0,1–4), «Segue la larghezza dello slider» (a) e ritardo proprio (w, ms).
+                // Mancanti = com'era: il tracciato in px della tela, dall'ingresso del livello.
+                $mp_o     = $layer['motionPath'];
+                $mp_scala = isset( $mp_o['scala'] ) && is_numeric( $mp_o['scala'] ) ? max( 10, min( 400, floatval( $mp_o['scala'] ) ) ) : 100.0;
+                if ( 100.0 !== (float) $mp_scala ) {
+                    $mpc['k'] = round( $mp_scala / 100, 4 );
+                }
+                if ( ! empty( $mp_o['adatta'] ) ) {
+                    $mpc['a'] = 1;
+                }
+                $mp_rit = min( 60000, absint( $mp_o['ritardo'] ?? 0 ) );
+                if ( $mp_rit > 0 ) {
+                    $mpc['w'] = $mp_rit;
+                }
                 // Il contenitore che corre prende tutto il livello e il suo aspetto (bordo, raggio, sfondo, ombra): prima
                 // restavano sul contenitore fermo, e un tondo col bordo restava al suo posto mentre la foto ne usciva.
                 $aspetto  = substr( $style, $aspetto_da, $aspetto_a - $aspetto_da );
@@ -1297,7 +1349,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
     }
 
     /**
-     * Il carattere più piccolo che un testo può avere SULLO SCHERMO (17 nov 2026). Lo Slider Pro riduce la tela col
+     * Il carattere più piccolo che un testo può avere SULLO SCHERMO (17 nov 2026). Il Pro Slider riduce la tela col
      * dispositivo (a 820 px la tela del tablet è a 0,8, a 390 quella del telefono a 0,61): i testi disegnati per la
      * tela finivano a 8–12 px. Paragrafi (testi da 40 caratteri, non in maiuscolo) almeno 14 px, le altre scritte e
      * i pulsanti almeno 11. 0 = nessun minimo (altri tipi di livello).
@@ -1435,7 +1487,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                 }
                 // Il testo alternativo del livello (un logo che fa da titolo, una foto che dice qualcosa); senza, quello di sempre.
                 $alt = trim( (string) ( $layer['imageAlt'] ?? '' ) );
-                $alt = '' !== $alt ? $alt : 'Slide image';
+                $alt = '' !== $alt ? $alt : __( 'Immagine della slide', 'olobuilder' );
                 // «Colori del disegno» (1.4.1433): un disegno SVG coi colori della palette al posto di quelli del file
                 if ( ! empty( $layer['coloriDisegno'] ) && is_array( $layer['coloriDisegno'] ) && class_exists( 'Olobuild_Disegni' ) && class_exists( 'Olobuild_Style_System' ) ) {
                     $mappa = [];
@@ -1456,7 +1508,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             case 'button':
                 $url    = esc_url( $layer['buttonUrl'] ?? '#' );
                 $target = esc_attr( $layer['buttonTarget'] ?? '_self' );
-                $label  = esc_html( $layer['content'] ?? 'Button' );
+                $label  = esc_html( $layer['content'] ?? __( 'Pulsante', 'olobuilder' ) );
                 $btn_style = $base_style . 'display:inline-block;text-decoration:none;cursor:pointer;';
                 // Pulsante senza colori: il fondo è il primario (render_layer), il testo il suo
                 // contrasto. Senza, `color:;` veniva scartato e restava il colore dei link del tema.
@@ -1467,8 +1519,12 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
 
             case 'icon':
                 $icon_name = esc_attr( $layer['iconName'] ?? 'star' );
-                $ratio     = max( 1, round( absint( $layer['fontSize'] ?? 24 ) / 20 ) );
-                $icon_style = 'color:' . $color . ';display:inline-flex;align-items:center;justify-content:center;';
+                // 1.4.1475: la grandezza esatta della «Dimensione icona» (prima round(fontSize / 20): a scatti di 20 px, un'icona
+                // da 30 usciva da 40). Il disegno è largo 1em della scritta del suo contenitore, così vale anche la grandezza
+                // per schermo (regole per dispositivo: font-size sul figlio del livello), che prima non agiva.
+                $icon_fs    = max( 4, round( floatval( $layer['fontSize'] ?? 24 ), 1 ) );
+                $ratio      = round( $icon_fs / 20, 3 );
+                $icon_style = 'color:' . $color . ';display:inline-flex;align-items:center;justify-content:center;font-size:' . $this->px_livello( $icon_fs, $fuori ) . ';line-height:1;';
                 // SVG icon custom properties
                 $icon_fill = sanitize_text_field( $layer['iconFillColor'] ?? '' );
                 $icon_stroke = sanitize_text_field( $layer['iconStrokeColor'] ?? '' );

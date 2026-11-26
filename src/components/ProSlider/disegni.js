@@ -1,5 +1,5 @@
 /**
- * «Colori del disegno» (1.4.1433): i disegni SVG dello Slider Pro coi colori della palette al posto di quelli del file.
+ * «Colori del disegno» (1.4.1433): i disegni SVG del Pro Slider coi colori della palette al posto di quelli del file.
  * Gemello di includes/class-disegni.php: il server dà il disegno pulito e i suoi colori (rotta olobuild/v1/disegno),
  * qui si ricolora per la tela dell'editor come fa il sito, da immagine (data URI): i disegni hanno animazioni e stili
  * interni coi nomi corti che, stampati nella pagina, toccherebbero il resto.

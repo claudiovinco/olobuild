@@ -2,7 +2,7 @@
 """Genera il tema «Raspa» (id raspa): un laboratorio di Vicenza che lava e graffia a mano il denim, un paio alla volta.
 
 La trovata: «gratta il crudo». In apertura lo schermo è denim crudo, scuro; scorrendo la raspa passa: i baffi chiari dei
-jeans lavati si tirano uno dopo l'altro sul tessuto (livelli dello Slider Pro che si allungano con lo scorrimento) e al
+jeans lavati si tirano uno dopo l'altro sul tessuto (livelli del Pro Slider che si allungano con lo scorrimento) e al
 centro il denim sbiadisce in una macchia di candeggio (un livello che schiarisce ciò che ha dietro). Più giù i lavaggi si
 scoprono grattando: tre «gratta e scopri» col denim crudo sopra e il jeans lavato sotto.
 

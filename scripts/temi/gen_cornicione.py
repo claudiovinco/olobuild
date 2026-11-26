@@ -5,7 +5,7 @@ legna a 450 gradi, farine macinate a pietra; si mangia al tavolo o si porta via.
 Tema chiaro e caldo: farina, pomodoro, basilico e la crosta dorata. Titoli in Hedvig Letters Serif, testo in Familjen
 Grotesk, dati in Victor Mono.
 
-Apertura: Slider Pro «la pizza della sera», alto 16:9 perché i cerchi restino cerchi. Una pizza per diapositiva, vista
+Apertura: Pro Slider «la pizza della sera», alto 16:9 perché i cerchi restino cerchi. Una pizza per diapositiva, vista
 dall'alto in una finestra rotonda che gira piano come sulla pala; gli ingredienti (pomodoro, fiordilatte, farina)
 cadono nella diapositiva e rimbalzano a ogni pizza nuova; il prezzo in un bollino, le linguette coi nomi delle pizze.
 """

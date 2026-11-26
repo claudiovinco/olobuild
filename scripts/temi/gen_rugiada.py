@@ -5,7 +5,7 @@ formulati da una chimica e venduti online e in venti erboristerie.
 Tema chiaro e morbido: pesca chiara, rosa legno, salvia. Titoli in Ibarra Real Nova (anche corsivo), testo in Hanken
 Grotesk, dati in Red Hat Mono.
 
-Apertura: Slider Pro «la goccia», alto 16:9. Il prodotto in una finestra ad arco; dall'alto cade una goccia che tocca il
+Apertura: Pro Slider «la goccia», alto 16:9. Il prodotto in una finestra ad arco; dall'alto cade una goccia che tocca il
 prodotto e si allarga in un'onda (timeline in loop); attorno galleggiano bolle di vetro liquido (sfocatura di quello che
 c'è dietro, bordo di luce), lente e lievi. Una diapositiva per prodotto a linguette: siero, crema, olio, il rituale.
 """

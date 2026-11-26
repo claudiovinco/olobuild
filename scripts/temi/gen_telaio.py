@@ -4,7 +4,7 @@ uno alla volta, saldati a mano: strada, gravel, randonnée e pista, con la misur
 
 Tema scuro, nero officina, arancio del primo strato di vernice e blu acciaio. Titoli in Hanken Grotesk, dati in Space Mono.
 
-Apertura: Slider Pro «la tavola», alta 16:9, un modello per diapositiva col suo video pieno (la strada fra i pini, il
+Apertura: Pro Slider «la tavola», alta 16:9, un modello per diapositiva col suo video pieno (la strada fra i pini, il
 gravel dal drone, la saldatura, l'officina) e un velo scuro solo dal lato del testo. A destra la tavola del disegno
 tecnico: i tubi del telaio si disegnano uno dopo l'altro (la maschera della timeline), le ruote girano, e le quote del
 modello (orizzontale, sterzo, carro, verticale) cambiano a ogni diapositiva. Le diapositive si spingono verso destra

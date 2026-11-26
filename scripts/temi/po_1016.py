@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Traduzioni della 1.4.1016 (15 nov 2026): Slider Pro, movimento con lo scorrimento → larghezza e peso del carattere.
+"""Traduzioni della 1.4.1016 (15 nov 2026): Pro Slider, movimento con lo scorrimento → larghezza e peso del carattere.
 Aggiunge le voci che mancano ai .po di de_DE, en_GB, en_US, es_ES, fr_FR e ricompila i .mo. Si può rilanciare.
 uso: python po_1016.py
 """

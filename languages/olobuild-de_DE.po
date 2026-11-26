@@ -48826,8 +48826,8 @@ msgid "Le colonne si allargano al passaggio"
 msgstr "Spalten werden beim Überfahren breiter"
 
 #: src/config/elements/row.js
-msgid "Da 1200 px le colonne si dividono lo spazio in parti uguali e quella sotto il puntatore se ne prende di più. Per le aperture divise in due metà, ognuna col suo Slider Pro (con «Impila su tablet» sotto i 1200 px stanno una sotto l’altra)."
-msgstr "Ab 1200 px teilen sich die Spalten den Platz gleichmäßig, und die unter dem Mauszeiger nimmt sich mehr davon. Für zweigeteilte Eröffnungen, jede mit ihrem eigenen Slider Pro (mit „Auf Tablet stapeln“ stehen sie unter 1200 px untereinander)."
+msgid "Da 1200 px le colonne si dividono lo spazio in parti uguali e quella sotto il puntatore se ne prende di più. Per le aperture divise in due metà, ognuna col suo Pro Slider (con «Impila su tablet» sotto i 1200 px stanno una sotto l’altra)."
+msgstr "Ab 1200 px teilen sich die Spalten den Platz gleichmäßig, und die unter dem Mauszeiger nimmt sich mehr davon. Für zweigeteilte Eröffnungen, jede mit ihrem eigenen Pro Slider (mit „Auf Tablet stapeln“ stehen sie unter 1200 px untereinander)."
 
 #: includes/class-theme-importer.php
 msgid "Dentro e fuori"
@@ -54276,8 +54276,8 @@ msgid "Importa le slide"
 msgstr "Folien importieren"
 
 #: OLObuild 1.4.1161
-msgid "Editor dello Slider Pro"
-msgstr "Slider-Pro-Editor"
+msgid "Editor del Pro Slider"
+msgstr "Pro-Slider-Editor"
 
 #: OLObuild 1.4.1161
 msgid "Livelli globali"
@@ -57343,8 +57343,8 @@ msgstr "diese Ebene"
 msgid "Scene dei temi"
 msgstr "Szenen aus den Themes"
 
-msgid "Parti da uno Slider Pro dei temi: poi cambi testi, foto e link."
-msgstr "Starte mit einem Slider Pro aus den Themes: dann änderst du Texte, Fotos und Links."
+msgid "Parti da un Pro Slider dei temi: poi cambi testi, foto e link."
+msgstr "Starte mit einem Pro Slider aus den Themes: dann änderst du Texte, Fotos und Links."
 
 msgid "Cerca un tema o una parola"
 msgstr "Ein Theme oder ein Wort suchen"
@@ -58239,6 +58239,296 @@ msgstr "Drehpunkt horizontal"
 
 msgid "Perno in verticale"
 msgstr "Drehpunkt vertikal"
+
+#: slider-1.4.1472
+msgid "Altezza personalizzata"
+msgstr "Eigene Höhe"
+
+msgid "Fotogramma chiave"
+msgstr "Schlüsselbild"
+
+msgid "Allunga la slide"
+msgstr "Slide verlängern"
+
+msgid "senza fine"
+msgstr "endlos"
+
+msgid "volte"
+msgstr "Mal"
+
+msgid "La linea del tempo dura %1 s, la slide %2 s: la slide cambierebbe prima che i livelli abbiano finito. Il pulsante porta la slide a %1 s."
+msgstr "Die Zeitleiste dauert %1 s, die Slide %2 s: Die Slide würde wechseln, bevor die Ebenen fertig sind. Der Knopf bringt die Slide auf %1 s."
+
+msgid "La linea del tempo di questo livello si perde."
+msgstr "Die Zeitleiste dieser Ebene geht verloren."
+
+msgid "Torna a Semplice"
+msgstr "Zurück zu Einfach"
+
+msgid "Andamento di entrata e uscita"
+msgstr "Verlauf von Eingang und Ausgang"
+
+msgid "Come il livello si muove mentre entra e mentre esce: costante, morbido, che frena alla fine, che rimbalza… Lo stesso andamento vale per tutte e due."
+msgstr "Wie sich die Ebene beim Eingang und beim Ausgang bewegt: gleichmäßig, weich, am Ende bremsend, federnd … Derselbe Verlauf gilt für beide."
+
+msgid "Usa la linea del tempo sotto la tela per aggiungere e spostare i fotogrammi chiave. Clicca un fotogramma: la tela va a quel momento, e trascinando il livello lo sposti in quel fotogramma."
+msgstr "Mit der Zeitleiste unter der Leinwand fügst du Schlüsselbilder hinzu und verschiebst sie. Klick auf ein Schlüsselbild: Die Leinwand springt zu diesem Moment, und wenn du die Ebene ziehst, verschiebst du sie in diesem Schlüsselbild."
+
+msgid "Come il livello esce quando la slide cambia (o alla fine della linea del tempo, con «Aspetta la fine» spento). Parte dal punto in cui la linea del tempo è arrivata. Finché non la cambi è una dissolvenza rapida."
+msgstr "Wie die Ebene ausgeht, wenn die Slide wechselt (oder am Ende der Zeitleiste, wenn „Auf das Ende warten“ aus ist). Sie beginnt dort, wo die Zeitleiste angekommen ist. Solange du sie nicht änderst, ist es ein schnelles Ausblenden."
+
+msgid "Durata dell’uscita"
+msgstr "Dauer des Ausgangs"
+
+msgid "Ritardo dell’uscita"
+msgstr "Verzögerung des Ausgangs"
+
+msgid "Andamento dell’uscita"
+msgstr "Verlauf des Ausgangs"
+
+msgid "Cosa non vale con la linea del tempo"
+msgstr "Was mit der Zeitleiste nicht gilt"
+
+msgid "L’entrata, l’animazione del testo, il movimento continuo e la maschera qui non agiscono: li fanno i fotogrammi chiave (posizione, opacità, scala, rotazione, maschera, sfocatura). Restano salvati e valgono di nuovo tornando a «Semplice»."
+msgstr "Eingang, Textanimation, Dauerbewegung und Maske wirken hier nicht: Das übernehmen die Schlüsselbilder (Position, Deckkraft, Skalierung, Drehung, Maske, Unschärfe). Sie bleiben gespeichert und gelten wieder, wenn du zu „Einfach“ zurückkehrst."
+
+msgid "Con la linea del tempo cambiano colori, bordo, raggio, cursore, scala, rotazione e spostamento. Inclinazioni, rotazioni 3D, opacità e filtri li comanda la linea del tempo, e qui non ci sono."
+msgstr "Mit der Zeitleiste ändern sich Farben, Rahmen, Radius, Cursor, Skalierung, Drehung und Verschiebung. Neigungen, 3D-Drehungen, Deckkraft und Filter steuert die Zeitleiste, deshalb fehlen sie hier."
+
+msgid "Profondità con la parallasse dello slider"
+msgstr "Tiefe mit der Parallaxe des Sliders"
+
+msgid "Con la Parallasse dello slider accesa (Stile della tile) il livello si muove col tipo e l’intensità dello slider, di più quanto più è profondo. 0 = fermo. Con «Parallasse attiva» qui sopra vale invece la parallasse propria del livello."
+msgstr "Ist die Parallaxe des Sliders an (Stil der Tile), bewegt sich die Ebene mit Art und Stärke des Sliders, umso mehr, je tiefer sie liegt. 0 = still. Mit „Parallaxe aktiv“ oben gilt dagegen die eigene Parallaxe der Ebene."
+
+msgid "Non agisce: la Parallasse dello slider è spenta (Stile della tile, «Parallasse»). Accendila, o usa «Parallasse attiva» qui sopra, che agisce da sola."
+msgstr "Wirkt nicht: Die Parallaxe des Sliders ist aus (Stil der Tile, „Parallaxe“). Schalte sie ein oder nutze „Parallaxe aktiv“ oben, die allein wirkt."
+
+msgid "Parte piano"
+msgstr "Langsamer Start"
+
+msgid "Parte piano (appena)"
+msgstr "Langsamer Start (kaum)"
+
+msgid "Parte piano (poco)"
+msgstr "Langsamer Start (leicht)"
+
+msgid "Parte piano (medio)"
+msgstr "Langsamer Start (mittel)"
+
+msgid "Parte piano (molto)"
+msgstr "Langsamer Start (stark)"
+
+msgid "Parte piano (deciso)"
+msgstr "Langsamer Start (deutlich)"
+
+msgid "Parte piano (moltissimo)"
+msgstr "Langsamer Start (sehr stark)"
+
+msgid "Parte piano (al massimo)"
+msgstr "Langsamer Start (maximal)"
+
+msgid "Frena alla fine"
+msgstr "Bremst am Ende"
+
+msgid "Frena alla fine (appena)"
+msgstr "Bremst am Ende (kaum)"
+
+msgid "Frena alla fine (poco)"
+msgstr "Bremst am Ende (leicht)"
+
+msgid "Frena alla fine (medio)"
+msgstr "Bremst am Ende (mittel)"
+
+msgid "Frena alla fine (molto)"
+msgstr "Bremst am Ende (stark)"
+
+msgid "Frena alla fine (deciso)"
+msgstr "Bremst am Ende (deutlich)"
+
+msgid "Frena alla fine (moltissimo)"
+msgstr "Bremst am Ende (sehr stark)"
+
+msgid "Frena alla fine (al massimo)"
+msgstr "Bremst am Ende (maximal)"
+
+msgid "Parte piano e frena"
+msgstr "Langsamer Start und Bremsen"
+
+msgid "Parte piano e frena (appena)"
+msgstr "Langsamer Start und Bremsen (kaum)"
+
+msgid "Parte piano e frena (poco)"
+msgstr "Langsamer Start und Bremsen (leicht)"
+
+msgid "Parte piano e frena (medio)"
+msgstr "Langsamer Start und Bremsen (mittel)"
+
+msgid "Parte piano e frena (molto)"
+msgstr "Langsamer Start und Bremsen (stark)"
+
+msgid "Parte piano e frena (deciso)"
+msgstr "Langsamer Start und Bremsen (deutlich)"
+
+msgid "Parte piano e frena (moltissimo)"
+msgstr "Langsamer Start und Bremsen (sehr stark)"
+
+msgid "Parte piano e frena (al massimo)"
+msgstr "Langsamer Start und Bremsen (maximal)"
+
+msgid "Rincorsa, elastico e rimbalzo"
+msgstr "Anlauf, Feder und Abprallen"
+
+msgid "Prende la rincorsa"
+msgstr "Holt Anlauf"
+
+msgid "Va oltre e torna"
+msgstr "Schießt über und kehrt zurück"
+
+msgid "Rincorsa e ritorno"
+msgstr "Anlauf und Rückkehr"
+
+#: slider-1.4.1473
+msgid "Il livello corre lungo un tracciato partendo da dove è posato. Sulla tela il tracciato si vede tratteggiato quando il livello è scelto: disegnalo coi clic, poi trascina i punti per correggerlo."
+msgstr "Die Ebene läuft einen Pfad entlang, ausgehend von ihrer Position. Auf der Leinwand ist der Pfad gestrichelt zu sehen, wenn die Ebene gewählt ist: Zeichne ihn mit Klicks und ziehe danach die Punkte, um ihn zu korrigieren."
+
+msgid "Disegna sulla tela"
+msgstr "Auf der Leinwand zeichnen"
+
+msgid "Prova il percorso"
+msgstr "Pfad testen"
+
+msgid "Forma del percorso"
+msgstr "Form des Pfads"
+
+msgid "Linee dritte"
+msgstr "Gerade Linien"
+
+msgid "Tracciato SVG"
+msgstr "SVG-Pfad"
+
+msgid "Il tracciato scritto come l’attributo «d» di un percorso SVG, in pixel della tela del Computer (per esempio M0,0 C50,0 50,100 100,100). Più semplice disegnarlo sulla tela."
+msgstr "Der Pfad als „d“-Attribut eines SVG-Pfads, in Pixeln der Computer-Leinwand (zum Beispiel M0,0 C50,0 50,100 100,100). Einfacher ist es, ihn auf der Leinwand zu zeichnen."
+
+msgid "Dimensione del percorso"
+msgstr "Größe des Pfads"
+
+msgid "Ingrandisce o rimpicciolisce il tracciato: 100% è com’è disegnato, 200% il doppio."
+msgstr "Vergrößert oder verkleinert den Pfad: 100 % ist wie gezeichnet, 200 % doppelt so groß."
+
+msgid "Segue la larghezza dello slider"
+msgstr "Folgt der Breite des Sliders"
+
+msgid "Il tracciato si allarga e si stringe con lo slider: sul telefono resta in proporzione a come lo vedi sul Computer. Spento, ha sempre gli stessi pixel della tela e sugli schermi stretti sembra più grande."
+msgstr "Der Pfad wird mit dem Slider breiter und schmaler: Auf dem Telefon bleibt er im Verhältnis so, wie du ihn auf dem Computer siehst. Ausgeschaltet hat er immer dieselben Pixel der Leinwand und wirkt auf schmalen Bildschirmen größer."
+
+msgid "Quanto aspetta il percorso prima di partire, dopo l’ingresso del livello."
+msgstr "Wie lange der Pfad nach dem Eingang der Ebene wartet, bevor er startet."
+
+msgid "Ritardo del percorso"
+msgstr "Verzögerung des Pfads"
+
+msgid "Disegnato sulla tela"
+msgstr "Auf der Leinwand gezeichnet"
+
+msgid "Tracciato SVG scritto a mano"
+msgstr "Von Hand geschriebener SVG-Pfad"
+
+msgid "Disegno del percorso"
+msgstr "Pfad zeichnen"
+
+msgid "1 punto"
+msgstr "1 Punkt"
+
+msgid "%d punti"
+msgstr "%d Punkte"
+
+msgid "Clicca sulla tela per aggiungere i punti: il primo è il livello. Doppio clic o Invio per finire, Esc per annullare. Dopo puoi trascinare i punti per correggere il percorso."
+msgstr "Klicke auf die Leinwand, um Punkte hinzuzufügen: Der erste ist die Ebene. Doppelklick oder Enter beendet, Esc bricht ab. Danach kannst du die Punkte ziehen, um den Pfad zu korrigieren."
+
+#: slider-1.4.1474
+msgid "Numero della slide"
+msgstr "Nummer der Slide"
+
+msgid "Nessun altro livello nello slider"
+msgstr "Keine weitere Ebene im Slider"
+
+msgid "Questa slide (%d)"
+msgstr "Diese Slide (%d)"
+
+msgid "Slide %d"
+msgstr "Slide %d"
+
+msgid "— Scegli un livello —"
+msgstr "— Ebene wählen —"
+
+msgid "Livello che non c’è più"
+msgstr "Ebene, die es nicht mehr gibt"
+
+msgid "Prova sulla pagina"
+msgstr "Auf der Seite testen"
+
+msgid "modifiche non ancora salvate"
+msgstr "Änderungen noch nicht gespeichert"
+
+msgid "Lo slider nel canvas è quello vero, con le modifiche fatte nell’editor: entrate, lettere, transizioni, percorsi, mouse e clic funzionano come sul sito. La pagina non è salvata: «Torna all’editor» per continuare, «Salva e chiudi» per tenerle, «Annulla» dell’editor rimette lo slider com’era."
+msgstr "Der Slider im Canvas ist der echte, mit den Änderungen aus dem Editor: Eingänge, Buchstaben, Übergänge, Pfade, Maus und Klicks funktionieren wie auf der Website. Die Seite ist nicht gespeichert: „Zurück zum Editor“, um weiterzumachen, „Speichern und schließen“, um sie zu behalten; „Abbrechen“ im Editor stellt den Slider wieder her, wie er war."
+
+msgid "Torna all’editor"
+msgstr "Zurück zum Editor"
+
+msgid "Guarda lo slider vero nel canvas del builder, con le modifiche di adesso, senza salvare"
+msgstr "Den echten Slider im Canvas des Builders mit den aktuellen Änderungen ansehen, ohne zu speichern"
+
+msgid "Importa 1 slide"
+msgstr "1 Slide importieren"
+
+msgid "Importa %d slide"
+msgstr "%d Slides importieren"
+
+msgid "Sostituisci tutte"
+msgstr "Alle ersetzen"
+
+msgid "Eliminare la slide %d?"
+msgstr "Slide %d löschen?"
+
+msgid "Questo livello parte nascosto: lo mostra un altro livello con l’azione «Mostra o nasconde un livello»."
+msgstr "Diese Ebene startet versteckt: Eine andere Ebene mit der Aktion „Blendet eine Ebene ein oder aus“ zeigt sie."
+
+#: slider-1.4.1475
+msgid "A capo (Invio)"
+msgstr "Zeilenumbruch (Enter)"
+
+msgid "Allinea in orizzontale"
+msgstr "Horizontal ausrichten"
+
+msgid "Allinea al centro in orizzontale"
+msgstr "Horizontal zentrieren"
+
+msgid "Allinea a destra"
+msgstr "Rechts ausrichten"
+
+msgid "Allinea in verticale"
+msgstr "Vertikal ausrichten"
+
+msgid "Allinea al centro in verticale"
+msgstr "Vertikal zentrieren"
+
+msgid "Allinea in basso"
+msgstr "Unten ausrichten"
+
+msgid "Testo intestazione"
+msgstr "Überschrift"
+
+msgid "Nessuna slide ancora: aggiungile con «Apri editor slider»."
+msgstr "Noch keine Slides: Füge sie mit „Slider-Editor öffnen“ hinzu."
+
+msgid "Immagine della slide"
+msgstr "Bild der Slide"
+
+#: slider-1.4.1477
+msgid "Come il livello va da questo fotogramma chiave al successivo: costante, morbido, che frena alla fine… Nell’ultimo fotogramma non conta."
+msgstr "Wie sich die Ebene von diesem Schlüsselbild zum nächsten bewegt: gleichmäßig, weich, am Ende bremsend … Beim letzten Schlüsselbild zählt es nicht."
 
 #: 1.4.1478
 msgid "Affina la ricerca"

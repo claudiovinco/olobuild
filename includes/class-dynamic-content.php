@@ -717,7 +717,7 @@ class Olobuild_Dynamic_Content {
 
     /**
      * Il valore grezzo di un segnaposto per il contenuto corrente, o null se il nome non è riconosciuto: per chi lo
-     * scrive in un indirizzo, in un attributo o in un testo da escapare da sé (le slide dagli articoli dello Slider Pro).
+     * scrive in un indirizzo, in un attributo o in un testo da escapare da sé (le slide dagli articoli del Pro Slider).
      *
      * @param string $token Nome del segnaposto.
      * @param string $arg   Argomento dopo i due punti ('' se assente).
@@ -985,7 +985,7 @@ class Olobuild_Dynamic_Content {
             ];
         }
 
-        // Solo i contenuti con la foto in evidenza (1.4.1458): le slide dagli articoli dello Slider Pro senza foto
+        // Solo i contenuti con la foto in evidenza (1.4.1458): le slide dagli articoli del Pro Slider senza foto
         // restavano col colore della slide modello.
         if ( ! empty( $query_config['solo_con_foto'] ) ) {
             $args['meta_query'] = [ [ 'key' => '_thumbnail_id', 'compare' => 'EXISTS' ] ]; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- volume limitato (posts_per_page)

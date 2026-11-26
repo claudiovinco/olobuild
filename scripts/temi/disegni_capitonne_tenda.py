@@ -7,7 +7,7 @@ d'oro dritta con una nappa piccola. Ora:
 
 - capitonne-tenda-velluto.webp (2560 × 1440, con trasparenza): il telo intero, a pieghe irregolari che si allargano
   verso il fondo e ondeggiano appena, col lucido del velluto sui fianchi delle pieghe, le pieghe strette sotto il bastone,
-  l'orlo ondulato col gallone d'oro e il gallone sul bordo libero. Le 14 pieghe dello Slider Pro se lo dividono
+  l'orlo ondulato col gallone d'oro e il gallone sul bordo libero. Le 14 pieghe del Pro Slider se lo dividono
   (background-position): chiusa è un telo solo, raccolta si stringe piega per piega.
 - capitonne-tenda-legata.webp (computer) e capitonne-tenda-legata-tel.webp (telefono): la tenda raccolta e legata, a
   clessidra: sopra il cordone il velluto si gonfia e ricade, sotto si allarga fino a terra; le pieghe seguono il profilo.

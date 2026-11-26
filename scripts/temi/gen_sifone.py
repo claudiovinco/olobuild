@@ -5,7 +5,7 @@ e pompe di calore, il pronto intervento.
 La trovata: «la perdita». Nell'apertura un tubo di rame attraversa lo schermo: dal raccordo cadono le gocce e sotto si
 allarga una pozza, il manometro trema nel rosso. Si clicca il raccordo che perde (o Invio): arriva la chiave inglese e lo
 stringe, la perdita si ferma, l'acqua corre nel tubo fino al rubinetto, l'ago sale al verde e il video del rubinetto che gocciola
-diventa acqua che scorre. Gli stati dello Slider Pro (perdita = riparata).
+diventa acqua che scorre. Gli stati del Pro Slider (perdita = riparata).
 
 Tema chiaro: bianco smalto, il rame dei tubi, il blu dell'acqua, il rosso della valvola. Titoli in Bricolage Grotesque,
 testo in Karla, dati in IBM Plex Mono. Cursore: gocciolio.

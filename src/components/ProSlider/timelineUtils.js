@@ -117,7 +117,11 @@ export function easingToCSS(easingName) {
   return 'ease';
 }
 
-/** Lista easing raggruppata per la UI */
+/**
+ * Lista easing raggruppata per la UI. 1.4.1472: nomi in italiano che dicono cosa fa il livello (prima «Power1 In»,
+ * «Expo Out», «Back InOut»…, gruppi «Power, Sine, Expo, Circ, Back»); i valori salvati restano quelli di sempre.
+ * L'intensità va da «appena» (sine) a «al massimo» (expo), passando per power1–4 e circ.
+ */
 export const EASING_GROUPS = [
   { label: t('Semplici'), options: [
     { value: 'linear', label: t('Costante') },
@@ -126,43 +130,39 @@ export const EASING_GROUPS = [
     { value: 'ease-out', label: t('Rallenta') },
     { value: 'ease-in-out', label: t('Accelera e rallenta') },
   ]},
-  { label: 'Power', options: [
-    { value: 'power1.in', label: 'Power1 In' },
-    { value: 'power1.out', label: 'Power1 Out' },
-    { value: 'power1.inOut', label: 'Power1 InOut' },
-    { value: 'power2.in', label: 'Power2 In' },
-    { value: 'power2.out', label: 'Power2 Out' },
-    { value: 'power2.inOut', label: 'Power2 InOut' },
-    { value: 'power3.in', label: 'Power3 In' },
-    { value: 'power3.out', label: 'Power3 Out' },
-    { value: 'power3.inOut', label: 'Power3 InOut' },
-    { value: 'power4.in', label: 'Power4 In' },
-    { value: 'power4.out', label: 'Power4 Out' },
-    { value: 'power4.inOut', label: 'Power4 InOut' },
+  { label: t('Parte piano'), options: [
+    { value: 'sine.in', label: t('Parte piano (appena)') },
+    { value: 'power1.in', label: t('Parte piano (poco)') },
+    { value: 'power2.in', label: t('Parte piano (medio)') },
+    { value: 'power3.in', label: t('Parte piano (molto)') },
+    { value: 'circ.in', label: t('Parte piano (deciso)') },
+    { value: 'power4.in', label: t('Parte piano (moltissimo)') },
+    { value: 'expo.in', label: t('Parte piano (al massimo)') },
   ]},
-  { label: 'Sine', options: [
-    { value: 'sine.in', label: 'Sine In' },
-    { value: 'sine.out', label: 'Sine Out' },
-    { value: 'sine.inOut', label: 'Sine InOut' },
+  { label: t('Frena alla fine'), options: [
+    { value: 'sine.out', label: t('Frena alla fine (appena)') },
+    { value: 'power1.out', label: t('Frena alla fine (poco)') },
+    { value: 'power2.out', label: t('Frena alla fine (medio)') },
+    { value: 'power3.out', label: t('Frena alla fine (molto)') },
+    { value: 'circ.out', label: t('Frena alla fine (deciso)') },
+    { value: 'power4.out', label: t('Frena alla fine (moltissimo)') },
+    { value: 'expo.out', label: t('Frena alla fine (al massimo)') },
   ]},
-  { label: 'Expo', options: [
-    { value: 'expo.in', label: 'Expo In' },
-    { value: 'expo.out', label: 'Expo Out' },
-    { value: 'expo.inOut', label: 'Expo InOut' },
+  { label: t('Parte piano e frena'), options: [
+    { value: 'sine.inOut', label: t('Parte piano e frena (appena)') },
+    { value: 'power1.inOut', label: t('Parte piano e frena (poco)') },
+    { value: 'power2.inOut', label: t('Parte piano e frena (medio)') },
+    { value: 'power3.inOut', label: t('Parte piano e frena (molto)') },
+    { value: 'circ.inOut', label: t('Parte piano e frena (deciso)') },
+    { value: 'power4.inOut', label: t('Parte piano e frena (moltissimo)') },
+    { value: 'expo.inOut', label: t('Parte piano e frena (al massimo)') },
   ]},
-  { label: 'Circ', options: [
-    { value: 'circ.in', label: 'Circ In' },
-    { value: 'circ.out', label: 'Circ Out' },
-    { value: 'circ.inOut', label: 'Circ InOut' },
-  ]},
-  { label: 'Back', options: [
-    { value: 'back.in', label: 'Back In' },
-    { value: 'back.out', label: 'Back Out' },
-    { value: 'back.inOut', label: 'Back InOut' },
-  ]},
-  { label: 'Speciali', options: [
-    { value: 'elastic.out', label: 'Elastic Out' },
-    { value: 'bounce.out', label: 'Bounce Out' },
+  { label: t('Rincorsa, elastico e rimbalzo'), options: [
+    { value: 'back.in', label: t('Prende la rincorsa') },
+    { value: 'back.out', label: t('Va oltre e torna') },
+    { value: 'back.inOut', label: t('Rincorsa e ritorno') },
+    { value: 'elastic.out', label: t('Elastico') },
+    { value: 'bounce.out', label: t('Rimbalzo') },
   ]},
 ];
 
@@ -306,8 +306,10 @@ export function interpolateAtTime(timeline, timeMs) {
     return { ...before.props };
   }
 
-  // Applica easing (l'easing del keyframe "after" controlla la curva verso di esso)
-  const easedProgress = applyEasing(progress, after.easing || 'ease');
+  // L'andamento del tratto è quello del fotogramma da cui parte (1.4.1477), come sul sito: nelle @keyframes del PHP
+  // animation-timing-function sta nel fotogramma di partenza e vale fino al successivo. Prima la tela usava quello
+  // d'arrivo e l'anteprima si muoveva diversa dal sito.
+  const easedProgress = applyEasing(progress, before.easing || 'ease');
 
   // Interpola linearmente ogni proprietà
   const interpolated = {};

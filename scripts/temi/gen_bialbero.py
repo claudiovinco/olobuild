@@ -5,7 +5,7 @@ meccanica, verniciatura e interni sotto lo stesso tetto; qualche auto restaurata
 Tema scuro, nero d’officina col rosso corsa, il cromo e il cuoio chiaro dei sedili. Titoli in Archivo, testo in Sofia
 Sans, le pratiche in Courier Prime, come scritte a macchina.
 
-Apertura: Slider Pro «il libretto». Ogni diapositiva è una pratica dell’officina: il video o la foto dell’auto, il
+Apertura: Pro Slider «il libretto». Ogni diapositiva è una pratica dell’officina: il video o la foto dell’auto, il
 numero di pratica, il nome dell’auto, i dati di telaio e le ore di lavoro che si battono a macchina lettera per lettera,
 e alla fine il timbro rosso che cade di traverso sulla pratica (RESTAURATA, IN OFFICINA…). In un angolo, fisso, il
 contagiri: la lancetta sale, scende e riparte, come un motore che si scalda.

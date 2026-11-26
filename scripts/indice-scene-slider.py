@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""L'elenco delle scene dello Slider Pro (1.4.1422): ogni Slider Pro di ogni tema diventa una scena da cui partire
+"""L'elenco delle scene del Pro Slider (1.4.1422): ogni Pro Slider di ogni tema diventa una scena da cui partire
 nell'editor (pulsante «Scene dei temi»). Utente, 24 nov 2026: «riprogettare la tile pro slider in modo che permetta di
 costruire tutti i pro slider che hai inserito in tutti i temi… anche l'utente poco addestrato deve capire». Fase 1:
 si parte da una scena vera e si cambiano testi e foto.
@@ -8,7 +8,7 @@ Scrive assets/data/scene-slider.json: solo i dati per le card (tipo, numero di s
 si legge dalla pagina del tema quando la scena si usa (Olobuild_Scene_Slider): nello zip della Free le pagine dei temi
 del Pro non ci sono, l'elenco sì (col lucchetto).
 
-Da rifare dopo aver aggiunto un tema o cambiato un suo Slider Pro:   python scripts/indice-scene-slider.py
+Da rifare dopo aver aggiunto un tema o cambiato un suo Pro Slider:   python scripts/indice-scene-slider.py
 """
 import glob
 import html

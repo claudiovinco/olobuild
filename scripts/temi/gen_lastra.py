@@ -2,7 +2,7 @@
 """Genera il tema «Lastra» (id lastra): un marchio di Torino di giacche tecniche e piumini che si fa guardare dentro.
 
 La trovata: «lo scanner dell'aeroporto». In apertura la giacca passa sotto lo scanner: scorrendo una riga di luce scende
-sullo schermo e tutto quello che ha già passato diventa una lastra ai raggi X (un livello dello Slider Pro che rovescia
+sullo schermo e tutto quello che ha già passato diventa una lastra ai raggi X (un livello del Pro Slider che rovescia
 e scolora quello che ha dietro e si allunga dall'alto), e sulla lastra compaiono le scritte di quello che c'è dentro.
 Più giù i punti da toccare sulla giacca (Hotspot) e la foto con la sua lastra da trascinare (Image Compare).
 

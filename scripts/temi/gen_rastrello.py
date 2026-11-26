@@ -6,7 +6,7 @@ La trovata: «l'erba cresce». Lo slider resta fermo mentre si scorre: sul video
 l'erba si alza un ciuffo dopo l'altro, sempre più alta («L'erba cresce»); poi entra il tosaerba da sinistra e la taglia
 fetta per fetta, coi fili che volano, e sotto resta il prato rasato a righe («Poi passiamo noi»). Dal 15 nov 2026 il
 tosaerba è a cilindro, col manico dietro (si spinge), e ruota, rullo e lame girano solo mentre avanza, quanto la strada
-fatta; l'erba alta ondeggia nel vento (animazione «Vento» dello Slider Pro).
+fatta; l'erba alta ondeggia nel vento (animazione «Vento» del Pro Slider).
 
 Tema chiaro: carta, verde bosso, l'oliva, la terracotta dei vasi di limoni. Titoli in Cormorant, testo in Figtree, dati
 in Geist Mono. Cursore: irrigatore.

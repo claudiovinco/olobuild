@@ -404,7 +404,7 @@ class Olobuild_Rest_Api {
             'callback'            => [ $this, 'import_theme' ],
             'permission_callback' => [ $this, 'check_permission_licenza' ],
         ] );
-        // Le scene dello Slider Pro (1.4.1422): l'elenco per l'editor e, con la chiave come per i temi, una scena
+        // Le scene del Pro Slider (1.4.1422): l'elenco per l'editor e, con la chiave come per i temi, una scena
         // pronta per questo sito (foto copiate nella Libreria media).
         register_rest_route( $this->namespace, '/scene-slider', [
             'methods'             => 'GET',
@@ -416,7 +416,7 @@ class Olobuild_Rest_Api {
             'callback'            => [ 'Olobuild_Scene_Slider', 'rest_usa' ],
             'permission_callback' => [ $this, 'check_permission_licenza' ],
         ] );
-        // «Colori del disegno» dello Slider Pro (1.4.1433): il disegno SVG pulito e i suoi colori
+        // «Colori del disegno» del Pro Slider (1.4.1433): il disegno SVG pulito e i suoi colori
         register_rest_route( $this->namespace, '/disegno', [
             'methods'             => 'GET',
             'callback'            => [ 'Olobuild_Disegni', 'rest' ],
@@ -1709,7 +1709,7 @@ class Olobuild_Rest_Api {
                 return rest_ensure_response( [ 'value' => null, 'post_id' => 0 ] );
             }
             if ( ! empty( $body['segnaposto'] ) ) {
-                // Slide dagli articoli dello Slider Pro (1.4.1457): i segnaposto del primo contenuto, che la tela
+                // Slide dagli articoli del Pro Slider (1.4.1457): i segnaposto del primo contenuto, che la tela
                 // dell'editor mostra al posto delle foto e dei link.
                 global $post;
                 $prima = $post;

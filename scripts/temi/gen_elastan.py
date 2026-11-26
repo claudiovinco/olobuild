@@ -5,7 +5,7 @@ allunga fino al triplo e torna com'era.
 La trovata: «tutto si allunga». In apertura il nome ELASTAN è un elastico: scorrendo si tende in larghezza fino a uscire
 dallo schermo (e si assottiglia, come la gomma tirata), poi lo si lascia andare e torna al suo posto con un rimbalzo.
 Dal 15 nov 2026 il nome si tende col disegno vero del carattere variabile (assi wdth e wght nel movimento a scorrimento
-dello Slider Pro), non più allungando la scritta: solo l'elastico sotto si allunga e si assottiglia. Il nastro di scritte si piega con la velocità
+del Pro Slider), non più allungando la scritta: solo l'elastico sotto si allunga e si assottiglia. Il nastro di scritte si piega con la velocità
 dello scorrimento e i numeri del tessuto si riempiono in cerchio (CounterCircle).
 
 Tema scuro: nero palestra, rosa acceso e acquamarina. Titoli in Anybody, testo in Manrope, dati in Martian Mono.

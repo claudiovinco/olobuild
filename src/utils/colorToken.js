@@ -75,7 +75,7 @@ export function buildSwatchColors(stylesStore) {
 }
 
 // Gli altri ruoli che la Palette emette SEMPRE (1.4.1438; Scuro, Chiaro e Accento li ricava dal primario se il sito non
-// li ha, RUOLI_DERIVATI). Rifacendo a mano Elastan: i temi li usano a migliaia negli Slider Pro (Chiaro 4.563 volte,
+// li ha, RUOLI_DERIVATI). Rifacendo a mano Elastan: i temi li usano a migliaia nei Pro Slider (Chiaro 4.563 volte,
 // Scuro 2.288, Accento 695, Sul primario 276) ma fra le pastiglie non c'erano, e per sceglierli bisognava scrivere
 // la variabile a mano. Si salvano come i ruoli: token nudi, senza riserva.
 export const ROLE_SWATCHES_ALTRI = [

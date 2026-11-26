@@ -20,7 +20,8 @@
       {{ t('Ereditato dal livello superiore') }} ({{ resolvedLabel }})
     </div>
     <div v-if="activeBp !== 'desktop' && currentHeight" class="mb-flex mb-items-center mb-gap-2">
-      <span class="mb-text-[10px] mb-text-yellow-400">{{ t('Valori propri per') }} {{ activeBp }}</span>
+      <!-- 1.4.1475: il nome dello schermo come nella barra (prima la chiave interna: «mobile») -->
+      <span class="mb-text-[10px] mb-text-yellow-400">{{ t('Valori propri per') }} {{ (breakpointList.find((b) => b.key === activeBp) || {}).label || activeBp }}</span>
       <button @click="clearBreakpoint" class="mb-text-[10px] mb-text-yellow-500 hover:mb-text-yellow-300">&times; {{ t('Azzera') }}</button>
     </div>
 

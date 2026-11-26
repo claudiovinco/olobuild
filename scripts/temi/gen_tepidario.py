@@ -5,7 +5,7 @@ delle sale calde, il gommage col guanto di kessa, i massaggi, il tè alla menta 
 Tema scuro e caldo: pietra bruna, rame, verde delle maioliche e oro delle candele. Titoli in Marcellus, testo in Jost,
 dati in Spline Sans Mono.
 
-Apertura: Slider Pro «la cupola», alta 16:9, una sala del percorso per diapositiva col suo video pieno (il vapore e i
+Apertura: Pro Slider «la cupola», alta 16:9, una sala del percorso per diapositiva col suo video pieno (il vapore e i
 secchi di legno, l'acqua sulla pietra, il massaggio, il tè versato) e un velo scuro solo dal lato del testo. A destra la
 cupola vista dal basso: i lucernari a stella brillano piano, tre raggi di luce scendono nel vapore e al centro c'è la
 temperatura della sala. Le sale si danno il cambio sfumando (fade). Cursore: la cometa.

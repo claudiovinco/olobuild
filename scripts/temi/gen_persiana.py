@@ -3,7 +3,7 @@
 
 La trovata (18 nov 2026, utente: «un video che si perde sullo sfondo, svelando qualcos'altro»): nell'apertura il video
 della facciata, a tutto schermo, scorrendo si allontana: rimpicciolisce, sale di lato e si perde sullo sfondo, e dietro
-c'era il salotto. «Da fuori è una facciata. Da dentro è casa.» Lo Slider Pro fermo durante lo scorrimento, col livello
+c'era il salotto. «Da fuori è una facciata. Da dentro è casa.» Il Pro Slider fermo durante lo scorrimento, col livello
 video che passa da scala 1 a 0,05.
 
 Tile poco usate messe alla prova: Hotspots (mai usata; senza foto era un riquadro di prova: aggiunta la foto), Mixer (mai

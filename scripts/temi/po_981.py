@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Traduzioni della 1.4.981–984 (10 nov 2026): la categoria «Artigiani e mestieri», le zone dei dieci temi dei mestieri,
-i comandi nuovi dello Slider Pro (stati e livello da pulire) e i dieci cursori. Aggiunge le voci che mancano ai .po di
+i comandi nuovi del Pro Slider (stati e livello da pulire) e i dieci cursori. Aggiunge le voci che mancano ai .po di
 de_DE, en_GB, en_US, es_ES, fr_FR e ricompila i .mo (msgfmt di Python). Si può rilanciare.
 uso: python po_981.py
 """
@@ -26,7 +26,7 @@ V = {
     'Puliscimi': ('Mach mich sauber', 'Clean me', 'Límpiame', 'Nettoie-moi'),
     'L’erba che cresce': ('Das Gras, das wächst', 'The grass that grows', 'La hierba que crece', 'L’herbe qui pousse'),
     'Rompilo pure': ('Schlag ruhig zu', 'Go on, break it', 'Rómpelo, adelante', 'Vas-y, casse-le'),
-    # Slider Pro: gli stati
+    # Pro Slider: gli stati
     'Imposta uno stato': ('Einen Zustand setzen', 'Set a state', 'Fijar un estado', 'Définir un état'),
     'Stato successivo (a giro)': ('Nächster Zustand (im Kreis)', 'Next state (in a loop)', 'Estado siguiente (en bucle)',
                                   'État suivant (en boucle)'),
@@ -87,7 +87,7 @@ V = {
     'Scende dall’alto': ('Kommt von oben', 'Drops from above', 'Baja desde arriba', 'Descend du haut'),
     'Si ingrandisce': ('Wird größer', 'Grows', 'Se agranda', 'S’agrandit'),
     'Subito, senza effetto': ('Sofort, ohne Effekt', 'At once, no effect', 'Enseguida, sin efecto', 'Tout de suite, sans effet'),
-    # Slider Pro: il livello da pulire
+    # Pro Slider: il livello da pulire
     'Da pulire col puntatore': ('Mit dem Zeiger zu putzen', 'Wipe clean with the pointer', 'Para limpiar con el puntero',
                                 'À nettoyer avec le pointeur'),
     'L’immagine copre quello che c’è sotto e si cancella passandoci sopra col mouse (col dito sul telefono). Pulita la parte '

@@ -4,7 +4,7 @@ un colore alla volta, e tiene apposta un millimetro di errore.
 
 La trovata: «la stampa va a registro». In apertura il nome è stampato tre volte, ciano, magenta e giallo, sfasate e
 storte come una prova di stampa sbagliata; scorrendo le tre lastre scivolano una sopra l'altra fino a combaciare e il
-nome diventa bianco e netto (tre livelli dello Slider Pro con la fusione «schermo»). Più giù una parola stampata sopra la
+nome diventa bianco e netto (tre livelli del Pro Slider con la fusione «schermo»). Più giù una parola stampata sopra la
 foto in differenza, tre nastri nei tre colori che corrono in versi opposti e la prova di stampa prima e dopo.
 
 Tema chiaro: carta, nero inchiostro, magenta e ciano. Titoli in Anton, testo in Work Sans, dati in Space Mono.

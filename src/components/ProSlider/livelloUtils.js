@@ -1,5 +1,5 @@
 /**
- * Lo Slider Pro leggibile (1.4.1352). Utente, 23 nov 2026: «il banner hero slider pro, che spesso aprendolo non si capisce
+ * Il Pro Slider leggibile (1.4.1352). Utente, 23 nov 2026: «il banner hero slider pro, che spesso aprendolo non si capisce
  * nulla… migliorare la gestione degli slider pro in modo da poter gestire bene le animazioni… attualmente sono
  * ingestibili e sembrano trucchi di magia».
  *

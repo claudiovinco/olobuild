@@ -4,7 +4,7 @@
 Blu-nero, il rosso delle torce da osservazione (non abbaglia l'occhio abituato al buio) e l'oro delle stelle. Titoli in
 Syne, testo in Inter Tight, coordinate e orari in Space Mono.
 
-Apertura: Slider Pro a tutto schermo, quattro capitoli della notte (il cielo di Castelluccio, le serate al telescopio,
+Apertura: Pro Slider a tutto schermo, quattro capitoli della notte (il cielo di Castelluccio, le serate al telescopio,
 le stelle cadenti, la Luna) con le lettere del titolo che cadono come stelle, una stella cadente che attraversa la
 diapositiva lungo un tracciato e un indice fisso in basso che porta a ogni capitolo. Poi la mappa del cielo da toccare
 (Punti sull'immagine), il paesaggio a strati notturno con la luna, il conto alla rovescia alle Geminidi, la raccolta

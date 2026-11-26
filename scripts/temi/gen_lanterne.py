@@ -4,7 +4,7 @@
 Nero di notte, l'ambra delle lanterne, il corallo delle braci e un verde salvia. Titoli nel DM Serif Display (anche in
 corsivo), testo in Figtree, orari in Martian Mono.
 
-Apertura: Slider Pro guidato dallo scorrimento (Scroll timeline): scendendo nella pagina si attraversa la notte di un
+Apertura: Pro Slider guidato dallo scorrimento (Scroll timeline): scendendo nella pagina si attraversa la notte di un
 turno, dalle 18:30 in cucina al rientro dopo mezzanotte, con l'ora enorme a contorno che cambia a ogni passo e un
 indice fisso che dice «continua a scorrere». Poi le colonne di foto e parole che scorrono in direzioni opposte
 (Scorrimento verticale), i numeri dell'inverno, le coperte raccolte, i turni della settimana (Schedule) e la richiesta

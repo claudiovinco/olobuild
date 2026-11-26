@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Dopo aver rigenerato un tema col generatore, rimette nella cartella del tema i JSON di HEAD e vi innesta SOLO le
-posizioni dei pulsanti affiancati dello Slider Pro (x e x di notebook/tablet/telefono) prese dal tema rigenerato:
+posizioni dei pulsanti affiancati del Pro Slider (x e x di notebook/tablet/telefono) prese dal tema rigenerato:
 il resto della rigenerazione (testate ritoccate a mano, kit cambiato nel frattempo) non passa.
 Con --anche id,id porta anche i valori del telefono (responsive.mobile) di quei livelli.
 uso: python innesta_pulsanti.py [--anche id,id] tema [tema …]"""

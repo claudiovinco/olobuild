@@ -1,6 +1,6 @@
 <?php
 /**
- * Le scene dello Slider Pro (1.4.1422): gli Slider Pro dei temi, da cui si parte nell'editor («Scene dei temi»).
+ * Le scene del Pro Slider (1.4.1422): i Pro Slider dei temi, da cui si parte nell'editor («Scene dei temi»).
  *
  * Utente, 24 nov 2026: «riprogettare la tile pro slider in modo che permetta di costruire tutti i pro slider che hai
  * inserito in tutti i temi… anche l'utente poco addestrato deve capire come utilizzare la pro slider in modo

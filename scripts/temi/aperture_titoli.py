@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Per ogni titolo dell'apertura Slider Pro (testi dai 30 px), in tutte le diapositive: quanto è largo su una riga sola
+"""Per ogni titolo dell'apertura Pro Slider (testi dai 30 px), in tutte le diapositive: quanto è largo su una riga sola
 rispetto alla larghezza del suo livello. Oltre 1,0 il titolo va a capo (e di solito copre la riga sotto).
 Stampa, per famiglia di livello (l'id senza il numero della diapositiva), il rapporto peggiore e la diapositiva.
 uso: python aperture_titoli.py larghezza tema [tema …]"""

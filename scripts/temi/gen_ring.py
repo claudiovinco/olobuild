@@ -6,7 +6,7 @@ Scuro come una palestra di sera, con le luci sopra il ring.
 Nero, il rosso dei guantoni, l'oro della cintura e il cuoio del sacco. Titoli in Anton, testo in Archivo, dati in Space
 Mono.
 
-Apertura: Slider Pro coi video veri (la sagoma nel ring, il sacco in controluce, la palestra rossa), tre round: il
+Apertura: Pro Slider coi video veri (la sagoma nel ring, il sacco in controluce, la palestra rossa), tre round: il
 cambio è un taglio diagonale (paperCut), il titolo arriva come un pugno (lettere che si rimpiccioliscono fino al loro
 posto), l'occhiello si scopre dietro una lama rossa e la barra in basso si riempie come il cronometro del round. Poi
 chi c'è stasera in palestra (Presence grid), i prossimi incontri (Match fixtures), i numeri (Counter), l'orario dei

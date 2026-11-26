@@ -21,7 +21,7 @@
 
       <!-- Easing -->
       <div>
-        <label class="mps-label">{{ t('Andamento') }}</label>
+        <label class="mps-label mb-flex mb-items-center mb-gap-1">{{ t('Andamento') }}<InfoTip :testo="t('Come il livello va da questo fotogramma chiave al successivo: costante, morbido, che frena alla fine… Nell’ultimo fotogramma non conta.')" :titolo="t('Andamento')" /></label>
         <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="keyframe.easing || 'ease'" :options="EASING_GROUPS" @update:model-value="upKf('easing', $event)" />
       </div>
 
@@ -47,11 +47,10 @@
         />
       </div>
 
-      <!-- Cattura da canvas -->
-      <button
-        @click="$emit('capture-from-canvas')"
-        class="mb-w-full mb-mt-2 mb-px-2 mb-py-1 mb-bg-gray-700 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-600 mb-transition-colors mb-text-center"
-      >{{ t('Prendi la posizione dalla tela') }}</button>
+      <!-- 1.4.1472: tolto «Prendi la posizione dalla tela». Copiava nel fotogramma la posizione FERMA del livello (quella
+           di «Semplice»), che con la linea del tempo non si vede né si sposta: annullava lo spostamento appena fatto.
+           Trascinare il livello sulla tela scrive già la posizione nel fotogramma scelto, e «+ Fotogramma chiave»
+           prende la posa del momento. -->
     </div>
 
     <!-- Nessun keyframe selezionato -->
@@ -65,6 +64,7 @@
 import { ANIMATABLE_PROPS, EASING_GROUPS } from './timelineUtils.js';
 import FieldSelect from '../Builder/fields/FieldSelect.vue';
 import NumberScrubber from '../Builder/fields/NumberScrubber.vue';
+import InfoTip from '../Builder/InfoTip.vue';
 import { t } from '@/i18n';
 
 const props = defineProps({
@@ -72,7 +72,7 @@ const props = defineProps({
   timeline: { type: Object, required: true },
 });
 
-const emit = defineEmits(['update-keyframe', 'capture-from-canvas']);
+const emit = defineEmits(['update-keyframe']);
 
 function upKf(field, value) {
   if (!props.keyframe) return;

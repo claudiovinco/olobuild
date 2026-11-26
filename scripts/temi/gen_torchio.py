@@ -3,7 +3,7 @@
 1961. Libri d'artista, riviste, inviti, biglietti da visita, caratteri su misura.
 
 La trovata (20 nov 2026): il sito si stampa davanti a te. Nell'apertura un foglio è steso sul torchio, sopra la macchina
-che gira; scorrendo passa il rullo nero e dove è passato compaiono le righe (livelli dello Slider Pro con la maschera
+che gira; scorrendo passa il rullo nero e dove è passato compaiono le righe (livelli del Pro Slider con la maschera
 che si apre insieme al rullo, a velocità costante), poi passa il rullo rosso e stampa il secondo colore. Poi i lavori
 sono sezioni col passaggio «Rullo» (Sezioni → Effetto sticky → «Rullo»): un rullo inchiostrato passa sulla pagina e la
 sezione dopo compare dove è passato. Cursore: il timbro.

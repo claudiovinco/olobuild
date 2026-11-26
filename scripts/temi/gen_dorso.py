@@ -3,7 +3,7 @@
 restauro di libri, taccuini su misura, corsi.
 
 La trovata (18 nov 2026, sera; utente: «hai fatto un ottimo lavoro con i siti pazzi, cerca di farne altri 5»): il sito si
-sfoglia. Nell'apertura la copertina di cuoio con la cornice d'oro si apre (rotazione 3D a scorrimento dello Slider Pro) e
+sfoglia. Nell'apertura la copertina di cuoio con la cornice d'oro si apre (rotazione 3D a scorrimento del Pro Slider) e
 scopre le pagine che si sfogliano; poi le sezioni della home sono le pagine di un libro (Sezioni → Effetto sticky →
 «Pagina»): scorrendo, quella di turno gira sul bordo e scopre la successiva. Una pagina si gira dal basso, come un
 calendario da tavolo, e l'ultima da destra a sinistra, come un libro giapponese.

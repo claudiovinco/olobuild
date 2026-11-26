@@ -5,7 +5,7 @@ fatte a mano in otto settimane sulla forma di legno di chi le porta, risuolature
 Nero di bottega, il cuoio cognac, il verde bottiglia del banco e il color pergamena del filo cerato. Titoli in Young
 Serif, testo in Work Sans, misure in Overpass Mono.
 
-Apertura: Slider Pro con le quattro tappe di una scarpa (la misura, la forma di faggio, la cucitura, la lucidatura) coi
+Apertura: Pro Slider con le quattro tappe di una scarpa (la misura, la forma di faggio, la cucitura, la lucidatura) coi
 video veri della bottega, in dissolvenza con zoom; in basso, fisso, un metro da sarto disegnato coi numeri (livello
 globale). Poi i modelli in elenco con l'anteprima che segue il cursore (Hover list), la pelle che si compone a schegge
 scorrendo (Shattered image), il restauro prima e dopo da trascinare (Before/after), il tracciamento delle scarpe in

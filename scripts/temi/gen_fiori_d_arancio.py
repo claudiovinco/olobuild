@@ -5,7 +5,7 @@ matrimoni sul lago, fra le vigne e gli ulivi. Dal primo caffè all’ultimo ball
 Tema chiaro, avorio e carta, col verde salvia profondo, l’albicocca e lo champagne. Titoli in Bodoni Moda (anche
 corsivo), testo in Tenor Sans, date in Fragment Mono.
 
-Apertura: Slider Pro come un album di inviti. Ogni diapositiva è un matrimonio vero: la foto a tutto schermo che si
+Apertura: Pro Slider come un album di inviti. Ogni diapositiva è un matrimonio vero: la foto a tutto schermo che si
 muove piano, sopra un cartoncino che entra da sinistra coi nomi degli sposi, il luogo e la data, e il sigillo di
 ceralacca con le iniziali che si posa sull’angolo. Si passa all’altro matrimonio con un taglio di carta in diagonale;
 sotto, le miniature dei quattro matrimoni; sopra tutto cadono piano petali di fiori d’arancio.

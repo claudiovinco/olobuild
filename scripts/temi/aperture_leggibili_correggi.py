@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Corregge nei dati dei temi l'apertura (Slider Pro) al telefono, dalle misure di aperture_leggibili.py:
+"""Corregge nei dati dei temi l'apertura (Pro Slider) al telefono, dalle misure di aperture_leggibili.py:
 1. testi sotto la testata: il gruppo di testi e pulsanti della metà alta della slide scende tutto insieme quanto basta
    (12 px sotto la testata), così le distanze fra occhiello, titolo e sottotitolo restano quelle;
 2. testi piccoli: paragrafi (≥ 40 caratteri) almeno 14 px reali, gli altri testi e i pulsanti almeno 11 px.

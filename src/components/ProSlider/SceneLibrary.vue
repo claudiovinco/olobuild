@@ -1,12 +1,12 @@
 <template>
-  <!-- Le scene dei temi (1.4.1422): gli Slider Pro dei temi, da cui si parte e si cambiano testi e foto.
+  <!-- Le scene dei temi (1.4.1422): i Pro Slider dei temi, da cui si parte e si cambiano testi e foto.
        Utente, 24 nov 2026: «anche l'utente poco addestrato deve capire come utilizzare la pro slider». -->
   <div class="mps-scene" role="dialog" aria-modal="true" :aria-label="t('Scene dei temi')" @keydown="tasto" @click.self="lavoro || $emit('chiudi')">
     <div class="mps-scene-box" ref="box">
       <div class="mps-scene-testa">
         <div class="mb-min-w-0">
           <h3 class="mps-scene-titolo">{{ t('Scene dei temi') }}</h3>
-          <p class="mps-scene-sotto">{{ t('Parti da uno Slider Pro dei temi: poi cambi testi, foto e link.') }}</p>
+          <p class="mps-scene-sotto">{{ t('Parti da un Pro Slider dei temi: poi cambi testi, foto e link.') }}</p>
         </div>
         <button type="button" class="mps-scene-x" @click="$emit('chiudi')" :aria-label="t('Chiudi')">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>

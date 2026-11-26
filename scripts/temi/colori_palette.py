@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-I colori degli Slider Pro dei temi presi dalla palette (24 nov 2026). Utente: «nessun CSS o cose hardcoded».
+I colori dei Pro Slider dei temi presi dalla palette (24 nov 2026). Utente: «nessun CSS o cose hardcoded».
 
 Ogni colore fisso di un livello (#hex, rgb, rgba, anche dentro color-mix) diventa un colore della palette del tema:
 - uguale (o quasi, distanza RGB < 12) a un ruolo del tema → var(--olo-color-<ruolo>);
@@ -42,7 +42,7 @@ RGB = re.compile(r'rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(?:,\s*
 CHIAVE_COLORE = re.compile(r'(colou?r|colore|^bgColor$|Color$|^from$|^to$|^segno$)', re.I)
 SALTA = {'content', 'name', 'id', 'label', 'tabLabel', 'iconName', 'imageSrc', 'videoSrc', 'shapeImage', 'poster',
          'buttonUrl', 'url', 'customCSS', 'customClass', 'customId', 'audioSrc'}
-# impostazioni comuni della tile (contenitore, sfondo della tile, tipografia): non sono lo Slider Pro
+# impostazioni comuni della tile (contenitore, sfondo della tile, tipografia): non sono il Pro Slider
 SALTA_SET = {'border', 'border_hover', 'border_effect_color2', 'bg', 'typography_preset', 'slides', 'globalLayers'}
 
 

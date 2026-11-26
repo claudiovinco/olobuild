@@ -55,6 +55,7 @@
             :defaultValue="3000"
             emitAs="number"
             unit="ms"
+            a-conferma
             :ariaLabel="t('Durata')"
             @update:modelValue="$emit('update-timeline-prop', 'duration', clampDuration($event))"
           />
@@ -93,14 +94,14 @@
             @change="$emit('update-timeline-prop', 'endWithSlide', $event.target.checked)"
             class="mb-rounded mb-w-3 mb-h-3"
           />
-          <span class="mb-text-[10px] mb-text-gray-400">{{ t('Aspetta la fine') }}</span>
+          <span class="mb-text-[10px] mb-text-gray-400 mb-whitespace-nowrap">{{ t('Aspetta la fine') }}</span>
         </label>
 
         <button
           @click="addKeyframeAtPlayhead"
-          class="mb-ml-auto mb-px-2 mb-py-0.5 mb-bg-gray-700 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-600 mb-transition-colors"
+          class="mb-ml-auto mb-px-2 mb-py-0.5 mb-bg-gray-700 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-600 mb-transition-colors mb-whitespace-nowrap mb-shrink-0"
           :title="t('Aggiungi un fotogramma chiave a questo punto')"
-        >+ Keyframe</button>
+        >+ {{ t('Fotogramma chiave') }}</button>
       </template>
       <span v-else class="mb-text-[10px] mb-text-gray-500 mb-italic">{{ t('Seleziona un livello con la linea del tempo') }}</span>
 
@@ -124,7 +125,8 @@
           @click="timelineZoom = 1"
           class="mb-w-5 mb-h-5 mb-flex mb-items-center mb-justify-center mb-bg-gray-700 mb-rounded mb-text-[10px] mb-text-gray-400 hover:mb-bg-gray-600 mb-transition-colors"
           :title="t('Zoom al 100%')"
-        >⟲</button>
+          :aria-label="t('Zoom al 100%')"
+        ><span class="mps-tl-ico" aria-hidden="true" v-html="ICO_ZOOM"></span></button>
       </div>
 
       <!-- Separator + Slide duration controls (always visible) -->
@@ -144,12 +146,14 @@
             @update:modelValue="onSlideDurationChange($event)"
           />
         </label>
-        <button
-          v-if="maxDuration > effectiveSlideDuration"
-          @click="emit('update-slide-duration', maxDuration)"
-          class="mb-px-1.5 mb-py-0.5 mb-bg-yellow-600/30 mb-border mb-border-yellow-600/50 mb-rounded mb-text-[10px] mb-text-yellow-300 hover:mb-bg-yellow-600/50 mb-transition-colors"
-          :title="t('La linea del tempo (') + (maxDuration/1000).toFixed(1) + t('s) è più lunga della slide (') + (effectiveSlideDuration/1000).toFixed(1) + t('s). Clicca per sincronizzare.')"
-        >⚠ Sync</button>
+        <!-- 1.4.1472: «Allunga la slide» con la (i) (era «⚠ Sync», con la spiegazione spezzata nel title) -->
+        <span v-if="maxDuration > effectiveSlideDuration" class="mb-inline-flex mb-items-center mb-gap-1">
+          <button
+            @click="emit('update-slide-duration', maxDuration)"
+            class="mb-px-1.5 mb-py-0.5 mb-bg-yellow-600/30 mb-border mb-border-yellow-600/50 mb-rounded mb-text-[10px] mb-text-yellow-300 hover:mb-bg-yellow-600/50 mb-transition-colors"
+          >{{ t('Allunga la slide') }}</button>
+          <InfoTip :testo="testoAllunga" :titolo="t('Allunga la slide')" />
+        </span>
         <button
           v-if="timelineTracks.length > 1"
           @click="emit('set-all-durations', maxDuration)"
@@ -178,7 +182,7 @@
           :title="trackLabel(track.layer)"
         >
           <span class="mb-text-[10px] mb-truncate" :class="track.layer.id === selectedLayerId ? 'mb-text-white mb-font-semibold' : 'mb-text-gray-400'">
-            <span class="mb-mr-1 mb-opacity-60">{{ typeIcon(track.layer.type) }}</span>{{ trackLabel(track.layer) }}
+            <span class="mps-tl-tipo" aria-hidden="true" v-html="typeIcon(track.layer.type)"></span>{{ trackLabel(track.layer) }}
           </span>
         </div>
       </div>
@@ -245,7 +249,7 @@
                 height: '6px',
                 background: 'repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255,255,255,0.08) 2px, rgba(255,255,255,0.08) 4px)',
               }"
-              :title="'Delay: ' + (track.timeline.delay || 0) + 'ms'"
+              :title="t('Ritardo') + ': ' + (track.timeline.delay || 0) + ' ms'"
             ></div>
 
             <!-- WAIT indicator (endWithSlide) -->
@@ -268,7 +272,7 @@
               v-if="track.timeline.tloop"
               class="mb-absolute mb-rounded-sm mb-border mb-border-dashed"
               :style="tloopStyle(track)"
-              :title="'Loop: ' + (track.timeline.tloop.repeat === -1 ? '∞' : track.timeline.tloop.repeat + 'x')"
+              :title="t('Ripetizione') + ': ' + (track.timeline.tloop.repeat === -1 ? t('senza fine') : track.timeline.tloop.repeat + ' ' + t('volte'))"
             ></div>
 
             <!-- Keyframe markers -->
@@ -280,9 +284,9 @@
                 'mps-kf-selected': kf.id === selectedKeyframeId && track.layer.id === selectedLayerId,
                 'mps-kf-other': track.layer.id !== selectedLayerId,
               }"
-              :style="{ left: kfPctInTrack(kf, track) + '%', top: (trackHeight / 2 - 6) + 'px', color: track.color }"
+              :style="{ left: 'clamp(6px, ' + kfPctInTrack(kf, track) + '%, calc(100% - 6px))', top: (trackHeight / 2 - 6) + 'px', color: track.color }"
               @pointerdown.stop="startDragKf($event, kf, track)"
-              @click.stop="onKfClick(track.layer.id, kf.id)"
+              @click.stop="onKfClick(track, kf)"
               @contextmenu.prevent="onKfContextMenu($event, kf, track)"
               :title="formatTime(kf.time) + 's'"
             >
@@ -334,6 +338,9 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { formatTime, interpolateAtTime, defaultKeyframe } from './timelineUtils.js';
 import { t } from '@/i18n';
 import NumberScrubber from '../Builder/fields/NumberScrubber.vue';
+import InfoTip from '../Builder/InfoTip.vue';
+import lucideIcons from './lucideIconsSvg.js';
+import { nomeLivello } from './livelloUtils.js';
 
 const props = defineProps({
   layers: { type: Array, default: () => [] },
@@ -416,26 +423,26 @@ const typeColors = {
   audio: '#a78bfa',
 };
 
+// 1.4.1472: le icone del set (prima emoji e segni: 🖼 ▢ ◆) e il nome del livello come nel pannello Livelli (prima
+// «Image», «Shape», il tipo in inglese)
 const typeIcons = {
-  text: 'T',
-  button: '▢',
-  image: '🖼',
-  icon: '★',
-  shape: '◆',
-  video: '▶',
-  audio: '♪',
+  text: 'type',
+  button: 'mouse-pointer-click',
+  image: 'image',
+  icon: 'star',
+  shape: 'square',
+  video: 'video',
+  audio: 'music',
 };
+const ICO_ZOOM = lucideIcons['rotate-ccw'] || '';
 
 function typeIcon(type) {
-  return typeIcons[type] || '•';
+  return lucideIcons[typeIcons[type]] || lucideIcons.circle || '';
 }
 
 function trackLabel(layer) {
-  if (layer.type === 'text' || layer.type === 'button') {
-    const txt = (layer.content || '').replace(/<[^>]+>/g, '').trim();
-    return txt.length > 12 ? txt.slice(0, 12) + '…' : (txt || layer.type);
-  }
-  return layer.type.charAt(0).toUpperCase() + layer.type.slice(1);
+  const nome = nomeLivello(layer);
+  return nome.length > 18 ? nome.slice(0, 18) + '…' : nome;
 }
 
 // --- Computed: tracks with timeline ---
@@ -489,13 +496,16 @@ const selectedTrackKfs = computed(() => {
   return [...(activeTimeline.value.keyframes || [])].sort((a, b) => a.time - b.time);
 });
 
+// i tempi dei fotogrammi sulla testina comune: col ritardo del livello (come le tacche sulla traccia)
 const prevKfTime = computed(() => {
-  const times = selectedTrackKfs.value.map(kf => kf.time).filter(t => t < props.playhead);
+  const d = activeTimeline.value?.delay || 0;
+  const times = selectedTrackKfs.value.map(kf => d + kf.time).filter(t => t < props.playhead);
   return times.length ? times[times.length - 1] : null;
 });
 
 const nextKfTime = computed(() => {
-  const times = selectedTrackKfs.value.map(kf => kf.time).filter(t => t > props.playhead);
+  const d = activeTimeline.value?.delay || 0;
+  const times = selectedTrackKfs.value.map(kf => d + kf.time).filter(t => t > props.playhead);
   return times.length ? times[0] : null;
 });
 
@@ -558,6 +568,9 @@ function tloopStyle(track) {
 const effectiveSlideDuration = computed(() => {
   return props.slideDuration > 0 ? props.slideDuration : props.autoplaySpeed;
 });
+const secondi = (ms) => (ms / 1000).toFixed(1).replace('.', ',');
+const testoAllunga = computed(() => t('La linea del tempo dura %1 s, la slide %2 s: la slide cambierebbe prima che i livelli abbiano finito. Il pulsante porta la slide a %1 s.')
+  .replace(/%1/g, secondi(maxDuration.value)).replace('%2', secondi(effectiveSlideDuration.value)));
 
 function onSlideDurationChange(seconds) {
   const ms = Math.round(Math.max(0.5, Math.min(120, seconds)) * 1000);
@@ -597,18 +610,24 @@ function onTracksDblClick() {
 
 function addKeyframeAtPlayhead() {
   if (!activeTimeline.value) return;
-  const time = props.playhead;
+  // il punto della linea del tempo del livello: la testina meno il suo ritardo (1.4.1472: prima il ritardo non contava e
+  // il fotogramma nasceva più avanti di quanto si vedeva)
+  const tl = activeTimeline.value;
+  const time = Math.max(0, Math.min(tl.duration || 3000, props.playhead - (tl.delay || 0)));
   const interpolated = interpolateAtTime(activeTimeline.value, time);
   const kf = defaultKeyframe(time, interpolated || {});
   emit('add-keyframe', kf);
 }
 
 // --- Click keyframe ---
-function onKfClick(layerId, kfId) {
-  if (layerId !== props.selectedLayerId) {
-    emit('select-layer', layerId);
+// 1.4.1472: la testina va sul fotogramma scelto, così la tela mostra proprio quello e trascinando il livello lo si sposta
+// sotto il mouse (prima la tela restava al punto di prima e il fotogramma cambiava senza che lo si vedesse)
+function onKfClick(track, kf) {
+  if (track.layer.id !== props.selectedLayerId) {
+    emit('select-layer', track.layer.id);
   }
-  emit('select-keyframe', kfId);
+  emit('select-keyframe', kf.id);
+  emit('seek', (track.timeline.delay || 0) + kf.time);
 }
 
 // --- Keyframe dragging ---
@@ -710,6 +729,9 @@ onUnmounted(() => {
 
 <style scoped>
 .mps-timeline { display: flex; flex-direction: column; min-height: 50px; position: relative; }
+.mps-tl-tipo { display: inline-flex; vertical-align: -2px; margin-right: 4px; opacity: .6; }
+.mps-tl-tipo :deep(svg), .mps-tl-ico :deep(svg) { width: 11px; height: 11px; }
+.mps-tl-ico { display: inline-flex; }
 .mps-kf-marker {
   position: absolute;
   transform: translateX(-50%);
@@ -763,11 +785,12 @@ onUnmounted(() => {
 .mps-resize-handle:hover::after {
   opacity: 1;
 }
+/* 1.4.1479: tutta dentro la colonna dei nomi (con right:-4px copriva il fotogramma a 0 s, che non si prendeva più) */
 .mps-resize-handle-side {
   position: absolute;
   top: 0;
   bottom: 0;
-  right: -4px;
+  right: 0;
   width: 8px;
   cursor: ew-resize;
   z-index: 40;

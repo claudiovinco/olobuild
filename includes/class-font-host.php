@@ -18,6 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Olobuild_Font_Host {
 
     const DIR = 'olo-fonts';
+    // Tutti i pesi di css2: Google serve solo quelli che la famiglia ha (secondo tentativo di build_famiglia).
+    const TUTTI_I_PESI = '100;200;300;400;500;600;700;800;900';
     const UA  = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
     /**
@@ -52,15 +54,19 @@ class Olobuild_Font_Host {
         $durata = '' === $css ? 5 * MINUTE_IN_SECONDS : MONTH_IN_SECONDS;
 
         // Google rifiuta TUTTA la richiesta (400) se anche una sola famiglia non
-        // esiste: allora si chiede una famiglia per volta, e un nome sbagliato non
-        // si porta dietro gli altri. Solo sul rifiuto: con Google irraggiungibile
-        // una richiesta per famiglia moltiplicherebbe le attese.
-        if ( $rifiutata && count( $families ) > 1 ) {
+        // esiste, o se di una famiglia non esiste NESSUNO dei pesi chiesti (quelli
+        // che mancano li salta da sé: Cormorant Garamond chiesto da 300 a 900 arriva
+        // da 300 a 700). Allora si chiede una famiglia per volta, e un nome sbagliato
+        // non si porta dietro gli altri; una famiglia rifiutata si richiede con tutti
+        // i pesi da 100 a 900 (build_famiglia, 1.4.1479). Solo sul rifiuto: con Google
+        // irraggiungibile una richiesta per famiglia moltiplicherebbe le attese.
+        if ( $rifiutata ) {
+            $una    = 1 === count( $families );
             $parti  = [];
             $dubbio = false;
             foreach ( $families as $f ) {
                 $no    = false;
-                $parte = self::build( [ $f ], $weights, $no, $italic );
+                $parte = self::build_famiglia( $f, $weights, $no, $italic, $una );
                 if ( '' !== $parte ) {
                     $parti[] = $parte;
                 } elseif ( ! $no ) {
@@ -72,6 +78,27 @@ class Olobuild_Font_Host {
         }
 
         set_transient( $key, $css, $durata );
+        return $css;
+    }
+
+    /**
+     * Una famiglia sola, con un secondo tentativo su tutti i pesi (1.4.1479): una famiglia che non ha
+     * nessuno dei pesi chiesti (per esempio solo 100 e 200) Google la rifiuta come un nome sbagliato.
+     *
+     * @param string $family        Famiglia.
+     * @param string $weights       Pesi css2 chiesti.
+     * @param bool   $rifiutata     Diventa true se Google ha rifiutato anche il secondo tentativo.
+     * @param array  $italic        Famiglie coi corsivi (minuscole).
+     * @param bool   $gia_rifiutata La richiesta coi pesi chiesti è già stata rifiutata: si salta.
+     * @return string CSS con URL locali, o ''.
+     */
+    private static function build_famiglia( $family, $weights, &$rifiutata, $italic, $gia_rifiutata = false ) {
+        $rifiutata = $gia_rifiutata;
+        $css       = $gia_rifiutata ? '' : self::build( [ $family ], $weights, $rifiutata, $italic );
+        if ( '' === $css && $rifiutata && self::TUTTI_I_PESI !== $weights ) {
+            $rifiutata = false;
+            $css       = self::build( [ $family ], self::TUTTI_I_PESI, $rifiutata, $italic );
+        }
         return $css;
     }
 

@@ -5,7 +5,7 @@ Giappone, Taiwan, India e Cina, le degustazioni guidate, il matcha sbattuto al b
 Tema chiaro, carta di riso, verde tè, ambra dell'oolong e oro. Titoli in Shippori Mincho, testo in Zen Kaku Gothic New,
 dati in Overpass Mono.
 
-Apertura: Slider Pro «la tazza», alta 16:9, un tè per diapositiva col suo video pieno (la raccolta, la teiera piccola,
+Apertura: Pro Slider «la tazza», alta 16:9, un tè per diapositiva col suo video pieno (la raccolta, la teiera piccola,
 la tazza che fuma, la frusta di bambù) e un velo scuro solo dal lato del testo. A destra la tazza vista dall'alto sul
 piattino: il tè ha il colore di quell'infusione, sulla superficie si allargano i cerchi di una goccia e sopra sale il
 vapore; sotto, temperatura e tempo. I tè si danno il cambio sfumando (crossFade). Cursore: la goccia.

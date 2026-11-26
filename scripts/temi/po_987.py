@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Traduzioni della 1.4.987 (10 nov 2026): l'andamento del movimento a scorrimento dello Slider Pro e il cursore atomo.
+"""Traduzioni della 1.4.987 (10 nov 2026): l'andamento del movimento a scorrimento del Pro Slider e il cursore atomo.
 Aggiunge le voci che mancano ai .po di de_DE, en_GB, en_US, es_ES, fr_FR e ricompila i .mo. Si può rilanciare.
 uso: python po_987.py
 """

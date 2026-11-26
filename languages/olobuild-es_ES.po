@@ -4286,7 +4286,7 @@ msgid "Pro Gallery"
 msgstr "Galería Pro"
 
 msgid "Pro Slider"
-msgstr "Slider Pro"
+msgstr "Pro Slider"
 
 msgid "Prodotti Correlati"
 msgstr "Productos relacionados"
@@ -48680,8 +48680,8 @@ msgid "Le colonne si allargano al passaggio"
 msgstr "Las columnas se ensanchan al pasar"
 
 #: src/config/elements/row.js
-msgid "Da 1200 px le colonne si dividono lo spazio in parti uguali e quella sotto il puntatore se ne prende di più. Per le aperture divise in due metà, ognuna col suo Slider Pro (con «Impila su tablet» sotto i 1200 px stanno una sotto l’altra)."
-msgstr "Desde 1200 px las columnas se reparten el espacio a partes iguales y la que está bajo el puntero toma más. Para aperturas divididas en dos mitades, cada una con su Slider Pro (con «Apilar en tablet» por debajo de 1200 px quedan una debajo de la otra)."
+msgid "Da 1200 px le colonne si dividono lo spazio in parti uguali e quella sotto il puntatore se ne prende di più. Per le aperture divise in due metà, ognuna col suo Pro Slider (con «Impila su tablet» sotto i 1200 px stanno una sotto l’altra)."
+msgstr "Desde 1200 px las columnas se reparten el espacio a partes iguales y la que está bajo el puntero toma más. Para aperturas divididas en dos mitades, cada una con su Pro Slider (con «Apilar en tablet» por debajo de 1200 px quedan una debajo de la otra)."
 
 #: includes/class-theme-importer.php
 msgid "Dentro e fuori"
@@ -54122,8 +54122,8 @@ msgid "Importa le slide"
 msgstr "Importar las diapositivas"
 
 #: OLObuild 1.4.1161
-msgid "Editor dello Slider Pro"
-msgstr "Editor del Slider Pro"
+msgid "Editor del Pro Slider"
+msgstr "Editor del Pro Slider"
 
 #: OLObuild 1.4.1161
 msgid "Livelli globali"
@@ -57189,8 +57189,8 @@ msgstr "esta capa"
 msgid "Scene dei temi"
 msgstr "Escenas de los temas"
 
-msgid "Parti da uno Slider Pro dei temi: poi cambi testi, foto e link."
-msgstr "Parte de un Slider Pro de los temas: luego cambias textos, fotos y enlaces."
+msgid "Parti da un Pro Slider dei temi: poi cambi testi, foto e link."
+msgstr "Parte de un Pro Slider de los temas: luego cambias textos, fotos y enlaces."
 
 msgid "Cerca un tema o una parola"
 msgstr "Busca un tema o una palabra"
@@ -58088,6 +58088,296 @@ msgstr "Pivote en horizontal"
 
 msgid "Perno in verticale"
 msgstr "Pivote en vertical"
+
+#: slider-1.4.1472
+msgid "Altezza personalizzata"
+msgstr "Altura personalizada"
+
+msgid "Fotogramma chiave"
+msgstr "Fotograma clave"
+
+msgid "Allunga la slide"
+msgstr "Alargar la diapositiva"
+
+msgid "senza fine"
+msgstr "sin fin"
+
+msgid "volte"
+msgstr "veces"
+
+msgid "La linea del tempo dura %1 s, la slide %2 s: la slide cambierebbe prima che i livelli abbiano finito. Il pulsante porta la slide a %1 s."
+msgstr "La línea de tiempo dura %1 s y la diapositiva %2 s: la diapositiva cambiaría antes de que las capas terminen. El botón lleva la diapositiva a %1 s."
+
+msgid "La linea del tempo di questo livello si perde."
+msgstr "Se perderá la línea de tiempo de esta capa."
+
+msgid "Torna a Semplice"
+msgstr "Volver a Simple"
+
+msgid "Andamento di entrata e uscita"
+msgstr "Curva de entrada y salida"
+
+msgid "Come il livello si muove mentre entra e mentre esce: costante, morbido, che frena alla fine, che rimbalza… Lo stesso andamento vale per tutte e due."
+msgstr "Cómo se mueve la capa al entrar y al salir: constante, suave, frenando al final, rebotando… La misma curva vale para las dos."
+
+msgid "Usa la linea del tempo sotto la tela per aggiungere e spostare i fotogrammi chiave. Clicca un fotogramma: la tela va a quel momento, e trascinando il livello lo sposti in quel fotogramma."
+msgstr "Usa la línea de tiempo bajo el lienzo para añadir y mover fotogramas clave. Haz clic en un fotograma: el lienzo va a ese momento y, arrastrando la capa, la mueves en ese fotograma."
+
+msgid "Come il livello esce quando la slide cambia (o alla fine della linea del tempo, con «Aspetta la fine» spento). Parte dal punto in cui la linea del tempo è arrivata. Finché non la cambi è una dissolvenza rapida."
+msgstr "Cómo sale la capa cuando cambia la diapositiva (o al final de la línea de tiempo, con «Esperar al final» desactivado). Empieza desde donde ha llegado la línea de tiempo. Mientras no la cambies es un fundido rápido."
+
+msgid "Durata dell’uscita"
+msgstr "Duración de la salida"
+
+msgid "Ritardo dell’uscita"
+msgstr "Retraso de la salida"
+
+msgid "Andamento dell’uscita"
+msgstr "Curva de la salida"
+
+msgid "Cosa non vale con la linea del tempo"
+msgstr "Lo que no vale con la línea de tiempo"
+
+msgid "L’entrata, l’animazione del testo, il movimento continuo e la maschera qui non agiscono: li fanno i fotogrammi chiave (posizione, opacità, scala, rotazione, maschera, sfocatura). Restano salvati e valgono di nuovo tornando a «Semplice»."
+msgstr "La entrada, la animación del texto, el movimiento continuo y la máscara aquí no actúan: lo hacen los fotogramas clave (posición, opacidad, escala, rotación, máscara, desenfoque). Quedan guardados y vuelven a valer al volver a «Simple»."
+
+msgid "Con la linea del tempo cambiano colori, bordo, raggio, cursore, scala, rotazione e spostamento. Inclinazioni, rotazioni 3D, opacità e filtri li comanda la linea del tempo, e qui non ci sono."
+msgstr "Con la línea de tiempo cambian colores, borde, radio, cursor, escala, rotación y desplazamiento. Las inclinaciones, rotaciones 3D, opacidad y filtros los controla la línea de tiempo, y aquí no están."
+
+msgid "Profondità con la parallasse dello slider"
+msgstr "Profundidad con el paralaje del slider"
+
+msgid "Con la Parallasse dello slider accesa (Stile della tile) il livello si muove col tipo e l’intensità dello slider, di più quanto più è profondo. 0 = fermo. Con «Parallasse attiva» qui sopra vale invece la parallasse propria del livello."
+msgstr "Con el paralaje del slider activado (Estilo de la tile), la capa se mueve con el tipo y la intensidad del slider, más cuanto más profunda es. 0 = quieta. Con «Paralaje activo» arriba vale en cambio el paralaje propio de la capa."
+
+msgid "Non agisce: la Parallasse dello slider è spenta (Stile della tile, «Parallasse»). Accendila, o usa «Parallasse attiva» qui sopra, che agisce da sola."
+msgstr "No actúa: el paralaje del slider está desactivado (Estilo de la tile, «Paralaje»). Actívalo, o usa «Paralaje activo» arriba, que actúa por sí solo."
+
+msgid "Parte piano"
+msgstr "Empieza despacio"
+
+msgid "Parte piano (appena)"
+msgstr "Empieza despacio (apenas)"
+
+msgid "Parte piano (poco)"
+msgstr "Empieza despacio (poco)"
+
+msgid "Parte piano (medio)"
+msgstr "Empieza despacio (medio)"
+
+msgid "Parte piano (molto)"
+msgstr "Empieza despacio (mucho)"
+
+msgid "Parte piano (deciso)"
+msgstr "Empieza despacio (marcado)"
+
+msgid "Parte piano (moltissimo)"
+msgstr "Empieza despacio (muchísimo)"
+
+msgid "Parte piano (al massimo)"
+msgstr "Empieza despacio (al máximo)"
+
+msgid "Frena alla fine"
+msgstr "Frena al final"
+
+msgid "Frena alla fine (appena)"
+msgstr "Frena al final (apenas)"
+
+msgid "Frena alla fine (poco)"
+msgstr "Frena al final (poco)"
+
+msgid "Frena alla fine (medio)"
+msgstr "Frena al final (medio)"
+
+msgid "Frena alla fine (molto)"
+msgstr "Frena al final (mucho)"
+
+msgid "Frena alla fine (deciso)"
+msgstr "Frena al final (marcado)"
+
+msgid "Frena alla fine (moltissimo)"
+msgstr "Frena al final (muchísimo)"
+
+msgid "Frena alla fine (al massimo)"
+msgstr "Frena al final (al máximo)"
+
+msgid "Parte piano e frena"
+msgstr "Empieza despacio y frena"
+
+msgid "Parte piano e frena (appena)"
+msgstr "Empieza despacio y frena (apenas)"
+
+msgid "Parte piano e frena (poco)"
+msgstr "Empieza despacio y frena (poco)"
+
+msgid "Parte piano e frena (medio)"
+msgstr "Empieza despacio y frena (medio)"
+
+msgid "Parte piano e frena (molto)"
+msgstr "Empieza despacio y frena (mucho)"
+
+msgid "Parte piano e frena (deciso)"
+msgstr "Empieza despacio y frena (marcado)"
+
+msgid "Parte piano e frena (moltissimo)"
+msgstr "Empieza despacio y frena (muchísimo)"
+
+msgid "Parte piano e frena (al massimo)"
+msgstr "Empieza despacio y frena (al máximo)"
+
+msgid "Rincorsa, elastico e rimbalzo"
+msgstr "Impulso, elástico y rebote"
+
+msgid "Prende la rincorsa"
+msgstr "Toma impulso"
+
+msgid "Va oltre e torna"
+msgstr "Se pasa y vuelve"
+
+msgid "Rincorsa e ritorno"
+msgstr "Impulso y regreso"
+
+#: slider-1.4.1473
+msgid "Il livello corre lungo un tracciato partendo da dove è posato. Sulla tela il tracciato si vede tratteggiato quando il livello è scelto: disegnalo coi clic, poi trascina i punti per correggerlo."
+msgstr "La capa recorre un trazado partiendo de donde está colocada. En el lienzo el trazado se ve discontinuo cuando la capa está elegida: dibújalo con clics y luego arrastra los puntos para corregirlo."
+
+msgid "Disegna sulla tela"
+msgstr "Dibujar en el lienzo"
+
+msgid "Prova il percorso"
+msgstr "Probar el trazado"
+
+msgid "Forma del percorso"
+msgstr "Forma del trazado"
+
+msgid "Linee dritte"
+msgstr "Líneas rectas"
+
+msgid "Tracciato SVG"
+msgstr "Trazado SVG"
+
+msgid "Il tracciato scritto come l’attributo «d» di un percorso SVG, in pixel della tela del Computer (per esempio M0,0 C50,0 50,100 100,100). Più semplice disegnarlo sulla tela."
+msgstr "El trazado escrito como el atributo «d» de un trazado SVG, en píxeles del lienzo del Ordenador (por ejemplo M0,0 C50,0 50,100 100,100). Es más fácil dibujarlo en el lienzo."
+
+msgid "Dimensione del percorso"
+msgstr "Tamaño del trazado"
+
+msgid "Ingrandisce o rimpicciolisce il tracciato: 100% è com’è disegnato, 200% il doppio."
+msgstr "Amplía o reduce el trazado: 100 % es como está dibujado, 200 % el doble."
+
+msgid "Segue la larghezza dello slider"
+msgstr "Sigue el ancho del slider"
+
+msgid "Il tracciato si allarga e si stringe con lo slider: sul telefono resta in proporzione a come lo vedi sul Computer. Spento, ha sempre gli stessi pixel della tela e sugli schermi stretti sembra più grande."
+msgstr "El trazado se ensancha y se estrecha con el slider: en el teléfono queda en proporción a como lo ves en el Ordenador. Desactivado, tiene siempre los mismos píxeles del lienzo y en las pantallas estrechas parece más grande."
+
+msgid "Quanto aspetta il percorso prima di partire, dopo l’ingresso del livello."
+msgstr "Cuánto espera el trazado antes de empezar, después de la entrada de la capa."
+
+msgid "Ritardo del percorso"
+msgstr "Retraso del trazado"
+
+msgid "Disegnato sulla tela"
+msgstr "Dibujado en el lienzo"
+
+msgid "Tracciato SVG scritto a mano"
+msgstr "Trazado SVG escrito a mano"
+
+msgid "Disegno del percorso"
+msgstr "Dibujo del trazado"
+
+msgid "1 punto"
+msgstr "1 punto"
+
+msgid "%d punti"
+msgstr "%d puntos"
+
+msgid "Clicca sulla tela per aggiungere i punti: il primo è il livello. Doppio clic o Invio per finire, Esc per annullare. Dopo puoi trascinare i punti per correggere il percorso."
+msgstr "Haz clic en el lienzo para añadir los puntos: el primero es la capa. Doble clic o Intro para terminar, Esc para cancelar. Después puedes arrastrar los puntos para corregir el trazado."
+
+#: slider-1.4.1474
+msgid "Numero della slide"
+msgstr "Número de la diapositiva"
+
+msgid "Nessun altro livello nello slider"
+msgstr "Ninguna otra capa en el slider"
+
+msgid "Questa slide (%d)"
+msgstr "Esta diapositiva (%d)"
+
+msgid "Slide %d"
+msgstr "Diapositiva %d"
+
+msgid "— Scegli un livello —"
+msgstr "— Elige una capa —"
+
+msgid "Livello che non c’è più"
+msgstr "Capa que ya no existe"
+
+msgid "Prova sulla pagina"
+msgstr "Probar en la página"
+
+msgid "modifiche non ancora salvate"
+msgstr "cambios aún sin guardar"
+
+msgid "Lo slider nel canvas è quello vero, con le modifiche fatte nell’editor: entrate, lettere, transizioni, percorsi, mouse e clic funzionano come sul sito. La pagina non è salvata: «Torna all’editor» per continuare, «Salva e chiudi» per tenerle, «Annulla» dell’editor rimette lo slider com’era."
+msgstr "El slider del lienzo es el real, con los cambios hechos en el editor: entradas, letras, transiciones, trazados, ratón y clics funcionan como en el sitio. La página no está guardada: «Volver al editor» para seguir, «Guardar y cerrar» para conservarlos; «Cancelar» del editor deja el slider como estaba."
+
+msgid "Torna all’editor"
+msgstr "Volver al editor"
+
+msgid "Guarda lo slider vero nel canvas del builder, con le modifiche di adesso, senza salvare"
+msgstr "Ver el slider real en el lienzo del builder con los cambios actuales, sin guardar"
+
+msgid "Importa 1 slide"
+msgstr "Importar 1 diapositiva"
+
+msgid "Importa %d slide"
+msgstr "Importar %d diapositivas"
+
+msgid "Sostituisci tutte"
+msgstr "Sustituir todas"
+
+msgid "Eliminare la slide %d?"
+msgstr "¿Eliminar la diapositiva %d?"
+
+msgid "Questo livello parte nascosto: lo mostra un altro livello con l’azione «Mostra o nasconde un livello»."
+msgstr "Esta capa empieza oculta: la muestra otra capa con la acción «Muestra u oculta una capa»."
+
+#: slider-1.4.1475
+msgid "A capo (Invio)"
+msgstr "Salto de línea (Intro)"
+
+msgid "Allinea in orizzontale"
+msgstr "Alinear en horizontal"
+
+msgid "Allinea al centro in orizzontale"
+msgstr "Centrar en horizontal"
+
+msgid "Allinea a destra"
+msgstr "Alinear a la derecha"
+
+msgid "Allinea in verticale"
+msgstr "Alinear en vertical"
+
+msgid "Allinea al centro in verticale"
+msgstr "Centrar en vertical"
+
+msgid "Allinea in basso"
+msgstr "Alinear abajo"
+
+msgid "Testo intestazione"
+msgstr "Texto del título"
+
+msgid "Nessuna slide ancora: aggiungile con «Apri editor slider»."
+msgstr "Todavía no hay diapositivas: añádelas con «Abrir editor de slider»."
+
+msgid "Immagine della slide"
+msgstr "Imagen de la diapositiva"
+
+#: slider-1.4.1477
+msgid "Come il livello va da questo fotogramma chiave al successivo: costante, morbido, che frena alla fine… Nell’ultimo fotogramma non conta."
+msgstr "Cómo va la capa de este fotograma clave al siguiente: constante, suave, frenando al final… En el último fotograma no cuenta."
 
 #: 1.4.1478
 msgid "Affina la ricerca"

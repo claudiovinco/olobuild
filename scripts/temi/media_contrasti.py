@@ -6,7 +6,7 @@ testo deve leggersi lo stesso.
 Per ogni pagina dei temi indicati che ha uno Sfondo a media con del testo sopra: si scorre la pagina (le sezioni pigre
 arrivano), poi per ogni contenitore a media si porta in vista, si nascondono i suoi testi, si fotografa e per ogni testo si
 prende, nel suo riquadro, il punto più chiaro (90° percentile) per un testo chiaro o il più scuro (10°) per uno scuro.
-Soglie WCAG AA: 4,5, o 3 per i testi grandi (24 px, o 18,66 in grassetto). Lo Slider Pro ha il suo strumento
+Soglie WCAG AA: 4,5, o 3 per i testi grandi (24 px, o 18,66 in grassetto). Il Pro Slider ha il suo strumento
 (aperture_contrasti.py).
 
 uso: python media_contrasti.py larghezza uscita.json tema [tema …]
@@ -32,7 +32,7 @@ def lum(c):
 
 
 def ha_media(o):
-    """Il file del template ha uno Sfondo a foto o video (fuori dallo Slider Pro)?"""
+    """Il file del template ha uno Sfondo a foto o video (fuori dal Pro Slider)?"""
     if isinstance(o, dict):
         if o.get('type') in ('image', 'video') and (o.get('image_url') or o.get('video_url')) and 'overlay_opacity' in o:
             return True

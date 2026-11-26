@@ -5,7 +5,7 @@ Per ogni tema: la trovata (la «zona» di theme.json), i tipi di tile usati con 
 usata da pochi temi si segnala come rara, una ritirata dalla palette come nascosta, una che a HEAD non esiste come nata
 in questa tornata), e le opzioni nuove della versione indicata che il tema usa davvero. Controlla anche che nei
 template non ci sia CSS personalizzato (custom_css) né tile HTML, e raccoglie le proprietà scritte nel «CSS del livello»
-dei livelli dello Slider Pro.
+dei livelli del Pro Slider.
 
 uso: python censimento_tornata.py [--md] [id …]   (senza id: i dieci temi del 3 nov 2026, seconda tornata)
 """
@@ -77,7 +77,7 @@ def esisteva_a_head(tipo):
 
 
 def novita(tid):
-    """Le opzioni nuove della versione che il tema usa, e il CSS dei livelli dello Slider Pro."""
+    """Le opzioni nuove della versione che il tema usa, e il CSS dei livelli del Pro Slider."""
     trovate, css, problemi = set(), set(), []
     d = os.path.join(THEMES, tid)
     for f in sorted(os.listdir(d)):
@@ -95,14 +95,14 @@ def novita(tid):
             if n.get('type') == 'proslider':
                 for sl in s.get('slides') or []:
                     if (sl.get('background') or {}).get('videoScroll'):
-                        trovate.add('Slider Pro · video che segue lo scorrimento')
+                        trovate.add('Pro Slider · video che segue lo scorrimento')
                     for L in (sl.get('layers') or []) + (s.get('globalLayers') or []):
                         for t in ((L.get('scrollMove') or {}).get('tappe') or []):
                             if 'sx' in t or 'sy' in t:
-                                trovate.add('Slider Pro · allunga in orizzontale/verticale')
+                                trovate.add('Pro Slider · allunga in orizzontale/verticale')
                         for k in ('backdropContrast', 'backdropSaturate', 'backdropInvert', 'backdropHueRotate'):
                             if k in L and L[k] not in (0, 100):
-                                trovate.add('Slider Pro · filtri dietro il livello (%s)' % k[8:].lower())
+                                trovate.add('Pro Slider · filtri dietro il livello (%s)' % k[8:].lower())
                         for decl in (L.get('customCSS') or '').split(';'):
                             if ':' in decl:
                                 css.add(decl.split(':')[0].strip())

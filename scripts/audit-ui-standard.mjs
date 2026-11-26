@@ -1225,7 +1225,7 @@ const fieldBoxCelle = [];
 violazioni['fieldbox-celle'] = fieldBoxCelle;
 RULES.push({ id: 'fieldbox-celle', titolo: 'FieldBox: ogni cella scrive l\'angolo/lato che disegna, nella sua posizione' });
 
-// ─── Slider Pro dei temi: solo comandi, niente CSS su misura (1.4.1431) ─────
+// ─── Pro Slider dei temi: solo comandi, niente CSS su misura (1.4.1431) ─────
 // Utente, 24 nov 2026: «non devono esserci css personalizzati o hardcoded nelle cose
 // fatte con pro slider ma comandi usabili da chiunque». Nei livelli dei temi: niente
 // customCSS né customClass (una classe vive solo di CSS scritto altrove), e nei testi
@@ -1282,7 +1282,7 @@ const sliderSuMisura = [];
       for (const f of fs.readdirSync(path.join(dir, tema)).filter((n) => n.endsWith('.json'))) {
         let dati;
         try { dati = JSON.parse(fs.readFileSync(path.join(dir, tema, f), 'utf8')); } catch { continue; }
-        // solo dentro le tile Slider Pro (i livelli stanno in settings.slides[].layers e settings.globalLayers)
+        // solo dentro le tile Pro Slider (i livelli stanno in settings.slides[].layers e settings.globalLayers)
         const tile = [];
         const cerca = (o) => {
           if (Array.isArray(o)) { o.forEach(cerca); return; }
@@ -1302,9 +1302,9 @@ const sliderSuMisura = [];
   }
 }
 violazioni['slider-pro-su-misura'] = sliderSuMisura;
-RULES.push({ id: 'slider-pro-su-misura', titolo: 'Slider Pro dei temi: niente CSS, classi o colori fissi, nei testi solo gli stili dei pulsanti, niente dati che nessuno legge' });
+RULES.push({ id: 'slider-pro-su-misura', titolo: 'Pro Slider dei temi: niente CSS, classi o colori fissi, nei testi solo gli stili dei pulsanti, niente dati che nessuno legge' });
 
-// ─── Slider Pro dei temi: ognuno si costruisce DA ZERO coi soli comandi (1.4.1435) ───
+// ─── Pro Slider dei temi: ognuno si costruisce DA ZERO coi soli comandi (1.4.1435) ───
 // Utente, 24 nov 2026: «costruire da ZERO OGNI pro slider usandolo senza trucchi css». scripts/slider-ricostruibile.mjs
 // rifà ogni livello dei 150 slider passando dai controlli dell'editor (letti dal suo codice) e conta quello che nessun
 // controllo sa scrivere o che il suo controllo non sa dare (menu, colori, limiti della linea del tempo…).
@@ -1315,7 +1315,7 @@ RULES.push({ id: 'slider-pro-su-misura', titolo: 'Slider Pro dei temi: niente CS
   violazioni['slider-pro-ricostruibile'] = righe.split('\n').filter((r) => /^ {9}\S/.test(r)).map((r) => ({ file: 'slider', type: 'comando', key: r.trim(), label: '' }));
   if (!/da costruire coi comandi:/.test(righe)) violazioni['slider-pro-ricostruibile'].push({ file: 'slider', type: 'errore', key: 'scripts/slider-ricostruibile.mjs non ha risposto', label: '' });
 }
-RULES.push({ id: 'slider-pro-ricostruibile', titolo: 'Ogni Slider Pro dei temi si costruisce da zero coi soli comandi dell\'editor' });
+RULES.push({ id: 'slider-pro-ricostruibile', titolo: 'Ogni Pro Slider dei temi si costruisce da zero coi soli comandi dell\'editor' });
 
 // ─── confronto con la baseline ──────────────────────────────────────────────
 const args = process.argv.slice(2);

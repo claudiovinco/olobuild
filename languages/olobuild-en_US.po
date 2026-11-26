@@ -47415,8 +47415,8 @@ msgid "Le colonne si allargano al passaggio"
 msgstr "Columns widen on hover"
 
 #: src/config/elements/row.js
-msgid "Da 1200 px le colonne si dividono lo spazio in parti uguali e quella sotto il puntatore se ne prende di più. Per le aperture divise in due metà, ognuna col suo Slider Pro (con «Impila su tablet» sotto i 1200 px stanno una sotto l’altra)."
-msgstr "From 1200 px the columns share the space equally and the one under the pointer takes more of it. For openings split into two halves, each with its own Slider Pro (with “Stack on tablet” they sit one below the other under 1200 px)."
+msgid "Da 1200 px le colonne si dividono lo spazio in parti uguali e quella sotto il puntatore se ne prende di più. Per le aperture divise in due metà, ognuna col suo Pro Slider (con «Impila su tablet» sotto i 1200 px stanno una sotto l’altra)."
+msgstr "From 1200 px the columns share the space equally and the one under the pointer takes more of it. For openings split into two halves, each with its own Pro Slider (with “Stack on tablet” they sit one below the other under 1200 px)."
 
 #: includes/class-theme-importer.php
 msgid "Dentro e fuori"
@@ -52861,8 +52861,8 @@ msgid "Importa le slide"
 msgstr "Import slides"
 
 #: OLObuild 1.4.1161
-msgid "Editor dello Slider Pro"
-msgstr "Slider Pro editor"
+msgid "Editor del Pro Slider"
+msgstr "Pro Slider editor"
 
 #: OLObuild 1.4.1161
 msgid "Livelli globali"
@@ -55928,8 +55928,8 @@ msgstr "this layer"
 msgid "Scene dei temi"
 msgstr "Theme scenes"
 
-msgid "Parti da uno Slider Pro dei temi: poi cambi testi, foto e link."
-msgstr "Start from a Slider Pro from the themes: then change the texts, photos and links."
+msgid "Parti da un Pro Slider dei temi: poi cambi testi, foto e link."
+msgstr "Start from a Pro Slider from the themes: then change the texts, photos and links."
 
 msgid "Cerca un tema o una parola"
 msgstr "Search for a theme or a word"
@@ -56824,6 +56824,299 @@ msgstr "Pivot horizontally"
 
 msgid "Perno in verticale"
 msgstr "Pivot vertically"
+
+#: slider-1.4.1472
+msgid "Altezza personalizzata"
+msgstr "Custom height"
+
+msgid "Fotogramma chiave"
+msgstr "Keyframe"
+
+msgid "Allunga la slide"
+msgstr "Lengthen the slide"
+
+msgid "senza fine"
+msgstr "endless"
+
+msgid "volte"
+msgstr "times"
+
+msgid "La linea del tempo dura %1 s, la slide %2 s: la slide cambierebbe prima che i livelli abbiano finito. Il pulsante porta la slide a %1 s."
+msgstr "The timeline lasts %1 s, the slide %2 s: the slide would change before the layers have finished. The button brings the slide to %1 s."
+
+msgid "La linea del tempo di questo livello si perde."
+msgstr "This layer’s timeline will be lost."
+
+msgid "Torna a Semplice"
+msgstr "Back to Simple"
+
+msgid "Andamento di entrata e uscita"
+msgstr "Entrance and exit easing"
+
+msgid "Come il livello si muove mentre entra e mentre esce: costante, morbido, che frena alla fine, che rimbalza… Lo stesso andamento vale per tutte e due."
+msgstr "How the layer moves as it enters and as it exits: steady, smooth, braking at the end, bouncing… The same easing applies to both."
+
+msgid "Usa la linea del tempo sotto la tela per aggiungere e spostare i fotogrammi chiave. Clicca un fotogramma: la tela va a quel momento, e trascinando il livello lo sposti in quel fotogramma."
+msgstr "Use the timeline below the canvas to add and move keyframes. Click a keyframe: the canvas jumps to that moment, and dragging the layer moves it in that keyframe."
+
+msgid "Come il livello esce quando la slide cambia (o alla fine della linea del tempo, con «Aspetta la fine» spento). Parte dal punto in cui la linea del tempo è arrivata. Finché non la cambi è una dissolvenza rapida."
+msgstr "How the layer exits when the slide changes (or at the end of the timeline, with “Wait for the end” off). It starts where the timeline has got to. Until you change it, it is a quick fade."
+
+msgid "Durata dell’uscita"
+msgstr "Exit duration"
+
+msgid "Ritardo dell’uscita"
+msgstr "Exit delay"
+
+msgid "Andamento dell’uscita"
+msgstr "Exit easing"
+
+msgid "Cosa non vale con la linea del tempo"
+msgstr "What does not apply with the timeline"
+
+msgid "L’entrata, l’animazione del testo, il movimento continuo e la maschera qui non agiscono: li fanno i fotogrammi chiave (posizione, opacità, scala, rotazione, maschera, sfocatura). Restano salvati e valgono di nuovo tornando a «Semplice»."
+msgstr "The entrance, text animation, continuous motion and mask do not act here: the keyframes do that (position, opacity, scale, rotation, mask, blur). They stay saved and apply again when you go back to “Simple”."
+
+msgid "Con la linea del tempo cambiano colori, bordo, raggio, cursore, scala, rotazione e spostamento. Inclinazioni, rotazioni 3D, opacità e filtri li comanda la linea del tempo, e qui non ci sono."
+msgstr "With the timeline, colours, border, radius, cursor, scale, rotation and offset change. Skews, 3D rotations, opacity and filters are driven by the timeline, so they are not here."
+
+msgid "Profondità con la parallasse dello slider"
+msgstr "Depth with the slider parallax"
+
+msgid "Con la Parallasse dello slider accesa (Stile della tile) il livello si muove col tipo e l’intensità dello slider, di più quanto più è profondo. 0 = fermo. Con «Parallasse attiva» qui sopra vale invece la parallasse propria del livello."
+msgstr "With the slider parallax on (tile Style), the layer moves with the slider’s type and intensity, the more the deeper it is. 0 = still. With “Parallax on” above, the layer’s own parallax applies instead."
+
+msgid "Non agisce: la Parallasse dello slider è spenta (Stile della tile, «Parallasse»). Accendila, o usa «Parallasse attiva» qui sopra, che agisce da sola."
+msgstr "Has no effect: the slider parallax is off (tile Style, “Parallax”). Turn it on, or use “Parallax on” above, which works on its own."
+
+msgid "slide"
+msgstr "slides"
+
+msgid "Parte piano"
+msgstr "Slow start"
+
+msgid "Parte piano (appena)"
+msgstr "Slow start (barely)"
+
+msgid "Parte piano (poco)"
+msgstr "Slow start (slight)"
+
+msgid "Parte piano (medio)"
+msgstr "Slow start (medium)"
+
+msgid "Parte piano (molto)"
+msgstr "Slow start (strong)"
+
+msgid "Parte piano (deciso)"
+msgstr "Slow start (sharp)"
+
+msgid "Parte piano (moltissimo)"
+msgstr "Slow start (very strong)"
+
+msgid "Parte piano (al massimo)"
+msgstr "Slow start (maximum)"
+
+msgid "Frena alla fine"
+msgstr "Brakes at the end"
+
+msgid "Frena alla fine (appena)"
+msgstr "Brakes at the end (barely)"
+
+msgid "Frena alla fine (poco)"
+msgstr "Brakes at the end (slight)"
+
+msgid "Frena alla fine (medio)"
+msgstr "Brakes at the end (medium)"
+
+msgid "Frena alla fine (molto)"
+msgstr "Brakes at the end (strong)"
+
+msgid "Frena alla fine (deciso)"
+msgstr "Brakes at the end (sharp)"
+
+msgid "Frena alla fine (moltissimo)"
+msgstr "Brakes at the end (very strong)"
+
+msgid "Frena alla fine (al massimo)"
+msgstr "Brakes at the end (maximum)"
+
+msgid "Parte piano e frena"
+msgstr "Slow start and brake"
+
+msgid "Parte piano e frena (appena)"
+msgstr "Slow start and brake (barely)"
+
+msgid "Parte piano e frena (poco)"
+msgstr "Slow start and brake (slight)"
+
+msgid "Parte piano e frena (medio)"
+msgstr "Slow start and brake (medium)"
+
+msgid "Parte piano e frena (molto)"
+msgstr "Slow start and brake (strong)"
+
+msgid "Parte piano e frena (deciso)"
+msgstr "Slow start and brake (sharp)"
+
+msgid "Parte piano e frena (moltissimo)"
+msgstr "Slow start and brake (very strong)"
+
+msgid "Parte piano e frena (al massimo)"
+msgstr "Slow start and brake (maximum)"
+
+msgid "Rincorsa, elastico e rimbalzo"
+msgstr "Wind-up, elastic and bounce"
+
+msgid "Prende la rincorsa"
+msgstr "Winds up first"
+
+msgid "Va oltre e torna"
+msgstr "Overshoots and comes back"
+
+msgid "Rincorsa e ritorno"
+msgstr "Wind-up and return"
+
+#: slider-1.4.1473
+msgid "Il livello corre lungo un tracciato partendo da dove è posato. Sulla tela il tracciato si vede tratteggiato quando il livello è scelto: disegnalo coi clic, poi trascina i punti per correggerlo."
+msgstr "The layer runs along a path starting from where it sits. On the canvas the path shows dashed when the layer is selected: draw it with clicks, then drag the points to correct it."
+
+msgid "Disegna sulla tela"
+msgstr "Draw on the canvas"
+
+msgid "Prova il percorso"
+msgstr "Try the path"
+
+msgid "Forma del percorso"
+msgstr "Path shape"
+
+msgid "Linee dritte"
+msgstr "Straight lines"
+
+msgid "Tracciato SVG"
+msgstr "SVG path"
+
+msgid "Il tracciato scritto come l’attributo «d» di un percorso SVG, in pixel della tela del Computer (per esempio M0,0 C50,0 50,100 100,100). Più semplice disegnarlo sulla tela."
+msgstr "The path written as the “d” attribute of an SVG path, in pixels of the Computer canvas (for example M0,0 C50,0 50,100 100,100). Drawing it on the canvas is easier."
+
+msgid "Dimensione del percorso"
+msgstr "Path size"
+
+msgid "Ingrandisce o rimpicciolisce il tracciato: 100% è com’è disegnato, 200% il doppio."
+msgstr "Enlarges or shrinks the path: 100% is as drawn, 200% twice as big."
+
+msgid "Segue la larghezza dello slider"
+msgstr "Follows the slider width"
+
+msgid "Il tracciato si allarga e si stringe con lo slider: sul telefono resta in proporzione a come lo vedi sul Computer. Spento, ha sempre gli stessi pixel della tela e sugli schermi stretti sembra più grande."
+msgstr "The path widens and narrows with the slider: on the phone it stays in proportion to how you see it on the Computer. Off, it always keeps the same canvas pixels and looks bigger on narrow screens."
+
+msgid "Quanto aspetta il percorso prima di partire, dopo l’ingresso del livello."
+msgstr "How long the path waits before starting, after the layer’s entrance."
+
+msgid "Ritardo del percorso"
+msgstr "Path delay"
+
+msgid "Disegnato sulla tela"
+msgstr "Drawn on the canvas"
+
+msgid "Tracciato SVG scritto a mano"
+msgstr "Hand-written SVG path"
+
+msgid "Disegno del percorso"
+msgstr "Drawing the path"
+
+msgid "1 punto"
+msgstr "1 point"
+
+msgid "%d punti"
+msgstr "%d points"
+
+msgid "Clicca sulla tela per aggiungere i punti: il primo è il livello. Doppio clic o Invio per finire, Esc per annullare. Dopo puoi trascinare i punti per correggere il percorso."
+msgstr "Click on the canvas to add points: the first one is the layer. Double-click or Enter to finish, Esc to cancel. Afterwards you can drag the points to correct the path."
+
+#: slider-1.4.1474
+msgid "Numero della slide"
+msgstr "Slide number"
+
+msgid "Nessun altro livello nello slider"
+msgstr "No other layer in the slider"
+
+msgid "Questa slide (%d)"
+msgstr "This slide (%d)"
+
+msgid "Slide %d"
+msgstr "Slide %d"
+
+msgid "— Scegli un livello —"
+msgstr "— Choose a layer —"
+
+msgid "Livello che non c’è più"
+msgstr "Layer that no longer exists"
+
+msgid "Prova sulla pagina"
+msgstr "Try on the page"
+
+msgid "modifiche non ancora salvate"
+msgstr "changes not saved yet"
+
+msgid "Lo slider nel canvas è quello vero, con le modifiche fatte nell’editor: entrate, lettere, transizioni, percorsi, mouse e clic funzionano come sul sito. La pagina non è salvata: «Torna all’editor» per continuare, «Salva e chiudi» per tenerle, «Annulla» dell’editor rimette lo slider com’era."
+msgstr "The slider in the canvas is the real one, with the changes made in the editor: entrances, letters, transitions, paths, mouse and clicks work as on the site. The page is not saved: “Back to the editor” to carry on, “Save and close” to keep them; the editor’s “Cancel” puts the slider back as it was."
+
+msgid "Torna all’editor"
+msgstr "Back to the editor"
+
+msgid "Guarda lo slider vero nel canvas del builder, con le modifiche di adesso, senza salvare"
+msgstr "See the real slider in the builder canvas with the current changes, without saving"
+
+msgid "Importa 1 slide"
+msgstr "Import 1 slide"
+
+msgid "Importa %d slide"
+msgstr "Import %d slides"
+
+msgid "Sostituisci tutte"
+msgstr "Replace all"
+
+msgid "Eliminare la slide %d?"
+msgstr "Delete slide %d?"
+
+msgid "Questo livello parte nascosto: lo mostra un altro livello con l’azione «Mostra o nasconde un livello»."
+msgstr "This layer starts hidden: another layer with the “Shows or hides a layer” action shows it."
+
+#: slider-1.4.1475
+msgid "A capo (Invio)"
+msgstr "Line break (Enter)"
+
+msgid "Allinea in orizzontale"
+msgstr "Align horizontally"
+
+msgid "Allinea al centro in orizzontale"
+msgstr "Centre horizontally"
+
+msgid "Allinea a destra"
+msgstr "Align right"
+
+msgid "Allinea in verticale"
+msgstr "Align vertically"
+
+msgid "Allinea al centro in verticale"
+msgstr "Centre vertically"
+
+msgid "Allinea in basso"
+msgstr "Align bottom"
+
+msgid "Testo intestazione"
+msgstr "Heading text"
+
+msgid "Nessuna slide ancora: aggiungile con «Apri editor slider»."
+msgstr "No slides yet: add them with “Open slider editor”."
+
+msgid "Immagine della slide"
+msgstr "Slide image"
+
+#: slider-1.4.1477
+msgid "Come il livello va da questo fotogramma chiave al successivo: costante, morbido, che frena alla fine… Nell’ultimo fotogramma non conta."
+msgstr "How the layer moves from this keyframe to the next: steady, smooth, braking at the end… It does not count on the last keyframe."
 
 #: 1.4.1478
 msgid "Affina la ricerca"

@@ -164,7 +164,7 @@ def apertura(t):
 
 
 # ── notebook e tablet (8 nov 2026) ──
-# Lo Slider Pro ha una tela per formato: computer 1440, notebook 1240 (fino a 1240 px), tablet 1024 (fino a 1024),
+# Il Pro Slider ha una tela per formato: computer 1440, notebook 1240 (fino a 1240 px), tablet 1024 (fino a 1024),
 # telefono 640. L'apertura aveva regole solo per il telefono, così da 641 a 1240 px i caratteri restavano quelli del
 # computer su una tela più stretta: il sottotitolo copriva la riga «Studio più semplice…» (fino a 40 px a 1024).
 # Notebook: la stessa impaginazione del computer, coi caratteri in proporzione (1240/1440). Tablet: tela 1024×820, più

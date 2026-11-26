@@ -6,7 +6,7 @@ come un portico la sera.
 Blu ardesia notturno, il crema del sole sulla pietra, il blu cielo delle mattine e l'ottone delle meridiane. Titoli in
 Newsreader, testo in Hanken Grotesk, cifre in Fragment Mono.
 
-Apertura: Slider Pro sulle ore di una vita (costruire, proteggere, godersi, passare il testimone), coi video veri della
+Apertura: Pro Slider sulle ore di una vita (costruire, proteggere, godersi, passare il testimone), coi video veri della
 luce che si sposta sul muro; a destra un quadrante disegnato coi livelli (il cerchio, le ore, lo gnomone che gira piano
 come un'ombra al sole); il cambio è una dissolvenza lunga. Poi il risparmio che cresce col cursore (Projector), un
 portafoglio prudente a ciambella (Chart), il confronto dei costi con la banca (Table), il metodo e i consulenti.

@@ -5,7 +5,7 @@ caldo e il rasoio a mano libera; ora la portano avanti il nipote e due giovani b
 Tema scuro: verde bottiglia quasi nero, ottone, rosso sangue di bue e crema. Titoli in DM Serif Text (anche corsivo),
 testo in Albert Sans, dati in IBM Plex Mono.
 
-Apertura: Slider Pro «la poltrona», alto 16:9. A destra la foto del lavoro in una cornice d'ottone che si inclina verso
+Apertura: Pro Slider «la poltrona», alto 16:9. A destra la foto del lavoro in una cornice d'ottone che si inclina verso
 il puntatore; davanti, un paio di forbici disegnate con le forme dello slider che apre e chiude le lame a tempo
 (timeline con il perno in comune), e il bollino «dal 1962» che gira piano. Una diapositiva per servizio, a linguette.
 """

@@ -13,7 +13,7 @@
  *   - «senza controllo»: chiavi di settings che nessun campo (né le sue varianti: hover, dispositivi, legacy) scrive;
  *   - «media senza controllo» / «media nascosto»: un video o un'immagine in una chiave senza controllo, o in un campo
  *     che con le impostazioni del tema non si vede (anche dentro le voci dei ripetitori).
- * Lo Slider Pro ha un editor suo (slide e livelli): qui si guardano solo le sue impostazioni generali.
+ * Il Pro Slider ha un editor suo (slide e livelli): qui si guardano solo le sue impostazioni generali.
  *
  * Uso: node scripts/audit-chiavi-temi.mjs [--tutti] [--json file] [--tipo nome]
  */
@@ -51,7 +51,7 @@ const VARIANTI = ['_hover', '_hover_duration', '_tablet', '_mobile', '_tablet_la
 // Chiavi che ogni tile può avere senza un campo suo (gestite dal builder o da gruppi comuni): lo Sfondo dell'elemento
 // (bg) lo aggiunge l'inspector a tutte le tile, non i config.
 // Chiavi scritte da un editor su misura e non da un campo con la loro `key`: la finestra dei dati della Tabella
-// (FieldTabella → col_alignments), l'editor dello Slider Pro (altezza e sfondo comune a tutte le slide).
+// (FieldTabella → col_alignments), l'editor del Pro Slider (altezza e sfondo comune a tutte le slide).
 const GESTITE = { table: ['col_alignments'], proslider: ['globalBackground', 'height'] };
 const COMUNI = new Set(['preset', 'typography_preset', 'stile', '_v', 'version', 'bg']);
 

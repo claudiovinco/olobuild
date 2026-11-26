@@ -5,7 +5,7 @@ italiani. Scuro come la notte polare.
 Blu di notte polare, il verde dell'aurora, il viola delle sue frange e la luce calda delle lanterne. Titoli in
 Unbounded, testo in Nunito Sans, dati (gradi, latitudine, probabilità) in Azeret Mono.
 
-Apertura: Slider Pro coi video veri delle aurore, transizione a sfocatura, lettere che salgono dal buio, una fascia di
+Apertura: Pro Slider coi video veri delle aurore, transizione a sfocatura, lettere che salgono dal buio, una fascia di
 luce verde che respira sopra il titolo e un'etichetta fissa con la latitudine e la temperatura di adesso. Poi l'ora di
 Kittilä accanto a quella di casa (Timezone), le quattro cabine (Showcase grid), il calendario delle notti libere col
 prezzo (Soggiorni), le esperienze che si svelano di lato, la cena davanti al fuoco.

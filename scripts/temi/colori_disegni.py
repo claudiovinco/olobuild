@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-I disegni SVG degli Slider Pro dei temi coi colori della palette (1.4.1433, comando «Colori del disegno»).
+I disegni SVG dei Pro Slider dei temi coi colori della palette (1.4.1433, comando «Colori del disegno»).
 
 Per ogni livello immagine con un disegno della libreria ({{OLOBUILD_LIBRARY}}/media/*.svg) i colori del file uguali (o
 quasi, distanza RGB < 12) a un colore della palette del tema — ruoli e colori extra (theme.json → colori_extra) — vanno in

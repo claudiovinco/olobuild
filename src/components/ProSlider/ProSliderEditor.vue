@@ -1,10 +1,22 @@
 <template>
   <Teleport to="body">
-    <div class="mps-modal-overlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999999;background:#111827;display:flex;flex-direction:column;outline:none;" @keydown="onKeydown" tabindex="-1" ref="modalEl">
+    <!-- «Prova sulla pagina» (1.4.1474): l'editor si riduce a una barra e si guarda lo slider vero nel canvas del builder,
+         con le modifiche di adesso (non salvate). Il resto del builder resta coperto: si guarda e si prova, non si cambia. -->
+    <template v-if="provaPagina">
+      <div v-for="(s, i) in scudi" :key="'scudo' + i" class="mps-prova-scudo" :style="s" aria-hidden="true"></div>
+      <div class="mps-prova-barra" role="region" :aria-label="t('Prova sulla pagina')">
+        <span class="mps-prova-ico" aria-hidden="true" v-html="ICO.prova"></span>
+        <span class="mps-prova-testo">{{ t('Prova sulla pagina') }}<span class="mps-prova-nota">· {{ t('modifiche non ancora salvate') }}</span></span>
+        <InfoTip :testo="t('Lo slider nel canvas è quello vero, con le modifiche fatte nell’editor: entrate, lettere, transizioni, percorsi, mouse e clic funzionano come sul sito. La pagina non è salvata: «Torna all’editor» per continuare, «Salva e chiudi» per tenerle, «Annulla» dell’editor rimette lo slider com’era.')" :titolo="t('Prova sulla pagina')" />
+        <button type="button" class="mps-prova-btn is-si" @click="tornaAllEditor">{{ t('Torna all’editor') }}</button>
+        <button type="button" class="mps-prova-btn" @click="tornaAllEditor(); save()">{{ t('Salva e chiudi') }}</button>
+      </div>
+    </template>
+    <div v-show="!provaPagina" class="mps-modal-overlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999999;background:#111827;display:flex;flex-direction:column;outline:none;" @keydown="onKeydown" tabindex="-1" ref="modalEl">
       <!-- Header bar -->
       <div class="mb-flex mb-items-center mb-justify-between mb-bg-gray-800 mb-border-b mb-border-gray-700 mb-px-4 mb-py-2 mb-shrink-0">
         <div class="mb-flex mb-items-center mb-gap-3 mb-min-w-0">
-          <h2 class="mb-text-sm mb-font-bold mb-text-gray-200">{{ t('Editor dello Slider Pro') }}</h2>
+          <h2 class="mb-text-sm mb-font-bold mb-text-gray-200">{{ t('Editor del Pro Slider') }}</h2>
           <!-- Le modalità (1.4.1426, come Disegno/Animazione/Azioni di Slider Revolution 7): ognuna mostra solo i suoi comandi -->
           <div class="mps-modi" role="group" :aria-label="t('Modalità dell’editor')">
             <button v-for="m in MODI" :key="m.k" type="button" class="mps-modo" :class="{ 'is-on': modo === m.k }" :aria-pressed="modo === m.k ? 'true' : 'false'"
@@ -20,6 +32,7 @@
           <span v-if="avvisoScena" class="mb-text-xs mb-text-green-300 mb-truncate" role="status">{{ avvisoScena }}</span>
         </div>
         <div class="mb-flex mb-items-center mb-gap-2">
+          <button type="button" @click="provaSullaPagina" class="mps-prova-apri" :title="t('Guarda lo slider vero nel canvas del builder, con le modifiche di adesso, senza salvare')"><span aria-hidden="true" v-html="ICO.prova"></span>{{ t('Prova sulla pagina') }}</button>
           <button @click="save" class="mb-px-4 mb-py-1.5 mb-bg-primary-600 mb-text-white mb-text-xs mb-font-semibold mb-rounded hover:mb-bg-primary-500 mb-transition-colors">
             {{ t('Salva e chiudi') }}
           </button>
@@ -51,6 +64,7 @@
             @add="addSlide"
             @duplicate="duplicateSlide"
             @remove="removeSlide"
+            @move="spostaSlide"
             @import-slides="importSlides"
             @scene="mostraScene = true"
           />
@@ -298,8 +312,14 @@
               :scrollPreview="scrollPreview"
               :statePreview="statePreview"
               :initialStates="statiIniziali"
+              :larghezzaFormato="activeCanvasWidth || 1440"
+              :globalLayers="!data.carousel || editingGlobal ? (data.globalLayers || []) : []"
+              :editingGlobal="editingGlobal"
+              :disegnoPercorso="disegnoPercorso"
+              :provaPercorso="provaPercorso"
+              @fine-disegno="disegnoPercorso = false"
               @deselect="selectedLayerId = null"
-              @select-layer="scegliLivello"
+              @select-layer="(id, opz) => (opz && opz.globale ? selectGlobalLayer(id) : scegliLivello(id, opz))"
               @update-layers="aggiornaLivelli"
               :selectedIds="selezione"
               @update-layer="updateLayer"
@@ -364,6 +384,7 @@
             ref="pannelloInt"
             class="mps-colonna-int"
             :layers="activeSlide?.layers || []"
+            :tuttiLivelli="tuttiILivelli"
             :selectedId="editingGlobal ? null : selectedLayerId"
             :stati="data.stati || ''"
             :statePreview="statePreview"
@@ -401,7 +422,13 @@
             @set-scroll-preview="fermaScorrimento(); scrollPreview = $event"
             @update="updateLayerProp"
             @update-keyframe="onUpdateKeyframe"
-            @capture-from-canvas="captureLayerToKeyframe"
+            :parallasseSlider="!!data.parallax"
+            :disegnoPercorso="disegnoPercorso"
+            :tutteLeSlide="data.slides"
+            :indiceSlide="activeSlideIndex"
+            :livelliGlobali="data.globalLayers || []"
+            @disegna-percorso="disegnoPercorso = !disegnoPercorso"
+            @prova-percorso="disegnoPercorso = false; provaPercorso++"
           />
         </div>
       </div>
@@ -439,6 +466,7 @@ import InteractionsPanel from './InteractionsPanel.vue';
 import MultiPanel from './MultiPanel.vue';
 import lucideIcons from './lucideIconsSvg.js';
 import { CHIAVE_CONTENUTI, FOTO_ARTICOLO } from './datiArticolo.js';
+import { requestScrollToTile } from '@/utils/scrollToTileChannel';
 import { useDynamicContent } from '@/composables/useDynamicContent';
 
 // Option arrays per FieldSelect (stessi value dei vecchi <option>: dati salvati invariati)
@@ -493,6 +521,9 @@ watch(() => (contenutiAttivi.value ? JSON.stringify(data.contenuti) : ''), async
 provide(CHIAVE_CONTENUTI, { attivi: contenutiAttivi, modello: slideModello, esempio: esempioArticolo });
 const selectedLayerId = ref(null);
 const editingLayerId = ref(null);
+// Il percorso del livello scelto (1.4.1473): disegno coi clic sulla tela e prova
+const disegnoPercorso = ref(false);
+const provaPercorso = ref(0);
 const showSlideBg = ref(false);
 const hiddenLayerIds = reactive(new Set());
 const modalEl = ref(null);
@@ -671,20 +702,52 @@ function duplicateSlide(idx) {
   clone.id = makeId();
   clone.layers.forEach(l => { l.id = makeId(); });
   data.slides.splice(idx + 1, 0, clone);
+  rinumeraSlide((i) => (i > idx ? i + 1 : i));
   activeSlideIndex.value = idx + 1;
 }
 
 function removeSlide(idx) {
   if (data.slides.length <= 1) return;
   data.slides.splice(idx, 1);
+  rinumeraSlide((i) => (i > idx ? i - 1 : i));
   if (activeSlideIndex.value >= data.slides.length) {
     activeSlideIndex.value = data.slides.length - 1;
   }
   selectedLayerId.value = null;
 }
 
+// «Vai alla slide…» (salvata da 0) e la slide modello degli articoli (da 1) seguono la slide quando cambia posto
+// (1.4.1475: riordino, ma anche duplica ed elimina, che prima spostavano le slide sotto i pulsanti senza dirlo)
+function rinumeraSlide(fn) {
+  const tutti = [...data.slides.flatMap((s) => s.layers || []), ...(data.globalLayers || [])];
+  for (const l of tutti) {
+    if (l?.action?.type !== 'goToSlide') continue;
+    const v = parseInt(l.action.target, 10);
+    if (Number.isFinite(v)) l.action = { ...l.action, target: fn(v) };
+  }
+  if (data.contenuti?.enabled && data.contenuti.modello) {
+    const m = parseInt(data.contenuti.modello, 10);
+    if (Number.isFinite(m)) data.contenuti = { ...data.contenuti, modello: fn(m - 1) + 1 };
+  }
+}
+// Riordino delle slide (1.4.1475): trascinando la miniatura o con «Sposta prima / dopo»
+function spostaSlide(da, a) {
+  const n = data.slides.length;
+  if (da === a || da < 0 || a < 0 || da >= n || a >= n) return;
+  const attiva = data.slides[activeSlideIndex.value];
+  const [s] = data.slides.splice(da, 1);
+  data.slides.splice(a, 0, s);
+  rinumeraSlide((i) => {
+    if (i === da) return a;
+    if (da < a && i > da && i <= a) return i - 1;
+    if (a < da && i >= a && i < da) return i + 1;
+    return i;
+  });
+  activeSlideIndex.value = Math.max(0, data.slides.indexOf(attiva));
+}
+
 // --- Scene dei temi (1.4.1422) ---
-// Si parte da uno Slider Pro di un tema (Olobuild_Scene_Slider): «Usa questa scena» prende slide, livelli globali e
+// Si parte da un Pro Slider di un tema (Olobuild_Scene_Slider): «Usa questa scena» prende slide, livelli globali e
 // impostazioni che lo fanno funzionare (altezze, scorrimento, stati, schede…), non lo sfondo né il bordo della tile;
 // «Aggiungi le slide in fondo» solo le slide (e gli stati di partenza). Gli id dei livelli si rifanno: due copie
 // della stessa scena non si pestano i piedi (stati, CSS dei livelli), e i riferimenti «mostra o nasconde» seguono.
@@ -755,14 +818,33 @@ function usaScena({ settings, nome, media, colori, modo }) {
   timerAvviso = setTimeout(() => { avvisoScena.value = ''; }, 12000);
 }
 
-function importSlides(json) {
-  data.slides = json.slides;
-  if (json.globalBackground) {
-    data.globalBackground = json.globalBackground;
+// «Importa le slide» (1.4.1475): «Aggiungi in fondo» o «Sostituisci tutte» (prima sostituiva sempre). Aggiunte, le slide
+// prendono id nuovi (due importazioni dello stesso file non si pestano i piedi) e i loro «Vai alla slide…» si spostano
+// insieme a loro.
+function importSlides({ json, modo }) {
+  if (!json || !Array.isArray(json.slides)) return;
+  if (modo === 'aggiungi') {
+    const da = data.slides.length;
+    const nuove = JSON.parse(JSON.stringify(json.slides)).map((sl) => ({ ...sl, id: makeId(), layers: rinnovaIds(sl.layers) }));
+    for (const sl of nuove) {
+      for (const l of sl.layers || []) {
+        const v = parseInt(l?.action?.target, 10);
+        if (l?.action?.type === 'goToSlide' && Number.isFinite(v)) l.action = { ...l.action, target: v + da };
+      }
+    }
+    data.slides.push(...nuove);
+    activeSlideIndex.value = da;
+  } else {
+    data.slides = json.slides;
+    if (json.globalBackground) {
+      data.globalBackground = json.globalBackground;
+    }
+    activeSlideIndex.value = 0;
   }
-  activeSlideIndex.value = 0;
   selectedLayerId.value = null;
 }
+// Tutti i livelli dello slider (le slide e quelli su tutte le slide): bersagli di «Mostra o nasconde un livello»
+const tuttiILivelli = computed(() => [...data.slides.flatMap((s) => s.layers || []), ...(data.globalLayers || [])]);
 
 // --- Background ---
 function updateBg(key, val) {
@@ -818,8 +900,13 @@ function replaceLayer(layersArr, layerId, newLayer) {
 }
 
 function updateLayer(layerId, updates) {
-  if (!activeSlide.value) return;
-  const layer = activeSlide.value.layers.find(l => l.id === layerId);
+  // il livello della slide o, dalla 1.4.1475, uno «su tutte le slide» (ora anche lui sulla tela)
+  let lista = activeSlide.value?.layers || null;
+  let layer = lista?.find(l => l.id === layerId) || null;
+  if (!layer && data.globalLayers) {
+    lista = data.globalLayers;
+    layer = lista.find(l => l.id === layerId) || null;
+  }
   if (!layer) return;
 
   const bp = activeBreakpoint.value;
@@ -838,13 +925,13 @@ function updateLayer(layerId, updates) {
         directUpdates[k] = v;
       }
     }
-    replaceLayer(activeSlide.value.layers, layerId, {
+    replaceLayer(lista, layerId, {
       ...layer,
       ...directUpdates,
       responsive: { ...resp, [bp]: { ...bpOverride, ...respUpdates } },
     });
   } else {
-    replaceLayer(activeSlide.value.layers, layerId, { ...layer, ...updates });
+    replaceLayer(lista, layerId, { ...layer, ...updates });
   }
 }
 
@@ -916,7 +1003,7 @@ function guardaScena(v) {
 // --- Annulla e ripeti (1.4.1430) ---
 // Una fotografia dei dati dopo ogni modifica (ferma da 350 ms: un trascinamento è un passo solo), fino a 100 passi.
 // Ctrl+Z / Cmd+Z indietro, Ctrl+Maiusc+Z o Ctrl+Y avanti; dentro un campo di testo restano quelli del campo.
-const ICO = { indietro: lucideIcons['undo-2'] || '↶', avanti: lucideIcons['redo-2'] || '↷', copia: lucideIcons['copy'] || '⧉', incolla: lucideIcons['clipboard-paste'] || '⎘' };
+const ICO = { indietro: lucideIcons['undo-2'] || '↶', avanti: lucideIcons['redo-2'] || '↷', copia: lucideIcons['copy'] || '⧉', incolla: lucideIcons['clipboard-paste'] || '⎘', prova: lucideIcons['monitor-play'] || '' };
 const storia = [];
 let posStoria = -1;
 let applicando = false;
@@ -1045,15 +1132,33 @@ function posVista(l) {
 const arrot = (v) => Math.round(Math.max(-50, Math.min(150, v)) * 10) / 10;
 function aggiornaLivelli(lista) { (lista || []).forEach((u) => updateLayer(u.id, { x: u.x, y: u.y })); }
 function spostaScelti(dx, dy) {
-  const ls = livelliScelti.value.length ? livelliScelti.value : (selectedLayer.value && !editingGlobal.value ? [selectedLayer.value] : []);
+  // anche un livello su tutte le slide (1.4.1475: ora sta sulla tela e si sposta come gli altri)
+  const ls = livelliScelti.value.length ? livelliScelti.value : (selectedLayer.value ? [selectedLayer.value] : []);
   ls.filter((l) => !lockedLayerIds.has(l.id)).forEach((l) => { const p = posVista(l); updateLayer(l.id, { x: arrot(p.x + dx), y: arrot(p.y + dy) }); });
 }
+// La larghezza e l'altezza di un livello in % della tela, misurate sulla tela (valgono anche per «auto»)
+function misuraLivello(id) {
+  const el = [...(modalEl.value?.querySelectorAll('[data-mps-id]') || [])].find((e) => e.getAttribute('data-mps-id') === id);
+  const tela = el?.parentElement;
+  if (!el || !tela || !tela.offsetWidth || !tela.offsetHeight) return { w: 0, h: 0 };
+  return { w: (el.offsetWidth / tela.offsetWidth) * 100, h: (el.offsetHeight / tela.offsetHeight) * 100 };
+}
+// Allinea i livelli scelti ai bordi o al centro del riquadro che li contiene tutti (1.4.1475: prima solo a sinistra e
+// in alto, cioè alla X o alla Y più piccola)
 function allinea(dir) {
   const ls = livelliScelti.value;
   if (ls.length < 2) return;
-  const k = dir === 'sinistra' ? 'x' : 'y';
-  const m = Math.min(...ls.map((l) => posVista(l)[k]));
-  ls.forEach((l) => updateLayer(l.id, { [k]: m }));
+  const asse = ['sinistra', 'centro-o', 'destra'].includes(dir) ? 'x' : 'y';
+  const dim = asse === 'x' ? 'w' : 'h';
+  const box = ls.map((l) => ({ l, p: posVista(l)[asse], d: misuraLivello(l.id)[dim] }));
+  const min = Math.min(...box.map((b) => b.p));
+  const max = Math.max(...box.map((b) => b.p + b.d));
+  box.forEach((b) => {
+    let v = min;
+    if (dir === 'destra' || dir === 'basso') v = max - b.d;
+    else if (dir === 'centro-o' || dir === 'centro-v') v = (min + max) / 2 - b.d / 2;
+    updateLayer(b.l.id, { [asse]: arrot(v) });
+  });
 }
 function distribuisci(asse) {
   const ls = livelliScelti.value.map((l) => ({ l, p: posVista(l) })).sort((a, b) => a.p[asse] - b.p[asse]);
@@ -1480,23 +1585,13 @@ function onSetAllDurations(ms) {
   }
 }
 
-function captureLayerToKeyframe() {
-  if (!selectedLayer.value || !selectedKeyframeId.value) return;
-  const l = selectedLayer.value;
-  const kf = l.timeline?.keyframes?.find(k => k.id === selectedKeyframeId.value);
-  if (kf) {
-    kf.props.x = l.x;
-    kf.props.y = l.y;
-    kf.props.opacity = l.opacity ?? 100;
-  }
-}
-
 // --- Global settings ---
 function updateGlobal(key, val) {
   data[key] = val;
 }
 
 // --- Save / Cancel ---
+let salvato = false;
 function save() {
   // Write back to tile store
   const settings = JSON.parse(JSON.stringify(data));
@@ -1504,6 +1599,7 @@ function save() {
   for (const key of Object.keys(settings)) {
     tilesStore.updateTile(props.tileId, { [key]: settings[key] });
   }
+  salvato = true;
   builderStore.isDirty = true;
   emit('close');
 }
@@ -1511,8 +1607,88 @@ function save() {
 // «Annulla» con delle modifiche chiede conferma (1.4.1440): prima buttava via tutto in silenzio.
 const chiediAnnulla = ref(false);
 function cancel() {
-  if (!chiediAnnulla.value && JSON.stringify(data) !== datiIniziali) { chiediAnnulla.value = true; return; }
+  if (!chiediAnnulla.value && (JSON.stringify(data) !== datiIniziali || applicataSullaPagina)) { chiediAnnulla.value = true; return; }
+  rimettiTile();
   emit('close');
+}
+
+// ── Prova sulla pagina (1.4.1474) ──
+// Le modifiche vanno nella tile del builder come con «Salva e chiudi», ma la pagina non si salva: il canvas del builder
+// rifà la tile (render-tile, useIframeBridge) e lo slider vero riparte. L'anteprima del canvas passa in «modalità
+// anteprima» (iframe-bridge: niente selezione né barre, i clic arrivano allo slider), senza toccare la modalità
+// anteprima del builder, che smonterebbe l'inspector e con lui questo editor. «Annulla» rimette la tile com'era
+// all'apertura; «Salva e chiudi» la tiene.
+const impostazioniAllApertura = JSON.stringify(tile?.settings || {});
+let applicataSullaPagina = false;
+const provaPagina = ref(false);
+const zonaCanvas = ref(null);
+function misuraCanvas() {
+  const ifr = document.querySelector('iframe.olo-live-iframe');
+  if (!ifr) { zonaCanvas.value = null; return; }
+  let r = ifr.getBoundingClientRect();
+  // la parte che si vede: dentro il contenitore che scorre
+  for (let el = ifr.parentElement; el && el !== document.body; el = el.parentElement) {
+    const oy = getComputedStyle(el).overflowY;
+    if (oy === 'auto' || oy === 'scroll' || oy === 'hidden') {
+      const c = el.getBoundingClientRect();
+      const left = Math.max(r.left, c.left), top = Math.max(r.top, c.top);
+      r = { left, top, right: Math.min(r.right, c.right), bottom: Math.min(r.bottom, c.bottom) };
+      break;
+    }
+  }
+  const vw = window.innerWidth, vh = window.innerHeight;
+  zonaCanvas.value = { left: Math.max(0, r.left), top: Math.max(0, r.top), right: Math.min(vw, r.right), bottom: Math.min(vh, r.bottom) };
+}
+// Quattro veli attorno al canvas: il builder si vede ma non si tocca (salvare, cambiare tile, togliere lo slider…)
+const scudi = computed(() => {
+  const z = zonaCanvas.value;
+  if (!z) return [{ inset: '0' }];
+  return [
+    { top: '0', left: '0', right: '0', height: z.top + 'px' },
+    { top: z.bottom + 'px', left: '0', right: '0', bottom: '0' },
+    { top: z.top + 'px', left: '0', width: z.left + 'px', height: (z.bottom - z.top) + 'px' },
+    { top: z.top + 'px', left: z.right + 'px', right: '0', height: (z.bottom - z.top) + 'px' },
+  ];
+});
+function bloccaTastiBuilder(e) {
+  // Ctrl+S, Ctrl+Z… del builder: durante la prova non salvano né annullano la pagina
+  if ((e.ctrlKey || e.metaKey) && ['s', 'z', 'y', 'c', 'v', 'x', 'd'].includes(String(e.key).toLowerCase())) { e.preventDefault(); e.stopPropagation(); }
+  if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); tornaAllEditor(); }
+}
+function postaAnteprima(tipo, dati) {
+  try { window.__oloBridgePostToIframe?.(tipo, dati); } catch (_) { /* canvas non pronto */ }
+}
+function provaSullaPagina() {
+  if (!tilesStore.getTileById(props.tileId)) return;
+  stopTimelinePlay();
+  fermaScorrimento();
+  disegnoPercorso.value = false;
+  editingLayerId.value = null;
+  tilesStore.updateTile(props.tileId, JSON.parse(JSON.stringify(data)));
+  applicataSullaPagina = true;
+  provaPagina.value = true;
+  postaAnteprima('olo:preview-mode', { enabled: true });
+  requestScrollToTile(props.tileId);
+  window.addEventListener('resize', misuraCanvas);
+  window.addEventListener('keydown', bloccaTastiBuilder, true);
+  nextTick(misuraCanvas);
+  setTimeout(misuraCanvas, 600);
+}
+function tornaAllEditor() {
+  if (!provaPagina.value) return;
+  provaPagina.value = false;
+  window.removeEventListener('resize', misuraCanvas);
+  window.removeEventListener('keydown', bloccaTastiBuilder, true);
+  postaAnteprima('olo:preview-mode', { enabled: false });
+  postaAnteprima('olo:select-set', { ids: [props.tileId], zone: null });
+  nextTick(() => modalEl.value?.focus());
+}
+// la tile com'era all'apertura dell'editor (solo se la prova l'ha cambiata)
+function rimettiTile() {
+  if (!applicataSullaPagina || salvato) return;
+  const tl = tilesStore.getTileById(props.tileId);
+  if (tl) tl.settings = JSON.parse(impostazioniAllApertura);
+  applicataSullaPagina = false;
 }
 
 // --- Keyboard ---
@@ -1556,9 +1732,12 @@ function onKeydown(e) {
   }
 }
 
-// Reset timeline state when switching layers
+// Reset timeline state when switching layers. 1.4.1472: non se il fotogramma scelto è del livello nuovo (clic sulla tacca
+// di un'altra traccia: prima la scelta e la testina tornavano a zero subito dopo il clic)
 watch(selectedLayerId, () => {
   stopTimelinePlay();
+  const kfs = selectedLayer.value?.timeline?.keyframes || [];
+  if (selectedKeyframeId.value && kfs.some((k) => k.id === selectedKeyframeId.value)) return;
   timelinePlayhead.value = 0;
   selectedKeyframeId.value = null;
 });
@@ -1614,6 +1793,8 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+  tornaAllEditor();
+  rimettiTile();
   osservaInt?.disconnect();
   stopTimelinePlay();
   fermaScorrimento();
@@ -1623,6 +1804,21 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* Prova sulla pagina (1.4.1474): la barra sopra la barra del builder, i veli attorno al canvas */
+.mps-prova-apri { font: inherit; display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; font-size: 12px; font-weight: 600; color: #e5e7eb; background: #374151; border: 1px solid #4b5563; border-radius: 4px; cursor: pointer; }
+.mps-prova-apri :deep(svg) { width: 14px; height: 14px; }
+.mps-prova-apri:hover { background: #4b5563; color: #fff; }
+.mps-prova-apri:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
+.mps-prova-scudo { position: fixed; z-index: 999990; background: rgb(17 24 39 / .55); }
+.mps-prova-barra { position: fixed; top: 6px; left: 50%; transform: translateX(-50%); z-index: 999999; display: flex; align-items: center; gap: 10px; padding: 6px 8px 6px 12px; border-radius: 8px; background: #111827; border: 1px solid #374151; box-shadow: 0 8px 24px rgb(0 0 0 / .35); color: #e5e7eb; font-size: 12px; white-space: nowrap; }
+.mps-prova-ico { display: inline-flex; color: #fbbf24; }
+.mps-prova-ico :deep(svg) { width: 16px; height: 16px; }
+.mps-prova-testo { font-weight: 600; }
+.mps-prova-nota { font-weight: 400; color: #fcd34d; margin-left: 4px; }
+.mps-prova-btn { font: inherit; font-size: 12px; padding: 4px 12px; border-radius: 5px; border: 1px solid #4b5563; background: #374151; color: #e5e7eb; cursor: pointer; }
+.mps-prova-btn:hover { background: #4b5563; }
+.mps-prova-btn.is-si { background: var(--olo-color-primary, #e1474f); border-color: var(--olo-color-primary, #e1474f); color: var(--olo-color-primary-contrast, #fff); font-weight: 600; }
+.mps-prova-btn:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
 /* Slide dagli articoli: la foto in evidenza come sfondo della slide modello (1.4.1457) */
 .mps-dato-bg { font: inherit; font-size: 10px; padding: 0 8px; border: 1px solid #374151; border-radius: 4px; background: #1f2937; color: #d1d5db; cursor: pointer; white-space: nowrap; }
 .mps-dato-bg:hover { background: #374151; color: #fff; }

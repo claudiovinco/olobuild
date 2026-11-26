@@ -5,7 +5,7 @@ crociere di una settimana, uscite al tramonto e noleggio.
 Tema chiaro, bianco vela e blu mare, con l'arancio delle cerate e il verde acqua. Titoli in Outfit, testo in DM Sans, dati
 in JetBrains Mono.
 
-Apertura: Slider Pro «la bolina», alta 16:9, una diapositiva per corso col suo video pieno (la barca a vela, la prua che
+Apertura: Pro Slider «la bolina», alta 16:9, una diapositiva per corso col suo video pieno (la barca a vela, la prua che
 sbanda, il drone sul mare scuro, le vele al tramonto) e un velo scuro solo dal lato del testo. A destra la rotta di
 bolina: dall'alto scendono le strisce del vento, la rotta a zig-zag si disegna lato dopo lato e la barca la risale
 virata dopo virata fino alla boa; in alto il vento del giorno, che cambia a ogni diapositiva. Le diapositive si

@@ -6,7 +6,7 @@ Scuro come una stube la sera, con la luce del fuoco.
 Nero di fuliggine, l'arancio delle braci, il verde della maiolica trentina e il crema della calce. Titoli in Instrument
 Serif, testo in Albert Sans, numeri in Sometype Mono.
 
-Apertura: Slider Pro coi video veri (il fuoco dietro il vetro, le braci, il camino di mattoni) e la maiolica dipinta,
+Apertura: Pro Slider coi video veri (il fuoco dietro il vetro, le braci, il camino di mattoni) e la maiolica dipinta,
 in dissolvenza lunga; sopra, fisse, piccole scintille che galleggiano e salgono (livelli globali con «fluttua» e
 «deriva»), e la temperatura di fuori e di dentro. Poi le braci che salgono dietro il testo (Particle FX «embers»), la
 legna che serve in un inverno a confronto (Chart a barre), la stufa da comporre col prezzo (Configuratore) e i modelli.

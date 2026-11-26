@@ -4,7 +4,7 @@ domotica, fotovoltaico con accumulo, colonnine di ricarica; il pronto intervento
 
 La trovata: «è saltata la luce». L'apertura è al buio: si vede solo il salvavita al centro, nella luce di una torcia.
 Cliccando la leva (o premendo Invio) la leva sale, scatta un lampo, la corrente corre nei fili e si accende la stanza
-(il video delle lampadine che dondolano); ricliccando si torna al buio. Sono gli «stati» dello Slider Pro (1.4.981):
+(il video delle lampadine che dondolano); ricliccando si torna al buio. Sono gli «stati» del Pro Slider (1.4.981):
 la leva imposta lo stato luce = accesa e i livelli scelgono in quale stato farsi vedere.
 
 Tema scuro: blu notte, il giallo del filo di fase, l'azzurro dell'arco elettrico. Titoli in Red Hat Display, testo in

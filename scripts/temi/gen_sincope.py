@@ -5,7 +5,7 @@ sere a settimana, la big band del giovedì, la jam session del sabato dopo mezza
 Tema scuro, il nero della sala, l'ottone dei fiati e il viola delle luci di scena. Titoli in Bodoni Moda (anche corsivo),
 testo in Manrope, dati in Fragment Mono.
 
-Apertura: Slider Pro «il giradischi», alta 16:9, una serata per diapositiva col suo video pieno (le mani sul piano, il sax
+Apertura: Pro Slider «il giradischi», alta 16:9, una serata per diapositiva col suo video pieno (le mani sul piano, il sax
 nel locale, la cantante, il palco nel fumo) e un velo scuro solo dal lato del testo. A destra un disco a trentatré giri:
 i solchi, il riflesso fermo, l'etichetta col nome della serata che gira piano; il braccio parte dal riposo e si posa sul
 disco a ogni diapositiva. Le serate passano attraverso il buio (fadeThroughDark). Cursore: l'alone, come un occhio di bue.

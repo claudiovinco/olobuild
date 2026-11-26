@@ -6,7 +6,7 @@ fondo: senza, lo strumento non suona.
 Tema chiaro e caldo: carta, acero dorato, il rosso bruno della vernice e il verde del feltro. Titoli in Crimson Pro
 (anche corsivo), testo in Gantari, dati in Fragment Mono.
 
-Apertura: Slider Pro «il suono», alto 16:9 perché i cerchi restino cerchi. Lo strumento in una finestra ad arco che si
+Apertura: Pro Slider «il suono», alto 16:9 perché i cerchi restino cerchi. Lo strumento in una finestra ad arco che si
 inclina in 3D verso il puntatore; dalle effe partono onde concentriche che si allargano e svaniscono (il suono); quattro
 corde tese attraversano l'apertura e vibrano ognuna alla sua frequenza (sol, re, la, mi).
 """

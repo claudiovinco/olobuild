@@ -367,7 +367,7 @@
         @update:modelValue="onFieldUpdate($event)"
       />
 
-      <!-- Slide dagli articoli dello Slider Pro (1.4.1457): la stessa ricerca della «Sorgente dinamica», salvata nelle
+      <!-- Slide dagli articoli del Pro Slider (1.4.1457): la stessa ricerca della «Sorgente dinamica», salvata nelle
            impostazioni della tile; la slide modello si ripete una volta per ogni contenuto trovato. -->
       <template v-else-if="field.type === 'slide-dagli-articoli'">
         <DynamicQueryPanel
@@ -1572,7 +1572,7 @@ function onDynamicUpdate(dynamicUpdate, isRemove) {
 }
 .olo-desc-row :deep(.olo-info-btn) { color: #64748b; }
 /* Galleria dagli articoli: lo stesso avviso delle voci dei ripetitori (ContentItemsEditor) */
-/* Slide dagli articoli dello Slider Pro: la slide modello, in fila col suo numero (1.4.1457) */
+/* Slide dagli articoli del Pro Slider: la slide modello, in fila col suo numero (1.4.1457) */
 .if-modello { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 8px; }
 .if-modello-et { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--olo-color-text, #374151); }
 .if-dynamic-info {

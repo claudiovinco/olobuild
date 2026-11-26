@@ -5,7 +5,7 @@ con il giardino, l'orto, l'atelier e la cucina interna.
 Tema chiaro e morbido: latte, terracotta, salvia e il giallo sole. Titoli in Parkinsans, testo in Inclusive Sans (fatto
 per leggere bene), dati in Overpass Mono.
 
-Apertura: Slider Pro «i giochi di legno», alto 16:9. La foto in una cornice dalle curve morbide; davanti, l'arcobaleno
+Apertura: Pro Slider «i giochi di legno», alto 16:9. La foto in una cornice dalle curve morbide; davanti, l'arcobaleno
 di legno a cinque archi che dondola piano sul tavolo (tutti gli archi con lo stesso punto d'appoggio); in alto tre
 cubi di legno che cadono uno dopo l'altro e rimbalzano a ogni diapositiva. Una diapositiva per momento del nido.
 """

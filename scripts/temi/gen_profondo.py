@@ -5,7 +5,7 @@ cima di allenamento a 40 metri e i corsi da aprile a ottobre. Scuro come il blu 
 Blu abissale, l'arancio della boa di segnalazione, il ciano della luce che filtra dall'alto. Titoli in Sora, testo in
 Manrope, profondità e tempi in JetBrains Mono.
 
-Apertura: Slider Pro che scende scorrendo la pagina (scrollTimeline): cinque profondità, da 0 a −60 metri, la luce che
+Apertura: Pro Slider che scende scorrendo la pagina (scrollTimeline): cinque profondità, da 0 a −60 metri, la luce che
 si spegne, la profondità scritta enorme in trasparenza e, sul lato, un profondimetro (livelli globali: la scala; per
 diapositiva: il segno che scende e la pressione). Poi il manifesto del respiro che si accende scorrendo (Scrub text),
 il percorso di un'allieva (Progress tracker), la settimana da comporre col prezzo (Configuratore), gli istruttori

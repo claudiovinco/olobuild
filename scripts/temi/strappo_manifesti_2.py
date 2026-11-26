@@ -2,7 +2,7 @@
 """I manifesti di Strappo, seconda versione (21 nov 2026, utente: «il carattere di questo tema sembra allungato in
 verticale»).
 
-Perché: nell'apertura la tela dello Slider Pro al computer e al tablet è alta quanto lo schermo, non 16:9, e i manifesti
+Perché: nell'apertura la tela del Pro Slider al computer e al tablet è alta quanto lo schermo, non 16:9, e i manifesti
 (immagini 1440 × 810) erano stesi con object-fit «fill»: a 1440 × 900 il carattere si allungava dell'11 %, a 1024 × 768
 del 33 %, sul tablet in verticale più del doppio. Al telefono la tela ha le proporzioni del disegno (640 × 1400) e lì
 non cambia niente.

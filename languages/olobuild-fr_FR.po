@@ -3464,7 +3464,7 @@ msgid "Pro Gallery"
 msgstr "Galerie Pro"
 
 msgid "Pro Slider"
-msgstr "Slider Pro"
+msgstr "Pro Slider"
 
 msgid "Prodotti Correlati"
 msgstr "Produits associés"
@@ -48840,8 +48840,8 @@ msgid "Le colonne si allargano al passaggio"
 msgstr "Les colonnes s’élargissent au survol"
 
 #: src/config/elements/row.js
-msgid "Da 1200 px le colonne si dividono lo spazio in parti uguali e quella sotto il puntatore se ne prende di più. Per le aperture divise in due metà, ognuna col suo Slider Pro (con «Impila su tablet» sotto i 1200 px stanno una sotto l’altra)."
-msgstr "À partir de 1200 px, les colonnes se partagent l’espace à parts égales et celle sous le pointeur en prend davantage. Pour les ouvertures divisées en deux moitiés, chacune avec son Slider Pro (avec « Empiler sur tablette », sous 1200 px elles sont l’une sous l’autre)."
+msgid "Da 1200 px le colonne si dividono lo spazio in parti uguali e quella sotto il puntatore se ne prende di più. Per le aperture divise in due metà, ognuna col suo Pro Slider (con «Impila su tablet» sotto i 1200 px stanno una sotto l’altra)."
+msgstr "À partir de 1200 px, les colonnes se partagent l’espace à parts égales et celle sous le pointeur en prend davantage. Pour les ouvertures divisées en deux moitiés, chacune avec son Pro Slider (avec « Empiler sur tablette », sous 1200 px elles sont l’une sous l’autre)."
 
 #: includes/class-theme-importer.php
 msgid "Dentro e fuori"
@@ -54286,8 +54286,8 @@ msgid "Importa le slide"
 msgstr "Importer les diapositives"
 
 #: OLObuild 1.4.1161
-msgid "Editor dello Slider Pro"
-msgstr "Éditeur du Slider Pro"
+msgid "Editor del Pro Slider"
+msgstr "Éditeur du Pro Slider"
 
 #: OLObuild 1.4.1161
 msgid "Livelli globali"
@@ -57353,8 +57353,8 @@ msgstr "ce calque"
 msgid "Scene dei temi"
 msgstr "Scènes des thèmes"
 
-msgid "Parti da uno Slider Pro dei temi: poi cambi testi, foto e link."
-msgstr "Pars d’un Slider Pro des thèmes : ensuite tu changes les textes, les photos et les liens."
+msgid "Parti da un Pro Slider dei temi: poi cambi testi, foto e link."
+msgstr "Pars d’un Pro Slider des thèmes : ensuite tu changes les textes, les photos et les liens."
 
 msgid "Cerca un tema o una parola"
 msgstr "Cherche un thème ou un mot"
@@ -58252,6 +58252,299 @@ msgstr "Pivot à l’horizontale"
 
 msgid "Perno in verticale"
 msgstr "Pivot à la verticale"
+
+#: slider-1.4.1472
+msgid "Altezza personalizzata"
+msgstr "Hauteur personnalisée"
+
+msgid "Fotogramma chiave"
+msgstr "Image clé"
+
+msgid "Allunga la slide"
+msgstr "Allonger la diapositive"
+
+msgid "senza fine"
+msgstr "sans fin"
+
+msgid "volte"
+msgstr "fois"
+
+msgid "La linea del tempo dura %1 s, la slide %2 s: la slide cambierebbe prima che i livelli abbiano finito. Il pulsante porta la slide a %1 s."
+msgstr "La ligne de temps dure %1 s, la diapositive %2 s : la diapositive changerait avant que les calques aient fini. Le bouton porte la diapositive à %1 s."
+
+msgid "La linea del tempo di questo livello si perde."
+msgstr "La ligne de temps de ce calque sera perdue."
+
+msgid "Torna a Semplice"
+msgstr "Revenir à Simple"
+
+msgid "Andamento di entrata e uscita"
+msgstr "Courbe d’entrée et de sortie"
+
+msgid "Come il livello si muove mentre entra e mentre esce: costante, morbido, che frena alla fine, che rimbalza… Lo stesso andamento vale per tutte e due."
+msgstr "Comment le calque bouge en entrant et en sortant : constant, doux, qui freine à la fin, qui rebondit… La même courbe vaut pour les deux."
+
+msgid "Usa la linea del tempo sotto la tela per aggiungere e spostare i fotogrammi chiave. Clicca un fotogramma: la tela va a quel momento, e trascinando il livello lo sposti in quel fotogramma."
+msgstr "Utilise la ligne de temps sous le canevas pour ajouter et déplacer les images clés. Clique sur une image clé : le canevas va à ce moment, et en faisant glisser le calque tu le déplaces dans cette image clé."
+
+msgid "Come il livello esce quando la slide cambia (o alla fine della linea del tempo, con «Aspetta la fine» spento). Parte dal punto in cui la linea del tempo è arrivata. Finché non la cambi è una dissolvenza rapida."
+msgstr "Comment le calque sort quand la diapositive change (ou à la fin de la ligne de temps, avec « Attendre la fin » désactivé). Il part de là où la ligne de temps est arrivée. Tant que tu ne la changes pas, c’est un fondu rapide."
+
+msgid "Durata dell’uscita"
+msgstr "Durée de la sortie"
+
+msgid "Ritardo dell’uscita"
+msgstr "Délai de la sortie"
+
+msgid "Andamento dell’uscita"
+msgstr "Courbe de la sortie"
+
+msgid "Cosa non vale con la linea del tempo"
+msgstr "Ce qui ne vaut pas avec la ligne de temps"
+
+msgid "L’entrata, l’animazione del testo, il movimento continuo e la maschera qui non agiscono: li fanno i fotogrammi chiave (posizione, opacità, scala, rotazione, maschera, sfocatura). Restano salvati e valgono di nuovo tornando a «Semplice»."
+msgstr "L’entrée, l’animation du texte, le mouvement continu et le masque n’agissent pas ici : ce sont les images clés qui le font (position, opacité, échelle, rotation, masque, flou). Ils restent enregistrés et valent de nouveau en revenant à « Simple »."
+
+msgid "Con la linea del tempo cambiano colori, bordo, raggio, cursore, scala, rotazione e spostamento. Inclinazioni, rotazioni 3D, opacità e filtri li comanda la linea del tempo, e qui non ci sono."
+msgstr "Avec la ligne de temps changent les couleurs, la bordure, le rayon, le curseur, l’échelle, la rotation et le décalage. Les inclinaisons, rotations 3D, l’opacité et les filtres sont pilotés par la ligne de temps, et ne sont pas ici."
+
+msgid "Profondità con la parallasse dello slider"
+msgstr "Profondeur avec la parallaxe du slider"
+
+msgid "Con la Parallasse dello slider accesa (Stile della tile) il livello si muove col tipo e l’intensità dello slider, di più quanto più è profondo. 0 = fermo. Con «Parallasse attiva» qui sopra vale invece la parallasse propria del livello."
+msgstr "Avec la parallaxe du slider activée (Style de la tile), le calque bouge avec le type et l’intensité du slider, d’autant plus qu’il est profond. 0 = immobile. Avec « Parallaxe active » au-dessus, c’est la parallaxe propre du calque qui vaut."
+
+msgid "Non agisce: la Parallasse dello slider è spenta (Stile della tile, «Parallasse»). Accendila, o usa «Parallasse attiva» qui sopra, che agisce da sola."
+msgstr "N’agit pas : la parallaxe du slider est désactivée (Style de la tile, « Parallaxe »). Active-la, ou utilise « Parallaxe active » au-dessus, qui agit seule."
+
+msgid "slide"
+msgstr "diapositives"
+
+msgid "Parte piano"
+msgstr "Démarre doucement"
+
+msgid "Parte piano (appena)"
+msgstr "Démarre doucement (à peine)"
+
+msgid "Parte piano (poco)"
+msgstr "Démarre doucement (léger)"
+
+msgid "Parte piano (medio)"
+msgstr "Démarre doucement (moyen)"
+
+msgid "Parte piano (molto)"
+msgstr "Démarre doucement (fort)"
+
+msgid "Parte piano (deciso)"
+msgstr "Démarre doucement (marqué)"
+
+msgid "Parte piano (moltissimo)"
+msgstr "Démarre doucement (très fort)"
+
+msgid "Parte piano (al massimo)"
+msgstr "Démarre doucement (au maximum)"
+
+msgid "Frena alla fine"
+msgstr "Freine à la fin"
+
+msgid "Frena alla fine (appena)"
+msgstr "Freine à la fin (à peine)"
+
+msgid "Frena alla fine (poco)"
+msgstr "Freine à la fin (léger)"
+
+msgid "Frena alla fine (medio)"
+msgstr "Freine à la fin (moyen)"
+
+msgid "Frena alla fine (molto)"
+msgstr "Freine à la fin (fort)"
+
+msgid "Frena alla fine (deciso)"
+msgstr "Freine à la fin (marqué)"
+
+msgid "Frena alla fine (moltissimo)"
+msgstr "Freine à la fin (très fort)"
+
+msgid "Frena alla fine (al massimo)"
+msgstr "Freine à la fin (au maximum)"
+
+msgid "Parte piano e frena"
+msgstr "Démarre doucement et freine"
+
+msgid "Parte piano e frena (appena)"
+msgstr "Démarre doucement et freine (à peine)"
+
+msgid "Parte piano e frena (poco)"
+msgstr "Démarre doucement et freine (léger)"
+
+msgid "Parte piano e frena (medio)"
+msgstr "Démarre doucement et freine (moyen)"
+
+msgid "Parte piano e frena (molto)"
+msgstr "Démarre doucement et freine (fort)"
+
+msgid "Parte piano e frena (deciso)"
+msgstr "Démarre doucement et freine (marqué)"
+
+msgid "Parte piano e frena (moltissimo)"
+msgstr "Démarre doucement et freine (très fort)"
+
+msgid "Parte piano e frena (al massimo)"
+msgstr "Démarre doucement et freine (au maximum)"
+
+msgid "Rincorsa, elastico e rimbalzo"
+msgstr "Élan, élastique et rebond"
+
+msgid "Prende la rincorsa"
+msgstr "Prend son élan"
+
+msgid "Va oltre e torna"
+msgstr "Dépasse et revient"
+
+msgid "Rincorsa e ritorno"
+msgstr "Élan et retour"
+
+#: slider-1.4.1473
+msgid "Il livello corre lungo un tracciato partendo da dove è posato. Sulla tela il tracciato si vede tratteggiato quando il livello è scelto: disegnalo coi clic, poi trascina i punti per correggerlo."
+msgstr "Le calque parcourt un tracé à partir de l’endroit où il est posé. Sur le canevas, le tracé apparaît en pointillés quand le calque est choisi : dessine-le en cliquant, puis fais glisser les points pour le corriger."
+
+msgid "Disegna sulla tela"
+msgstr "Dessiner sur le canevas"
+
+msgid "Prova il percorso"
+msgstr "Essayer le tracé"
+
+msgid "Forma del percorso"
+msgstr "Forme du tracé"
+
+msgid "Linee dritte"
+msgstr "Lignes droites"
+
+msgid "Tracciato SVG"
+msgstr "Tracé SVG"
+
+msgid "Il tracciato scritto come l’attributo «d» di un percorso SVG, in pixel della tela del Computer (per esempio M0,0 C50,0 50,100 100,100). Più semplice disegnarlo sulla tela."
+msgstr "Le tracé écrit comme l’attribut « d » d’un chemin SVG, en pixels du canevas Ordinateur (par exemple M0,0 C50,0 50,100 100,100). Il est plus simple de le dessiner sur le canevas."
+
+msgid "Dimensione del percorso"
+msgstr "Taille du tracé"
+
+msgid "Ingrandisce o rimpicciolisce il tracciato: 100% è com’è disegnato, 200% il doppio."
+msgstr "Agrandit ou réduit le tracé : 100 % tel qu’il est dessiné, 200 % le double."
+
+msgid "Segue la larghezza dello slider"
+msgstr "Suit la largeur du slider"
+
+msgid "Il tracciato si allarga e si stringe con lo slider: sul telefono resta in proporzione a come lo vedi sul Computer. Spento, ha sempre gli stessi pixel della tela e sugli schermi stretti sembra più grande."
+msgstr "Le tracé s’élargit et se rétrécit avec le slider : sur le téléphone il reste proportionné à ce que tu vois sur l’Ordinateur. Désactivé, il garde toujours les mêmes pixels du canevas et paraît plus grand sur les écrans étroits."
+
+msgid "Quanto aspetta il percorso prima di partire, dopo l’ingresso del livello."
+msgstr "Combien de temps le tracé attend avant de partir, après l’entrée du calque."
+
+msgid "Ritardo del percorso"
+msgstr "Délai du tracé"
+
+msgid "Disegnato sulla tela"
+msgstr "Dessiné sur le canevas"
+
+msgid "Tracciato SVG scritto a mano"
+msgstr "Tracé SVG écrit à la main"
+
+msgid "Disegno del percorso"
+msgstr "Dessin du tracé"
+
+msgid "1 punto"
+msgstr "1 point"
+
+msgid "%d punti"
+msgstr "%d points"
+
+msgid "Clicca sulla tela per aggiungere i punti: il primo è il livello. Doppio clic o Invio per finire, Esc per annullare. Dopo puoi trascinare i punti per correggere il percorso."
+msgstr "Clique sur le canevas pour ajouter les points : le premier est le calque. Double-clic ou Entrée pour finir, Échap pour annuler. Ensuite tu peux faire glisser les points pour corriger le tracé."
+
+#: slider-1.4.1474
+msgid "Numero della slide"
+msgstr "Numéro de la diapositive"
+
+msgid "Nessun altro livello nello slider"
+msgstr "Aucun autre calque dans le slider"
+
+msgid "Questa slide (%d)"
+msgstr "Cette diapositive (%d)"
+
+msgid "Slide %d"
+msgstr "Diapositive %d"
+
+msgid "— Scegli un livello —"
+msgstr "— Choisis un calque —"
+
+msgid "Livello che non c’è più"
+msgstr "Calque qui n’existe plus"
+
+msgid "Prova sulla pagina"
+msgstr "Essayer sur la page"
+
+msgid "modifiche non ancora salvate"
+msgstr "modifications pas encore enregistrées"
+
+msgid "Lo slider nel canvas è quello vero, con le modifiche fatte nell’editor: entrate, lettere, transizioni, percorsi, mouse e clic funzionano come sul sito. La pagina non è salvata: «Torna all’editor» per continuare, «Salva e chiudi» per tenerle, «Annulla» dell’editor rimette lo slider com’era."
+msgstr "Le slider dans le canevas est le vrai, avec les modifications faites dans l’éditeur : entrées, lettres, transitions, tracés, souris et clics fonctionnent comme sur le site. La page n’est pas enregistrée : « Retour à l’éditeur » pour continuer, « Enregistrer et fermer » pour les garder ; « Annuler » de l’éditeur remet le slider comme il était."
+
+msgid "Torna all’editor"
+msgstr "Retour à l’éditeur"
+
+msgid "Guarda lo slider vero nel canvas del builder, con le modifiche di adesso, senza salvare"
+msgstr "Voir le vrai slider dans le canevas du builder avec les modifications actuelles, sans enregistrer"
+
+msgid "Importa 1 slide"
+msgstr "Importer 1 diapositive"
+
+msgid "Importa %d slide"
+msgstr "Importer %d diapositives"
+
+msgid "Sostituisci tutte"
+msgstr "Tout remplacer"
+
+msgid "Eliminare la slide %d?"
+msgstr "Supprimer la diapositive %d ?"
+
+msgid "Questo livello parte nascosto: lo mostra un altro livello con l’azione «Mostra o nasconde un livello»."
+msgstr "Ce calque démarre caché : un autre calque avec l’action « Affiche ou masque un calque » le montre."
+
+#: slider-1.4.1475
+msgid "A capo (Invio)"
+msgstr "Retour à la ligne (Entrée)"
+
+msgid "Allinea in orizzontale"
+msgstr "Aligner horizontalement"
+
+msgid "Allinea al centro in orizzontale"
+msgstr "Centrer horizontalement"
+
+msgid "Allinea a destra"
+msgstr "Aligner à droite"
+
+msgid "Allinea in verticale"
+msgstr "Aligner verticalement"
+
+msgid "Allinea al centro in verticale"
+msgstr "Centrer verticalement"
+
+msgid "Allinea in basso"
+msgstr "Aligner en bas"
+
+msgid "Testo intestazione"
+msgstr "Texte du titre"
+
+msgid "Nessuna slide ancora: aggiungile con «Apri editor slider»."
+msgstr "Pas encore de diapositives : ajoute-les avec « Ouvrir l’éditeur de slider »."
+
+msgid "Immagine della slide"
+msgstr "Image de la diapositive"
+
+#: slider-1.4.1477
+msgid "Come il livello va da questo fotogramma chiave al successivo: costante, morbido, che frena alla fine… Nell’ultimo fotogramma non conta."
+msgstr "Comment le calque va de cette image clé à la suivante : constant, doux, qui freine à la fin… Sur la dernière image clé, cela ne compte pas."
 
 #: 1.4.1478
 msgid "Affina la ricerca"

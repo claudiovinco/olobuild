@@ -5,7 +5,7 @@ bambini dai quattro anni, il fuoripista con la guida e le piste del comprensorio
 Tema chiaro, bianco neve e azzurro ghiaccio, coi colori delle piste: blu, rosso, nero e l'ambra del fuoripista. Titoli in
 Sora, testo in Plus Jakarta Sans, dati in Roboto Mono.
 
-Apertura: Slider Pro «la pendenza», alta 16:9, un livello per diapositiva col suo video pieno (la pista dolce con la
+Apertura: Pro Slider «la pendenza», alta 16:9, un livello per diapositiva col suo video pieno (la pista dolce con la
 seggiovia, le curve fra gli abeti, la discesa ripida, la neve fresca) e un velo scuro solo dal lato del testo. A destra
 il cartello della pista col suo colore e la pendenza disegnata: la linea della pista si inclina a ogni livello, dalla
 blu alla nera, e lo sciatore la scende; accanto la pendenza in percentuale. Cursore: la neve.
