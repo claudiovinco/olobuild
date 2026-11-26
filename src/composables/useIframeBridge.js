@@ -425,7 +425,13 @@ export function useIframeBridge(iframeRef) {
         break;
       }
 
+      case 'olo:chiudi-menu':
+        builderStore._chiudiMenuRapido = Date.now();
+        break;
+
       case 'olo:tile-click':
+        // Un clic nel canvas chiude il menu rapido aperto (il clic destro lo riapre subito dopo, col suo messaggio)
+        builderStore._chiudiMenuRapido = Date.now();
         if (d.tileId) {
           if (d.additive) builderStore.toggleTileSelection(d.tileId);
           else builderStore.selectTile(d.tileId);
@@ -433,6 +439,7 @@ export function useIframeBridge(iframeRef) {
         break;
 
       case 'olo:canvas-click':
+        builderStore._chiudiMenuRapido = Date.now();
         builderStore.deselectTile();
         break;
 

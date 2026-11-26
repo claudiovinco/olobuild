@@ -56570,3 +56570,143 @@ msgstr "How much"
 
 msgid "Quanto del secondo colore"
 msgstr "How much of the second colour"
+
+#: licenza-1.4.1345
+msgid "Immagine d’attesa"
+msgstr "Placeholder image"
+
+msgid "Si vede finché il video non parte, e al suo posto se non si può caricare. Meglio un fotogramma del video: il passaggio non si nota."
+msgstr "It shows until the video starts, and in its place if it cannot load. A frame from the video works best: the switch goes unnoticed."
+
+msgid "Le modifiche fatte qui si perdono."
+msgstr "The changes made here will be lost."
+
+msgid "Esci senza salvare"
+msgstr "Leave without saving"
+
+msgid "Clic per sceglierlo; Ctrl + clic per aggiungerne uno; Maiusc + clic per scegliere tutti quelli fino a qui; trascinalo per cambiare ordine o gruppo"
+msgstr "Click to choose it; Ctrl + click to add one; Shift + click to choose all of them up to here; drag it to change order or group"
+
+#: licenza-1.4.1345
+msgid "Quelli non impostati qui ereditano dallo schermo più grande: il telefono dal tablet, il tablet dal notebook, il notebook dal computer."
+msgstr "Whatever is not set here is inherited from the larger screen: the phone from the tablet, the tablet from the notebook, the notebook from the computer."
+
+#: licenza-1.4.1345
+msgid "Intervallo fra lettere"
+msgstr "Interval between letters"
+
+msgid "Maschera da destra"
+msgstr "Mask from the right"
+
+msgid "Maschera da sinistra"
+msgstr "Mask from the left"
+
+msgid "Maschera dal basso"
+msgstr "Mask from the bottom"
+
+msgid "Maschera dall’alto"
+msgstr "Mask from the top"
+
+msgid "Ombra del testo, orizzontale"
+msgstr "Text shadow, horizontal"
+
+msgid "Ombra del testo, verticale"
+msgstr "Text shadow, vertical"
+
+msgid "Raggio al passaggio"
+msgstr "Radius on hover"
+
+msgid "Raggio in alto a destra"
+msgstr "Top right radius"
+
+msgid "Raggio in alto a sinistra"
+msgstr "Top left radius"
+
+msgid "Raggio in basso a destra"
+msgstr "Bottom right radius"
+
+msgid "Raggio in basso a sinistra"
+msgstr "Bottom left radius"
+
+msgid "Sfocatura al passaggio"
+msgstr "Blur on hover"
+
+msgid "Sfocatura dell’ombra del testo"
+msgstr "Text shadow blur"
+
+msgid "Spostamento orizzontale al passaggio"
+msgstr "Horizontal shift on hover"
+
+msgid "Spostamento verticale al passaggio"
+msgstr "Vertical shift on hover"
+
+#: licenza-1.4.1345
+msgid "Duplica la slide"
+msgstr "Duplicate slide"
+
+msgid "Elimina la slide"
+msgstr "Delete slide"
+
+msgid "Colore brunito"
+msgstr "Colour burn"
+
+msgid "Colore schiarito"
+msgstr "Colour dodge"
+
+msgid "Luce intensa"
+msgstr "Hard light"
+
+msgid "X"
+msgstr "X"
+
+msgid "Y"
+msgstr "Y"
+
+#: licenza-1.4.1345
+msgid "Usa questo indirizzo"
+msgstr "Use this address"
+
+#: licenza-1.4.1345
+msgid "Inserisci un dato dell’articolo"
+msgstr "Insert a detail from the post"
+
+msgid "Ogni slide mostra quello del suo articolo"
+msgstr "Each slide shows the one from its post"
+
+msgid "Foto dell’articolo"
+msgstr "Post photo"
+
+msgid "Titolo dell’articolo"
+msgstr "Post title"
+
+msgid "Link dell’articolo"
+msgstr "Post link"
+
+msgid "Slide modello: sul sito si ripete una volta per ogni articolo"
+msgstr "Template slide: on the site it repeats once for each post"
+
+msgid "Slide dagli articoli"
+msgstr "Slides from posts"
+
+msgid "Slide modello"
+msgstr "Template slide"
+
+msgid "Sul sito questa slide si ripete una volta per ogni articolo trovato, al suo posto; le altre slide restano dove sono. Nei suoi livelli metti i dati dell’articolo coi pulsanti dell’editor (Dato, Foto dell’articolo, Link dell’articolo)."
+msgstr "On the site this slide repeats in its place once for each post found; the other slides stay where they are. In its layers put the post details with the editor buttons (Detail, Post photo, Post link)."
+
+#: licenza-1.4.1345
+msgid "Solo articoli con la foto"
+msgstr "Only posts with a photo"
+
+#: licenza-1.4.1345
+msgid "Inclina in orizzontale"
+msgstr "Skew horizontally"
+
+msgid "Inclina in verticale"
+msgstr "Skew vertically"
+
+msgid "Perno in orizzontale"
+msgstr "Pivot horizontally"
+
+msgid "Perno in verticale"
+msgstr "Pivot vertically"

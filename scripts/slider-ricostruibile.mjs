@@ -88,7 +88,12 @@ let livelliSlide = [];
 // FieldColor: vuoto, trasparente, un #hex o rgba() scritto, un token della palette (anche con la riserva), un token o
 // un #hex con la trasparenza della sua barra (color-mix(in srgb, X N%, transparent)). Non sa mescolare due colori.
 const CHIAVE_COLORE = /(colou?r|colore|^bgColor$|Color$|^from$|^to$|^segno$)/i;
-const TOKEN = String.raw`var\(\s*--olo-color-[a-z0-9_-]+\s*(?:,\s*#[0-9a-f]{3,8}\s*)?\)`;
+// … ma solo i token che le sue pastiglie offrono (1.4.1438): i ruoli (ROLE_SWATCHES e ROLE_SWATCHES_ALTRI di
+// colorToken.js) come token nudi, i colori globali del sito (gli extra dei temi) con la loro riserva #hex. Prima valeva
+// qualunque token, e Scuro, Chiaro e Accento passavano anche se fra le pastiglie non c'erano.
+const CT = fs.readFileSync(path.join(ROOT, 'src/utils/colorToken.js'), 'utf8');
+const RUOLI = [...CT.matchAll(/\{ id: '([a-z-]+)', label: '[^']+' \}/g)].map((m) => m[1]);
+const TOKEN = String.raw`var\(\s*--olo-color-(?:${RUOLI.join('|')})\s*\)|var\(\s*--olo-color-[a-z0-9_-]+\s*,\s*#[0-9a-f]{3,8}\s*\)`;
 const HEXRGB = String.raw`#[0-9a-f]{3,8}|rgba?\([\d\s.,%]+\)`;
 // … e dalla 1.4.1435 «Mescola con»: color-mix(in srgb, A P%, B) con A e B token della palette (o #hex)
 const PARTE = String.raw`(?:${TOKEN}|#[0-9a-f]{3,8})`;
@@ -130,6 +135,64 @@ function livello(l, tema, file) {
   };
   visita(l, '');
 }
+// ── 3b. la slide: sfondo e durata (1.4.1438) ──────────────────────────────────
+// Rifacendo a mano Elastan: l'immagine d'attesa dei video (in tutti i 250 sfondi video) non aveva un campo, e la durata
+// si fermava a 120 s (63 slide a 600). Per ogni tipo di sfondo, le chiavi che il sito LEGGE (render_bg() e la
+// sovrapposizione del PHP) devono avere un updateBg('chiave') nel pannello di quel tipo; le chiavi rimaste da un altro
+// tipo (un «video» su uno sfondo a immagine) non contano: il sito non le legge.
+const ED = leggi('ProSliderEditor.vue');
+const SOVRAPP = ['overlay', 'overlayOpacity', 'overlayFadeTop', 'overlayFadeBottom'];
+const KB = ['kenBurns', 'kenBurnsDirection', 'kenBurnsScale', 'kenBurnsDuration', 'kenBurnsPanX', 'kenBurnsPanY', 'kenBurnsBlurStart', 'kenBurnsBlurEnd'];
+const LETTE = { color: ['color', ...SOVRAPP], image: ['image', ...KB, ...SOVRAPP], video: ['video', 'image', 'videoScroll', ...SOVRAPP], gradient: ['gradientFrom', 'gradientTo', 'gradientAngle', ...SOVRAPP], transparent: [] };
+const PANNELLO = {}; // tipo → chiavi che il pannello di quel tipo scrive
+{
+  let tipi = [];
+  // solo il template, fino al pannello chiuso (che nomina i tipi per dire cos'è, non per scriverli)
+  const fine = ED.indexOf('mps-sfondo-chiuso');
+  for (const riga of ED.slice(0, fine > 0 ? fine : ED.search(/^<script/m)).split('\n')) {
+    const uguale = [...riga.matchAll(/currentBg\.type === '(\w+)'/g)].map((m) => m[1]);
+    const diverso = riga.match(/currentBg\.type !== '(\w+)'/);
+    if (uguale.length) tipi = uguale; else if (diverso) tipi = Object.keys(LETTE).filter((t) => t !== diverso[1]);
+    for (const m of riga.matchAll(/updateBg\('(\w+)'/g)) for (const t of tipi) (PANNELLO[t] ||= new Set()).add(m[1]);
+  }
+}
+const durataMax = +((ED.match(/activeSlide\?\.duration[^>]*?:max="(\d+)"/) || [, 0])[1]) * 1000;
+function slide(s, tema, file, n) {
+  const chi = `${tema} · slide ${n}`;
+  const bg = s.background || {};
+  const tipo = bg.type || 'color';
+  for (const k of Object.keys(bg)) if (k !== 'type' && (LETTE[tipo] || []).includes(k) && !(PANNELLO[tipo] || new Set()).has(k)) casi.push({ chi, file, cosa: `background(${tipo}).${k}`, perche: 'il pannello dello sfondo non lo offre' });
+  if ((s.duration || 0) > durataMax) casi.push({ chi, file, cosa: `duration = ${s.duration}`, perche: `la Durata della slide si ferma a ${durataMax / 1000} s` });
+}
+
+// ── 3c. i decimali che un campo tiene (1.4.1444) ──────────────────────────────
+// NumberScrubber: un passo ≥ 1 legge solo interi (parseInt); un passo < 1 tiene i decimali scritti fino a
+// PRECISIONE_SCRITTA. Un up('k', Math.round($event * N) / N) nel pannello taglia a log10(N) decimali.
+// Rifacendo a mano Elastan, «1,05» nell'interlinea diventava 1,1.
+const NS = fs.readFileSync(path.join(ROOT, 'src/components/Builder/fields/NumberScrubber.vue'), 'utf8');
+const PREC = +((NS.match(/PRECISIONE_SCRITTA\s*=\s*(\d+)/) || [, 1])[1]);
+const DECIMALI = {}; // chiave → decimali che il suo campo tiene
+for (const m of LP.matchAll(/<NumberScrubber[^>]*?:modelValue="(?:rv\('(\w+)'\)|layer\.(\w+))[^"]*"[^>]*?:step="([\d.]+)"[^>]*>/g)) {
+  const k = m[1] || m[2], st = +m[3];
+  const dStep = String(st).includes('.') ? String(st).split('.')[1].length : 0;
+  const scr = +((m[0].match(/:scriviDecimali="(\d+)"/) || [, 0])[1]);
+  let d = st >= 1 ? scr : Math.max(dStep, PREC);
+  const taglio = m[0].match(/Math\.round\(\$event \* (\d+)\) \/ \1/);
+  if (taglio) d = Math.min(d, Math.round(Math.log10(+taglio[1])));
+  DECIMALI[k] = Math.min(DECIMALI[k] ?? 99, d);
+}
+function decimaliDi(v) { const s = String(v); return s.includes('.') && !/e/i.test(s) ? s.split('.')[1].length : 0; }
+function precisione(l, tema, file) {
+  const chi = `${tema} · ${l.name || l.id}`;
+  for (const src of [l, ...Object.values(l.responsive || {})]) {
+    if (!src || typeof src !== 'object') continue;
+    for (const [k, d] of Object.entries(DECIMALI)) {
+      const v = src[k];
+      if (typeof v === 'number' && decimaliDi(v) > d) casi.push({ chi, file, cosa: `${k} = ${v}`, perche: `il campo tiene ${d} decimali` });
+    }
+  }
+}
+
 const temi = path.join(ROOT, 'assets/data/themes');
 let nSlider = 0, nLiv = 0;
 for (const t of fs.readdirSync(temi)) {
@@ -142,9 +205,10 @@ for (const t of fs.readdirSync(temi)) {
       if (!o || typeof o !== 'object') return;
       if (o.type === 'proslider' && o.settings) {
         nSlider++;
-        for (const s of o.settings.slides || []) { livelliSlide = [...(s.layers || []), ...(o.settings.globalLayers || [])]; for (const l of s.layers || []) { nLiv++; livello(l, t, f); } }
+        (o.settings.slides || []).forEach((s, i) => slide(s, t, f, i + 1));
+        for (const s of o.settings.slides || []) { livelliSlide = [...(s.layers || []), ...(o.settings.globalLayers || [])]; for (const l of s.layers || []) { nLiv++; livello(l, t, f); precisione(l, t, f); } }
         livelliSlide = o.settings.globalLayers || [];
-        for (const l of o.settings.globalLayers || []) { nLiv++; livello(l, t, f); }
+        for (const l of o.settings.globalLayers || []) { nLiv++; livello(l, t, f); precisione(l, t, f); }
         return;
       }
       Object.values(o).forEach(cerca);

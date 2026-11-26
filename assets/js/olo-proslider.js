@@ -1144,10 +1144,21 @@ function initSlider(container) {
       var w = Math.max(container.offsetWidth || 1440, 1000);
       return o.p * w / 1440 * dpr * ((window.innerWidth || 1440) < 700 ? 1.25 : 1);
     }
+    // (1.4.1448) la tela non capisce var() né color-mix(): con un colore della palette («Primario», come in Fuliggine)
+    // fillStyle restava nero. Il colore si fa leggere al browser su un elemento dentro lo slider, dove i token valgono.
+    function coloreVero(c) {
+      if (!c || !/var\(|color-mix|currentcolor/i.test(c)) return c || '#111';
+      var s = document.createElement('span');
+      s.style.cssText = 'display:none;color:' + c;
+      strato.appendChild(s);
+      var v = getComputedStyle(s).color;
+      strato.removeChild(s);
+      return v || '#111';
+    }
     function copri() {
       g.globalCompositeOperation = 'source-over';
       g.clearRect(0, 0, cv.width, cv.height);
-      g.fillStyle = o.c || '#111';
+      g.fillStyle = coloreVero(o.c);
       g.fillRect(0, 0, cv.width, cv.height);
       if (img && img.naturalWidth) {
         // come object-fit: cover, col punto scelto

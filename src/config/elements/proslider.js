@@ -10,10 +10,10 @@ import { t } from '@/i18n';
  *
  *   fields[]      → modalità sizing, riproduzione (autoplay/loop/swipe/keyboard/mouseWheel),
  *                   tipo transizione, visibilità navigazione (frecce/dots/thumbs/tabs/progress),
- *                   parallax/carousel toggles, scroll timeline (toggle + distanza)
+ *                   carosello, scroll timeline (toggle + distanza)
  *   styleFields[] → preset, sfondo, tipografia, durata transizione/animazioni, stile frecce/dots/thumbs,
- *                   colore/altezza barra progresso, intensità parallax, geometria carosello,
- *                   bordi
+ *                   colore/altezza barra progresso, geometria carosello, bordi,
+ *                   parallasse (interruttore + tipo + intensità, tutti insieme)
  *   AVANZATE      → meta tecnico (id/class/condizioni)
  */
 
@@ -49,9 +49,9 @@ function defaultLayer(type = 'text') {
     fontStyle: 'normal', // normal | italic
     // Il pulsante nasce sul primario della palette col suo contrasto (era un blu fisso #2563eb,
     // estraneo a ogni tema): vale solo per i pulsanti aggiunti da qui in avanti.
-    color: type === 'button' ? 'var(--olo-color-primary-contrast, #ffffff)' : '#ffffff',
+    color: type === 'button' ? 'var(--olo-color-primary-contrast)' : 'var(--olo-color-light)', // (1.4.1445) token, non #ffffff
     textAlign: 'left',
-    bgColor: type === 'button' ? 'var(--olo-color-primary, #e1474f)' : '',
+    bgColor: type === 'button' ? 'var(--olo-color-primary)' : '',
     borderRadius: type === 'button' ? 6 : 0,
     borderRadiusLinked: true, // true = tutti gli angoli uguali
     borderRadiusTL: 0,
@@ -73,7 +73,7 @@ function defaultLayer(type = 'text') {
     fontFamily: '',
     // Text stroke (text/button)
     textStrokeWidth: 0,
-    textStrokeColor: '#000000',
+    textStrokeColor: 'var(--olo-color-dark)',
     // Selectable text
     selectableText: false,
     // Bordo (tutti i tipi)
@@ -84,7 +84,7 @@ function defaultLayer(type = 'text') {
     borderWidthBottom: 0,
     borderWidthLeft: 0,
     borderStyle: 'solid',
-    borderColor: '#ffffff',
+    borderColor: 'var(--olo-color-light)',
     // Text shadow (text/button)
     textShadow: null, // { x: 2, y: 2, blur: 4, color: '#000000' }
     // Box shadow (tutti i tipi)
@@ -176,9 +176,9 @@ function defaultSlide() {
       type: 'color',
       image: '',
       video: '',
-      color: '#1e293b',
-      gradientFrom: '#1e293b',
-      gradientTo: '#0f172a',
+      color: 'var(--olo-color-dark)',
+      gradientFrom: 'var(--olo-color-dark)',
+      gradientTo: 'var(--olo-color-dark)',
       gradientAngle: 180,
       kenBurns: false,
       kenBurnsScale: 1.2,
@@ -239,8 +239,8 @@ export function resolveHeightPx(h, canvasWidth) {
 // ── Impostazioni di PARTENZA ──────────────────────────────────────────────────────────────
 // Livelli e diapositive completi come quelli che crea l'editor (stesse chiavi), ma con i colori
 // della palette al posto degli esadecimali di defaultLayer/defaultSlide.
-const SCURO = 'var(--olo-color-dark, #16263d)';
-const CHIARO = 'var(--olo-color-light, #ffffff)';
+const SCURO = 'var(--olo-color-dark)';
+const CHIARO = 'var(--olo-color-light)';
 function livelloPartenza(type, p = {}) {
   return { ...defaultLayer(type), color: CHIARO, bgColor: '', borderColor: CHIARO, textStrokeColor: SCURO, ...p };
 }
@@ -284,9 +284,9 @@ export default {
       type: 'color',
       image: '',
       video: '',
-      color: 'var(--olo-color-dark, #16263d)',
-      gradientFrom: 'var(--olo-color-dark, #16263d)',
-      gradientTo: 'var(--olo-color-dark, #16263d)',
+      color: 'var(--olo-color-dark)',
+      gradientFrom: 'var(--olo-color-dark)',
+      gradientTo: 'var(--olo-color-dark)',
       gradientAngle: 180,
       kenBurns: false,
       kenBurnsScale: 1.2,
@@ -353,13 +353,13 @@ export default {
   partenza: {
     slides: [
       diapositivaPartenza('ufficio', [
-        livelloPartenza('text', { content: t('Studio di consulenza · dal 2010'), tag: 'p', x: 8, y: 22, width: 60, fontSize: 15, fontWeight: '600', letterSpacing: 3, textTransform: 'uppercase', color: 'color-mix(in srgb, var(--olo-color-light, #ffffff) 85%, transparent)' }),
+        livelloPartenza('text', { content: t('Studio di consulenza · dal 2010'), tag: 'p', x: 8, y: 22, width: 60, fontSize: 15, fontWeight: '600', letterSpacing: 3, textTransform: 'uppercase', color: 'color-mix(in srgb, var(--olo-color-light) 85%, transparent)' }),
         livelloPartenza('text', { content: t('Idee chiare per far crescere la tua attività'), tag: 'h2', x: 8, y: 30, width: 62, fontSize: 60, lineHeight: 1.1, animInDelay: 350 }),
         livelloPartenza('text', { content: t('Conti, strategia e marketing con un solo interlocutore, dal primo incontro ai risultati.'), tag: 'p', x: 8, y: 60, width: 46, fontSize: 21, fontWeight: '400', lineHeight: 1.5, animInDelay: 500 }),
         livelloPartenza('button', { content: t('Prenota una consulenza'), x: 8, y: 76, fontSize: 17, fontWeight: '600', bgColor: 'var(--olo-color-primary)', color: 'var(--olo-color-primary-contrast)', borderRadius: 999, padding: 14, buttonUrl: '#', animInDelay: 700 }),
       ]),
       diapositivaPartenza('citta-tetti', [
-        livelloPartenza('text', { content: t('Dove lavoriamo'), tag: 'p', x: 8, y: 22, width: 60, fontSize: 15, fontWeight: '600', letterSpacing: 3, textTransform: 'uppercase', color: 'color-mix(in srgb, var(--olo-color-light, #ffffff) 85%, transparent)' }),
+        livelloPartenza('text', { content: t('Dove lavoriamo'), tag: 'p', x: 8, y: 22, width: 60, fontSize: 15, fontWeight: '600', letterSpacing: 3, textTransform: 'uppercase', color: 'color-mix(in srgb, var(--olo-color-light) 85%, transparent)' }),
         livelloPartenza('text', { content: t('Oltre 300 imprese seguite in tutta Italia'), tag: 'h2', x: 8, y: 30, width: 62, fontSize: 60, lineHeight: 1.1, animInDelay: 350 }),
         livelloPartenza('text', { content: t('Incontri in studio oppure online, nei giorni e negli orari che preferisci.'), tag: 'p', x: 8, y: 60, width: 46, fontSize: 21, fontWeight: '400', lineHeight: 1.5, animInDelay: 500 }),
         livelloPartenza('button', { content: t('Leggi le loro storie'), x: 8, y: 76, fontSize: 17, fontWeight: '600', bgColor: 'var(--olo-color-primary)', color: 'var(--olo-color-primary-contrast)', borderRadius: 999, padding: 14, buttonUrl: '#', animInDelay: 700 }),
@@ -378,6 +378,11 @@ export default {
       { value: 'fullwidth', label: t('Tutta larghezza') },
       { value: 'fullscreen', label: t('Tutto schermo') },
     ]},
+
+    // Slide dagli articoli (1.4.1457): la slide modello si ripete una volta per ogni contenuto scelto (Contenuto: è
+    // cosa lo slider mostra). Il renderer PHP la moltiplica (slide_dai_contenuti); l'editor propone i dati dell'articolo.
+    { type: 'separator', label: t('Articoli') },
+    { key: 'contenuti', label: t('Slide dagli articoli'), type: 'slide-dagli-articoli' },
 
     { type: 'separator', label: t('Riproduzione') },
     { key: 'autoplay', label: t('Riproduzione automatica'), type: 'toggle' },
@@ -425,13 +430,6 @@ export default {
     { key: 'showThumbs', label: t('Miniature'), type: 'toggle' },
     { key: 'showTabs', label: t('Schede'), type: 'toggle' },
 
-    { type: 'separator', label: t('Parallasse') },
-    { key: 'parallaxType', label: t('Tipo di parallasse'), type: 'select', options: [
-      { value: 'mouse', label: t('Mouse') },
-      { value: 'scroll', label: t('Scorrimento') },
-      { value: 'both', label: t('Entrambi') },
-    ], condition: { field: 'parallax', value: true } },
-
     { type: 'separator', label: t('Carosello') },
     { key: 'carousel', label: t('Modalità carosello'), type: 'toggle' },
     { key: 'carousel3D', label: t('Rotazione 3D'), type: 'toggle',
@@ -454,7 +452,10 @@ export default {
       description: t('Mentre lo slider è fermo in cima, ogni gesto della rotella o del trackpad porta alla diapositiva dopo '
         + 'o prima, senza saltarne; alla prima e all’ultima la pagina riprende a scorrere. Fermandosi, la pagina si posa '
         + 'sulla diapositiva più vicina.'),
-      condition: [{ field: 'scrollTimeline', value: true }, { field: 'scrollScrub', op: 'neq', value: true }] },
+      // nascosto solo quando il cubo segue davvero lo scorrimento (acceso E transizione a cubo, come lo legge il PHP):
+      // rimasto acceso con un'altra transizione non agisce, e «una diapositiva per gesto» sì (1.4.1471, Incudine)
+      condition: { field: 'scrollTimeline', value: true },
+      show: (s) => !(s.scrollScrub === true && ['cubeH', 'cubeV'].includes(s.transition)) },
     { key: 'scrollScrub', label: t('Il cubo segue lo scorrimento'), type: 'toggle',
       description: t('Con la transizione a cubo: il cubo gira insieme alla pagina, si ferma se smettete di scorrere e torna '
         + 'indietro se risalite. Frecce, linguette e punti portano la pagina alla faccia.'),
@@ -524,8 +525,6 @@ export default {
       { value: 'blur', label: t('Sfocatura') },
       { value: 'fadeBlur', label: t('Dissolvenza e sfocatura') },
     ]},
-    { key: 'parallaxIntensity', label: t('Intensità della parallasse'), type: 'number', min: 1, max: 20,
-      condition: { field: 'parallax', value: true } },
 
     { type: 'separator', label: t('Carosello — dimensioni') },
     { key: 'carouselWidth', label: t('Larghezza slide'), type: 'number', unit: '%', min: 40, max: 95,
@@ -538,6 +537,13 @@ export default {
     ...borderFields(),
     { type: 'separator', label: t('Parallasse') },
     { key: 'parallax', label: t('Parallasse'), type: 'toggle' },
+    { key: 'parallaxType', label: t('Tipo di parallasse'), type: 'select', options: [
+      { value: 'mouse', label: t('Mouse') },
+      { value: 'scroll', label: t('Scorrimento') },
+      { value: 'both', label: t('Entrambi') },
+    ], condition: { field: 'parallax', value: true } },
+    { key: 'parallaxIntensity', label: t('Intensità della parallasse'), type: 'number', min: 1, max: 20,
+      condition: { field: 'parallax', value: true } },
   ],
 
   // Helper esportati per l'editor

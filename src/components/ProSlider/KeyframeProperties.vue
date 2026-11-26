@@ -29,17 +29,20 @@
 
       <!-- Proprietà animabili -->
       <div v-for="(meta, key) in ANIMATABLE_PROPS" :key="key">
-        <label class="mps-label">{{ meta.label }}</label>
+        <label class="mps-label">{{ t(meta.label) }}</label>
+        <!-- 1.4.1462: un valore scritto tiene fino a 3 decimali (il passo vale per frecce e trascinamento) -->
         <NumberScrubber
           theme="dark"
           :modelValue="keyframe.props[key] ?? meta.default"
           :min="meta.min"
           :max="meta.max"
           :step="meta.step"
+          :scriviDecimali="3"
           :defaultValue="meta.default"
           emitAs="number"
+          :unit="meta.unit"
           :sliderOnFocus="false"
-          :ariaLabel="meta.label"
+          :ariaLabel="t(meta.label)"
           @update:modelValue="upProp(key, clampVal($event, meta.min, meta.max))"
         />
       </div>

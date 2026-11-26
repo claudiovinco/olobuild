@@ -1261,6 +1261,8 @@ const sliderSuMisura = [];
       colori(o, tema, file, chi);
       if (typeof o.alt === 'string') sliderSuMisura.push({ file: tema, type: 'non letto', key: `${file} · ${chi} · alt (il testo alternativo è imageAlt)`, label: '' });
       if (o.shapeGradient && Array.isArray(o.shapeGradient.stops)) sliderSuMisura.push({ file: tema, type: 'non letto', key: `${file} · ${chi} · shapeGradient.stops (usare le Sfumature)`, label: '' });
+      // 1.4.1460: un'ombra scritta come testo CSS («0 30px 70px rgba(…)») il renderer non la disegna: va nel campo «Ombre»
+      if (typeof o.boxShadow === 'string' && o.boxShadow.trim()) sliderSuMisura.push({ file: tema, type: 'non letto', key: `${file} · ${chi} · boxShadow come testo (usare il campo Ombre)`, label: '' });
       for (const [bp, ov] of Object.entries(o.responsive || {})) for (const k of Object.keys(ov || {})) if (!PER_SCHERMO.has(k)) sliderSuMisura.push({ file: tema, type: 'schermo', key: `${file} · ${chi} · ${bp}.${k} (l'editor non lo mostra per schermo)`, label: '' });
       if (typeof o.customCSS === 'string' && o.customCSS.trim()) sliderSuMisura.push({ file: tema, type: 'css', key: `${file} · ${chi}`, label: '' });
       if (typeof o.customClass === 'string' && o.customClass.trim()) sliderSuMisura.push({ file: tema, type: 'classe', key: `${file} · ${chi} · ${o.customClass}`, label: '' });

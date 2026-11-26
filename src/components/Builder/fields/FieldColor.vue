@@ -27,6 +27,16 @@
             @click.stop="hideQuickColor(sc.id)"
           >{{ t('&times;') }}</button>
         </span>
+        <!-- Trasparente (1.4.1445): i temi lo usano 425 volte (pulsanti col solo bordo, fondi vuoti) e il selettore non lo
+             offriva: si arrivava solo a un colore con alfa 0. -->
+        <button
+          type="button"
+          class="fc-swatch fc-swatch--trasparente"
+          :class="{ 'fc-swatch--active': String(modelValue || '').trim().toLowerCase() === 'transparent' }"
+          :title="t('Trasparente')"
+          :aria-label="t('Trasparente')"
+          @click="emit('update:modelValue', 'transparent')"
+        ></button>
         <!-- Mentre la palette si salva «+», «×» e le swatch rapide sono occupati:
              il colore nuovo compare solo a salvataggio riuscito, e una swatch
              che si sta togliendo non si può più scegliere. -->
@@ -472,6 +482,10 @@ async function hideQuickColor(colorId) {
   box-shadow: 0 0 0 1px var(--olo-ui-accent, #e8622a);
 }
 
+/* Trasparente: la scacchiera dice «niente colore» */
+.fc-swatch--trasparente {
+  background: repeating-conic-gradient(#cbd5e1 0% 25%, #ffffff 0% 50%) 50% / 8px 8px;
+}
 .fc-swatch--add {
   background: #f3f4f6;
   color: #9ca3af;

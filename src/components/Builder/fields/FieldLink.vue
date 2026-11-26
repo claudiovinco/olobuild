@@ -49,7 +49,7 @@
       v-if="open"
       ref="dropdownRef"
       class="mb-absolute mb-left-0 mb-right-0 mb-top-full mb-mt-1 mb-bg-white mb-border mb-border-gray-300 mb-rounded-lg mb-shadow-xl mb-overflow-hidden"
-      style="z-index:100090; min-width:280px"
+      style="z-index:100090; min-width:min(280px, 100%)"
     >
       <!-- Header -->
       <div class="mb-px-3 mb-py-1.5 mb-border-b mb-border-gray-200 mb-flex mb-items-center mb-justify-between mb-bg-gray-50" style="font-size:10px">
@@ -68,7 +68,7 @@
           v-for="(item, i) in results"
           :key="item.type + ':' + item.subtype + ':' + item.id"
           @click.prevent="selectItem(item)"
-          @mouseenter="selIdx = i"
+          @mouseenter="indica(i)"
           type="button"
           :class="[
             'mb-w-full mb-flex mb-items-center mb-gap-2 mb-px-3 mb-py-2 mb-text-left mb-border-0 mb-border-b mb-border-gray-100 mb-bg-transparent mb-cursor-pointer mb-transition-colors',
@@ -92,8 +92,7 @@
                 style="font-size:9px"
               >{{ item.type_label }}</span>
             </div>
-            <div v-if="item.excerpt" class="mb-text-gray-500 mb-truncate" style="font-size:10px; margin-top:1px">{{ item.excerpt }}</div>
-            <div v-else class="mb-text-gray-400 mb-truncate" style="font-size:10px; margin-top:1px">{{ item.url_relative || item.url }}</div>
+            <div class="mb-text-gray-400 mb-truncate" style="font-size:10px; margin-top:1px" :title="item.excerpt || null">{{ item.url_relative || item.url }}<span v-if="item.excerpt" class="mb-text-gray-500"> · {{ item.excerpt }}</span></div>
           </div>
         </button>
 
@@ -101,7 +100,7 @@
         <button
           v-if="showCustomFallback"
           @click.prevent="selectCustomUrl"
-          @mouseenter="selIdx = results.length"
+          @mouseenter="indica(results.length)"
           type="button"
           :class="[
             'mb-w-full mb-flex mb-items-center mb-gap-2 mb-px-3 mb-py-2 mb-text-left mb-border-0 mb-border-t mb-border-gray-200 mb-bg-transparent mb-cursor-pointer mb-transition-colors',
@@ -112,7 +111,7 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </div>
           <div class="mb-flex-1 mb-min-w-0">
-            <div class="mb-text-sm mb-text-gray-900">{{ t('Usa URL esterno') }}</div>
+            <div class="mb-text-sm mb-text-gray-900">{{ t('Usa questo indirizzo') }}</div>
             <div class="mb-text-gray-500 mb-truncate" style="font-size:10px">{{ query }}</div>
           </div>
         </button>
@@ -141,17 +140,29 @@ const results = ref([]);
 const query = ref('');
 const selIdx = ref(0);
 const selectedMeta = ref(null);
+// la voce evidenziata l'ha indicata chi scrive (frecce o puntatore): Invio sceglie quella
+const indicata = ref(false);
 
 let debounceTimer = null;
 let abortCtrl = null;
 
+// Un indirizzo scritto a mano (https://…, /pagina/, www.…, dominio.it) si tiene com'è: Invio non lo scambia col primo
+// risultato della ricerca (scrivendo «/vendi/» si finiva su «/in-vendita/»). Se una pagina ha proprio quell'indirizzo,
+// si sceglie lei.
+const sembraIndirizzo = (q) => /^(https?:\/\/|\/|www\.)/i.test(q) || /[a-z0-9-]+\.[a-z]{2,}/i.test(q);
+const senzaBarra = (u) => String(u || '').trim().replace(/\/+$/, '');
+const stessoIndirizzo = (r, q) => !!q && (senzaBarra(r.url) === senzaBarra(q) || (!!r.url_relative && senzaBarra(r.url_relative) === senzaBarra(q)));
+
 const showCustomFallback = computed(() => {
   const q = (query.value || '').trim();
-  if (!q) return false;
-  const looksLikeUrl = /^(https?:\/\/|\/|www\.)/i.test(q) || /[a-z0-9-]+\.[a-z]{2,}/i.test(q);
-  if (!looksLikeUrl) return false;
-  return !results.value.some(r => r.url === q);
+  if (!q || !sembraIndirizzo(q)) return false;
+  return !results.value.some(r => stessoIndirizzo(r, q));
 });
+
+function indica(i) {
+  selIdx.value = i;
+  indicata.value = true;
+}
 
 function typeBadgeClass(item) {
   if (item.type === 'shortcut') return 'mb-bg-primary-100 mb-text-primary-700';
@@ -166,6 +177,7 @@ function onInput(e) {
   emit('update:modelValue', v);
   query.value = v;
   selectedMeta.value = null;
+  indicata.value = false;
   scheduleSearch();
   open.value = true;
 }
@@ -178,6 +190,13 @@ function onFocus() {
 
 function onEnter() {
   if (!open.value) return;
+  const q = (query.value || '').trim();
+  if (!indicata.value && sembraIndirizzo(q)) {
+    // i risultati possono essere ancora quelli della ricerca di prima: conta solo l'indirizzo scritto
+    const uguale = results.value.find(r => stessoIndirizzo(r, q));
+    if (uguale) selectItem(uguale); else selectCustomUrl();
+    return;
+  }
   if (selIdx.value < results.value.length) {
     selectItem(results.value[selIdx.value]);
   } else if (showCustomFallback.value) {
@@ -190,7 +209,7 @@ function onEnter() {
 function moveSel(delta) {
   const max = results.value.length + (showCustomFallback.value ? 1 : 0) - 1;
   if (max < 0) return;
-  selIdx.value = Math.max(0, Math.min(max, selIdx.value + delta));
+  indica(Math.max(0, Math.min(max, selIdx.value + delta)));
 }
 
 function scheduleSearch() {
@@ -216,7 +235,13 @@ async function doSearch() {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     results.value = Array.isArray(data.results) ? data.results : [];
-    selIdx.value = 0;
+    // evidenziata la voce che Invio sceglierebbe: per un indirizzo scritto, la pagina con quell'indirizzo o l'indirizzo
+    const q = (query.value || '').trim();
+    if (sembraIndirizzo(q)) {
+      const i = results.value.findIndex(r => stessoIndirizzo(r, q));
+      selIdx.value = i >= 0 ? i : results.value.length;
+    } else selIdx.value = 0;
+    indicata.value = false;
   } catch (e) {
     if (e.name !== 'AbortError') {
       console.warn('[FieldLink] search failed:', e);

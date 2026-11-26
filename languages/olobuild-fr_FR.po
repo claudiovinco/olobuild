@@ -58112,3 +58112,143 @@ msgstr "Combien"
 
 msgid "Quanto del secondo colore"
 msgstr "Quelle part de la deuxième couleur"
+
+#: licenza-1.4.1345
+msgid "Immagine d’attesa"
+msgstr "Image d’attente"
+
+msgid "Si vede finché il video non parte, e al suo posto se non si può caricare. Meglio un fotogramma del video: il passaggio non si nota."
+msgstr "Elle s’affiche jusqu’au démarrage de la vidéo, et à sa place si elle ne peut pas se charger. Mieux vaut une image de la vidéo : le passage ne se remarque pas."
+
+msgid "Le modifiche fatte qui si perdono."
+msgstr "Les modifications faites ici seront perdues."
+
+msgid "Esci senza salvare"
+msgstr "Quitter sans enregistrer"
+
+msgid "Clic per sceglierlo; Ctrl + clic per aggiungerne uno; Maiusc + clic per scegliere tutti quelli fino a qui; trascinalo per cambiare ordine o gruppo"
+msgstr "Clic pour le choisir ; Ctrl + clic pour en ajouter un ; Maj + clic pour choisir tous ceux jusqu’ici ; faites-le glisser pour changer l’ordre ou le groupe"
+
+#: licenza-1.4.1345
+msgid "Quelli non impostati qui ereditano dallo schermo più grande: il telefono dal tablet, il tablet dal notebook, il notebook dal computer."
+msgstr "Ce qui n’est pas réglé ici est hérité de l’écran plus grand : le téléphone de la tablette, la tablette du portable, le portable de l’ordinateur."
+
+#: licenza-1.4.1345
+msgid "Intervallo fra lettere"
+msgstr "Intervalle entre les lettres"
+
+msgid "Maschera da destra"
+msgstr "Masque depuis la droite"
+
+msgid "Maschera da sinistra"
+msgstr "Masque depuis la gauche"
+
+msgid "Maschera dal basso"
+msgstr "Masque depuis le bas"
+
+msgid "Maschera dall’alto"
+msgstr "Masque depuis le haut"
+
+msgid "Ombra del testo, orizzontale"
+msgstr "Ombre du texte, horizontale"
+
+msgid "Ombra del testo, verticale"
+msgstr "Ombre du texte, verticale"
+
+msgid "Raggio al passaggio"
+msgstr "Rayon au survol"
+
+msgid "Raggio in alto a destra"
+msgstr "Rayon en haut à droite"
+
+msgid "Raggio in alto a sinistra"
+msgstr "Rayon en haut à gauche"
+
+msgid "Raggio in basso a destra"
+msgstr "Rayon en bas à droite"
+
+msgid "Raggio in basso a sinistra"
+msgstr "Rayon en bas à gauche"
+
+msgid "Sfocatura al passaggio"
+msgstr "Flou au survol"
+
+msgid "Sfocatura dell’ombra del testo"
+msgstr "Flou de l’ombre du texte"
+
+msgid "Spostamento orizzontale al passaggio"
+msgstr "Décalage horizontal au survol"
+
+msgid "Spostamento verticale al passaggio"
+msgstr "Décalage vertical au survol"
+
+#: licenza-1.4.1345
+msgid "Duplica la slide"
+msgstr "Dupliquer la diapositive"
+
+msgid "Elimina la slide"
+msgstr "Supprimer la diapositive"
+
+msgid "Colore brunito"
+msgstr "Densité couleur +"
+
+msgid "Colore schiarito"
+msgstr "Densité couleur -"
+
+msgid "Luce intensa"
+msgstr "Lumière crue"
+
+msgid "X"
+msgstr "X"
+
+msgid "Y"
+msgstr "Y"
+
+#: licenza-1.4.1345
+msgid "Usa questo indirizzo"
+msgstr "Utiliser cette adresse"
+
+#: licenza-1.4.1345
+msgid "Inserisci un dato dell’articolo"
+msgstr "Insérer une donnée de l’article"
+
+msgid "Ogni slide mostra quello del suo articolo"
+msgstr "Chaque diapositive montre celle de son article"
+
+msgid "Foto dell’articolo"
+msgstr "Photo de l’article"
+
+msgid "Titolo dell’articolo"
+msgstr "Titre de l’article"
+
+msgid "Link dell’articolo"
+msgstr "Lien de l’article"
+
+msgid "Slide modello: sul sito si ripete una volta per ogni articolo"
+msgstr "Diapositive modèle : sur le site elle se répète une fois par article"
+
+msgid "Slide dagli articoli"
+msgstr "Diapositives depuis les articles"
+
+msgid "Slide modello"
+msgstr "Diapositive modèle"
+
+msgid "Sul sito questa slide si ripete una volta per ogni articolo trovato, al suo posto; le altre slide restano dove sono. Nei suoi livelli metti i dati dell’articolo coi pulsanti dell’editor (Dato, Foto dell’articolo, Link dell’articolo)."
+msgstr "Sur le site cette diapositive se répète à sa place une fois pour chaque article trouvé ; les autres diapositives restent où elles sont. Dans ses calques, mets les données de l’article avec les boutons de l’éditeur (Donnée, Photo de l’article, Lien de l’article)."
+
+#: licenza-1.4.1345
+msgid "Solo articoli con la foto"
+msgstr "Seulement les articles avec photo"
+
+#: licenza-1.4.1345
+msgid "Inclina in orizzontale"
+msgstr "Incliner à l’horizontale"
+
+msgid "Inclina in verticale"
+msgstr "Incliner à la verticale"
+
+msgid "Perno in orizzontale"
+msgstr "Pivot à l’horizontale"
+
+msgid "Perno in verticale"
+msgstr "Pivot à la verticale"

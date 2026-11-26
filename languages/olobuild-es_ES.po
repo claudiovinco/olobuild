@@ -57945,3 +57945,146 @@ msgstr "Cuánto"
 
 msgid "Quanto del secondo colore"
 msgstr "Cuánto del segundo color"
+
+#: licenza-1.4.1345
+msgid "Immagine d’attesa"
+msgstr "Imagen de espera"
+
+msgid "Si vede finché il video non parte, e al suo posto se non si può caricare. Meglio un fotogramma del video: il passaggio non si nota."
+msgstr "Se ve hasta que arranca el vídeo, y en su lugar si no se puede cargar. Mejor un fotograma del vídeo: el cambio no se nota."
+
+msgid "Le modifiche fatte qui si perdono."
+msgstr "Los cambios hechos aquí se perderán."
+
+msgid "Esci senza salvare"
+msgstr "Salir sin guardar"
+
+msgid "Clic per sceglierlo; Ctrl + clic per aggiungerne uno; Maiusc + clic per scegliere tutti quelli fino a qui; trascinalo per cambiare ordine o gruppo"
+msgstr "Clic para elegirla; Ctrl + clic para añadir una; Mayús + clic para elegir todas hasta aquí; arrástrala para cambiar orden o grupo"
+
+#: licenza-1.4.1345
+msgid "Quelli non impostati qui ereditano dallo schermo più grande: il telefono dal tablet, il tablet dal notebook, il notebook dal computer."
+msgstr "Lo que no se ajusta aquí se hereda de la pantalla más grande: el teléfono de la tableta, la tableta del portátil, el portátil del ordenador."
+
+#: licenza-1.4.1345
+msgid "Intervallo fra lettere"
+msgstr "Intervalo entre letras"
+
+msgid "Maschera da destra"
+msgstr "Máscara desde la derecha"
+
+msgid "Maschera da sinistra"
+msgstr "Máscara desde la izquierda"
+
+msgid "Maschera dal basso"
+msgstr "Máscara desde abajo"
+
+msgid "Maschera dall’alto"
+msgstr "Máscara desde arriba"
+
+msgid "Ombra del testo, orizzontale"
+msgstr "Sombra del texto, horizontal"
+
+msgid "Ombra del testo, verticale"
+msgstr "Sombra del texto, vertical"
+
+msgid "Raggio al passaggio"
+msgstr "Radio al pasar el ratón"
+
+msgid "Raggio in alto a destra"
+msgstr "Radio arriba a la derecha"
+
+msgid "Raggio in alto a sinistra"
+msgstr "Radio arriba a la izquierda"
+
+msgid "Raggio in basso a destra"
+msgstr "Radio abajo a la derecha"
+
+msgid "Raggio in basso a sinistra"
+msgstr "Radio abajo a la izquierda"
+
+msgid "Sfocatura al passaggio"
+msgstr "Desenfoque al pasar el ratón"
+
+msgid "Sfocatura dell’ombra del testo"
+msgstr "Desenfoque de la sombra del texto"
+
+msgid "Spostamento orizzontale al passaggio"
+msgstr "Desplazamiento horizontal al pasar el ratón"
+
+msgid "Spostamento verticale al passaggio"
+msgstr "Desplazamiento vertical al pasar el ratón"
+
+#: licenza-1.4.1345
+msgid "Duplica la slide"
+msgstr "Duplicar diapositiva"
+
+msgid "Elimina la slide"
+msgstr "Eliminar diapositiva"
+
+msgid "Colore brunito"
+msgstr "Subexponer color"
+
+msgid "Colore schiarito"
+msgstr "Sobreexponer color"
+
+msgid "Luce intensa"
+msgstr "Luz fuerte"
+
+msgid "X"
+msgstr "X"
+
+msgid "Y"
+msgstr "Y"
+
+#: licenza-1.4.1345
+msgid "Usa questo indirizzo"
+msgstr "Usar esta dirección"
+
+#: licenza-1.4.1345
+msgid "Inserisci un dato dell’articolo"
+msgstr "Insertar un dato de la entrada"
+
+msgid "Dato"
+msgstr "Dato"
+
+msgid "Ogni slide mostra quello del suo articolo"
+msgstr "Cada diapositiva muestra el de su entrada"
+
+msgid "Foto dell’articolo"
+msgstr "Foto de la entrada"
+
+msgid "Titolo dell’articolo"
+msgstr "Título de la entrada"
+
+msgid "Link dell’articolo"
+msgstr "Enlace de la entrada"
+
+msgid "Slide modello: sul sito si ripete una volta per ogni articolo"
+msgstr "Diapositiva modelo: en el sitio se repite una vez por cada entrada"
+
+msgid "Slide dagli articoli"
+msgstr "Diapositivas desde entradas"
+
+msgid "Slide modello"
+msgstr "Diapositiva modelo"
+
+msgid "Sul sito questa slide si ripete una volta per ogni articolo trovato, al suo posto; le altre slide restano dove sono. Nei suoi livelli metti i dati dell’articolo coi pulsanti dell’editor (Dato, Foto dell’articolo, Link dell’articolo)."
+msgstr "En el sitio esta diapositiva se repite en su lugar una vez por cada entrada encontrada; las demás diapositivas se quedan donde están. En sus capas pon los datos de la entrada con los botones del editor (Dato, Foto de la entrada, Enlace de la entrada)."
+
+#: licenza-1.4.1345
+msgid "Solo articoli con la foto"
+msgstr "Solo entradas con foto"
+
+#: licenza-1.4.1345
+msgid "Inclina in orizzontale"
+msgstr "Inclinar en horizontal"
+
+msgid "Inclina in verticale"
+msgstr "Inclinar en vertical"
+
+msgid "Perno in orizzontale"
+msgstr "Pivote en horizontal"
+
+msgid "Perno in verticale"
+msgstr "Pivote en vertical"

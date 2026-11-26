@@ -49,8 +49,8 @@
           <NumberScrubber
             theme="dark"
             :modelValue="activeTimeline.duration"
-            :min="500"
-            :max="30000"
+            :min="50"
+            :max="120000"
             :step="100"
             :defaultValue="3000"
             emitAs="number"
@@ -71,7 +71,7 @@
             :defaultValue="0"
             emitAs="number"
             unit="ms"
-            ariaLabel="Delay"
+            :ariaLabel="t('Ritardo')"
             @update:modelValue="$emit('update-timeline-prop', 'delay', Math.max(0, $event))"
           />
         </label>
@@ -140,7 +140,7 @@
             :defaultValue="5"
             emitAs="number"
             unit="s"
-            ariaLabel="Slide"
+            :ariaLabel="t('Slide')"
             @update:modelValue="onSlideDurationChange($event)"
           />
         </label>
@@ -530,8 +530,11 @@ function delayPct(track) {
   return (delay / maxDuration.value) * 100;
 }
 
+// 1.4.1463: fino a 2 minuti (come il percorso): la lancetta dei secondi di Scappamento fa un giro in 60 s, e col limite di
+// 30 s la sua linea del tempo non si poteva scrivere
+// e da 50 ms (le corde di Anima vibrano in 78–150 ms: col minimo di 500 non si potevano fare)
 function clampDuration(v) {
-  return Math.max(500, Math.min(30000, v || 3000));
+  return Math.max(50, Math.min(120000, v || 3000));
 }
 
 function tloopStyle(track) {

@@ -156,6 +156,22 @@
     return root.querySelector('[data-olo-tile-id="' + tileId + '"]');
   }
 
+  // (1.4.1451) La fascia invisibile del «+» (28 px a cavallo del bordo di ogni riga e sezione, iframe-builder.css)
+  // sta sopra le tile: in una riga di colonne vuote alta 30 px ne copriva 28. Lì il clic non faceva niente, il clic
+  // destro apriva il menu della sezione e la colonna non si riusciva a scegliere (utente, 25 nov 2026: «ho serie
+  // difficoltà a far apparire questo menu rapido»). Fuori dal cerchio, clic, clic destro, doppio clic e trascinamento
+  // vanno alla tile che sta sotto la fascia; il cerchio resta il suo pulsante.
+  // ancheCerchio (clic destro): si passa anche attraverso il cerchio del «+», che col clic destro non fa niente.
+  function sottoLaFascia(e, ancheCerchio) {
+    var t = e.target;
+    if (!t || !t.closest || !t.closest('.olo-iframe-add-btn') || (!ancheCerchio && t.closest('.olo-iframe-add-circle'))) return t;
+    var sotto = document.elementsFromPoint ? document.elementsFromPoint(e.clientX, e.clientY) : [];
+    for (var i = 0; i < sotto.length; i++) {
+      if (sotto[i].closest && !sotto[i].closest('.olo-iframe-add-btn, .olo-iframe-toolbar')) return sotto[i];
+    }
+    return t;
+  }
+
   // ── Scroll-flash: evidenzia la tile raggiunta dal click sulla Struttura ──
   // Le preferenze (olo_scroll_flash) viaggiano nel messaggio 'olo:scroll-to':
   // vivono nel localStorage del documento builder, non in quello dell'iframe.
@@ -364,8 +380,9 @@
 
   function onClick(e) {
     if (previewMode) return;
-    // Don't intercept clicks on builder controls
-    if (e.target.closest('.olo-iframe-add-btn, .olo-iframe-toolbar, .olo-iframe-add-circle')) return;
+    // Don't intercept clicks on builder controls (la fascia del «+» fuori dal cerchio non lo è: conta la tile sotto)
+    var bersaglio = sottoLaFascia(e);
+    if (bersaglio.closest('.olo-iframe-add-btn, .olo-iframe-toolbar, .olo-iframe-add-circle')) return;
     // Suppress click that follows an edge-drag gesture
     if (suppressNextClick) {
       suppressNextClick = false;
@@ -380,7 +397,7 @@
     // capture phase and the native handler doesn't always fire reliably.
     // Add `data-olo-interactive` to any custom element to opt-in.
     var INTERACTIVE_SEL = '.uk-accordion-title, .uk-tab a, .uk-tab > * > a, .uk-switcher-nav a, .uk-subnav a, .uk-slidenav, .uk-dotnav a, [data-uk-toggle], [uk-toggle], [data-olo-interactive], .oit-tab, [role="tab"], [data-idx][role="button"], .olo-carousel-arrow, .olo-carousel-dot, .olo-car-arrow, .olo-car-dot';
-    var isInteractive = e.target.closest && e.target.closest(INTERACTIVE_SEL);
+    var isInteractive = bersaglio.closest && bersaglio.closest(INTERACTIVE_SEL);
 
     if (!isInteractive) {
       e.preventDefault();
@@ -391,11 +408,11 @@
       // so the native UIkit handler in the bubble phase performs the toggle.
       // Calling toggle() manually here would cause a double-toggle (bridge +
       // UIkit), netting zero state change.
-      var anchor = e.target.closest('a[href="#"]');
+      var anchor = bersaglio.closest('a[href="#"]');
       if (anchor) e.preventDefault();
     }
     // Floating panel empty placeholder: open finder to insert into the panel
-    var emptyEl = e.target.closest && e.target.closest('[data-olo-fp-empty]');
+    var emptyEl = bersaglio.closest && bersaglio.closest('[data-olo-fp-empty]');
     if (emptyEl) {
       var fpId = emptyEl.getAttribute('data-olo-fp-empty');
       if (fpId) {
@@ -404,7 +421,7 @@
       }
     }
     // Empty canvas placeholder buttons: open InsertPanel on the right tab
-    var emptyActionEl = e.target.closest && e.target.closest('[data-olo-empty-action]');
+    var emptyActionEl = bersaglio.closest && bersaglio.closest('[data-olo-empty-action]');
     if (emptyActionEl) {
       e.preventDefault();
       e.stopPropagation();
@@ -412,7 +429,7 @@
       post('olo:empty-action', { action: action });
       return;
     }
-    var tileId = findTileId(e.target);
+    var tileId = findTileId(bersaglio);
     if (tileId) {
       var additive = !!(e.ctrlKey || e.metaKey);
       if (additive) {
@@ -454,13 +471,14 @@
   function onEdgeMouseDown(e) {
     if (previewMode || gripDragging) return;
     if (e.button !== 0 && e.pointerType === 'mouse') return;
-    if (isBuilderChrome(e.target)) return;
+    var bersaglio = sottoLaFascia(e);
+    if (isBuilderChrome(bersaglio)) return;
     // Skip editable text regions
-    if (e.target.closest('[data-olo-editable], [contenteditable="true"]')) return;
+    if (bersaglio.closest('[data-olo-editable], [contenteditable="true"]')) return;
     // Zone che trascinano da sé (la maniglia di Prima/Dopo e Confronto immagini): lì il gesto è
     // della tile; per spostarla si usa la barra. Il clic seleziona comunque la tile.
-    if (e.target.closest('[data-olo-own-drag]')) return;
-    var tileId = findTileId(e.target);
+    if (bersaglio.closest('[data-olo-own-drag]')) return;
+    var tileId = findTileId(bersaglio);
     if (!tileId) return;
     var el = findTileEl(tileId);
     if (!el) return;
@@ -513,12 +531,13 @@
 
   function onDblClick(e) {
     if (previewMode) return;
+    var bersaglio = sottoLaFascia(e);
 
     // Find nearest editable or text element
-    var editEl = e.target.closest('[data-olo-editable]');
+    var editEl = bersaglio.closest('[data-olo-editable]');
     if (!editEl) {
       // Auto-detect: double-click on heading, paragraph, button text, span inside tile
-      var textEl = e.target.closest('h1,h2,h3,h4,h5,h6,p,.olo-headline *,.olo-btn-text,button span,.olo-nl-title,.olo-nl-sub,.olo-ib-title,.olo-ib-desc,.olo-testimonial-quote');
+      var textEl = bersaglio.closest('h1,h2,h3,h4,h5,h6,p,.olo-headline *,.olo-btn-text,button span,.olo-nl-title,.olo-nl-sub,.olo-ib-title,.olo-ib-desc,.olo-testimonial-quote');
       if (textEl) {
         var tileEl = textEl.closest('[data-olo-tile-id]');
         if (tileEl) {
@@ -747,16 +766,16 @@
 
   function onContextMenu(e) {
     if (previewMode) return;
-    var tileId = findTileId(e.target);
+    var tileId = findTileId(sottoLaFascia(e, true));
     if (!tileId) return;
     e.preventDefault();
+    apriMenuRapido(tileId, e.clientX, e.clientY);
+  }
+
+  function apriMenuRapido(tileId, x, y) {
     selectTile(tileId);
     post('olo:tile-click', { tileId: tileId });
-    post('olo:tile-contextmenu', {
-      tileId: tileId,
-      x: e.clientX,
-      y: e.clientY
-    });
+    post('olo:tile-contextmenu', { tileId: tileId, x: x, y: y });
   }
 
   // ── Drag over (from parent sidebar) ──
@@ -1150,6 +1169,7 @@
         '<span class="olo-iframe-tb-sep"></span>' +
         '<button class="olo-iframe-tb-btn" data-action="settings" title="Impostazioni"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>' +
         '<button class="olo-iframe-tb-btn" data-action="duplicate" title="Duplica"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>' +
+        '<button class="olo-iframe-tb-btn olo-tb-menu" data-action="menu" title="Altre azioni: copia, incolla, stile, globale, colonne (anche col clic destro)" aria-label="Altre azioni"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>' +
         '<button class="olo-iframe-tb-btn" data-action="delete" title="Elimina"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/></svg></button>' +
         '<span class="olo-iframe-tb-sep"></span>' +
         '<button class="olo-iframe-tb-btn olo-tb-add" data-action="addafter" title="Aggiungi elemento dopo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button>' +
@@ -1165,6 +1185,10 @@
         var action = btn.dataset.action;
         if (action === 'settings') {
           post('olo:tile-click', { tileId: tileId });
+        } else if (action === 'menu') {
+          // (1.4.1451) il menu rapido anche col clic normale, sotto il pulsante
+          var rb = btn.getBoundingClientRect();
+          apriMenuRapido(tileId, rb.left, rb.bottom + 4);
         } else if (action === 'addafter') {
           post('olo:add-tile-after', { tileId: tileId });
         } else if (action === 'addcolumn') {
@@ -1172,6 +1196,16 @@
         } else {
           post('olo:tile-action', { tileId: tileId, action: action });
         }
+      });
+
+      // Clic destro sulla barra = menu rapido della sua tile (la barra sta fuori da #olo-iframe-root: prima compariva il
+      // menu del browser)
+      hoverToolbar.addEventListener('contextmenu', function(e) {
+        if (previewMode) return;
+        var tileId = hoverToolbar.getAttribute('data-for-tile');
+        if (!tileId) return;
+        e.preventDefault();
+        apriMenuRapido(tileId, e.clientX, e.clientY);
       });
 
       hoverToolbar.addEventListener('mouseenter', function() {
@@ -1873,13 +1907,21 @@
             var st = document.createElement('style');
             st.id = wfId;
             st.textContent =
-              // Color-coding livelli = stessa lingua dei bottoni add del canvas:
-              // sezione arancio chrome, row verde, tile blu.
-              '.olo-wireframe-mode .olo-frontend-grid > section { outline: 2px dashed rgba(232,98,42,0.35) !important; outline-offset: -2px; position: relative; }' +
-              '.olo-wireframe-mode .olo-frontend-grid > section::after { content: "SEZIONE"; position: absolute; top: 4px; right: 8px; font-size: 9px; font-weight: 700; letter-spacing: 1px; color: rgba(232,98,42,0.55); pointer-events: none; z-index: 10; }' +
-              '.olo-wireframe-mode [data-olo-tile-id][class*="olo-row"], .olo-wireframe-mode .uk-grid { outline: 1px dashed rgba(16,185,129,0.35) !important; outline-offset: -1px; }' +
-              '.olo-wireframe-mode [data-olo-tile-id] { outline: 1px solid rgba(59,130,246,0.18) !important; outline-offset: -1px; position: relative; }' +
-              '.olo-wireframe-mode [data-olo-tile-id]:hover { outline-color: rgba(59,130,246,0.5) !important; }';
+              // Color-coding livelli = stessa lingua dei bottoni add del canvas: sezione arancio chrome, riga verde,
+              // colonna blu tratteggiata, tile azzurra piena. (1.4.1453, utente: «quando premo il tasto Gabbia, si vede
+              // molto poco nel canvas») Prima: opacità 0,18–0,55 e linee da 1 px, le colonne solo col contorno delle
+              // tile al 18 %: su un tema scuro non si vedeva quasi niente. Ora colori pieni al 90 %, linee più spesse,
+              // ogni livello col suo colore ed etichetta della sezione bianca su arancio.
+              '.olo-wireframe-mode [data-olo-tile-id] { outline: 1px solid rgba(56,189,248,0.85) !important; outline-offset: -1px; position: relative; }' +
+              '.olo-wireframe-mode [data-olo-tile-type="column"], .olo-wireframe-mode [data-olo-tile-type="inner-column"] { outline: 2px dashed rgba(59,130,246,0.95) !important; outline-offset: -3px; }' +
+              '.olo-wireframe-mode [data-olo-tile-type="row"], .olo-wireframe-mode [data-olo-tile-type="inner-columns"] { outline: 2px dashed rgba(16,185,129,0.95) !important; outline-offset: 1px; }' +
+              '.olo-wireframe-mode [data-olo-tile-type="section"] { outline: 3px dashed rgba(232,98,42,0.95) !important; outline-offset: -3px; position: relative; }' +
+              '.olo-wireframe-mode [data-olo-tile-type="section"]::after { content: "SEZIONE"; position: absolute; top: 6px; right: 8px; left: auto; transform: none; font: 700 10px/1 system-ui, -apple-system, sans-serif; letter-spacing: 0.8px; text-transform: uppercase; color: #fff; background: rgba(232,98,42,0.95); padding: 4px 8px; border-radius: 4px; pointer-events: none; z-index: 10; white-space: nowrap; }' +
+              '.olo-wireframe-mode [data-olo-empty="1"][data-olo-tile-type="section"]::after { content: "SEZIONE VUOTA"; }' +
+              '.olo-wireframe-mode [data-olo-tile-id]:hover { outline-width: 2px !important; outline-color: rgba(56,189,248,1) !important; }' +
+              '.olo-wireframe-mode [data-olo-tile-type="column"]:hover, .olo-wireframe-mode [data-olo-tile-type="inner-column"]:hover { outline-color: rgba(59,130,246,1) !important; }' +
+              '.olo-wireframe-mode [data-olo-tile-type="row"]:hover, .olo-wireframe-mode [data-olo-tile-type="inner-columns"]:hover { outline-color: rgba(16,185,129,1) !important; }' +
+              '.olo-wireframe-mode [data-olo-tile-type="section"]:hover { outline-color: rgba(232,98,42,1) !important; outline-width: 3px !important; }';
             document.head.appendChild(st);
           }
         } else if (existing) {
@@ -2009,6 +2051,8 @@
       post('olo:keydown', { key: e.key, code: e.code, ctrlKey: e.ctrlKey, shiftKey: e.shiftKey, altKey: e.altKey, metaKey: e.metaKey });
       return;
     }
+    // (1.4.1451) Esc col fuoco nel canvas chiude il menu rapido del builder (prima restava aperto)
+    if (e.key === 'Escape' && !previewMode) post('olo:chiudi-menu');
     // Skip if editing text
     var tag = e.target.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) return;
@@ -2019,6 +2063,13 @@
       post('olo:keydown', { key: e.key, code: e.code, ctrlKey: e.ctrlKey, shiftKey: e.shiftKey, altKey: e.altKey, metaKey: e.metaKey });
     }
   });
+
+  // (1.4.1452) Un clic in qualunque punto del canvas chiude il menu rapido del builder, anche su testata e piè di
+  // pagina, che stanno fuori da #olo-iframe-root (lì il clic non arrivava a onClick e il menu restava aperto). Il «⋯»
+  // della barra e il clic destro lo riaprono subito dopo.
+  document.addEventListener('pointerdown', function(e) {
+    if (!previewMode && e.button === 0) post('olo:chiudi-menu');
+  }, true);
 
   // Signal ready to parent. mode = 'inline' (WP renderizza header/footer reali,
   // il bridge aggiorna SOLO il body) | 'standalone' (template HTML standalone).

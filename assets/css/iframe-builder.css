@@ -208,7 +208,10 @@ body.olo-preview-mode .olo-zone-marker {
   cursor: pointer;
   position: relative;
   z-index: 10;
-  pointer-events: auto;
+  /* (1.4.1454) Spento non prende il puntatore: invisibile ma cliccabile, stava dentro la riga (ultimi 34 px, a metà
+     della colonna centrale) e lì il clic destro apriva il menu della sezione e il clic aggiungeva una riga (utente,
+     25 nov 2026: «il tasto destro delle colonne NON FUNZIONA ANCORA»). Si accende passando sulla fascia del bordo. */
+  pointer-events: none;
   transition: background 0.15s, transform 0.15s, opacity 0.2s, box-shadow 0.2s;
   box-shadow: 0 2px 8px rgba(232, 98, 42, 0.25);
   opacity: 0;
@@ -218,6 +221,14 @@ body.olo-preview-mode .olo-zone-marker {
 .olo-iframe-add-circle:hover {
   opacity: 1;
   animation: olo-add-pulse 1.4s ease-in-out infinite;
+}
+.olo-iframe-add-btn:hover .olo-iframe-add-circle,
+.olo-iframe-add-btn:focus-within .olo-iframe-add-circle,
+.olo-frontend-grid > .olo-iframe-add-btn:only-child .olo-iframe-add-circle {
+  pointer-events: auto;
+}
+.olo-iframe-add-btn:focus-within .olo-iframe-add-circle {
+  opacity: 1;
 }
 .olo-iframe-add-circle:hover {
   background: var(--olo-ui-accent, #e8622a);
@@ -620,15 +631,18 @@ body.olo-preview-mode .olo-iframe-toolbar {
    tile-leaf nel sottoalbero. Senza questo CSS collasserebbero a 0 e
    l'utente non vedrebbe nulla nel canvas anche con tante righe vuote.
    ───────────────────────────────────────────────────────── */
+/* (1.4.1451) 64 px invece di 30: la fascia del «+» copre 14 px in cima e 14 in fondo alla riga, e in una colonna
+   vuota da 30 px restavano 2 px per cliccarla (utente, 25 nov 2026: «magari con delle zone più alte si riuscirebbe»).
+   Solo nel canvas: in anteprima e sul sito le colonne vuote non hanno altezza. */
 [data-olo-empty="1"][data-olo-tile-type="column"],
 [data-olo-empty="1"][data-olo-tile-type="inner-column"] {
-  min-height: 30px !important;
+  min-height: 64px !important;
   outline: 1px dashed rgba(232, 98, 42, 0.5);
   outline-offset: -1px;
 }
 [data-olo-empty="1"][data-olo-tile-type="row"],
 [data-olo-empty="1"][data-olo-tile-type="inner-columns"] {
-  min-height: 30px !important;
+  min-height: 64px !important;
 }
 [data-olo-empty="1"][data-olo-tile-type="section"] {
   min-height: 34px !important;

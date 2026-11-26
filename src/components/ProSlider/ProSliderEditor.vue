@@ -23,7 +23,16 @@
           <button @click="save" class="mb-px-4 mb-py-1.5 mb-bg-primary-600 mb-text-white mb-text-xs mb-font-semibold mb-rounded hover:mb-bg-primary-500 mb-transition-colors">
             {{ t('Salva e chiudi') }}
           </button>
-          <button @click="cancel" class="mb-px-3 mb-py-1.5 mb-bg-gray-700 mb-text-gray-300 mb-text-xs mb-rounded hover:mb-bg-gray-600 mb-transition-colors">
+          <template v-if="chiediAnnulla">
+            <span class="mb-text-xs mb-text-amber-300" role="alert">{{ t('Le modifiche fatte qui si perdono.') }}</span>
+            <button @click="cancel" class="mb-px-3 mb-py-1.5 mb-bg-red-700 mb-text-white mb-text-xs mb-rounded hover:mb-bg-red-600 mb-transition-colors">
+              {{ t('Esci senza salvare') }}
+            </button>
+            <button @click="chiediAnnulla = false" class="mb-px-3 mb-py-1.5 mb-bg-gray-700 mb-text-gray-300 mb-text-xs mb-rounded hover:mb-bg-gray-600 mb-transition-colors">
+              {{ t('Continua') }}
+            </button>
+          </template>
+          <button v-else @click="cancel" class="mb-px-3 mb-py-1.5 mb-bg-gray-700 mb-text-gray-300 mb-text-xs mb-rounded hover:mb-bg-gray-600 mb-transition-colors">
             {{ t('Annulla') }}
           </button>
         </div>
@@ -99,15 +108,19 @@
               <!-- Color -->
               <div v-if="currentBg.type === 'color'">
                 <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('Colore') }}</label>
-                <FieldColor :modelValue="currentBg.color || '#ffffff'" @update:modelValue="updateBg('color', $event)" />
+                <FieldColor :modelValue="currentBg.color || 'var(--olo-color-dark)'" @update:modelValue="updateBg('color', $event)" />
               </div>
               <!-- Image -->
-              <div v-if="currentBg.type === 'image'" class="mb-flex mb-gap-2 mb-items-end">
+              <!-- va a capo (1.4.1446): col Ken Burns acceso la riga era larga 1.190 px e spostamenti e sfocature
+                   restavano fuori dal pannello, irraggiungibili -->
+              <div v-if="currentBg.type === 'image'" class="mb-flex mb-flex-wrap mb-gap-x-3 mb-gap-y-2 mb-items-end mb-min-w-0 mb-max-w-full">
                 <div>
                   <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('Immagine') }}</label>
                   <div class="mb-flex mb-gap-1">
                     <input :value="currentBg.image" @input="updateBg('image', $event.target.value)" class="mps-inp mb-w-48" placeholder="URL" />
                     <button @click="pickSlideBg" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-[10px] mb-text-gray-300">{{ t('Sfoglia') }}</button>
+                    <!-- Slide dagli articoli (1.4.1457): sulla slide modello, la foto in evidenza di ogni articolo -->
+                    <button v-if="contenutiAttivi && activeSlideIndex === slideModello" type="button" class="mps-dato-bg" :class="{ 'is-on': currentBg.image === FOTO_ARTICOLO }" :aria-pressed="currentBg.image === FOTO_ARTICOLO ? 'true' : 'false'" @click="updateBg('image', FOTO_ARTICOLO)">{{ t('Foto dell’articolo') }}</button>
                   </div>
                 </div>
                 <label class="mb-flex mb-items-center mb-gap-1">
@@ -153,6 +166,17 @@
                   <button @click="pickSlideVideo" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-500">{{ t('Sfoglia') }}</button>
                 </div>
               </div>
+              <!-- immagine d'attesa (1.4.1438): tutti i 250 video dei temi la portano, l'editor non la offriva -->
+              <div v-if="currentBg.type === 'video'">
+                <label class="mb-flex mb-items-center mb-gap-1 mb-text-[10px] mb-text-gray-400 mb-mb-0.5">
+                  {{ t('Immagine d’attesa') }}
+                  <InfoTip :testo="t('Si vede finché il video non parte, e al suo posto se non si può caricare. Meglio un fotogramma del video: il passaggio non si nota.')" :titolo="t('Immagine d’attesa')" />
+                </label>
+                <div class="mb-flex mb-gap-1">
+                  <input :value="currentBg.image" @input="updateBg('image', $event.target.value)" class="mps-inp mb-w-48" placeholder="URL" />
+                  <button @click="pickSlideBg" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-500">{{ t('Sfoglia') }}</button>
+                </div>
+              </div>
               <label v-if="currentBg.type === 'video'" class="mb-flex mb-items-center mb-gap-1">
                 <input type="checkbox" :checked="!!currentBg.videoScroll" @change="updateBg('videoScroll', $event.target.checked)" class="mb-rounded" />
                 <span class="mb-text-[10px] mb-text-gray-400">{{ t('Segue lo scorrimento') }}</span>
@@ -162,11 +186,11 @@
               <template v-if="currentBg.type === 'gradient'">
                 <div>
                   <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('Da') }}</label>
-                  <FieldColor :modelValue="currentBg.gradientFrom || '#ffffff'" @update:modelValue="updateBg('gradientFrom', $event)" />
+                  <FieldColor :modelValue="currentBg.gradientFrom || 'var(--olo-color-dark)'" @update:modelValue="updateBg('gradientFrom', $event)" />
                 </div>
                 <div>
                   <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('A') }}</label>
-                  <FieldColor :modelValue="currentBg.gradientTo || '#000000'" @update:modelValue="updateBg('gradientTo', $event)" />
+                  <FieldColor :modelValue="currentBg.gradientTo || 'var(--olo-color-dark)'" @update:modelValue="updateBg('gradientTo', $event)" />
                 </div>
                 <div>
                   <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('Angolo') }}</label>
@@ -176,7 +200,7 @@
               <!-- Slide duration (seconds, 0 = use global) -->
               <div class="mb-flex mb-items-center mb-gap-1">
                 <label class="mb-text-[10px] mb-text-gray-400">{{ t('Durata') }}</label>
-                <NumberScrubber theme="dark" :modelValue="(activeSlide?.duration || 0) / 1000" :min="0" :max="120" :step="0.5" :defaultValue="0" emitAs="number" unit="sec" :ariaLabel="t('Durata')" @update:modelValue="activeSlide.duration = Math.round(($event || 0) * 1000)" />
+                <NumberScrubber theme="dark" :modelValue="(activeSlide?.duration || 0) / 1000" :min="0" :max="600" :step="0.5" :defaultValue="0" emitAs="number" unit="sec" :ariaLabel="t('Durata')" @update:modelValue="activeSlide.duration = Math.round(($event || 0) * 1000)" />
               </div>
               <!-- Persist for N slides -->
               <div class="mb-flex mb-items-center mb-gap-1">
@@ -191,9 +215,11 @@
               <!-- Overlay -->
               <div v-if="currentBg.type !== 'transparent'">
                 <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('Sovrapposizione') }}</label>
-                <FieldColor :modelValue="currentBg.overlay || '#000000'" @update:modelValue="updateBg('overlay', $event)" />
+                <FieldColor :modelValue="currentBg.overlay || 'var(--olo-color-dark)'" @update:modelValue="updateBg('overlay', $event)" />
+                <!-- 1.4.1447: con l'etichetta, come le due righe sotto (prima un cursore senza nome dopo l'Alfa del colore) -->
                 <div class="mb-flex mb-gap-1 mb-items-center mb-mt-1">
-                  <NumberScrubber theme="dark" class="mb-flex-1" :modelValue="Math.round((currentBg.overlayOpacity ?? 0.3) * 100)" :min="0" :max="100" :step="5" :defaultValue="30" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Sovrapposizione')" @update:modelValue="updateBg('overlayOpacity', $event / 100)" />
+                  <label class="mb-text-[10px] mb-text-gray-400 mb-w-16">{{ t('Opacità del velo') }}</label>
+                  <NumberScrubber theme="dark" class="mb-flex-1" :modelValue="Math.round((currentBg.overlayOpacity ?? 0.3) * 100)" :min="0" :max="100" :step="5" :defaultValue="30" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Opacità del velo')" @update:modelValue="updateBg('overlayOpacity', $event / 100)" />
                 </div>
                 <!-- sfumata: piena sul bordo, trasparente a questa distanza; 0 = uniforme -->
                 <div class="mb-flex mb-gap-1 mb-items-center mb-mt-1">
@@ -294,7 +320,7 @@
           <!-- Multi-track Keyframe Timeline (sempre visibile se ci sono layer con timeline) -->
           <KeyframeTimeline
             v-if="hasAnyTimeline && modo === 'animazione'"
-            :layers="livelliInScena"
+            :layers="livelliConTimeline"
             :selectedLayerId="selectedLayerId"
             :selectedKeyframeId="selectedKeyframeId"
             :playhead="timelinePlayhead"
@@ -335,6 +361,7 @@
         <div class="mb-flex mb-flex-col mb-min-h-0" :style="{ width: rightPanelWidth + 'px', flexShrink: 0 }">
           <InteractionsPanel
             v-if="modo === 'interazioni'"
+            ref="pannelloInt"
             class="mps-colonna-int"
             :layers="activeSlide?.layers || []"
             :selectedId="editingGlobal ? null : selectedLayerId"
@@ -389,7 +416,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, reactive, nextTick, watch } from 'vue';
+import { ref, computed, onMounted, onUnmounted, reactive, nextTick, watch, provide } from 'vue';
 import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
 import { useStylesStore } from '@/stores/styles';
@@ -411,6 +438,8 @@ import LayerTree from './LayerTree.vue';
 import InteractionsPanel from './InteractionsPanel.vue';
 import MultiPanel from './MultiPanel.vue';
 import lucideIcons from './lucideIconsSvg.js';
+import { CHIAVE_CONTENUTI, FOTO_ARTICOLO } from './datiArticolo.js';
+import { useDynamicContent } from '@/composables/useDynamicContent';
 
 // Option arrays per FieldSelect (stessi value dei vecchi <option>: dati salvati invariati)
 const OPTS_BG_TYPE = [
@@ -447,8 +476,21 @@ const data = reactive(JSON.parse(JSON.stringify(tile?.settings || prosliderDef.d
 if (!data.slides || !data.slides.length) {
   data.slides = [defaultSlide()];
 }
+// com'era all'apertura: «Annulla» chiede conferma solo se qualcosa è cambiato
+const datiIniziali = JSON.stringify(data);
 
 const activeSlideIndex = ref(0);
+
+// Slide dagli articoli (1.4.1457): accese nell'inspector («Slide dagli articoli»), la slide modello si ripete per ogni
+// contenuto. I pannelli propongono i dati dell'articolo; la tela mostra le foto del primo contenuto trovato.
+const contenutiAttivi = computed(() => !!data.contenuti?.enabled);
+const slideModello = computed(() => (contenutiAttivi.value ? Math.max(0, Math.min(data.slides.length - 1, (parseInt(data.contenuti?.modello, 10) || 1) - 1)) : -1));
+const esempioArticolo = ref(null);
+const { segnapostoEsempio } = useDynamicContent();
+watch(() => (contenutiAttivi.value ? JSON.stringify(data.contenuti) : ''), async (q) => {
+  esempioArticolo.value = q ? await segnapostoEsempio(data.contenuti) : null;
+}, { immediate: true });
+provide(CHIAVE_CONTENUTI, { attivi: contenutiAttivi, modello: slideModello, esempio: esempioArticolo });
 const selectedLayerId = ref(null);
 const editingLayerId = ref(null);
 const showSlideBg = ref(false);
@@ -520,10 +562,13 @@ const selectedLayerHasTimeline = computed(() => {
   return !!(selectedLayer.value?.timeline?.keyframes?.length >= 2);
 });
 
+// 1.4.1463: anche i livelli «su tutte le slide» hanno la loro linea del tempo (Scappamento ne anima 7): prima la barra
+// sotto la tela guardava solo i livelli della slide, e i fotogrammi di un livello globale non si vedevano né cambiavano
 const hasAnyTimeline = computed(() => {
-  const layers = activeSlide.value?.layers || [];
+  const layers = [...(activeSlide.value?.layers || []), ...(data.globalLayers || [])];
   return layers.some(l => l.timeline?.keyframes?.length >= 2);
 });
+const livelliConTimeline = computed(() => [...livelliInScena.value, ...(data.globalLayers || [])]);
 
 // ── Anteprime (1.4.1352): vedere sulla tela quello che fa lo slider sul sito ──
 // Scorrimento: 0–100 come l'avanzamento della scena sul sito (col «Scorrimento fissato» il tratto in cui lo slider resta
@@ -609,7 +654,8 @@ const riepilogoAnimazioni = computed(() => {
 watch(activeSlideIndex, () => { statePreview.value = {}; });
 
 function onTimelineSelectLayer(layerId) {
-  editingGlobal.value = false;
+  // una traccia di un livello «su tutte le slide» lo apre come tale (pannello e linea del tempo lavorano su quello)
+  editingGlobal.value = (data.globalLayers || []).some((l) => l.id === layerId);
   selectedLayerId.value = layerId;
 }
 
@@ -1133,6 +1179,37 @@ const MODI = [
   { k: 'interazioni', nome: t('Interazioni'), spiega: t('Cosa succede al clic: scelte, stati e azioni') },
 ];
 const modo = ref('disegno');
+// (1.4.1448) Il riepilogo delle interazioni sta sopra le proprietà e cresce mentre si scrive (nome dello stato, valore,
+// nome per i lettori di schermo): spingeva giù i campi e il clic sul campo dopo finiva su un altro (rifacendo il
+// pulsante «Pulisci tu» di Fuliggine il valore è andato nel menu «Quando»). Quando il riepilogo cambia altezza, le
+// proprietà scorrono della stessa misura e i campi restano fermi sotto il puntatore.
+const pannelloInt = ref(null);
+let osservaInt = null;
+let altezzaInt = 0;
+function scorrevoleDentro(el) {
+  if (!el) return null;
+  for (const x of el.querySelectorAll('*')) {
+    const oy = getComputedStyle(x).overflowY;
+    if ((oy === 'auto' || oy === 'scroll') && x.scrollHeight > x.clientHeight) return x;
+  }
+  return null;
+}
+watch(pannelloInt, (c) => {
+  osservaInt?.disconnect();
+  osservaInt = null;
+  const el = c?.$el;
+  if (!el || typeof ResizeObserver === 'undefined') return;
+  altezzaInt = el.offsetHeight;
+  osservaInt = new ResizeObserver(() => {
+    const h = el.offsetHeight;
+    const d = h - altezzaInt;
+    altezzaInt = h;
+    if (!d) return;
+    const sc = scorrevoleDentro(el.parentElement?.querySelector('.mps-colonna-prop'));
+    if (sc) sc.scrollTop += d;
+  });
+  osservaInt.observe(el);
+});
 const nomeStatoE = (n) => String(n || '').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '');
 function sostituisciValore(vale, vecchio, nuovo) {
   const s = String(vale ?? '').trim();
@@ -1431,21 +1508,29 @@ function save() {
   emit('close');
 }
 
+// «Annulla» con delle modifiche chiede conferma (1.4.1440): prima buttava via tutto in silenzio.
+const chiediAnnulla = ref(false);
 function cancel() {
+  if (!chiediAnnulla.value && JSON.stringify(data) !== datiIniziali) { chiediAnnulla.value = true; return; }
   emit('close');
 }
 
 // --- Keyboard ---
 function onKeydown(e) {
-  if (e.key === 'Escape') {
-    if (editingLayerId.value) {
-      editingLayerId.value = null;
-    } else {
-      cancel();
-    }
-  }
   // Canc in un campo cancella il testo, non il livello scelto (1.4.1422: prima toglieva il livello).
   const campo = e.target?.closest?.('input, textarea, select, [contenteditable="true"]');
+  // Esc (1.4.1440) fa un passo indietro alla volta e NON chiude più l'editor: prima lo chiudeva buttando via tutte le
+  // modifiche, anche premuto per chiudere un menu o il selettore colore (rifacendo a mano Elastan si sono persi così
+  // lo sfondo e il primo livello). L'editor si chiude solo coi suoi pulsanti.
+  if (e.key === 'Escape') {
+    if (e.defaultPrevented) return; // un menu o un popup l'ha già usato per chiudersi
+    if (editingLayerId.value) editingLayerId.value = null;
+    else if (chiediAnnulla.value) chiediAnnulla.value = false;
+    else if (campo) campo.blur?.();
+    else if (showSlideBg.value) showSlideBg.value = false;
+    else if (selectedLayerId.value) selectedLayerId.value = null;
+    return;
+  }
   // Annulla, ripeti, copia, incolla, duplica (1.4.1430): fuori dai campi di testo, che hanno i loro
   if ((e.ctrlKey || e.metaKey) && !campo && !editingLayerId.value) {
     const k = e.key.toLowerCase();
@@ -1529,6 +1614,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+  osservaInt?.disconnect();
   stopTimelinePlay();
   fermaScorrimento();
   window.removeEventListener('pointermove', onPanelResizeMove);
@@ -1537,6 +1623,11 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* Slide dagli articoli: la foto in evidenza come sfondo della slide modello (1.4.1457) */
+.mps-dato-bg { font: inherit; font-size: 10px; padding: 0 8px; border: 1px solid #374151; border-radius: 4px; background: #1f2937; color: #d1d5db; cursor: pointer; white-space: nowrap; }
+.mps-dato-bg:hover { background: #374151; color: #fff; }
+.mps-dato-bg.is-on { border-color: var(--olo-color-primary, #e1474f); color: #fff; }
+.mps-dato-bg:focus-visible { outline: 2px solid var(--olo-color-primary, #e1474f); outline-offset: 1px; }
 /* Le slide in alto prendono al massimo un terzo abbondante: il resto è del pannello Livelli (1.4.1424) */
 .mps-colonna-slide { max-height: 38%; flex: none; }
 .mps-scene-riga { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 5px 12px; border-bottom: 1px solid #374151; background: #111827; }

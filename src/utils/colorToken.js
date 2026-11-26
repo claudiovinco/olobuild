@@ -57,14 +57,47 @@ export function tokenParts(val) {
  */
 export function buildSwatchColors(stylesStore) {
   const c = stylesStore?.colors || {};
-  const roleIds = new Set(ROLE_SWATCHES.map(r => r.id));
+  const gcs = stylesStore?.globalColors || [];
+  const roleIds = new Set([...ROLE_SWATCHES, ...ROLE_SWATCHES_ALTRI].map(r => r.id));
   const roles = ROLE_SWATCHES
     .filter(r => c[r.id])
     .map(r => ({ id: r.id, label: t(r.label), value: c[r.id], quick: false, hidden: false }));
-  const globals = (stylesStore?.globalColors || [])
+  // gli altri ruoli: dal colore globale con lo stesso id, se il sito ce l'ha, se no da quello che la Palette emette
+  const altri = ROLE_SWATCHES_ALTRI.map((r) => {
+    const g = gcs.find(x => x && x.id === r.id && x.value);
+    const v = g ? g.value : (c[r.id.replace(/-/g, '_')] || c[r.id] || templateColorTokens(stylesStore)[r.id] || tokenDalCanvas(r.id));
+    return { id: r.id, label: t(r.label), value: dipingibile(v, stylesStore), quick: false, hidden: false };
+  }).filter(r => r.value);
+  const globals = gcs
     .filter(g => g && g.id && !roleIds.has(g.id))
     .map(g => ({ id: g.id, label: g.label || g.id, value: g.value, quick: !!g.quick, hidden: !!g.hidden }));
-  return [...roles, ...globals];
+  return [...roles, ...altri, ...globals];
+}
+
+// Gli altri ruoli che la Palette emette SEMPRE (1.4.1438; Scuro, Chiaro e Accento li ricava dal primario se il sito non
+// li ha, RUOLI_DERIVATI). Rifacendo a mano Elastan: i temi li usano a migliaia negli Slider Pro (Chiaro 4.563 volte,
+// Scuro 2.288, Accento 695, Sul primario 276) ma fra le pastiglie non c'erano, e per sceglierli bisognava scrivere
+// la variabile a mano. Si salvano come i ruoli: token nudi, senza riserva.
+export const ROLE_SWATCHES_ALTRI = [
+  { id: 'accent', label: 'Accento' }, { id: 'dark', label: 'Scuro' }, { id: 'light', label: 'Chiaro' },
+  { id: 'primary-contrast', label: 'Sul primario' }, { id: 'secondary-contrast', label: 'Sul secondario' },
+  { id: 'text-muted', label: 'Testo tenue' },
+];
+
+// Un valore della Palette può nominare altri token (`color-mix(in srgb, var(--olo-color-primary) 12%, #14161c)`):
+// nel pannello non esistono, e la pastiglia resterebbe vuota. Si sostituiscono coi loro valori (senza passare da
+// buildSwatchColors, che chiama questa funzione).
+function dipingibile(v, stylesStore, prof = 0) {
+  const s = String(v || '').trim();
+  if (!s || prof > 6 || !/var\(\s*--olo-color-/i.test(s)) return s;
+  const c = stylesStore?.colors || {};
+  const mappa = templateColorTokens(stylesStore);
+  const fuori = s.replace(/var\(\s*--olo-color-([a-z0-9_-]+)\s*(?:,\s*([^()]*))?\)/gi, (tutto, id, riserva) => {
+    const k = id.toLowerCase();
+    const gc = (stylesStore?.globalColors || []).find(x => x && x.id === k && x.value);
+    return (gc && gc.value) || c[k] || c[k.replace(/-/g, '_')] || mappa[k] || tokenDalCanvas(k) || (riserva || '').trim() || tutto;
+  });
+  return fuori === s ? s : dipingibile(fuori, stylesStore, prof + 1);
 }
 
 /**
@@ -79,7 +112,7 @@ export function buildSwatchColors(stylesStore) {
  */
 export function tokenDaSalvare(id, stylesStore) {
   const tok = `var(--olo-color-${id})`;
-  if (ROLE_SWATCHES.some(r => r.id === id)) return tok;
+  if (ROLE_SWATCHES.some(r => r.id === id) || ROLE_SWATCHES_ALTRI.some(r => r.id === id)) return tok;
   const d = describeColor(tok, stylesStore);
   if (d.kind !== 'color' || !Array.isArray(d.rgb)) return tok;
   const hex2 = n => Math.min(255, Math.max(0, Math.round(n))).toString(16).padStart(2, '0');

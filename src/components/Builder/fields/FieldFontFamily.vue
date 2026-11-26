@@ -212,7 +212,8 @@ const dropdownPos = ref({});
 const livello = ref(100090);
 
 // Focus trap per accessibilità dropdown
-const { activate: activateTrap, deactivate: deactivateTrap } = useFocusTrap(dropdownEl);
+// Esc chiude l'elenco (1.4.1466): la trappola del focus fermava il tasto senza fare niente, e l'elenco restava aperto
+const { activate: activateTrap, deactivate: deactivateTrap } = useFocusTrap(dropdownEl, { onEscape: () => { open.value = false; } });
 
 // Custom fonts (uploaded via REST API)
 const oloData = window.oloData || {};

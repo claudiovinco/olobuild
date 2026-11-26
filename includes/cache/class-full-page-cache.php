@@ -111,6 +111,59 @@ class Olobuild_FullPage_Cache {
         return is_array( $o ) && ! empty( $o['full_page_cache'] );
     }
 
+    /* ── pagine che cambiano da sole ───────────────────────── */
+
+    /**
+     * Il momento (timestamp) in cui la pagina che si sta costruendo cambierà da sola: una tile con «Fascia oraria»,
+     * una data, un giorno della settimana, i mesi dell'anno o «Mostra dal / fino al» (24 nov 2026). 0 = mai.
+     * Il drop-in lo legge salvando la pagina e la fa scadere a quell'ora (advanced-cache.php).
+     *
+     * @var int
+     */
+    private static $scadenza = 0;
+
+    /**
+     * Una tile dice quando la pagina cambierà: la copia in cache non deve durare oltre. Vale per la cache di OLObuild
+     * (il drop-in, vedi scadenza()) e per LiteSpeed Cache, che tiene l'ULTIMA durata ricevuta: per questo le si
+     * passa sempre la più vicina, e mai più di un giorno, per non allungare la durata scelta da chi gestisce il sito.
+     * Prima nessuna condizione lo diceva e la pagina restava com'era al momento del salvataggio: con LiteSpeed Cache
+     * l'offerta di Natale poteva restare online una settimana dopo la fine.
+     *
+     * @param int    $quando Timestamp del prossimo cambio.
+     * @param string $motivo Per il registro di LiteSpeed Cache.
+     */
+    public static function scade_alle( $quando, $motivo = '' ) {
+        $quando = (int) $quando;
+        $ora    = time();
+        if ( $quando <= $ora || ( self::$scadenza && self::$scadenza <= $quando ) ) {
+            return;
+        }
+        self::$scadenza = $quando;
+        if ( $quando - $ora < MINUTE_IN_SECONDS ) {
+            self::non_salvare( $motivo ); // cambia fra pochi secondi: salvarla non serve
+            return;
+        }
+        do_action( 'litespeed_control_set_ttl', min( DAY_IN_SECONDS, $quando - $ora ), 'olobuild: ' . $motivo );
+    }
+
+    /** Il prossimo cambio della pagina che si sta costruendo (0 = nessuno): lo legge il drop-in. */
+    public static function scadenza() {
+        return self::$scadenza;
+    }
+
+    /**
+     * Una tile che cambia da un visitatore all'altro («Provenienza», «Browser», l'ora esatta): la pagina non va in
+     * nessuna cache. DONOTCACHEPAGE vale per la cache di OLObuild, LiteSpeed Cache, WP Rocket e W3 Total Cache.
+     *
+     * @param string $motivo Per il registro di LiteSpeed Cache.
+     */
+    public static function non_salvare( $motivo = '' ) {
+        if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+            define( 'DONOTCACHEPAGE', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- costante standard dei plugin di cache.
+        }
+        do_action( 'litespeed_control_set_nocache', 'olobuild: ' . $motivo );
+    }
+
     private static function cache_dir()     { return WP_CONTENT_DIR . '/cache/olobuild/'; }
     private static function dropin_path()   { return WP_CONTENT_DIR . '/advanced-cache.php'; }
     private static function dropin_source() { return OLOBUILD_PATH . 'includes/cache/advanced-cache.php'; }

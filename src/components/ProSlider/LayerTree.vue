@@ -75,8 +75,8 @@
                          'is-daparte': l.daParte, 'is-sopra': arrivoRiga && arrivoRiga.id === l.id && arrivoRiga.dove === 'sopra', 'is-sotto': arrivoRiga && arrivoRiga.id === l.id && arrivoRiga.dove === 'sotto' }"
                @dragstart="inizia($event, l)" @dragend="trascinato = null; arrivo = null; arrivoRiga = null"
                @dragover.prevent="sopraRiga($event, l)" @drop.prevent.stop="lascia(g, l)">
-            <button type="button" class="mps-lt-lnome" @click="$emit('select', l.id, $event.shiftKey || $event.ctrlKey || $event.metaKey)"
-                    :aria-current="l.id === selectedId && !editingGlobal ? 'true' : null" :title="t('Clic per sceglierlo; Maiusc o Ctrl + clic per sceglierne più d’uno; trascinalo per cambiare ordine o gruppo')">
+            <button type="button" class="mps-lt-lnome" @click="clicRiga(l, $event)"
+                    :aria-current="l.id === selectedId && !editingGlobal ? 'true' : null" :title="t('Clic per sceglierlo; Ctrl + clic per aggiungerne uno; Maiusc + clic per scegliere tutti quelli fino a qui; trascinalo per cambiare ordine o gruppo')">
               <span v-if="l.etichetta" class="mps-lt-colore" :style="{ background: coloreDi(l.etichetta) }" aria-hidden="true"></span>
               <span class="mps-lt-ico" aria-hidden="true" v-html="ico(ICO_TIPO[l.type] || 'square')"></span>
               <span class="mps-lt-testo" :title="nomeLivello(l)">{{ nomeLivello(l) }}</span>
@@ -152,11 +152,16 @@ const emit = defineEmits(['select', 'select-many', 'select-global', 'nascondi', 
 
 const ICO_TIPO = { text: 'type', image: 'image', video: 'video', button: 'rectangle-horizontal', icon: 'star', shape: 'shapes', audio: 'music' };
 const ICO_GRUPPO = { manuale: 'folder', scelta: 'mouse-pointer-click', prima: 'play', stato: 'contrast', serie: 'layers', veli: 'blend', testi: 'type', forme: 'shapes', media: 'image' };
+// 1.4.1461: gli stessi tipi della barra AGGIUNGI. Prima solo testo, pulsante, immagine e icona, mentre i temi usano su
+// tutte le slide 101 forme (veli, cornici, righe) e 2 video: nell'editor non si potevano rifare.
 const TIPI_GLOBALI = [
   { type: 'text', label: t('Testo'), ico: 'type' },
-  { type: 'button', label: t('Pulsante'), ico: 'rectangle-horizontal' },
   { type: 'image', label: t('Immagine'), ico: 'image' },
+  { type: 'video', label: t('Video'), ico: 'video' },
+  { type: 'button', label: t('Pulsante'), ico: 'rectangle-horizontal' },
   { type: 'icon', label: t('Icona'), ico: 'star' },
+  { type: 'shape', label: t('Forma'), ico: 'shapes' },
+  { type: 'audio', label: t('Audio'), ico: 'music' },
 ];
 const ico = (k) => lucideIcons[k] || '';
 
@@ -207,6 +212,21 @@ const visti = computed(() => {
     .filter((g) => g.livelli.length);
 });
 const inScelta = (l) => !props.editingGlobal && (props.selectedIds.has(l.id) || l.id === props.selectedId);
+// Maiusc + clic sceglie tutti i livelli fra quello scelto e questo, nell'ordine in cui l'elenco li mostra (1.4.1440,
+// come nei programmi di grafica); Ctrl + clic ne aggiunge o toglie uno. Prima Maiusc faceva come Ctrl: per togliere
+// i quattro livelli di partenza di uno slider nuovo servivano quattro clic.
+function clicRiga(l, e) {
+  if (e.shiftKey && props.selectedId && props.selectedId !== l.id && !props.editingGlobal) {
+    const ordine = visti.value.flatMap((g) => (aperto(g) ? g.livelli : [])).map((x) => x.id);
+    const a = ordine.indexOf(props.selectedId), b = ordine.indexOf(l.id);
+    if (a >= 0 && b >= 0) {
+      const tratto = ordine.slice(Math.min(a, b), Math.max(a, b) + 1);
+      emit('select-many', [props.selectedId, ...tratto.filter((id) => id !== props.selectedId)]);
+      return;
+    }
+  }
+  emit('select', l.id, e.shiftKey || e.ctrlKey || e.metaKey);
+}
 
 // Trascinare le righe (1.4.1428, come l'elenco dei livelli di Smart Slider): sopra o sotto un'altra riga cambia
 // l'ordine sulla slide; nella riga di un gruppo lo porta in quel gruppo. In una scelta il livello compare con quella
@@ -321,6 +341,8 @@ function valoriPropri(l) {
 .mps-lt-g.is-scena { background: rgba(250, 204, 21, .07); box-shadow: inset 2px 0 0 #facc15; }
 .mps-lt-g.is-solo { background: rgba(96, 165, 250, .08); box-shadow: inset 2px 0 0 #60a5fa; }
 .mps-lt-gt { display: flex; align-items: center; gap: 1px; min-height: 26px; }
+/* 1.4.1461: sette tipi da aggiungere su tutte le slide: la riga va a capo invece di uscire dalla colonna */
+.mps-lt-globali .mps-lt-gt { flex-wrap: wrap; }
 .mps-lt-apri { font: inherit; flex: 1; min-width: 0; display: flex; align-items: center; gap: 5px; padding: 4px 4px; background: transparent; border: 0; border-radius: 4px; color: #e5e7eb; cursor: pointer; text-align: left; }
 .mps-lt-apri:hover { background: #1f2937; }
 .mps-lt-freccia { display: inline-flex; color: #6b7280; transition: transform .12s ease; }
@@ -373,7 +395,13 @@ function valoriPropri(l) {
 .mps-lt-l.is-primo { box-shadow: inset 2px 0 0 var(--olo-color-primary, #e1474f); }
 .mps-lt-colore { flex: none; width: 7px; height: 7px; border-radius: 2px; }
 .mps-lt-daparte:focus-visible, .mps-lt-sel:focus-within { outline: 2px solid var(--olo-color-primary, #e1474f); outline-offset: -2px; }
-.mps-lt-l:hover .mps-lt-az, .mps-lt-l:focus-within .mps-lt-az, .mps-lt-az--sempre { display: inline-flex; }
+/* (1.4.1445) Porta avanti/indietro, metti da parte ed elimina compaiono solo sul livello scelto (o col fuoco da
+   tastiera), non al passaggio: comparendo sotto il puntatore accorciavano il nome, e il clic per scegliere un livello
+   dal nome lungo cadeva su «Porta avanti» (rifacendo a mano Elastan). Occhio e lucchetto restano al passaggio. */
+/* 1.4.1446: col fuoco da TASTIERA soltanto. Con :focus-within il clic del mouse sul nome dava il fuoco al pulsante,
+   i comandi comparivano e accorciavano il nome prima del rilascio: il puntatore finiva su un'icona e il livello dal
+   nome lungo non si sceglieva. */
+.mps-lt-l.is-primo .mps-lt-az, .mps-lt-l:has(:focus-visible) .mps-lt-az, .mps-lt-az--sempre { display: inline-flex; }
 .mps-lt-link:focus-visible, .mps-lt-apri:focus-visible, .mps-lt-btn:focus-visible, .mps-lt-lnome:focus-visible { outline: 2px solid var(--olo-color-primary, #e1474f); outline-offset: -2px; }
 @media (prefers-reduced-motion: reduce) { .mps-lt-freccia { transition: none; } }
 </style>

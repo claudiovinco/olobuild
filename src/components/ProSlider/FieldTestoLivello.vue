@@ -17,9 +17,20 @@
       <button type="button" class="mps-tl-btn" :title="t('Togli lo stile alle parole scelte')" :aria-label="t('Togli lo stile alle parole scelte')" @mousedown.prevent @click="togliStile">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7V4h16v3"/><path d="M5 20h6"/><path d="M13 4 8 20"/><path d="m15 15 5 5"/><path d="m20 15-5 5"/></svg>
       </button>
+      <!-- Slide dagli articoli (1.4.1457): solo quando sono accese, perché solo allora i segnaposto prendono un valore -->
+      <template v-if="contenuti.attivi.value">
+        <span class="mps-tl-sep" aria-hidden="true"></span>
+        <button type="button" class="mps-tl-btn mps-tl-dato" :class="{ 'is-on': datiAperti }" :title="t('Inserisci un dato dell’articolo')" :aria-label="t('Inserisci un dato dell’articolo')" :aria-expanded="datiAperti ? 'true' : 'false'" @mousedown.prevent @click="datiAperti = !datiAperti">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M8 9h8"/><path d="M8 13h8"/><path d="M8 17h5"/></svg>
+          <span>{{ t('Dato') }}</span>
+        </button>
+      </template>
     </div>
     <div v-if="coloreAperto" class="mps-tl-colore">
       <FieldColor :modelValue="coloreScelto" @update:modelValue="colora" />
+    </div>
+    <div v-if="datiAperti && contenuti.attivi.value" class="mps-tl-dati" role="group" :aria-label="t('Inserisci un dato dell’articolo')">
+      <button v-for="d in DATI_TESTO" :key="d.token" type="button" class="mps-tl-btn" @mousedown.prevent @click="inserisci(d.token)">{{ t(d.label) }}</button>
     </div>
     <div
       ref="area"
@@ -33,22 +44,25 @@
       @paste.prevent="incolla"
       @keyup="ricordaScelta"
       @mouseup="ricordaScelta"
-      @blur="ricordaScelta"
+      @blur="lasciato"
     ></div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import FieldColor from '../Builder/fields/FieldColor.vue';
 import { testoSicuro } from './livelloUtils.js';
+import { useContenutiSlider, DATI_TESTO } from './datiArticolo.js';
 
 const props = defineProps({ modelValue: { type: String, default: '' } });
 const emit = defineEmits(['update:modelValue']);
 const area = ref(null);
 const coloreAperto = ref(false);
 const coloreScelto = ref('');
+const contenuti = useContenutiSlider();
+const datiAperti = ref(false);
 let scelta = null;   // l'ultima selezione dentro il campo: il colore si sceglie fuori, e la selezione va ricordata
 let ultimo = '';     // l'ultimo valore mandato: quando torna indietro uguale, il campo non si riscrive (il cursore resta)
 
@@ -65,12 +79,18 @@ watch(() => props.modelValue, (v) => {
 });
 
 function manda() {
+  clearTimeout(timer); timer = null;
   if (!area.value) return;
   ultimo = testoSicuro(area.value.innerHTML).replace(/(<br>)+$/, '');
   emit('update:modelValue', ultimo);
 }
 let timer = null;
 function scrivi() { ricordaScelta(); clearTimeout(timer); timer = setTimeout(manda, 250); }
+// 1.4.1446: ciò che aspetta i 250 ms parte subito quando il campo perde il fuoco o sparisce. Scrivendo e passando
+// subito alla scheda Posizione il campo si smontava prima del timer e il testo scritto andava perso.
+function svuota() { if (timer) manda(); }
+function lasciato() { ricordaScelta(); svuota(); }
+onBeforeUnmount(svuota);
 
 function ricordaScelta() {
   const sel = window.getSelection();
@@ -124,6 +144,23 @@ function togliStile() {
   riseleziona(n);
   manda();
 }
+// Un segnaposto dove sta il cursore (o al posto delle parole scelte); senza cursore nel campo, in fondo
+function inserisci(testo) {
+  if (!area.value) return;
+  let r = scelta && area.value.contains(scelta.commonAncestorContainer) ? scelta.cloneRange() : null;
+  if (!r) { r = document.createRange(); r.selectNodeContents(area.value); r.collapse(false); }
+  r.deleteContents();
+  const n = document.createTextNode(testo);
+  r.insertNode(n);
+  const dopo = document.createRange();
+  dopo.setStartAfter(n);
+  dopo.collapse(true);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(dopo);
+  scelta = dopo.cloneRange();
+  manda();
+}
 function aCapo() {
   const sel = window.getSelection();
   if (!sel || !sel.rangeCount || !area.value?.contains(sel.getRangeAt(0).commonAncestorContainer)) return;
@@ -169,6 +206,8 @@ function incolla(e) {
 .mps-tl-a { font-weight: 700; border-bottom: 3px solid var(--olo-color-primary, #e1474f); line-height: 1; padding: 0 1px; }
 .mps-tl-sep { width: 1px; height: 16px; background: #374151; margin: 0 3px; }
 .mps-tl-colore { padding: 6px; border: 1px solid #374151; border-radius: 5px; }
+.mps-tl-dato { gap: 4px; }
+.mps-tl-dati { display: flex; flex-wrap: wrap; gap: 4px; padding: 6px; border: 1px solid #374151; border-radius: 5px; }
 .mps-tl-area { min-height: 64px; max-height: 220px; overflow: auto; padding: 6px 8px; border: 1px solid #d1d5db; border-radius: 4px; background: #fff; color: #111827; font-size: 13px; line-height: 1.45; white-space: pre-wrap; word-break: break-word; outline: none; }
 .mps-tl-area:focus { border-color: var(--olo-color-primary, #e1474f); box-shadow: 0 0 0 2px color-mix(in srgb, var(--olo-color-primary, #e1474f) 25%, transparent); }
 </style>

@@ -20,6 +20,16 @@
 
 const KEY_PREFIX = 'olo_stale_bundle_';
 
+/** true se la versione a è più nuova della b (1.4.1466 > 1.4.1465; numeri confrontati uno per uno). */
+function piuNuova(a, b) {
+  const pa = String(a).split('.').map((n) => parseInt(n, 10) || 0);
+  const pb = String(b).split('.').map((n) => parseInt(n, 10) || 0);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    if ((pa[i] || 0) !== (pb[i] || 0)) return (pa[i] || 0) > (pb[i] || 0);
+  }
+  return false;
+}
+
 function safeSessionGet(key) {
   try {
     return window.sessionStorage.getItem(key);
@@ -67,6 +77,12 @@ export function guardStaleBundle() {
   const serverVersion = (window.oloData && window.oloData.version) || '';
 
   if (!bundleVersion || !serverVersion || bundleVersion === serverVersion) {
+    return false;
+  }
+  // Il browser ha già la versione PIÙ NUOVA (1.4.1466): il server sta finendo l'aggiornamento (la cache del PHP
+  // rilegge i file dopo qualche secondo). Non è il caso del bundle vecchio: niente ricarica e niente avviso, che
+  // diceva «versione vecchia (1.4.1466); sul server c'è la 1.4.1465».
+  if (piuNuova(bundleVersion, serverVersion)) {
     return false;
   }
 

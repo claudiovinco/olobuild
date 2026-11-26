@@ -195,7 +195,7 @@
           </div>
         </div>
       </template>
-      <label v-else-if="field.type !== 'typography' && !field.reveal" class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">
+      <label v-else-if="field.type !== 'typography' && field.type !== 'slide-dagli-articoli' && !field.reveal" class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">
         {{ etichetta.testo }}
         <InfoTip v-if="field.description" class="olo-field-info" :testo="t(field.description)" :titolo="etichetta.testo" />
       </label>
@@ -366,6 +366,32 @@
         :modelValue="effectiveValue"
         @update:modelValue="onFieldUpdate($event)"
       />
+
+      <!-- Slide dagli articoli dello Slider Pro (1.4.1457): la stessa ricerca della «Sorgente dinamica», salvata nelle
+           impostazioni della tile; la slide modello si ripete una volta per ogni contenuto trovato. -->
+      <template v-else-if="field.type === 'slide-dagli-articoli'">
+        <DynamicQueryPanel
+          :query="(effectiveValue && typeof effectiveValue === 'object') ? effectiveValue : {}"
+          :itemFields="[]"
+          :origins="['posts']"
+          :etichetta="field.label"
+          @update:query="onFieldUpdate({ ...$event, modello: (effectiveValue && effectiveValue.modello) || 1 })"
+        />
+        <label v-if="effectiveValue && effectiveValue.enabled" class="if-modello">
+          <span class="if-modello-et">{{ t('Solo articoli con la foto') }}</span>
+          <FieldToggle :model-value="!!effectiveValue.solo_con_foto" @update:model-value="onFieldUpdate({ ...effectiveValue, solo_con_foto: !!$event })" />
+        </label>
+        <div v-if="effectiveValue && effectiveValue.enabled" class="if-modello">
+          <label class="if-modello-et">{{ t('Slide modello') }}<InfoTip :titolo="t('Slide modello')" :testo="t('Sul sito questa slide si ripete una volta per ogni articolo trovato, al suo posto; le altre slide restano dove sono. Nei suoi livelli metti i dati dell’articolo coi pulsanti dell’editor (Dato, Foto dell’articolo, Link dell’articolo).')" /></label>
+          <NumberScrubber
+            :modelValue="effectiveValue.modello || 1"
+            :min="1" :max="Math.max(1, (tileSettings && tileSettings.slides ? tileSettings.slides.length : 1))" :step="1" :defaultValue="1"
+            emitAs="number"
+            :ariaLabel="t('Slide modello')"
+            @update:modelValue="onFieldUpdate({ ...effectiveValue, modello: $event || 1 })"
+          />
+        </div>
+      </template>
 
       <!-- Galleria dagli articoli (1.4.585): stessa «Sorgente dinamica» dei ripetitori; le voci da
            mappare le dichiara la tile (dynamicItemFields), la query salva quale campo riempie. -->
@@ -1546,6 +1572,9 @@ function onDynamicUpdate(dynamicUpdate, isRemove) {
 }
 .olo-desc-row :deep(.olo-info-btn) { color: #64748b; }
 /* Galleria dagli articoli: lo stesso avviso delle voci dei ripetitori (ContentItemsEditor) */
+/* Slide dagli articoli dello Slider Pro: la slide modello, in fila col suo numero (1.4.1457) */
+.if-modello { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 8px; }
+.if-modello-et { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--olo-color-text, #374151); }
 .if-dynamic-info {
   margin-top: 8px;
   padding: 10px 12px;

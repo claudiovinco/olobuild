@@ -30,7 +30,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                     'kenBurnsScale'  => 1.2,
                     'kenBurnsDuration' => 8000,
                     'kenBurnsDirection' => 'in',
-                    'overlay'        => '#000000',
+                    'overlay'        => 'var(--olo-color-dark, #000000)',
                     'overlayOpacity' => 0.3,
                 ],
                 'duration' => 5000,
@@ -85,9 +85,9 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             'type'           => 'color',
             'image'          => '',
             'video'          => '',
-            'color'          => '#1e293b',
-            'gradientFrom'   => '#1e293b',
-            'gradientTo'     => '#0f172a',
+            'color'          => 'var(--olo-color-dark)',
+            'gradientFrom'   => 'var(--olo-color-dark)',
+            'gradientTo'     => 'var(--olo-color-dark)',
             'gradientAngle'  => 180,
             'kenBurns'       => false,
             'kenBurnsScale'  => 1.2,
@@ -157,6 +157,13 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         $s = wp_parse_args( $settings, $this->defaults );
 
         $slides = is_array( $s['slides'] ) ? $s['slides'] : [];
+        // Slide dagli articoli (1.4.1457): la slide modello diventa una slide per ogni contenuto scelto. Sul sito, senza
+        // contenuti e senza altre slide, lo slider non c'è.
+        $con_contenuti = ! empty( $s['contenuti']['enabled'] );
+        $slides        = $this->slide_dai_contenuti( $slides, $s );
+        if ( empty( $slides ) && $con_contenuti && empty( $s['_builder_mode'] ) ) {
+            return '';
+        }
         if ( empty( $slides ) ) {
             return '<div class="olo-proslider" style="padding:60px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);">No slides configured — open the Slider Editor</div>';
         }
@@ -439,6 +446,86 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
     /** Carosello in corso di render: la prima card nasce al centro, le altre dopo (render_slide). */
     private $carosello = false;
 
+    /**
+     * Slide dagli articoli (1.4.1457). Con «Slide dagli articoli» accesa (impostazione `contenuti`: la stessa ricerca
+     * della Sorgente dinamica, più `modello`, il numero della slide modello da 1) la slide modello si ripete, al suo
+     * posto, una volta per ogni contenuto trovato; le altre slide restano dove sono. In livelli e sfondo i segnaposto di
+     * OLObuild ({post_title}, {post_excerpt}, {featured_image}, {post_url}…) prendono i valori di quel contenuto.
+     * Senza contenuti la slide modello sul sito non c'è; nel builder resta coi segnaposto, per vederla e modificarla.
+     *
+     * @param array $slides Le slide salvate.
+     * @param array $s      Impostazioni della tile.
+     * @return array
+     */
+    private function slide_dai_contenuti( $slides, $s ) {
+        $q = isset( $s['contenuti'] ) && is_array( $s['contenuti'] ) ? $s['contenuti'] : [];
+        if ( empty( $q['enabled'] ) || empty( $slides ) || ! class_exists( 'Olobuild_Dynamic_Content' ) ) {
+            return $slides;
+        }
+        $slides  = array_values( $slides );
+        $modello = max( 0, min( count( $slides ) - 1, absint( $q['modello'] ?? 1 ) - 1 ) );
+        $q['source'] = 'posts';
+        $trovati = ( new Olobuild_Dynamic_Content() )->resolve_query( $q );
+        if ( empty( $trovati ) ) {
+            if ( empty( $s['_builder_mode'] ) ) {
+                array_splice( $slides, $modello, 1 );
+            }
+            return $slides;
+        }
+        global $post;
+        $prima = $post;
+        $copie = [];
+        foreach ( $trovati as $contenuto ) {
+            $post = $contenuto; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- il contenuto della slide, rimesso com'era subito dopo
+            setup_postdata( $contenuto );
+            $copia       = $this->riempi_segnaposto( $slides[ $modello ], '' );
+            $copia['id'] = ( isset( $copia['id'] ) && is_scalar( $copia['id'] ) ? (string) $copia['id'] : 'slide' ) . '-' . $contenuto->ID;
+            $copie[]     = $copia;
+        }
+        $post = $prima; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- rimesso com'era
+        if ( $prima instanceof WP_Post ) {
+            setup_postdata( $prima );
+        } else {
+            wp_reset_postdata();
+        }
+        array_splice( $slides, $modello, 1, $copie );
+        return $slides;
+    }
+
+    /**
+     * I segnaposto di una slide modello col contenuto corrente. Nel testo dei livelli (`content`, che può avere grassetti
+     * e corsivi) il valore va escapato; negli indirizzi, nei nomi e negli attributi resta grezzo: lo escapa chi lo scrive.
+     * Si toccano solo i segnaposto riconosciuti: le altre graffe restano com'erano.
+     *
+     * @param mixed  $v      Valore (anche annidato).
+     * @param string $chiave Chiave del valore.
+     * @return mixed
+     */
+    private function riempi_segnaposto( $v, $chiave ) {
+        if ( is_array( $v ) ) {
+            foreach ( $v as $k => $x ) {
+                $v[ $k ] = $this->riempi_segnaposto( $x, is_string( $k ) ? $k : $chiave );
+            }
+            return $v;
+        }
+        if ( ! is_string( $v ) || false === strpos( $v, '{' ) ) {
+            return $v;
+        }
+        $nel_testo = 'content' === $chiave;
+        $fatto     = preg_replace_callback(
+            '/\{(' . implode( '|', Olobuild_Dynamic_Content::TOKENS ) . ')(?::([^}]+))?\}/',
+            function ( $m ) use ( $nel_testo ) {
+                $valore = Olobuild_Dynamic_Content::valore_segnaposto( $m[1], $m[2] ?? '' );
+                if ( null === $valore ) {
+                    return $m[0];
+                }
+                return $nel_testo ? esc_html( $valore ) : $valore;
+            },
+            $v
+        );
+        return null === $fatto ? $v : $fatto;
+    }
+
     private function render_slide( $slide, $index ) {
         $bg = isset( $slide['background'] ) && is_array( $slide['background'] ) ? $slide['background'] : [];
         $layers = isset( $slide['layers'] ) && is_array( $slide['layers'] ) ? $slide['layers'] : [];
@@ -466,7 +553,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                 <?php echo $this->render_bg( $bg ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- background HTML built by render_bg() with esc_url()/esc_attr()/safe_color_css()/absint() internally ?>
                 <?php
                 $bg_type    = $bg['type'] ?? 'color';
-                $ov_color   = $this->safe_color_css( $bg['overlay'] ?? '#000000' );
+                $ov_color   = $this->safe_color_css( $bg['overlay'] ?? 'var(--olo-color-dark, #000000)' );
                 $ov_opacity = isset( $bg['overlayOpacity'] ) ? floatval( $bg['overlayOpacity'] ) : 0.3;
                 // Sfumata dall'alto e/o dal basso (1.4.943): copre tutta la diapositiva, non solo la tela dei livelli, così
                 // nelle finestre più alte del formato non si vede dove finisce il velo (coro Paganella, 2 nov 2026).
@@ -562,25 +649,27 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                     return '<iframe src="https://www.youtube-nocookie.com/embed/' . esc_attr( $vid_id ) . '?autoplay=1&mute=1&loop=1&playlist=' . esc_attr( $vid_id ) . '&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>';
                 }
             }
+            // Immagine d'attesa: si vede finché il video non parte. Dalla 1.4.1438 anche sul video che va da solo (prima
+            // solo con «Segue lo scorrimento»): i 250 video dei temi la portavano e il sito la ignorava.
+            $poster = ! empty( $bg['image'] ) ? ' poster="' . esc_url( $bg['image'] ) . '"' : '';
             // «Segue lo scorrimento» (1.4.959): il video non va da solo, lo porta avanti e indietro lo scorrimento (il JS).
             if ( ! empty( $bg['videoScroll'] ) ) {
-                $poster = ! empty( $bg['image'] ) ? ' poster="' . esc_url( $bg['image'] ) . '"' : '';
                 return '<video src="' . esc_url( $url ) . '"' . $poster . ' muted playsinline preload="auto" data-video-scorre="1"></video>';
             }
-            return '<video src="' . esc_url( $url ) . '" autoplay muted loop playsinline></video>';
+            return '<video src="' . esc_url( $url ) . '"' . $poster . ' autoplay muted loop playsinline></video>';
         }
 
         // Gradient
         if ( $type === 'gradient' ) {
-            $from  = $this->safe_color_css( $bg['gradientFrom'] ?? '#1e293b' );
-            $to    = $this->safe_color_css( $bg['gradientTo'] ?? '#0f172a' );
+            $from  = $this->safe_color_css( $bg['gradientFrom'] ?? 'var(--olo-color-dark, #1e293b)' );
+            $to    = $this->safe_color_css( $bg['gradientTo'] ?? 'var(--olo-color-dark, #0f172a)' );
             $angle = absint( $bg['gradientAngle'] ?? 180 );
             return '<div style="width:100%;height:100%;background:linear-gradient(' . $angle . 'deg,' . $from . ',' . $to . ');"></div>';
         }
 
         // Color fallback
-        $color = $this->safe_color_css( $bg['color'] ?? '#1e293b' );
-        return '<div style="width:100%;height:100%;background:' . ( $color ?: '#1e293b' ) . ';"></div>';
+        $color = $this->safe_color_css( $bg['color'] ?? 'var(--olo-color-dark, #1e293b)' );
+        return '<div style="width:100%;height:100%;background:' . ( $color ?: 'var(--olo-color-dark, #1e293b)' ) . ';"></div>';
     }
 
     /* ─── Layer ────────────────────────────────────────────── */
@@ -744,7 +833,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         // Border — supporta lati individuali
         $valid_border_styles = [ 'solid', 'dashed', 'dotted', 'double' ];
         $bs = in_array( $layer['borderStyle'] ?? 'solid', $valid_border_styles, true ) ? ( $layer['borderStyle'] ?? 'solid' ) : 'solid';
-        $bc = $this->safe_color_css( $layer['borderColor'] ?? '#ffffff' ) ?: '#ffffff';
+        $bc = $this->safe_color_css( $layer['borderColor'] ?? '' ) ?: 'var(--olo-color-light, #ffffff)';
         if ( ! empty( $layer['borderWidthLinked'] ) === false && isset( $layer['borderWidthLinked'] ) && $layer['borderWidthLinked'] === false ) {
             $bwt = absint( $layer['borderWidthTop'] ?? 0 );
             $bwr = absint( $layer['borderWidthRight'] ?? 0 );
@@ -830,7 +919,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             $sh_y = intval( $sh['y'] ?? 4 );
             $sh_blur = absint( $sh['blur'] ?? 10 );
             $sh_spread = intval( $sh['spread'] ?? 0 );
-            $sh_color = $this->safe_color_css( $sh['color'] ?? 'rgba(0,0,0,0.3)' ) ?: 'rgba(0,0,0,0.3)';
+            $sh_color = $this->safe_color_css( $sh['color'] ?? '' ) ?: 'color-mix(in srgb, var(--olo-color-dark, #000000) 30%, transparent)'; // (1.4.1455) ripiego dalla palette, non nero fisso
             $is_transparent_icon = ( $type === 'icon' && empty( $layer['bgColor'] ) );
             if ( $is_transparent_icon ) {
                 $style .= 'filter:drop-shadow(' . $sh_x . 'px ' . $sh_y . 'px ' . $sh_blur . 'px ' . $sh_color . ');';
@@ -841,9 +930,10 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
 
         $aspetto_a = strlen( $style );
 
-        // CSS filters (image/video)
-        if ( in_array( $type, [ 'image', 'video' ], true ) ) {
-            $filter_parts = $this->filtri_immagine( $layer );
+        // CSS filters (image/video; sulle forme la sola sfocatura, 1.4.1462: aloni e macchie di luce di Respiro e Nove lune,
+        // prima scritta nei temi ma mai disegnata)
+        if ( in_array( $type, [ 'image', 'video', 'shape' ], true ) ) {
+            $filter_parts = $this->filtri_livello( $layer, $type );
             if ( $filter_parts ) {
                 $style .= 'filter:' . implode( ' ', $filter_parts ) . ';';
             }
@@ -985,7 +1075,9 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         if ( '' !== $forma_img && ! preg_match( '/[\s"\'()\\\\<>]/', $forma_img ) ) {
             $fi_pos = trim( (string) ( $layer['shapeImagePos'] ?? '' ) );
             $fi_dim = trim( (string) ( $layer['shapeImageSize'] ?? '' ) );
-            $fi_rip = in_array( $layer['shapeImageRepeat'] ?? '', [ 'no-repeat', 'repeat', 'repeat-x', 'repeat-y' ], true ) ? $layer['shapeImageRepeat'] : '';
+            // senza valore l'immagine NON si ripete (1.4.1469), come dice la casella «Ripeti come una trama» spenta: prima
+            // il CSS ripeteva di serie e la casella mostrava il contrario di quello che si vedeva (Capitonne)
+            $fi_rip = in_array( $layer['shapeImageRepeat'] ?? '', [ 'no-repeat', 'repeat', 'repeat-x', 'repeat-y' ], true ) ? $layer['shapeImageRepeat'] : 'no-repeat';
             $fi_pos = preg_match( '/^[a-z0-9.%\s-]{1,40}$/i', $fi_pos ) ? $fi_pos : 'center';
             $fi_dim = preg_match( '/^[a-z0-9.%\s-]{1,40}$/i', $fi_dim ) ? $fi_dim : 'cover';
             $style .= 'background:url("' . esc_attr( $forma_img ) . '") ' . $fi_pos . ' / ' . $fi_dim . ( $fi_rip ? ' ' . $fi_rip : '' ) . ';';
@@ -1051,7 +1143,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             $om = [];
             foreach ( $layer['ombre'] as $o ) {
                 if ( ! is_array( $o ) ) { continue; }
-                $c = $this->safe_color_css( (string) ( $o['color'] ?? '' ) ) ?: 'rgba(0,0,0,.3)';
+                $c = $this->safe_color_css( (string) ( $o['color'] ?? '' ) ) ?: 'color-mix(in srgb, var(--olo-color-dark, #000000) 30%, transparent)';
                 $om[] = ( ! empty( $o['inset'] ) ? 'inset ' : '' ) . intval( $o['x'] ?? 0 ) . 'px ' . intval( $o['y'] ?? 0 ) . 'px ' . absint( $o['blur'] ?? 0 ) . 'px ' . intval( $o['spread'] ?? 0 ) . 'px ' . $c;
             }
             if ( $om ) { $out .= 'box-shadow:' . implode( ',', $om ) . ';'; }
@@ -1060,8 +1152,8 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         // filtri (luminosità, contrasto…): in CSS vince un solo «filter», e da sola li cancellerebbe.
         if ( ! empty( $layer['ombraForma'] ) && is_array( $layer['ombraForma'] ) ) {
             $o     = $layer['ombraForma'];
-            $c     = $this->safe_color_css( (string) ( $o['color'] ?? '' ) ) ?: 'rgba(0,0,0,.4)';
-            $prima = in_array( $type, [ 'image', 'video' ], true ) ? $this->filtri_immagine( $layer ) : [];
+            $c     = $this->safe_color_css( (string) ( $o['color'] ?? '' ) ) ?: 'color-mix(in srgb, var(--olo-color-dark, #000000) 40%, transparent)';
+            $prima = $this->filtri_livello( $layer, $type );
             $out  .= 'filter:' . ( $prima ? implode( ' ', $prima ) . ' ' : '' ) . 'drop-shadow(' . intval( $o['x'] ?? 0 ) . 'px ' . intval( $o['y'] ?? 0 ) . 'px ' . absint( $o['blur'] ?? 0 ) . 'px ' . $c . ');';
         }
         // Il colore che cambia sfumando (es. quando una scelta lo cambia)
@@ -1094,6 +1186,15 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
     }
 
     /** I filtri di un'immagine o di un video (luminosità, contrasto, saturazione…), come parti di «filter». */
+    /** I filtri di un livello: tutti per immagini e video, la sola sfocatura per le forme (1.4.1462), niente per gli altri. */
+    private function filtri_livello( $layer, $type ) {
+        if ( in_array( $type, [ 'image', 'video' ], true ) ) {
+            return $this->filtri_immagine( $layer );
+        }
+        $sf = floatval( $layer['filterBlur'] ?? 0 );
+        return ( 'shape' === $type && $sf > 0 ) ? [ 'blur(' . $sf . 'px)' ] : [];
+    }
+
     private function filtri_immagine( $layer ) {
         $p   = [];
         $fb  = floatval( $layer['filterBrightness'] ?? 100 );
@@ -1229,7 +1330,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
             : $this->px_livello( absint( $layer['fontSize'] ?? 24 ), $fuori );
         $font_weight = esc_attr( $layer['fontWeight'] ?? '700' );
         $font_style  = esc_attr( $layer['fontStyle'] ?? 'normal' );
-        $color       = $this->safe_color_css( $layer['color'] ?? '#ffffff' );
+        $color       = $this->safe_color_css( $layer['color'] ?? 'var(--olo-color-light, #ffffff)' );
         $text_align  = esc_attr( $layer['textAlign'] ?? 'left' );
         $opacity     = isset( $layer['opacity'] ) ? floatval( $layer['opacity'] ) / 100 : 1;
 
@@ -1242,14 +1343,14 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         $text_shadow_css = '';
         if ( ! empty( $layer['textShadow'] ) && is_array( $layer['textShadow'] ) ) {
             $ts = $layer['textShadow'];
-            $ts_color = $this->safe_color_css( $ts['color'] ?? '#000000' ) ?: '#000000';
+            $ts_color = $this->safe_color_css( $ts['color'] ?? '' ) ?: 'var(--olo-color-dark, #000000)';
             $text_shadow_css = 'text-shadow:' . intval( $ts['x'] ?? 2 ) . 'px ' . intval( $ts['y'] ?? 2 ) . 'px ' . absint( $ts['blur'] ?? 4 ) . 'px ' . $ts_color . ';';
         }
         // Text stroke
         $text_stroke_css = '';
         $tsw = floatval( $layer['textStrokeWidth'] ?? 0 );
         if ( $tsw > 0 ) {
-            $tsc = $this->safe_color_css( $layer['textStrokeColor'] ?? '#000000' ) ?: '#000000';
+            $tsc = $this->safe_color_css( $layer['textStrokeColor'] ?? '' ) ?: 'var(--olo-color-dark, #000000)';
             $text_stroke_css = '-webkit-text-stroke:' . $tsw . 'px ' . $tsc . ';';
         }
 
@@ -1312,7 +1413,7 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
                 if ( ! empty( $pul['attivo'] ) ) {
                     $dati = [
                         'img' => $src,
-                        'c'   => $this->safe_color_css( $pul['colore'] ?? '' ) ?: '#111111',
+                        'c'   => $this->safe_color_css( $pul['colore'] ?? '' ) ?: 'var(--olo-color-dark, #111111)',
                         'p'   => max( 10, min( 400, absint( $pul['pennello'] ?? 70 ) ) ),
                         's'   => max( 5, min( 100, absint( $pul['soglia'] ?? 60 ) ) ),
                         'st'  => sanitize_text_field( (string) ( $pul['stato'] ?? '' ) ),
@@ -1671,8 +1772,10 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         $direction  = $char_anim['direction'] ?? 'forward';
         $stagger    = absint( $char_anim['stagger'] ?? 30 );
 
-        // Strip HTML tags for splitting, preserve plain text
-        $plain = wp_strip_all_tags( $text );
+        // Strip HTML tags for splitting, preserve plain text. L'a capo dell'editor è un <br>: diventa «\n» PRIMA di togliere
+        // i tag (1.4.1470), se no spariva e le due parole si attaccavano («Il cielo più buiodel», Cielo buio). Il testo
+        // usa white-space: pre-wrap, quindi «\n» va a capo come il <br>.
+        $plain = wp_strip_all_tags( preg_replace( '/<br\s*\/?>/i', "\n", (string) $text ) );
         if ( empty( $plain ) ) return $text;
 
         if ( $split_mode === 'words' ) {

@@ -169,6 +169,22 @@ export function useDynamicContent() {
   }
 
   /**
+   * Slide dagli articoli dello Slider Pro (1.4.1457): i valori dei segnaposto del primo contenuto della ricerca
+   * ({ post_title, featured_image, … }), o null se la ricerca non trova niente.
+   */
+  async function segnapostoEsempio(query) {
+    try {
+      const r = await apiFetch('dynamic-preview', {
+        method: 'POST',
+        body: JSON.stringify({ source: 'current_post', field: 'post_title', query, segnaposto: true }),
+      });
+      return r && r.segnaposto ? r.segnaposto : null;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  /**
    * Get available source keys (for binding, not post_types/taxonomies).
    */
   function getBindingSources(fieldType = '') {
@@ -202,5 +218,6 @@ export function useDynamicContent() {
     getBindingSources,
     previewBinding,
     previewQuery,
+    segnapostoEsempio,
   };
 }

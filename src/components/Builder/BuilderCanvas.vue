@@ -397,6 +397,7 @@ watch(() => builderStore._iframeContextMenu, (ctx) => {
     builderStore._iframeContextMenu = null;
   }
 });
+watch(() => builderStore._chiudiMenuRapido, () => { iframeContextMenuRef.value?.close?.(); });
 
 
 // Live style system: inject CSS into <head> reactively

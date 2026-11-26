@@ -420,7 +420,9 @@ class Kit:
             fs = L.get('fontSize')
             for chiave, tela in (('notebook', 1240.0), ('tablet', 1024.0)):
                 ov = r.setdefault(chiave, {})
-                if isinstance(fs, (int, float)) and fs and 'fontSize' not in ov:
+                # solo i livelli con delle parole (25 nov 2026): su forme, immagini e video la grandezza del carattere
+                # non disegna niente e restava un valore nascosto, che l'editor non mostra e non lascia togliere
+                if L.get('type') in ('text', 'button', 'icon') and isinstance(fs, (int, float)) and fs and 'fontSize' not in ov:
                     ov['fontSize'] = int(round(fs * tela / 1440)) if fs >= 30 else int(round(fs * (0.94 if chiave == 'tablet' else 0.97)))
                 w = L.get('width')
                 if chiave == 'tablet' and L.get('type') == 'text' and isinstance(fs, (int, float)) and fs < 30 \

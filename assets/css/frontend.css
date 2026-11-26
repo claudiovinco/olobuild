@@ -5,6 +5,21 @@
  */
 
 /* ========================================
+   Bordi fantasma di WordPress (1.4.1450)
+   WordPress (block-library, common.css) dà border-style:solid a ogni elemento che ha «border-color» (o
+   «border-top-color»…) nello stile in linea. Fino a WordPress 6.x bastava la parola anche dentro una transizione
+   («transition: …, border-color .3s»), dalla 7 serve la proprietà. Se lo stile in linea non dichiara uno spessore, il
+   bordo prende quello di serie (3 px) e il colore del testo: le Schede informative di olotheme.com/olosecurity/
+   mostravano un contorno che nessuno aveva messo (21 nov 2026). Qui lo stile torna «nessuno».
+   Peso (0,0,2): batte la regola di WordPress (0,0,1) e perde contro ogni classe, quindi i bordi disegnati dalle tile
+   con le loro classi e quelli dell'inspector (in linea, «border: 1px solid …», che vincono sempre) restano com'erano.
+   I campi dei moduli, i pulsanti e le linee <hr> tengono il bordo del browser.
+   ======================================== */
+html body :where(.olo-template :is([style*="border-color"], [style*="border-top-color"], [style*="border-right-color"], [style*="border-bottom-color"], [style*="border-left-color"]):not(input, select, textarea, button, hr, fieldset, [style*="border-width"], [style*="border-top-width"], [style*="border-right-width"], [style*="border-bottom-width"], [style*="border-left-width"])) {
+  border-style: none;
+}
+
+/* ========================================
    Mesh / Aurora background (bg.type = 'mesh')
    Drift animation for the multi-blob gradient.
    Built inline by Olo_CSS_Builder::build_mesh_css().

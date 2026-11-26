@@ -364,6 +364,15 @@ class Olobuild_Dynamic_Content {
      * Resolve a date/time field.
      */
     private function resolve_datetime( $field ) {
+        // La pagina in cache (OLObuild o LiteSpeed Cache) teneva la data del giorno in cui era stata salvata, e l'ora
+        // del salvataggio (24 nov 2026): la data cambia a mezzanotte, l'ora a ogni minuto e non va in cache.
+        if ( class_exists( 'Olobuild_FullPage_Cache' ) ) {
+            if ( 'current_time' === $field || ( ! in_array( $field, [ 'current_date', 'current_year', 'current_day_name' ], true ) && preg_match( '/[aABgGhHisuv]/', (string) $field ) ) ) {
+                Olobuild_FullPage_Cache::non_salvare( 'contenuto dinamico: ora attuale' );
+            } else {
+                Olobuild_FullPage_Cache::scade_alle( ( new DateTimeImmutable( 'tomorrow', wp_timezone() ) )->getTimestamp(), 'contenuto dinamico: data di oggi' );
+            }
+        }
         switch ( $field ) {
             case 'current_date':
                 return wp_date( get_option( 'date_format' ) );
@@ -397,6 +406,10 @@ class Olobuild_Dynamic_Content {
                 return '';
 
             case 'referrer':
+                // cambia da un visitatore all'altro: la pagina non va in cache (24 nov 2026)
+                if ( class_exists( 'Olobuild_FullPage_Cache' ) ) {
+                    Olobuild_FullPage_Cache::non_salvare( 'contenuto dinamico: provenienza' );
+                }
                 return wp_get_referer() ?: '';
 
             default:
@@ -703,6 +716,19 @@ class Olobuild_Dynamic_Content {
     }
 
     /**
+     * Il valore grezzo di un segnaposto per il contenuto corrente, o null se il nome non è riconosciuto: per chi lo
+     * scrive in un indirizzo, in un attributo o in un testo da escapare da sé (le slide dagli articoli dello Slider Pro).
+     *
+     * @param string $token Nome del segnaposto.
+     * @param string $arg   Argomento dopo i due punti ('' se assente).
+     * @return string|null
+     */
+    public static function valore_segnaposto( $token, $arg = '' ) {
+        $valore = self::token_value( (string) $token, (string) $arg );
+        return null === $valore ? null : (string) $valore;
+    }
+
+    /**
      * Valore di un segnaposto, o null se il nome non è riconosciuto.
      *
      * @param string $token Nome del segnaposto.
@@ -751,11 +777,12 @@ class Olobuild_Dynamic_Content {
                 break;
 
             case 'current_year':
-                $value = date_i18n( 'Y' );
-                break;
-
             case 'current_date':
-                $value = date_i18n( get_option( 'date_format' ) );
+                // la pagina in cache cambia a mezzanotte (24 nov 2026, vedi resolve_datetime())
+                if ( class_exists( 'Olobuild_FullPage_Cache' ) ) {
+                    Olobuild_FullPage_Cache::scade_alle( ( new DateTimeImmutable( 'tomorrow', wp_timezone() ) )->getTimestamp(), 'contenuto dinamico: data di oggi' );
+                }
+                $value = 'current_year' === $token ? date_i18n( 'Y' ) : date_i18n( get_option( 'date_format' ) );
                 break;
 
             case 'featured_image':
@@ -917,6 +944,9 @@ class Olobuild_Dynamic_Content {
                 ],
                 $ordine
             );
+            if ( ! empty( $query_config['solo_con_foto'] ) ) {
+                $args['meta_query'] = [ [ 'key' => '_thumbnail_id', 'compare' => 'EXISTS' ] ]; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- solo i contenuti con la foto in evidenza (slide dagli articoli), volume limitato (posts_per_page)
+            }
             $query = new WP_Query( $args );
             update_post_thumbnail_cache( $query );
             return $query->posts;
@@ -953,6 +983,12 @@ class Olobuild_Dynamic_Content {
                     'terms'    => array_map( 'absint', (array) $terms ),
                 ],
             ];
+        }
+
+        // Solo i contenuti con la foto in evidenza (1.4.1458): le slide dagli articoli dello Slider Pro senza foto
+        // restavano col colore della slide modello.
+        if ( ! empty( $query_config['solo_con_foto'] ) ) {
+            $args['meta_query'] = [ [ 'key' => '_thumbnail_id', 'compare' => 'EXISTS' ] ]; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- volume limitato (posts_per_page)
         }
 
         $query = new WP_Query( $args );

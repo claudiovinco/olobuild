@@ -273,7 +273,7 @@ if ( ! function_exists( 'olobuild_fpc_gz' ) ) {
         return; // non generiamo cache da una HEAD.
     }
 
-    $GLOBALS['olobuild_fpc_ctx'] = [ 'dir' => $dir, 'file' => $file ];
+    $GLOBALS['olobuild_fpc_ctx'] = [ 'dir' => $dir, 'file' => $file, 'ttl' => (int) $cfg['ttl'] ];
 
     ob_start( static function ( $html ) {
         $ctx = isset( $GLOBALS['olobuild_fpc_ctx'] ) ? $GLOBALS['olobuild_fpc_ctx'] : null;
@@ -308,14 +308,32 @@ if ( ! function_exists( 'olobuild_fpc_gz' ) ) {
             return $html; // risposta parziale / non una pagina completa.
         }
 
+        // Una tile con una condizione a tempo (Fascia oraria, date, giorni, mesi, «Mostra dal / fino al») ha detto
+        // quando la pagina cambierà (Olobuild_FullPage_Cache::scade_alle(), 24 nov 2026). Fra meno di un minuto: non
+        // la si salva. Prima della scadenza normale: la si salva e se ne arretra la data, così l'età della copia
+        // arriva alla durata della cache proprio a quell'ora e la richiesta dopo la ricostruisce. La copia gzip,
+        // scritta dopo, resta più recente dell'HTML: si serve finché l'HTML vale.
+        $scade = ( class_exists( 'Olobuild_FullPage_Cache', false ) && method_exists( 'Olobuild_FullPage_Cache', 'scadenza' ) )
+            ? (int) Olobuild_FullPage_Cache::scadenza() : 0;
+        $resta = $scade > 0 ? $scade - time() : 0;
+        if ( $scade > 0 && $resta < 60 ) {
+            return $html;
+        }
+
         // Scrittura atomica (file temporaneo + rename) per non servire mai un file mezzo scritto.
         // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_mkdir -- drop-in pre-bootstrap (WP_CACHE), WP_Filesystem/wp_mkdir_p unavailable here
         if ( is_dir( $ctx['dir'] ) || @mkdir( $ctx['dir'], 0755, true ) || is_dir( $ctx['dir'] ) ) {
             $tmp = $ctx['file'] . '.' . getmypid() . '.tmp';
             if ( false !== @file_put_contents( $tmp, $html, LOCK_EX ) ) {
                 // phpcs:ignore WordPress.WP.AlternativeFunctions.rename_rename -- atomic cache write in the drop-in (pre-bootstrap); WP_Filesystem unavailable
-                if ( @rename( $tmp, $ctx['file'] ) && function_exists( 'olobuild_fpc_gz' ) ) {
-                    olobuild_fpc_gz( $ctx['file'], $html ); // la copia compressa, pronta per il primo HIT
+                if ( @rename( $tmp, $ctx['file'] ) ) {
+                    if ( $scade > 0 && $resta < $ctx['ttl'] ) {
+                        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_touch -- drop-in pre-bootstrap (WP_CACHE): WP_Filesystem non c'è
+                        @touch( $ctx['file'], time() - ( $ctx['ttl'] - $resta ) );
+                    }
+                    if ( function_exists( 'olobuild_fpc_gz' ) ) {
+                        olobuild_fpc_gz( $ctx['file'], $html ); // la copia compressa, pronta per il primo HIT
+                    }
                 }
             }
         }

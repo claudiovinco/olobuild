@@ -1708,6 +1708,26 @@ class Olobuild_Rest_Api {
             if ( ! $post_id || ! current_user_can( 'read_post', $post_id ) ) {
                 return rest_ensure_response( [ 'value' => null, 'post_id' => 0 ] );
             }
+            if ( ! empty( $body['segnaposto'] ) ) {
+                // Slide dagli articoli dello Slider Pro (1.4.1457): i segnaposto del primo contenuto, che la tela
+                // dell'editor mostra al posto delle foto e dei link.
+                global $post;
+                $prima = $post;
+                $post  = get_post( $post_id ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- rimesso com'era subito dopo
+                setup_postdata( $post );
+                $valori = [];
+                foreach ( [ 'post_title', 'post_excerpt', 'post_date', 'post_category', 'post_author', 'post_url', 'featured_image' ] as $segnaposto ) {
+                    $v                     = Olobuild_Dynamic_Content::valore_segnaposto( $segnaposto );
+                    $valori[ $segnaposto ] = null === $v ? '' : html_entity_decode( wp_strip_all_tags( $v ), ENT_QUOTES, 'UTF-8' );
+                }
+                $post = $prima; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- rimesso com'era
+                if ( $prima instanceof WP_Post ) {
+                    setup_postdata( $prima );
+                } else {
+                    wp_reset_postdata();
+                }
+                return rest_ensure_response( [ 'segnaposto' => $valori, 'post_id' => $post_id ] );
+            }
         }
 
         // In un template singolo il valore è quello del contenuto che il canvas mostra (17 nov 2026: il pannello

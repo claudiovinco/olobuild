@@ -70,7 +70,7 @@
             emitAs="number"
             unit="px"
             :sliderOnFocus="false"
-            ariaLabel="Altezza personalizzata (px)"
+            :ariaLabel="t('Altezza personalizzata')"
             @update:modelValue="setHeight({ mode: 'px', value: $event || 600 })"
           />
         </template>
@@ -86,7 +86,7 @@
             emitAs="number"
             unit="vh"
             :sliderOnFocus="false"
-            ariaLabel="Altezza viewport (vh)"
+            :ariaLabel="t('Altezza rispetto alla finestra')"
             @update:modelValue="setHeight({ mode: 'vh', value: $event })"
           />
         </template>

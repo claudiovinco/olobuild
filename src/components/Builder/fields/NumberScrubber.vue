@@ -109,6 +109,9 @@ const props = defineProps({
   // in modo distruttivo (coerente con FieldBox).
   max: { type: [Number, String, null], default: 100 },
   step: { type: [Number, String], default: 1 },
+  // (1.4.1444) decimali che si possono SCRIVERE anche dove il passo è intero (dimensione del testo 34,4 px, bordo 1,5 px):
+  // le frecce e il trascinamento vanno sempre di un passo
+  scriviDecimali: { type: Number, default: 0 },
   // Target del doppio-click. '' verbatim = "eredita/non impostato"; null = fallback a min.
   defaultValue: { type: [Number, String, null], default: null },
   // Tipo emesso: 'string' (RAW, default — preserva FieldRange/type=number) | 'number'.
@@ -169,13 +172,22 @@ function roundToStep(n) {
   return Math.round(n * f) / f;
 }
 
-// Parsing coerente con FieldBox: parseFloat se step<1, altrimenti parseInt; poi
-// arrotondamento alla precisione dello step.
+// Parsing coerente con FieldBox: parseFloat se step<1, altrimenti parseInt.
+// (1.4.1444) Un numero SCRITTO tiene i suoi decimali, fino a PRECISIONE_SCRITTA: il passo vale per le frecce e il
+// trascinamento, non per quello che si digita. Prima «1,05» nell'interlinea (passo 0,1) diventava 1,1 e 33,58 in X
+// diventava 33,6: nei temi 3.810 interlinee e oltre 11.000 posizioni non si potevano riscrivere uguali.
+const PRECISIONE_SCRITTA = 3;
 function parseNum(v) {
   if (v === '' || v == null) return 0;
-  const n = stepNum.value < 1 ? parseFloat(v) : parseInt(v, 10);
+  const n = stepNum.value < 1 || props.scriviDecimali > 0 ? parseFloat(v) : parseInt(v, 10);
   if (isNaN(n)) return 0;
-  return stepNum.value < 1 ? roundToStep(n) : n;
+  if (stepNum.value >= 1) {
+    if (!(props.scriviDecimali > 0)) return n;
+    const g = Math.pow(10, props.scriviDecimali);
+    return Math.round(n * g) / g;
+  }
+  const f = Math.pow(10, Math.max(stepDecimals.value, PRECISIONE_SCRITTA));
+  return Math.round(n * f) / f;
 }
 
 const numericValue = computed(() => parseNum(props.modelValue));
@@ -209,13 +221,17 @@ function emitNumber(n) {
 // ha decimali, il punto diventa la virgola che il campo si aspetta.
 const VIRGOLA = (1.5).toLocaleString(navigator.language || undefined).includes(',');
 function puntoDecimale(e) {
-  if (e.key !== '.' || !VIRGOLA || stepNum.value >= 1) return;
+  if (e.key !== '.' || !VIRGOLA || (stepNum.value >= 1 && !(props.scriviDecimali > 0))) return;
   e.preventDefault();
   document.execCommand('insertText', false, ',');
 }
 
 let sospeso = null;
 function onNum(raw) {
+  // (1.4.1448) Un numero a metà che il campo non sa ancora leggere («-» di «-200», «1,» di «1,5»): il campo dà '' con
+  // badInput. Mandarlo azzerava il valore e il campo, così il «-» spariva e restava 200 (X della lastra di Fuliggine
+  // rifatta a mano). Si aspetta il carattere dopo.
+  if (raw === '' && numEl.value?.validity?.badInput) return;
   const n = parseFloat(raw);
   if (raw !== '' && isFinite(n) && minN.value != null && isFinite(minN.value) && minN.value > 0 && n < minN.value) {
     sospeso = raw;

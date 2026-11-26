@@ -9,12 +9,12 @@
         <button type="button" class="mps-om-btn" @click="togli(i)" :title="t('Togli l’ombra')" :aria-label="t('Togli l’ombra')">&times;</button>
       </div>
       <div class="mps-om-griglia">
-        <div><label class="mps-om-et">X</label><NumberScrubber theme="dark" :modelValue="o.x ?? 0" :min="-200" :max="200" :step="1" :defaultValue="0" emitAs="number" unit="px" :sliderOnFocus="true" ariaLabel="X" @update:modelValue="cambia(i, 'x', $event)" /></div>
-        <div><label class="mps-om-et">Y</label><NumberScrubber theme="dark" :modelValue="o.y ?? 0" :min="-200" :max="200" :step="1" :defaultValue="0" emitAs="number" unit="px" :sliderOnFocus="true" ariaLabel="Y" @update:modelValue="cambia(i, 'y', $event)" /></div>
+        <div><label class="mps-om-et">X</label><NumberScrubber theme="dark" :modelValue="o.x ?? 0" :min="-200" :max="200" :step="1" :defaultValue="0" emitAs="number" unit="px" :sliderOnFocus="true" :ariaLabel="t('X')" @update:modelValue="cambia(i, 'x', $event)" /></div>
+        <div><label class="mps-om-et">Y</label><NumberScrubber theme="dark" :modelValue="o.y ?? 0" :min="-200" :max="200" :step="1" :defaultValue="0" emitAs="number" unit="px" :sliderOnFocus="true" :ariaLabel="t('Y')" @update:modelValue="cambia(i, 'y', $event)" /></div>
         <div><label class="mps-om-et">{{ t('Sfocatura') }}</label><NumberScrubber theme="dark" :modelValue="o.blur ?? 0" :min="0" :max="300" :step="1" :defaultValue="0" emitAs="number" unit="px" :sliderOnFocus="true" :ariaLabel="t('Sfocatura')" @update:modelValue="cambia(i, 'blur', $event)" /></div>
         <div><label class="mps-om-et">{{ t('Estensione') }}</label><NumberScrubber theme="dark" :modelValue="o.spread ?? 0" :min="-100" :max="100" :step="1" :defaultValue="0" emitAs="number" unit="px" :sliderOnFocus="true" :ariaLabel="t('Estensione')" @update:modelValue="cambia(i, 'spread', $event)" /></div>
       </div>
-      <FieldColor :modelValue="o.color || 'rgba(0,0,0,.35)'" @update:modelValue="cambia(i, 'color', $event)" />
+      <FieldColor :modelValue="o.color || 'color-mix(in srgb, var(--olo-color-dark) 35%, transparent)'" @update:modelValue="cambia(i, 'color', $event)" />
     </div>
     <button type="button" class="mps-om-aggiungi" @click="aggiungi">+ {{ lista.length ? t('Un’altra ombra') : t('Ombre (anche più d’una, anche interne)') }}</button>
   </div>
@@ -31,7 +31,7 @@ const emit = defineEmits(['update:modelValue']);
 const lista = computed(() => (Array.isArray(props.modelValue) ? props.modelValue : []));
 const copia = () => JSON.parse(JSON.stringify(lista.value));
 function cambia(i, k, v) { const l = copia(); l[i][k] = v; emit('update:modelValue', l); }
-function aggiungi() { emit('update:modelValue', [...copia(), { x: 0, y: 12, blur: 30, spread: 0, color: 'rgba(0,0,0,.35)', inset: false }]); }
+function aggiungi() { emit('update:modelValue', [...copia(), { x: 0, y: 12, blur: 30, spread: 0, color: 'color-mix(in srgb, var(--olo-color-dark) 35%, transparent)', inset: false }]); }
 function togli(i) { const l = copia(); l.splice(i, 1); emit('update:modelValue', l); }
 </script>
 

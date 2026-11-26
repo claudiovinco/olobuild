@@ -26,7 +26,7 @@
         <!-- Image -->
         <img
           v-if="slideBg.type === 'image' && slideBg.image"
-          :src="slideBg.image"
+          :src="conEsempio(slideBg.image, contenuti.esempio.value)"
           class="mb-w-full mb-h-full mb-object-cover"
           draggable="false"
         />
@@ -35,7 +35,7 @@
           v-else-if="slideBg.type === 'video' && slideBg.video && !isYouTube(slideBg.video)"
           ref="bgVideo"
           :src="slideBg.video"
-          :poster="slideBg.image || undefined"
+          :poster="conEsempio(slideBg.image, contenuti.esempio.value) || undefined"
           class="mb-w-full mb-h-full mb-object-cover"
           muted
           preload="metadata"
@@ -77,13 +77,13 @@
           class="mb-m-0 mb-outline-none"
           @blur="onTextBlur($event, layer)"
           @keydown.enter.exact.prevent="$event.target.blur()"
-          v-html="testoSicuro(layer.content)"
+          v-html="editingLayerId === layer.id ? testoSicuro(layer.content) : conEsempioTesto(testoSicuro(layer.content), contenuti.esempio.value)"
         ></component>
 
         <!-- Image -->
         <img
           v-else-if="layer.type === 'image'"
-          :src="(layer.coloriDisegno && disegnoRicolorato(layer.imageSrc, layer.coloriDisegno, canvasWrap)) || layer.imageSrc || 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%2280%22><rect fill=%22%23475569%22 width=%22120%22 height=%2280%22/><text x=%2260%22 y=%2244%22 text-anchor=%22middle%22 fill=%22%23cbd5e1%22 font-size=%2213%22>Immagine</text></svg>'"
+          :src="(layer.coloriDisegno && disegnoRicolorato(layer.imageSrc, layer.coloriDisegno, canvasWrap)) || conEsempio(layer.imageSrc, contenuti.esempio.value) || 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%2280%22><rect fill=%22%23475569%22 width=%22120%22 height=%2280%22/><text x=%2260%22 y=%2244%22 text-anchor=%22middle%22 fill=%22%23cbd5e1%22 font-size=%2213%22>Immagine</text></svg>'"
           class="mb-w-full mb-h-full mb-pointer-events-none"
           :style="{ objectFit: layer.objectFit || 'cover', objectPosition: layer.objectPosition || 'center', borderRadius: (layer.borderRadius || 0) + 'px' }"
           draggable="false"
@@ -94,7 +94,7 @@
           v-else-if="layer.type === 'button'"
           :style="buttonStyle(layer)"
           class="mb-inline-block mb-cursor-move"
-        >{{ layer.content || t('Pulsante') }}</span>
+        >{{ conEsempio(layer.content, contenuti.esempio.value) || t('Pulsante') }}</span>
 
         <!-- Icon -->
         <span
@@ -159,6 +159,8 @@ import { useStylesStore } from '@/stores/styles';
 import { t } from '@/i18n';
 import { statoSM, statoVale, stileComandi, testoSicuro } from './livelloUtils.js';
 import { disegnoRicolorato } from './disegni.js';
+import { useContenutiSlider, conEsempio, conEsempioTesto } from './datiArticolo.js';
+import { templateColorTokens } from '@/utils/colorToken';
 
 const props = defineProps({
   slide: { type: Object, required: true },
@@ -187,7 +189,7 @@ const emit = defineEmits(['deselect', 'select-layer', 'update-layer', 'update-la
 
 // La sovrapposizione dello sfondo, uniforme o sfumata dall'alto e dal basso (gemella di class-proslider-tile.php).
 function velo(bg) {
-  const c = bg.overlay || '#000';
+  const c = bg.overlay || 'var(--olo-color-dark, #000)';
   const alto = Math.max(0, Math.min(100, +bg.overlayFadeTop || 0));
   const basso = Math.max(0, Math.min(100, +bg.overlayFadeBottom || 0));
   if (!alto && !basso) return c;
@@ -269,7 +271,9 @@ const scale = ref(1);
 const resizeHandles = ['nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w'];
 
 const layers = computed(() => props.slide?.layers || []);
-const slideBg = computed(() => props.slide?.background || { type: 'color', color: '#1e293b' });
+// Slide dagli articoli (1.4.1457): le foto con un segnaposto mostrano quella del primo contenuto trovato
+const contenuti = useContenutiSlider();
+const slideBg = computed(() => props.slide?.background || { type: 'color', color: 'var(--olo-color-dark)' });
 
 const effectiveScale = computed(() => scale.value * props.zoom);
 
@@ -283,7 +287,17 @@ const scaledWrapStyle = computed(() => {
   };
 });
 
+// I colori della Palette sulla tela (1.4.1441): i token `--olo-color-*` sono definiti solo dentro `.olo-template`, cioè
+// nella pagina dell'anteprima; la tela dell'editor sta fuori e conosceva solo il primario. Scuro, Chiaro, Accento,
+// Testo… restavano senza valore: la sfumatura scura del velo di Elastan non si vedeva affatto. Qui gli stessi valori
+// che BuilderCanvas dà all'anteprima, come variabili della tela (solo i colori, non le altre regole della pagina).
+const coloriPalette = computed(() => {
+  const o = {};
+  for (const [k, v] of Object.entries(templateColorTokens(stylesStore))) o['--olo-color-' + k] = v;
+  return o;
+});
 const canvasStyle = computed(() => ({
+  ...coloriPalette.value,
   width: CANVAS_W.value + 'px',
   height: canvasH.value + 'px',
   transform: `scale(${effectiveScale.value})`,
@@ -366,6 +380,7 @@ function layerStyle(l) {
   if (sm.rotate) st.rotate = sm.rotate;
   if (sm.opacita != null) st.opacity = (st.opacity ?? 1) * sm.opacita;
   if (sm.clipPath) st.clipPath = sm.clipPath;
+  if (sm.assi) st.fontVariationSettings = sm.assi;
   return st;
 }
 
@@ -442,14 +457,14 @@ function layerStyleBase(l) {
     const bt = l.borderWidthTop ?? 0, br = l.borderWidthRight ?? 0, bb = l.borderWidthBottom ?? 0, bl = l.borderWidthLeft ?? 0;
     if (bt > 0 || br > 0 || bb > 0 || bl > 0) {
       const bs = l.borderStyle || 'solid';
-      const bc = l.borderColor || '#fff';
+      const bc = l.borderColor || 'var(--olo-color-light, #fff)';
       st.borderTop = `${bt}px ${bs} ${bc}`;
       st.borderRight = `${br}px ${bs} ${bc}`;
       st.borderBottom = `${bb}px ${bs} ${bc}`;
       st.borderLeft = `${bl}px ${bs} ${bc}`;
     }
   } else if ((l.borderWidth ?? 0) > 0) {
-    st.border = `${l.borderWidth}px ${l.borderStyle || 'solid'} ${l.borderColor || '#fff'}`;
+    st.border = `${l.borderWidth}px ${l.borderStyle || 'solid'} ${l.borderColor || 'var(--olo-color-light, #fff)'}`;
   }
   // Border-radius — supporta angoli individuali
   if (l.borderRadiusLinked === false) {
@@ -466,9 +481,9 @@ function layerStyleBase(l) {
   if (l.type === 'shape') {
     if (l.shapeGradient) {
       const stop = Math.max(0, Math.min(95, parseInt(l.shapeGradient.fromStop, 10) || 0));
-      st.background = `linear-gradient(${l.shapeGradient.angle ?? 180}deg, ${l.shapeGradient.from || '#3b82f6'}${stop ? ' ' + stop + '%' : ''}, ${l.shapeGradient.to || '#8b5cf6'})`;
+      st.background = `linear-gradient(${l.shapeGradient.angle ?? 180}deg, ${l.shapeGradient.from || 'var(--olo-color-primary, #e1474f)'}${stop ? ' ' + stop + '%' : ''}, ${l.shapeGradient.to || 'var(--olo-color-accent, #f4a23b)'})`;
     } else {
-      st.backgroundColor = l.bgColor || '#3b82f6';
+      st.backgroundColor = l.bgColor || 'var(--olo-color-primary, #e1474f)';
     }
   } else if (l.type === 'button') {
     // Come il PHP: senza colore il pulsante prende il primario del sito (prima un blu fisso).
@@ -500,9 +515,9 @@ function layerStyleBase(l) {
     if (isTransparentIcon) {
       // drop-shadow segue la forma visibile del contenuto (stella SVG, ecc.)
       st.filter = (st.filter && st.filter !== 'none' ? st.filter + ' ' : '') +
-        `drop-shadow(${bs.x ?? 0}px ${bs.y ?? 4}px ${bs.blur ?? 10}px ${bs.color || 'rgba(0,0,0,0.3)'})`;
+        `drop-shadow(${bs.x ?? 0}px ${bs.y ?? 4}px ${bs.blur ?? 10}px ${bs.color || 'color-mix(in srgb, var(--olo-color-dark, #000000) 30%, transparent)'})`;
     } else {
-      st.boxShadow = `${bs.x ?? 0}px ${bs.y ?? 4}px ${bs.blur ?? 10}px ${bs.spread ?? 0}px ${bs.color || 'rgba(0,0,0,0.3)'}`;
+      st.boxShadow = `${bs.x ?? 0}px ${bs.y ?? 4}px ${bs.blur ?? 10}px ${bs.spread ?? 0}px ${bs.color || 'color-mix(in srgb, var(--olo-color-dark, #000000) 30%, transparent)'}`;
     }
   }
   // CSS filters (image/video)
@@ -517,6 +532,9 @@ function layerStyleBase(l) {
     if ((l.filterSepia ?? 0) > 0) parts.push(`sepia(${l.filterSepia}%)`);
     if ((l.filterInvert ?? 0) > 0) parts.push(`invert(${l.filterInvert}%)`);
     if (parts.length) st.filter = parts.join(' ');
+  } else if (l.type === 'shape' && (l.filterBlur ?? 0) > 0) {
+    // 1.4.1462: la sfocatura delle forme (aloni, macchie di luce), come nel renderer PHP
+    st.filter = `blur(${l.filterBlur}px)`;
   }
   // Backdrop filter (glassmorphism)
   const bdParts = [];
@@ -537,7 +555,7 @@ function layerStyleBase(l) {
   if (l.retroNascosto) { st.backfaceVisibility = 'hidden'; st.WebkitBackfaceVisibility = 'hidden'; }
   if (Number(l.rotazione)) st.rotate = Number(l.rotazione) + 'deg';
   if (l.type === 'shape' && l.shapeImage && !/[\s"'()<>]/.test(String(l.shapeImage))) {
-    st.background = `url("${l.shapeImage}") ${l.shapeImagePos || 'center'} / ${l.shapeImageSize || 'cover'}${l.shapeImageRepeat ? ' ' + l.shapeImageRepeat : ''}`;
+    st.background = `url("${l.shapeImage}") ${l.shapeImagePos || 'center'} / ${l.shapeImageSize || 'cover'} ${l.shapeImageRepeat || 'no-repeat'}`;
   }
   // il resto dei comandi ex CSS (1.4.1431): sfumature, ombre, ritaglio, bordi sfumati… (stileComandi in livelloUtils)
   // il clic che passa attraverso vale solo sul sito: sulla tela il livello resta prendibile
@@ -554,7 +572,7 @@ function textStyle(l) {
   const st = {
     fontSize: rl.fontSize + 'px',
     fontWeight: l.fontWeight || '700',
-    color: l.color || '#fff',
+    color: l.color || 'var(--olo-color-light, #fff)',
     textAlign: rl.textAlign || 'left',
     lineHeight: l.lineHeight ?? 1.2,
     whiteSpace: l.unaRiga ? 'nowrap' : 'pre-wrap',
@@ -565,9 +583,9 @@ function textStyle(l) {
   if (rl.letterSpacing) st.letterSpacing = rl.letterSpacing + 'px';
   if (l.textTransform && l.textTransform !== 'none') st.textTransform = l.textTransform;
   if (l.textDecoration && l.textDecoration !== 'none') st.textDecoration = l.textDecoration;
-  if (l.textShadow) st.textShadow = `${l.textShadow.x ?? 2}px ${l.textShadow.y ?? 2}px ${l.textShadow.blur ?? 4}px ${l.textShadow.color || '#000'}`;
+  if (l.textShadow) st.textShadow = `${l.textShadow.x ?? 2}px ${l.textShadow.y ?? 2}px ${l.textShadow.blur ?? 4}px ${l.textShadow.color || 'var(--olo-color-dark, #000)'}`;
   if ((l.textStrokeWidth ?? 0) > 0) {
-    st.WebkitTextStroke = `${l.textStrokeWidth}px ${l.textStrokeColor || '#000'}`;
+    st.WebkitTextStroke = `${l.textStrokeWidth}px ${l.textStrokeColor || 'var(--olo-color-dark, #000)'}`;
   }
   if (l.selectableText) st.userSelect = 'text';
   return st;
@@ -589,9 +607,9 @@ function buttonStyle(l) {
   if (rl.letterSpacing) st.letterSpacing = rl.letterSpacing + 'px';
   if (l.textTransform && l.textTransform !== 'none') st.textTransform = l.textTransform;
   if (l.textDecoration && l.textDecoration !== 'none') st.textDecoration = l.textDecoration;
-  if (l.textShadow) st.textShadow = `${l.textShadow.x ?? 2}px ${l.textShadow.y ?? 2}px ${l.textShadow.blur ?? 4}px ${l.textShadow.color || '#000'}`;
+  if (l.textShadow) st.textShadow = `${l.textShadow.x ?? 2}px ${l.textShadow.y ?? 2}px ${l.textShadow.blur ?? 4}px ${l.textShadow.color || 'var(--olo-color-dark, #000)'}`;
   if ((l.textStrokeWidth ?? 0) > 0) {
-    st.WebkitTextStroke = `${l.textStrokeWidth}px ${l.textStrokeColor || '#000'}`;
+    st.WebkitTextStroke = `${l.textStrokeWidth}px ${l.textStrokeColor || 'var(--olo-color-dark, #000)'}`;
   }
   return st;
 }
@@ -612,7 +630,7 @@ function iconStyle(l) {
     justifyContent: 'center',
     width: size + 'px',
     height: size + 'px',
-    color: l.color || '#fff',
+    color: l.color || 'var(--olo-color-light, #fff)',
   };
   // SVG fill/stroke override via CSS custom properties
   if (l.iconFillColor) st['--icon-fill'] = l.iconFillColor;

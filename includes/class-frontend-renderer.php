@@ -308,28 +308,68 @@ class Olobuild_Frontend_Renderer {
         $cond_type = $settings['cond_type'] ?? '';
         if ( $cond_type === '' ) return true;
 
-        // OR logic: if cond_logic is 'or', check first condition OR second condition
-        $cond_logic = $settings['cond_logic'] ?? 'and';
-        if ( $cond_logic === 'or' ) {
-            $cond_2_type = $settings['cond_2_type'] ?? '';
-            $first_result = $this->evaluate_single_condition( $cond_type, $settings );
-            if ( $cond_2_type === '' ) {
-                return $first_result;
-            }
-            $second_result = $this->evaluate_single_condition( $cond_2_type, $settings, '2' );
-            return $first_result || $second_result;
+        // «Logica condizioni»: con «Almeno una (OR)» basta una delle due, con «Tutte (AND)» servono tutte e due.
+        // Fino alla 1.4.1445 con AND la condizione 2 non si leggeva proprio: «Dopo il 1° dicembre» E «Prima del
+        // 6 gennaio» mostrava la tile anche a febbraio. Si valutano sempre tutte e due (niente scorciatoia): ognuna
+        // deve poter dire alla cache quando cambierà.
+        $cond_2_type  = $settings['cond_2_type'] ?? '';
+        $first_result = $this->evaluate_single_condition( $cond_type, $settings );
+        if ( $cond_2_type === '' ) {
+            return $first_result;
         }
+        $second_result = $this->evaluate_single_condition( $cond_2_type, $settings, '2' );
+        return ( ( $settings['cond_logic'] ?? 'and' ) === 'or' )
+            ? ( $first_result || $second_result )
+            : ( $first_result && $second_result );
+    }
 
-        return $this->evaluate_single_condition( $cond_type, $settings );
+    /* ── condizioni e cache delle pagine (24 nov 2026) ──────────────────────────────────────────────────────────
+     * Le condizioni si calcolano quando la pagina viene costruita. Una pagina salvata in cache (quella di OLObuild o
+     * LiteSpeed Cache) restava com'era: la «Fascia oraria» decisa all'ora del salvataggio, la «Provenienza» del primo
+     * visitatore, l'offerta che doveva finire il 6 gennaio ancora online giorni dopo. Ora le condizioni a tempo dicono
+     * alla cache quando la pagina cambierà, e quelle che cambiano da un visitatore all'altro la tengono fuori. */
+
+    /** Il timestamp di una data e ora del fuso del sito («2026-12-06 00:00»); 0 se non si legge. */
+    private static function momento( $testo ) {
+        $d = date_create_immutable_from_format( '!Y-m-d H:i', (string) $testo, wp_timezone() );
+        return $d ? $d->getTimestamp() : 0;
+    }
+
+    /** Il timestamp della prossima mezzanotte del sito, o del primo giorno del mese prossimo. */
+    private static function prossimo( $quale ) {
+        try {
+            return ( new DateTimeImmutable( $quale, wp_timezone() ) )->getTimestamp();
+        } catch ( Exception $e ) {
+            return 0;
+        }
+    }
+
+    /** La pagina cambierà a quell'ora: la cache non deve tenerla oltre. */
+    private static function cache_fino_a( $quando, $motivo ) {
+        if ( $quando > 0 && class_exists( 'Olobuild_FullPage_Cache' ) ) {
+            Olobuild_FullPage_Cache::scade_alle( $quando, $motivo );
+        }
+    }
+
+    /** La pagina cambia da un visitatore all'altro: niente cache. */
+    private static function cache_mai( $motivo ) {
+        if ( class_exists( 'Olobuild_FullPage_Cache' ) ) {
+            Olobuild_FullPage_Cache::non_salvare( $motivo );
+        }
     }
 
     /**
      * Evaluate a single condition by type.
-     * $prefix is '' for primary condition, '2' for secondary (OR logic).
+     * $prefix is '' for primary condition, '2' for the secondary one.
      */
     private function evaluate_single_condition( $cond_type, $settings, $prefix = '' ) {
-        // For secondary conditions, settings keys may be prefixed (cond_2_date, etc.)
-        // But most share the same setting keys — caller passes the type separately.
+        // La condizione 2 ha le sue chiavi (cond_2_date, cond_2_day…), come le mostra l'inspector. Fino alla
+        // 1.4.1445 quasi tutti i casi leggevano quelle della condizione 1: «Sabato» O «Domenica» era sabato O sabato.
+        // Restano sulle chiavi comuni i casi che l'inspector non offre per la condizione 2 (campi ACF, tassonomie…).
+        $val = static function ( $nome ) use ( $settings, $prefix ) {
+            $k = '' === $prefix ? 'cond_' . $nome : 'cond_' . $prefix . '_' . $nome;
+            return $settings[ $k ] ?? '';
+        };
 
         switch ( $cond_type ) {
             case 'logged_in':
@@ -337,20 +377,32 @@ class Olobuild_Frontend_Renderer {
             case 'logged_out':
                 return ! is_user_logged_in();
             case 'role':
-                $role = $settings['cond_role'] ?? '';
+                $role = $val( 'role' );
                 if ( $role === '' ) return true;
                 return current_user_can( $role );
             case 'mobile':
-                return wp_is_mobile();
             case 'desktop':
-                return ! wp_is_mobile();
+                // La cache di OLObuild tiene una copia per i telefoni e una per i computer. LiteSpeed Cache solo se
+                // nelle sue impostazioni è acceso «Cache Mobile» (di base è spento): altrimenti niente cache.
+                if ( defined( 'LSCWP_V' ) && ! apply_filters( 'litespeed_conf', 'cache-mobile' ) ) {
+                    self::cache_mai( 'tile solo mobile o solo desktop' );
+                }
+                return 'mobile' === $cond_type ? wp_is_mobile() : ! wp_is_mobile();
             case 'date_after':
-                $date = $settings['cond_date'] ?? '';
+                $date = $val( 'date' );
                 if ( $date === '' ) return true;
+                if ( current_time( 'Y-m-d' ) < $date ) {
+                    self::cache_fino_a( self::momento( $date . ' 00:00' ), 'Dopo una data' );
+                }
                 return current_time( 'Y-m-d' ) >= $date;
             case 'date_before':
-                $date = $settings['cond_date'] ?? '';
+                $date = $val( 'date' );
                 if ( $date === '' ) return true;
+                if ( current_time( 'Y-m-d' ) <= $date ) {
+                    // l'ultimo giorno è compreso: la tile sparisce alla mezzanotte dopo
+                    $giorno = date_create_immutable_from_format( '!Y-m-d', (string) $date, wp_timezone() );
+                    self::cache_fino_a( $giorno ? $giorno->modify( '+1 day' )->getTimestamp() : 0, 'Prima di una data' );
+                }
                 return current_time( 'Y-m-d' ) <= $date;
             case 'has_featured_image':
                 return has_post_thumbnail();
@@ -367,7 +419,7 @@ class Olobuild_Frontend_Renderer {
             case 'is_404':
                 return is_404();
             case 'post_type':
-                $pt = $settings['cond_post_type'] ?? '';
+                $pt = $val( 'post_type' );
                 if ( $pt === '' ) return true;
                 return get_post_type() === $pt;
             case 'has_children':
@@ -376,41 +428,64 @@ class Olobuild_Frontend_Renderer {
             case 'is_author':
                 return is_author();
             case 'url_contains':
-                $str = $settings['cond_url_contains'] ?? '';
+                $str = $val( 'url_contains' );
                 if ( $str === '' ) return true;
                 // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per filtro di visibilità (display condition url_contains); nessuna modifica di stato; valore sanitizzato.
                 $request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
                 return ( str_contains( $request_uri, $str ) );
             case 'day_of_week':
-                $cond_day = strtolower( $settings['cond_day'] ?? '' );
+                $cond_day = strtolower( (string) $val( 'day' ) );
                 if ( $cond_day === '' ) return true;
-                $today = strtolower( wp_date( 'l' ) );
+                self::cache_fino_a( self::prossimo( 'tomorrow' ), 'Giorno della settimana' );
+                // Il giorno in inglese, come i valori salvati (monday…). wp_date( 'l' ) lo traduce nella lingua del
+                // sito («martedì»): fino alla 1.4.1445 la condizione su un sito in italiano non era mai vera.
+                $today = strtolower( ( new DateTimeImmutable( 'now', wp_timezone() ) )->format( 'l' ) );
                 return $today === $cond_day;
             case 'months':
                 // 15 nov 2026: «Mesi dell'anno», da un mese a un altro (anche a cavallo d'anno, da novembre a febbraio):
                 // una sezione per stagione o per mese che il sito mostra da solo quando è il suo momento.
-                $p  = '' === $prefix ? 'cond_' : 'cond_' . $prefix . '_';
-                $da = (int) ( $settings[ $p . 'month_from' ] ?? 0 );
-                $a  = (int) ( $settings[ $p . 'month_to' ] ?? 0 );
+                $da = (int) $val( 'month_from' );
+                $a  = (int) $val( 'month_to' );
                 if ( $da < 1 || $da > 12 ) return true;
                 if ( $a < 1 || $a > 12 ) $a = $da;
+                self::cache_fino_a( self::prossimo( 'first day of next month midnight' ), 'Mesi dell\'anno' );
                 $m = (int) wp_date( 'n' );
                 return $da <= $a ? ( $m >= $da && $m <= $a ) : ( $m >= $da || $m <= $a );
             case 'time_range':
-                $time_from = $settings['cond_time_from'] ?? '';
-                $time_to   = $settings['cond_time_to'] ?? '';
+                $time_from = (string) $val( 'time_from' );
+                $time_to   = (string) $val( 'time_to' );
                 if ( $time_from === '' || $time_to === '' ) return true;
                 $now = wp_date( 'H:i' );
-                return ( $now >= $time_from ) && ( $now <= $time_to );
+                // La pagina cambia all'inizio della fascia e al minuto dopo la sua fine (fino alle 20:00 vuol dire
+                // tutto il minuto 20:00): la cache tiene la pagina fino al primo di questi momenti, oggi o domani.
+                $oggi    = wp_date( 'Y-m-d' );
+                $domani  = wp_date( 'Y-m-d', self::prossimo( 'tomorrow' ) );
+                $cambi   = [];
+                foreach ( [ $oggi, $domani ] as $giorno ) {
+                    $inizio = self::momento( $giorno . ' ' . $time_from );
+                    $fine   = self::momento( $giorno . ' ' . $time_to );
+                    if ( $inizio ) $cambi[] = $inizio;
+                    if ( $fine ) $cambi[] = $fine + MINUTE_IN_SECONDS;
+                }
+                $futuri = array_filter( $cambi, static function ( $t ) { return $t > time(); } );
+                if ( $futuri ) {
+                    self::cache_fino_a( min( $futuri ), 'Fascia oraria' );
+                }
+                // Una fascia che passa la mezzanotte (dalle 22:00 alle 02:00) prima non si vedeva mai.
+                return $time_from <= $time_to
+                    ? ( ( $now >= $time_from ) && ( $now <= $time_to ) )
+                    : ( ( $now >= $time_from ) || ( $now <= $time_to ) );
             case 'referrer_url':
-                $cond_ref = $settings['cond_referrer'] ?? '';
+                $cond_ref = $val( 'referrer' );
                 if ( $cond_ref === '' ) return true;
+                self::cache_mai( 'Provenienza' );
                 // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per filtro di visibilità (display condition referrer_url); nessuna modifica di stato; valore sanitizzato.
                 $referrer = isset( $_SERVER['HTTP_REFERER'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_REFERER'] ) ) : '';
                 return ( str_contains( $referrer, $cond_ref ) );
             case 'browser':
-                $cond_browser = strtolower( $settings['cond_browser'] ?? '' );
+                $cond_browser = strtolower( (string) $val( 'browser' ) );
                 if ( $cond_browser === '' ) return true;
+                self::cache_mai( 'Browser' );
                 // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per filtro di visibilità (display condition browser); nessuna modifica di stato; valore sanitizzato.
                 $ua = strtolower( isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '' );
                 return ( str_contains( $ua, $cond_browser ) );
@@ -590,12 +665,18 @@ class Olobuild_Frontend_Renderer {
             }
         }
 
-        // Time-based conditions
+        // Time-based conditions («Mostra dal» / «Mostra fino al», data e ora). La cache tiene la pagina fino al
+        // prossimo dei due momenti (vedi cache_fino_a()).
         $now = current_time( 'mysql' );
         $show_from = $adv['cond_show_from'] ?? '';
-        if ( $show_from !== '' && $now < str_replace( 'T', ' ', $show_from ) ) return false;
-
+        if ( $show_from !== '' ) {
+            self::cache_fino_a( self::momento( substr( str_replace( 'T', ' ', $show_from ), 0, 16 ) ), 'Mostra dal' );
+        }
         $show_until = $adv['cond_show_until'] ?? '';
+        if ( $show_until !== '' ) {
+            self::cache_fino_a( self::momento( substr( str_replace( 'T', ' ', $show_until ), 0, 16 ) ), 'Mostra fino al' );
+        }
+        if ( $show_from !== '' && $now < str_replace( 'T', ' ', $show_from ) ) return false;
         if ( $show_until !== '' && $now > str_replace( 'T', ' ', $show_until ) ) return false;
 
         // Per-post condition (show only on specific posts)

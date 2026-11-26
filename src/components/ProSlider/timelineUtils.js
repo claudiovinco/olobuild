@@ -169,27 +169,29 @@ export const EASING_GROUPS = [
 // --- Proprietà animabili con defaults ---
 // Limiti larghi (1.4.1435): i temi girano più volte (380°, 531°) e ruotano attorno a punti fuori dal livello (la catena di
 // Chiavistello, fino a ±31.000%): upProp() taglia ai limiti, e con 0–100 quei movimenti non si potevano rifare.
+// 1.4.1462: nomi in italiano e tradotti (erano «Skew X°», «Blur (px)», «Origin X (%)», «Mask Top (%)»…), gli stessi del
+// movimento con lo scorrimento; l'unità sta nel controllo, non nel nome (regola dell'inspector)
 export const ANIMATABLE_PROPS = {
-  x:         { label: 'X (%)',         min: -100, max: 200,  step: 0.1,  default: 0 },
-  y:         { label: 'Y (%)',         min: -100, max: 200,  step: 0.1,  default: 0 },
-  opacity:   { label: 'Opacità',      min: 0,    max: 100,  step: 1,    default: 100 },
-  scale:     { label: 'Scala',         min: 0,    max: 5,    step: 0.01, default: 1 },
-  rotation:  { label: 'Rotazione Z°', min: -3600, max: 3600, step: 1,    default: 0 },
-  rotationX: { label: 'Rotazione X°', min: -720, max: 720,  step: 1,    default: 0 },
-  rotationY: { label: 'Rotazione Y°', min: -720, max: 720,  step: 1,    default: 0 },
-  skewX:     { label: 'Skew X°',      min: -60,  max: 60,   step: 1,    default: 0 },
-  skewY:     { label: 'Skew Y°',      min: -60,  max: 60,   step: 1,    default: 0 },
-  blur:      { label: 'Blur (px)',     min: 0,    max: 50,   step: 0.5,  default: 0 },
-  originX:   { label: 'Origin X (%)', min: -40000, max: 40000, step: 1, default: 50 },
-  originY:   { label: 'Origin Y (%)', min: -40000, max: 40000, step: 1, default: 50 },
-  // Mask (clip-path inset reveal)
-  maskTop:    { label: 'Mask Top (%)',    min: 0, max: 100, step: 1, default: 0 },
-  maskRight:  { label: 'Mask Right (%)',  min: 0, max: 100, step: 1, default: 0 },
-  maskBottom: { label: 'Mask Bottom (%)', min: 0, max: 100, step: 1, default: 0 },
-  maskLeft:   { label: 'Mask Left (%)',   min: 0, max: 100, step: 1, default: 0 },
-  // Brightness/Grayscale animabili
-  brightness: { label: 'Luminosità (%)', min: 0, max: 200, step: 5, default: 100 },
-  grayscale:  { label: 'Scala grigi (%)', min: 0, max: 100, step: 5, default: 0 },
+  x:          { label: 'Sposta in orizzontale', unit: '%',  min: -100,   max: 200,   step: 0.1,  default: 0 },
+  y:          { label: 'Sposta in verticale',   unit: '%',  min: -100,   max: 200,   step: 0.1,  default: 0 },
+  opacity:    { label: 'Opacità',               unit: '%',  min: 0,      max: 100,   step: 1,    default: 100 },
+  scale:      { label: 'Scala',                 unit: '',   min: 0,      max: 5,     step: 0.01, default: 1 },
+  rotation:   { label: 'Rotazione',             unit: '°',  min: -3600,  max: 3600,  step: 1,    default: 0 },
+  rotationX:  { label: 'Rotazione 3D (X)',      unit: '°',  min: -720,   max: 720,   step: 1,    default: 0 },
+  rotationY:  { label: 'Rotazione 3D (Y)',      unit: '°',  min: -720,   max: 720,   step: 1,    default: 0 },
+  skewX:      { label: 'Inclina in orizzontale', unit: '°', min: -60,    max: 60,    step: 1,    default: 0 },
+  skewY:      { label: 'Inclina in verticale',  unit: '°',  min: -60,    max: 60,    step: 1,    default: 0 },
+  blur:       { label: 'Sfocatura',             unit: 'px', min: 0,      max: 50,    step: 0.5,  default: 0 },
+  originX:    { label: 'Perno in orizzontale',  unit: '%',  min: -40000, max: 40000, step: 1,    default: 50 },
+  originY:    { label: 'Perno in verticale',    unit: '%',  min: -40000, max: 40000, step: 1,    default: 50 },
+  // Maschera (si scopre da un lato)
+  maskTop:    { label: 'Maschera dall’alto',    unit: '%',  min: 0,      max: 100,   step: 1,    default: 0 },
+  maskRight:  { label: 'Maschera da destra',    unit: '%',  min: 0,      max: 100,   step: 1,    default: 0 },
+  maskBottom: { label: 'Maschera dal basso',    unit: '%',  min: 0,      max: 100,   step: 1,    default: 0 },
+  maskLeft:   { label: 'Maschera da sinistra',  unit: '%',  min: 0,      max: 100,   step: 1,    default: 0 },
+  // Luminosità e bianco e nero animabili
+  brightness: { label: 'Luminosità',            unit: '%',  min: 0,      max: 200,   step: 5,    default: 100 },
+  grayscale:  { label: 'Bianco e nero',         unit: '%',  min: 0,      max: 100,   step: 5,    default: 0 },
 };
 
 /**

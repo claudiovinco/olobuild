@@ -58099,3 +58099,143 @@ msgstr "Wie viel"
 
 msgid "Quanto del secondo colore"
 msgstr "Wie viel von der zweiten Farbe"
+
+#: licenza-1.4.1345
+msgid "Immagine d’attesa"
+msgstr "Platzhalterbild"
+
+msgid "Si vede finché il video non parte, e al suo posto se non si può caricare. Meglio un fotogramma del video: il passaggio non si nota."
+msgstr "Sie ist zu sehen, bis das Video startet, und an seiner Stelle, wenn es nicht geladen werden kann. Am besten ein Standbild aus dem Video: Der Übergang fällt nicht auf."
+
+msgid "Le modifiche fatte qui si perdono."
+msgstr "Die Änderungen hier gehen verloren."
+
+msgid "Esci senza salvare"
+msgstr "Ohne Speichern beenden"
+
+msgid "Clic per sceglierlo; Ctrl + clic per aggiungerne uno; Maiusc + clic per scegliere tutti quelli fino a qui; trascinalo per cambiare ordine o gruppo"
+msgstr "Klicken zum Auswählen; Strg + Klick fügt eine hinzu; Umschalt + Klick wählt alle bis hierher; ziehen, um Reihenfolge oder Gruppe zu ändern"
+
+#: licenza-1.4.1345
+msgid "Quelli non impostati qui ereditano dallo schermo più grande: il telefono dal tablet, il tablet dal notebook, il notebook dal computer."
+msgstr "Was hier nicht eingestellt ist, wird vom größeren Bildschirm übernommen: das Telefon vom Tablet, das Tablet vom Notebook, das Notebook vom Computer."
+
+#: licenza-1.4.1345
+msgid "Intervallo fra lettere"
+msgstr "Abstand zwischen Buchstaben"
+
+msgid "Maschera da destra"
+msgstr "Maske von rechts"
+
+msgid "Maschera da sinistra"
+msgstr "Maske von links"
+
+msgid "Maschera dal basso"
+msgstr "Maske von unten"
+
+msgid "Maschera dall’alto"
+msgstr "Maske von oben"
+
+msgid "Ombra del testo, orizzontale"
+msgstr "Textschatten, horizontal"
+
+msgid "Ombra del testo, verticale"
+msgstr "Textschatten, vertikal"
+
+msgid "Raggio al passaggio"
+msgstr "Radius beim Überfahren"
+
+msgid "Raggio in alto a destra"
+msgstr "Radius oben rechts"
+
+msgid "Raggio in alto a sinistra"
+msgstr "Radius oben links"
+
+msgid "Raggio in basso a destra"
+msgstr "Radius unten rechts"
+
+msgid "Raggio in basso a sinistra"
+msgstr "Radius unten links"
+
+msgid "Sfocatura al passaggio"
+msgstr "Unschärfe beim Überfahren"
+
+msgid "Sfocatura dell’ombra del testo"
+msgstr "Unschärfe des Textschattens"
+
+msgid "Spostamento orizzontale al passaggio"
+msgstr "Horizontale Verschiebung beim Überfahren"
+
+msgid "Spostamento verticale al passaggio"
+msgstr "Vertikale Verschiebung beim Überfahren"
+
+#: licenza-1.4.1345
+msgid "Duplica la slide"
+msgstr "Folie duplizieren"
+
+msgid "Elimina la slide"
+msgstr "Folie löschen"
+
+msgid "Colore brunito"
+msgstr "Farbig nachbelichten"
+
+msgid "Colore schiarito"
+msgstr "Farbig abwedeln"
+
+msgid "Luce intensa"
+msgstr "Hartes Licht"
+
+msgid "X"
+msgstr "X"
+
+msgid "Y"
+msgstr "Y"
+
+#: licenza-1.4.1345
+msgid "Usa questo indirizzo"
+msgstr "Diese Adresse verwenden"
+
+#: licenza-1.4.1345
+msgid "Inserisci un dato dell’articolo"
+msgstr "Eine Angabe des Beitrags einfügen"
+
+msgid "Ogni slide mostra quello del suo articolo"
+msgstr "Jede Slide zeigt die ihres Beitrags"
+
+msgid "Foto dell’articolo"
+msgstr "Foto des Beitrags"
+
+msgid "Titolo dell’articolo"
+msgstr "Titel des Beitrags"
+
+msgid "Link dell’articolo"
+msgstr "Link des Beitrags"
+
+msgid "Slide modello: sul sito si ripete una volta per ogni articolo"
+msgstr "Vorlagen-Slide: Auf der Website wiederholt sie sich einmal pro Beitrag"
+
+msgid "Slide dagli articoli"
+msgstr "Slides aus Beiträgen"
+
+msgid "Slide modello"
+msgstr "Vorlagen-Slide"
+
+msgid "Sul sito questa slide si ripete una volta per ogni articolo trovato, al suo posto; le altre slide restano dove sono. Nei suoi livelli metti i dati dell’articolo coi pulsanti dell’editor (Dato, Foto dell’articolo, Link dell’articolo)."
+msgstr "Auf der Website wiederholt sich diese Slide an ihrer Stelle einmal für jeden gefundenen Beitrag; die anderen Slides bleiben, wo sie sind. In ihre Ebenen setzt du die Angaben des Beitrags mit den Schaltflächen des Editors (Angabe, Foto des Beitrags, Link des Beitrags)."
+
+#: licenza-1.4.1345
+msgid "Solo articoli con la foto"
+msgstr "Nur Beiträge mit Foto"
+
+#: licenza-1.4.1345
+msgid "Inclina in orizzontale"
+msgstr "Horizontal neigen"
+
+msgid "Inclina in verticale"
+msgstr "Vertikal neigen"
+
+msgid "Perno in orizzontale"
+msgstr "Drehpunkt horizontal"
+
+msgid "Perno in verticale"
+msgstr "Drehpunkt vertikal"

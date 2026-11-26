@@ -29,9 +29,9 @@
       </div>
       <div class="mps-mp-fila mps-mp-fila--num">
         <label class="mps-mp-et">{{ t('Comincia dopo') }}</label>
-        <NumberScrubber theme="dark" :modelValue="base" :min="0" :max="5000" :step="50" :defaultValue="200" emitAs="number" unit="ms" :sliderOnFocus="false" :ariaLabel="t('Comincia dopo')" @update:modelValue="base = $event" />
+        <NumberScrubber theme="dark" :modelValue="base" :min="0" :max="5000" :step="50" :defaultValue="200" emitAs="number" unit="ms" :ariaLabel="t('Comincia dopo')" @update:modelValue="base = $event" />
         <label class="mps-mp-et">{{ t('uno ogni') }}</label>
-        <NumberScrubber theme="dark" :modelValue="cascata" :min="0" :max="2000" :step="20" :defaultValue="120" emitAs="number" unit="ms" :sliderOnFocus="false" :ariaLabel="t('uno ogni')" @update:modelValue="cascata = $event" />
+        <NumberScrubber theme="dark" :modelValue="cascata" :min="0" :max="2000" :step="20" :defaultValue="120" emitAs="number" unit="ms" :ariaLabel="t('uno ogni')" @update:modelValue="cascata = $event" />
       </div>
       <button type="button" class="mps-mp-btn mps-mp-btn--pieno" @click="$emit('entrata', { animIn: entrata, base, cascata })">{{ t('Applica dall’alto in basso') }}</button>
     </section>
@@ -43,9 +43,9 @@
       </div>
       <div class="mps-mp-fila mps-mp-fila--num">
         <label class="mps-mp-et">{{ t('Durata') }}</label>
-        <NumberScrubber theme="dark" :modelValue="durata" :min="0" :max="4000" :step="50" :defaultValue="450" emitAs="number" unit="ms" :sliderOnFocus="false" :ariaLabel="t('Durata')" @update:modelValue="durata = $event" />
+        <NumberScrubber theme="dark" :modelValue="durata" :min="0" :max="4000" :step="50" :defaultValue="450" emitAs="number" unit="ms" :ariaLabel="t('Durata')" @update:modelValue="durata = $event" />
         <label class="mps-mp-et">{{ t('uno ogni') }}</label>
-        <NumberScrubber theme="dark" :modelValue="cascataStato" :min="0" :max="2000" :step="20" :defaultValue="80" emitAs="number" unit="ms" :sliderOnFocus="false" :ariaLabel="t('uno ogni')" @update:modelValue="cascataStato = $event" />
+        <NumberScrubber theme="dark" :modelValue="cascataStato" :min="0" :max="2000" :step="20" :defaultValue="80" emitAs="number" unit="ms" :ariaLabel="t('uno ogni')" @update:modelValue="cascataStato = $event" />
       </div>
       <button type="button" class="mps-mp-btn mps-mp-btn--pieno" @click="$emit('transizione', { effetto, durata, cascata: cascataStato })">{{ t('Applica alle scene') }}</button>
     </section>
@@ -148,7 +148,9 @@ const OPTS_EFFETTO = [
 .mps-mp-sez { border-top: 1px solid #1f2937; padding-top: 8px; display: flex; flex-direction: column; gap: 6px; }
 .mps-mp-sotto { margin: 0; font-size: 10px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #9ca3af; }
 .mps-mp-fila { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.mps-mp-fila--num { flex-wrap: nowrap; }
+/* 1.4.1446: numeri compatti (cursore al clic) e a capo se non ci stanno: coi cursori sempre aperti la riga
+   sbordava, i cursori coprivano «Comincia dopo» e il secondo valore finiva fuori dal pannello */
+.mps-mp-fila--num { flex-wrap: wrap; row-gap: 4px; }
 .mps-mp-fila--num > * { min-width: 0; }
 .mps-mp-et { font-size: 10.5px; color: #9ca3af; white-space: nowrap; }
 .mps-mp-btn { font: inherit; display: inline-flex; align-items: center; gap: 5px; padding: 5px 8px; font-size: 11px; color: #e5e7eb; background: #1f2937; border: 1px solid #374151; border-radius: 5px; cursor: pointer; }
@@ -161,4 +163,8 @@ const OPTS_EFFETTO = [
 .mps-mp-colore { width: 18px; height: 18px; border-radius: 50%; border: 2px solid transparent; background: var(--c); cursor: pointer; padding: 0; }
 .mps-mp-colore.is-on { border-color: #fff; }
 .mps-mp-link:focus-visible, .mps-mp-btn:focus-visible, .mps-mp-colore:focus-visible { outline: 2px solid var(--olo-color-primary, #e1474f); outline-offset: 2px; }
+/* 1.4.1447: la casella «Nome del gruppo» come le altre dell'editor (lo stile .mps-input è scoped nei componenti che lo
+   usano: qui mancava e la casella usciva bianca, senza bordo né angoli). */
+.mps-input { min-width: 0; background: #ffffff; border: 1px solid #d1d5db; border-radius: 0.375rem; padding: 4px 8px; font-size: 0.75rem; color: #111827; }
+.mps-input:focus { outline: none; border-color: var(--olo-color-primary, #e1474f); }
 </style>

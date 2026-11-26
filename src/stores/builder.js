@@ -190,6 +190,9 @@ export const useBuilderStore = defineStore('builder', {
     wireframeMode: false,
     livePreviewMode: true,  // iframe live preview (Divi-style)
     _iframeContextMenu: null,
+    // (1.4.1451) segnale per chiudere il menu rapido da un clic o da Esc dentro il canvas (l'iframe non fa arrivare
+    // i suoi eventi al documento del builder, dove il menu ascolta)
+    _chiudiMenuRapido: 0,
     previewHeaderContent: null,
     previewFooterContent: null,
     previewCssUrls: [],

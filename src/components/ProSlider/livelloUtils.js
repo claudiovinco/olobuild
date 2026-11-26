@@ -103,6 +103,10 @@ export function statoSM(sm, pScena, fattore = 1) {
   if (usa(['mt', 'mr', 'mb', 'ml'])) {
     out.clipPath = 'inset(' + ['mt', 'mr', 'mb', 'ml'].map((ch) => Math.max(0, Math.min(100, valoreSM(t2, k, ch, c))).toFixed(2) + '%').join(' ') + ')';
   }
+  // larghezza e peso del carattere variabile (1.4.1443): il sito li muoveva (olo-proslider.js, font-variation-settings),
+  // la tela no — il titolo di Elastan restava fermo nell'anteprima dello scorrimento
+  const assi = ['wdth', 'wght'].filter((a) => usa([a]));
+  if (assi.length) out.assi = assi.map((a) => '"' + a + '" ' + valoreSM(t2, k, a, c).toFixed(1)).join(', ');
   return out;
 }
 

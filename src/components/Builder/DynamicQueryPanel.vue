@@ -10,7 +10,7 @@
           :model-value="isEnabled"
           @update:model-value="toggleEnabled"
         />
-        <span>{{ t('Sorgente dinamica') }}</span>
+        <span>{{ etichetta || t('Sorgente dinamica') }}</span>
       </label>
     </div>
 
@@ -161,8 +161,8 @@
         <template v-else-if="primo.stato === 'vuoto'">{{ t('Nessun contenuto con questi filtri') }}</template>
       </div>
 
-      <!-- Field Mapping -->
-      <div class="dqp-mapping">
+      <!-- Field Mapping (non c'è dove la tile non ha voci da collegare: le slide dagli articoli dello Slider Pro) -->
+      <div v-if="itemFields.length" class="dqp-mapping">
         <label class="dqp-label dqp-label--section">{{ t('Mappatura campi') }}</label>
         <!-- Sorgente accesa senza campi collegati: il sito mostra ancora le voci scritte a mano -->
         <button v-if="puoCollegare" type="button" class="dqp-automappa" @click="collegaPerNome">{{ t('Collega i campi per nome') }}</button>
@@ -198,6 +198,8 @@ const props = defineProps({
   // Le origini che il ripetitore accetta (dynamicOrigins del campo): ['images'] per le scene del
   // Tour 360, che con le immagini in evidenza degli articoli non avrebbero senso. null = tutte.
   origins: { type: Array, default: null },
+  // Il nome dell'interruttore, se non è «Sorgente dinamica» (lo Slider Pro: «Slide dagli articoli»)
+  etichetta: { type: String, default: '' },
 });
 
 const emit = defineEmits(['update:query', 'update:itemMap']);

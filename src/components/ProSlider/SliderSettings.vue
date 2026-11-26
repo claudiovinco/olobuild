@@ -90,8 +90,8 @@ const emit = defineEmits(['update']);
 const showGlobalBg = ref(false);
 
 const globalBg = computed(() => props.settings.globalBackground || {
-  type: 'color', color: '#1e293b', image: '', video: '',
-  gradientFrom: '#1e293b', gradientTo: '#0f172a', gradientAngle: 180,
+  type: 'color', color: 'var(--olo-color-dark)', image: '', video: '',
+  gradientFrom: 'var(--olo-color-dark)', gradientTo: 'var(--olo-color-dark)', gradientAngle: 180,
 });
 
 function updateGlobalBg(key, val) {
