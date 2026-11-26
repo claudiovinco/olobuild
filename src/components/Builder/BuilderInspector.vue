@@ -2848,7 +2848,8 @@ function abFieldLabel(key) {
 
 async function abFetch(path, opts = {}) {
   const olo = window.oloData || {};
-  const res = await fetch(olo.restUrl + path, {
+  // restUrl finisce già con «/» e i percorsi cominciano con «/»: «…/v1//ab-tests» dava 404 (1.4.1480)
+  const res = await fetch(String(olo.restUrl || '').replace(/\/+$/, '') + '/' + String(path).replace(/^\/+/, ''), {
     headers: { 'X-WP-Nonce': olo.nonce, 'Content-Type': 'application/json', ...opts.headers },
     ...opts,
   });

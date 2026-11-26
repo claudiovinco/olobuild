@@ -17,20 +17,15 @@
     <!-- Filtro per tipo e per quello che fanno, ordine (Slider Revolution 7) e livelli messi da parte (gli «shy» di After
          Effects): 1.4.1428 -->
     <div class="mps-lt-strumenti">
-      <label class="mps-lt-sel" :title="t('Mostra')">
+      <div class="mps-lt-sel" :title="t('Mostra')">
         <span class="mps-lt-ico" aria-hidden="true" v-html="ico('list-filter')"></span>
-        <select v-model="filtro" :aria-label="t('Mostra')">
-          <option v-for="f in FILTRI" :key="f.k" :value="f.k">{{ f.nome }}</option>
-        </select>
-      </label>
-      <label class="mps-lt-sel" :title="t('Ordine')">
+        <!-- il menu dell'editor, non quello del browser (1.4.1480): stesso aspetto e stessa tastiera degli altri -->
+        <FieldSelect class="mps-lt-fs" ui="dropdown" size="compact" theme="dark" :model-value="filtro" :options="FILTRI.map((f) => ({ value: f.k, label: f.nome }))" :ariaLabel="t('Mostra')" @update:model-value="filtro = $event" />
+      </div>
+      <div class="mps-lt-sel" :title="t('Ordine')">
         <span class="mps-lt-ico" aria-hidden="true" v-html="ico('arrow-down-up')"></span>
-        <select v-model="ordine" :aria-label="t('Ordine')">
-          <option value="slide">{{ t('Come sulla slide') }}</option>
-          <option value="nome">{{ t('Per nome') }}</option>
-          <option value="tipo">{{ t('Per tipo') }}</option>
-        </select>
-      </label>
+        <FieldSelect class="mps-lt-fs" ui="dropdown" size="compact" theme="dark" :model-value="ordine" :options="[{ value: 'slide', label: t('Come sulla slide') }, { value: 'nome', label: t('Per nome') }, { value: 'tipo', label: t('Per tipo') }]" :ariaLabel="t('Ordine')" @update:model-value="ordine = $event" />
+      </div>
     </div>
     <button v-if="quantiDaParte" type="button" class="mps-lt-daparte" @click="mostraDaParte = !mostraDaParte">
       <span class="mps-lt-ico" aria-hidden="true" v-html="ico('archive')"></span>
@@ -131,6 +126,7 @@
 <script setup>
 import { ref, computed, watch, nextTick } from 'vue';
 import { t } from '@/i18n';
+import FieldSelect from '../Builder/fields/FieldSelect.vue';
 import lucideIcons from './lucideIconsSvg.js';
 import { nomeLivello, animazioniLivello, gruppiLivelli, nomeGruppo, ETICHETTE } from './livelloUtils.js';
 
@@ -384,7 +380,8 @@ function valoriPropri(l) {
 .mps-lt-globali .mps-lt-gt:not(:hover):not(:focus-within) .mps-lt-btn:not(.is-on):not(.is-spento) { width: 22px; overflow: visible; }
 .mps-lt-az { display: none; }
 .mps-lt-strumenti { display: flex; gap: 4px; margin: 0 8px 6px; }
-.mps-lt-sel { flex: 1; min-width: 0; display: flex; align-items: center; gap: 3px; padding: 0 4px; height: 24px; border: 1px solid #374151; border-radius: 5px; background: #0b1220; color: #6b7280; }
+.mps-lt-sel { flex: 1; min-width: 0; display: flex; align-items: center; gap: 3px; color: #6b7280; }
+.mps-lt-sel .mps-lt-fs { flex: 1; min-width: 0; }
 .mps-lt-sel select { flex: 1; min-width: 0; height: 22px; border: 0; background: transparent; color: #d1d5db; font-size: 10.5px; padding: 0; outline: 0; box-shadow: none; }
 .mps-lt-sel select option { background: #111827; color: #e5e7eb; }
 .mps-lt-sel:focus-within { border-color: var(--olo-color-primary, #e1474f); }

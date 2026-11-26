@@ -1178,42 +1178,42 @@
               <div class="mb-grid mb-grid-cols-2 mb-gap-2">
                 <div>
                   <label class="mps-label">{{ t('Scala') }}</label>
-                  <NumberScrubber theme="dark" :modelValue="layer.hover.scale ?? 1" :min="0.5" :max="2" :step="0.05" :defaultValue="1" emitAs="number" :sliderOnFocus="true" :ariaLabel="t('Scala')" @update:modelValue="upHover('scale', $event)" />
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.scale ?? 1" :min="0.5" :max="2" :step="0.05" :defaultValue="1" emitAs="number" :sliderOnFocus="true" :ariaLabel="t('Scala') + ' · ' + t('Al passaggio del mouse')" @update:modelValue="upHover('scale', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">{{ t('Rotazione Z') }}</label>
-                  <NumberScrubber theme="dark" :modelValue="layer.hover.rotation ?? 0" :min="-45" :max="45" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="°" :ariaLabel="t('Rotazione Z')" @update:modelValue="upHover('rotation', $event)" />
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.rotation ?? 0" :min="-45" :max="45" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="°" :ariaLabel="t('Rotazione Z') + ' · ' + t('Al passaggio del mouse')" @update:modelValue="upHover('rotation', $event)" />
                 </div>
                 <div v-if="!hasTimeline">
                   <label class="mps-label">{{ t('Rotazione X') }}</label>
-                  <NumberScrubber theme="dark" :modelValue="layer.hover.rotateX ?? 0" :min="-90" :max="90" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="°" :ariaLabel="t('Rotazione X')" @update:modelValue="upHover('rotateX', $event)" />
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.rotateX ?? 0" :min="-90" :max="90" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="°" :ariaLabel="t('Rotazione X') + ' · ' + t('Al passaggio del mouse')" @update:modelValue="upHover('rotateX', $event)" />
                 </div>
                 <div v-if="!hasTimeline">
                   <label class="mps-label">{{ t('Rotazione Y') }}</label>
-                  <NumberScrubber theme="dark" :modelValue="layer.hover.rotateY ?? 0" :min="-90" :max="90" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="°" :ariaLabel="t('Rotazione Y')" @update:modelValue="upHover('rotateY', $event)" />
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.rotateY ?? 0" :min="-90" :max="90" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="°" :ariaLabel="t('Rotazione Y') + ' · ' + t('Al passaggio del mouse')" @update:modelValue="upHover('rotateY', $event)" />
                 </div>
                 <div v-if="!hasTimeline">
                   <label class="mps-label">{{ t('Inclinazione orizzontale') }}</label>
-                  <NumberScrubber theme="dark" :modelValue="layer.hover.skewX ?? 0" :min="-30" :max="30" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="°" :ariaLabel="t('Inclinazione orizzontale')" @update:modelValue="upHover('skewX', $event)" />
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.skewX ?? 0" :min="-30" :max="30" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="°" :ariaLabel="t('Inclinazione orizzontale') + ' · ' + t('Al passaggio del mouse')" @update:modelValue="upHover('skewX', $event)" />
                 </div>
                 <div v-if="!hasTimeline">
                   <label class="mps-label">{{ t('Inclinazione verticale') }}</label>
-                  <NumberScrubber theme="dark" :modelValue="layer.hover.skewY ?? 0" :min="-30" :max="30" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="°" :ariaLabel="t('Inclinazione verticale')" @update:modelValue="upHover('skewY', $event)" />
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.skewY ?? 0" :min="-30" :max="30" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="°" :ariaLabel="t('Inclinazione verticale') + ' · ' + t('Al passaggio del mouse')" @update:modelValue="upHover('skewY', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">{{ t('Spostamento orizzontale') }}</label>
-                  <NumberScrubber theme="dark" :modelValue="layer.hover.x ?? 0" :min="-20" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="%" :ariaLabel="t('Spostamento orizzontale al passaggio')" @update:modelValue="upHover('x', $event)" />
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.x ?? 0" :min="-20" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="%" :ariaLabel="t('Spostamento orizzontale al passaggio') + ' · ' + t('Al passaggio del mouse')" @update:modelValue="upHover('x', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">{{ t('Spostamento verticale') }}</label>
-                  <NumberScrubber theme="dark" :modelValue="layer.hover.y ?? 0" :min="-20" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="%" :ariaLabel="t('Spostamento verticale al passaggio')" @update:modelValue="upHover('y', $event)" />
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.y ?? 0" :min="-20" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="%" :ariaLabel="t('Spostamento verticale al passaggio') + ' · ' + t('Al passaggio del mouse')" @update:modelValue="upHover('y', $event)" />
                 </div>
               </div>
               <!-- Aspetto -->
               <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-2">{{ t('Aspetto') }}</p>
               <div v-if="!hasTimeline">
                 <label class="mps-label">{{ t('Opacità') }}</label>
-                <NumberScrubber theme="dark" :modelValue="layer.hover.opacity ?? 100" :min="0" :max="100" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Opacità (%)')" @update:modelValue="upHover('opacity', $event)" />
+                <NumberScrubber theme="dark" :modelValue="layer.hover.opacity ?? 100" :min="0" :max="100" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Opacità (%)') + ' · ' + t('Al passaggio del mouse')" @update:modelValue="upHover('opacity', $event)" />
               </div>
               <template v-if="layer.type === 'text' || layer.type === 'button'">
                 <div>
@@ -1231,29 +1231,29 @@
               </div>
               <div>
                 <label class="mps-label">{{ t('Raggio') }}</label>
-                <NumberScrubber theme="dark" :modelValue="layer.hover.borderRadius ?? ''" :min="0" :max="200" :step="1" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="t('Raggio al passaggio')" @update:modelValue="upHover('borderRadius', $event)" />
+                <NumberScrubber theme="dark" :modelValue="layer.hover.borderRadius ?? ''" :min="0" :max="200" :step="1" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="t('Raggio al passaggio') + ' · ' + t('Al passaggio del mouse')" @update:modelValue="upHover('borderRadius', $event)" />
               </div>
               <!-- Filtri hover -->
               <p v-if="!hasTimeline" class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-2">{{ t('Filtri') }}</p>
               <div v-if="!hasTimeline" class="mb-grid mb-grid-cols-2 mb-gap-2">
                 <div>
                   <label class="mps-label">{{ t('Sfocatura') }}</label>
-                  <NumberScrubber theme="dark" :modelValue="layer.hover.blur ?? 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="px" :ariaLabel="t('Sfocatura al passaggio')" @update:modelValue="upHover('blur', $event)" />
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.blur ?? 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="px" :ariaLabel="t('Sfocatura al passaggio') + ' · ' + t('Al passaggio del mouse')" @update:modelValue="upHover('blur', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">{{ t('Luminosità') }}</label>
-                  <NumberScrubber theme="dark" :modelValue="layer.hover.brightness ?? 100" :min="0" :max="200" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="true" unit="%" :ariaLabel="t('Luminosità (%)')" @update:modelValue="upHover('brightness', $event)" />
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.brightness ?? 100" :min="0" :max="200" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="true" unit="%" :ariaLabel="t('Luminosità (%)') + ' · ' + t('Al passaggio del mouse')" @update:modelValue="upHover('brightness', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">{{ t('Scala di grigi') }}</label>
-                  <NumberScrubber theme="dark" :modelValue="layer.hover.grayscale ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="%" :ariaLabel="t('Scala di grigi (%)')" @update:modelValue="upHover('grayscale', $event)" />
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.grayscale ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="true" unit="%" :ariaLabel="t('Scala di grigi (%)') + ' · ' + t('Al passaggio del mouse')" @update:modelValue="upHover('grayscale', $event)" />
                 </div>
               </div>
               <!-- Transizione -->
               <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-2">{{ t('Transizione') }}</p>
               <div>
                 <label class="mps-label">{{ t('Durata') }}</label>
-                <NumberScrubber theme="dark" :modelValue="layer.hover.duration ?? 300" :min="100" :max="1000" :step="50" :defaultValue="300" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata (ms)')" @update:modelValue="upHover('duration', $event)" />
+                <NumberScrubber theme="dark" :modelValue="layer.hover.duration ?? 300" :min="100" :max="1000" :step="50" :defaultValue="300" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata (ms)') + ' · ' + t('Al passaggio del mouse')" @update:modelValue="upHover('duration', $event)" />
               </div>
               <div>
                 <label class="mps-label">{{ t('Andamento') }}</label>

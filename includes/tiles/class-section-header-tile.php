@@ -181,7 +181,7 @@ class Olobuild_SectionHeader_Tile extends Olobuild_Tile_Base {
                         <?php $first = true; foreach ( $headlines as $idx => $line ) :
                             $ltext = $line['text'] ?? '';
                             if ( $ltext === '' ) continue;
-                            $lcolor  = $this->safe_color_css( $line['color'] ?? '' ) ?: '#0f172a';
+                            $lcolor  = $this->safe_color_css( $line['color'] ?? '' ) ?: 'var(--olo-color-text, #0f172a)'; // 1.4.1480: il testo della palette (sui temi scuri il blu notte fisso non si leggeva)
                             $litalic = ! empty( $line['italic'] ) ? 'font-style:italic;' : '';
                             if ( $inline && ! $first ) echo ' ';
                             $first = false;
@@ -192,7 +192,7 @@ class Olobuild_SectionHeader_Tile extends Olobuild_Tile_Base {
                 <?php endif; ?>
 
                 <?php if ( $show_subtitle ) :
-                    $sub_clr    = $this->safe_color_css( $s['tagline_text_color'] ) ?: '#475569';
+                    $sub_clr    = $this->safe_color_css( $s['tagline_text_color'] ) ?: 'var(--olo-color-text-muted, #475569)';
                     $sub_size   = absint( $s['tagline_text_size'] ) ?: 18;
                     $sub_fam    = $this->resolve_font_family( (string) $s['tagline_font_family'], $legacy ) ?: $sans;
                     $sub_italic = ! empty( $s['tagline_text_italic'] ) ? 'font-style:italic;' : '';
@@ -215,7 +215,7 @@ class Olobuild_SectionHeader_Tile extends Olobuild_Tile_Base {
             </div>
 
             <?php if ( $show_tagline ) :
-                $tag_clr     = $this->safe_color_css( $s['tagline_text_color'] ) ?: '#0f172a';
+                $tag_clr     = $this->safe_color_css( $s['tagline_text_color'] ) ?: 'var(--olo-color-text, #0f172a)';
                 $tag_size    = absint( $s['tagline_text_size'] ) ?: 22;
                 // Il sottotitolo a destra usa, di suo, la famiglia del titolo (quella
                 // della tile, non lo stile tipografico: quello è del solo titolo).

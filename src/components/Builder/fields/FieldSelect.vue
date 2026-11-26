@@ -361,6 +361,11 @@ function onTriggerKeydown(e) {
   if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(e.key)) {
     e.preventDefault();
     if (!open.value) openPop();
+  } else if (e.key === 'Escape' && open.value) {
+    // menu aperto col mouse, fuoco ancora sul pulsante (1.4.1480): Esc chiude il menu e basta. preventDefault dice a chi
+    // sta sopra (l'editor del Pro Slider) che il tasto è già usato, se no toglieva anche il livello scelto.
+    e.preventDefault();
+    close();
   }
 }
 

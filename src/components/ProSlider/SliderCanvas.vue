@@ -447,6 +447,16 @@ function layerStyleStato(l) {
     const v = Object.prototype.hasOwnProperty.call(props.statePreview, nome) ? props.statePreview[nome] : (props.initialStates?.[nome] ?? '');
     if (!statoVale(l.stato.vale, v)) return { display: 'none' };
   }
+  // Il livello «Da pulire col puntatore» che imposta lo stato guardato (1.4.1480): sul sito, pulito, svanisce e lo stato
+  // cambia; nella Scena di quello stato la tela lo copriva ancora sopra a tutto. Si nasconde come sul sito (resta
+  // sceglibile dal pannello Livelli).
+  if (props.statePreview && l.pulisci?.attivo && l.pulisci.stato) {
+    const [n, val = ''] = String(l.pulisci.stato).split('=');
+    const nome = n.trim().toLowerCase();
+    if (nome && Object.prototype.hasOwnProperty.call(props.statePreview, nome) && String(props.statePreview[nome]) === val.trim()) {
+      return { ...layerStyleBase(l), opacity: 0, pointerEvents: 'none' };
+    }
+  }
   const st = layerStyleBase(l);
   if (st.display === 'none' || props.scrollPreview == null || !l.scrollMove) return st;
   const sm = statoSM(l.scrollMove, props.scrollPreview, CANVAS_W.value / 1440);

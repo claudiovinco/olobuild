@@ -1,12 +1,14 @@
 <template>
   <div class="mps-timeline mb-bg-gray-850 mb-border-t mb-border-gray-700 mb-select-none" :style="{ height: actualHeight + 'px' }">
+    <!-- 1.4.1480: tutto resta DENTRO il riquadro (overflow nascosto, tracce che scorrono): con tanti livelli le ultime tracce
+         uscivano sopra la barra «Aggiungi:» e un clic lì aggiungeva un livello -->
     <!-- Resize handle (drag to increase height) -->
     <div
       class="mps-resize-handle"
       @pointerdown="startResize"
     ></div>
     <!-- Header: play controls + info -->
-    <div class="mb-flex mb-items-center mb-gap-3 mb-px-3 mb-py-1.5 mb-border-b mb-border-gray-700">
+    <div class="mb-flex mb-shrink-0 mb-flex-wrap mb-items-center mb-gap-3 mb-px-3 mb-py-1.5 mb-border-b mb-border-gray-700">
       <!-- Play / Pause -->
       <button
         @click="$emit('toggle-play')"
@@ -163,8 +165,8 @@
       </div>
     </div>
 
-    <!-- Multi-track area -->
-    <div class="mb-flex mb-flex-1 mb-overflow-hidden" style="min-height:0;">
+    <!-- Multi-track area: nomi e tracce scorrono insieme in verticale -->
+    <div class="mb-flex mb-flex-1 mb-items-start mb-overflow-y-auto mb-overflow-x-hidden" style="min-height:0;">
       <!-- Layer names column -->
       <div class="mb-flex mb-flex-col mb-shrink-0 mb-border-r mb-border-gray-700 mb-relative" :style="{ width: namesColWidth + 'px' }">
         <!-- Resize handle laterale -->
@@ -188,7 +190,7 @@
       </div>
 
       <!-- Tracks area (scrollable) -->
-      <div ref="tracksScrollEl" class="mb-flex-1 mb-flex mb-flex-col mb-overflow-x-auto mb-overflow-y-hidden mb-relative" @wheel="onTimelineWheel">
+      <div ref="tracksScrollEl" class="mb-flex-1 mb-flex mb-flex-col mb-overflow-x-auto mb-overflow-y-hidden mb-relative" style="min-width:0;" @wheel="onTimelineWheel">
         <div :style="{ width: timelineZoom * 100 + '%', minWidth: '100%' }">
         <!-- Time ruler -->
         <div class="mb-border-b mb-border-gray-700 mb-relative" style="height:18px;">
@@ -476,7 +478,8 @@ const maxDuration = computed(() => {
 const panelHeight = computed(() => {
   const tracks = timelineTracks.value.length;
   if (tracks === 0) return 60;
-  return 32 + 18 + tracks * trackHeight + 4; // header + ruler + tracks + padding
+  // header + ruler + tracks + padding, fino a 8 tracce: oltre, le tracce scorrono (la tela resta grande)
+  return 32 + 18 + Math.min(tracks, 8) * trackHeight + 4;
 });
 
 // --- Ruler ---
@@ -728,7 +731,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.mps-timeline { display: flex; flex-direction: column; min-height: 50px; position: relative; }
+.mps-timeline { display: flex; flex-direction: column; min-height: 50px; position: relative; overflow: hidden; flex: none; }
 .mps-tl-tipo { display: inline-flex; vertical-align: -2px; margin-right: 4px; opacity: .6; }
 .mps-tl-tipo :deep(svg), .mps-tl-ico :deep(svg) { width: 11px; height: 11px; }
 .mps-tl-ico { display: inline-flex; }
