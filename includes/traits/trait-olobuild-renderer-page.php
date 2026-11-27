@@ -935,7 +935,11 @@ trait Olobuild_Renderer_Page_Trait {
                             var track=document.createElement('div');
                             track.className='olo-h-track';
                             track.style.height='100%';
-                            var panelCSS='flex:0 0 100%;width:100%;min-height:'+viewH+'px;box-sizing:border-box;position:relative;overflow:hidden';
+                            /* 27 nov 2026: senza max-width e margini propri. Una sezione larga «large» senza sfondo porta
+                               max-width:1400px e margin:auto sulla sezione; nel gruppo, posizionata da sinistra, restava
+                               larga 1400 e attaccata a sinistra (Fuliggine a 1920: le testimonianze dello Strappo). Il
+                               contenuto si centra lo stesso: lo tiene il suo uk-container, che ha già la sua larghezza. */
+                            var panelCSS='flex:0 0 100%;width:100%;max-width:none;margin-left:0;margin-right:0;min-height:'+viewH+'px;box-sizing:border-box;position:relative;overflow:hidden';
                             /* 21 nov 2026: un pannello senza sfondo proprio prende il colore della pagina, altrimenti nei
                                passaggi impilati (e nel Reveal) si vedrebbe attraverso quello che gli sta sotto. */
                             function opaco(c){c=String(c||'');if(!c||c==='transparent'){return false;}var m=/^rgba\(([^)]*)\)$/.exec(c);if(m){var q=m[1].split(/[\s,\/]+/).filter(Boolean);return q.length<4||parseFloat(q[3])>=0.99;}m=/\/\s*([\d.]+)\s*\)$/.exec(c);if(m){return parseFloat(m[1])>=0.99;}return true;}

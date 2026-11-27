@@ -107,6 +107,7 @@ SCELTE = {
     'spiedo': ('strappo', [5, 6]),
     'pennino': ('pagina', [3, 4]),
     'falda': ('percorso-su', [1, 2]),
+    'fuliggine': ('strappo', [5, 6]),  # 27 nov 2026: la citazione si strappa come carta sulle testimonianze
     'trottola': ('ruota', [8, 9, 10]),
     'calice': ('diaframma', [9, 10]),
     'rovescio': ('pagina', [5, 6]),
