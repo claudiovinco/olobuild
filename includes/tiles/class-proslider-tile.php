@@ -290,6 +290,11 @@ class Olobuild_ProSlider_Tile extends Olobuild_Tile_Base {
         } else {
             $container_style .= $h_info['css'];
         }
+        // Sfondo dello slider «Trasparente» (1.4.1483): si vede la sezione sotto. Prima restava il nero di serie del
+        // contenitore (.olo-proslider { background: #000 }) e lo slider trasparente era un riquadro nero (Ventaglio).
+        if ( 'transparent' === ( $global_bg['type'] ?? '' ) ) {
+            $container_style .= 'background:transparent;';
+        }
         $scroll_fixed = ! empty( $s['scrollTimeline'] );
         $scroll_dist  = absint( $s['scrollTimelineDistance'] ?? 2000 );
         if ( $scroll_fixed ) {

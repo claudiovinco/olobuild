@@ -121,13 +121,23 @@ SCELTE = {
     'sbieco': ('strappo', [5, 6, 7]),
     'falcata': ('percorso', [1, 2, 3]),
     'combinazione': ('ascensore', [6, 7, 8]),
-    'ventaglio': ('ruota', [5, 6, 7]),
+    'ventaglio': ('ruota', [6, 7]),  # la 5 ha i panni stesi (Pro Slider fermo allo scorrimento): fuori dal gruppo
     'elastan': ('mazzo', [7, 8, 9]),
     'morsetto': ('prismi', [5, 6, 7]),
     'truciolo': ('strappo', [1, 2, 3]),
     'persiana': ('prismi', [1, 2]),
     'vetrino': ('diaframma', [4, 5, 6]),
     'doppio-senso': ('pagina', [7, 8]),
+}
+
+# Altri passaggi della home oltre al gruppo (27 nov 2026, utente: «usa almeno una transizione da sotto di sezione, quella
+# che scorrendo si alza come provenisse da dietro quella che si sposta»): tema → {indice: chiavi della sezione}.
+# «Reveal»: la sezione aspetta ferma sotto la precedente, che si alza e la scopre. La precedente deve avere uno sfondo
+# pieno, se no la sezione che aspetta si vede attraverso fin dall'inizio; l'ombra (Stile) la stacca da quella sotto.
+ALTRI = {
+    'ventaglio': {1: {'bg': {'type': 'solid', 'color': 'var(--olo-color-background)'}, 'bg_scope': 'section',
+                      'style': {'shadow': 'lg'}},
+                  2: {'sticky_effect': 'reveal'}},
 }
 
 # il sipario: la foto (e il video) divisi fra le due ante
@@ -207,6 +217,11 @@ def applica(tema):
     for k, i in enumerate(indici):
         assert sez[i].get('type') == 'section', (tema, i)
         sez[i]['settings'].update(impostazioni(tipo, k, tema))
+    for i, chiavi in ALTRI.get(tema, {}).items():
+        assert sez[i].get('type') == 'section', (tema, i)
+        chiavi = dict(chiavi)
+        sez[i].setdefault('style', {}).update(chiavi.pop('style', {}))  # l'ombra sotto la sezione che si alza: Stile
+        sez[i]['settings'].update(chiavi)
     nuovo = json.dumps(home, ensure_ascii=False, separators=(',', ':'))
     if nuovo != testo:
         open(f, 'w', encoding='utf-8', newline='').write(nuovo)
