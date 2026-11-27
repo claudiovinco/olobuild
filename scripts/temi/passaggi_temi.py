@@ -121,7 +121,7 @@ SCELTE = {
     'lastra': ('prismi', [6, 7]),
     'sbieco': ('strappo', [5, 6, 7]),
     'falcata': ('percorso', [1, 2, 3]),
-    'combinazione': ('ascensore', [6, 7, 8]),
+    'combinazione': ('ascensore', [7, 8]),
     'ventaglio': ('ruota', [6, 7]),  # la 5 ha i panni stesi (Pro Slider fermo allo scorrimento): fuori dal gruppo
     'elastan': ('mazzo', [7, 8, 9]),
     'morsetto': ('prismi', [5, 6, 7]),
