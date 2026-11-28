@@ -58721,3 +58721,15 @@ msgstr "Le fauteuil libre, en direct"
 #: 1.4.1478
 msgid "Video e parole che cambiano"
 msgstr "Vidéo et mots qui changent"
+
+#: OLObuild 1.4.1489
+msgid "Mese all’apertura"
+msgstr "Mois à l’ouverture"
+
+#: OLObuild 1.4.1489
+msgid "Il primo mese dell’elenco"
+msgstr "Premier mois de la liste"
+
+#: OLObuild 1.4.1489
+msgid "Con «Il primo mese dell’elenco» la pagina si apre su un mese solo: il primo in arrivo o, con «Dal più recente», l’ultimo andato in scena. Gli altri mesi restano a un tocco; senza JavaScript si vedono tutti gli appuntamenti."
+msgstr "Avec « Premier mois de la liste », la page s’ouvre sur un seul mois : le premier à venir ou, avec « Du plus récent », le dernier déjà joué. Les autres mois restent à portée de clic ; sans JavaScript, tous les rendez-vous sont visibles."

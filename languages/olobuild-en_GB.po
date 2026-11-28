@@ -57179,3 +57179,15 @@ msgstr "The free chair, live"
 #: 1.4.1478
 msgid "Video e parole che cambiano"
 msgstr "Video and changing words"
+
+#: OLObuild 1.4.1489
+msgid "Mese all’apertura"
+msgstr "Month on opening"
+
+#: OLObuild 1.4.1489
+msgid "Il primo mese dell’elenco"
+msgstr "First month in the list"
+
+#: OLObuild 1.4.1489
+msgid "Con «Il primo mese dell’elenco» la pagina si apre su un mese solo: il primo in arrivo o, con «Dal più recente», l’ultimo andato in scena. Gli altri mesi restano a un tocco; senza JavaScript si vedono tutti gli appuntamenti."
+msgstr "With “First month in the list” the page opens on a single month: the first one coming up or, with “Most recent first”, the last one already performed. The other months are one tap away; without JavaScript every event is shown."

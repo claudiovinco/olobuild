@@ -58554,3 +58554,15 @@ msgstr "El sillón libre, en directo"
 #: 1.4.1478
 msgid "Video e parole che cambiano"
 msgstr "Vídeo y palabras que cambian"
+
+#: OLObuild 1.4.1489
+msgid "Mese all’apertura"
+msgstr "Mes al abrir"
+
+#: OLObuild 1.4.1489
+msgid "Il primo mese dell’elenco"
+msgstr "Primer mes de la lista"
+
+#: OLObuild 1.4.1489
+msgid "Con «Il primo mese dell’elenco» la pagina si apre su un mese solo: il primo in arrivo o, con «Dal più recente», l’ultimo andato in scena. Gli altri mesi restano a un tocco; senza JavaScript si vedono tutti gli appuntamenti."
+msgstr "Con «Primer mes de la lista» la página se abre en un solo mes: el primero que llega o, con «Del más reciente», el último ya representado. Los demás meses quedan a un toque; sin JavaScript se ven todos los eventos."

@@ -3,6 +3,10 @@
 Le modifiche di ogni versione, dalla più recente. Ogni voce dice cosa cambia per chi usa Olobuild.
 La bacheca mostra le ultime 2 versioni nel Centro risorse, la pagina Guida le mostra tutte.
 
+## v1.4.1489 - 2026-11-28 (Cartellone: il mese scelto all'apertura)
+- Cartellone › Filtri: col «Filtro per mese» acceso c'è «Mese all'apertura». Con «Il primo mese dell'elenco» la pagina si apre su un mese solo: il primo in arrivo o, con «Dal più recente», l'ultimo andato in scena. Un archivio lungo occupa così poco spazio, e gli altri mesi restano a un tocco. Con «Tutti», il valore di partenza, si vede tutto come prima; senza JavaScript si vedono sempre tutti gli appuntamenti.
+- Se i mesi del Cartellone coprono più di un anno, ogni pastiglia porta anche l'anno: prima dicembre 2026 e dicembre 2027 erano due «Dicembre».
+
 ## v1.4.1488 - 2026-11-28 (Fisarmonica con grassetti, link ed elenchi)
 - Fisarmonica: se il contenuto di una voce ha HTML (grassetti, link, elenchi, paragrafi), si vede com'è, pulito come negli altri testi. Prima la Fisarmonica toglieva tutto l'HTML e il testo usciva attaccato, senza link né a capo fra i paragrafi. Il testo semplice resta come prima, con gli a capo scritti a mano.
 

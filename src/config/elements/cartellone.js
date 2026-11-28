@@ -53,6 +53,7 @@ export default {
     passati: 'nascondi',
     filtri_generi: true,
     filtri_mesi: false,
+    mese_iniziale: '',
     ricerca: false,
     solo_genere: '',
     escludi_generi: '',
@@ -213,6 +214,13 @@ export default {
     { type: 'separator', label: t('Filtri'), condition: nonProssimo },
     { key: 'filtri_generi', label: t('Filtro per genere'), type: 'toggle' },
     { key: 'filtri_mesi', label: t('Filtro per mese'), type: 'toggle' },
+    // Il mese acceso quando la pagina si apre (1.4.1489): con «Tutti» si vede tutto, com'era. Agisce solo col filtro per
+    // mese e nelle viste che hanno i filtri (non il prossimo né il calendario del mese).
+    { key: 'mese_iniziale', label: t('Mese all’apertura'), type: 'select', options: [
+      { value: '', label: t('Tutti') },
+      { value: 'primo', label: t('Il primo mese dell’elenco') },
+    ], show: (s) => !!s.filtri_mesi && !['prossimo', 'mese'].includes(s.vista || 'lista'),
+      description: t('Con «Il primo mese dell’elenco» la pagina si apre su un mese solo: il primo in arrivo o, con «Dal più recente», l’ultimo andato in scena. Gli altri mesi restano a un tocco; senza JavaScript si vedono tutti gli appuntamenti.') },
     { key: 'ricerca', label: t('Ricerca'), type: 'toggle' },
     { key: 'testo_tutti', label: t('Testo «Tutti»'), type: 'text',
       show: (s) => s.filtri_generi !== false || !!s.filtri_mesi },

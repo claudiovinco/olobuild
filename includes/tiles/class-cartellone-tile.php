@@ -38,6 +38,7 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
         'passati'           => 'nascondi',
         'filtri_generi'     => true,
         'filtri_mesi'       => false,
+        'mese_iniziale'     => '',
         'ricerca'           => false,
         'solo_genere'       => '',
         'escludi_generi'    => '',
@@ -385,6 +386,14 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
             'ora'     => __( 'In scena adesso', 'olobuilder' ),
             'builder' => $builder,
         ];
+        // «Mese all'apertura» (1.4.1489): con «Il primo mese dell'elenco» lo script accende la pastiglia del primo mese in
+        // arrivo o, con «Dal più recente», dell'ultimo andato in scena. Lo sceglie col valore vero dei passati (nel builder
+        // `passati` è sempre «attenua»). Il server disegna tutte le voci: senza JavaScript si vedono tutte.
+        if ( ! empty( $s['filtri_mesi'] ) && 'primo' === (string) $s['mese_iniziale'] && ! in_array( $vista, [ 'prossimo', 'mese' ], true ) ) {
+            $cfg['aperto']  = 1;
+            $cfg['pv']      = $passati;
+            $cfg['recente'] = ! empty( $s['dal_recente'] ) ? 1 : 0;
+        }
         if ( 'mese' === $vista ) {
             $cfg['oggi']   = wp_date( 'Y-m-d' );
             $cfg['inizio'] = (int) get_option( 'start_of_week', 1 );
@@ -750,12 +759,19 @@ class Olobuild_Cartellone_Tile extends Olobuild_Tile_Base {
             if ( ! empty( $s['filtri_mesi'] ) ) {
                 $mesi = [];
                 foreach ( $voci as $x ) {
-                    $mesi[ wp_date( 'Y-m', $x['ts'] ) ] = wp_date( 'F', $x['ts'] );
+                    $mesi[ wp_date( 'Y-m', $x['ts'] ) ] = $x['ts'];
                 }
                 if ( count( $mesi ) > 1 ) {
+                    // Se i mesi coprono più di un anno (dal primo all'ultimo 12 mesi o più) ogni pastiglia porta anche
+                    // l'anno (1.4.1489): prima «dicembre 2026» e «dicembre 2027» erano due «Dicembre». Una stagione da
+                    // ottobre a maggio resta coi soli mesi.
+                    $num = array_map( static function ( $ym ) {
+                        return 12 * (int) substr( $ym, 0, 4 ) + (int) substr( $ym, 5, 2 );
+                    }, array_keys( $mesi ) );
+                    $fmt  = max( $num ) - min( $num ) >= 12 ? 'F Y' : 'F';
                     $chips .= '<div class="ocrt-chips ocrt-chips--mesi" role="group" aria-label="' . esc_attr__( 'Mese', 'olobuilder' ) . '"><button type="button" class="ocrt-chip is-on" data-m="" aria-pressed="true">' . esc_html( (string) $s['testo_tutti'] ) . '</button>';
-                    foreach ( $mesi as $m => $nome ) {
-                        $chips .= '<button type="button" class="ocrt-chip" data-m="' . esc_attr( $m ) . '" aria-pressed="false">' . esc_html( $nome ) . '</button>';
+                    foreach ( $mesi as $m => $ts_m ) {
+                        $chips .= '<button type="button" class="ocrt-chip" data-m="' . esc_attr( $m ) . '" aria-pressed="false">' . esc_html( wp_date( $fmt, $ts_m ) ) . '</button>';
                     }
                     $chips .= '</div>';
                 }
@@ -854,6 +870,7 @@ if(vu2){if(n===0){if(!filtrato){vu2.removeAttribute("hidden");}}else{vu2.setAttr
 [].forEach.call(chi,function(c){c.addEventListener("click",function(){var mese=c.hasAttribute("data-m");var val=mese?c.getAttribute("data-m"):c.getAttribute("data-g");if(mese){m=val;}else{g=val;}[].forEach.call(c.parentNode.querySelectorAll(".ocrt-chip"),function(o){var on=o===c;o.classList.toggle("is-on",on);o.setAttribute("aria-pressed",on?"true":"false");});applica();});});
 var cerca=el.querySelector(".ocrt-cerca");if(cerca){var t=0;cerca.addEventListener("input",function(){clearTimeout(t);t=setTimeout(function(){q=(cerca.value||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();applica();},150);});}
 [].forEach.call(el.querySelectorAll(".ocrt-chip[data-m]"),function(c){var mm=c.getAttribute("data-m");if(!mm){return;}var so=C.passati==="solo";if(C.passati!=="nascondi"){if(!so){return;}}var vivo=voci.some(function(v){var tiene=so?v._p:!v._p;return tiene?v.getAttribute("data-mese")===mm:false;});if(!vivo){c.setAttribute("hidden","");}});
+if(C.aperto){var pv=C.pv||C.passati;var cand=voci.filter(function(v){return v._p?pv!=="nascondi":pv!=="solo";});var pref=cand.filter(function(v){return C.recente?v._p:!v._p;});var sc=(pref.length?pref:cand)[0];var mc=sc?el.querySelector(".ocrt-chip[data-m=\""+sc.getAttribute("data-mese")+"\"]"):null;if(mc){if(!mc.hasAttribute("hidden")){m=mc.getAttribute("data-m");[].forEach.call(mc.parentNode.querySelectorAll(".ocrt-chip"),function(o){var on=o===mc;o.classList.toggle("is-on",on);o.setAttribute("aria-pressed",on?"true":"false");});}}}
 applica();}
 var due=function(n){return (n<10?"0":"")+n;};
 var fmt=function(ms){var d=new Date(ms);return d.getUTCFullYear()+due(d.getUTCMonth()+1)+due(d.getUTCDate())+"T"+due(d.getUTCHours())+due(d.getUTCMinutes())+"00Z";};
