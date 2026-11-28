@@ -122,6 +122,7 @@ SCELTE = {
     'sbieco': ('strappo', [5, 6, 7]),
     'falcata': ('percorso', [1, 2, 3]),
     'combinazione': ('ascensore', [7, 8]),
+    'giunto': ('prismi', [1, 2]),  # 28 nov 2026: «Si ferma se lo toccate» gira come un prisma sulla citazione
     'ventaglio': ('ruota', [6, 7]),  # la 5 ha i panni stesi (Pro Slider fermo allo scorrimento): fuori dal gruppo
     'elastan': ('mazzo', [7, 8, 9]),
     'morsetto': ('prismi', [5, 6, 7]),
